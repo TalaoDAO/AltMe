@@ -27,7 +27,6 @@ class WalletLogo extends StatelessWidget {
         switch (profileModel.profileType) {
           case ProfileType.custom:
           case ProfileType.defaultOne:
-          case ProfileType.europeanWallet:
           case ProfileType.diipv3:
             image = flavorCubit.state == FlavorMode.development
                 ? ImageStrings.appLogoDev
@@ -37,6 +36,7 @@ class WalletLogo extends StatelessWidget {
           case ProfileType.ebsiV3:
           case ProfileType.ebsiV4:
             image = ImageStrings.ebsiLogo;
+          case ProfileType.europeanWallet:
           case ProfileType.enterprise:
             final isLightTheme =
                 Theme.of(context).brightness == Brightness.light;
@@ -45,7 +45,6 @@ class WalletLogo extends StatelessWidget {
             image = isLightTheme
                 ? generalOptions.companyLogoLight ?? generalOptions.companyLogo
                 : generalOptions.companyLogo;
-
         }
 
         return Column(
@@ -54,7 +53,7 @@ class WalletLogo extends StatelessWidget {
               child: SizedBox(
                 width: width,
                 height: height,
-                child: profileModel.profileType == ProfileType.enterprise
+                child: Uri.parse(image).isAbsolute
                     ? CachedImageFromNetwork(
                         image,
                         fit: BoxFit.contain,

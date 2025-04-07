@@ -55,9 +55,9 @@ final ProfileCubitListener = BlocListener<ProfileCubit, ProfileState>(
     if (state.status == AppStatus.addEuropeanProfile) {
       context.read<CredentialsCubit>().addWalletCredential(
             qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+            profileLinkedId: ProfileType.europeanWallet.getVCId,
           );
     }
-
   },
 );
 

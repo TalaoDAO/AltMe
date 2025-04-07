@@ -185,6 +185,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       // if enterprise and walletAttestation data is available and added
       await credentialsCubit.addWalletCredential(
         qrCodeScanCubit: qrCodeScanCubit,
+        profileLinkedId: ProfileType.enterprise.getVCId,
       );
 
       emit(

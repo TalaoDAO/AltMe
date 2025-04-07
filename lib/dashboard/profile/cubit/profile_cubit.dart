@@ -693,64 +693,52 @@ class ProfileCubit extends Cubit<ProfileState> {
           ),
         );
       case ProfileType.europeanWallet:
-        final europeanWalletProfileSettingJsonString =
-            await secureStorageProvider.get(
-          SecureStorageKeys.europeanWalletProfileSetting,
-        );
         late ProfileSetting profileSetting;
-        // Check if the European wallet profile setting is already stored
-        if (europeanWalletProfileSettingJsonString != null) {
-          profileSetting = ProfileSetting.fromJson(
-            json.decode(europeanWalletProfileSettingJsonString)
-                as Map<String, dynamic>,
-          );
-        } else {
-          // Set up European wallet profile using the deeplink
-          try {
-            /// get vc and store it in the wallet
-            const url = 'https://wallet-provider.talao.co';
-            final walletAttestationData = await getWalletAttestationData(
-              url: url,
+        // Set up European wallet profile using the deeplink
+        try {
+          /// get vc and store it in the wallet
+          const url = 'https://wallet-provider.talao.co';
+          final walletAttestationData = await getWalletAttestationData(
+            url: url,
+            secureStorageProvider: secureStorageProvider,
+            profileModel: state.model,
+            client: DioClient(
               secureStorageProvider: secureStorageProvider,
-              profileModel: state.model,
-              client: DioClient(
-                secureStorageProvider: secureStorageProvider,
-                dio: Dio(),
-              ),
-              jwtDecode: JWTDecode(),
-            );
+              dio: Dio(),
+            ),
+            jwtDecode: JWTDecode(),
+          );
 
-            final profileSettingJson = await getProfileFromProvider(
-              email: 'guest@EWC',
-              password: 'guest',
-              jwtVc: walletAttestationData,
-              url: url,
-              client: DioClient(
-                secureStorageProvider: secureStorageProvider,
-                dio: Dio(),
-              ),
-            );
-            profileSetting = ProfileSetting.fromJson(
-              json.decode(profileSettingJson) as Map<String, dynamic>,
-            );
-            profileSetting = profileSetting.copyWith(
-              settingsMenu: profileSetting.settingsMenu.copyWith(
-                displayProfile: true,
-              ),
-            );
-            await secureStorageProvider.set(
-              SecureStorageKeys.europeanWalletProfileSetting,
-              profileSettingJson,
-            );
-          } catch (e, s) {
-            final log = getLogger('ProfileCubit - loadEuropeanWallet');
-            log.e(
-              'Failed to load European wallet configuration',
-              error: e,
-              stackTrace: s,
-            );
-            throw Exception('Failed to load European wallet configuration');
-          }
+          final profileSettingJson = await getProfileFromProvider(
+            email: 'guest@EWC',
+            password: 'guest',
+            jwtVc: walletAttestationData,
+            url: url,
+            client: DioClient(
+              secureStorageProvider: secureStorageProvider,
+              dio: Dio(),
+            ),
+          );
+          profileSetting = ProfileSetting.fromJson(
+            json.decode(profileSettingJson) as Map<String, dynamic>,
+          );
+          profileSetting = profileSetting.copyWith(
+            settingsMenu: profileSetting.settingsMenu.copyWith(
+              displayProfile: true,
+            ),
+          );
+          await secureStorageProvider.set(
+            SecureStorageKeys.europeanWalletProfileSetting,
+            jsonEncode(profileSetting.toJson()),
+          );
+        } catch (e, s) {
+          final log = getLogger('ProfileCubit - loadEuropeanWallet');
+          log.e(
+            'Failed to load European wallet configuration',
+            error: e,
+            stackTrace: s,
+          );
+          throw Exception('Failed to load European wallet configuration');
         }
         await update(
           state.model.copyWith(

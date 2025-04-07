@@ -4,9 +4,9 @@ enum ProfileType {
   ebsiV4,
   //diipv2point1,
   diipv3,
+  europeanWallet,
   custom,
   enterprise,
-  europeanWallet,
 }
 
 extension ProfileTypeX on ProfileType {
@@ -27,7 +27,7 @@ extension ProfileTypeX on ProfileType {
       case ProfileType.defaultOne:
         return 'Default';
       case ProfileType.europeanWallet:
-        return 'Wallet Profile for EWC';
+        return 'Prototype for EWC pilot';
     }
   }
 
