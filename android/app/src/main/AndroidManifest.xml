@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="co.altme.alt.me.altme">
+    package="com.compellio.wallet">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -55,7 +55,7 @@
                 <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST -->
                 <data
                     android:scheme="https"
-                    android:host="app.altme.io" />
+                    android:host="wallet.compellio.com" />
                 <data android:scheme="http"/>
             </intent-filter>
             <intent-filter android:autoVerify="true">

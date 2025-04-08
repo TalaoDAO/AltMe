@@ -27,7 +27,7 @@
 		<string>it</string>
 	</array>
 	<key>CFBundleName</key>
-	<string>Altme</string>
+	<string>Compellio Wallet</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -185,9 +185,9 @@
 		<string>_dartobservatory._tcp</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
-	<string>Please give us access to your camera, to complete the verification.</string>
+	<string>Please give us access to your camera, to scan QR codes and complete verification.</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Why is my app authenticating using face id?</string>
+	<string>Compellio Wallet uses Face ID to securely access your wallet.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Please give us access to your photo library to verify you.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
