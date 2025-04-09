@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.compellio.wallet">
+    package="co.altme.alt.me.altme">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -86,7 +86,7 @@
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
-				<data android:scheme="altme-openid-vc" />
+				<data android:scheme="compellio-openid-vc" />
 			</intent-filter>
             <intent-filter android:autoVerify="true">
 				<action android:name="android.intent.action.VIEW" />
@@ -98,7 +98,7 @@
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
-				<data android:scheme="altme-openid-credential-offer" />
+				<data android:scheme="compellio-openid-credential-offer" />
 			</intent-filter>
             <intent-filter android:autoVerify="true">
 				<action android:name="android.intent.action.VIEW" />
@@ -110,7 +110,7 @@
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
-				<data android:scheme="wc-altme" />
+				<data android:scheme="wc-compellio" />
 			</intent-filter>
             <intent-filter android:autoVerify="true">
 				<action android:name="android.intent.action.VIEW" />
