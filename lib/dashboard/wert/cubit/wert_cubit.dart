@@ -2,22 +2,37 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class WertCubit extends Cubit<String> {
   WertCubit({
     required this.credentialsRepository,
     required this.walletCubit,
+    required this.themeMode,
+    required this.locale,
   }) : super('') {
     getUrl();
   }
 
   final CredentialsRepository credentialsRepository;
   final WalletCubit walletCubit;
+  final String themeMode; // 'light' or 'dark'
+  final String locale; // Language locale like 'en', 'fr', etc.
 
   Future<void> getUrl() async {
     final log = getLogger('WertCubit - getUrl');
+
+    // Get Wert ID from environment variables
+    final wertId = dotenv.env['WERT_ID'];
+    if (wertId == null) {
+      throw Exception('WERT_ID is not set in .env file');
+    }
+    // Use the theme based on app's theme mode
+    final theme = themeMode == 'light' ? 'light' : 'dark';
+
+    // Base URL for Wert widget with dynamic values
     String link =
-        '''https://widget.wert.io/01GPB3PAQ0KF3SCDMHRAN6AZ2B/widget/?theme=dark&lang=en''';
+        'https://widget.wert.io/$wertId/widget/?theme=$theme&lang=$locale';
 
     final address = walletCubit.state.currentAccount!.walletAddress;
 
