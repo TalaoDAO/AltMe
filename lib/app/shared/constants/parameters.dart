@@ -26,12 +26,12 @@ class Parameters {
   );
 
   static const oidc4vcUniversalLink =
-      'https://app.altme.io/app/download/callback';
-  static const walletOfferDeepLink = 'altme-openid-credential-offer';
-  static const walletPresentationDeepLink = 'altme-openid-vc';
+      'https://wallet.compellio.com/app/download/callback';
+  static const walletOfferDeepLink = 'compellio-openid-credential-offer';
+  static const walletPresentationDeepLink = 'compellio-openid-vc';
 
   static const authorizeEndPoint =
-      'https://app.altme.io/app/download/authorize';
+      'https://wallet.compellio.com/app/download/authorize';
 
   static const web3RpcMainnetUrl = 'https://mainnet.infura.io/v3/';
 
@@ -93,12 +93,12 @@ class Parameters {
     ...optionalEvents,
   ];
 
-  static const String clientId = 'urn:altme:0001';
+  static const String clientId = 'urn:compellio:0001';
   static const int maxEntries = 3;
 
   // 'Talao'for talao
   // 'Altme' for altme
-  static const String appName = 'Altme';
+  static const String appName = 'Compellio';
 
   // 'false' for talao
   // 'true' for altme
@@ -124,20 +124,20 @@ class Parameters {
   //'https://app.talao.co/app/download/callback' for Talao
   // 'https://app.altme.io/app/download/callback' for altme
   static const String authorizationEndPoint =
-      'https://app.altme.io/app/download/callback';
+      'https://wallet.compellio.com/app/download/callback';
 
   // 'Talao_wallet'for talao
   // 'Altme_wallet' for altme
-  static const String walletName = 'Altme_wallet';
+  static const String walletName = 'Compellio_wallet';
 
   // 'https://app.talao.co/wallet_issuer'for talao
   // 'https://app.altme.io/wallet_issuer' for altme
-  static const String walletIssuer = 'https://app.altme.io/wallet_issuer';
+  static const String walletIssuer = 'https://wallet.compellio.com/wallet_issuer';
 
   // 'https://app.talao.co/wallet-issuer/.well-known/openid-configuration'for talao
   // 'https://app.altme.io/wallet-issuer/.well-known/openid-configuration' for altme
   static const String walletMetadataForVerifier =
-      'https://app.altme.io/wallet-issuer/.well-known/openid-configuration';
+      'https://wallet.compellio.com/wallet-issuer/.well-known/openid-configuration';
 
   static const DidKeyType didKeyTypeForEbsiV3 = DidKeyType.ebsiv3;
   static const DidKeyType didKeyTypeForEbsiV4 = DidKeyType.ebsiv4;

@@ -350,9 +350,9 @@ abstract class ConstantsJson {
       'client_secret_basic',
       'client_secret_jwt',
     ],
-    'credential_offer_endpoint': ['openid-credential-offer://', 'haip://', 'altme-openid-credential-offer'],
+    'credential_offer_endpoint': ['openid-credential-offer://', 'haip://', 'compellio-openid-credential-offer'],
     'client_name': '${Parameters.appName} wallet',
-    'contacts': ['contact@talao.io'],
+    'contacts': ['contact@compellio.com'],
   };
 
   static const walletMetadataForVerifiers = <String, dynamic>{
@@ -394,6 +394,6 @@ abstract class ConstantsJson {
     ],
     'request_object_signing_alg_values_supported': ['ES256', 'ES256K', 'EdDSA'],
     'presentation_definition_uri_supported': true,
-    'contacts': ['contact@talao.io'],
+    'contacts': ['contact@compellio.com'],
   };
 }
