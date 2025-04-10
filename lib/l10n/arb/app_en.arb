@@ -1168,5 +1168,6 @@
   "chooseYourSSIProfileOrCustomizeYourOwn": "Choose your wallet profile or customize your own",
   "recoveryPhraseIncorrectErrorMessage": "Please try again with correct order.",
   "invalidCode": "Invalid code",
-  "back": "Back"
+  "back": "Back",
+  "greek": "Greek"
 }

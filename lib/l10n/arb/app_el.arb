@@ -1,0 +1,15 @@
+{
+  "@@locale": "el",
+  "genericError": "Παρουσιάστηκε ένα σφάλμα!",
+  "@genericError": {
+    "description": "Generic error message",
+    "type": "text",
+    "placeholders": {}
+  },
+  "credentialListTitle": "Διαπιστευτήρια",
+  "@credentialListTitle": {
+    "description": "Title for the Credentials List Page",
+    "type": "text",
+    "placeholders": {}
+  },
+}

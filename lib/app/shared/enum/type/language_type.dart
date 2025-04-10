@@ -6,6 +6,7 @@ enum LanguageType {
   en,
   es,
   fr,
+  el,
 }
 
 extension LanguageTypeX on LanguageType {
@@ -24,6 +25,8 @@ extension LanguageTypeX on LanguageType {
         return l10n.spanish;
       case LanguageType.fr:
         return l10n.french;
+      case LanguageType.el:
+        return l10n.greek;
     }
   }
 }
