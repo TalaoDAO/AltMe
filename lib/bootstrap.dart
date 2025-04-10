@@ -52,14 +52,16 @@ Future<void> bootstrap(FlavorMode flavor) async {
       await initSecureStorage;
 
       /// Disable Http google font
-      GoogleFonts.config.allowRuntimeFetching = false;
+      GoogleFonts.config.allowRuntimeFetching = true;
 
       await Dartez().init();
       Bloc.observer = AppBlocObserver();
-      runApp(App(
-        flavorMode: flavor,
-        themeRepository: themeRepository,
-      ),);
+      runApp(
+        App(
+          flavorMode: flavor,
+          themeRepository: themeRepository,
+        ),
+      );
     },
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );
