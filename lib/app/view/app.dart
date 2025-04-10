@@ -312,7 +312,7 @@ class MaterialAppDefinition extends StatelessWidget {
               builder: (profileContext, profileState) {
                 return MaterialApp(
                   locale: state.locale,
-                  title: 'AltMe',
+                  title: Parameters.appName,
                   theme: AppTheme.seedThemeData(
                     Brightness.light,
                     profileState
