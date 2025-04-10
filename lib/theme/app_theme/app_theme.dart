@@ -41,7 +41,7 @@ class AppTheme {
       ),
     );
     return theme.copyWith(
-      textTheme: GoogleFonts.nunitoTextTheme(theme.textTheme),
+      textTheme: GoogleFonts.interTextTheme(theme.textTheme),
       colorScheme: ColorScheme.fromSeed(
         seedColor: seedColor,
         brightness: brightness,
