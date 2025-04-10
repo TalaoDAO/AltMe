@@ -53,7 +53,8 @@ class WalletLogo extends StatelessWidget {
               child: SizedBox(
                 width: width,
                 height: height,
-                child: Uri.parse(image).isAbsolute
+                child: (Uri.parse(image).isAbsolute ||
+                        profileModel.profileType == ProfileType.enterprise)
                     ? CachedImageFromNetwork(
                         image,
                         fit: BoxFit.contain,
