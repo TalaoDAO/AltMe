@@ -132,7 +132,8 @@ class Parameters {
 
   // 'https://app.talao.co/wallet_issuer'for talao
   // 'https://app.altme.io/wallet_issuer' for altme
-  static const String walletIssuer = 'https://wallet.compellio.com/wallet_issuer';
+  static const String walletIssuer =
+      'https://wallet.compellio.com/wallet_issuer';
 
   // 'https://app.talao.co/wallet-issuer/.well-known/openid-configuration'for talao
   // 'https://app.altme.io/wallet-issuer/.well-known/openid-configuration' for altme
@@ -147,7 +148,7 @@ class Parameters {
 
   // seed color for the app Theme
   // Altme
-  static const Color seedColor = Color(0xff6600FF);
+  static const Color seedColor = Color(0xff2c2464);
   // Talao
   // static const Color seedColor = Color(0xff1EAADC);
 
