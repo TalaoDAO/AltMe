@@ -556,15 +556,6 @@ Future<(String, String)> getDidAndKid({
       kid = await profileCubit.didKitProvider
           .keyToVerificationMethod(didMethod, privateKey);
     case DidKeyType.jwtClientAttestation:
-      if (profileCubit.state.model.walletType != WalletType.enterprise) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'Please switch to enterprise account',
-          },
-        );
-      }
-
       final walletAttestationData = await profileCubit.secureStorageProvider
           .get(SecureStorageKeys.walletAttestationData);
 
