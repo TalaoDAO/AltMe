@@ -3,12 +3,14 @@ function env {
   echo "env"
   if [ -f ".env.$1" ]; then
     cp ".env.$1" ".env"
+    chmod g-w ".env"
     echo "copy .env.$1 to .env"
   else
     echo "file .env.$1 not found"
   fi
   if [ -f "android/key.properties.$1" ]; then
     cp "android/key.properties.$1" "android/key.properties"
+    chmod g-w "android/key.properties"
     echo "copy android/key.properties.$1 to android/key.properties"
   else
     echo "file android/key.properties.$1 not found"
