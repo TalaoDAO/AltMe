@@ -1,3 +1,13 @@
+# function env wich take string project as an argument and copy .env.project to .env
+function env {
+  echo "env"
+  if [ -f ".env.$1" ]; then
+    cp ".env.$1" ".env"
+    echo "copy .env.$1 to .env"
+  else
+    echo "file .env.$1 not found"
+  fi
+}  
 
 function pub {
   flutter clean
@@ -81,6 +91,14 @@ then
 elif [[ "$*" == *-pub* ]];
 then
 pub
+elif [[ "$*" == *-main* ]];
+# call env function with main as project
+then
+  env main
+elif [[ "$*" == *-COMP* ]];
+# call env function with COMP as project
+then
+  env COMP
 else
   pub
   buildRunner
