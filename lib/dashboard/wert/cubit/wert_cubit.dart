@@ -8,16 +8,12 @@ class WertCubit extends Cubit<String> {
   WertCubit({
     required this.credentialsRepository,
     required this.walletCubit,
-    required this.themeMode,
-    required this.locale,
   }) : super('') {
     getUrl();
   }
 
   final CredentialsRepository credentialsRepository;
   final WalletCubit walletCubit;
-  final String themeMode; // 'light' or 'dark'
-  final String locale; // Language locale like 'en', 'fr', etc.
 
   Future<void> getUrl() async {
     final log = getLogger('WertCubit - getUrl');
@@ -27,12 +23,9 @@ class WertCubit extends Cubit<String> {
     if (wertId == null) {
       throw Exception('WERT_ID is not set in .env file');
     }
-    // Use the theme based on app's theme mode
-    final theme = themeMode == 'light' ? 'light' : 'dark';
 
     // Base URL for Wert widget with dynamic values
-    String link =
-        'https://widget.wert.io/$wertId/widget/?theme=$theme&lang=$locale';
+    String link = 'https://widget.wert.io/$wertId/widget/?theme=dark&lang=en';
 
     final address = walletCubit.state.currentAccount!.walletAddress;
 
