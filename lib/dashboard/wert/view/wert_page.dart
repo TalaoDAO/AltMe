@@ -23,9 +23,6 @@ class WertPage extends StatelessWidget {
       create: (context) => WertCubit(
         walletCubit: context.read<WalletCubit>(),
         credentialsRepository: CredentialsRepository(getSecureStorage),
-        themeMode:
-            Theme.of(context).brightness == Brightness.light ? 'light' : 'dark',
-        locale: Localizations.localeOf(context).languageCode,
       ),
       child: const WertView(),
     );
