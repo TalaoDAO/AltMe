@@ -68,7 +68,7 @@ class RecentTransactions extends StatelessWidget {
                               color: Theme.of(context)
                                   .colorScheme
                                   .onSurface
-                                  .withOpacity(0.12),
+                                  .withValues(alpha: 0.12),
                             ),
                           );
                         },

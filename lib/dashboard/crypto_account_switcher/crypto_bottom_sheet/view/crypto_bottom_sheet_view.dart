@@ -150,7 +150,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onSurface
-                                        .withOpacity(0.12),
+                                        .withValues(alpha: 0.12),
                                     width: 0.2,
                                   ),
                                 ),
@@ -262,7 +262,7 @@ class _CryptoBottomSheetPageState extends State<CryptoBottomSheetPage> {
                                           color: Theme.of(context)
                                               .colorScheme
                                               .onSurface
-                                              .withOpacity(0.12),
+                                              .withValues(alpha: 0.12),
                                         ),
                                       ),
                                     );

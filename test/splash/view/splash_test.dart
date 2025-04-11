@@ -52,12 +52,7 @@ class MockProfileCubit extends MockCubit<ProfileState> implements ProfileCubit {
 class MockCredentialsCubit extends MockCubit<CredentialsState>
     implements CredentialsCubit {
   @override
-  final state = const CredentialsState();
-
-  @override
-  Future<void> loadAllCredentials({
-    required BlockchainType blockchainType,
-  }) async {}
+  Future<void> loadAllCredentials() async {}
 }
 
 class MockQRCodeScanCubit extends MockCubit<QRCodeScanState>

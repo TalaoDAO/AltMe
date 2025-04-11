@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:convert';
 
 import 'package:did_kit/src/didkit_interface.dart';
@@ -50,10 +52,8 @@ class DIDKitProvider {
     String key,
   ) async {
     final newPresentation = jsonDecode(presentation);
-    // ignore: avoid_dynamic_calls
     if (newPresentation['verifiableCredential'] != null) {
       var verifiableCredential =
-          // ignore: avoid_dynamic_calls
           newPresentation['verifiableCredential'];
       if (verifiableCredential is List) {
         for (var i = 0; i < verifiableCredential.length; i++) {
@@ -66,7 +66,6 @@ class DIDKitProvider {
             await _loadContext(jsonEncode(verifiableCredential));
         verifiableCredential = jsonDecode(credentialWithEbeddedContext);
       }
-      // ignore: avoid_dynamic_calls
       newPresentation['verifiableCredential'] = verifiableCredential;
     }
 
@@ -149,7 +148,6 @@ class DIDKitProvider {
             final response = await Dio().get<String>(valueToTest);
             if (response.statusCode == 200) {
               final newContext = jsonDecode(response.data!);
-              // ignore: avoid_dynamic_calls
               context[i] = newContext['@context'];
             }
           }

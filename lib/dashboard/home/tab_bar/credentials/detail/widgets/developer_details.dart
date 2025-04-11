@@ -48,7 +48,7 @@ class DeveloperDetails extends StatelessWidget {
       if (credentialModel.getFormat == VCFormatType.vcSdJWT.vcValue) {
         final selectiveDisclosure = SelectiveDisclosure(credentialModel);
 
-        final data = createJsonByDecryptingSDValues(
+        final data = valuesJson(
           encryptedJson: jsonPayload,
           selectiveDisclosure: selectiveDisclosure,
         );

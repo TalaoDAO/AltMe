@@ -4,6 +4,7 @@ enum ProfileType {
   ebsiV4,
   //diipv2point1,
   diipv3,
+  europeanWallet,
   custom,
   enterprise,
 }
@@ -25,6 +26,8 @@ extension ProfileTypeX on ProfileType {
         return 'Decentralized Identity Interop Profile (DIIP v3.0)';
       case ProfileType.defaultOne:
         return 'Default';
+      case ProfileType.europeanWallet:
+        return 'Prototype for EWC pilot';
     }
   }
 
@@ -34,7 +37,7 @@ extension ProfileTypeX on ProfileType {
     switch (this) {
       case ProfileType.custom:
       case ProfileType.defaultOne:
-        // case ProfileType.diipv2point1:
+      case ProfileType.europeanWallet:
         return false;
       case ProfileType.ebsiV3:
       case ProfileType.ebsiV4:
@@ -58,6 +61,8 @@ extension ProfileTypeX on ProfileType {
         return 'Z4C7T1X';
       case ProfileType.enterprise:
         return 'L8F6V3P';
+      case ProfileType.europeanWallet:
+        return 'M3FN2K8';
     }
   }
 }

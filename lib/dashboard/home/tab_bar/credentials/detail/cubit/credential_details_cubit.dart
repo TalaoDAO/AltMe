@@ -330,19 +330,33 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
     final statusListUri = data.statusListCredential;
     final headers = {
       'Content-Type': 'application/json; charset=UTF-8',
+      // 'accept': 'application/statuslist+jwt',
     };
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-    final response = await client.get(
+    // TODO(hawkbee): Using Dio directly is solving the issue but it probably
+    /// means an issue.
+    /// in the paramaers of DioClient
+    /// Status invalid of an emailpass in a jwt_vc_json format #3283
+    final response = await Dio().get<String>(
       statusListUri,
-      headers: headers,
-      isCachingEnabled: customOidc4vcProfile.statusListCache,
-      options: Options().copyWith(
+      options: Options(
+        headers: headers,
         sendTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
       ),
     );
+
+    // final response = await client.get(
+    //   statusListUri,
+    //   headers: headers,
+    //   isCachingEnabled: customOidc4vcProfile.statusListCache,
+    //   options: Options().copyWith(
+    //     sendTimeout: const Duration(seconds: 10),
+    //     receiveTimeout: const Duration(seconds: 10),
+    //   ),
+    // );
 
     final payload = jwtDecode.parseJwt(response.toString());
 

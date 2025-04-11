@@ -15,4 +15,5 @@ enum AppStatus {
   restoreWallet,
   successAdd,
   successUpdate,
+  addEuropeanProfile,
 }

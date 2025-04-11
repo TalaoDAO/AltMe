@@ -88,7 +88,7 @@ class _ChangeNetworkBottomSheetPageState
                         color: Theme.of(context)
                             .colorScheme
                             .onSurface
-                            .withOpacity(0.12),
+                            .withValues(alpha: 0.12),
                         width: 0.2,
                       ),
                       borderRadius: const BorderRadius.all(
@@ -112,7 +112,7 @@ class _ChangeNetworkBottomSheetPageState
                           color: Theme.of(context)
                               .colorScheme
                               .onSurface
-                              .withOpacity(0.12),
+                              .withValues(alpha: 0.12),
                         ),
                       ),
                     ),

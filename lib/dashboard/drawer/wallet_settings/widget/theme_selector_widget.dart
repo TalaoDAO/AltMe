@@ -117,7 +117,8 @@ class ThemeModeLine extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Divider(
             height: 0,
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
+            color:
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12),
           ),
         ),
       ],

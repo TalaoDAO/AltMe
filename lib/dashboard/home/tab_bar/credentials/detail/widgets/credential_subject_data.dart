@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/helper_functions/get_display.dart';
+import 'package:altme/app/shared/helper_functions/value_type_if_null.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:flutter/material.dart';
@@ -177,7 +178,9 @@ class CredentialSubjectData extends StatelessWidget {
           widget = DisplayCredentialField(
             title: title,
             data: data,
-            type: displayInstructionValue['value_type'].toString(),
+            type: displayInstructionValue['value_type'] != null
+                ? displayInstructionValue['value_type'].toString()
+                : valueTypeIfNull(data).toString(),
             showVertically: showVertically,
           );
         }

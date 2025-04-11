@@ -82,7 +82,7 @@ class WalletDialog extends StatelessWidget {
                       borderColor: Theme.of(context)
                           .colorScheme
                           .onSurface
-                          .withOpacity(0.2),
+                          .withValues(alpha: 0.2),
                       backgroundColor: Theme.of(context).colorScheme.surface,
                       onPressed: () {
                         Navigator.pop(context);

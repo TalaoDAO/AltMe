@@ -59,7 +59,10 @@ class DrawerCategoryItem extends StatelessWidget {
               Icon(
                 Icons.chevron_right,
                 size: Sizes.icon2x,
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.6),
               ),
             ],
           ],

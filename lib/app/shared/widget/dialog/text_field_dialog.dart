@@ -122,8 +122,10 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
               fontSize: 12,
               elevation: 0,
               borderRadius: Sizes.smallRadius,
-              borderColor:
-                  Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+              borderColor: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.2),
               backgroundColor: background,
               textColor: Theme.of(context).colorScheme.onSurface,
               onPressed: () {
