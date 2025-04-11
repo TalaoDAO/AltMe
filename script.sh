@@ -7,6 +7,12 @@ function env {
   else
     echo "file .env.$1 not found"
   fi
+  if [ -f "android/key.properties.$1" ]; then
+    cp "android/key.properties.$1" "android/key.properties"
+    echo "copy android/key.properties.$1 to android/key.properties"
+  else
+    echo "file android/key.properties.$1 not found"
+  fi
 }  
 
 function pub {
