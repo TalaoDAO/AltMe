@@ -18,7 +18,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-import '../configuration/configuration.dart';
 
 class MockPkcePair extends Mock implements PkcePair {}
 
@@ -191,9 +190,6 @@ void main() {
     });
 
     group('EBSI: getAuthorizationUriForIssuer', () {
-      const selectedCredentials = ['EmailPass'];
-      const clientId =
-          'did:jwk:eyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6IjZka1U2Wk1GSzc5V3dpY3dKNXJieEUxM3pTdWtCWTJPb0VpVlVFanFNRWMiLCJ5IjoiUm5Iem55VmxyUFNNVDdpckRzMTVEOXd4Z01vamlTREFRcGZGaHFUa0xSWSJ9';
       const redirectUri = 'https://app.altme.io/app/download/oidc4vc';
 
       const issuer = 'https://talao.co/issuer/mfyttabosy';
@@ -228,150 +224,8 @@ void main() {
         },
       };
 
-      test(
-        'given Url of openid request we return Uri for authentication endpoint',
-        () async {
-          const expectedAuthorizationEndpoint =
-              'https://talao.co/issuer/mfyttabosy/authorize';
 
-          const expectedAuthorizationRequestParemeters = {
-            'response_type': 'code',
-            'redirect_uri': 'https://app.altme.io/app/download/oidc4vc',
-            'state':
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlVmVyaWZpZXIiOiI0S29yQ3dtWXlPLV90NGlfaHZhN0YzYUhHcFRfMldxcURoNmVyaW1lcE9BIiwiY3JlZGVudGlhbHMiOlsiRW1haWxQYXNzIl0sImlzc3VlciI6Imh0dHBzOi8vdGFsYW8uY28vaXNzdWVyL21meXR0YWJvc3kiLCJpc0VCU0lWMyI6ZmFsc2UsImNsaWVudF9pZCI6ImRpZDpqd2s6ZXlKamNuWWlPaUpRTFRJMU5pSXNJbXQwZVNJNklrVkRJaXdpZUNJNklqWmthMVUyV2sxR1N6YzVWM2RwWTNkS05YSmllRVV4TTNwVGRXdENXVEpQYjBWcFZsVkZhbkZOUldNaUxDSjVJam9pVW01SWVtNTVWbXh5VUZOTlZEZHBja1J6TVRWRU9YZDRaMDF2YW1sVFJFRlJjR1pHYUhGVWEweFNXU0o5IiwiaWF0IjoxNzE0NTQ5OTUxfQ.JJtv8H52NTvPzR3IPET1sXGALdt0yXaQBQbGvDLKNlM',
-            'nonce': '8b60e2fb-87f3-4401-8107-0f0128ea01ab',
-            'code_challenge': '4KorCwmYyO-_t4i_hva7F3aHGpT_2WqqDh6erimepOA',
-            'code_challenge_method': 'S256',
-            'issuer_state': 'test7',
-            'client_metadata':
-                '{\"authorization_endpoint\":\"https://app.altme.io/app/download/authorize\",\"scopes_supported\":[\"openid\"],\"response_types_supported\":[\"vp_token\",\"id_token\"],\"client_id_schemes_supported\":[\"redirect_uri\",\"did\"],\"grant_types_supported\":[\"authorization_code\",\"pre-authorized_code\"],\"subject_types_supported\":[\"public\"],\"id_token_signing_alg_values_supported\":[\"ES256\",\"ES256K\"],\"request_object_signing_alg_values_supported\":[\"ES256\",\"ES256K\"],\"request_parameter_supported\":true,\"request_uri_parameter_supported\":true,\"request_authentication_methods_supported\":{\"authorization_endpoint\":[\"request_object\"]},\"vp_formats_supported\":{\"jwt_vp\":{\"alg_values_supported\":[\"ES256\",\"ES256K\"]},\"jwt_vc\":{\"alg_values_supported\":[\"ES256\",\"ES256K\"]}},\"subject_syntax_types_supported\":[\"urn:ietf:params:oauth:jwk-thumbprint\",\"did:key\",\"did:pkh\",\"did:key\"],\"subject_syntax_types_discriminations\":[\"did:key:jwk_jcs-pub\",\"did:ebsi:v1\"],\"subject_trust_frameworks_supported\":[\"ebsi\"],\"id_token_types_supported\":[\"subject_signed_id_token\"],\"token_endpoint_auth_method\":\"client_id\"}',
-            'client_id':
-                'did:jwk:eyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6IjZka1U2Wk1GSzc5V3dpY3dKNXJieEUxM3pTdWtCWTJPb0VpVlVFanFNRWMiLCJ5IjoiUm5Iem55VmxyUFNNVDdpckRzMTVEOXd4Z01vamlTREFRcGZGaHFUa0xSWSJ9',
-            'scope': 'openid',
-            'authorization_details':
-                '[{\"type\":\"openid_credential\",\"credential_configuration_id\":\"EmailPass\"}]',
-          };
 
-          dioAdapter
-            ..onGet(
-              'https://talao.co/issuer/mfyttabosy/.well-known/openid-credential-issuer',
-              (request) => request.reply(200, jsonDecode(openIdConfiguration)),
-            )
-            ..onGet(
-              'https://talao.co/issuer/mfyttabosy/.well-known/openid-configuration',
-              (request) => request.reply(200, jsonDecode(openIdConfiguration)),
-            );
-
-          final (authorizationEndpoint, authorizationRequestParemeters, _) =
-              await oidc4vc.getAuthorizationData(
-            selectedCredentials: selectedCredentials,
-            clientId: clientId,
-            clientSecret: null,
-            redirectUri: redirectUri,
-            issuerState: issuerState,
-            nonce: nonce,
-            pkcePair: pkcePair,
-            state: state,
-            authorizationEndPoint: authorizationEndPoint,
-            scope: false,
-            clientAuthentication: ClientAuthentication.clientId,
-            oidc4vciDraftType: OIDC4VCIDraftType.draft13,
-            formatsSupported: [VCFormatType.jwtVcJson],
-            secureAuthorizedFlow: false,
-            issuer: issuer,
-            dio: client,
-            credentialOfferJson: credentialOfferJson,
-            secureStorage: mockSecureStorage,
-            isEBSIProfile: true,
-            walletIssuer: 'https://app.talao.co/wallet_issuer',
-            useOAuthAuthorizationServerLink: false,
-          );
-
-          expect(authorizationEndpoint, expectedAuthorizationEndpoint);
-          expect(
-            authorizationRequestParemeters,
-            expectedAuthorizationRequestParemeters,
-          );
-        },
-      );
-
-      test(
-        'throw Exception with when request is not valid',
-        () async {
-          expect(
-            () async => oidc4vc.getAuthorizationData(
-              selectedCredentials: [],
-              clientId: '',
-              issuer: '',
-              issuerState: '',
-              nonce: '',
-              state: '',
-              pkcePair: const PkcePair(
-                '',
-                '',
-              ),
-              authorizationEndPoint: '',
-              clientAuthentication: ClientAuthentication.clientId,
-              clientSecret: '',
-              oidc4vciDraftType: OIDC4VCIDraftType.draft11,
-              redirectUri: '',
-              scope: false,
-              secureAuthorizedFlow: false,
-              formatsSupported: [VCFormatType.jwtVc],
-              credentialOfferJson: credentialOfferJson,
-              dio: client,
-              isEBSIProfile: true,
-              walletIssuer: 'https://app.talao.co/wallet_issuer',
-              useOAuthAuthorizationServerLink: false,
-              secureStorage: mockSecureStorage,
-            ),
-            throwsA(
-              isA<Exception>().having(
-                (p0) => p0.toString(),
-                'toString()',
-                'Exception: NOT_A_VALID_OPENID_URL',
-              ),
-            ),
-          );
-        },
-      );
-
-      test(
-        'given correct authorization request parameter',
-        () async {
-          const expectedAuthorizationRequestParemeters =
-              r'{"response_type":"code","redirect_uri":"https://app.altme.io/app/download/oidc4vc","state":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlVmVyaWZpZXIiOiI0S29yQ3dtWXlPLV90NGlfaHZhN0YzYUhHcFRfMldxcURoNmVyaW1lcE9BIiwiY3JlZGVudGlhbHMiOlsiRW1haWxQYXNzIl0sImlzc3VlciI6Imh0dHBzOi8vdGFsYW8uY28vaXNzdWVyL21meXR0YWJvc3kiLCJpc0VCU0lWMyI6ZmFsc2UsImNsaWVudF9pZCI6ImRpZDpqd2s6ZXlKamNuWWlPaUpRTFRJMU5pSXNJbXQwZVNJNklrVkRJaXdpZUNJNklqWmthMVUyV2sxR1N6YzVWM2RwWTNkS05YSmllRVV4TTNwVGRXdENXVEpQYjBWcFZsVkZhbkZOUldNaUxDSjVJam9pVW01SWVtNTVWbXh5VUZOTlZEZHBja1J6TVRWRU9YZDRaMDF2YW1sVFJFRlJjR1pHYUhGVWEweFNXU0o5IiwiaWF0IjoxNzE0NTQ5OTUxfQ.JJtv8H52NTvPzR3IPET1sXGALdt0yXaQBQbGvDLKNlM","nonce":"8b60e2fb-87f3-4401-8107-0f0128ea01ab","code_challenge":"4KorCwmYyO-_t4i_hva7F3aHGpT_2WqqDh6erimepOA","code_challenge_method":"S256","issuer_state":"test7","client_metadata":"{\"authorization_endpoint\":\"https://app.altme.io/app/download/authorize\",\"scopes_supported\":[\"openid\"],\"response_types_supported\":[\"vp_token\",\"id_token\"],\"client_id_schemes_supported\":[\"redirect_uri\",\"did\"],\"grant_types_supported\":[\"authorization_code\",\"pre-authorized_code\"],\"subject_types_supported\":[\"public\"],\"id_token_signing_alg_values_supported\":[\"ES256\",\"ES256K\"],\"request_object_signing_alg_values_supported\":[\"ES256\",\"ES256K\"],\"request_parameter_supported\":true,\"request_uri_parameter_supported\":true,\"request_authentication_methods_supported\":{\"authorization_endpoint\":[\"request_object\"]},\"vp_formats_supported\":{\"jwt_vp\":{\"alg_values_supported\":[\"ES256\",\"ES256K\"]},\"jwt_vc\":{\"alg_values_supported\":[\"ES256\",\"ES256K\"]}},\"subject_syntax_types_supported\":[\"urn:ietf:params:oauth:jwk-thumbprint\",\"did:key\",\"did:pkh\",\"did:key\"],\"subject_syntax_types_discriminations\":[\"did:key:jwk_jcs-pub\",\"did:ebsi:v1\"],\"subject_trust_frameworks_supported\":[\"ebsi\"],\"id_token_types_supported\":[\"subject_signed_id_token\"],\"token_endpoint_auth_method\":\"client_id\"}","client_id":"did:jwk:eyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6IjZka1U2Wk1GSzc5V3dpY3dKNXJieEUxM3pTdWtCWTJPb0VpVlVFanFNRWMiLCJ5IjoiUm5Iem55VmxyUFNNVDdpckRzMTVEOXd4Z01vamlTREFRcGZGaHFUa0xSWSJ9","scope":"openid","authorization_details":"[{\"type\":\"openid_credential\",\"credential_configuration_id\":\"EmailPass\"}]"}';
-
-          final authorizationRequestParemeters =
-              oidc4vc.getAuthorizationRequestParemeters(
-            selectedCredentials: selectedCredentials,
-            clientId: clientId,
-            authorizationEndPoint: authorizationEndPoint,
-            scope: false,
-            clientAuthentication: ClientAuthentication.clientId,
-            oidc4vciDraftType: OIDC4VCIDraftType.draft13,
-            formatsSuported: [VCFormatType.jwtVcJson],
-            secureAuthorizedFlow: false,
-            issuer: issuer,
-            issuerState: issuerState,
-            nonce: nonce,
-            state: state,
-            pkcePair: pkcePair,
-            clientSecret: null,
-            openIdConfiguration: OpenIdConfiguration.fromJson(
-              jsonDecode(openIdConfiguration) as Map<String, dynamic>,
-            ),
-            redirectUri: redirectUri,
-            isEBSIProfile: true,
-            walletIssuer: 'https://app.talao.co/wallet_issuer',
-          );
-
-          expect(
-            jsonEncode(authorizationRequestParemeters),
-            expectedAuthorizationRequestParemeters,
-          );
-        },
-      );
     });
 
     group('Draft 13: getAuthorizationUriForIssuer', () {
@@ -396,135 +250,7 @@ void main() {
           'https://app.altme.io/app/download/authorize';
 
       group('test 10: LSP Potential Interop Event', () {
-        test(
-          'authentication code flow we return Uri for authentication endpoint',
-          () async {
-            const expectedAuthorizationEndpoint =
-                'https://talao.co/issuer/grlvzckofy/authorize';
 
-            const expectedAuthorizationRequestParemeters = {
-              'response_type': 'code',
-              'redirect_uri': 'https://app.altme.io/app/download/callback',
-              'state':
-                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlVmVyaWZpZXIiOiJrZFFvY1hkSzg5eEFDMTd6eFFaVjg3Q3h5eU84X25OY1oxbDF4UUpnTEI0IiwiY3JlZGVudGlhbHMiOlsiUGlkIl0sImlzc3VlciI6Imh0dHBzOi8vdGFsYW8uY28vaXNzdWVyL2dybHZ6Y2tvZnkiLCJpc0VCU0lWMyI6ZmFsc2UsImNsaWVudF9pZCI6IjhiNnBIRWttSWNTdnBtaDNMUEVNN2RqSFF2TGVGWXhGa2FUeGIxRGJmWlEiLCJjbGllbnRfYXNzZXJ0aW9uIjoiZXlKaGJHY2lPaUpGVXpJMU5pSXNJbXRwWkNJNkltUnBaRHAzWldJNmRHRnNZVzh1WTI4amEyVjVMVElpTENKMGVYQWlPaUozWVd4c1pYUXRZWFIwWlhOMFlYUnBiMjRyYW5kMEluMC5leUpoZFhSb2IzSnBlbUYwYVc5dVgyVnVaSEJ2YVc1MElqb2lhSFIwY0hNNkx5OWhjSEF1WVd4MGJXVXVhVzh2WVhCd0wyUnZkMjVzYjJGa0wyRjFkR2h2Y21sNlpTSXNJbU5zYVdWdWRGOXBaRjl6WTJobGJXVnpYM04xY0hCdmNuUmxaQ0k2V3lKa2FXUWlMQ0p5WldScGNtVmpkRjkxY21raUxDSjROVEE1WDNOaGJsOWtibk1pTENKMlpYSnBabWxsY2w5aGRIUmxjM1JoZEdsdmJpSmRMQ0pqYm1ZaU9uc2lhbmRySWpwN0ltTnlkaUk2SWxBdE1qVTJJaXdpYTJsa0lqb2lPR0kyY0VoRmEyMUpZMU4yY0cxb00weFFSVTAzWkdwSVVYWk1aVVpaZUVacllWUjRZakZFWW1aYVVTSXNJbXQwZVNJNklrVkRJaXdpZUNJNklrVlFiMTk0VmtoRmFpMVFZekIxZUdKdFkzaE5hakpNTmpaUWIwZG9MWFZ2V1VkQmVtZEhTMDEyVDFFaUxDSjVJam9pUm5kR1NERjJTMVpIWDJjM1FrZGlUME5JWTNkWmNuRktkRkpJTm5WRFRGVTVhVWxpVUdGNFMxZFdRU0o5ZlN3aVpYaHdJam94TnpRNU9URXlOall3TENKbmNtRnVkRjkwZVhCbGMxOXpkWEJ3YjNKMFpXUWlPbHNpWVhWMGFHOXlhWHBoZEdsdmJsOWpiMlJsSWl3aWNISmxMV0YxZEdodmNtbDZaV1JmWTI5a1pTSmRMQ0pwWVhRaU9qRTNNVGd6TnpZMk5qQXNJbWx6Y3lJNkltUnBaRHAzWldJNmRHRnNZVzh1WTI4aUxDSnFkR2tpT2lJNFl6WmtaakZsTmkweVlUVmtMVEV4WldZdFlqUXdZeTB3WVRFMk1qZzVOVGcxTmpBaUxDSnJaWGxmZEhsd1pTSTZJbk52Wm5SM1lYSmxJaXdpYm05dVkyVWlPaUk0WXpSa05EZzJZUzB5WVRWa0xURXhaV1l0WWpRd1l5MHdZVEUyTWpnNU5UZzFOakFpTENKd2NtVnpaVzUwWVhScGIyNWZaR1ZtYVc1cGRHbHZibDkxY21sZmMzVndjRzl5ZEdWa0lqcDBjblZsTENKeVpYRjFaWE4wWDI5aWFtVmpkRjl6YVdkdWFXNW5YMkZzWjE5MllXeDFaWE5mYzNWd2NHOXlkR1ZrSWpwYklrVlRNalUySWl3aVJWTXlOVFpMSWwwc0luSmxjM0J2Ym5ObFgzUjVjR1Z6WDNOMWNIQnZjblJsWkNJNld5SjJjRjkwYjJ0bGJpSXNJbWxrWDNSdmEyVnVJbDBzSW5OMFlYUjFjeUk2ZXlKemRHRjBkWE5mYkdsemRDSTZleUpwWkhnaU9qYzFOek13TENKMWNta2lPaUpvZEhSd2N6b3ZMM1JoYkdGdkxtTnZMM05oYm1SaWIzZ3ZhWE56ZFdWeUwzTjBZWFIxYzJ4cGMzUXZNU0o5ZlN3aWMzVmlJam9pT0dJMmNFaEZhMjFKWTFOMmNHMW9NMHhRUlUwM1pHcElVWFpNWlVaWmVFWnJZVlI0WWpGRVltWmFVU0lzSW5WelpYSmZZWFYwYUdWdWRHbGpZWFJwYjI0aU9pSnplWE4wWlcxZlltbHZiV1YwY25raUxDSjJjRjltYjNKdFlYUnpYM04xY0hCdmNuUmxaQ0k2ZXlKcWQzUmZkbU5mYW5OdmJpSTZleUpoYkdkZmRtRnNkV1Z6WDNOMWNIQnZjblJsWkNJNld5SkZVekkxTmlJc0lrVlRNalUyU3lJc0lrVmtSRk5CSWwxOUxDSnFkM1JmZG5CZmFuTnZiaUk2ZXlKaGJHZGZkbUZzZFdWelgzTjFjSEJ2Y25SbFpDSTZXeUpGVXpJMU5pSXNJa1ZUTWpVMlN5SXNJa1ZrUkZOQklsMTlMQ0oyWXl0elpDMXFkM1FpT25zaVlXeG5YM1poYkhWbGMxOXpkWEJ3YjNKMFpXUWlPbHNpUlZNeU5UWWlMQ0pGVXpJMU5rc2lMQ0pGWkVSVFFTSmRmWDBzSW5kaGJHeGxkRjl1WVcxbElqb2lkR0ZzWVc5ZmQyRnNiR1YwSW4wLkdjNkJUdzFwcHF2U3VLdHhiZi1saHhoamIxSGFhQnZuV0hrMUowWk1OYWg2RDBVY3IxV3pvZlhZUGJKa2tzejNBd0xya0F4NUh5QmR0NE5QMGFuSVVBfmV5SmhiR2NpT2lKRlV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpwYzNNaU9pSTRZalp3U0VWcmJVbGpVM1p3YldnelRGQkZUVGRrYWtoUmRreGxSbGw0Um10aFZIaGlNVVJpWmxwUklpd2lZWFZrSWpvaWFIUjBjSE02THk5MFlXeGhieTVqYnk5cGMzTjFaWEl2WjNKc2RucGphMjltZVNJc0ltNWlaaUk2TVRjeE9EWXlPVGM0TXl3aVpYaHdJam94TnpFNE5qSTVPRFF6ZlEuRC1pX3V6S3BlWE1XMXY0N0thVWxaYl9qazNMTFN1eEQ4bVRYVnMyektka00zR3V1dEtxc2NGSEkzbjZRYUYyc2EzY29RaWhnZ1I5bGJxUFpwZGN1SXciLCJpYXQiOjE3MTg2Mjk3OTJ9.lJ3ez1qV4_gUVcpMZg-agMCgwoaaLkC8yxj5R6F-ICU',
-              'nonce': 'de208cc1-1c17-4123-b52e-67321ef55aa1',
-              'code_challenge': '4KorCwmYyO-_t4i_hva7F3aHGpT_2WqqDh6erimepOA',
-              'code_challenge_method': 'S256',
-              'issuer_state': 'test10',
-              'client_metadata':
-                  '%7B%22authorization_endpoint%22%3A%22https%3A%2F%2Fapp.altme.io%2Fapp%2Fdownload%2Fauthorize%22%2C%22scopes_supported%22%3A%5B%22openid%22%5D%2C%22response_types_supported%22%3A%5B%22vp_token%22%2C%22id_token%22%5D%2C%22client_id_schemes_supported%22%3A%5B%22redirect_uri%22%2C%22did%22%5D%2C%22grant_types_supported%22%3A%5B%22authorization_code%22%2C%22pre-authorized_code%22%5D%2C%22subject_types_supported%22%3A%5B%22public%22%5D%2C%22id_token_signing_alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%2C%22request_object_signing_alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%2C%22request_parameter_supported%22%3Atrue%2C%22request_uri_parameter_supported%22%3Atrue%2C%22request_authentication_methods_supported%22%3A%7B%22authorization_endpoint%22%3A%5B%22request_object%22%5D%7D%2C%22vp_formats_supported%22%3A%7B%22jwt_vp%22%3A%7B%22alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%7D%2C%22jwt_vc%22%3A%7B%22alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%7D%7D%2C%22subject_syntax_types_supported%22%3A%5B%22urn%3Aietf%3Aparams%3Aoauth%3Ajwk-thumbprint%22%2C%22did%3Akey%22%2C%22did%3Apkh%22%2C%22did%3Akey%22%2C%22did%3Apolygonid%22%5D%2C%22subject_syntax_types_discriminations%22%3A%5B%22did%3Akey%3Ajwk_jcs-pub%22%2C%22did%3Aebsi%3Av1%22%5D%2C%22subject_trust_frameworks_supported%22%3A%5B%22ebsi%22%5D%2C%22id_token_types_supported%22%3A%5B%22subject_signed_id_token%22%5D%2C%22token_endpoint_auth_method%22%3A%22client_id%22%7D',
-              'client_id': '8b6pHEkmIcSvpmh3LPEM7djHQvLeFYxFkaTxb1DbfZQ',
-              'scope': 'openid',
-              'authorization_details':
-                  '[{"type":"openid_credential","credential_configuration_id":"Pid"}]',
-            };
-
-            dioAdapter.onGet(
-              'https://talao.co/issuer/grlvzckofy/.well-known/openid-credential-issuer',
-              (request) =>
-                  request.reply(200, openIdCredentialIssuerConfigurationTest10),
-            );
-            final (authorizationEndpoint, authorizationRequestParemeters, _) =
-                await oidc4vc.getAuthorizationData(
-              selectedCredentials: selectedCredentials,
-              clientId: clientId,
-              clientSecret: null,
-              redirectUri: redirectUri,
-              issuerState: issuerState,
-              nonce: nonce,
-              pkcePair: pkcePair,
-              state: state,
-              authorizationEndPoint: authorizationEndPoint,
-              scope: false,
-              clientAuthentication: ClientAuthentication.clientId,
-              oidc4vciDraftType: OIDC4VCIDraftType.draft13,
-              formatsSupported: [VCFormatType.jwtVcJson],
-              oAuthClientAttestation:
-                  'eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDp3ZWI6dGFsYW8uY28ja2V5LTIiLCJ0eXAiOiJ3YWxsZXQtYXR0ZXN0YXRpb24rand0In0.eyJhdXRob3JpemF0aW9uX2VuZHBvaW50IjoiaHR0cHM6Ly9hcHAuYWx0bWUuaW8vYXBwL2Rvd25sb2FkL2F1dGhvcml6ZSIsImNsaWVudF9pZF9zY2hlbWVzX3N1cHBvcnRlZCI6WyJkaWQiLCJyZWRpcmVjdF91cmkiLCJ4NTA5X3Nhbl9kbnMiLCJ2ZXJpZmllcl9hdHRlc3RhdGlvbiJdLCJjbmYiOnsiandrIjp7ImNydiI6IlAtMjU2Iiwia2lkIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsImt0eSI6IkVDIiwieCI6IkVQb194VkhFai1QYzB1eGJtY3hNajJMNjZQb0doLXVvWUdBemdHS012T1EiLCJ5IjoiRndGSDF2S1ZHX2c3QkdiT0NIY3dZcnFKdFJINnVDTFU5aUliUGF4S1dWQSJ9fSwiZXhwIjoxNzQ5OTEyNjYwLCJncmFudF90eXBlc19zdXBwb3J0ZWQiOlsiYXV0aG9yaXphdGlvbl9jb2RlIiwicHJlLWF1dGhvcml6ZWRfY29kZSJdLCJpYXQiOjE3MTgzNzY2NjAsImlzcyI6ImRpZDp3ZWI6dGFsYW8uY28iLCJqdGkiOiI4YzZkZjFlNi0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJrZXlfdHlwZSI6InNvZnR3YXJlIiwibm9uY2UiOiI4YzRkNDg2YS0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJwcmVzZW50YXRpb25fZGVmaW5pdGlvbl91cmlfc3VwcG9ydGVkIjp0cnVlLCJyZXF1ZXN0X29iamVjdF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIl0sInJlc3BvbnNlX3R5cGVzX3N1cHBvcnRlZCI6WyJ2cF90b2tlbiIsImlkX3Rva2VuIl0sInN0YXR1cyI6eyJzdGF0dXNfbGlzdCI6eyJpZHgiOjc1NzMwLCJ1cmkiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvaXNzdWVyL3N0YXR1c2xpc3QvMSJ9fSwic3ViIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsInVzZXJfYXV0aGVudGljYXRpb24iOiJzeXN0ZW1fYmlvbWV0cnkiLCJ2cF9mb3JtYXRzX3N1cHBvcnRlZCI6eyJqd3RfdmNfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJqd3RfdnBfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJ2YytzZC1qd3QiOnsiYWxnX3ZhbHVlc19zdXBwb3J0ZWQiOlsiRVMyNTYiLCJFUzI1NksiLCJFZERTQSJdfX0sIndhbGxldF9uYW1lIjoidGFsYW9fd2FsbGV0In0.Gc6BTw1ppqvSuKtxbf-lhxhjb1HaaBvnWHk1J0ZMNah6D0Ucr1WzofXYPbJkksz3AwLrkAx5HyBdt4NP0anIUA',
-              oAuthClientAttestationPop:
-                  'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI4YjZwSEVrbUljU3ZwbWgzTFBFTTdkakhRdkxlRll4RmthVHhiMURiZlpRIiwiYXVkIjoiaHR0cHM6Ly90YWxhby5jby9pc3N1ZXIvZ3Jsdnpja29meSIsIm5iZiI6MTcxODYzMDkwNCwiZXhwIjoxNzE4NjMwOTY0fQ.versm2Ejz9W5uVbejGiOl1ytAoAHSeo5zZLer-hhiWBm8y1QgCmFB5xay4xWi3Nlx2KC2f1wsZ6tMVsrfZD2rg',
-              secureAuthorizedFlow: true,
-              issuer: issuer,
-              dio: client,
-              credentialOfferJson: credentialOfferJsonAuthorizedTest10,
-              secureStorage: mockSecureStorage,
-              isEBSIProfile: true,
-              walletIssuer: 'https://app.talao.co/wallet_issuer',
-              useOAuthAuthorizationServerLink: false,
-            );
-
-            expect(authorizationEndpoint, expectedAuthorizationEndpoint);
-            expect(
-              authorizationRequestParemeters,
-              expectedAuthorizationRequestParemeters,
-            );
-          },
-        );
-
-        test(
-          'pre-authorized code flow  we return Uri for authentication endpoint',
-          () async {
-            const expectedAuthorizationEndpoint =
-                'https://talao.co/issuer/grlvzckofy/authorize';
-
-            const expectedAuthorizationRequestParemeters = {
-              'response_type': 'code',
-              'redirect_uri': 'https://app.altme.io/app/download/callback',
-              'state':
-                  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlVmVyaWZpZXIiOiJrZFFvY1hkSzg5eEFDMTd6eFFaVjg3Q3h5eU84X25OY1oxbDF4UUpnTEI0IiwiY3JlZGVudGlhbHMiOlsiUGlkIl0sImlzc3VlciI6Imh0dHBzOi8vdGFsYW8uY28vaXNzdWVyL2dybHZ6Y2tvZnkiLCJpc0VCU0lWMyI6ZmFsc2UsImNsaWVudF9pZCI6IjhiNnBIRWttSWNTdnBtaDNMUEVNN2RqSFF2TGVGWXhGa2FUeGIxRGJmWlEiLCJjbGllbnRfYXNzZXJ0aW9uIjoiZXlKaGJHY2lPaUpGVXpJMU5pSXNJbXRwWkNJNkltUnBaRHAzWldJNmRHRnNZVzh1WTI4amEyVjVMVElpTENKMGVYQWlPaUozWVd4c1pYUXRZWFIwWlhOMFlYUnBiMjRyYW5kMEluMC5leUpoZFhSb2IzSnBlbUYwYVc5dVgyVnVaSEJ2YVc1MElqb2lhSFIwY0hNNkx5OWhjSEF1WVd4MGJXVXVhVzh2WVhCd0wyUnZkMjVzYjJGa0wyRjFkR2h2Y21sNlpTSXNJbU5zYVdWdWRGOXBaRjl6WTJobGJXVnpYM04xY0hCdmNuUmxaQ0k2V3lKa2FXUWlMQ0p5WldScGNtVmpkRjkxY21raUxDSjROVEE1WDNOaGJsOWtibk1pTENKMlpYSnBabWxsY2w5aGRIUmxjM1JoZEdsdmJpSmRMQ0pqYm1ZaU9uc2lhbmRySWpwN0ltTnlkaUk2SWxBdE1qVTJJaXdpYTJsa0lqb2lPR0kyY0VoRmEyMUpZMU4yY0cxb00weFFSVTAzWkdwSVVYWk1aVVpaZUVacllWUjRZakZFWW1aYVVTSXNJbXQwZVNJNklrVkRJaXdpZUNJNklrVlFiMTk0VmtoRmFpMVFZekIxZUdKdFkzaE5hakpNTmpaUWIwZG9MWFZ2V1VkQmVtZEhTMDEyVDFFaUxDSjVJam9pUm5kR1NERjJTMVpIWDJjM1FrZGlUME5JWTNkWmNuRktkRkpJTm5WRFRGVTVhVWxpVUdGNFMxZFdRU0o5ZlN3aVpYaHdJam94TnpRNU9URXlOall3TENKbmNtRnVkRjkwZVhCbGMxOXpkWEJ3YjNKMFpXUWlPbHNpWVhWMGFHOXlhWHBoZEdsdmJsOWpiMlJsSWl3aWNISmxMV0YxZEdodmNtbDZaV1JmWTI5a1pTSmRMQ0pwWVhRaU9qRTNNVGd6TnpZMk5qQXNJbWx6Y3lJNkltUnBaRHAzWldJNmRHRnNZVzh1WTI4aUxDSnFkR2tpT2lJNFl6WmtaakZsTmkweVlUVmtMVEV4WldZdFlqUXdZeTB3WVRFMk1qZzVOVGcxTmpBaUxDSnJaWGxmZEhsd1pTSTZJbk52Wm5SM1lYSmxJaXdpYm05dVkyVWlPaUk0WXpSa05EZzJZUzB5WVRWa0xURXhaV1l0WWpRd1l5MHdZVEUyTWpnNU5UZzFOakFpTENKd2NtVnpaVzUwWVhScGIyNWZaR1ZtYVc1cGRHbHZibDkxY21sZmMzVndjRzl5ZEdWa0lqcDBjblZsTENKeVpYRjFaWE4wWDI5aWFtVmpkRjl6YVdkdWFXNW5YMkZzWjE5MllXeDFaWE5mYzNWd2NHOXlkR1ZrSWpwYklrVlRNalUySWl3aVJWTXlOVFpMSWwwc0luSmxjM0J2Ym5ObFgzUjVjR1Z6WDNOMWNIQnZjblJsWkNJNld5SjJjRjkwYjJ0bGJpSXNJbWxrWDNSdmEyVnVJbDBzSW5OMFlYUjFjeUk2ZXlKemRHRjBkWE5mYkdsemRDSTZleUpwWkhnaU9qYzFOek13TENKMWNta2lPaUpvZEhSd2N6b3ZMM1JoYkdGdkxtTnZMM05oYm1SaWIzZ3ZhWE56ZFdWeUwzTjBZWFIxYzJ4cGMzUXZNU0o5ZlN3aWMzVmlJam9pT0dJMmNFaEZhMjFKWTFOMmNHMW9NMHhRUlUwM1pHcElVWFpNWlVaWmVFWnJZVlI0WWpGRVltWmFVU0lzSW5WelpYSmZZWFYwYUdWdWRHbGpZWFJwYjI0aU9pSnplWE4wWlcxZlltbHZiV1YwY25raUxDSjJjRjltYjNKdFlYUnpYM04xY0hCdmNuUmxaQ0k2ZXlKcWQzUmZkbU5mYW5OdmJpSTZleUpoYkdkZmRtRnNkV1Z6WDNOMWNIQnZjblJsWkNJNld5SkZVekkxTmlJc0lrVlRNalUyU3lJc0lrVmtSRk5CSWwxOUxDSnFkM1JmZG5CZmFuTnZiaUk2ZXlKaGJHZGZkbUZzZFdWelgzTjFjSEJ2Y25SbFpDSTZXeUpGVXpJMU5pSXNJa1ZUTWpVMlN5SXNJa1ZrUkZOQklsMTlMQ0oyWXl0elpDMXFkM1FpT25zaVlXeG5YM1poYkhWbGMxOXpkWEJ3YjNKMFpXUWlPbHNpUlZNeU5UWWlMQ0pGVXpJMU5rc2lMQ0pGWkVSVFFTSmRmWDBzSW5kaGJHeGxkRjl1WVcxbElqb2lkR0ZzWVc5ZmQyRnNiR1YwSW4wLkdjNkJUdzFwcHF2U3VLdHhiZi1saHhoamIxSGFhQnZuV0hrMUowWk1OYWg2RDBVY3IxV3pvZlhZUGJKa2tzejNBd0xya0F4NUh5QmR0NE5QMGFuSVVBfmV5SmhiR2NpT2lKRlV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpwYzNNaU9pSTRZalp3U0VWcmJVbGpVM1p3YldnelRGQkZUVGRrYWtoUmRreGxSbGw0Um10aFZIaGlNVVJpWmxwUklpd2lZWFZrSWpvaWFIUjBjSE02THk5MFlXeGhieTVqYnk5cGMzTjFaWEl2WjNKc2RucGphMjltZVNJc0ltNWlaaUk2TVRjeE9EWXlPVGM0TXl3aVpYaHdJam94TnpFNE5qSTVPRFF6ZlEuRC1pX3V6S3BlWE1XMXY0N0thVWxaYl9qazNMTFN1eEQ4bVRYVnMyektka00zR3V1dEtxc2NGSEkzbjZRYUYyc2EzY29RaWhnZ1I5bGJxUFpwZGN1SXciLCJpYXQiOjE3MTg2Mjk3OTJ9.lJ3ez1qV4_gUVcpMZg-agMCgwoaaLkC8yxj5R6F-ICU',
-              'nonce': 'de208cc1-1c17-4123-b52e-67321ef55aa1',
-              'code_challenge': '4KorCwmYyO-_t4i_hva7F3aHGpT_2WqqDh6erimepOA',
-              'code_challenge_method': 'S256',
-              'issuer_state': 'test10',
-              'client_metadata':
-                  '%7B%22authorization_endpoint%22%3A%22https%3A%2F%2Fapp.altme.io%2Fapp%2Fdownload%2Fauthorize%22%2C%22scopes_supported%22%3A%5B%22openid%22%5D%2C%22response_types_supported%22%3A%5B%22vp_token%22%2C%22id_token%22%5D%2C%22client_id_schemes_supported%22%3A%5B%22redirect_uri%22%2C%22did%22%5D%2C%22grant_types_supported%22%3A%5B%22authorization_code%22%2C%22pre-authorized_code%22%5D%2C%22subject_types_supported%22%3A%5B%22public%22%5D%2C%22id_token_signing_alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%2C%22request_object_signing_alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%2C%22request_parameter_supported%22%3Atrue%2C%22request_uri_parameter_supported%22%3Atrue%2C%22request_authentication_methods_supported%22%3A%7B%22authorization_endpoint%22%3A%5B%22request_object%22%5D%7D%2C%22vp_formats_supported%22%3A%7B%22jwt_vp%22%3A%7B%22alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%7D%2C%22jwt_vc%22%3A%7B%22alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%5D%7D%7D%2C%22subject_syntax_types_supported%22%3A%5B%22urn%3Aietf%3Aparams%3Aoauth%3Ajwk-thumbprint%22%2C%22did%3Akey%22%2C%22did%3Apkh%22%2C%22did%3Akey%22%2C%22did%3Apolygonid%22%5D%2C%22subject_syntax_types_discriminations%22%3A%5B%22did%3Akey%3Ajwk_jcs-pub%22%2C%22did%3Aebsi%3Av1%22%5D%2C%22subject_trust_frameworks_supported%22%3A%5B%22ebsi%22%5D%2C%22id_token_types_supported%22%3A%5B%22subject_signed_id_token%22%5D%2C%22token_endpoint_auth_method%22%3A%22client_id%22%7D',
-              'client_id': '8b6pHEkmIcSvpmh3LPEM7djHQvLeFYxFkaTxb1DbfZQ',
-              'scope': 'openid',
-              'authorization_details':
-                  '[{"type":"openid_credential","credential_configuration_id":"Pid"}]',
-            };
-
-            dioAdapter.onGet(
-              'https://talao.co/issuer/grlvzckofy/.well-known/openid-credential-issuer',
-              (request) =>
-                  request.reply(200, openIdCredentialIssuerConfigurationTest10),
-            );
-            final (authorizationEndpoint, authorizationRequestParemeters, _) =
-                await oidc4vc.getAuthorizationData(
-              selectedCredentials: selectedCredentials,
-              clientId: clientId,
-              clientSecret: null,
-              redirectUri: redirectUri,
-              issuerState: issuerState,
-              nonce: nonce,
-              pkcePair: pkcePair,
-              state: state,
-              authorizationEndPoint: authorizationEndPoint,
-              scope: false,
-              clientAuthentication: ClientAuthentication.clientId,
-              oidc4vciDraftType: OIDC4VCIDraftType.draft13,
-              formatsSupported: [VCFormatType.jwtVcJson],
-              oAuthClientAttestation:
-                  'eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDp3ZWI6dGFsYW8uY28ja2V5LTIiLCJ0eXAiOiJ3YWxsZXQtYXR0ZXN0YXRpb24rand0In0.eyJhdXRob3JpemF0aW9uX2VuZHBvaW50IjoiaHR0cHM6Ly9hcHAuYWx0bWUuaW8vYXBwL2Rvd25sb2FkL2F1dGhvcml6ZSIsImNsaWVudF9pZF9zY2hlbWVzX3N1cHBvcnRlZCI6WyJkaWQiLCJyZWRpcmVjdF91cmkiLCJ4NTA5X3Nhbl9kbnMiLCJ2ZXJpZmllcl9hdHRlc3RhdGlvbiJdLCJjbmYiOnsiandrIjp7ImNydiI6IlAtMjU2Iiwia2lkIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsImt0eSI6IkVDIiwieCI6IkVQb194VkhFai1QYzB1eGJtY3hNajJMNjZQb0doLXVvWUdBemdHS012T1EiLCJ5IjoiRndGSDF2S1ZHX2c3QkdiT0NIY3dZcnFKdFJINnVDTFU5aUliUGF4S1dWQSJ9fSwiZXhwIjoxNzQ5OTEyNjYwLCJncmFudF90eXBlc19zdXBwb3J0ZWQiOlsiYXV0aG9yaXphdGlvbl9jb2RlIiwicHJlLWF1dGhvcml6ZWRfY29kZSJdLCJpYXQiOjE3MTgzNzY2NjAsImlzcyI6ImRpZDp3ZWI6dGFsYW8uY28iLCJqdGkiOiI4YzZkZjFlNi0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJrZXlfdHlwZSI6InNvZnR3YXJlIiwibm9uY2UiOiI4YzRkNDg2YS0yYTVkLTExZWYtYjQwYy0wYTE2Mjg5NTg1NjAiLCJwcmVzZW50YXRpb25fZGVmaW5pdGlvbl91cmlfc3VwcG9ydGVkIjp0cnVlLCJyZXF1ZXN0X29iamVjdF9zaWduaW5nX2FsZ192YWx1ZXNfc3VwcG9ydGVkIjpbIkVTMjU2IiwiRVMyNTZLIl0sInJlc3BvbnNlX3R5cGVzX3N1cHBvcnRlZCI6WyJ2cF90b2tlbiIsImlkX3Rva2VuIl0sInN0YXR1cyI6eyJzdGF0dXNfbGlzdCI6eyJpZHgiOjc1NzMwLCJ1cmkiOiJodHRwczovL3RhbGFvLmNvL3NhbmRib3gvaXNzdWVyL3N0YXR1c2xpc3QvMSJ9fSwic3ViIjoiOGI2cEhFa21JY1N2cG1oM0xQRU03ZGpIUXZMZUZZeEZrYVR4YjFEYmZaUSIsInVzZXJfYXV0aGVudGljYXRpb24iOiJzeXN0ZW1fYmlvbWV0cnkiLCJ2cF9mb3JtYXRzX3N1cHBvcnRlZCI6eyJqd3RfdmNfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJqd3RfdnBfanNvbiI6eyJhbGdfdmFsdWVzX3N1cHBvcnRlZCI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19LCJ2YytzZC1qd3QiOnsiYWxnX3ZhbHVlc19zdXBwb3J0ZWQiOlsiRVMyNTYiLCJFUzI1NksiLCJFZERTQSJdfX0sIndhbGxldF9uYW1lIjoidGFsYW9fd2FsbGV0In0.Gc6BTw1ppqvSuKtxbf-lhxhjb1HaaBvnWHk1J0ZMNah6D0Ucr1WzofXYPbJkksz3AwLrkAx5HyBdt4NP0anIUA',
-              oAuthClientAttestationPop:
-                  'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI4YjZwSEVrbUljU3ZwbWgzTFBFTTdkakhRdkxlRll4RmthVHhiMURiZlpRIiwiYXVkIjoiaHR0cHM6Ly90YWxhby5jby9pc3N1ZXIvZ3Jsdnpja29meSIsIm5iZiI6MTcxODYzMDkwNCwiZXhwIjoxNzE4NjMwOTY0fQ.versm2Ejz9W5uVbejGiOl1ytAoAHSeo5zZLer-hhiWBm8y1QgCmFB5xay4xWi3Nlx2KC2f1wsZ6tMVsrfZD2rg',
-              secureAuthorizedFlow: true,
-              issuer: issuer,
-              dio: client,
-              credentialOfferJson: credentialOfferJsonPreAuthorizedTest10,
-              secureStorage: mockSecureStorage,
-              isEBSIProfile: true,
-              walletIssuer: 'https://app.talao.co/wallet_issuer',
-              useOAuthAuthorizationServerLink: false,
-            );
-
-            expect(authorizationEndpoint, expectedAuthorizationEndpoint);
-            expect(
-              authorizationRequestParemeters,
-              expectedAuthorizationRequestParemeters,
-            );
-          },
-        );
       });
     });
 

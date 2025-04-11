@@ -47,7 +47,8 @@ class CredentialManifestCard extends StatelessWidget {
                     ],
                   )
                 : null,
-            shapeColor: Theme.of(context).colorScheme.primary.withOpacity(0.05),
+            shapeColor:
+                Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
             value: 1,
             anchors: showBgDecoration
                 ? const <Alignment>[Alignment.bottomRight]

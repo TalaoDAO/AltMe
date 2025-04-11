@@ -52,6 +52,7 @@ const _$AppStatusEnumMap = {
   AppStatus.restoreWallet: 'restoreWallet',
   AppStatus.successAdd: 'successAdd',
   AppStatus.successUpdate: 'successUpdate',
+  AppStatus.addEuropeanProfile: 'addEuropeanProfile',
 };
 
 const _$BlockchainTypeEnumMap = {

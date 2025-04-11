@@ -46,10 +46,10 @@ class Circle extends StatelessWidget {
           color: filled
               ? allowAction
                   ? fillColor
-                  : fillColor.withOpacity(0.1)
+                  : fillColor.withValues(alpha: 0.1)
               : allowAction
                   ? borderColor
-                  : borderColor.withOpacity(0.1),
+                  : borderColor.withValues(alpha: 0.1),
           width: circleUIConfig.borderWidth,
         ),
       ),

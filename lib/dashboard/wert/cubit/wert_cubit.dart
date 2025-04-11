@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class WertCubit extends Cubit<String> {
   WertCubit({
@@ -16,8 +17,15 @@ class WertCubit extends Cubit<String> {
 
   Future<void> getUrl() async {
     final log = getLogger('WertCubit - getUrl');
-    String link =
-        '''https://widget.wert.io/01GPB3PAQ0KF3SCDMHRAN6AZ2B/widget/?theme=dark&lang=en''';
+
+    // Get Wert ID from environment variables
+    final wertId = dotenv.env['WERT_ID'];
+    if (wertId == null) {
+      throw Exception('WERT_ID is not set in .env file');
+    }
+
+    // Base URL for Wert widget with dynamic values
+    String link = 'https://widget.wert.io/$wertId/widget/?theme=dark&lang=en';
 
     final address = walletCubit.state.currentAccount!.walletAddress;
 

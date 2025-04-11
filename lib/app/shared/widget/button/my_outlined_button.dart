@@ -64,7 +64,7 @@ class MyOutlinedButton extends StatelessWidget {
                           ? Theme.of(context)
                               .colorScheme
                               .inverseSurface
-                              .withOpacity(0.12)
+                              .withValues(alpha: 0.12)
                           : textColor ??
                               Theme.of(context).colorScheme.inverseSurface,
                     ),
@@ -96,7 +96,7 @@ class MyOutlinedButton extends StatelessWidget {
                           ? Theme.of(context)
                               .colorScheme
                               .onSurface
-                              .withOpacity(0.12)
+                              .withValues(alpha: 0.12)
                           : textColor ??
                               Theme.of(context).colorScheme.secondaryContainer,
                     ),
@@ -121,7 +121,7 @@ ButtonStyle outlinedStyleFrom({
     backgroundColor: backgroundColor ?? Colors.transparent,
     side: BorderSide(
       color: onPressed == null
-          ? Theme.of(context).colorScheme.inverseSurface.withOpacity(0.12)
+          ? Theme.of(context).colorScheme.inverseSurface.withValues(alpha: 0.12)
           : borderColor ?? Theme.of(context).colorScheme.inverseSurface,
       width: 2,
     ),
@@ -151,7 +151,7 @@ class OutlinedButtonText extends StatelessWidget {
       text.toUpperCase(),
       style: TextStyle(
         color: onPressed == null
-            ? Theme.of(context).colorScheme.onSurface.withOpacity(0.12)
+            ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12)
             : textColor ?? Theme.of(context).colorScheme.secondaryContainer,
         fontSize: fontSize,
         fontWeight: FontWeight.w700,

@@ -49,6 +49,7 @@ const _$ProfileTypeEnumMap = {
   ProfileType.ebsiV3: 'ebsiV3',
   ProfileType.ebsiV4: 'ebsiV4',
   ProfileType.diipv3: 'diipv3',
+  ProfileType.europeanWallet: 'europeanWallet',
   ProfileType.custom: 'custom',
   ProfileType.enterprise: 'enterprise',
 };

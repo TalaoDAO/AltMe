@@ -13,7 +13,8 @@ class ImportedTag extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).highlightColor,
         border: Border.all(
-          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
+          color:
+              Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12),
           width: 0.35,
         ),
         borderRadius:

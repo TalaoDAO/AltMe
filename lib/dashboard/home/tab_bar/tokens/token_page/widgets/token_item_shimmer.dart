@@ -9,7 +9,7 @@ class TokenItemShimmer extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: BackgroundCard(
-        color: Theme.of(context).colorScheme.surface.withOpacity(0.07),
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.07),
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: const ListTile(
           minVerticalPadding: 0,

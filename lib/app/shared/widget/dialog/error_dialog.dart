@@ -54,8 +54,10 @@ class ErrorDialog extends StatelessWidget {
                 text: l10n.moreDetails,
                 verticalSpacing: 14,
                 fontSize: 15,
-                borderColor:
-                    Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                borderColor: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.2),
                 backgroundColor: background,
                 textColor: textColor,
                 borderRadius: Sizes.smallRadius,

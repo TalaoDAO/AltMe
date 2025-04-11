@@ -1,7 +1,7 @@
 name: altme
 description: AltMe Flutter App
 
-version: 2.21.6+5621
+version: 2.22.2+5628
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 environment:
@@ -74,7 +74,7 @@ dependencies:
   #google_mlkit_face_detection: ^0.5.0
   google_mlkit_barcode_scanning: ^0.10.0
   hex: ^0.2.0
-  image: ^4.0.17
+  image: ^4.5.4
   image_picker: ^1.0.7
   jose_plus: ^0.4.5
   json_annotation: ^4.8.1
@@ -97,7 +97,7 @@ dependencies:
   pretty_qr_code: ^3.1.0
   qr_flutter: ^4.1.0
   random_string: ^2.3.1
-  reown_walletkit: ^1.1.0
+  reown_walletkit: ^1.1.4
   secp256k1: ^0.3.0
   secure_application:
     git:
@@ -105,7 +105,7 @@ dependencies:
   secure_storage:
     path: packages/secure_storage
   share_plus: ^7.0.2
-  shared_preferences: ^2.5.1
+  shared_preferences: ^2.5.3
   shimmer: ^3.0.0
   stream_channel: ^2.1.1
   switcher: ^1.0.0

@@ -51,7 +51,7 @@ class DrawerItem2 extends StatelessWidget {
                                 ? Theme.of(context)
                                     .colorScheme
                                     .onSurface
-                                    .withOpacity(0.6)
+                                    .withValues(alpha: 0.6)
                                 : null,
                           ),
                     ),
@@ -65,7 +65,7 @@ class DrawerItem2 extends StatelessWidget {
                                       ? Theme.of(context)
                                           .colorScheme
                                           .onSurface
-                                          .withOpacity(0.6)
+                                          .withValues(alpha: 0.6)
                                       : null,
                                 ),
                       ),
@@ -82,11 +82,14 @@ class DrawerItem2 extends StatelessWidget {
                   Icons.chevron_right,
                   size: 26,
                   color: isDisabled
-                      ? Theme.of(context).colorScheme.onSurface.withOpacity(0.6)
+                      ? Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.6)
                       : Theme.of(context)
                           .colorScheme
                           .onSurface
-                          .withOpacity(0.6),
+                          .withValues(alpha: 0.6),
                 ),
               ],
             ],

@@ -39,10 +39,11 @@ class MarkdownPage extends StatelessWidget {
                   ),
                   a: TextStyle(color: Theme.of(context).colorScheme.primary),
                   p: TextStyle(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withOpacity(0.6),),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.6),
+                  ),
                 ),
                 onTapLink: (text, href, title) => _onTapLink(href),
               );

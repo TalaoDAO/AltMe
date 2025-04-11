@@ -17,7 +17,7 @@ class ProfileSelectorWidget extends StatelessWidget {
         profile.walletType == WalletType.enterprise;
 
     return BlocBuilder<ProfileCubit, ProfileState>(
-      builder: (context, state) {
+      builder: (buildContext, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.max,
@@ -26,7 +26,7 @@ class ProfileSelectorWidget extends StatelessWidget {
               padding: const EdgeInsets.all(Sizes.spaceSmall),
               margin: const EdgeInsets.all(Sizes.spaceXSmall),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
+                color: Theme.of(buildContext).colorScheme.surface,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(Sizes.largeRadius),
                 ),
@@ -41,8 +41,9 @@ class ProfileSelectorWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          context.l10n.chooseYourSSIProfileOrCustomizeYourOwn,
-                          style: Theme.of(context).textTheme.titleMedium,
+                          buildContext
+                              .l10n.chooseYourSSIProfileOrCustomizeYourOwn,
+                          style: Theme.of(buildContext).textTheme.titleMedium,
                         ),
                       ],
                     ),
@@ -82,6 +83,7 @@ class ProfileSelectorWidget extends StatelessWidget {
                                     false;
                                 if (!moveAhead) return;
                               }
+                              LoadingView().show(context: buildContext);
 
                               await context
                                   .read<ProfileCubit>()
@@ -94,6 +96,7 @@ class ProfileSelectorWidget extends StatelessWidget {
                                 return Navigator.of(context)
                                     .push<void>(Oidc4vcSettingMenu.route());
                               }
+                              LoadingView().hide();
                             },
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
@@ -122,7 +125,7 @@ class ProfileSelectorWidget extends StatelessWidget {
                               color: Theme.of(context)
                                   .colorScheme
                                   .onSurface
-                                  .withOpacity(0.12),
+                                  .withValues(alpha: 0.12),
                             ),
                           ),
                         ],

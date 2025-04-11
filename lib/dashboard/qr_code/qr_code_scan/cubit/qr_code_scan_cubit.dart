@@ -890,6 +890,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       await handleErrorForOID4VCI(
         oidc4vcParameters: oidc4vcParameters,
+        didKeyType: profileCubit.state.model.profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid,
+        clientType: profileCubit.state.model.profileSetting
+            .selfSovereignIdentityOptions.customOidc4vcProfile.clientType,
       );
 
       await getAndAddDefferedCredential(
@@ -1078,27 +1082,20 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   Future<void> verifyJWTBeforeLaunchingOIDC4VPANDSIOPV2Flow() async {
     final String? requestUri = state.uri?.queryParameters['request_uri'];
     final String? request = state.uri?.queryParameters['request'];
-
     late dynamic encodedData;
-
     if (request != null) {
       encodedData = request;
     } else if (requestUri != null) {
       encodedData =
           await fetchRequestUriPayload(url: requestUri, client: client);
     }
-
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
-
     final isSecurityEnabled = customOidc4vcProfile.securityLevel;
-
     if (isSecurityEnabled) {
       final Map<String, dynamic> payload =
           jwtDecode.parseJwt(encodedData as String);
-
       var clientId = payload['client_id'].toString();
-
       //check Signature
       try {
         /// client_id_scheme = did, you need tio use the universal resolver

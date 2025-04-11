@@ -65,7 +65,7 @@ class SelectiveDisclosureDisplayMap {
       final bool hasNestedData =
           mapValue.values.any((element) => element is Map<String, dynamic>);
 
-      if (hasNestedData && parentKeyId == null) {
+      if (hasNestedData) {
         final nestedMap = SelectiveDisclosureDisplayMap(
           credentialModel: credentialModel,
           claims: mapValue,
@@ -80,7 +80,18 @@ class SelectiveDisclosureDisplayMap {
           displayMode: displayMode,
         ).buildMap;
         if (nestedMap.isNotEmpty) {
-          builtMap[title] = nestedMap;
+          final fundation = claimData(mapKey, title, type, parentKeyId);
+          if (fundation.isEmpty) {
+            builtMap.addAll(
+              {title: nestedMap},
+            );
+          } else {
+            final fundationValue = fundation.values.first;
+            fundationValue['value'] = nestedMap;
+            builtMap.addAll(
+              {fundation.keys.first: fundationValue},
+            );
+          }
         } else {
           builtMap.addAll(
             claimData(mapKey, title, type, parentKeyId),

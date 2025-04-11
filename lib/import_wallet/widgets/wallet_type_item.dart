@@ -20,7 +20,8 @@ class WalletTypeItem extends StatelessWidget {
           borderRadius:
               const BorderRadius.all(Radius.circular(Sizes.smallRadius)),
           border: Border.all(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
+            color:
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12),
           ),
         ),
         child: Row(

@@ -26,7 +26,9 @@ class OIDC4VPDraftTypeWidget extends StatelessWidget {
               if (draftType == OIDC4VPDraftType.draft10 ||
                   draftType == OIDC4VPDraftType.draft13 ||
                   draftType == OIDC4VPDraftType.draft18 ||
-                  draftType == OIDC4VPDraftType.draft23) return Container();
+                  draftType == OIDC4VPDraftType.draft23) {
+                return Container();
+              }
 
               return Column(
                 children: [
