@@ -6,7 +6,7 @@ void main() {
     test('getBit returns correct bit for index 0 and given encoded list', () {
       // Arrange
       const int index = 1;
-      const String encodedList = "H4sIAAMY_WcC_2NgGFgAAJ36qMKAAAAA";
+      const String encodedList = 'H4sIAAMY_WcC_2NgGFgAAJ36qMKAAAAA';
 
       // Act
       final result = getBit(index: index, encodedList: encodedList);
