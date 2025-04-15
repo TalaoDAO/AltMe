@@ -87,6 +87,7 @@ Future<void> oidc4vpSiopV2AcceptHost({
                   JsonViewerPage.route(
                     title: l10n.display,
                     data: formattedData,
+                    uri: uri,
                   ),
                 );
 

@@ -36,6 +36,7 @@ Future<void> oidc4vciAcceptHost({
                   JsonViewerPage.route(
                     title: l10n.display,
                     data: formattedData,
+                    uri: oidc4vcParameters.initialUri,
                   ),
                 );
 

@@ -9,7 +9,9 @@
     "chooseYourSSIProfileOrCustomizeYourOwn",
     "recoveryPhraseIncorrectErrorMessage",
     "invalidCode",
-    "back"
+    "back",
+    "iaAnalyze",
+    "iaAnalyzeTitle"
   ],
 
   "es": [
@@ -22,11 +24,15 @@
     "chooseYourSSIProfileOrCustomizeYourOwn",
     "recoveryPhraseIncorrectErrorMessage",
     "invalidCode",
-    "back"
+    "back",
+    "iaAnalyze",
+    "iaAnalyzeTitle"
   ],
 
   "fr": [
     "saveBackupPolygonCredentialSubtitle",
-    "back"
+    "back",
+    "iaAnalyze",
+    "iaAnalyzeTitle"
   ]
 }
