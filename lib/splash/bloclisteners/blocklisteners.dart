@@ -116,7 +116,10 @@ final credentialsBlocListener =
     }
     if (state.status == CredentialsStatus.delete) {
       if (state.message != null) {
-        Navigator.of(context).pop();
+        Navigator.popUntil(
+          context,
+          (route) => route.settings.name == AltMeStrings.dashBoardPage,
+        );
       }
     }
   },
