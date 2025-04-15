@@ -398,7 +398,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = NRFD3WN3RA;
 				ENABLE_BITCODE = NO;
-				FLAVOR_APP_NAME = Altme;
+				FLAVOR_APP_NAME = "Compellio Wallet";
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -538,7 +538,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = NRFD3WN3RA;
 				ENABLE_BITCODE = NO;
-				FLAVOR_APP_NAME = Altme;
+				FLAVOR_APP_NAME = "Compellio Wallet";
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -567,7 +567,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = NRFD3WN3RA;
 				ENABLE_BITCODE = NO;
-				FLAVOR_APP_NAME = Altme;
+				FLAVOR_APP_NAME = "Compellio Wallet";
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
