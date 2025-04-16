@@ -9,6 +9,7 @@ import 'package:altme/app/shared/widget/dialog/confirm_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class AiAnalysisButton extends StatelessWidget {
@@ -23,7 +24,7 @@ class AiAnalysisButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppLocalizations l10n = context.l10n;
     return MyElevatedButton(
-      text: l10n.iaAnalyze,
+      text: l10n.iaAnalyzeTitle,
       onPressed: () async {
         /// open popup which explain user is about to share
         /// current link with talao.io. In the popup User can
@@ -34,7 +35,8 @@ class AiAnalysisButton extends StatelessWidget {
               builder: (BuildContext context) {
                 return ConfirmDialog(
                   icon: IconStrings.share,
-                  title: l10n.iaAnalyze,
+                  title: l10n.iaAnalyzeTitle,
+                  subtitle: l10n.iaAnalyze,
                   yes: l10n.communicationHostAllow,
                   no: l10n.communicationHostDeny,
                   //lock: state.uri!.scheme == 'http',
@@ -53,12 +55,14 @@ class AiAnalysisButton extends StatelessWidget {
           final base64Link = base64Encode(utf8.encode(link));
           final headers = <String, dynamic>{
             'Content-Type': 'application/x-www-form-urlencoded',
+                'api-key': DotEnv('WALLET_API_KEY_ID360'),
           };
           try {
             final response = await client.post(
               'https://talao.co/ai/wallet/qrcode',
               data: {
                 'qrcode': base64Link,
+                'oidc4vciDraft': 13
               },
               headers: headers,
             ) as String;

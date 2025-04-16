@@ -82,12 +82,12 @@ Future<void> oidc4vpSiopV2AcceptHost({
           context: context,
           builder: (_) {
             return DeveloperModeDialog(
+              uri: uri,
               onDisplay: () async {
                 final returnedValue = await Navigator.of(context).push<dynamic>(
                   JsonViewerPage.route(
                     title: l10n.display,
                     data: formattedData,
-                    uri: uri,
                   ),
                 );
 

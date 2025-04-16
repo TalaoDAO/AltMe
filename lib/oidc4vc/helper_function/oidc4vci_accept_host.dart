@@ -31,12 +31,12 @@ Future<void> oidc4vciAcceptHost({
           context: context,
           builder: (_) {
             return DeveloperModeDialog(
+              uri: oidc4vcParameters.initialUri,
               onDisplay: () async {
                 final returnedValue = await Navigator.of(context).push<dynamic>(
                   JsonViewerPage.route(
                     title: l10n.display,
                     data: formattedData,
-                    uri: oidc4vcParameters.initialUri,
                   ),
                 );
 
