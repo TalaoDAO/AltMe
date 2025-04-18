@@ -6,10 +6,13 @@ import 'package:altme/app/shared/dio_client/dio_client.dart';
 import 'package:altme/app/shared/loading/loading_view.dart';
 import 'package:altme/app/shared/widget/button/my_elevated_button.dart';
 import 'package:altme/app/shared/widget/dialog/confirm_dialog.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class AiAnalysisButton extends StatelessWidget {
@@ -53,16 +56,37 @@ class AiAnalysisButton extends StatelessWidget {
           // use client to send post request to https://talao.co/wallet/qrcode with 'qrcode' in the body. the value of qrcode is the link in base64 encoded.
           // Encode the link to base64
           final base64Link = base64Encode(utf8.encode(link));
+          final DotEnv dotenv = DotEnv();
+
+          await dotenv.load();
+
           final headers = <String, dynamic>{
             'Content-Type': 'application/x-www-form-urlencoded',
-                'api-key': DotEnv('WALLET_API_KEY_ID360'),
+            'api-key': dotenv.get('WALLET_API_KEY_ID360'),
           };
           try {
             final response = await client.post(
               'https://talao.co/ai/wallet/qrcode',
               data: {
                 'qrcode': base64Link,
-                'oidc4vciDraft': 13
+                'oidc4vciDraft': context
+                    .read<ProfileCubit>()
+                    .state
+                    .model
+                    .profileSetting
+                    .selfSovereignIdentityOptions
+                    .customOidc4vcProfile
+                    .oidc4vciDraft
+                    .numbering,
+                'oidc4vpDraft': context
+                    .read<ProfileCubit>()
+                    .state
+                    .model
+                    .profileSetting
+                    .selfSovereignIdentityOptions
+                    .customOidc4vcProfile
+                    .oidc4vpDraft
+                    .numbering,
               },
               headers: headers,
             ) as String;
