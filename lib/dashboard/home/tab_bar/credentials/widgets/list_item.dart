@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/delete_credential.dart';
 
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
@@ -9,11 +10,13 @@ class _BaseItem extends StatefulWidget {
   const _BaseItem({
     required this.child,
     required this.onTap,
+    this.onLongPress,
     this.enabled = true,
   });
 
   final Widget child;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final bool enabled;
 
   @override
@@ -26,6 +29,7 @@ class __BaseItemState extends State<_BaseItem> {
         opacity: !widget.enabled ? 0.33 : 1,
         child: GestureDetector(
           onTap: widget.onTap,
+          onLongPress: widget.onLongPress,
           child: IntrinsicHeight(child: widget.child),
         ),
       );
@@ -95,6 +99,9 @@ class CredentialsDisplayItem extends StatelessWidget {
     return _BaseItem(
       enabled: true,
       onTap: onTap,
+      onLongPress: credentialModel.disAllowDelete
+          ? null
+          : () => deleteCredential(context, credentialModel.id),
       child: selected == null
           ? CredentialDisplay(
               credentialModel: credentialModel,

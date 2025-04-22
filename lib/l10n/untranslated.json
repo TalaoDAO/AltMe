@@ -10,6 +10,7 @@
     "recoveryPhraseIncorrectErrorMessage",
     "invalidCode",
     "back",
+<<<<<<< HEAD
     "greek"
   ],
 
@@ -938,6 +939,10 @@
     "recoveryPhraseIncorrectErrorMessage",
     "invalidCode",
     "greek"
+=======
+    "iaAnalyze",
+    "iaAnalyzeTitle"
+>>>>>>> main
   ],
 
   "es": [
@@ -951,12 +956,22 @@
     "recoveryPhraseIncorrectErrorMessage",
     "invalidCode",
     "back",
+<<<<<<< HEAD
     "greek"
+=======
+    "iaAnalyze",
+    "iaAnalyzeTitle"
+>>>>>>> main
   ],
 
   "fr": [
     "saveBackupPolygonCredentialSubtitle",
     "back",
+<<<<<<< HEAD
     "greek"
+=======
+    "iaAnalyze",
+    "iaAnalyzeTitle"
+>>>>>>> main
   ]
 }

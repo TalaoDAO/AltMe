@@ -1,9 +1,9 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/widget/markdown_body.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 
 class DisplayTermsOfUseCubit extends Cubit<bool> {
   DisplayTermsOfUseCubit() : super(false);
@@ -130,39 +130,5 @@ class _DisplayTermsofUseState extends State<DisplayTermsofUse> {
 
   Future<String> _loadFile(String path) async {
     return rootBundle.loadString(path);
-  }
-}
-
-class MarkdownBody extends StatelessWidget {
-  const MarkdownBody({
-    super.key,
-    this.physics,
-    this.shrinkWrap = true,
-    required this.data,
-  });
-
-  final ScrollPhysics? physics;
-  final bool shrinkWrap;
-  final String data;
-
-  @override
-  Widget build(BuildContext context) {
-    return Markdown(
-      physics: physics,
-      shrinkWrap: shrinkWrap,
-      data: data,
-      styleSheet: MarkdownStyleSheet(
-        h1: TextStyle(
-          color: Theme.of(context).colorScheme.onSurface,
-        ),
-        h2: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-        a: TextStyle(color: Theme.of(context).colorScheme.primary),
-        p: TextStyle(
-          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
-        ),
-
-        //onTapLink: (text, href, title) => _onTapLink(href),
-      ),
-    );
   }
 }

@@ -2,8 +2,8 @@
 
 import 'dart:convert';
 import 'package:altme/app/app.dart';
-import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/delete_credential.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/ldp_vc/ldp_vc.dart';
@@ -97,28 +97,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           .read<CredentialDetailsCubit>()
           .verifyCredential(widget.credentialModel);
     });
-  }
-
-  Future<void> delete() async {
-    final l10n = context.l10n;
-    final confirm = await showDialog<bool>(
-          context: context,
-          builder: (BuildContext context) {
-            return ConfirmDialog(
-              title: l10n.credentialDetailDeleteConfirmationDialog,
-              yes: l10n.credentialDetailDeleteConfirmationDialogYes,
-              no: l10n.credentialDetailDeleteConfirmationDialogNo,
-            );
-          },
-        ) ??
-        false;
-
-    if (confirm) {
-      final credentialsCubit = context.read<CredentialsCubit>();
-      await credentialsCubit.deleteById(
-        id: widget.credentialModel.id,
-      );
-    }
   }
 
   @override
@@ -404,8 +382,12 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   MyOutlinedButton(
-                    onPressed:
-                        widget.credentialModel.disAllowDelete ? null : delete,
+                    onPressed: widget.credentialModel.disAllowDelete
+                        ? null
+                        : () => deleteCredential(
+                              context,
+                              widget.credentialModel.id,
+                            ),
                     text: l10n.credentialDetailDeleteCard,
                   ),
                   const SizedBox(height: 8),
