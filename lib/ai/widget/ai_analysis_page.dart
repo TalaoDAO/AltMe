@@ -37,7 +37,13 @@ class AiAnalysisPage extends StatelessWidget {
         },
       ),
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      body: MarkdownBody(data: data),
+      body: SingleChildScrollView(
+        child: MarkdownBody(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          data: data,
+        ),
+      ),
       navigation: Padding(
         padding: const EdgeInsets.all(
           Sizes.spaceSmall,
