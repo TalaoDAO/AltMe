@@ -970,7 +970,7 @@ Future<String> getHost({
 }
 
 bool isURL(String input) {
-  final bool uri = Uri.tryParse(input)?.hasAbsolutePath ?? false;
+  final bool uri = Uri.tryParse(input)?.host.isNotEmpty ?? false;
   return uri;
 }
 

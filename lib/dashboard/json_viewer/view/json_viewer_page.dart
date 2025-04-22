@@ -32,28 +32,6 @@ class JsonViewerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return JsonViewerView(
-      title: title,
-      data: data,
-      showButton: showButton,
-    );
-  }
-}
-
-class JsonViewerView extends StatelessWidget {
-  const JsonViewerView({
-    super.key,
-    required this.title,
-    required this.data,
-    required this.showButton,
-  });
-
-  final String title;
-  final String data;
-  final bool showButton;
-
-  @override
-  Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BasePage(
       title: title,

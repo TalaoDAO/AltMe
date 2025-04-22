@@ -1168,5 +1168,8 @@
   "chooseYourSSIProfileOrCustomizeYourOwn": "Choose your wallet profile or customize your own",
   "recoveryPhraseIncorrectErrorMessage": "Please try again with correct order.",
   "invalidCode": "Invalid code",
-  "back": "Back"
+  "back": "Back",
+  "iaAnalyze": "Data will be shared with a remote AI engine. Don't share personal data.",
+  "iaAnalyzeTitle": "AI Agent",
+  "deleteDigit": "Delete"
 }

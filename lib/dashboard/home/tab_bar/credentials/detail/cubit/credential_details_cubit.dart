@@ -67,8 +67,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
             final statusList = status['status_list'];
             if (statusList != null && statusList is Map<String, dynamic>) {
               statusListUri = statusList['uri']?.toString();
-              final idx = statusList['idx'];
-              statusListIndex = idx is int ? idx : null;
+              statusListIndex = int.tryParse(statusList['idx'].toString());
             }
           }
         }
@@ -112,9 +111,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           final statusList = status['status_list'];
           if (statusList != null && statusList is Map<String, dynamic>) {
             statusListUri = statusList['uri']?.toString();
-
-            final idx = statusList['idx'];
-            statusListIndex = idx is int ? idx : null;
+            statusListIndex = int.tryParse(statusList['idx'].toString());
 
             if (statusListUri != null && statusListIndex is int) {
               final headers = {
@@ -348,16 +345,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       ),
     );
 
-    // final response = await client.get(
-    //   statusListUri,
-    //   headers: headers,
-    //   isCachingEnabled: customOidc4vcProfile.statusListCache,
-    //   options: Options().copyWith(
-    //     sendTimeout: const Duration(seconds: 10),
-    //     receiveTimeout: const Duration(seconds: 10),
-    //   ),
-    // );
-
     final payload = jwtDecode.parseJwt(response.toString());
 
     // verify the signature of the VC with the kid of the JWT
@@ -389,8 +376,10 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         final encodedList = credentialSubject['encodedList'];
 
         if (encodedList != null && encodedList is String) {
-          final statusListIndex = int.parse(data.statusListIndex);
-
+          final statusListIndex = int.tryParse(data.statusListIndex);
+          if (statusListIndex == null) {
+            throw Exception('statusListIndex is not a numeric value');
+          }
           final bit = getBit(
             index: statusListIndex,
             encodedList: encodedList,

@@ -94,7 +94,7 @@ class _PinCodeViewState extends State<PinCodeView> {
         body: PinCodeWidget(
           title: widget.title,
           deleteButton: Text(
-            l10n.delete,
+            l10n.deleteDigit,
             style: Theme.of(context).textTheme.labelLarge,
           ),
           cancelButton: Text(
