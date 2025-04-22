@@ -1168,5 +1168,6 @@
     "placeholders": {
       "domain": {}
     }
-  }
+  },
+  "deleteDigit": "Eliminar"
 }

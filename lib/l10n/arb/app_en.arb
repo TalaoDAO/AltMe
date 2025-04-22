@@ -1170,5 +1170,6 @@
   "invalidCode": "Invalid code",
   "back": "Back",
   "iaAnalyze": "Data will be shared with a remote AI engine. Don't share personal data.",
-  "iaAnalyzeTitle": "AI Agent"
+  "iaAnalyzeTitle": "AI Agent",
+  "deleteDigit": "Delete"
 }
