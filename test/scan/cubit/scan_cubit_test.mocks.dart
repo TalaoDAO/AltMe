@@ -2026,7 +2026,7 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
   }) =>
       (super.noSuchMethod(
         Invocation.method(
-          #getDidDocument,
+          #getOpenIdConfiguration,
           [],
           {
             #didKey: didKey,
