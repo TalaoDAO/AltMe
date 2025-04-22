@@ -1,4 +1,3 @@
-import 'package:altme/ai/widget/ai_analysis_button.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -11,26 +10,22 @@ class JsonViewerPage extends StatelessWidget {
     required this.title,
     required this.data,
     required this.showButton,
-    this.uri,
   });
 
   final String title;
   final String data;
   final bool showButton;
-  final Uri? uri;
 
   static Route<dynamic> route({
     required String title,
     required String data,
     bool showButton = true,
-    Uri? uri,
   }) =>
       MaterialPageRoute<void>(
         builder: (_) => JsonViewerPage(
           title: title,
           data: data,
           showButton: showButton,
-          uri: uri,
         ),
         settings: const RouteSettings(name: '/JsonViewerPage'),
       );
@@ -82,17 +77,6 @@ class JsonViewerPage extends StatelessWidget {
                       );
                     },
                   ),
-                  if (uri != null)
-                    Column(
-                      children: [
-                        const SizedBox(height: 8),
-                        AiAnalysisButton(
-                          link: uri!.toString(),
-                        ),
-                      ],
-                    )
-                  else
-                    const SizedBox.shrink(),
                 ],
               ),
             ),

@@ -2015,7 +2015,7 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
       ) as Map<String, dynamic>);
 
   @override
-  _i16.Future<Map<String, dynamic>> getDidDocument({
+  _i16.Future<Map<String, dynamic>> getOpenIdConfiguration({
     required String? didKey,
     required bool? fromStatusList,
     required bool? isCachingEnabled,

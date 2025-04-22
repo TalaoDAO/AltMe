@@ -37,9 +37,7 @@ class LoadingView {
 
     final state = Overlay.of(context);
     // ignore: cast_nullable_to_non_nullable
-    final renderBox = context.findRenderObject() as RenderBox;
-    final size = renderBox.size;
-
+    final size = MediaQuery.sizeOf(context);
     final overlay = OverlayEntry(
       builder: (context) {
         return Material(
