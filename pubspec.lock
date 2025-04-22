@@ -2068,17 +2068,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_android
-<<<<<<< HEAD
-      sha256: c2c8c46297b5d6a80bed7741ec1f2759742c77d272f1a1698176ae828f8e1a18
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.4.9"
-=======
       sha256: "20cbd561f743a342c76c151d6ddb93a9ce6005751e7aa458baad3858bfbfb6ac"
       url: "https://pub.dev"
     source: hosted
     version: "2.4.10"
->>>>>>> main
   shared_preferences_foundation:
     dependency: transitive
     description:
@@ -2609,17 +2602,10 @@ packages:
     dependency: "direct main"
     description:
       name: webview_flutter_wkwebview
-<<<<<<< HEAD
-      sha256: c14455137ce60a68e1ccaf4e8f2dae8cebcb3465ddaa2fcfb57584fb7c5afe4d
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.18.5"
-=======
       sha256: c9f9be526fa0d3347374ceaa05c4b3acb85f4f112abd62f7d74b7d301fa515ff
       url: "https://pub.dev"
     source: hosted
     version: "3.20.0"
->>>>>>> main
   win32:
     dependency: transitive
     description:

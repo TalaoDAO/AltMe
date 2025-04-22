@@ -10,8 +10,9 @@
     "recoveryPhraseIncorrectErrorMessage",
     "invalidCode",
     "back",
-<<<<<<< HEAD
-    "greek"
+    "greek",
+    "iaAnalyze",
+    "iaAnalyzeTitle"
   ],
 
   "el": [
@@ -938,11 +939,10 @@
     "chooseYourSSIProfileOrCustomizeYourOwn",
     "recoveryPhraseIncorrectErrorMessage",
     "invalidCode",
-    "greek"
-=======
+    "greek",
     "iaAnalyze",
-    "iaAnalyzeTitle"
->>>>>>> main
+    "iaAnalyzeTitle",
+    "deleteDigit"
   ],
 
   "es": [
@@ -956,22 +956,16 @@
     "recoveryPhraseIncorrectErrorMessage",
     "invalidCode",
     "back",
-<<<<<<< HEAD
-    "greek"
-=======
+    "greek",
     "iaAnalyze",
     "iaAnalyzeTitle"
->>>>>>> main
   ],
 
   "fr": [
     "saveBackupPolygonCredentialSubtitle",
     "back",
-<<<<<<< HEAD
-    "greek"
-=======
+    "greek",
     "iaAnalyze",
     "iaAnalyzeTitle"
->>>>>>> main
   ]
 }
