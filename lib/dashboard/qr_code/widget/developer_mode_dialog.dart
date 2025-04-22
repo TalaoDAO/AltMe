@@ -47,7 +47,7 @@ class DeveloperModeDialog extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
-            if (uri != null)
+            if (uri != null && Parameters.AIServiceEnabled)
               Column(
                 children: [
                   AiAnalysisButton(
