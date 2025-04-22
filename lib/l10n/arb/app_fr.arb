@@ -1134,6 +1134,6 @@
   "operation": "Opération",
   "chooseYourSSIProfileOrCustomizeYourOwn": "Choisissez un écosystème pour votre wallet",
   "recoveryPhraseIncorrectErrorMessage": "Veuillez recommencer dans le bon ordre.",
-  "invalidCode": "Code invalide"
-
+  "invalidCode": "Code invalide",
+  "deleteDigit": "Effacer"
 }

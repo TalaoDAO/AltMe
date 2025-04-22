@@ -1,3 +1,4 @@
+import 'package:altme/ai/widget/ai_analysis_button.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +8,12 @@ class DeveloperModeDialog extends StatelessWidget {
     super.key,
     required this.onDisplay,
     required this.onSkip,
+    this.uri,
   });
 
   final VoidCallback onDisplay;
   final VoidCallback onSkip;
+  final Uri? uri;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +47,17 @@ class DeveloperModeDialog extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
+            if (uri != null && Parameters.AIServiceEnabled)
+              Column(
+                children: [
+                  AiAnalysisButton(
+                    link: uri!.toString(),
+                  ),
+                  const SizedBox(height: Sizes.spaceSmall),
+                ],
+              )
+            else
+              const SizedBox.shrink(),
             MyElevatedButton(
               text: l10n.display,
               verticalSpacing: 14,

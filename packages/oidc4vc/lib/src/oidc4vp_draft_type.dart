@@ -37,6 +37,25 @@ extension OIDC4VPDraftTypeX on OIDC4VPDraftType {
     }
   }
 
+  String get numbering {
+    switch (this) {
+      case OIDC4VPDraftType.draft10:
+        return '10';
+      case OIDC4VPDraftType.draft13:
+        return '13';
+      case OIDC4VPDraftType.draft18:
+        return '18';
+      case OIDC4VPDraftType.draft20:
+        return '20';
+      case OIDC4VPDraftType.draft21:
+        return '21';
+      case OIDC4VPDraftType.draft22:
+        return '22';
+      case OIDC4VPDraftType.draft23:
+        return '23';
+    }
+  }
+
   bool get draft22AndAbove {
     return this == OIDC4VPDraftType.draft22 || this == OIDC4VPDraftType.draft23;
   }

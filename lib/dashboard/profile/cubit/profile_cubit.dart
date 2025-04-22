@@ -114,7 +114,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       final isDeveloperModeValue =
           await secureStorageProvider.get(SecureStorageKeys.isDeveloperMode);
 
-      final isDeveloperMode =
+      bool isDeveloperMode =
           isDeveloperModeValue != null && isDeveloperModeValue == 'true';
 
       /// profileType
@@ -285,6 +285,9 @@ class ProfileCubit extends Cubit<ProfileState> {
               json.decode(enterpriseProfileSettingJsonString)
                   as Map<String, dynamic>,
             );
+            if (profileSetting.settingsMenu.displayDeveloperMode == false) {
+              isDeveloperMode = false;
+            }
           } else {
             profileSetting = ProfileSetting.initial();
           }
@@ -567,6 +570,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
 
     final profileModel = state.model.copyWith(
+      isDeveloperMode: profileSetting.settingsMenu.displayDeveloperMode &&
+          state.model.isDeveloperMode,
       profileSetting: profileSetting.copyWith(
         generalOptions: profileSetting.generalOptions.copyWith(
           companyLogo: companyLogo,
@@ -686,6 +691,9 @@ class ProfileCubit extends Cubit<ProfileState> {
 
         await update(
           state.model.copyWith(
+            isDeveloperMode:
+                enterpriseProfileSetting.settingsMenu.displayDeveloperMode &&
+                    state.model.isDeveloperMode,
             profileType: profileType,
             profileSetting: enterpriseProfileSetting,
             enterpriseWalletName:
