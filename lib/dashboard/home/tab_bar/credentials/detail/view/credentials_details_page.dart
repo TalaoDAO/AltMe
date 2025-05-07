@@ -1,6 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'dart:convert';
+import 'package:altme/ai/widget/ai_credential_analysis_button.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/delete_credential.dart';
@@ -457,7 +458,19 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                       text: l10n.credentialDetailShare,
                     )
                   else
-                    Container(),
+                    const SizedBox.shrink(),
+                  if (context.read<ProfileCubit>().state.model.isDeveloperMode)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8, bottom: 8),
+                      child: AiCredentialAnalysisButton(
+                        credential: base64Encode(
+                          utf8.encode(
+                            widget.credentialModel.jwt ??
+                                jsonEncode(widget.credentialModel.data),
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),

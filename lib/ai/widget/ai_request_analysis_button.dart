@@ -15,8 +15,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class AiAnalysisButton extends StatelessWidget {
-  const AiAnalysisButton({
+class AiRequestAnalysisButton extends StatelessWidget {
+  const AiRequestAnalysisButton({
     super.key,
     required this.link,
   });
