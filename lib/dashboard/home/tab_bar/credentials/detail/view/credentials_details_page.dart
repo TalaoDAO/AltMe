@@ -459,7 +459,12 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                     )
                   else
                     const SizedBox.shrink(),
-                  if (context.read<ProfileCubit>().state.model.isDeveloperMode)
+                  if (context
+                          .read<ProfileCubit>()
+                          .state
+                          .model
+                          .isDeveloperMode &&
+                      Parameters.isAIServiceEnabled)
                     Padding(
                       padding: const EdgeInsets.only(top: 8, bottom: 8),
                       child: AiCredentialAnalysisButton(
