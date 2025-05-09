@@ -1,6 +1,8 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CredentialActiveStatus extends StatelessWidget {
   const CredentialActiveStatus({
@@ -32,6 +34,11 @@ class CredentialActiveStatus extends StatelessWidget {
               ),
           ],
         ),
+        if (context.read<ProfileCubit>().state.model.isDeveloperMode &&
+            credentialStatus != null)
+          Text('Status label: ${credentialStatus!.message(context)}')
+        else
+          const SizedBox.shrink(),
       ],
     );
   }
