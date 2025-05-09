@@ -339,10 +339,10 @@ packages:
     dependency: transitive
     description:
       name: camera_android
-      sha256: bd9737671a00d979e0310a946e5be2fdc621b6a36b95378755cb3e4498e61485
+      sha256: "08808be7e26fc3c7426c81b3fa387564b8e9c22e6fe9cb5675ce3ab7017d8203"
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.10+2"
+    version: "0.10.10+3"
   camera_avfoundation:
     dependency: transitive
     description:
@@ -1182,10 +1182,10 @@ packages:
     dependency: transitive
     description:
       name: http
-      sha256: fe7ab022b76f3034adc518fb6ea04a82387620e19977665ea18d30a1cf43442f
+      sha256: "2c11f3f94c687ee9bad77c171151672986360b2b001d109814ee7140b2cf261b"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.0"
+    version: "1.4.0"
   http_mock_adapter:
     dependency: "direct dev"
     description:
@@ -1940,26 +1940,26 @@ packages:
     dependency: transitive
     description:
       name: reown_core
-      sha256: b7881177fb33d9c7a1ca2e89291e1027a17f08be55133d315606cef66ced6a39
+      sha256: "171ce977b563b7b2fe0a17393517a4743ab758152d6c0c5158921a7ed3746326"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.4+1"
+    version: "1.1.5"
   reown_sign:
     dependency: transitive
     description:
       name: reown_sign
-      sha256: "253bae7e957386091037c548406f709e7799b8f9f9c6a0eea3176f68a1393263"
+      sha256: eaf81d1d692f4a80ac1d89eb78f640dab8a67a0d015697675a562d107257f16a
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.4+1"
+    version: "1.1.5"
   reown_walletkit:
     dependency: "direct main"
     description:
       name: reown_walletkit
-      sha256: "86993642ee765f009d0b25367964fac6d26ecd9687cab8273cf28007b0a164d0"
+      sha256: a969f97ede4eb77ea42d024f387255b9cdc1383d2af86f4b1dd460c6417ad375
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.4+1"
+    version: "1.1.5"
   reown_yttrium:
     dependency: transitive
     description:
@@ -2546,10 +2546,10 @@ packages:
     dependency: transitive
     description:
       name: web_socket
-      sha256: bfe6f435f6ec49cb6c01da1e275ae4228719e59a6b067048c51e72d9d63bcc4b
+      sha256: "34d64019aa8e36bf9842ac014bb5d2f5586ca73df5e4d9bf5c936975cae6982c"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   web_socket_channel:
     dependency: transitive
     description:
