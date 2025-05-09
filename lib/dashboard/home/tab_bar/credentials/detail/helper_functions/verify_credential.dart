@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 int getPositionOfZlibBit(int index) => index % 8;
 
@@ -16,7 +17,6 @@ int getBit({
 
   final byteToCheck = decompressedBytes[bytes];
   final bitPosition = getPositionOfGZipBit(index);
-
   // byte => 32 =0100000
   // The bit in position 5 is set to 1 !!!
   // so bit = 1
@@ -25,8 +25,7 @@ int getBit({
 }
 
 List<int> decodeAndZlibDecompress(String lst) {
-  final paddedBase64 = lst.padRight((lst.length + 3) & ~3, '=');
-  final compressedBytes = base64Url.decode(paddedBase64);
+  final compressedBytes = decodeEncodedList(lst);
 
   final zlib = ZLibCodec();
   final decompressedBytes = zlib.decode(compressedBytes);
@@ -34,9 +33,17 @@ List<int> decodeAndZlibDecompress(String lst) {
   return decompressedBytes;
 }
 
+Uint8List decodeEncodedList(String lst) {
+  var output = lst;
+  while (output.length % 4 != 0) {
+    // ignore: use_string_buffers
+    output += '=';
+  }
+  return base64Url.decode(output);
+}
+
 List<int> decodeAndGzibDecompress(String lst) {
-  final paddedBase64 = lst.padRight((lst.length + 3) & ~3, '=');
-  final compressedBytes = base64Url.decode(paddedBase64);
+  final compressedBytes = decodeEncodedList(lst);
 
   final gzib = GZipCodec();
   final decompressedBytes = gzib.decode(compressedBytes);

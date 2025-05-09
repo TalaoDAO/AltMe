@@ -50,7 +50,7 @@ class ConfirmDialog extends StatelessWidget {
               icon,
               width: 50,
               height: 50,
-              color: icon == IconStrings.cardReceive ? textColor : null,
+              color: textColor,
               fit: BoxFit.fill,
             ),
             const SizedBox(height: 10),

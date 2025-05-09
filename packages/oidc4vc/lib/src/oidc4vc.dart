@@ -400,7 +400,7 @@ class OIDC4VC {
     return tokenData;
   }
 
-  Future<Map<String, dynamic>> getDidDocument({
+  Future<Map<String, dynamic>> getOpenIdConfiguration({
     required String didKey,
     required bool fromStatusList,
     required bool isCachingEnabled,
@@ -481,7 +481,7 @@ class OIDC4VC {
         } else if (openIdConfiguration.jwks != null) {
           response = openIdConfiguration.jwks;
         } else {
-          throw Exception();
+          throw Exception('no jwks_uri or jwks found');
         }
 
         return response as Map<String, dynamic>;
@@ -519,7 +519,7 @@ class OIDC4VC {
   }
 
   bool isURL(String input) {
-    final uri = Uri.tryParse(input)?.hasAbsolutePath ?? false;
+    final uri = Uri.tryParse(input)?.host.isNotEmpty ?? false;
     return uri;
   }
 
@@ -780,7 +780,8 @@ class OIDC4VC {
             publicKeyBase58ToPublicJwk(method['publicKeyBase58'].toString());
       } else if (method.containsKey('publicKeyMultibase')) {
         publicKeyJwk = publicKeyMultibaseToPublicJwk(
-            method['publicKeyMultibase'].toString(),);
+          method['publicKeyMultibase'].toString(),
+        );
       } else {
         throw Exception('PUBLICKEYJWK_EXTRACTION_ERROR');
       }
@@ -1041,7 +1042,7 @@ class OIDC4VC {
       if (publicJwk != null) {
         publicKeyJwk = publicJwk;
       } else {
-        final didDocument = await getDidDocument(
+        final openIdConfiguration = await getOpenIdConfiguration(
           didKey: issuer,
           fromStatusList: fromStatusList,
           isCachingEnabled: isCachingEnabled,
@@ -1053,7 +1054,7 @@ class OIDC4VC {
         publicKeyJwk = readPublicKeyJwk(
           issuer: issuer,
           holderKid: issuerKid,
-          didDocument: didDocument,
+          didDocument: openIdConfiguration,
         );
       }
 

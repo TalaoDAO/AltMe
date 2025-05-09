@@ -18,7 +18,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-
 class MockPkcePair extends Mock implements PkcePair {}
 
 class MockSecureStorage extends Mock implements SecureStorageProvider {}
@@ -223,9 +222,6 @@ void main() {
           },
         },
       };
-
-
-
     });
 
     group('Draft 13: getAuthorizationUriForIssuer', () {
@@ -249,9 +245,7 @@ void main() {
       const authorizationEndPoint =
           'https://app.altme.io/app/download/authorize';
 
-      group('test 10: LSP Potential Interop Event', () {
-
-      });
+      group('test 10: LSP Potential Interop Event', () {});
     });
 
     group('OIC4VC request credential', () {
@@ -601,7 +595,7 @@ void main() {
             (request) => request.reply(200, jsonDecode(didDocument)),
           );
 
-          final value = await oidc4vc.getDidDocument(
+          final value = await oidc4vc.getOpenIdConfiguration(
             didKey: issuer,
             fromStatusList: false,
             isCachingEnabled: false,
@@ -641,7 +635,7 @@ void main() {
               (request) => request.reply(200, jsonDecode(didDocument)),
             );
 
-          final value = await oidc4vc.getDidDocument(
+          final value = await oidc4vc.getOpenIdConfiguration(
             didKey: issuer,
             fromStatusList: false,
             isCachingEnabled: false,
@@ -681,7 +675,7 @@ void main() {
               (request) => request.reply(200, jsonDecode(jwkUriResponse)),
             );
 
-          final value = await oidc4vc.getDidDocument(
+          final value = await oidc4vc.getOpenIdConfiguration(
             didKey: issuer,
             fromStatusList: false,
             isCachingEnabled: false,

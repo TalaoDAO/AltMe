@@ -9,6 +9,8 @@ class Parameters {
   // 'true' for altme
   static const bool walletHandlesCrypto = true;
 
+  static const bool isAIServiceEnabled = true;
+
   static const AdvanceSettingsState defaultAdvanceSettingsState =
       AdvanceSettingsState(
     isGamingEnabled: true,
