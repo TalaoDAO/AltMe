@@ -1126,7 +1126,7 @@
   "showWalletRecoveryPhraseSubtitle2": "This recovery phrase is requested to restore a wallet at installation.",
   "documentation": "Documentation",
   "restoreACryptoWallet": "Restore a crypto wallet",
-  "restoreAnAppBackup": "Restore an {appName} backup",
+  "restoreAnAppBackup": "Restore a {appName} backup",
   "@restoreAnAppBackup": {
     "description": "name of the app",
     "type": "text",
@@ -1169,7 +1169,7 @@
   "recoveryPhraseIncorrectErrorMessage": "Please try again with correct order.",
   "invalidCode": "Invalid code",
   "back": "Back",
-  "greek": "Greek",
+  "greek": "Ελληνικά",
   "iaAnalyze": "Data will be shared with a remote AI engine. Don't share personal data.",
   "iaAnalyzeTitle": "AI Agent",
   "deleteDigit": "Delete"
