@@ -1948,18 +1948,18 @@ packages:
     dependency: transitive
     description:
       name: reown_sign
-      sha256: "253bae7e957386091037c548406f709e7799b8f9f9c6a0eea3176f68a1393263"
+      sha256: eb24d5b201635b0adbe15182c4cd2f831642dde05f59f033dac8de3bd423495d
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.4+1"
+    version: "1.1.6"
   reown_walletkit:
     dependency: "direct main"
     description:
       name: reown_walletkit
-      sha256: "86993642ee765f009d0b25367964fac6d26ecd9687cab8273cf28007b0a164d0"
+      sha256: e639dbfac019270380b8f80105e11364f4962ff78fdc95d01aee16ea6f27fb2a
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.4+1"
+    version: "1.1.5+1"
   reown_yttrium:
     dependency: transitive
     description:
