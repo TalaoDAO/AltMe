@@ -1,3 +1,4 @@
+import 'package:altme/ai/widget/ai_request_analysis_button.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/json_viewer/view/json_viewer_page.dart';
 import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
@@ -116,8 +117,11 @@ Future<void> oidc4vciAcceptHost({
         );
   } else {
     context.read<QRCodeScanCubit>().emitError(
-          ResponseMessage(
+          error: ResponseMessage(
             message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
+          ),
+          callToAction: AiRequestAnalysisButton(
+            link: oidc4vcParameters.initialUri.toString(),
           ),
         );
     return;

@@ -1,3 +1,4 @@
+import 'package:altme/ai/widget/ai_request_analysis_button.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/json_viewer/view/json_viewer_page.dart';
 import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.dart';
@@ -139,8 +140,11 @@ Future<void> oidc4vpSiopV2AcceptHost({
     await context.read<QRCodeScanCubit>().startSIOPV2OIDC4VPProcess(uri);
   } else {
     context.read<QRCodeScanCubit>().emitError(
-          ResponseMessage(
+          error: ResponseMessage(
             message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
+          ),
+          callToAction: AiRequestAnalysisButton(
+            link: uri.toString(),
           ),
         );
     return;

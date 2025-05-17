@@ -63,7 +63,7 @@ class _SplashViewState extends State<SplashView> {
     _linkSubscription?.cancel();
     super.dispose();
   }
-
+ 
   String? _deeplink;
 
   Future<void> processIncomingUri(Uri? uri) async {

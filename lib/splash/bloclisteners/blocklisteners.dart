@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:altme/ai/widget/ai_request_analysis_button.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
@@ -322,8 +323,11 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   );
             } else {
               context.read<QRCodeScanCubit>().emitError(
-                    ResponseMessage(
+                    error: ResponseMessage(
                       message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
+                    ),
+                    callToAction: AiRequestAnalysisButton(
+                      link: state.uri!.toString(),
                     ),
                   );
               return;
@@ -385,7 +389,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                 );
           }
         } catch (e) {
-          context.read<QRCodeScanCubit>().emitError(e);
+          context.read<QRCodeScanCubit>().emitError(error: e);
         }
       }
 
@@ -494,7 +498,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         );
       }
     } catch (e) {
-      context.read<QRCodeScanCubit>().emitError(e);
+      context.read<QRCodeScanCubit>().emitError(error: e);
     }
   },
 );

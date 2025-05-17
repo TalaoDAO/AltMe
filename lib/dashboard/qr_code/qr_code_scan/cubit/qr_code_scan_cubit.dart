@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:altme/ai/widget/ai_request_analysis_button.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
@@ -121,13 +122,21 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     } on FormatException {
       log.i('Format Exception');
       emitError(
-        ResponseMessage(
+        error: ResponseMessage(
           message: ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
+        ),
+        callToAction: AiRequestAnalysisButton(
+          link: scannedResponse.toString(),
         ),
       );
     } catch (e, s) {
       log.e('Error -$e, stack: $s');
-      emitError(e);
+      emitError(
+        error: e,
+        callToAction: AiRequestAnalysisButton(
+          link: scannedResponse.toString(),
+        ),
+      );
     }
   }
 
@@ -140,23 +149,33 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         await verify(uri: Uri.parse(deepLinkUrl));
       } on FormatException {
         emitError(
-          ResponseMessage(
+          error: ResponseMessage(
             message: ResponseString
                 .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
+          ),
+          callToAction: AiRequestAnalysisButton(
+            link: deepLinkUrl,
           ),
         );
       }
     }
   }
 
-  void emitError(dynamic e) {
-    final messageHandler = getMessageHandler(e);
+  void emitError({
+    required dynamic error,
+    Widget? callToAction,
+  }) {
+    final messageHandler = getMessageHandler(error);
 
     emit(
       state.error(
         message: StateMessage.error(
           messageHandler: messageHandler,
           showDialog: true,
+          callToAction: profileCubit.state.model.isDeveloperMode &&
+                  Parameters.isAIServiceEnabled
+              ? callToAction
+              : null,
         ),
       ),
     );
@@ -202,7 +221,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
     } catch (e) {
       log.e(e);
-      emitError(e);
+      emitError(error: e);
     }
   }
 
@@ -385,7 +404,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       log.e(
         'An error occurred while connecting to the server. $e',
       );
-      emitError(e);
+      emitError(
+        error: e,
+        callToAction: AiRequestAnalysisButton(
+          link: oidc4vcParameters.initialUri.toString(),
+        ),
+      );
     }
   }
 
@@ -562,7 +586,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       log.e(
         'An error occurred while connecting to the server. $e',
       );
-      emitError(e);
+      emitError(
+        error: e,
+        callToAction: AiRequestAnalysisButton(link: uri.toString()),
+      );
     }
   }
 
@@ -908,7 +935,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         profileCubit: profileCubit,
       );
     } catch (e) {
-      emitError(e);
+      emitError(error: e);
     }
   }
 
@@ -1201,7 +1228,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
           if (isVerified != VerificationType.verified) {
             return emitError(
-              ResponseMessage(
+              error: ResponseMessage(
                 message: ResponseString.RESPONSE_STRING_invalidRequest,
               ),
             );
@@ -1313,7 +1340,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
       goBack();
     } catch (e) {
-      emitError(e);
+      emitError(error: e);
     }
   }
 
@@ -1388,7 +1415,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         goBack();
       }
     } catch (e) {
-      emitError(e);
+      emitError(error: e);
     }
   }
 
@@ -1653,7 +1680,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       goBack();
     } catch (e) {
       resetNonceAndAccessTokenAndAuthorizationDetails();
-      emitError(e);
+      emitError(error: e);
     }
   }
 
@@ -1858,7 +1885,7 @@ ${state.uri}
       );
       await profileCubit.deleteOidc4VCIState(oidc4VCIState.challenge);
     } catch (e) {
-      emitError(e);
+      emitError(error: e);
     }
   }
 }

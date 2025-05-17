@@ -12,6 +12,7 @@ class ErrorDialog extends StatelessWidget {
     this.dialogColor,
     this.bgColor,
     this.textColor,
+    this.callToAction,
   });
 
   final String title;
@@ -20,6 +21,7 @@ class ErrorDialog extends StatelessWidget {
   final Color? dialogColor;
   final Color? bgColor;
   final Color? textColor;
+  final Widget? callToAction;
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +85,10 @@ class ErrorDialog extends StatelessWidget {
                 Navigator.of(context).pop(true);
               },
             ),
+            if (callToAction != null) ...[
+              const SizedBox(height: 10),
+              callToAction!,
+            ],
             const SizedBox(height: 10),
           ],
         ),
