@@ -1,4 +1,3 @@
-import 'package:altme/ai/widget/ai_request_analysis_button.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/json_viewer/view/json_viewer_page.dart';
 import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.dart';

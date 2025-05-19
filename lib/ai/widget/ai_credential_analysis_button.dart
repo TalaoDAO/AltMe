@@ -1,12 +1,17 @@
+import 'dart:convert';
+
 import 'package:altme/ai/widget/ai_analysis_page.dart';
 import 'package:altme/app/shared/constants/icon_strings.dart';
 import 'package:altme/app/shared/dio_client/dio_client.dart';
 import 'package:altme/app/shared/loading/loading_view.dart';
 import 'package:altme/app/shared/widget/button/my_elevated_button.dart';
 import 'package:altme/app/shared/widget/dialog/confirm_dialog.dart';
+import 'package:altme/credentials/credentials.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -18,7 +23,7 @@ class AiCredentialAnalysisButton extends StatelessWidget {
 
   /// received credential is already in base64 format if it is a jwt and
   /// is converted to base64 if it is a json-ld
-  final String credential;
+  final CredentialModel credential;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +31,16 @@ class AiCredentialAnalysisButton extends StatelessWidget {
     return MyElevatedButton(
       text: l10n.iaAnalyzeTitle,
       onPressed: () async {
+        if (credential.aiCredentialAnalysis != null &&
+            credential.aiCredentialAnalysis!.isNotEmpty) {
+          await Navigator.of(context).push<void>(
+            AiAnalysisPage.route(
+              content: credential.aiCredentialAnalysis!,
+            ),
+          );
+          return;
+        }
+
         /// open popup which explain user is about to share
         /// current link with talao.io. In the popup User can
         /// press on the accept button to continue or cancel
@@ -46,6 +61,11 @@ class AiCredentialAnalysisButton extends StatelessWidget {
             false;
         if (acceptAnalysis) {
           LoadingView().show(context: context);
+          final encodedCredential = base64Encode(
+            utf8.encode(
+              credential.jwt ?? jsonEncode(credential.data),
+            ),
+          );
           final client = DioClient(
             secureStorageProvider: getSecureStorage,
             dio: Dio(),
@@ -64,7 +84,7 @@ class AiCredentialAnalysisButton extends StatelessWidget {
             final response = await client.post(
               'https://talao.co/ai/wallet/vc',
               data: {
-                'vc': credential,
+                'vc': encodedCredential,
               },
               headers: headers,
             ) as String;
@@ -72,6 +92,10 @@ class AiCredentialAnalysisButton extends StatelessWidget {
               throw Exception('Ai analysis is null or empty');
             }
             LoadingView().hide();
+            await context.read<CredentialsCubit>().updateCredential(
+                  credential:
+                      credential.copyWith(aiCredentialAnalysis: response),
+                );
             await Navigator.of(context).push<void>(
               AiAnalysisPage.route(
                 content: response,
