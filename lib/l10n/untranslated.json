@@ -10,31 +10,8 @@
     "recoveryPhraseIncorrectErrorMessage",
     "invalidCode",
     "back",
-    "greek",
     "iaAnalyze",
     "iaAnalyzeTitle"
-  ],
-
-  "el": [
-    "networkErrorCreated",
-    "networkErrorOk",
-    "tezosProofMessage",
-    "ethereumProofMessage",
-    "fantomProofMessage",
-    "polygonProofMessage",
-    "binanceProofMessage",
-    "socialMediaCredentialsHomeSubtitle",
-    "userPinTitle",
-    "subjectSyntaxTypeNotSupported",
-    "french",
-    "spanish",
-    "catalan",
-    "english",
-    "etherlinkProofMessage",
-    "greek",
-    "iaAnalyze",
-    "iaAnalyzeTitle",
-    "deleteDigit"
   ],
 
   "es": [
@@ -48,7 +25,6 @@
     "recoveryPhraseIncorrectErrorMessage",
     "invalidCode",
     "back",
-    "greek",
     "iaAnalyze",
     "iaAnalyzeTitle"
   ],
@@ -56,7 +32,6 @@
   "fr": [
     "saveBackupPolygonCredentialSubtitle",
     "back",
-    "greek",
     "iaAnalyze",
     "iaAnalyzeTitle"
   ]
