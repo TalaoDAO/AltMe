@@ -1231,6 +1231,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               error: ResponseMessage(
                 message: ResponseString.RESPONSE_STRING_invalidRequest,
               ),
+              callToAction: AiRequestAnalysisButton(
+                link: state.uri.toString(),
+              ),
             );
           }
         }
