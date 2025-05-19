@@ -120,9 +120,6 @@ Future<void> oidc4vciAcceptHost({
           error: ResponseMessage(
             message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
           ),
-          callToAction: AiRequestAnalysisButton(
-            link: oidc4vcParameters.initialUri.toString(),
-          ),
         );
     return;
   }

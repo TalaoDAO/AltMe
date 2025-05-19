@@ -143,9 +143,6 @@ Future<void> oidc4vpSiopV2AcceptHost({
           error: ResponseMessage(
             message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
           ),
-          callToAction: AiRequestAnalysisButton(
-            link: uri.toString(),
-          ),
         );
     return;
   }

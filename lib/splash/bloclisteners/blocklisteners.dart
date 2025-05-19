@@ -326,9 +326,6 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                     error: ResponseMessage(
                       message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
                     ),
-                    callToAction: AiRequestAnalysisButton(
-                      link: state.uri!.toString(),
-                    ),
                   );
               return;
             }
