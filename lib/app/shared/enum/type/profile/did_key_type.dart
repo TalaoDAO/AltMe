@@ -67,7 +67,9 @@ extension DidKeyTypeX on DidKeyType {
         return 'did:key';
       case DidKeyType.ebsiv3:
       case DidKeyType.ebsiv4:
-        return 'did:key:jwk_jcs-pub';
+        // old rule was to strict
+        // return 'did:key:jwk_jcs-pub';
+        return 'did:key';
       case DidKeyType.jwkP256:
         return 'did:jwk';
       case DidKeyType.jwtClientAttestation:

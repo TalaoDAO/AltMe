@@ -481,7 +481,7 @@ class OIDC4VC {
         } else if (openIdConfiguration.jwks != null) {
           response = openIdConfiguration.jwks;
         } else {
-          throw Exception();
+          throw Exception('no jwks_uri or jwks found');
         }
 
         return response as Map<String, dynamic>;
@@ -1042,7 +1042,7 @@ class OIDC4VC {
       if (publicJwk != null) {
         publicKeyJwk = publicJwk;
       } else {
-        final didDocument = await getOpenIdConfiguration(
+        final openIdConfiguration = await getOpenIdConfiguration(
           didKey: issuer,
           fromStatusList: fromStatusList,
           isCachingEnabled: isCachingEnabled,
@@ -1054,7 +1054,7 @@ class OIDC4VC {
         publicKeyJwk = readPublicKeyJwk(
           issuer: issuer,
           holderKid: issuerKid,
-          didDocument: didDocument,
+          didDocument: openIdConfiguration,
         );
       }
 

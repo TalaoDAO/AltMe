@@ -34,6 +34,7 @@ class CredentialModel extends Equatable {
     this.selectiveDisclosureJwt,
     this.pendingInfo,
     this.credentialSupported,
+    this.aiCredentialAnalysis,
   });
 
   factory CredentialModel.fromJson(Map<String, dynamic> json) {
@@ -109,6 +110,7 @@ class CredentialModel extends Equatable {
   final String? format;
   final Map<String, dynamic>? credentialSupported;
   final String? profileLinkedId;
+  final String? aiCredentialAnalysis;
 
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
@@ -132,6 +134,7 @@ class CredentialModel extends Equatable {
     Map<String, dynamic>? claims,
     Map<String, dynamic>? credentialSupported,
     String? profileLinkedId,
+    String? aiCredentialAnalysis,
   }) {
     return CredentialModel(
       id: id ?? this.id,
@@ -153,6 +156,7 @@ class CredentialModel extends Equatable {
       format: format ?? this.format,
       credentialSupported: credentialSupported ?? this.credentialSupported,
       profileLinkedId: profileLinkedId ?? this.profileLinkedId,
+      aiCredentialAnalysis: aiCredentialAnalysis ?? this.aiCredentialAnalysis,
     );
   }
 
