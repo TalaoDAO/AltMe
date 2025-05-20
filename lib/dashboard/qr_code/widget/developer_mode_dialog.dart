@@ -1,4 +1,4 @@
-import 'package:altme/ai/widget/ai_analysis_button.dart';
+import 'package:altme/ai/widget/ai_request_analysis_button.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
@@ -47,10 +47,10 @@ class DeveloperModeDialog extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
-            if (uri != null && Parameters.AIServiceEnabled)
+            if (uri != null && Parameters.isAIServiceEnabled)
               Column(
                 children: [
-                  AiAnalysisButton(
+                  AiRequestAnalysisButton(
                     link: uri!.toString(),
                   ),
                   const SizedBox(height: Sizes.spaceSmall),

@@ -322,7 +322,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   );
             } else {
               context.read<QRCodeScanCubit>().emitError(
-                    ResponseMessage(
+                    error: ResponseMessage(
                       message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
                     ),
                   );
@@ -385,7 +385,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                 );
           }
         } catch (e) {
-          context.read<QRCodeScanCubit>().emitError(e);
+          context.read<QRCodeScanCubit>().emitError(error: e);
         }
       }
 
@@ -494,7 +494,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         );
       }
     } catch (e) {
-      context.read<QRCodeScanCubit>().emitError(e);
+      context.read<QRCodeScanCubit>().emitError(error: e);
     }
   },
 );

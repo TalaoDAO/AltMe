@@ -139,7 +139,7 @@ Future<void> oidc4vpSiopV2AcceptHost({
     await context.read<QRCodeScanCubit>().startSIOPV2OIDC4VPProcess(uri);
   } else {
     context.read<QRCodeScanCubit>().emitError(
-          ResponseMessage(
+          error: ResponseMessage(
             message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
           ),
         );
