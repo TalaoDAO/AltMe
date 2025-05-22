@@ -156,7 +156,7 @@ class Parameters {
 
   // ThemeMode.light for talao
   // 'ThemeMode.dark' for altme
-  static const ThemeMode defaultTheme = ThemeMode.dark;
+  static const ThemeMode defaultTheme = ThemeMode.light;
 
 // Used to prevent display
 // This key tells the app to not display the field and it allows use of maps
