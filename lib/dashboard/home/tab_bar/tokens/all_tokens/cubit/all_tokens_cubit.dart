@@ -40,7 +40,7 @@ class AllTokensCubit extends Cubit<AllTokensState> {
           'page': 1,
           'sparkline': false,
           'locale': 'en',
-          'x_cg_pro_api_key': apiKey,
+          'x_cg_demo_api_key': apiKey,
         },
       );
       final contracts = (result as List<dynamic>)
