@@ -506,7 +506,7 @@ class TokensCubit extends Cubit<TokensState> {
       _coinList = await client.get(
         '${Urls.coinGeckoBase}coins/list',
         queryParameters: {
-          'x_cg_pro_api_key': apiKey,
+          'x_cg_demo_api_key': apiKey,
         },
       ) as List<dynamic>;
       return _coinList!;
@@ -524,7 +524,7 @@ class TokensCubit extends Cubit<TokensState> {
       final response = await client.get(
         '${Urls.coinGeckoBase}simple/price?ids=${ids.join(',')}&vs_currencies=usd',
         queryParameters: {
-          'x_cg_pro_api_key': apiKey,
+          'x_cg_demo_api_key': apiKey,
         },
       ) as dynamic;
       return response as Map<String, dynamic>;
@@ -627,7 +627,7 @@ class TokensCubit extends Cubit<TokensState> {
           'page': 1,
           'sparkline': false,
           'locale': 'en',
-          'x_cg_pro_api_key': apiKey,
+          'x_cg_demo_api_key': apiKey,
         },
       );
       final contracts = (result as List<dynamic>)
@@ -709,7 +709,7 @@ class TokensCubit extends Cubit<TokensState> {
       final responseOfXTZUsdPrice = await client.get(
         '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
         queryParameters: {
-          'x_cg_pro_api_key': apiKey,
+          'x_cg_demo_api_key': apiKey,
         },
       ) as Map<String, dynamic>;
       return responseOfXTZUsdPrice['tezos']['usd'] as double;

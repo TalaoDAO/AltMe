@@ -34,6 +34,7 @@ CredentialModel _$CredentialModelFromJson(Map<String, dynamic> json) =>
           ? null
           : PendingInfo.fromJson(json['pendingInfo'] as Map<String, dynamic>),
       credentialSupported: json['credentialSupported'] as Map<String, dynamic>?,
+      aiCredentialAnalysis: json['aiCredentialAnalysis'] as String?,
     );
 
 Map<String, dynamic> _$CredentialModelToJson(CredentialModel instance) =>
@@ -56,4 +57,5 @@ Map<String, dynamic> _$CredentialModelToJson(CredentialModel instance) =>
       'format': instance.format,
       'credentialSupported': instance.credentialSupported,
       'profileLinkedId': instance.profileLinkedId,
+      'aiCredentialAnalysis': instance.aiCredentialAnalysis,
     };

@@ -86,6 +86,7 @@ class AlertMessage {
           title: message,
           erroDescription: erroDescription,
           erroUrl: errorUrl,
+          callToAction: stateMessage.callToAction,
         ),
       );
     } else {

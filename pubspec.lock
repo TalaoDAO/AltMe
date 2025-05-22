@@ -1948,18 +1948,18 @@ packages:
     dependency: transitive
     description:
       name: reown_sign
-      sha256: eaf81d1d692f4a80ac1d89eb78f640dab8a67a0d015697675a562d107257f16a
+      sha256: "253bae7e957386091037c548406f709e7799b8f9f9c6a0eea3176f68a1393263"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.5"
+    version: "1.1.4+1"
   reown_walletkit:
     dependency: "direct main"
     description:
       name: reown_walletkit
-      sha256: a969f97ede4eb77ea42d024f387255b9cdc1383d2af86f4b1dd460c6417ad375
+      sha256: "86993642ee765f009d0b25367964fac6d26ecd9687cab8273cf28007b0a164d0"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.5"
+    version: "1.1.4+1"
   reown_yttrium:
     dependency: transitive
     description:
@@ -2594,18 +2594,18 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_platform_interface
-      sha256: "18b1640839cf6546784a524c72aded5b6e86b23e7167dc2311cc96f7658b64bd"
+      sha256: "7cb32b21825bd65569665c32bb00a34ded5779786d6201f5350979d2d529940d"
       url: "https://pub.dev"
     source: hosted
-    version: "2.11.0"
+    version: "2.13.0"
   webview_flutter_wkwebview:
     dependency: "direct main"
     description:
       name: webview_flutter_wkwebview
-      sha256: c9f9be526fa0d3347374ceaa05c4b3acb85f4f112abd62f7d74b7d301fa515ff
+      sha256: a3d461fe3467014e05f3ac4962e5fdde2a4bf44c561cb53e9ae5c586600fdbc3
       url: "https://pub.dev"
     source: hosted
-    version: "3.20.0"
+    version: "3.22.0"
   win32:
     dependency: transitive
     description:

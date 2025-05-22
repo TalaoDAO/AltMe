@@ -192,6 +192,7 @@ class MockCredentialModel extends _i1.Mock implements _i2.CredentialModel {
     Map<String, dynamic>? claims,
     Map<String, dynamic>? credentialSupported,
     String? profileLinkedId,
+    String? aiCredentialAnalysis,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -217,6 +218,7 @@ class MockCredentialModel extends _i1.Mock implements _i2.CredentialModel {
             #claims: claims,
             #credentialSupported: credentialSupported,
             #profileLinkedId: profileLinkedId,
+            #aiCredentialAnalysis: aiCredentialAnalysis,
           },
         ),
         returnValue: _FakeCredentialModel_1(
@@ -244,6 +246,7 @@ class MockCredentialModel extends _i1.Mock implements _i2.CredentialModel {
               #claims: claims,
               #credentialSupported: credentialSupported,
               #profileLinkedId: profileLinkedId,
+              #aiCredentialAnalysis: aiCredentialAnalysis,
             },
           ),
         ),

@@ -116,7 +116,7 @@ Future<void> oidc4vciAcceptHost({
         );
   } else {
     context.read<QRCodeScanCubit>().emitError(
-          ResponseMessage(
+          error: ResponseMessage(
             message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
           ),
         );

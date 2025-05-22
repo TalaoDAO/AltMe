@@ -468,12 +468,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                     Padding(
                       padding: const EdgeInsets.only(top: 8, bottom: 8),
                       child: AiCredentialAnalysisButton(
-                        credential: base64Encode(
-                          utf8.encode(
-                            widget.credentialModel.jwt ??
-                                jsonEncode(widget.credentialModel.data),
-                          ),
-                        ),
+                        credential: widget.credentialModel,
                       ),
                     ),
                 ],
