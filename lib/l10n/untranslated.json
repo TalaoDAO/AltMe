@@ -15,28 +15,6 @@
     "iaAnalyzeTitle"
   ],
 
-  "el": [
-    "networkErrorCreated",
-    "networkErrorOk",
-    "tezosProofMessage",
-    "ethereumProofMessage",
-    "fantomProofMessage",
-    "polygonProofMessage",
-    "binanceProofMessage",
-    "socialMediaCredentialsHomeSubtitle",
-    "userPinTitle",
-    "subjectSyntaxTypeNotSupported",
-    "french",
-    "spanish",
-    "catalan",
-    "english",
-    "etherlinkProofMessage",
-    "greek",
-    "iaAnalyze",
-    "iaAnalyzeTitle",
-    "deleteDigit"
-  ],
-
   "es": [
     "payload",
     "keyBindingHeader",
