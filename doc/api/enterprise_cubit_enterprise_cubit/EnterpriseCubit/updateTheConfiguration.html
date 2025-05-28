@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the updateTheConfiguration method from the EnterpriseCubit class, for the Dart programming language.">
+  <title>updateTheConfiguration method - EnterpriseCubit class - enterprise_cubit library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../enterprise_cubit_enterprise_cubit/enterprise_cubit_enterprise_cubit-library.html">enterprise&#47;cubit&#47;enterprise_cubit.dart</a></li>
+    <li><a href="../../enterprise_cubit_enterprise_cubit/EnterpriseCubit-class.html">EnterpriseCubit</a></li>
+    <li class="self-crumb">updateTheConfiguration method</li>
+  </ol>
+  <div class="self-name">updateTheConfiguration</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="enterprise_cubit_enterprise_cubit&#47;EnterpriseCubit-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">updateTheConfiguration</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="name ">updateTheConfiguration</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="updateTheConfiguration-param-manageNetworkCubit"><span class="type-annotation"><a href="../../dashboard_drawer_blockchain_settings_manage_network_cubit_manage_network_cubit/ManageNetworkCubit-class.html">ManageNetworkCubit</a></span> <span class="parameter-name">manageNetworkCubit</span></span></li>
+</ol>)
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; updateTheConfiguration(
+  ManageNetworkCubit manageNetworkCubit,
+) async {
+  try {
+    emit(state.loading());
+
+    final savedEmail = await profileCubit.secureStorageProvider.get(
+      SecureStorageKeys.enterpriseEmail,
+    );
+    final savedPassword = await profileCubit.secureStorageProvider.get(
+      SecureStorageKeys.enterprisePassword,
+    );
+
+    final provider = await profileCubit.secureStorageProvider.get(
+      SecureStorageKeys.enterpriseWalletProvider,
+    );
+
+    final walletAttestationData =
+        await profileCubit.secureStorageProvider.get(
+      SecureStorageKeys.walletAttestationData,
+    );
+
+    if (savedEmail == null ||
+        savedPassword == null ||
+        provider == null ||
+        walletAttestationData == null) {
+      throw ResponseMessage(
+        data: {
+          &#39;error&#39;: &#39;invalid_request&#39;,
+          &#39;error_description&#39;: &#39;The wallet is not configured yet.&#39;,
+        },
+      );
+    }
+
+    final encodedData = utf8.encode(&#39;$savedEmail:$savedPassword&#39;);
+    final base64Encoded = base64UrlEncode(encodedData).replaceAll(&#39;=&#39;, &#39;&#39;);
+
+    final headers = &lt;String, dynamic&gt;{
+      &#39;Content-Type&#39;: &#39;application&#47;x-www-form-urlencoded&#39;,
+      &#39;Authorization&#39;: &#39;Basic $base64Encoded&#39;,
+    };
+
+    final data = &lt;String, dynamic&gt;{
+      &#39;grant_type&#39;: &#39;urn:ietf:params:oauth:grant-type:jwt-bearer&#39;,
+      &#39;assertion&#39;: walletAttestationData,
+    };
+
+    final response = await client.post(
+      &#39;$provider&#47;update&#39;,
+      headers: headers,
+      data: data,
+    );
+
+    final profileSettingJson =
+        profileCubit.jwtDecode.parseJwt(response as String);
+
+    await profileCubit.secureStorageProvider.set(
+      SecureStorageKeys.enterpriseProfileSetting,
+      jsonEncode(profileSettingJson),
+    );
+
+    final profileSetting = ProfileSetting.fromJson(profileSettingJson);
+
+    &#47;&#47;&#47;save to profileCubit
+    await profileCubit.setProfileSetting(
+      profileSetting: profileSetting,
+      profileType: ProfileType.enterprise,
+    );
+    &#47;&#47; if (isVerified == VerificationType.verified) {
+    &#47;&#47;   emit(
+    &#47;&#47;     state.copyWith(
+    &#47;&#47;       status: AppStatus.idle,
+    &#47;&#47;       message: const StateMessage.info(
+    &#47;&#47;         showDialog: true,
+    &#47;&#47;         stringMessage: &#39;Verfied&#39;,
+    &#47;&#47;       ),
+    &#47;&#47;     ),
+    &#47;&#47;   );
+    &#47;&#47; } else {
+    &#47;&#47;   emit(
+    &#47;&#47;     state.copyWith(
+    &#47;&#47;       status: AppStatus.idle,
+    &#47;&#47;       message: const StateMessage.info(
+    &#47;&#47;         showDialog: true,
+    &#47;&#47;         stringMessage: &#39;Not Verfied&#39;,
+    &#47;&#47;       ),
+    &#47;&#47;     ),
+    &#47;&#47;   );
+    &#47;&#47; }
+
+    final helpCenterOptions = profileSetting.helpCenterOptions;
+
+    if (helpCenterOptions.customNotification != null &amp;&amp;
+        helpCenterOptions.customNotification! &amp;&amp;
+        helpCenterOptions.customNotificationRoom != null) {
+      final roomName = helpCenterOptions.customNotificationRoom;
+
+      final savedRoomName =
+          await matrixNotificationCubit.getRoomIdFromStorage();
+
+      if (roomName != savedRoomName) {
+        await matrixNotificationCubit.clearRoomIdFromStorage();
+      }
+
+      await matrixNotificationCubit.init();
+    }
+
+    final blockchainOptions = profileSetting.blockchainOptions;
+    if (blockchainOptions != null &amp;&amp; Parameters.walletHandlesCrypto) {
+      await setUpBlockChainOptions(
+        blockchainOptions: blockchainOptions,
+        manageNetworkCubit: manageNetworkCubit,
+      );
+    }
+
+    emit(
+      state.copyWith(
+        status: AppStatus.success,
+        message: StateMessage.success(
+          messageHandler: ResponseMessage(
+            message: ResponseString
+                .RESPONSE_STRING_successfullyUpdatedEnterpriseAccount,
+          ),
+        ),
+      ),
+    );
+  } catch (e) {
+    emitError(e);
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../enterprise_cubit_enterprise_cubit/enterprise_cubit_enterprise_cubit-library.html">enterprise_cubit</a></li>
+    <li><a href="../../enterprise_cubit_enterprise_cubit/EnterpriseCubit-class.html">EnterpriseCubit</a></li>
+    <li class="self-crumb">updateTheConfiguration method</li>
+</ol>
+
+    <h5>EnterpriseCubit class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    altme
+      3.1.1+5635
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

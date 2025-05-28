@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the acceptOidc4vci method from the QRCodeScanCubit class, for the Dart programming language.">
+  <title>acceptOidc4vci method - QRCodeScanCubit class - qr_code_scan_cubit library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit-library.html">dashboard&#47;qr_code&#47;qr_code_scan&#47;cubit&#47;qr_code_scan_cubit.dart</a></li>
+    <li><a href="../../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit-class.html">QRCodeScanCubit</a></li>
+    <li class="self-crumb">acceptOidc4vci method</li>
+  </ol>
+  <div class="self-name">acceptOidc4vci</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit&#47;QRCodeScanCubit-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">acceptOidc4vci</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="name ">acceptOidc4vci</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="acceptOidc4vci-param-oidc4vcParameters"><span>required</span> <span class="type-annotation">Oidc4vcParameters</span> <span class="parameter-name">oidc4vcParameters</span>, </span></li>
+<li><span class="parameter" id="acceptOidc4vci-param-approvedIssuer"><span>required</span> <span class="type-annotation"><a href="../../app_shared_issuer_models_issuer/Issuer-class.html">Issuer</a></span> <span class="parameter-name">approvedIssuer</span>, </span></li>
+<li><span class="parameter" id="acceptOidc4vci-param-qrCodeScanCubit"><span>required</span> <span class="type-annotation"><a href="../../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit-class.html">QRCodeScanCubit</a></span> <span class="parameter-name">qrCodeScanCubit</span>, </span></li>
+</ol>})
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; acceptOidc4vci({
+  required Oidc4vcParameters oidc4vcParameters,
+  required Issuer approvedIssuer,
+  required QRCodeScanCubit qrCodeScanCubit,
+}) async {
+  emit(state.loading());
+  final log = getLogger(&#39;QRCodeScanCubit - accept&#39;);
+
+  late final dynamic data;
+
+  final customOidc4vcProfile = profileCubit.state.model.profileSetting
+      .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+  try {
+    if (oidc4vcParameters.oidc4vcType != null) {
+      &#47;&#47;&#47; issuer side (oidc4VCI)
+
+      await startOIDC4VCCredentialIssuance(
+        qrCodeScanCubit: qrCodeScanCubit,
+        oidc4vcParameters: oidc4vcParameters,
+      );
+      return;
+    }
+
+    if (isSIOPV2OROIDC4VPUrl(oidc4vcParameters.initialUri)) {
+      await startSIOPV2OIDC4VPProcess(oidc4vcParameters.initialUri);
+      return;
+    }
+
+    &#47;&#47;&#47; did credential addition and presentation
+    final dynamic response =
+        await client.get(oidc4vcParameters.initialUri.toString());
+    data = response is String ? jsonDecode(response) : response;
+
+    log.i(&#39;data - $data&#39;);
+    if (data[&#39;credential_manifest&#39;] != null) {
+      log.i(&#39;credential_manifest is not null&#39;);
+      final CredentialManifest credentialManifest =
+          CredentialManifest.fromJson(
+        data[&#39;credential_manifest&#39;] as Map&lt;String, dynamic&gt;,
+      );
+      final PresentationDefinition? presentationDefinition =
+          credentialManifest.presentationDefinition;
+
+      final isPresentable = await isVCPresentable(
+        presentationDefinition: presentationDefinition,
+        clientMetaData: null,
+        formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
+      );
+
+      if (!isPresentable) {
+        emit(
+          state.copyWith(
+            qrScanStatus: QrScanStatus.idle,
+            message: const StateMessage.info(
+              stringMessage: &#39;The credential requested has not been found&#39;,
+              showDialog: true,
+            ),
+          ),
+        );
+        return;
+      }
+    }
+
+    switch (data[&#39;type&#39;]) {
+      case &#39;CredentialOffer&#39;:
+        log.i(&#39;Credential Offer&#39;);
+        emit(
+          state.copyWith(
+            qrScanStatus: QrScanStatus.success,
+            route: CredentialsReceivePage.route(
+              uri: oidc4vcParameters.initialUri,
+              preview: data as Map&lt;String, dynamic&gt;,
+              issuer: approvedIssuer,
+            ),
+          ),
+        );
+
+      case &#39;VerifiablePresentationRequest&#39;:
+        if (data[&#39;query&#39;] != null) {
+          final query =
+              Query.fromJson(data[&#39;query&#39;].first as Map&lt;String, dynamic&gt;);
+
+          for (final credentialQuery in query.credentialQuery) {
+            final String? credentialName = credentialQuery.example?.type;
+
+            if (credentialName == null) {
+              continue;
+            }
+
+            final credentialSubjectType = getCredTypeFromName(credentialName);
+
+            final isPresentable = await isCredentialPresentable(
+              credentialSubjectType: credentialSubjectType,
+              formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
+            );
+
+            if (!isPresentable) {
+              emit(
+                state.copyWith(
+                  qrScanStatus: QrScanStatus.idle,
+                  message: const StateMessage.info(
+                    stringMessage:
+                        &#39;The credential requested has not been found&#39;,
+                    showDialog: true,
+                  ),
+                ),
+              );
+              return;
+            }
+
+            queryByExampleCubit.setQueryByExampleCubit(query);
+
+            log.i(data[&#39;query&#39;]);
+            if (data[&#39;query&#39;].first[&#39;type&#39;] == &#39;DIDAuth&#39;) {
+              log.i(&#39;DIDAuth&#39;);
+              await scanCubit.askPermissionDIDAuthCHAPI(
+                keyId: SecureStorageKeys.ssiKey,
+                done: (done) {
+                  log.i(&#39;done&#39;);
+                },
+                uri: oidc4vcParameters.initialUri,
+                challenge: data[&#39;challenge&#39;] as String,
+                domain: data[&#39;domain&#39;] as String,
+              );
+              emit(state.copyWith(qrScanStatus: QrScanStatus.idle));
+            } else if (data[&#39;query&#39;].first[&#39;type&#39;] == &#39;QueryByExample&#39;) {
+              log.i(&#39;QueryByExample&#39;);
+              emit(
+                state.copyWith(
+                  qrScanStatus: QrScanStatus.success,
+                  route: QueryByExamplePresentPage.route(
+                    uri: oidc4vcParameters.initialUri,
+                    preview: data as Map&lt;String, dynamic&gt;,
+                    issuer: approvedIssuer,
+                  ),
+                ),
+              );
+            } else {
+              throw ResponseMessage(
+                message:
+                    ResponseString.RESPONSE_STRING_UNIMPLEMENTED_QUERY_TYPE,
+              );
+            }
+          }
+        } else {
+          emit(
+            state.copyWith(
+              qrScanStatus: QrScanStatus.success,
+              route: QueryByExamplePresentPage.route(
+                uri: oidc4vcParameters.initialUri,
+                preview: data as Map&lt;String, dynamic&gt;,
+                issuer: approvedIssuer,
+              ),
+            ),
+          );
+        }
+      case &#39;object&#39;:
+        log.i(&#39;object&#39;);
+        emit(
+          state.copyWith(
+            qrScanStatus: QrScanStatus.success,
+            route: CredentialsReceivePage.route(
+              uri: oidc4vcParameters.initialUri,
+              preview: data as Map&lt;String, dynamic&gt;,
+              issuer: approvedIssuer,
+            ),
+          ),
+        );
+
+      default:
+        throw ResponseMessage(
+          message: ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE,
+        );
+    }
+  } catch (e) {
+    log.e(
+      &#39;An error occurred while connecting to the server. $e&#39;,
+    );
+    emitError(
+      error: e,
+      callToAction: AiRequestAnalysisButton(
+        link: oidc4vcParameters.initialUri.toString(),
+      ),
+    );
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit-library.html">qr_code_scan_cubit</a></li>
+    <li><a href="../../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit-class.html">QRCodeScanCubit</a></li>
+    <li class="self-crumb">acceptOidc4vci method</li>
+</ol>
+
+    <h5>QRCodeScanCubit class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    altme
+      3.1.1+5635
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

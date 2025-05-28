@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the getDidAndKid function from the helper_functions library, for the Dart programming language.">
+  <title>getDidAndKid function - helper_functions library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">altme</a></li>
+    <li><a href="../app_shared_helper_functions_helper_functions/app_shared_helper_functions_helper_functions-library.html">app&#47;shared&#47;helper_functions&#47;helper_functions.dart</a></li>
+    <li class="self-crumb">getDidAndKid function</li>
+  </ol>
+  <div class="self-name">getDidAndKid</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="app_shared_helper_functions_helper_functions&#47;app_shared_helper_functions_helper_functions-library-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-function">getDidAndKid</span> function 
+ 
+</h1></div>
+
+    <section class="multi-line-signature">
+        
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">(<span class="field"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, </span><span class="field"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span></span>)</span>&gt;</span></span>
+<span class="name ">getDidAndKid</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="getDidAndKid-param-privateKey"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">privateKey</span>, </span></li>
+<li><span class="parameter" id="getDidAndKid-param-profileCubit"><span>required</span> <span class="type-annotation"><a href="../dashboard_profile_cubit_profile_cubit/ProfileCubit-class.html">ProfileCubit</a></span> <span class="parameter-name">profileCubit</span>, </span></li>
+<li><span class="parameter" id="getDidAndKid-param-didKeyType"><span>required</span> <span class="type-annotation"><a href="../app_shared_enum_type_profile_did_key_type/DidKeyType.html">DidKeyType</a></span> <span class="parameter-name">didKeyType</span>, </span></li>
+</ol>})
+
+        
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future&lt;(String, String)&gt; getDidAndKid({
+  required String privateKey,
+  required ProfileCubit profileCubit,
+  required DidKeyType didKeyType,
+}) async {
+  late String did;
+  late String kid;
+
+  switch (didKeyType) {
+    case DidKeyType.ebsiv3:
+    case DidKeyType.ebsiv4:
+
+      &#47;&#47;b&#39;\xd1\xd6\x03&#39; in python
+      final List&lt;int&gt; prefixByteList = [0xd1, 0xd6, 0x03];
+      final List&lt;int&gt; prefix = prefixByteList.map((byte) =&gt; byte).toList();
+
+      final encodedData = utf8.encode(sortedPublcJwk(privateKey));
+      final encodedAddress = Base58Encode([...prefix, ...encodedData]);
+
+      did = &#39;did:key:z$encodedAddress&#39;;
+      final String lastPart = did.split(&#39;:&#39;)[2];
+      kid = &#39;$did#$lastPart&#39;;
+    case DidKeyType.jwkP256:
+      final encodedData = utf8.encode(sortedPublcJwk(privateKey));
+
+      final base64EncodedJWK = base64UrlEncode(encodedData).replaceAll(&#39;=&#39;, &#39;&#39;);
+      did = &#39;did:jwk:$base64EncodedJWK&#39;;
+
+      kid = &#39;$did#0&#39;;
+    case DidKeyType.p256:
+    case DidKeyType.secp256k1:
+    case DidKeyType.edDSA:
+      const didMethod = AltMeStrings.defaultDIDMethod;
+      did = profileCubit.didKitProvider.keyToDID(didMethod, privateKey);
+      kid = await profileCubit.didKitProvider
+          .keyToVerificationMethod(didMethod, privateKey);
+    case DidKeyType.jwtClientAttestation:
+      final walletAttestationData = await profileCubit.secureStorageProvider
+          .get(SecureStorageKeys.walletAttestationData);
+
+      if (walletAttestationData == null) {
+        throw ResponseMessage(
+          data: {
+            &#39;error&#39;: &#39;invalid_request&#39;,
+            &#39;error_description&#39;: &#39;The wallet attestation data has some issue.&#39;,
+          },
+        );
+      }
+
+      final walletAttestationDataPayload =
+          profileCubit.jwtDecode.parseJwt(walletAttestationData);
+
+      did = walletAttestationDataPayload[&#39;cnf&#39;][&#39;jwk&#39;][&#39;kid&#39;].toString();
+      kid = did;
+  }
+
+  return (did, kid);
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">altme</a></li>
+    <li><a href="../app_shared_helper_functions_helper_functions/app_shared_helper_functions_helper_functions-library.html">helper_functions</a></li>
+    <li class="self-crumb">getDidAndKid function</li>
+</ol>
+
+    <h5>helper_functions library</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-left-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    altme
+      3.1.1+5635
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

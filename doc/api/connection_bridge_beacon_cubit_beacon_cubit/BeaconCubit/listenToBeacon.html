@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the listenToBeacon method from the BeaconCubit class, for the Dart programming language.">
+  <title>listenToBeacon method - BeaconCubit class - beacon_cubit library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../connection_bridge_beacon_cubit_beacon_cubit/connection_bridge_beacon_cubit_beacon_cubit-library.html">connection_bridge&#47;beacon&#47;cubit&#47;beacon_cubit.dart</a></li>
+    <li><a href="../../connection_bridge_beacon_cubit_beacon_cubit/BeaconCubit-class.html">BeaconCubit</a></li>
+    <li class="self-crumb">listenToBeacon method</li>
+  </ol>
+  <div class="self-name">listenToBeacon</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="connection_bridge_beacon_cubit_beacon_cubit&#47;BeaconCubit-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">listenToBeacon</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype">void</span>
+<span class="name ">listenToBeacon</span>(<wbr>)
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">void listenToBeacon() {
+  try {
+    log.i(&#39;listening to beacon&#39;);
+
+    beacon.getBeaconResponse().listen(
+      (data) async {
+        final Map&lt;String, dynamic&gt; requestJson =
+            jsonDecode(data) as Map&lt;String, dynamic&gt;;
+        final BeaconRequest beaconRequest =
+            BeaconRequest.fromJson(requestJson);
+
+        log.i(&#39;beacon response - $requestJson&#39;);
+        log.i(&#39;beaconRequest.type - ${beaconRequest.type}&#39;);
+
+        &#47;&#47;&#47; cancel previous timer if exists
+        if (debounce?.isActive ?? false) {
+          log.w(&#39;cancelled bombarded request&#39;);
+          debounce?.cancel();
+        }
+
+        debounce = Timer(const Duration(seconds: 2), () {
+          switch (beaconRequest.type) {
+            case RequestType.permission:
+              emit(
+                state.copyWith(
+                  status: BeaconStatus.permission,
+                  beaconRequest: beaconRequest,
+                ),
+              );
+
+            case RequestType.signPayload:
+              emit(
+                state.copyWith(
+                  status: BeaconStatus.signPayload,
+                  beaconRequest: beaconRequest,
+                ),
+              );
+
+            case RequestType.operation:
+              emit(
+                state.copyWith(
+                  status: BeaconStatus.operation,
+                  beaconRequest: beaconRequest,
+                ),
+              );
+
+            case RequestType.broadcast:
+              emit(
+                state.copyWith(
+                  status: BeaconStatus.broadcast,
+                  beaconRequest: beaconRequest,
+                ),
+              );
+
+            &#47;&#47; ignore: no_default_cases
+            default:
+              break;
+          }
+          debounce?.cancel();
+        });
+      },
+    );
+  } catch (e) {
+    debounce?.cancel();
+    log.e(&#39;beacon listening error - $e&#39;);
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../connection_bridge_beacon_cubit_beacon_cubit/connection_bridge_beacon_cubit_beacon_cubit-library.html">beacon_cubit</a></li>
+    <li><a href="../../connection_bridge_beacon_cubit_beacon_cubit/BeaconCubit-class.html">BeaconCubit</a></li>
+    <li class="self-crumb">listenToBeacon method</li>
+</ol>
+
+    <h5>BeaconCubit class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    altme
+      3.1.1+5635
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

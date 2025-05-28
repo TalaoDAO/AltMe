@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the launchOIDC4VPAndSIOPV2Flow method from the QRCodeScanCubit class, for the Dart programming language.">
+  <title>launchOIDC4VPAndSIOPV2Flow method - QRCodeScanCubit class - qr_code_scan_cubit library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit-library.html">dashboard&#47;qr_code&#47;qr_code_scan&#47;cubit&#47;qr_code_scan_cubit.dart</a></li>
+    <li><a href="../../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit-class.html">QRCodeScanCubit</a></li>
+    <li class="self-crumb">launchOIDC4VPAndSIOPV2Flow method</li>
+  </ol>
+  <div class="self-name">launchOIDC4VPAndSIOPV2Flow</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit&#47;QRCodeScanCubit-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">launchOIDC4VPAndSIOPV2Flow</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="name ">launchOIDC4VPAndSIOPV2Flow</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="launchOIDC4VPAndSIOPV2Flow-param-keys"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">keys</span>, </span></li>
+<li><span class="parameter" id="launchOIDC4VPAndSIOPV2Flow-param-uri"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Uri-class.html">Uri</a></span> <span class="parameter-name">uri</span>, </span></li>
+</ol>})
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; launchOIDC4VPAndSIOPV2Flow({
+  required List&lt;String&gt; keys,
+  required Uri uri,
+}) async {
+  if (!keys.contains(&#39;presentation_definition&#39;) &amp;&amp;
+      !keys.contains(&#39;presentation_definition_uri&#39;)) {
+    final error = {
+      &#39;error&#39;: &#39;invalid_request&#39;,
+      &#39;error_description&#39;:
+          &#39;The presentation_definition or presentation_definition_uri is &#39;
+              &#39;required, only one but one is required.&#39;,
+    };
+    unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+    throw ResponseMessage(data: error);
+  }
+
+  final Map&lt;String, dynamic&gt;? presentationDefinitionData =
+      await getPresentationDefinition(client: client, uri: uri);
+
+  if (presentationDefinitionData == null) {
+    final error = {
+      &#39;error&#39;: &#39;invalid_request&#39;,
+      &#39;error_description&#39;: &#39;Presentation definition is invalid&#39;,
+    };
+    unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+    throw ResponseMessage(data: error);
+  }
+
+  final PresentationDefinition presentationDefinition =
+      PresentationDefinition.fromJson(presentationDefinitionData);
+
+  if (presentationDefinition.inputDescriptors.isEmpty) {
+    final error = {
+      &#39;error&#39;: &#39;invalid_request&#39;,
+      &#39;error_description&#39;:
+          &#39;The input_descriptors is required in the presentation_definition&#39;
+              &#39; object&#39;,
+    };
+    unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+    throw ResponseMessage(data: error);
+  }
+
+  if (presentationDefinition.inputDescriptors.isEmpty) {
+    final error = {
+      &#39;error&#39;: &#39;invalid_request&#39;,
+      &#39;error_description&#39;:
+          &#39;The input_descriptors is required in the presentation_definition&#39;
+              &#39; object&#39;,
+    };
+    unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+    throw ResponseMessage(data: error);
+  }
+
+  Map&lt;String, dynamic&gt;? clientMetaData;
+
+  if (presentationDefinition.format == null) {
+    clientMetaData = await getClientMetada(client: client, uri: uri);
+
+    if (clientMetaData != null) {
+      if (!clientMetaData.containsKey(&#39;vp_formats&#39;)) {
+        final error = {
+          &#39;error&#39;: &#39;invalid_request&#39;,
+          &#39;error_description&#39;: &#39;Format is missing.&#39;,
+        };
+        unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+        throw ResponseMessage(data: error);
+      }
+    }
+  }
+
+  for (final descriptor in presentationDefinition.inputDescriptors) {
+    if (descriptor.constraints == null) {
+      final error = {
+        &#39;error&#39;: &#39;invalid_request&#39;,
+        &#39;error_description&#39;: &#39;Presentation definition is invalid&#39;,
+      };
+      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      throw ResponseMessage(data: error);
+    }
+  }
+
+  final CredentialManifest credentialManifest = CredentialManifest(
+    &#39;id&#39;,
+    IssuedBy(&#39;&#39;, &#39;&#39;),
+    null,
+    presentationDefinition,
+  );
+
+  final CredentialModel credentialPreview = CredentialModel(
+    id: &#39;id&#39;,
+    image: &#39;image&#39;,
+    credentialPreview: Credential.dummy(),
+    shareLink: &#39;shareLink&#39;,
+    data: const {},
+    jwt: null,
+    credentialManifest: credentialManifest,
+    profileLinkedId: profileCubit.state.model.profileType.getVCId,
+  );
+
+  final host = await getHost(uri: uri, client: client);
+
+  emit(
+    state.copyWith(
+      qrScanStatus: QrScanStatus.success,
+      route: CredentialManifestOfferPickPage.route(
+        uri: uri,
+        credential: credentialPreview,
+        issuer: Issuer.emptyIssuer(host),
+        inputDescriptorIndex: 0,
+        credentialsToBePresented: [],
+      ),
+    ),
+  );
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit-library.html">qr_code_scan_cubit</a></li>
+    <li><a href="../../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit-class.html">QRCodeScanCubit</a></li>
+    <li class="self-crumb">launchOIDC4VPAndSIOPV2Flow method</li>
+</ol>
+
+    <h5>QRCodeScanCubit class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    altme
+      3.1.1+5635
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

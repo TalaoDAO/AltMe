@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the load method from the ProfileCubit class, for the Dart programming language.">
+  <title>load method - ProfileCubit class - profile_cubit library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../dashboard_profile_cubit_profile_cubit/dashboard_profile_cubit_profile_cubit-library.html">dashboard&#47;profile&#47;cubit&#47;profile_cubit.dart</a></li>
+    <li><a href="../../dashboard_profile_cubit_profile_cubit/ProfileCubit-class.html">ProfileCubit</a></li>
+    <li class="self-crumb">load method</li>
+  </ol>
+  <div class="self-name">load</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="dashboard_profile_cubit_profile_cubit&#47;ProfileCubit-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">load</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="name ">load</span>(<wbr>)
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; load() async {
+  final ssiKey = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
+
+  if (ssiKey == null) {
+    return emit(state.copyWith(status: AppStatus.success));
+  }
+
+  emit(state.loading());
+
+  final log = getLogger(&#39;ProfileCubit - load&#39;);
+  try {
+    &#47;&#47;&#47; walletType
+    var walletType = WalletType.personal;
+
+    final walletTypeString =
+        await secureStorageProvider.get(SecureStorageKeys.walletType);
+
+    if (walletTypeString != null) {
+      final enumVal = WalletType.values.firstWhereOrNull(
+        (ele) =&gt; ele.toString() == walletTypeString,
+      );
+      if (enumVal != null) {
+        walletType = enumVal;
+      }
+    }
+
+    var walletProtectionType = WalletProtectionType.pinCode;
+
+    final walletProtectionTypeString = await secureStorageProvider
+        .get(SecureStorageKeys.walletProtectionType);
+
+    if (walletProtectionTypeString != null) {
+      final enumVal = WalletProtectionType.values.firstWhereOrNull(
+        (ele) =&gt; ele.toString() == walletProtectionTypeString,
+      );
+      if (enumVal != null) {
+        walletProtectionType = enumVal;
+      }
+    }
+
+    &#47;&#47;&#47; developer mode
+
+    final isDeveloperModeValue =
+        await secureStorageProvider.get(SecureStorageKeys.isDeveloperMode);
+
+    bool isDeveloperMode =
+        isDeveloperModeValue != null &amp;&amp; isDeveloperModeValue == &#39;true&#39;;
+
+    &#47;&#47;&#47; profileType
+
+    var profileType = ProfileType.defaultOne;
+
+    final profileTypeString =
+        await secureStorageProvider.get(SecureStorageKeys.profileType);
+
+    if (profileTypeString != null) {
+      final enumVal = ProfileType.values.firstWhereOrNull(
+        (ele) =&gt; ele.toString() == profileTypeString,
+      );
+      if (enumVal != null) {
+        profileType = enumVal;
+      }
+    }
+    final oidc4VCIStackJsonString =
+        await secureStorageProvider.get(SecureStorageKeys.oidc4VCIStack);
+    late Oidc4VCIStack oidc4VCIStack;
+    if (oidc4VCIStackJsonString == null) {
+      oidc4VCIStack = Oidc4VCIStack();
+    } else {
+      oidc4VCIStack = Oidc4VCIStack.fromJson(
+        json.decode(oidc4VCIStackJsonString) as Map&lt;String, dynamic&gt;,
+      );
+    }
+
+    String? enterpriseWalletName;
+
+    final enterpriseProfileSettingJsonString =
+        await secureStorageProvider.get(
+      SecureStorageKeys.enterpriseProfileSetting,
+    );
+
+    final europeanWalletProfileSettingJsonString =
+        await secureStorageProvider.get(
+      SecureStorageKeys.europeanWalletProfileSetting,
+    );
+
+    if (enterpriseProfileSettingJsonString != null) {
+      final ProfileSetting enterpriseProfileSetting = ProfileSetting.fromJson(
+        json.decode(enterpriseProfileSettingJsonString)
+            as Map&lt;String, dynamic&gt;,
+      );
+
+      enterpriseWalletName =
+          enterpriseProfileSetting.generalOptions.profileName;
+    }
+
+    &#47;&#47;&#47; profileSetting
+    late ProfileSetting profileSetting;
+
+    late ProfileModel profileModel;
+
+    &#47;&#47;&#47; based on profileType set the profile setting
+    switch (profileType) {
+      case ProfileType.custom:
+        final customProfileSettingJsonString = await secureStorageProvider
+            .get(SecureStorageKeys.customProfileSettings);
+
+        if (customProfileSettingJsonString != null) {
+          final customProfileSettingMap =
+              jsonDecode(customProfileSettingJsonString)
+                  as Map&lt;String, dynamic&gt;;
+
+          profileSetting = ProfileSetting.fromJson(customProfileSettingMap);
+        } else {
+          profileSetting = ProfileSetting.initial();
+        }
+
+        profileModel = ProfileModel(
+          walletType: walletType,
+          walletProtectionType: walletProtectionType,
+          isDeveloperMode: isDeveloperMode,
+          profileType: profileType,
+          profileSetting: profileSetting,
+          enterpriseWalletName: enterpriseWalletName,
+        );
+
+      case ProfileType.defaultOne:
+        final privateKey = await getPrivateKey(
+          didKeyType: Parameters.didKeyTypeForDefault,
+          profileCubit: this,
+        );
+
+        final (did, _) = await getDidAndKid(
+          didKeyType: Parameters.didKeyTypeForDefault,
+          privateKey: privateKey,
+          profileCubit: this,
+        );
+
+        profileModel = ProfileModel.defaultOne(
+          walletType: walletType,
+          walletProtectionType: walletProtectionType,
+          isDeveloperMode: isDeveloperMode,
+          clientId: did,
+          clientSecret: randomString(12),
+          enterpriseWalletName: enterpriseWalletName,
+        );
+
+      case ProfileType.ebsiV3:
+        final privateKey = await getPrivateKey(
+          didKeyType: Parameters.didKeyTypeForEbsiV3,
+          profileCubit: this,
+        );
+
+        final (did, _) = await getDidAndKid(
+          didKeyType: Parameters.didKeyTypeForEbsiV3,
+          privateKey: privateKey,
+          profileCubit: this,
+        );
+
+        profileModel = ProfileModel.ebsiV3(
+          walletType: walletType,
+          walletProtectionType: walletProtectionType,
+          isDeveloperMode: isDeveloperMode,
+          clientId: did,
+          clientSecret: randomString(12),
+          enterpriseWalletName: enterpriseWalletName,
+        );
+
+      case ProfileType.ebsiV4:
+        final privateKey = await getPrivateKey(
+          didKeyType: Parameters.didKeyTypeForEbsiV4,
+          profileCubit: this,
+        );
+
+        final (did, _) = await getDidAndKid(
+          didKeyType: Parameters.didKeyTypeForEbsiV4,
+          privateKey: privateKey,
+          profileCubit: this,
+        );
+
+        profileModel = ProfileModel.ebsiV4(
+          walletType: walletType,
+          walletProtectionType: walletProtectionType,
+          isDeveloperMode: isDeveloperMode,
+          clientId: did,
+          clientSecret: randomString(12),
+          enterpriseWalletName: enterpriseWalletName,
+        );
+
+      case ProfileType.diipv3:
+        final privateKey = await getPrivateKey(
+          didKeyType: Parameters.didKeyTypeForOwfBaselineProfile,
+          profileCubit: this,
+        );
+
+        final (did, _) = await getDidAndKid(
+          didKeyType: Parameters.didKeyTypeForOwfBaselineProfile,
+          privateKey: privateKey,
+          profileCubit: this,
+        );
+
+        profileModel = ProfileModel.diipv3(
+          walletType: walletType,
+          walletProtectionType: walletProtectionType,
+          isDeveloperMode: isDeveloperMode,
+          clientId: did,
+          clientSecret: randomString(12),
+          enterpriseWalletName: enterpriseWalletName,
+        );
+
+      case ProfileType.enterprise:
+        if (enterpriseProfileSettingJsonString != null) {
+          profileSetting = ProfileSetting.fromJson(
+            json.decode(enterpriseProfileSettingJsonString)
+                as Map&lt;String, dynamic&gt;,
+          );
+          if (profileSetting.settingsMenu.displayDeveloperMode == false) {
+            isDeveloperMode = false;
+          }
+        } else {
+          profileSetting = ProfileSetting.initial();
+        }
+
+        profileModel = ProfileModel(
+          walletType: walletType,
+          walletProtectionType: walletProtectionType,
+          isDeveloperMode: isDeveloperMode,
+          profileType: profileType,
+          profileSetting: profileSetting,
+          enterpriseWalletName: profileSetting.generalOptions.profileName,
+        );
+      case ProfileType.europeanWallet:
+        if (europeanWalletProfileSettingJsonString != null) {
+          final customProfileSettingMap =
+              jsonDecode(europeanWalletProfileSettingJsonString)
+                  as Map&lt;String, dynamic&gt;;
+
+          profileSetting = ProfileSetting.fromJson(customProfileSettingMap);
+        } else {
+          throw Exception(
+            &#39;Failed to load European wallet profile setting&#39;,
+          );
+        }
+
+        profileModel = ProfileModel(
+          walletType: walletType,
+          walletProtectionType: walletProtectionType,
+          isDeveloperMode: isDeveloperMode,
+          profileType: profileType,
+          profileSetting: profileSetting,
+          enterpriseWalletName: enterpriseWalletName,
+        );
+    }
+
+    await update(profileModel.copyWith(oidc4VCIStack: oidc4VCIStack));
+  } catch (e, s) {
+    log.e(
+      &#39;something went wrong&#39;,
+      error: e,
+      stackTrace: s,
+    );
+    emit(
+      state.error(
+        messageHandler: ResponseMessage(
+          message: ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE,
+        ),
+      ),
+    );
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../dashboard_profile_cubit_profile_cubit/dashboard_profile_cubit_profile_cubit-library.html">profile_cubit</a></li>
+    <li><a href="../../dashboard_profile_cubit_profile_cubit/ProfileCubit-class.html">ProfileCubit</a></li>
+    <li class="self-crumb">load method</li>
+</ol>
+
+    <h5>ProfileCubit class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    altme
+      3.1.1+5635
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
