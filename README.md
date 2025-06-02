@@ -40,7 +40,7 @@ ALTME and TALAO implement all major holder-side components defined by [ARF 1.10.
 
 ## Architecture
 
-![Global Architecture](doc/architecture.png)
+![Global Architecture](doc/assets/architecture.png)
 
 The architecture shown above describes the full integration of components as specified in the ARF:
 
