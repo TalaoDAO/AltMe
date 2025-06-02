@@ -14,7 +14,10 @@ They are designed to support standardized credential issuance, presentation, and
 
 ALTME and TALAO implement all major holder-side components defined by [ARF 1.10.0](https://eu-digital-identity-wallet.github.io/eudi-doc-architecture-and-reference-framework/1.10.0/architecture-and-reference-framework-main/):
 
-- **Wallet Instance (WI)** — Core logic for credential storage and usage
+- **Wallet Instance (WI)** for secure credential handling
+- **Wallet Provider (WP)** and **Wallet Provider Backend (WPB)** for distribution, support, and maintenance
+- **Wallet Secure Cryptographic Application (WSCA)**: phone OS
+- **Wallet Secure Cryptographic Device (WSCD)** for compliant cryptographic operations: phone native  
 - Secure communication with:
   - **Authentic Sources (AS)**
   - **Attestation Providers (AP)**
