@@ -1,7 +1,6 @@
 # ALTME & TALAO — EU Digital Identity Wallet Implementations for Holders
-**ALTME** = **TALAO** + **crypto wallet**
 
-![Global Architecture](docs/architecture.png)
+**ALTME** = **TALAO** + **crypto wallet**
 
 ## Overview
 
@@ -16,8 +15,6 @@ They are designed to support standardized credential issuance, presentation, and
 ALTME and TALAO implement all major holder-side components defined by [ARF 1.10.0](https://eu-digital-identity-wallet.github.io/eudi-doc-architecture-and-reference-framework/1.10.0/architecture-and-reference-framework-main/):
 
 - **Wallet Instance (WI)** — Core logic for credential storage and usage
-- **Wallet Provider (WP)** and **Wallet Provider Backend (WPB)** — Distribution, support, and app maintenance
-- **Wallet Secure Cryptographic Application (WSCA)** and **Wallet Secure Cryptographic Device (WSCD)** — Secure cryptographic environment
 - Secure communication with:
   - **Authentic Sources (AS)**
   - **Attestation Providers (AP)**
@@ -43,6 +40,8 @@ ALTME and TALAO implement all major holder-side components defined by [ARF 1.10.
 
 ## Architecture
 
+![Global Architecture](docs/architecture.png)
+
 The architecture shown above describes the full integration of components as specified in the ARF:
 
 - **Wallet Instance (WI)** runs securely on the user’s device
@@ -51,6 +50,10 @@ The architecture shown above describes the full integration of components as spe
 - The **User Interface (UI)** allows the holder to manage credentials and consent to transactions
 
 This modular design ensures both **compliance** and **interoperability** with EU digital identity infrastructure.
+
+Currently, the wallet is non-custodial, meaning users retain full control over their credentials and private keys. Those keys and credentials are stored securely on the device, ensuring privacy and security:
+- Keychain is used for iOS
+- AES encryption and SharedPreferences are used for Android. AES secret key is encrypted with RSA and RSA key is stored in KeyStore
 
 ---
 
@@ -75,4 +78,4 @@ This project is released under the **Apache License 2.0**. See the [LICENSE](LIC
 
 ---
 
-**Maintained by [TalaoDAO](https://github.com/TalaoDAO) — Contributor to decentralized identity standards and European digital identity infrastructure.**
+**Maintained by [WEB3 DIGITAL WALLET](https://github.com/TalaoDAO) — Contributor to decentralized identity standards and European digital identity infrastructure.**
