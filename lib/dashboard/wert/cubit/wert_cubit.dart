@@ -60,34 +60,7 @@ class WertCubit extends Cubit<String> {
         throw Exception('Failed to get Wert URL');
       } else {
         log.i('Wert URL fetched successfully');
-        String link = '$linkWidget&session_id=${response['sessionId']}';
-        bool haveEmail = false;
-        bool havePhone = false;
-
-        final List<CredentialModel> allCredentials =
-            await credentialsRepository.findAll();
-
-        for (final storedCredential in allCredentials) {
-          final iteratedCredentialSubjectModel =
-              storedCredential.credentialPreview.credentialSubjectModel;
-
-          if (iteratedCredentialSubjectModel.credentialSubjectType ==
-              CredentialSubjectType.emailPass && !haveEmail) {
-            final email =
-                (iteratedCredentialSubjectModel as EmailPassModel).email;
-            link = '$link&email=$email';
-            haveEmail = true;
-          }
-
-          if (iteratedCredentialSubjectModel.credentialSubjectType ==
-              CredentialSubjectType.phonePass && !havePhone) {
-            final phone =
-                (iteratedCredentialSubjectModel as PhonePassModel).phone;
-            link = '$link&phone=$phone';
-            havePhone = true;
-          }
-        }
-        log.i('link: $link');
+        final link = '$linkWidget&session_id=${response['sessionId']}';
         emit(link);
       }
     } else {
