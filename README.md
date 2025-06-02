@@ -1,4 +1,5 @@
 # ALTME & TALAO — EU Digital Identity Wallet Implementations for Holders
+**ALTME** = **TALAO** + **crypto wallet**
 
 ![Global Architecture](docs/architecture.png)
 
