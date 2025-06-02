@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the claimData method from the SelectiveDisclosureDisplayMap class, for the Dart programming language.">
+  <title>claimData method - SelectiveDisclosureDisplayMap class - selective_disclosure_display_map library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../selective_disclosure_helper_functions_selective_disclosure_display_map/selective_disclosure_helper_functions_selective_disclosure_display_map-library.html">selective_disclosure&#47;helper_functions&#47;selective_disclosure_display_map.dart</a></li>
+    <li><a href="../../selective_disclosure_helper_functions_selective_disclosure_display_map/SelectiveDisclosureDisplayMap-class.html">SelectiveDisclosureDisplayMap</a></li>
+    <li class="self-crumb">claimData method</li>
+  </ol>
+  <div class="self-name">claimData</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="selective_disclosure_helper_functions_selective_disclosure_display_map&#47;SelectiveDisclosureDisplayMap-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">claimData</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span>
+<span class="name ">claimData</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="claimData-param-mapKey"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">mapKey</span>, </span></li>
+<li><span class="parameter" id="claimData-param-title"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">title</span>, </span></li>
+<li><span class="parameter" id="claimData-param-type"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">type</span>, </span></li>
+<li><span class="parameter" id="claimData-param-parentKeyId"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">parentKeyId</span>, </span></li>
+</ol>)
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Map&lt;String, dynamic&gt; claimData(
+  String mapKey,
+  String? title,
+  String? type,
+  String? parentKeyId,
+) {
+  final claimDataMap = &lt;String, dynamic&gt;{};
+  final (claimsData, sd) = SelectiveDisclosure(credentialModel).getClaimsData(
+    key: mapKey,
+    parentKeyId: parentKeyId,
+  );
+
+  if (claimsData.isEmpty) return claimDataMap;
+  int index = 0;
+  for (final element in claimsData) {
+    var claimKey = mapKey;
+    final isFirstElement = index == 0;
+
+    if (!isFirstElement) {
+      claimKey = &#39;$claimKey-$index&#39;;
+    }
+
+    final isCompulsary = limitDisclosure == &#39;required&#39;;
+
+    bool isDisabled = isCompulsary;
+    final selectedKeyId = selectedClaimsKeyIds
+        .firstWhereOrNull((ele) =&gt; ele.keyId == &#39;$claimKey#$sd&#39;);
+    if (isPresentation) {
+      if (filters.isNotEmpty) {
+        isDisabled = isCompulsary;
+
+        filters.forEach((key, value) {
+          if (element.threeDotValue != null) {
+            if (claimKey.contains(key) &amp;&amp;
+                element.data.replaceAll(&#39; &#39;, &#39;&#39;) == value) {
+              if (isCompulsary) isDisabled = false;
+              if (selectedKeyId == null) {
+                onPressed?.call(
+                  key,
+                  claimKey,
+                  element.threeDotValue,
+                  sd,
+                );
+              }
+            }
+          } else {
+            if (claimKey == key &amp;&amp; element.data == value) {
+              if (isCompulsary) isDisabled = false;
+              if (selectedKeyId == null) {
+                onPressed?.call(
+                  key,
+                  claimKey,
+                  null,
+                  sd,
+                );
+              }
+            }
+          }
+        });
+      }
+    }
+    final indexInDisclosure = SelectiveDisclosure(credentialModel)
+        .disclosureListToContent
+        .entries
+        .toList()
+        .indexWhere(
+          (entry) =&gt;
+              SelectiveDisclosure(credentialModel)
+                  .getMapFromList(
+                    jsonDecode(entry.value.toString()) as List,
+                  )
+                  .keys
+                  .first ==
+              claimKey,
+        );
+    if ((indexInDisclosure == -1 &amp;&amp; element.threeDotValue == null) ||
+        (sd == null &amp;&amp; parentKeyId != null)) {
+      isDisabled = true;
+    } else if (isDisabled) {
+      &#47;&#47; Don&#39;t add in the map if limitDisclosure is required and the
+      &#47;&#47; considered element is:
+      &#47;&#47; - From the SD
+      &#47;&#47; - Not targeted by the filters
+      continue;
+    }
+    &#47;&#47; ignore: inference_failure_on_uninitialized_variable, prefer_typing_uninitialized_variables
+    late final value;
+    try {
+      final json = jsonDecode(element.data);
+      value = json;
+    } catch (e) {
+      value = element.data;
+    }
+    final listElement = {
+      &#39;mapKey&#39;: mapKey,
+      &#39;claimKey&#39;: claimKey,
+      &#39;threeDotValue&#39;: element.threeDotValue,
+      &#39;value&#39;: value,
+      &#39;hasCheckbox&#39;: !isDisabled &amp;&amp; isPresentation,
+      &#39;isCompulsary&#39;: isCompulsary,
+      &#39;type&#39;: type,
+      &#39;sd&#39;: sd,
+    };
+    if (claimsData.length &gt; 1) {
+      if (index == 0) {
+        claimDataMap[title ?? mapKey] = {
+          &#39;value&#39;: [listElement],
+        };
+      } else {
+        claimDataMap[title ?? mapKey][&#39;value&#39;].add(listElement);
+      }
+    } else {
+      claimDataMap[title ?? mapKey] = listElement;
+    }
+    index++;
+  }
+  return claimDataMap;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../selective_disclosure_helper_functions_selective_disclosure_display_map/selective_disclosure_helper_functions_selective_disclosure_display_map-library.html">selective_disclosure_display_map</a></li>
+    <li><a href="../../selective_disclosure_helper_functions_selective_disclosure_display_map/SelectiveDisclosureDisplayMap-class.html">SelectiveDisclosureDisplayMap</a></li>
+    <li class="self-crumb">claimData method</li>
+</ol>
+
+    <h5>SelectiveDisclosureDisplayMap class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    altme
+      3.1.1+5635
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

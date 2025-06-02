@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the displayWidget method from the CredentialSubjectData class, for the Dart programming language.">
+  <title>displayWidget method - CredentialSubjectData class - credential_subject_data library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../dashboard_home_tab_bar_credentials_detail_widgets_credential_subject_data/dashboard_home_tab_bar_credentials_detail_widgets_credential_subject_data-library.html">dashboard&#47;home&#47;tab_bar&#47;credentials&#47;detail&#47;widgets&#47;credential_subject_data.dart</a></li>
+    <li><a href="../../dashboard_home_tab_bar_credentials_detail_widgets_credential_subject_data/CredentialSubjectData-class.html">CredentialSubjectData</a></li>
+    <li class="self-crumb">displayWidget method</li>
+  </ol>
+  <div class="self-name">displayWidget</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="dashboard_home_tab_bar_credentials_detail_widgets_credential_subject_data&#47;CredentialSubjectData-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">displayWidget</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/widgets/Widget-class.html">Widget</a></span>
+<span class="name ">displayWidget</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="displayWidget-param-displayInstructions"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">displayInstructions</span>, </span></li>
+<li><span class="parameter" id="displayWidget-param-languageCode"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">languageCode</span>, </span></li>
+<li><span class="parameter" id="displayWidget-param-credentialSubjectData"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">credentialSubjectData</span></span></li>
+</ol>)
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Widget displayWidget(
+  Map&lt;String, dynamic&gt; displayInstructions,
+  String languageCode,
+  Map&lt;String, dynamic&gt; credentialSubjectData,
+) {
+  final Widget column = Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children:
+        displayInstructions.entries.map((MapEntry&lt;String, dynamic&gt; map) {
+      String? title;
+      String? data;
+
+      final displayInstructionKey = map.key;
+      final displayInstructionValue = map.value;
+
+      if (displayInstructionValue is! Map&lt;String, dynamic&gt;) {
+        return const SizedBox.shrink();
+      }
+
+      if (displayInstructionValue.containsKey(&#39;display&#39;)) {
+        final display = getDisplay(displayInstructionValue, languageCode);
+        if (display == null) return const SizedBox.shrink();
+
+        if (credentialSubjectData.containsKey(displayInstructionKey)) {
+          title = display[&#39;name&#39;].toString();
+          data = credentialSubjectData[displayInstructionKey] is Map ||
+                  credentialSubjectData[displayInstructionKey] is List
+              ? jsonEncode(credentialSubjectData[displayInstructionKey])
+              : credentialSubjectData[displayInstructionKey].toString();
+        }
+      } else {
+        if (credentialSubjectData[displayInstructionKey] != null) {
+          title = null;
+          data = credentialSubjectData[displayInstructionKey] is Map ||
+                  credentialSubjectData[displayInstructionKey] is List
+              ? jsonEncode(credentialSubjectData[displayInstructionKey])
+              : credentialSubjectData[displayInstructionKey].toString();
+        } else {
+          return const SizedBox.shrink();
+        }
+      }
+&#47;&#47; check if that&#39;s a picture which is displayed on the card.
+      final valueType = displayInstructionValue[&#39;value_type&#39;];
+      if (Parameters.pictureOnCardValueTypeList.contains(valueType) &amp;&amp;
+          Parameters.pictureOnCardKeyList.contains(displayInstructionKey)) {
+        return const SizedBox.shrink();
+      }
+      if (data == null) return const SizedBox.shrink();
+      late Widget widget;
+      final nestedFieldsFromDisplayInstruction =
+          Map&lt;String, dynamic&gt;.from(displayInstructionValue);
+      nestedFieldsFromDisplayInstruction.remove(&#39;display&#39;);
+      nestedFieldsFromDisplayInstruction.remove(&#39;value_type&#39;);
+      nestedFieldsFromDisplayInstruction.remove(&#39;mandatory&#39;);
+      if (nestedFieldsFromDisplayInstruction.isNotEmpty) {
+        try {
+          final json = jsonDecode(data);
+          final List&lt;Widget&gt; column = [];
+          if (json is Map&lt;String, dynamic&gt;) {
+            column.addAll(
+              displayBlock(
+                json,
+                nestedFieldsFromDisplayInstruction,
+                languageCode,
+              ),
+            );
+          }
+          if (json is List&lt;dynamic&gt;) {
+            for (final listElement in json) {
+              if (listElement is Map&lt;String, dynamic&gt;) {
+                column.add(
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: displayBlock(
+                        listElement,
+                        nestedFieldsFromDisplayInstruction,
+                        languageCode,
+                      ),
+                    ),
+                  ),
+                );
+              }
+            }
+          }
+
+          &#47;&#47;&#47; for each element in Map toto, call displayWidget
+
+          widget = IndentedCredentialFields(
+            title: title,
+            children: column,
+          );
+        } catch (e) {
+          return const SizedBox.shrink();
+        }
+      } else {
+        widget = DisplayCredentialField(
+          title: title,
+          data: data,
+          type: displayInstructionValue[&#39;value_type&#39;] != null
+              ? displayInstructionValue[&#39;value_type&#39;].toString()
+              : valueTypeIfNull(data).toString(),
+          showVertically: showVertically,
+        );
+      }
+
+      return widget;
+    }).toList(),
+  );
+  return column;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../dashboard_home_tab_bar_credentials_detail_widgets_credential_subject_data/dashboard_home_tab_bar_credentials_detail_widgets_credential_subject_data-library.html">credential_subject_data</a></li>
+    <li><a href="../../dashboard_home_tab_bar_credentials_detail_widgets_credential_subject_data/CredentialSubjectData-class.html">CredentialSubjectData</a></li>
+    <li class="self-crumb">displayWidget method</li>
+</ol>
+
+    <h5>CredentialSubjectData class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    altme
+      3.1.1+5635
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

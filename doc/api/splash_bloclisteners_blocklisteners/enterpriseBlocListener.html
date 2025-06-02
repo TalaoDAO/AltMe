@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the enterpriseBlocListener property from the blocklisteners library, for the Dart programming language.">
+  <title>enterpriseBlocListener property - blocklisteners library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">altme</a></li>
+    <li><a href="../splash_bloclisteners_blocklisteners/splash_bloclisteners_blocklisteners-library.html">splash&#47;bloclisteners&#47;blocklisteners.dart</a></li>
+    <li class="self-crumb">enterpriseBlocListener property</li>
+  </ol>
+  <div class="self-name">enterpriseBlocListener</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="splash_bloclisteners_blocklisteners&#47;splash_bloclisteners_blocklisteners-library-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-top-level-property">enterpriseBlocListener</span> top-level property 
+ 
+</h1></div>
+
+        <section class="multi-line-signature">
+          
+          <a href="https://pub.dev/documentation/flutter_bloc/8.1.6/flutter_bloc/BlocListener-class.html">BlocListener</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../enterprise_cubit_enterprise_cubit/EnterpriseCubit-class.html">EnterpriseCubit</a></span>, <span class="type-parameter"><a href="../enterprise_cubit_enterprise_cubit/EnterpriseState-class.html">EnterpriseState</a></span>&gt;</span>
+          <span class="name ">enterpriseBlocListener</span>
+          <div class="features"><span class="feature">final</span></div>
+
+        </section>
+        
+
+        
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">final enterpriseBlocListener = BlocListener&lt;EnterpriseCubit, EnterpriseState&gt;(
+  listener: (BuildContext context, EnterpriseState state) async {
+    if (state.status == AppStatus.loading) {
+      LoadingView().show(context: context);
+    }
+
+    if (state.status == AppStatus.goBack) {
+      Navigator.of(context).pop();
+      LoadingView().hide();
+    }
+
+    if (state.status == AppStatus.revoked) {
+      LoadingView().hide();
+      await showDialog&lt;void&gt;(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) =&gt; const WalletRevokedDialog(),
+      );
+    }
+    if (state.status == AppStatus.successAdd) {
+      &#47;&#47; TODO(hawkbee): when we create vc+sd-jwt associated address cards
+      &#47;&#47; we need to check also for vc+sd-jwt
+      if (context
+              .read&lt;ProfileCubit&gt;()
+              .state
+              .model
+              .profileSetting
+              .blockchainOptions
+              ?.associatedAddressFormat ==
+          VCFormatType.ldpVc) {
+        &#47;&#47; get list of crypto accounts from profile cubit
+        final manageAccountsCubit = ManageAccountsCubit(
+          credentialsCubit: context.read&lt;CredentialsCubit&gt;(),
+          manageNetworkCubit: context.read&lt;ManageNetworkCubit&gt;(),
+        );
+        final cryptoAccounts = manageAccountsCubit.state.cryptoAccount.data;
+        &#47;&#47; generate crypto accounts cards
+        await context.read&lt;CredentialsCubit&gt;().generateCryptoAccountsCards(
+              cryptoAccounts,
+            );
+      }
+    }
+    if (state.status == AppStatus.addEnterpriseAccount ||
+        state.status == AppStatus.updateEnterpriseAccount ||
+        state.status == AppStatus.replaceEnterpriseAccount) {
+      final settingJson = state.profileSettingJson;
+      if (settingJson != null) {
+        final l10n = context.l10n;
+        final profileSetting = ProfileSetting.fromJson(
+          jsonDecode(settingJson) as Map&lt;String, dynamic&gt;,
+        );
+
+        var title = l10n.approveProfileTitle;
+        var subTitle = l10n.approveProfileDescription(
+          profileSetting.generalOptions.companyName,
+        );
+
+        if (state.status == AppStatus.updateEnterpriseAccount) {
+          title = l10n.updateProfileTitle;
+          subTitle = l10n.updateProfileDescription(
+            profileSetting.generalOptions.companyName,
+          );
+        }
+
+        if (state.status == AppStatus.replaceEnterpriseAccount) {
+          title = l10n.replaceProfileTitle;
+          subTitle = l10n.replaceProfileDescription(
+            profileSetting.generalOptions.companyName,
+          );
+        }
+        LoadingView().hide();
+
+        final confirm = await showDialog&lt;bool&gt;(
+              context: context,
+              builder: (_) =&gt; ConfirmDialog(
+                title: title,
+                subtitle: subTitle,
+                yes: l10n.showDialogYes,
+                no: l10n.showDialogNo,
+              ),
+            ) ??
+            false;
+
+        if (confirm) {
+          await context.read&lt;EnterpriseCubit&gt;().applyConfiguration(
+                qrCodeScanCubit: context.read&lt;QRCodeScanCubit&gt;(),
+                manageNetworkCubit: context.read&lt;ManageNetworkCubit&gt;(),
+                status: state.status,
+              );
+        } else {
+          &#47;&#47;&#47; Need to remove the enterprise email from secure storage
+          &#47;&#47;&#47; because we may think later that the entreprise profile is
+          &#47;&#47;&#47; already installed.
+          await getSecureStorage.delete(
+            SecureStorageKeys.enterpriseEmail,
+          );
+        }
+      }
+    }
+
+    if (state.message != null) {
+      AlertMessage.showStateMessage(
+        context: context,
+        stateMessage: state.message!,
+      );
+    }
+  },
+);</code></pre>
+</section>
+
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">altme</a></li>
+    <li><a href="../splash_bloclisteners_blocklisteners/splash_bloclisteners_blocklisteners-library.html">blocklisteners</a></li>
+    <li class="self-crumb">enterpriseBlocListener property</li>
+</ol>
+
+    <h5>blocklisteners library</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-left-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    altme
+      3.1.1+5635
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

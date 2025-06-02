@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the getMessage method from the ResponseMessage class, for the Dart programming language.">
+  <title>getMessage method - ResponseMessage class - response_message library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../app_shared_message_handler_response_message/app_shared_message_handler_response_message-library.html">app&#47;shared&#47;message_handler&#47;response_message.dart</a></li>
+    <li><a href="../../app_shared_message_handler_response_message/ResponseMessage-class.html">ResponseMessage</a></li>
+    <li class="self-crumb">getMessage method</li>
+  </ol>
+  <div class="self-name">getMessage</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="app_shared_message_handler_response_message&#47;ResponseMessage-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">getMessage</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+<span class="name ">getMessage</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="getMessage-param-context"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span>, </span></li>
+<li><span class="parameter" id="getMessage-param-messageHandler"><span class="type-annotation"><a href="../../app_shared_message_handler_message_handler_message_handler/MessageHandler-mixin.html">MessageHandler</a></span> <span class="parameter-name">messageHandler</span>, {</span></li>
+<li><span class="parameter" id="getMessage-param-injectedMessage"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">injectedMessage</span>, </span></li>
+</ol>})
+
+      <div class="features"><span class="feature">override</span></div>
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+String getMessage(
+  BuildContext context,
+  MessageHandler messageHandler, {
+  String? injectedMessage,
+}) {
+  if (messageHandler is ResponseMessage &amp;&amp; messageHandler.message != null) {
+    switch (messageHandler.message!) {
+      case ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard:
+        return ResponseString.RESPONSE_STRING_livenessCardWhyGetThisCard
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_livenessCardExpirationDate:
+        return ResponseString.RESPONSE_STRING_livenessCardExpirationDate
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_livenessCardHowToGetIt:
+        return ResponseString.RESPONSE_STRING_livenessCardHowToGetIt.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW:
+        return ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_CANNOT_PAY_STORAGE_FEE:
+        return ResponseString.RESPONSE_STRING_CANNOT_PAY_STORAGE_FEE
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_FEE_TOO_LOW:
+        return ResponseString.RESPONSE_STRING_FEE_TOO_LOW.localise(context);
+
+      case ResponseString.RESPONSE_STRING_FEE_TOO_LOW_FOR_MEMPOOL:
+        return ResponseString.RESPONSE_STRING_FEE_TOO_LOW_FOR_MEMPOOL
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_TX_ROLLUP_BALANCE_TOO_LOW:
+        return ResponseString.RESPONSE_STRING_TX_ROLLUP_BALANCE_TOO_LOW
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_TX_ROLLUP_INVALID_ZERO_TRANSFER:
+        return ResponseString.RESPONSE_STRING_TX_ROLLUP_INVALID_ZERO_TRANSFER
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_TX_ROLLUP_UNKNOWN_ADDRESS:
+        return ResponseString.RESPONSE_STRING_TX_ROLLUP_UNKNOWN_ADDRESS
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_INACTIVE_CHAIN:
+        return ResponseString.RESPONSE_STRING_INACTIVE_CHAIN
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE:
+        return ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_FAILED_TO_SAVE_PROFILE:
+        return ResponseString.RESPONSE_STRING_FAILED_TO_SAVE_PROFILE
+            .localise(context);
+
+      case ResponseString
+            .RESPONSE_STRING_FAILED_TO_CREATE_SELF_ISSUED_CREDENTIAL:
+        return ResponseString
+            .RESPONSE_STRING_FAILED_TO_CREATE_SELF_ISSUED_CREDENTIAL
+            .localise(context);
+
+      case ResponseString
+            .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL:
+        return ResponseString
+            .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_SELF_ISSUED_CREATED_SUCCESSFULLY:
+        return ResponseString.RESPONSE_STRING_SELF_ISSUED_CREATED_SUCCESSFULLY
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_ERROR:
+        return ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_ERROR
+            .localise(context);
+
+      case ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE:
+        return ResponseString.STORAGE_PERMISSION_DENIED_MESSAGE
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE:
+        return ResponseString
+            .RESPONSE_STRING_BACKUP_CREDENTIAL_SUCCESS_MESSAGE
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_credentialSuccessfullyExported:
+        return ResponseString.RESPONSE_STRING_credentialSuccessfullyExported
+            .localise(context);
+
+      case ResponseString
+            .RESPONSE_STRING_CREDENTIAL_DETAIL_DELETE_SUCCESS_MESSAGE:
+        return ResponseString
+            .RESPONSE_STRING_CREDENTIAL_DETAIL_DELETE_SUCCESS_MESSAGE
+            .localise(context);
+
+      case ResponseString
+            .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE:
+        return ResponseString
+            .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE
+            .localise(context);
+
+      case ResponseString
+            .RESPONSE_STRING_RECOVERY_CREDENTIAL_AUTH_ERROR_MESSAGE:
+        return ResponseString
+            .RESPONSE_STRING_RECOVERY_CREDENTIAL_AUTH_ERROR_MESSAGE
+            .localise(context);
+
+      case ResponseString
+            .RESPONSE_STRING_RECOVERY_CREDENTIAL_DEFAULT_ERROR_MESSAGE:
+        return ResponseString
+            .RESPONSE_STRING_RECOVERY_CREDENTIAL_DEFAULT_ERROR_MESSAGE
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_CREDENTIAL_ADDED_MESSAGE:
+        return ResponseString.RESPONSE_STRING_CREDENTIAL_ADDED_MESSAGE
+            .localise(context);
+
+      case ResponseString
+            .RESPONSE_STRING_CREDENTIAL_DETAIL_EDIT_SUCCESS_MESSAGE:
+        return ResponseString
+            .RESPONSE_STRING_CREDENTIAL_DETAIL_EDIT_SUCCESS_MESSAGE
+            .localise(context);
+
+      case ResponseString
+            .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING:
+        return ResponseString
+            .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL:
+        return ResponseString.RESPONSE_STRING_FAILED_TO_VERIFY_CREDENTIAL
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_AN_UNKNOWN_ERROR_HAPPENED:
+        return ResponseString.RESPONSE_STRING_AN_UNKNOWN_ERROR_HAPPENED
+            .localise(context);
+
+      case ResponseString
+            .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER:
+        return ResponseString
+            .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER
+            .localise(context);
+
+      case ResponseString
+            .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL:
+        return ResponseString
+            .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_DID:
+        return ResponseString.RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_DID
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED:
+        return ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED
+            .localise(context);
+
+      case ResponseString
+            .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE:
+        return ResponseString
+            .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE
+            .localise(context);
+
+      case ResponseString
+            .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER:
+        return ResponseString
+            .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_ERROR_GENERATING_KEY:
+        return ResponseString.RESPONSE_STRING_ERROR_GENERATING_KEY
+            .localise(context);
+
+      case ResponseString
+            .RESPONSE_STRING_FAILED_TO_SAVE_MNEMONIC_PLEASE_TRY_AGAIN:
+        return ResponseString
+            .RESPONSE_STRING_FAILED_TO_SAVE_MNEMONIC_PLEASE_TRY_AGAIN
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_DID:
+        return ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_DID
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST:
+        return ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_PLEASE_IMPORT_YOUR_RSA_KEY:
+        return ResponseString.RESPONSE_STRING_PLEASE_IMPORT_YOUR_RSA_KEY
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_PLEASE_ENTER_YOUR_DID_KEY:
+        return ResponseString.RESPONSE_STRING_PLEASE_ENTER_YOUR_DID_KEY
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_RSA_NOT_MATCHED_WITH_DID_KEY:
+        return ResponseString.RESPONSE_STRING_RSA_NOT_MATCHED_WITH_DID_KEY
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_DID_KEY_NOT_RESOLVED:
+        return ResponseString.RESPONSE_STRING_DID_KEY_NOT_RESOLVED
+            .localise(context);
+
+      case ResponseString
+            .RESPONSE_STRING_DID_KEY_AND_RSA_KEY_VERIFIED_SUCCESSFULLY:
+        return ResponseString
+            .RESPONSE_STRING_DID_KEY_AND_RSA_KEY_VERIFIED_SUCCESSFULLY
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA:
+        return ResponseString.RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE:
+        return ResponseString.RESPONSE_STRING_SCAN_UNSUPPORTED_MESSAGE
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_UNIMPLEMENTED_QUERY_TYPE:
+        return ResponseString.RESPONSE_STRING_UNIMPLEMENTED_QUERY_TYPE
+            .localise(context);
+
+      case ResponseString
+            .RESPONSE_STRING_PERSONAL_OPEN_ID_RESTRICTION_MESSAGE:
+        return ResponseString
+            .RESPONSE_STRING_PERSONAL_OPEN_ID_RESTRICTION_MESSAGE
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR:
+        return ResponseString.RESPONSE_STRING_CREDENTIAL_EMPTY_ERROR
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED:
+        return ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_SUCCESSFULLY_CONNECTED_TO_BEACON:
+        return ResponseString.RESPONSE_STRING_SUCCESSFULLY_CONNECTED_TO_BEACON
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON:
+        return ResponseString.RESPONSE_STRING_FAILED_TO_CONNECT_WITH_BEACON
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD:
+        return ResponseString.RESPONSE_STRING_SUCCESSFULLY_SIGNED_PAYLOAD
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD:
+        return ResponseString.RESPONSE_STRING_FAILED_TO_SIGNED_PAYLOAD
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_OPERATION_COMPLETED:
+        return ResponseString.RESPONSE_STRING_OPERATION_COMPLETED
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_OPERATION_FAILED:
+        return ResponseString.RESPONSE_STRING_OPERATION_FAILED
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE:
+        return ResponseString.RESPONSE_STRING_INSUFFICIENT_BALANCE
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE:
+        return ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP:
+        return ResponseString.RESPONSE_STRING_DISCONNECTED_FROM_DAPP
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_FAILED_TO_DO_OPERATION:
+        return ResponseString.RESPONSE_STRING_FAILED_TO_DO_OPERATION
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_emailPassWhyGetThisCard:
+        return ResponseString.RESPONSE_STRING_emailPassWhyGetThisCard
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_emailPassExpirationDate:
+        return ResponseString.RESPONSE_STRING_emailPassExpirationDate
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_emailPassHowToGetIt:
+        return ResponseString.RESPONSE_STRING_emailPassHowToGetIt.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_tezotopiaMembershipWhyGetThisCard:
+        return ResponseString
+                .RESPONSE_STRING_tezotopiaMembershipWhyGetThisCard
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_tezotopiaMembershipExpirationDate:
+        return ResponseString
+                .RESPONSE_STRING_tezotopiaMembershipExpirationDate
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_tezotopiaMembershipHowToGetIt:
+        return ResponseString.RESPONSE_STRING_tezotopiaMembershipHowToGetIt
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_chainbornMembershipWhyGetThisCard:
+        return ResponseString
+                .RESPONSE_STRING_chainbornMembershipWhyGetThisCard
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_chainbornMembershipExpirationDate:
+        return ResponseString
+                .RESPONSE_STRING_chainbornMembershipExpirationDate
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_chainbornMembershipHowToGetIt:
+        return ResponseString.RESPONSE_STRING_chainbornMembershipHowToGetIt
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_twitterWhyGetThisCard:
+        return ResponseString.RESPONSE_STRING_twitterWhyGetThisCard.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_twitterExpirationDate:
+        return ResponseString.RESPONSE_STRING_twitterExpirationDate.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_twitterHowToGetIt:
+        return ResponseString.RESPONSE_STRING_twitterHowToGetIt.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_twitterDummyDesc:
+        return ResponseString.RESPONSE_STRING_twitterDummyDesc.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_over18WhyGetThisCard:
+        return ResponseString.RESPONSE_STRING_over18WhyGetThisCard.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_over18ExpirationDate:
+        return ResponseString.RESPONSE_STRING_over18ExpirationDate.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_over18HowToGetIt:
+        return ResponseString.RESPONSE_STRING_over18HowToGetIt.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_over13WhyGetThisCard:
+        return ResponseString.RESPONSE_STRING_over13WhyGetThisCard.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_over13ExpirationDate:
+        return ResponseString.RESPONSE_STRING_over13ExpirationDate.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_over13HowToGetIt:
+        return ResponseString.RESPONSE_STRING_over13HowToGetIt.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_over15WhyGetThisCard:
+        return ResponseString.RESPONSE_STRING_over15WhyGetThisCard.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_over15ExpirationDate:
+        return ResponseString.RESPONSE_STRING_over15ExpirationDate.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_over15HowToGetIt:
+        return ResponseString.RESPONSE_STRING_over15HowToGetIt.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_passportFootprintWhyGetThisCard:
+        return ResponseString.RESPONSE_STRING_passportFootprintWhyGetThisCard
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_passportFootprintExpirationDate:
+        return ResponseString.RESPONSE_STRING_passportFootprintExpirationDate
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_passportFootprintHowToGetIt:
+        return ResponseString.RESPONSE_STRING_passportFootprintHowToGetIt
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_verifiableIdCardWhyGetThisCard:
+        return ResponseString.RESPONSE_STRING_verifiableIdCardWhyGetThisCard
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_verifiableIdCardExpirationDate:
+        return ResponseString.RESPONSE_STRING_verifiableIdCardExpirationDate
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_verifiableIdCardHowToGetIt:
+        return ResponseString.RESPONSE_STRING_verifiableIdCardHowToGetIt
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_phoneProofWhyGetThisCard:
+        return ResponseString.RESPONSE_STRING_phoneProofWhyGetThisCard
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_phoneProofExpirationDate:
+        return ResponseString.RESPONSE_STRING_phoneProofExpirationDate
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_phoneProofHowToGetIt:
+        return ResponseString.RESPONSE_STRING_phoneProofHowToGetIt.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_tezVoucherWhyGetThisCard:
+        return ResponseString.RESPONSE_STRING_tezVoucherWhyGetThisCard
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_tezVoucherExpirationDate:
+        return ResponseString.RESPONSE_STRING_tezVoucherExpirationDate
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_tezVoucherHowToGetIt:
+        return ResponseString.RESPONSE_STRING_tezVoucherHowToGetIt.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_genderWhyGetThisCard:
+        return ResponseString.RESPONSE_STRING_genderWhyGetThisCard.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_genderExpirationDate:
+        return ResponseString.RESPONSE_STRING_genderExpirationDate.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_genderHowToGetIt:
+        return ResponseString.RESPONSE_STRING_genderHowToGetIt.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_nationalityWhyGetThisCard:
+        return ResponseString.RESPONSE_STRING_nationalityWhyGetThisCard
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_nationalityExpirationDate:
+        return ResponseString.RESPONSE_STRING_nationalityExpirationDate
+            .localise(context);
+
+      case ResponseString.RESPONSE_STRING_nationalityHowToGetIt:
+        return ResponseString.RESPONSE_STRING_nationalityHowToGetIt.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_ageRangeWhyGetThisCard:
+        return ResponseString.RESPONSE_STRING_ageRangeWhyGetThisCard.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_ageRangeExpirationDate:
+        return ResponseString.RESPONSE_STRING_ageRangeExpirationDate.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_ageRangeHowToGetIt:
+        return ResponseString.RESPONSE_STRING_ageRangeHowToGetIt.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_payloadFormatErrorMessage:
+        return ResponseString.RESPONSE_STRING_payloadFormatErrorMessage
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage:
+        return ResponseString.RESPONSE_STRING_thisFeatureIsNotSupportedMessage
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_userNotFitErrorMessage:
+        return ResponseString.RESPONSE_STRING_userNotFitErrorMessage.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_transactionIsLikelyToFail:
+        return ResponseString.RESPONSE_STRING_transactionIsLikelyToFail
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_verifiableIdCardDummyDesc:
+        return ResponseString.RESPONSE_STRING_verifiableIdCardDummyDesc
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_tezotopiaMembershipLongDescription:
+        return ResponseString
+            .RESPONSE_STRING_tezotopiaMembershipLongDescription.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_chainbornMembershipLongDescription:
+        return ResponseString
+            .RESPONSE_STRING_chainbornMembershipLongDescription.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_livenessCardLongDescription:
+        return ResponseString.RESPONSE_STRING_livenessCardLongDescription
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_succesfullyAuthenticated:
+        return ResponseString.RESPONSE_STRING_succesfullyAuthenticated
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_authenticationFailed:
+        return ResponseString.RESPONSE_STRING_authenticationFailed.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_deviceIncompatibilityMessage:
+        return ResponseString.RESPONSE_STRING_deviceIncompatibilityMessage
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_downloadingCircuitLoadingMessage:
+        return ResponseString.RESPONSE_STRING_downloadingCircuitLoadingMessage
+            .localise(
+          context,
+        );
+      case ResponseString.RESPONSE_STRING_defiComplianceWhyGetThisCard:
+        return ResponseString.RESPONSE_STRING_defiComplianceWhyGetThisCard
+            .localise(context);
+      case ResponseString.RESPONSE_STRING_defiComplianceExpirationDate:
+        return ResponseString.RESPONSE_STRING_defiComplianceExpirationDate
+            .localise(context);
+      case ResponseString.RESPONSE_STRING_defiComplianceHowToGetIt:
+        return ResponseString.RESPONSE_STRING_defiComplianceHowToGetIt
+            .localise(context);
+      case ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST:
+        return ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ALREADY_EXIST
+            .localise(context);
+      case ResponseString.RESPONSE_STRING_errorGeneratingProof:
+        return ResponseString.RESPONSE_STRING_errorGeneratingProof.localise(
+          context,
+        );
+      case ResponseString.RESPONSE_STRING_successfullyGeneratingProof:
+        return ResponseString.RESPONSE_STRING_successfullyGeneratingProof
+            .localise(
+          context,
+        );
+      case ResponseString.RESPONSE_STRING_pleaseAddXtoConnectToTheDapp:
+        return ResponseString.RESPONSE_STRING_pleaseAddXtoConnectToTheDapp
+            .localise(
+          context,
+          injectedMessage: injectedMessage,
+        );
+      case ResponseString.RESPONSE_STRING_pleaseSwitchPolygonNetwork:
+        return ResponseString.RESPONSE_STRING_pleaseSwitchPolygonNetwork
+            .localise(
+          context,
+          injectedMessage: injectedMessage,
+        );
+
+      case ResponseString.RESPONSE_STRING_pleaseSwitchToRightOIDC4VCProfile:
+        return ResponseString
+            .RESPONSE_STRING_pleaseSwitchToRightOIDC4VCProfile.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_authenticationSuccess:
+        return ResponseString.RESPONSE_STRING_authenticationSuccess.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_youcanSelectOnlyXCredential:
+        return ResponseString.RESPONSE_STRING_youcanSelectOnlyXCredential
+            .localise(
+          context,
+          injectedMessage: injectedMessage,
+        );
+
+      case ResponseString.RESPONSE_STRING_theCredentialIsNotReady:
+        return ResponseString.RESPONSE_STRING_theCredentialIsNotReady
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_theCredentialIsNoMoreReady:
+        return ResponseString.RESPONSE_STRING_theCredentialIsNoMoreReady
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_theRequestIsRejected:
+        return ResponseString.RESPONSE_STRING_theRequestIsRejected.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_userPinIsIncorrect:
+        return ResponseString.RESPONSE_STRING_userPinIsIncorrect.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_responseTypeNotSupported:
+        return ResponseString.RESPONSE_STRING_responseTypeNotSupported
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_invalidRequest:
+        return ResponseString.RESPONSE_STRING_invalidRequest.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported:
+        return ResponseString.RESPONSE_STRING_subjectSyntaxTypeNotSupported
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_accessDenied:
+        return ResponseString.RESPONSE_STRING_accessDenied.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_thisRequestIsNotSupported:
+        return ResponseString.RESPONSE_STRING_thisRequestIsNotSupported
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_unsupportedCredential:
+        return ResponseString.RESPONSE_STRING_unsupportedCredential.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_aloginIsRequired:
+        return ResponseString.RESPONSE_STRING_aloginIsRequired.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_userConsentIsRequired:
+        return ResponseString.RESPONSE_STRING_userConsentIsRequired.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_theWalletIsNotRegistered:
+        return ResponseString.RESPONSE_STRING_theWalletIsNotRegistered
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_credentialIssuanceDenied:
+        return ResponseString.RESPONSE_STRING_credentialIssuanceDenied
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_credentialIssuanceIsStillPending:
+        return ResponseString.RESPONSE_STRING_credentialIssuanceIsStillPending
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_thisCredentialFormatIsNotSupported:
+        return ResponseString
+            .RESPONSE_STRING_thisCredentialFormatIsNotSupported.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_thisFormatIsNotSupported:
+        return ResponseString.RESPONSE_STRING_thisFormatIsNotSupported
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid:
+        return ResponseString.RESPONSE_STRING_theCredentialOfferIsInvalid
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_theServiceIsNotAvailable:
+        return ResponseString.RESPONSE_STRING_theServiceIsNotAvailable
+            .localise(
+          context,
+        );
+
+      case ResponseString
+            .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending:
+        return ResponseString
+            .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_successfullyAddedEnterpriseAccount:
+        return ResponseString
+            .RESPONSE_STRING_successfullyAddedEnterpriseAccount.localise(
+          context,
+        );
+
+      case ResponseString
+            .RESPONSE_STRING_successfullyUpdatedEnterpriseAccount:
+        return ResponseString
+            .RESPONSE_STRING_successfullyUpdatedEnterpriseAccount.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_thisWalleIsAlreadyConfigured:
+        return ResponseString.RESPONSE_STRING_thisWalleIsAlreadyConfigured
+            .localise(
+          context,
+        );
+      case ResponseString.RESPONSE_STRING_invalidStatus:
+        return ResponseString.RESPONSE_STRING_invalidStatus.localise(
+          context,
+        );
+      case ResponseString.RESPONSE_STRING_statusListInvalidSignature:
+        return ResponseString.RESPONSE_STRING_statusListInvalidSignature
+            .localise(
+          context,
+        );
+      case ResponseString.RESPONSE_STRING_theWalletIsSuspended:
+        return ResponseString.RESPONSE_STRING_theWalletIsSuspended.localise(
+          context,
+        );
+      case ResponseString
+            .RESPONSE_STRING_couldNotFindTheAccountWithThisAddress:
+        return ResponseString
+            .RESPONSE_STRING_couldNotFindTheAccountWithThisAddress.localise(
+          context,
+          injectedMessage: injectedMessage,
+        );
+
+      case ResponseString.RESPONSE_STRING_invalidClientErrorDescription:
+        return ResponseString.RESPONSE_STRING_invalidClientErrorDescription
+            .localise(
+          context,
+        );
+
+      case ResponseString
+            .RESPONSE_STRING_vpFormatsNotSupportedErrorDescription:
+        return ResponseString
+            .RESPONSE_STRING_vpFormatsNotSupportedErrorDescription.localise(
+          context,
+        );
+
+      case ResponseString
+            .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription:
+        return ResponseString
+                &#47;&#47; ignore: lines_longer_than_80_chars
+                .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription
+            .localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_recoveryPhraseIncorrectErrorMessage:
+        return ResponseString
+            .RESPONSE_STRING_recoveryPhraseIncorrectErrorMessage.localise(
+          context,
+        );
+
+      case ResponseString.RESPONSE_STRING_invalidCode:
+        return ResponseString.RESPONSE_STRING_invalidCode.localise(
+          context,
+        );
+    }
+  }
+  return &#39;&#39;;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../app_shared_message_handler_response_message/app_shared_message_handler_response_message-library.html">response_message</a></li>
+    <li><a href="../../app_shared_message_handler_response_message/ResponseMessage-class.html">ResponseMessage</a></li>
+    <li class="self-crumb">getMessage method</li>
+</ol>
+
+    <h5>ResponseMessage class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    altme
+      3.1.1+5635
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

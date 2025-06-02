@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the performLayout method from the AragoLearningAchievementDelegate class, for the Dart programming language.">
+  <title>performLayout method - AragoLearningAchievementDelegate class - arago_learning_achievement_widget library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../dashboard_home_tab_bar_credentials_widgets_credential_widget_arago_learning_achievement_widget/dashboard_home_tab_bar_credentials_widgets_credential_widget_arago_learning_achievement_widget-library.html">dashboard&#47;home&#47;tab_bar&#47;credentials&#47;widgets&#47;credential_widget&#47;arago_learning_achievement_widget.dart</a></li>
+    <li><a href="../../dashboard_home_tab_bar_credentials_widgets_credential_widget_arago_learning_achievement_widget/AragoLearningAchievementDelegate-class.html">AragoLearningAchievementDelegate</a></li>
+    <li class="self-crumb">performLayout method</li>
+  </ol>
+  <div class="self-name">performLayout</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="dashboard_home_tab_bar_credentials_widgets_credential_widget_arago_learning_achievement_widget&#47;AragoLearningAchievementDelegate-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">performLayout</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+<span class="returntype">void</span>
+<span class="name ">performLayout</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="performLayout-param-size"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Size-class.html">Size</a></span> <span class="parameter-name">size</span></span></li>
+</ol>)
+
+      <div class="features"><span class="feature">override</span></div>
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Override this method to lay out and position all children given this
+widget's size.</p>
+<p>This method must call <a href="https://api.flutter.dev/flutter/rendering/MultiChildLayoutDelegate/layoutChild.html">layoutChild</a> for each child. It should also specify
+the final position of each child with <a href="https://api.flutter.dev/flutter/rendering/MultiChildLayoutDelegate/positionChild.html">positionChild</a>.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+void performLayout(Size size) {
+  if (hasChild(&#39;name&#39;)) {
+    layoutChild(&#39;name&#39;, BoxConstraints.loose(size));
+    positionChild(&#39;name&#39;, Offset(size.width * 0.06, size.height * 0.16));
+  }
+  if (hasChild(&#39;school&#39;)) {
+    layoutChild(&#39;school&#39;, BoxConstraints.loose(size));
+    positionChild(&#39;school&#39;, Offset(size.width * 0.06, size.height * 0.33));
+  }
+
+  if (hasChild(&#39;familyName&#39;)) {
+    layoutChild(&#39;familyName&#39;, BoxConstraints.loose(size));
+    positionChild(
+      &#39;familyName&#39;,
+      Offset(size.width * 0.06, size.height * 0.63),
+    );
+  }
+  if (hasChild(&#39;givenName&#39;)) {
+    layoutChild(&#39;givenName&#39;, BoxConstraints.loose(size));
+    positionChild(&#39;givenName&#39;, Offset(size.width * 0.06, size.height * 0.53));
+  }
+
+  if (hasChild(&#39;birthDate&#39;)) {
+    layoutChild(&#39;birthDate&#39;, BoxConstraints.loose(size));
+    positionChild(&#39;birthDate&#39;, Offset(size.width * 0.45, size.height * 0.53));
+  }
+
+  if (hasChild(&#39;hasCredential&#39;)) {
+    layoutChild(&#39;hasCredential&#39;, BoxConstraints.loose(size));
+    positionChild(
+      &#39;hasCredential&#39;,
+      Offset(size.width * 0.45, size.height * 0.63),
+    );
+  }
+
+  if (hasChild(&#39;proof&#39;)) {
+    layoutChild(&#39;proof&#39;, BoxConstraints.loose(size));
+    positionChild(&#39;proof&#39;, Offset(size.width * 0.06, size.height * 0.8));
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../dashboard_home_tab_bar_credentials_widgets_credential_widget_arago_learning_achievement_widget/dashboard_home_tab_bar_credentials_widgets_credential_widget_arago_learning_achievement_widget-library.html">arago_learning_achievement_widget</a></li>
+    <li><a href="../../dashboard_home_tab_bar_credentials_widgets_credential_widget_arago_learning_achievement_widget/AragoLearningAchievementDelegate-class.html">AragoLearningAchievementDelegate</a></li>
+    <li class="self-crumb">performLayout method</li>
+</ol>
+
+    <h5>AragoLearningAchievementDelegate class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    altme
+      3.1.1+5635
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

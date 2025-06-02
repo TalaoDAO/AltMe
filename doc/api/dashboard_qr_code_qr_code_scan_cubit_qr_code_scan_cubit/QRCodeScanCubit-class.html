@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the QRCodeScanCubit class from the qr_code_scan_cubit library, for the Dart programming language.">
+  <title>QRCodeScanCubit class - qr_code_scan_cubit library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">altme</a></li>
+    <li><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit-library.html">dashboard&#47;qr_code&#47;qr_code_scan&#47;cubit&#47;qr_code_scan_cubit.dart</a></li>
+    <li class="self-crumb">QRCodeScanCubit class</li>
+  </ol>
+  <div class="self-name">QRCodeScanCubit</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit&#47;dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit-library-sidebar.html"
+    data-below-sidebar="dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit&#47;QRCodeScanCubit-class-sidebar.html">
+    <div>
+<h1><span class="kind-class">QRCodeScanCubit</span> class 
+ 
+</h1></div>
+
+    
+
+
+    <section>
+      <dl class="dl-horizontal">
+        
+  <dt>Inheritance</dt>
+  <dd>
+    <ul class="gt-separated dark clazz-relationships">
+      <li><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></li>
+        <li><a href="https://pub.dev/documentation/bloc/8.1.4/bloc/BlocBase-class.html">BlocBase</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanState-class.html">QRCodeScanState</a></span>&gt;</span></li>
+        <li><a href="https://pub.dev/documentation/bloc/8.1.4/bloc/Cubit-class.html">Cubit</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanState-class.html">QRCodeScanState</a></span>&gt;</span></li>
+      <li>QRCodeScanCubit</li>
+    </ul>
+  </dd>
+
+        
+        
+
+
+        
+        
+
+
+      </dl>
+    </section>
+
+    
+  <section class="summary offset-anchor" id="constructors">
+    <h2>Constructors</h2>
+    <dl class="constructor-summary-list">
+        <dt id="QRCodeScanCubit" class="callable">
+          <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/QRCodeScanCubit.html">QRCodeScanCubit</a></span><span class="signature">({<span class="parameter" id="-param-client"><span>required</span> <span class="type-annotation"><a href="../app_shared_dio_client_dio_client/DioClient-class.html">DioClient</a></span> <span class="parameter-name">client</span>, </span><span class="parameter" id="-param-scanCubit"><span>required</span> <span class="type-annotation"><a href="../scan_cubit_scan_cubit/ScanCubit-class.html">ScanCubit</a></span> <span class="parameter-name">scanCubit</span>, </span><span class="parameter" id="-param-profileCubit"><span>required</span> <span class="type-annotation"><a href="../dashboard_profile_cubit_profile_cubit/ProfileCubit-class.html">ProfileCubit</a></span> <span class="parameter-name">profileCubit</span>, </span><span class="parameter" id="-param-credentialsCubit"><span>required</span> <span class="type-annotation"><a href="../credentials_cubit_credentials_cubit/CredentialsCubit-class.html">CredentialsCubit</a></span> <span class="parameter-name">credentialsCubit</span>, </span><span class="parameter" id="-param-queryByExampleCubit"><span>required</span> <span class="type-annotation"><a href="../query_by_example_cubit_query_by_example/QueryByExampleCubit-class.html">QueryByExampleCubit</a></span> <span class="parameter-name">queryByExampleCubit</span>, </span><span class="parameter" id="-param-deepLinkCubit"><span>required</span> <span class="type-annotation"><a href="../deep_link_cubit_deep_link/DeepLinkCubit-class.html">DeepLinkCubit</a></span> <span class="parameter-name">deepLinkCubit</span>, </span><span class="parameter" id="-param-jwtDecode"><span>required</span> <span class="type-annotation">JWTDecode</span> <span class="parameter-name">jwtDecode</span>, </span><span class="parameter" id="-param-beacon"><span>required</span> <span class="type-annotation">Beacon</span> <span class="parameter-name">beacon</span>, </span><span class="parameter" id="-param-walletConnectCubit"><span>required</span> <span class="type-annotation"><a href="../connection_bridge_wallet_connect_cubit_wallet_connect_cubit/WalletConnectCubit-class.html">WalletConnectCubit</a></span> <span class="parameter-name">walletConnectCubit</span>, </span><span class="parameter" id="-param-secureStorageProvider"><span>required</span> <span class="type-annotation">SecureStorageProvider</span> <span class="parameter-name">secureStorageProvider</span>, </span><span class="parameter" id="-param-didKitProvider"><span>required</span> <span class="type-annotation">DIDKitProvider</span> <span class="parameter-name">didKitProvider</span>, </span><span class="parameter" id="-param-oidc4vc"><span>required</span> <span class="type-annotation">OIDC4VC</span> <span class="parameter-name">oidc4vc</span>, </span><span class="parameter" id="-param-walletCubit"><span>required</span> <span class="type-annotation"><a href="../wallet_cubit_wallet_cubit/WalletCubit-class.html">WalletCubit</a></span> <span class="parameter-name">walletCubit</span>, </span><span class="parameter" id="-param-enterpriseCubit"><span>required</span> <span class="type-annotation"><a href="../enterprise_cubit_enterprise_cubit/EnterpriseCubit-class.html">EnterpriseCubit</a></span> <span class="parameter-name">enterpriseCubit</span></span>})</span>
+        </dt>
+        <dd>
+          
+        </dd>
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-properties">
+    <h2>Properties</h2>
+    <dl class="properties">
+        <dt id="beacon" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/beacon.html">beacon</a></span>
+  <span class="signature">&#8594; Beacon</span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="client" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/client.html">client</a></span>
+  <span class="signature">&#8594; <a href="../app_shared_dio_client_dio_client/DioClient-class.html">DioClient</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="completer" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/completer.html">completer</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-async/Completer-class.html">Completer</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span>?</span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="credentialsCubit" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/credentialsCubit.html">credentialsCubit</a></span>
+  <span class="signature">&#8594; <a href="../credentials_cubit_credentials_cubit/CredentialsCubit-class.html">CredentialsCubit</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="deepLinkCubit" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/deepLinkCubit.html">deepLinkCubit</a></span>
+  <span class="signature">&#8594; <a href="../deep_link_cubit_deep_link/DeepLinkCubit-class.html">DeepLinkCubit</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="didKitProvider" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/didKitProvider.html">didKitProvider</a></span>
+  <span class="signature">&#8594; DIDKitProvider</span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="enterpriseCubit" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/enterpriseCubit.html">enterpriseCubit</a></span>
+  <span class="signature">&#8594; <a href="../enterprise_cubit_enterprise_cubit/EnterpriseCubit-class.html">EnterpriseCubit</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="hashCode" class="property inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  The hash code for this object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="isClosed" class="property inherited">
+  <span class="name"><a href="https://pub.dev/documentation/bloc/8.1.4/bloc/BlocBase/isClosed.html">isClosed</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  Whether the bloc is closed.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="jwtDecode" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/jwtDecode.html">jwtDecode</a></span>
+  <span class="signature">&#8594; JWTDecode</span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="log" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/log.html">log</a></span>
+  <span class="signature">&#8594; <a href="https://pub.dev/documentation/logger/2.5.0/logger/Logger-class.html">Logger</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="oidc4vc" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/oidc4vc.html">oidc4vc</a></span>
+  <span class="signature">&#8594; OIDC4VC</span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="profileCubit" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/profileCubit.html">profileCubit</a></span>
+  <span class="signature">&#8594; <a href="../dashboard_profile_cubit_profile_cubit/ProfileCubit-class.html">ProfileCubit</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="queryByExampleCubit" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/queryByExampleCubit.html">queryByExampleCubit</a></span>
+  <span class="signature">&#8594; <a href="../query_by_example_cubit_query_by_example/QueryByExampleCubit-class.html">QueryByExampleCubit</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="runtimeType" class="property inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Type-class.html">Type</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  A representation of the runtime type of the object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="savedAccessToken" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/savedAccessToken.html">savedAccessToken</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="savedAuthorizationDetails" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/savedAuthorizationDetails.html">savedAuthorizationDetails</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a>?</span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="savedNonce" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/savedNonce.html">savedNonce</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="scanCubit" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/scanCubit.html">scanCubit</a></span>
+  <span class="signature">&#8594; <a href="../scan_cubit_scan_cubit/ScanCubit-class.html">ScanCubit</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="secureStorageProvider" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/secureStorageProvider.html">secureStorageProvider</a></span>
+  <span class="signature">&#8594; SecureStorageProvider</span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="state" class="property inherited">
+  <span class="name"><a href="https://pub.dev/documentation/bloc/8.1.4/bloc/BlocBase/state.html">state</a></span>
+  <span class="signature">&#8594; <a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanState-class.html">QRCodeScanState</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  The current <a href="https://pub.dev/documentation/bloc/8.1.4/bloc/BlocBase/state.html">state</a>.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="stream" class="property inherited">
+  <span class="name"><a href="https://pub.dev/documentation/bloc/8.1.4/bloc/BlocBase/stream.html">stream</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Stream-class.html">Stream</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanState-class.html">QRCodeScanState</a></span>&gt;</span></span>
+  
+
+</dt>
+<dd class="inherited">
+  The current <a href="https://pub.dev/documentation/bloc/8.1.4/bloc/BlocBase/stream.html">stream</a> of states.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="walletConnectCubit" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/walletConnectCubit.html">walletConnectCubit</a></span>
+  <span class="signature">&#8594; <a href="../connection_bridge_wallet_connect_cubit_wallet_connect_cubit/WalletConnectCubit-class.html">WalletConnectCubit</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="walletCubit" class="property">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/walletCubit.html">walletCubit</a></span>
+  <span class="signature">&#8594; <a href="../wallet_cubit_wallet_cubit/WalletCubit-class.html">WalletCubit</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-methods">
+    <h2>Methods</h2>
+    <dl class="callables">
+        <dt id="accept" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/accept.html">accept</a></span><span class="signature">(<wbr>{<span class="parameter" id="accept-param-approvedIssuer"><span>required</span> <span class="type-annotation"><a href="../app_shared_issuer_models_issuer/Issuer-class.html">Issuer</a></span> <span class="parameter-name">approvedIssuer</span>, </span><span class="parameter" id="accept-param-qrCodeScanCubit"><span>required</span> <span class="type-annotation"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit-class.html">QRCodeScanCubit</a></span> <span class="parameter-name">qrCodeScanCubit</span>, </span><span class="parameter" id="accept-param-credentialOfferJson"><span>required</span> <span class="type-annotation">dynamic</span> <span class="parameter-name">credentialOfferJson</span>, </span><span class="parameter" id="accept-param-openIdConfiguration"><span>required</span> <span class="type-annotation">OpenIdConfiguration?</span> <span class="parameter-name">openIdConfiguration</span>, </span><span class="parameter" id="accept-param-issuer"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">issuer</span>, </span><span class="parameter" id="accept-param-preAuthorizedCode"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">preAuthorizedCode</span>, </span><span class="parameter" id="accept-param-uri"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Uri-class.html">Uri</a></span> <span class="parameter-name">uri</span>, </span><span class="parameter" id="accept-param-oidcType"><span class="type-annotation">OIDC4VCType?</span> <span class="parameter-name">oidcType</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="acceptOidc4vci" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/acceptOidc4vci.html">acceptOidc4vci</a></span><span class="signature">(<wbr>{<span class="parameter" id="acceptOidc4vci-param-oidc4vcParameters"><span>required</span> <span class="type-annotation">Oidc4vcParameters</span> <span class="parameter-name">oidc4vcParameters</span>, </span><span class="parameter" id="acceptOidc4vci-param-approvedIssuer"><span>required</span> <span class="type-annotation"><a href="../app_shared_issuer_models_issuer/Issuer-class.html">Issuer</a></span> <span class="parameter-name">approvedIssuer</span>, </span><span class="parameter" id="acceptOidc4vci-param-qrCodeScanCubit"><span>required</span> <span class="type-annotation"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit-class.html">QRCodeScanCubit</a></span> <span class="parameter-name">qrCodeScanCubit</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="addCredentialsInLoop" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/addCredentialsInLoop.html">addCredentialsInLoop</a></span><span class="signature">(<wbr>{<span class="parameter" id="addCredentialsInLoop-param-oidc4vcParameters"><span>required</span> <span class="type-annotation">Oidc4vcParameters</span> <span class="parameter-name">oidc4vcParameters</span>, </span><span class="parameter" id="addCredentialsInLoop-param-selectedCredentials"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a></span> <span class="parameter-name">selectedCredentials</span>, </span><span class="parameter" id="addCredentialsInLoop-param-userPin"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">userPin</span>, </span><span class="parameter" id="addCredentialsInLoop-param-txCode"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">txCode</span>, </span><span class="parameter" id="addCredentialsInLoop-param-codeForAuthorisedFlow"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">codeForAuthorisedFlow</span>, </span><span class="parameter" id="addCredentialsInLoop-param-codeVerifier"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">codeVerifier</span>, </span><span class="parameter" id="addCredentialsInLoop-param-authorization"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">authorization</span>, </span><span class="parameter" id="addCredentialsInLoop-param-clientId"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">clientId</span>, </span><span class="parameter" id="addCredentialsInLoop-param-clientSecret"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">clientSecret</span>, </span><span class="parameter" id="addCredentialsInLoop-param-publicKeyForDPop"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">publicKeyForDPop</span>, </span><span class="parameter" id="addCredentialsInLoop-param-oAuthClientAttestation"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">oAuthClientAttestation</span>, </span><span class="parameter" id="addCredentialsInLoop-param-oAuthClientAttestationPop"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">oAuthClientAttestationPop</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="addError" class="callable inherited">
+  <span class="name"><a href="https://pub.dev/documentation/bloc/8.1.4/bloc/BlocBase/addError.html">addError</a></span><span class="signature">(<wbr><span class="parameter" id="addError-param-error"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">error</span>, [</span><span class="parameter" id="addError-param-stackTrace"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/StackTrace-class.html">StackTrace</a>?</span> <span class="parameter-name">stackTrace</span></span>])
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Reports an <code>error</code> which triggers <a href="https://pub.dev/documentation/bloc/8.1.4/bloc/BlocBase/onError.html">onError</a> with an optional <a href="https://api.flutter.dev/flutter/dart-core/StackTrace-class.html">StackTrace</a>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="authorizedFlowCompletion" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/authorizedFlowCompletion.html">authorizedFlowCompletion</a></span><span class="signature">(<wbr>{<span class="parameter" id="authorizedFlowCompletion-param-statePayload"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">statePayload</span>, </span><span class="parameter" id="authorizedFlowCompletion-param-codeForAuthorisedFlow"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">codeForAuthorisedFlow</span>, </span><span class="parameter" id="authorizedFlowCompletion-param-qrCodeScanCubit"><span>required</span> <span class="type-annotation"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit-class.html">QRCodeScanCubit</a></span> <span class="parameter-name">qrCodeScanCubit</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="authorizedFlowStart" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/authorizedFlowStart.html">authorizedFlowStart</a></span><span class="signature">(<wbr><span class="parameter" id="authorizedFlowStart-param-uri"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Uri-class.html">Uri</a></span> <span class="parameter-name">uri</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="clearRoute" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/clearRoute.html">clearRoute</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="close" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/close.html">close</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Closes the instance.
+This method should be called when the instance is no longer needed.
+Once <a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/close.html">close</a> is called, the instance can no longer be used.
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="completeSiopV2Flow" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/completeSiopV2Flow.html">completeSiopV2Flow</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  complete SIOPV2 Flow
+  
+
+</dd>
+
+        <dt id="deepLink" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/deepLink.html">deepLink</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="emit" class="callable inherited">
+  <span class="name"><a href="https://pub.dev/documentation/bloc/8.1.4/bloc/BlocBase/emit.html">emit</a></span><span class="signature">(<wbr><span class="parameter" id="emit-param-state"><span class="type-annotation"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanState-class.html">QRCodeScanState</a></span> <span class="parameter-name">state</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Updates the <code>state</code> to the provided <code>state</code>.
+<a href="https://pub.dev/documentation/bloc/8.1.4/bloc/BlocBase/emit.html">emit</a> does nothing if the <code>state</code> being emitted
+is equal to the current <code>state</code>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="emitError" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/emitError.html">emitError</a></span><span class="signature">(<wbr>{<span class="parameter" id="emitError-param-error"><span>required</span> <span class="type-annotation">dynamic</span> <span class="parameter-name">error</span>, </span><span class="parameter" id="emitError-param-callToAction"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/Widget-class.html">Widget</a>?</span> <span class="parameter-name">callToAction</span></span>})
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="goBack" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/goBack.html">goBack</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="isVCPresentable" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/isVCPresentable.html">isVCPresentable</a></span><span class="signature">(<wbr>{<span class="parameter" id="isVCPresentable-param-formatsSupported"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">VCFormatType</span>&gt;</span></span> <span class="parameter-name">formatsSupported</span>, </span><span class="parameter" id="isVCPresentable-param-presentationDefinition"><span>required</span> <span class="type-annotation">PresentationDefinition?</span> <span class="parameter-name">presentationDefinition</span>, </span><span class="parameter" id="isVCPresentable-param-clientMetaData"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span>?</span> <span class="parameter-name">clientMetaData</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="launchOIDC4VPAndSIOPV2Flow" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/launchOIDC4VPAndSIOPV2Flow.html">launchOIDC4VPAndSIOPV2Flow</a></span><span class="signature">(<wbr>{<span class="parameter" id="launchOIDC4VPAndSIOPV2Flow-param-keys"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">keys</span>, </span><span class="parameter" id="launchOIDC4VPAndSIOPV2Flow-param-uri"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Uri-class.html">Uri</a></span> <span class="parameter-name">uri</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="navigateToOidc4vcCredentialPickPage" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/navigateToOidc4vcCredentialPickPage.html">navigateToOidc4vcCredentialPickPage</a></span><span class="signature">(<wbr>{<span class="parameter" id="navigateToOidc4vcCredentialPickPage-param-credentials"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a></span> <span class="parameter-name">credentials</span>, </span><span class="parameter" id="navigateToOidc4vcCredentialPickPage-param-userPin"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">userPin</span>, </span><span class="parameter" id="navigateToOidc4vcCredentialPickPage-param-txCode"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">txCode</span>, </span><span class="parameter" id="navigateToOidc4vcCredentialPickPage-param-oidc4vcParameters"><span>required</span> <span class="type-annotation">Oidc4vcParameters</span> <span class="parameter-name">oidc4vcParameters</span></span>})
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="noSuchMethod" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+    <span class="returntype parameter">&#8594; dynamic</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Invoked when a nonexistent method or property is accessed.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="onChange" class="callable inherited">
+  <span class="name"><a href="https://pub.dev/documentation/bloc/8.1.4/bloc/BlocBase/onChange.html">onChange</a></span><span class="signature">(<wbr><span class="parameter" id="onChange-param-change"><span class="type-annotation"><a href="https://pub.dev/documentation/bloc/8.1.4/bloc/Change-class.html">Change</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanState-class.html">QRCodeScanState</a></span>&gt;</span></span> <span class="parameter-name">change</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Called whenever a <code>change</code> occurs with the given <code>change</code>.
+A <code>change</code> occurs when a new <code>state</code> is emitted.
+<a href="https://pub.dev/documentation/bloc/8.1.4/bloc/BlocBase/onChange.html">onChange</a> is called before the <code>state</code> of the <code>cubit</code> is updated.
+<a href="https://pub.dev/documentation/bloc/8.1.4/bloc/BlocBase/onChange.html">onChange</a> is a great spot to add logging/analytics for a specific <code>cubit</code>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="onError" class="callable inherited">
+  <span class="name"><a href="https://pub.dev/documentation/bloc/8.1.4/bloc/BlocBase/onError.html">onError</a></span><span class="signature">(<wbr><span class="parameter" id="onError-param-error"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">error</span>, </span><span class="parameter" id="onError-param-stackTrace"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/StackTrace-class.html">StackTrace</a></span> <span class="parameter-name">stackTrace</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Called whenever an <code>error</code> occurs and notifies <a href="https://pub.dev/documentation/bloc/8.1.4/bloc/BlocObserver/onError.html">BlocObserver.onError</a>.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="process" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/process.html">process</a></span><span class="signature">(<wbr>{<span class="parameter" id="process-param-scannedResponse"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">scannedResponse</span>, </span><span class="parameter" id="process-param-qrCodeScanCubit"><span>required</span> <span class="type-annotation"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit-class.html">QRCodeScanCubit</a></span> <span class="parameter-name">qrCodeScanCubit</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="processSelectedCredentials" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/processSelectedCredentials.html">processSelectedCredentials</a></span><span class="signature">(<wbr>{<span class="parameter" id="processSelectedCredentials-param-selectedCredentials"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a></span> <span class="parameter-name">selectedCredentials</span>, </span><span class="parameter" id="processSelectedCredentials-param-userPin"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">userPin</span>, </span><span class="parameter" id="processSelectedCredentials-param-txCode"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">txCode</span>, </span><span class="parameter" id="processSelectedCredentials-param-oidc4vcParameters"><span>required</span> <span class="type-annotation">Oidc4vcParameters</span> <span class="parameter-name">oidc4vcParameters</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="resetNonceAndAccessTokenAndAuthorizationDetails" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/resetNonceAndAccessTokenAndAuthorizationDetails.html">resetNonceAndAccessTokenAndAuthorizationDetails</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="showDataAfterReceiving" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/showDataAfterReceiving.html">showDataAfterReceiving</a></span><span class="signature">(<wbr><span class="parameter" id="showDataAfterReceiving-param-formattedData"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">formattedData</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="showDataBeforeSending" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/showDataBeforeSending.html">showDataBeforeSending</a></span><span class="signature">(<wbr>{<span class="parameter" id="showDataBeforeSending-param-title"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">title</span>, </span><span class="parameter" id="showDataBeforeSending-param-data"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span>?</span> <span class="parameter-name">data</span>, </span><span class="parameter" id="showDataBeforeSending-param-fullData"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">fullData</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="startOIDC4VCCredentialIssuance" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/startOIDC4VCCredentialIssuance.html">startOIDC4VCCredentialIssuance</a></span><span class="signature">(<wbr>{<span class="parameter" id="startOIDC4VCCredentialIssuance-param-oidc4vcParameters"><span>required</span> <span class="type-annotation">Oidc4vcParameters</span> <span class="parameter-name">oidc4vcParameters</span>, </span><span class="parameter" id="startOIDC4VCCredentialIssuance-param-qrCodeScanCubit"><span>required</span> <span class="type-annotation"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit-class.html">QRCodeScanCubit</a></span> <span class="parameter-name">qrCodeScanCubit</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="startOIDC4VCDeferedCredentialIssuance" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/startOIDC4VCDeferedCredentialIssuance.html">startOIDC4VCDeferedCredentialIssuance</a></span><span class="signature">(<wbr>{<span class="parameter" id="startOIDC4VCDeferedCredentialIssuance-param-credentialModel"><span>required</span> <span class="type-annotation"><a href="../dashboard_home_tab_bar_credentials_models_credential_model_credential_model/CredentialModel-class.html">CredentialModel</a></span> <span class="parameter-name">credentialModel</span>, </span><span class="parameter" id="startOIDC4VCDeferedCredentialIssuance-param-qrCodeScanCubit"><span>required</span> <span class="type-annotation"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit-class.html">QRCodeScanCubit</a></span> <span class="parameter-name">qrCodeScanCubit</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="startSIOPV2OIDC4VPProcess" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/startSIOPV2OIDC4VPProcess.html">startSIOPV2OIDC4VPProcess</a></span><span class="signature">(<wbr><span class="parameter" id="startSIOPV2OIDC4VPProcess-param-oldUri"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Uri-class.html">Uri</a></span> <span class="parameter-name">oldUri</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="toString" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  A string representation of this object.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="verify" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/verify.html">verify</a></span><span class="signature">(<wbr>{<span class="parameter" id="verify-param-uri"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Uri-class.html">Uri</a></span> <span class="parameter-name">uri</span>, </span><span class="parameter" id="verify-param-isScan"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">isScan</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="verifyJWTBeforeLaunchingOIDC4VPANDSIOPV2Flow" class="callable">
+  <span class="name"><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/QRCodeScanCubit/verifyJWTBeforeLaunchingOIDC4VPANDSIOPV2Flow.html">verifyJWTBeforeLaunchingOIDC4VPANDSIOPV2Flow</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  verify jwt
+  
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor inherited"
+      id="operators">
+    <h2>Operators</h2>
+    <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  The equality operator.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+    
+    
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">altme</a></li>
+    <li><a href="../dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit/dashboard_qr_code_qr_code_scan_cubit_qr_code_scan_cubit-library.html">qr_code_scan_cubit</a></li>
+    <li class="self-crumb">QRCodeScanCubit class</li>
+</ol>
+
+    <h5>qr_code_scan_cubit library</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    altme
+      3.1.1+5635
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

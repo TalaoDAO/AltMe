@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the oidc4vpSiopV2AcceptHost function from the oidc4vp_siopv2_accept_host library, for the Dart programming language.">
+  <title>oidc4vpSiopV2AcceptHost function - oidc4vp_siopv2_accept_host library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">altme</a></li>
+    <li><a href="../oidc4vc_helper_function_oidc4vp_siopv2_accept_host/oidc4vc_helper_function_oidc4vp_siopv2_accept_host-library.html">oidc4vc&#47;helper_function&#47;oidc4vp_siopv2_accept_host.dart</a></li>
+    <li class="self-crumb">oidc4vpSiopV2AcceptHost function</li>
+  </ol>
+  <div class="self-name">oidc4vpSiopV2AcceptHost</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="oidc4vc_helper_function_oidc4vp_siopv2_accept_host&#47;oidc4vc_helper_function_oidc4vp_siopv2_accept_host-library-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-function">oidc4vpSiopV2AcceptHost</span> function 
+ 
+</h1></div>
+
+    <section class="multi-line-signature">
+        
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="name ">oidc4vpSiopV2AcceptHost</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="oidc4vpSiopV2AcceptHost-param-uri"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Uri-class.html">Uri</a></span> <span class="parameter-name">uri</span>, </span></li>
+<li><span class="parameter" id="oidc4vpSiopV2AcceptHost-param-context"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span>, </span></li>
+<li><span class="parameter" id="oidc4vpSiopV2AcceptHost-param-isDeveloperMode"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">isDeveloperMode</span>, </span></li>
+<li><span class="parameter" id="oidc4vpSiopV2AcceptHost-param-client"><span>required</span> <span class="type-annotation"><a href="../app_shared_dio_client_dio_client/DioClient-class.html">DioClient</a></span> <span class="parameter-name">client</span>, </span></li>
+<li><span class="parameter" id="oidc4vpSiopV2AcceptHost-param-showPrompt"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">showPrompt</span>, </span></li>
+<li><span class="parameter" id="oidc4vpSiopV2AcceptHost-param-approvedIssuer"><span>required</span> <span class="type-annotation"><a href="../app_shared_issuer_models_issuer/Issuer-class.html">Issuer</a></span> <span class="parameter-name">approvedIssuer</span>, </span></li>
+</ol>})
+
+        
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; oidc4vpSiopV2AcceptHost({
+  required Uri uri,
+  required BuildContext context,
+  required bool isDeveloperMode,
+  required DioClient client,
+  required bool showPrompt,
+  required Issuer approvedIssuer,
+}) async {
+  final l10n = context.l10n;
+  var acceptHost = true;
+
+  if (isDeveloperMode) {
+    late String formattedData;
+
+    &#47;&#47;&#47; verification case
+    final String? requestUri = uri.queryParameters[&#39;request_uri&#39;];
+    final String? request = uri.queryParameters[&#39;request&#39;];
+
+    Map&lt;String, dynamic&gt;? response;
+    late String url;
+
+    if (requestUri != null || request != null) {
+      late dynamic encodedData;
+
+      if (request != null) {
+        encodedData = request;
+      } else if (requestUri != null) {
+        encodedData = await fetchRequestUriPayload(
+          url: requestUri,
+          client: client,
+        );
+      }
+
+      response = decodePayload(
+        jwtDecode: JWTDecode(),
+        token: encodedData as String,
+      );
+
+      final clientId = getClientIdForPresentation(
+        uri.queryParameters[&#39;client_id&#39;],
+      );
+
+      url = getUpdatedUrlForSIOPV2OIC4VP(
+        uri: uri,
+        response: response,
+        clientId: clientId.toString(),
+      );
+      formattedData = await getFormattedStringOIDC4VPSIOPV2FromRequest(
+        url: url,
+        client: client,
+        response: response,
+      );
+    } else if (uri.queryParameters[&#39;presentation_definition&#39;] != null ||
+        uri.queryParameters[&#39;presentation_definition_uri&#39;] != null) {
+      final Map&lt;String, dynamic&gt;? presentationDefinition =
+          await getPresentationDefinition(uri: uri, client: client);
+      final Map&lt;String, dynamic&gt;? clientMetaData = await getClientMetada(
+        client: client,
+        uri: uri,
+      );
+      formattedData = getFormattedStringOIDC4VPSIOPV2(
+        &#39;&#39;,
+        uri.queryParameters,
+        clientMetaData,
+        presentationDefinition,
+      );
+    } else {
+      throw Exception(&#39;Invalid Presentation Request&#39;);
+    }
+
+    LoadingView().hide();
+    final bool moveAhead = await showDialog&lt;bool&gt;(
+          context: context,
+          builder: (_) {
+            return DeveloperModeDialog(
+              uri: uri,
+              onDisplay: () async {
+                final returnedValue = await Navigator.of(context).push&lt;dynamic&gt;(
+                  JsonViewerPage.route(
+                    title: l10n.display,
+                    data: formattedData,
+                  ),
+                );
+
+                if (returnedValue != null &amp;&amp;
+                    returnedValue is bool &amp;&amp;
+                    returnedValue) {
+                  Navigator.of(context).pop(true);
+                }
+                return;
+              },
+              onSkip: () {
+                Navigator.of(context).pop(true);
+              },
+            );
+          },
+        ) ??
+        true;
+    if (!moveAhead) return;
+  }
+
+  if (showPrompt) {
+    final String title = l10n.scanPromptHost;
+
+    String subtitle = (approvedIssuer.did.isEmpty)
+        ? uri.host
+        : &#39;&#39;&#39;${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}&#39;&#39;&#39;;
+
+    subtitle = await getHost(
+      uri: uri,
+      client: client,
+    );
+
+    LoadingView().hide();
+    acceptHost = await showDialog&lt;bool&gt;(
+          context: context,
+          builder: (BuildContext context) {
+            return ConfirmDialog(
+              title: title,
+              subtitle: subtitle,
+              yes: l10n.communicationHostAllow,
+              no: l10n.communicationHostDeny,
+            );
+          },
+        ) ??
+        false;
+  }
+  LoadingView().hide();
+  if (acceptHost) {
+    await context.read&lt;QRCodeScanCubit&gt;().startSIOPV2OIDC4VPProcess(uri);
+  } else {
+    context.read&lt;QRCodeScanCubit&gt;().emitError(
+          error: ResponseMessage(
+            message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
+          ),
+        );
+    return;
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">altme</a></li>
+    <li><a href="../oidc4vc_helper_function_oidc4vp_siopv2_accept_host/oidc4vc_helper_function_oidc4vp_siopv2_accept_host-library.html">oidc4vp_siopv2_accept_host</a></li>
+    <li class="self-crumb">oidc4vpSiopV2AcceptHost function</li>
+</ol>
+
+    <h5>oidc4vp_siopv2_accept_host library</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-left-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    altme
+      3.1.1+5635
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the getUrl method from the WertCubit class, for the Dart programming language.">
+  <title>getUrl method - WertCubit class - wert_cubit library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../dashboard_wert_cubit_wert_cubit/dashboard_wert_cubit_wert_cubit-library.html">dashboard&#47;wert&#47;cubit&#47;wert_cubit.dart</a></li>
+    <li><a href="../../dashboard_wert_cubit_wert_cubit/WertCubit-class.html">WertCubit</a></li>
+    <li class="self-crumb">getUrl method</li>
+  </ol>
+  <div class="self-name">getUrl</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="dashboard_wert_cubit_wert_cubit&#47;WertCubit-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">getUrl</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="name ">getUrl</span>(<wbr>)
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; getUrl() async {
+  final log = getLogger(&#39;WertCubit - getUrl&#39;);
+
+  &#47;&#47; Get Wert ID from environment variables
+  final wertId = dotenv.env[&#39;WERT_ID&#39;];
+  final wertPartnerId = dotenv.env[&#39;WERT_PARTNER_ID&#39;];
+  if (wertId == null || wertPartnerId == null) {
+    throw Exception(&#39;WERT_ID or WERT_PARTNER_ID is not set in .env file&#39;);
+  }
+
+  &#47;&#47; Base URL for Wert widget with dynamic values
+  final linkWidget =
+      &#39;https:&#47;&#47;widget.wert.io&#47;$wertPartnerId&#47;widget&#47;?theme=dark&amp;lang=en&#39;;
+  const linkInitialization =
+      &#39;https:&#47;&#47;partner.wert.io&#47;api&#47;external&#47;hpp&#47;create-session&#39;;
+
+  final address = walletCubit.state.currentAccount!.walletAddress;
+
+  final blockchainType = walletCubit.state.currentAccount!.blockchainType;
+
+  if (blockchainType.supportWert) {
+    final (commodity, network, commodityId) = blockchainType.commodityData;
+    final data = &lt;String, dynamic&gt;{
+      &#39;flow_type&#39;: &#39;simple&#39;,
+      &#39;commodity&#39;: commodity,
+      &#39;network&#39;: network,
+      &#39;wallet_address&#39;: address,
+    };
+    final response = await dioClient.post(
+      linkInitialization,
+      headers: &lt;String, dynamic&gt;{
+        &#39;Content-Type&#39;: &#39;application&#47;json&#39;,
+        &#39;X-Api-Key&#39;: wertId,
+      },
+      data: data,
+    );
+    if (response[&#39;sessionId&#39;] == null) {
+      log.e(&#39;Failed to get Wert URL: ${response.statusMessage}&#39;);
+      throw Exception(&#39;Failed to get Wert URL&#39;);
+    } else {
+      log.i(&#39;Wert URL fetched successfully&#39;);
+      String link = &#39;$linkWidget&amp;session_id=${response[&#39;sessionId&#39;]}&#39;;
+      bool haveEmail = false;
+      bool havePhone = false;
+
+      final List&lt;CredentialModel&gt; allCredentials =
+          await credentialsRepository.findAll();
+
+      for (final storedCredential in allCredentials) {
+        final iteratedCredentialSubjectModel =
+            storedCredential.credentialPreview.credentialSubjectModel;
+
+        if (iteratedCredentialSubjectModel.credentialSubjectType ==
+            CredentialSubjectType.emailPass &amp;&amp; !haveEmail) {
+          final email =
+              (iteratedCredentialSubjectModel as EmailPassModel).email;
+          link = &#39;$link&amp;email=$email&#39;;
+          haveEmail = true;
+        }
+
+        if (iteratedCredentialSubjectModel.credentialSubjectType ==
+            CredentialSubjectType.phonePass &amp;&amp; !havePhone) {
+          final phone =
+              (iteratedCredentialSubjectModel as PhonePassModel).phone;
+          link = &#39;$link&amp;phone=$phone&#39;;
+          havePhone = true;
+        }
+      }
+      log.i(&#39;link: $link&#39;);
+      emit(link);
+    }
+  } else {
+    log.e(
+      &#39;Wert is not supporting this blockchain type&#39;,
+    );
+    throw Exception(
+      &#39;Wert is not supporting this blockchain type&#39;,
+    );
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../dashboard_wert_cubit_wert_cubit/dashboard_wert_cubit_wert_cubit-library.html">wert_cubit</a></li>
+    <li><a href="../../dashboard_wert_cubit_wert_cubit/WertCubit-class.html">WertCubit</a></li>
+    <li class="self-crumb">getUrl method</li>
+</ol>
+
+    <h5>WertCubit class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    altme
+      3.1.1+5635
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

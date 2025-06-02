@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the getTokensOnTezos method from the TokensCubit class, for the Dart programming language.">
+  <title>getTokensOnTezos method - TokensCubit class - tokens_cubit library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../dashboard_home_tab_bar_tokens_token_page_cubit_tokens_cubit/dashboard_home_tab_bar_tokens_token_page_cubit_tokens_cubit-library.html">dashboard&#47;home&#47;tab_bar&#47;tokens&#47;token_page&#47;cubit&#47;tokens_cubit.dart</a></li>
+    <li><a href="../../dashboard_home_tab_bar_tokens_token_page_cubit_tokens_cubit/TokensCubit-class.html">TokensCubit</a></li>
+    <li class="self-crumb">getTokensOnTezos method</li>
+  </ol>
+  <div class="self-name">getTokensOnTezos</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="dashboard_home_tab_bar_tokens_token_page_cubit_tokens_cubit&#47;TokensCubit-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">getTokensOnTezos</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="name ">getTokensOnTezos</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="getTokensOnTezos-param-walletAddress"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">walletAddress</span>, </span></li>
+<li><span class="parameter" id="getTokensOnTezos-param-tezosNetwork"><span>required</span> <span class="type-annotation"><a href="../../app_shared_models_blockchain_network_tezos_network/TezosNetwork-class.html">TezosNetwork</a></span> <span class="parameter-name">tezosNetwork</span>, </span></li>
+<li><span class="parameter" id="getTokensOnTezos-param-limit"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">limit</span>, </span></li>
+<li><span class="parameter" id="getTokensOnTezos-param-offset"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">offset</span>, </span></li>
+</ol>})
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; getTokensOnTezos({
+  required String walletAddress,
+  required TezosNetwork tezosNetwork,
+  required int limit,
+  required int offset,
+}) async {
+  final baseUrl = tezosNetwork.apiUrl;
+
+  final List&lt;dynamic&gt; tokensBalancesJsonArray = await client.get(
+    &#39;$baseUrl&#47;v1&#47;tokens&#47;balances&#39;,
+    queryParameters: &lt;String, dynamic&gt;{
+      &#39;account&#39;: walletAddress,
+      &#39;token.metadata.decimals.ne&#39;: &#39;0&#39;,
+      &#39;token.metadata.artifactUri.null&#39;: true,
+      &#39;select&#39;:
+          &#39;&#39;&#39;token.contract.address as contractAddress,token.tokenId as tokenId,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri,token.metadata.decimals as decimals,token.standard as standard&#39;&#39;&#39;,
+      &#39;offset&#39;: offset,
+      &#39;limit&#39;: limit,
+    },
+  ) as List&lt;dynamic&gt;;
+  List&lt;TokenModel&gt; newData = [];
+  if (tokensBalancesJsonArray.isNotEmpty) {
+    newData = tokensBalancesJsonArray.map(
+      (dynamic json) {
+        final token = TokenModel.fromJson(json as Map&lt;String, dynamic&gt;);
+        return token.copyWith(
+          decimalsToShow: token.calculatedBalanceInDouble &lt; 1.0 ? 5 : 2,
+        );
+      },
+    ).toList();
+  }
+
+  if (offset == 0) {
+    final tezosToken = await _getXtzBalance(walletAddress);
+    newData.insert(0, tezosToken);
+    data = newData;
+
+    &#47;&#47; empty coins handled in different way
+  } else {
+    data.addAll(newData);
+  }
+
+  &#47;&#47; get all contract(for usd balance of every tokens) if not loaded yet
+  &#47;&#47; or is empty
+  if (allTokensCubit.state.contracts.isEmpty) {
+    await allTokensCubit.init();
+  } else {
+    &#47;&#47; ignore: unawaited_futures
+    allTokensCubit.init();
+  }
+
+  double totalBalanceInUSD = 0;
+  if (data.length &gt; 1) {
+    final tokenListSymbols = data.map((e) =&gt; e.symbol).toList();
+    final coinsList = await _getAllCoinsList();
+    final filteredCoinList = coinsList
+        .where(
+          (element) =&gt; tokenListSymbols.map((e) =&gt; e.toLowerCase()).contains(
+                element[&#39;symbol&#39;].toString().toLowerCase(),
+              ),
+        )
+        .toList();
+
+    final coinsPrice = await _getSimplePriceForCoinIds(
+      filteredCoinList.map((e) =&gt; e[&#39;id&#39;] as String).toList(),
+    );
+
+    for (final coinItem in filteredCoinList) {
+      final token = data.firstWhere(
+        (element) =&gt;
+            element.symbol.toLowerCase() ==
+            coinItem[&#39;symbol&#39;].toString().toLowerCase(),
+      );
+      final indexOfToken = data.indexOf(token);
+      final coinId = coinItem[&#39;id&#39;] as String;
+      final currentPrice = coinsPrice[coinId][&#39;usd&#39;] as double?;
+
+      final updatedToken = token.copyWith(
+        tokenUSDPrice: currentPrice,
+        balanceInUSD: token.calculatedBalanceInDouble * (currentPrice ?? 0),
+        decimalsToShow: token.calculatedBalanceInDouble &lt; 1.0 ? 5 : 2,
+      );
+      data[indexOfToken] = updatedToken;
+    }
+
+    data = _updateToSelectedTezosTokens(data);
+
+    for (final tokenElement in data) {
+      totalBalanceInUSD += tokenElement.balanceInUSD;
+    }
+    data.sort((a, b) =&gt; b.balanceInUSD.compareTo(a.balanceInUSD));
+  } else {
+    data = _updateToSelectedTezosTokens(data);
+  }
+
+  emit(
+    state.copyWith(
+      status: AppStatus.success,
+      data: data.toSet(),
+      totalBalanceInUSD: totalBalanceInUSD,
+    ),
+  );
+  await checkIfItNeedsToVerifyMnemonic(
+    totalBalanceInUSD: totalBalanceInUSD,
+  );
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../dashboard_home_tab_bar_tokens_token_page_cubit_tokens_cubit/dashboard_home_tab_bar_tokens_token_page_cubit_tokens_cubit-library.html">tokens_cubit</a></li>
+    <li><a href="../../dashboard_home_tab_bar_tokens_token_page_cubit_tokens_cubit/TokensCubit-class.html">TokensCubit</a></li>
+    <li class="self-crumb">getTokensOnTezos method</li>
+</ol>
+
+    <h5>TokensCubit class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    altme
+      3.1.1+5635
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

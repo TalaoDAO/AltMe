@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the checkStatusList method from the CredentialDetailsCubit class, for the Dart programming language.">
+  <title>checkStatusList method - CredentialDetailsCubit class - credential_details_cubit library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../dashboard_home_tab_bar_credentials_detail_cubit_credential_details_cubit/dashboard_home_tab_bar_credentials_detail_cubit_credential_details_cubit-library.html">dashboard&#47;home&#47;tab_bar&#47;credentials&#47;detail&#47;cubit&#47;credential_details_cubit.dart</a></li>
+    <li><a href="../../dashboard_home_tab_bar_credentials_detail_cubit_credential_details_cubit/CredentialDetailsCubit-class.html">CredentialDetailsCubit</a></li>
+    <li class="self-crumb">checkStatusList method</li>
+  </ol>
+  <div class="self-name">checkStatusList</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button" title="Toggle brightness">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        dark_mode
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        light_mode
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="dashboard_home_tab_bar_credentials_detail_cubit_credential_details_cubit&#47;CredentialDetailsCubit-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">checkStatusList</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+<span class="name ">checkStatusList</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="checkStatusList-param-credentialStatus"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">credentialStatus</span>, </span></li>
+<li><span class="parameter" id="checkStatusList-param-item"><span>required</span> <span class="type-annotation"><a href="../../dashboard_home_tab_bar_credentials_models_credential_model_credential_model/CredentialModel-class.html">CredentialModel</a></span> <span class="parameter-name">item</span>, </span></li>
+</ol>})
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future&lt;bool&gt; checkStatusList({
+  required Map&lt;String, dynamic&gt; credentialStatus,
+  required CredentialModel item,
+}) async {
+  final data = CredentialStatusField.fromJson(credentialStatus);
+
+  final statusListUri = data.statusListCredential;
+  final headers = {
+    &#39;Content-Type&#39;: &#39;application&#47;json; charset=UTF-8&#39;,
+    &#47;&#47; &#39;accept&#39;: &#39;application&#47;statuslist+jwt&#39;,
+  };
+  final customOidc4vcProfile = profileCubit.state.model.profileSetting
+      .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+  &#47;&#47; TODO(hawkbee): Using Dio directly is solving the issue but it probably
+  &#47;&#47;&#47; means an issue.
+  &#47;&#47;&#47; in the paramaers of DioClient
+  &#47;&#47;&#47; Status invalid of an emailpass in a jwt_vc_json format #3283
+  final response = await Dio().get&lt;String&gt;(
+    statusListUri,
+    options: Options(
+      headers: headers,
+      sendTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
+    ),
+  );
+
+  final payload = jwtDecode.parseJwt(response.toString());
+
+  &#47;&#47; verify the signature of the VC with the kid of the JWT
+  final VerificationType isVerified = await verifyEncodedData(
+    issuer: payload[&#39;iss&#39;]?.toString() ?? item.issuer,
+    jwtDecode: jwtDecode,
+    jwt: response.toString(),
+    fromStatusList: true,
+    isCachingEnabled: customOidc4vcProfile.statusListCache,
+    useOAuthAuthorizationServerLink:
+        useOauthServerAuthEndPoint(profileCubit.state.model),
+  );
+
+  if (isVerified != VerificationType.verified) {
+    emit(
+      state.copyWith(
+        credentialStatus: CredentialStatus.statusListInvalidSignature,
+        status: AppStatus.idle,
+      ),
+    );
+    return true;
+  }
+
+  final vc = payload[&#39;vc&#39;];
+  if (vc != null &amp;&amp; vc is Map&lt;String, dynamic&gt;) {
+    final credentialSubject = vc[&#39;credentialSubject&#39;];
+    if (credentialSubject != null &amp;&amp;
+        credentialSubject is Map&lt;String, dynamic&gt;) {
+      final encodedList = credentialSubject[&#39;encodedList&#39;];
+
+      if (encodedList != null &amp;&amp; encodedList is String) {
+        final statusListIndex = int.tryParse(data.statusListIndex);
+        if (statusListIndex == null) {
+          throw Exception(&#39;statusListIndex is not a numeric value&#39;);
+        }
+        final bit = getBit(
+          index: statusListIndex,
+          encodedList: encodedList,
+        );
+
+        if (bit == 0) {
+          &#47;&#47; active
+        } else {
+          &#47;&#47; revoked
+          emit(
+            state.copyWith(
+              credentialStatus: CredentialStatus.invalidStatus,
+              status: AppStatus.idle,
+            ),
+          );
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">altme</a></li>
+    <li><a href="../../dashboard_home_tab_bar_credentials_detail_cubit_credential_details_cubit/dashboard_home_tab_bar_credentials_detail_cubit_credential_details_cubit-library.html">credential_details_cubit</a></li>
+    <li><a href="../../dashboard_home_tab_bar_credentials_detail_cubit_credential_details_cubit/CredentialDetailsCubit-class.html">CredentialDetailsCubit</a></li>
+    <li class="self-crumb">checkStatusList method</li>
+</ol>
+
+    <h5>CredentialDetailsCubit class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    altme
+      3.1.1+5635
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
