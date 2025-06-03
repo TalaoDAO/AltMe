@@ -138,3 +138,6 @@ app.*.map.json
 *.env.dev
 *.env.main
 *.env.COMP
+
+#case sensitive files issue on macOS
+doc/api/
