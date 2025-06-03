@@ -1326,7 +1326,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       if (url != null) {
         final uri = Uri.parse(url);
-        if (uri.toString().startsWith(Parameters.universalLink)) {
+        if (uri.toString().startsWith(Parameters.redirectUri)) {
           await authorizedFlowStart(uri);
           return;
         }
@@ -1471,7 +1471,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               txCode: txCode,
               clientSecret: clientSecret,
               authorization: authorization,
-              redirectUri: Parameters.universalLink,
+              redirectUri: Parameters.redirectUri,
               oAuthClientAttestation: oAuthClientAttestation,
               oAuthClientAttestationPop: oAuthClientAttestationPop,
             );

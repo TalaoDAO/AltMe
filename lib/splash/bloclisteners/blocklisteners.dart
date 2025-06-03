@@ -245,7 +245,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
           final bool isOpenIDUrl = isOIDC4VCIUrl(state.uri!);
           final bool isPresentation = isSiopV2OrOidc4VpUrl(state.uri!);
-          final bool isFromDeeplink = state.uri
+          final bool isFromUniversallink = state.uri
                   .toString()
                   .startsWith(Parameters.authorizationEndPoint) ||
               state.uri.toString().startsWith(Parameters.universalLink);
@@ -267,7 +267,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             );
             return;
           }
-          if (isOpenIDUrl || isFromDeeplink) {
+          if (isOpenIDUrl || isFromUniversallink) {
             final Oidc4vcParameters oidc4vcParameters = await getIssuanceData(
               url: state.uri.toString(),
               client: client,

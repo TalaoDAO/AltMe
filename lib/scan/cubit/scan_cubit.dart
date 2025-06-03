@@ -700,7 +700,7 @@ class ScanCubit extends Cubit<ScanState> {
 
         if (url != null) {
           final uri = Uri.parse(url);
-          if (uri.toString().startsWith(Parameters.universalLink)) {
+          if (uri.toString().startsWith(Parameters.redirectUri)) {
             emit(state.copyWith(status: ScanStatus.goBack));
             await qrCodeScanCubit.authorizedFlowStart(uri);
             return;
