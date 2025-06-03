@@ -82,7 +82,7 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
 
     if (link == null) {
       url = '${Urls.authenticateForId360}/$code?vc_type=${vcType.value}'
-          '&client_id=$walletId&callback=${Urls.appDeepLink}';
+          '&client_id=$walletId&callback=${Parameters.universalLink}';
     } else {
       url = link;
     }

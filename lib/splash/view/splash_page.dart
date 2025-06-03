@@ -63,7 +63,7 @@ class _SplashViewState extends State<SplashView> {
     _linkSubscription?.cancel();
     super.dispose();
   }
- 
+
   String? _deeplink;
 
   Future<void> processIncomingUri(Uri? uri) async {
@@ -79,7 +79,7 @@ class _SplashViewState extends State<SplashView> {
       _deeplink = null;
     });
 
-    if (uri.toString().startsWith('${Urls.appDeepLink}/dashboard')) {
+    if (uri.toString().startsWith('${Parameters.universalLink}/dashboard')) {
       await Navigator.pushAndRemoveUntil<void>(
         context,
         DashboardPage.route(),
@@ -88,7 +88,7 @@ class _SplashViewState extends State<SplashView> {
       return;
     }
 
-    if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
+    if (uri.toString().startsWith(Parameters.authorizationEndPoint)) {
       await context.read<QRCodeScanCubit>().authorizedFlowStart(uri!);
       return;
     }
@@ -101,7 +101,7 @@ class _SplashViewState extends State<SplashView> {
       return;
     }
 
-    if (uri.toString().startsWith(Parameters.authorizeEndPoint)) {
+    if (uri.toString().startsWith(Parameters.universalLink)) {
       context.read<DeepLinkCubit>().addDeepLink(uri!.toString());
       return;
     }
@@ -124,7 +124,7 @@ class _SplashViewState extends State<SplashView> {
       }
     });
 
-    if (isOIDC4VCIUrl(uri) || isSIOPV2OROIDC4VPUrl(uri)) {
+    if (isOIDC4VCIUrl(uri) || isSiopV2OrOidc4VpUrl(uri)) {
       context.read<DeepLinkCubit>().addDeepLink(uri.toString());
       return;
     }
