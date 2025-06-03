@@ -74,6 +74,7 @@ class _SplashViewState extends State<SplashView> {
       return;
     }
 
+    // If the deeplink is already processed, do not process it again.
     _deeplink = uri.toString();
     Future.delayed(const Duration(seconds: 2), () async {
       _deeplink = null;
@@ -101,11 +102,6 @@ class _SplashViewState extends State<SplashView> {
       return;
     }
 
-    if (uri.toString().startsWith(Parameters.universalLink)) {
-      context.read<DeepLinkCubit>().addDeepLink(uri!.toString());
-      return;
-    }
-
     uri!.queryParameters.forEach((key, value) async {
       if (key == 'uri') {
         final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
@@ -124,15 +120,16 @@ class _SplashViewState extends State<SplashView> {
       }
     });
 
-    if (isOIDC4VCIUrl(uri) || isSiopV2OrOidc4VpUrl(uri)) {
-      context.read<DeepLinkCubit>().addDeepLink(uri.toString());
-      return;
-    }
-
     if (isBeaconRequest && beaconData != '') {
       unawaited(
         context.read<BeaconCubit>().peerFromDeepLink(beaconData),
       );
+    }
+    if (isOIDC4VCIUrl(uri) ||
+        isSiopV2OrOidc4VpUrl(uri) ||
+        uri.toString().startsWith(Parameters.universalLink)) {
+      context.read<DeepLinkCubit>().addDeepLink(uri.toString());
+      return;
     }
   }
 
