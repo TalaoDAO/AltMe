@@ -337,7 +337,7 @@ abstract class ConstantsJson {
       },
     },
     'grant_types': ['authorization code', 'pre-authorized_code'],
-    'redirect_uris': [Parameters.authorizationEndPoint],
+    'redirect_uris': [Parameters.redirectUri],
     'subject_syntax_types_supported': ['did:key', 'did:jwk'],
     'subject_syntax_types_discriminations': [
       'did:key:jwk_jcs-pub',

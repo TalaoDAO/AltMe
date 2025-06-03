@@ -27,13 +27,17 @@ class Parameters {
     isWalletIntegrityEnabled: true,
   );
 
-  static const oidc4vcUniversalLink =
-      'https://wallet.compellio.com/app/download/callback';
+  static const universalLink = 'https://wallet.compellio.com/app/download';
   static const walletOfferDeepLink = 'compellio-openid-credential-offer';
   static const walletPresentationDeepLink = 'compellio-openid-vc';
 
-  static const authorizeEndPoint =
+  static const authorizationEndPoint =
       'https://wallet.compellio.com/app/download/authorize';
+
+  //'https://app.talao.co/app/download/callback' for Talao
+  // 'https://app.altme.io/app/download/callback' for altme
+  static const String redirectUri =
+      'https://app.altme.io/app/download/callback';
 
   static const web3RpcMainnetUrl = 'https://mainnet.infura.io/v3/';
 
@@ -122,11 +126,6 @@ class Parameters {
   // false for talao
   // true for altme
   static const bool showTezotopiaCard = true;
-
-  //'https://app.talao.co/app/download/callback' for Talao
-  // 'https://app.altme.io/app/download/callback' for altme
-  static const String authorizationEndPoint =
-      'https://wallet.compellio.com/app/download/callback';
 
   // 'Talao_wallet'for talao
   // 'Altme_wallet' for altme

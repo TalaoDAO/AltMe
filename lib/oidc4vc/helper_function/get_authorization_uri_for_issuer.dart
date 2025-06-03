@@ -90,7 +90,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
     selectedCredentials: selectedCredentials,
     clientId: clientId,
     clientSecret: clientSecret,
-    redirectUri: Parameters.oidc4vcUniversalLink,
+    redirectUri: Parameters.redirectUri,
     nonce: nonce,
     pkcePair: pkcePair,
     state: jwtToken,
