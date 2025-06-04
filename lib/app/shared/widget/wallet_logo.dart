@@ -34,7 +34,7 @@ class WalletLogo extends StatelessWidget {
                     ? ImageStrings.appLogoStage
                     : ImageStrings.appLogo;
           case ProfileType.ebsiV3:
-          case ProfileType.ebsiV4:
+          // case ProfileType.ebsiV4:
             image = ImageStrings.ebsiLogo;
           case ProfileType.europeanWallet:
           case ProfileType.inji:

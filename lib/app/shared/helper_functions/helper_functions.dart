@@ -2169,8 +2169,11 @@ bool useOauthServerAuthEndPoint(ProfileModel profileModel) {
   final customOidc4vcProfile =
       profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
 
-  final bool notEligible = profileModel.profileType == ProfileType.ebsiV3 ||
-      profileModel.profileType == ProfileType.ebsiV4;
+  // Commenting while EBSI V4 is not live
+  // final bool notEligible = profileModel.profileType == ProfileType.ebsiV3 ||
+  //     profileModel.profileType == ProfileType.ebsiV4;
+
+  final bool notEligible = profileModel.profileType == ProfileType.ebsiV3;
 
   if (notEligible) return false;
 
