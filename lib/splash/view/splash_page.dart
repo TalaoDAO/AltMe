@@ -89,7 +89,7 @@ class _SplashViewState extends State<SplashView> {
       return;
     }
 
-    if (uri.toString().startsWith(Parameters.authorizationEndPoint)) {
+    if (uri.toString().startsWith(Parameters.redirectUri)) {
       await context.read<QRCodeScanCubit>().authorizedFlowStart(uri!);
       return;
     }

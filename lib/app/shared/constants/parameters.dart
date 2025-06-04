@@ -31,13 +31,11 @@ class Parameters {
   static const walletOfferDeepLink = 'altme-openid-credential-offer';
   static const walletPresentationDeepLink = 'altme-openid-vc';
 
-  static const authorizationEndPoint =
-      'https://app.altme.io/app/download/authorize';
+  static const authorizationEndPoint = '$universalLink/authorize';
 
   //'https://app.talao.co/app/download/callback' for Talao
   // 'https://app.altme.io/app/download/callback' for altme
-  static const String redirectUri =
-      'https://app.altme.io/app/download/callback';
+  static const String redirectUri = '$universalLink/callback';
 
   static const web3RpcMainnetUrl = 'https://mainnet.infura.io/v3/';
 
