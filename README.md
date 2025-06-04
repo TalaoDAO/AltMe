@@ -79,7 +79,7 @@ Currently, the wallet is non-custodial, meaning users retain full control over t
 * client authentication methode : anonymous, client_id, client secret basic, client secret post, jwt,
 * identifier : jwk thumbprint, did:key, did:jwk,
 * proof type : jwt, ldp_vp.
-#### OIDC4VP:
+#### OIDC4VP
 * client_id_scheme : did, verifier_attestation, X509, redirect_uri,
 * presentation_definition and presentation_definition_uri,
 * request object and request_uri,
