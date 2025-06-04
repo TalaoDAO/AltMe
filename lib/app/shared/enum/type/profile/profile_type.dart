@@ -5,6 +5,7 @@ enum ProfileType {
   //diipv2point1,
   diipv3,
   europeanWallet,
+  inji,
   custom,
   enterprise,
 }
@@ -28,6 +29,8 @@ extension ProfileTypeX on ProfileType {
         return 'Default';
       case ProfileType.europeanWallet:
         return 'Prototype for EWC pilot';
+      case ProfileType.inji:
+        return 'Inji by MOSIP';
     }
   }
 
@@ -38,6 +41,7 @@ extension ProfileTypeX on ProfileType {
       case ProfileType.custom:
       case ProfileType.defaultOne:
       case ProfileType.europeanWallet:
+      case ProfileType.inji:
         return false;
       case ProfileType.ebsiV3:
       case ProfileType.ebsiV4:
@@ -63,6 +67,8 @@ extension ProfileTypeX on ProfileType {
         return 'L8F6V3P';
       case ProfileType.europeanWallet:
         return 'M3FN2K8';
+      case ProfileType.inji:
+        return 'P9K4H7M';
     }
   }
 }

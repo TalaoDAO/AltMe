@@ -16,4 +16,5 @@ enum AppStatus {
   successAdd,
   successUpdate,
   addEuropeanProfile,
+  addInjiProfile,
 }
