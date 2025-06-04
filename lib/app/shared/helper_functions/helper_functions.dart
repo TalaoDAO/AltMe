@@ -654,7 +654,7 @@ bool isOIDC4VCIUrl(Uri uri) {
       uri.toString().startsWith(Parameters.walletOfferDeepLink);
 }
 
-bool isSIOPV2OROIDC4VPUrl(Uri uri) {
+bool isSiopV2OrOidc4VpUrl(Uri uri) {
   final isOpenIdUrl = uri.toString().startsWith('openid://?') ||
       uri.toString().startsWith('openid-vc://?') ||
       uri.toString().startsWith(Parameters.walletPresentationDeepLink) ||
@@ -666,7 +666,7 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
 
   final isSiopv2Url = uri.toString().startsWith('siopv2://?');
   final isAuthorizeEndPoint =
-      uri.toString().startsWith(Parameters.authorizeEndPoint) ||
+      uri.toString().startsWith(Parameters.authorizationEndPoint) ||
           uri.toString().startsWith('haip://authorize?');
 
   return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;

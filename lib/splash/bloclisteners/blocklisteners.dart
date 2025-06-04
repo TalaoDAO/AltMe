@@ -244,11 +244,11 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               confirmSecurityVerifierAccess;
 
           final bool isOpenIDUrl = isOIDC4VCIUrl(state.uri!);
-          final bool isPresentation = isSIOPV2OROIDC4VPUrl(state.uri!);
-          final bool isFromDeeplink = state.uri
+          final bool isPresentation = isSiopV2OrOidc4VpUrl(state.uri!);
+          final bool isFromUniversallink = state.uri
                   .toString()
-                  .startsWith(Parameters.authorizeEndPoint) ||
-              state.uri.toString().startsWith(Parameters.oidc4vcUniversalLink);
+                  .startsWith(Parameters.authorizationEndPoint) ||
+              state.uri.toString().startsWith(Parameters.universalLink);
 
           OIDC4VCType? oidc4vcTypeForIssuance;
           dynamic credentialOfferJsonForIssuance;
@@ -267,7 +267,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             );
             return;
           }
-          if (isOpenIDUrl || isFromDeeplink) {
+          if (isOpenIDUrl || isFromUniversallink) {
             final Oidc4vcParameters oidc4vcParameters = await getIssuanceData(
               url: state.uri.toString(),
               client: client,

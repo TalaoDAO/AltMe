@@ -81,9 +81,6 @@ class Urls {
   static const getNonce = 'https://talao.co/matrix/nonce';
   static const registerToMatrix = 'https://talao.co/matrix/register';
 
-  //deeplink
-  static const appDeepLink = 'https://app.altme.io/app/download';
-
   //ID360
   static const getCodeForId360 = 'https://talao.co/id360/get_code';
   static const authenticateForId360 = 'https://talao.co/id360/authenticate';

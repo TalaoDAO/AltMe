@@ -63,7 +63,7 @@ class _SplashViewState extends State<SplashView> {
     _linkSubscription?.cancel();
     super.dispose();
   }
- 
+
   String? _deeplink;
 
   Future<void> processIncomingUri(Uri? uri) async {
@@ -74,12 +74,13 @@ class _SplashViewState extends State<SplashView> {
       return;
     }
 
+    // If the deeplink is already processed, do not process it again.
     _deeplink = uri.toString();
     Future.delayed(const Duration(seconds: 2), () async {
       _deeplink = null;
     });
 
-    if (uri.toString().startsWith('${Urls.appDeepLink}/dashboard')) {
+    if (uri.toString().startsWith('${Parameters.universalLink}/dashboard')) {
       await Navigator.pushAndRemoveUntil<void>(
         context,
         DashboardPage.route(),
@@ -88,7 +89,7 @@ class _SplashViewState extends State<SplashView> {
       return;
     }
 
-    if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
+    if (uri.toString().startsWith(Parameters.redirectUri)) {
       await context.read<QRCodeScanCubit>().authorizedFlowStart(uri!);
       return;
     }
@@ -98,11 +99,6 @@ class _SplashViewState extends State<SplashView> {
             uri: uri!,
             qrCodeScanCubit: context.read<QRCodeScanCubit>(),
           );
-      return;
-    }
-
-    if (uri.toString().startsWith(Parameters.authorizeEndPoint)) {
-      context.read<DeepLinkCubit>().addDeepLink(uri!.toString());
       return;
     }
 
@@ -124,15 +120,16 @@ class _SplashViewState extends State<SplashView> {
       }
     });
 
-    if (isOIDC4VCIUrl(uri) || isSIOPV2OROIDC4VPUrl(uri)) {
-      context.read<DeepLinkCubit>().addDeepLink(uri.toString());
-      return;
-    }
-
     if (isBeaconRequest && beaconData != '') {
       unawaited(
         context.read<BeaconCubit>().peerFromDeepLink(beaconData),
       );
+    }
+    if (isOIDC4VCIUrl(uri) ||
+        isSiopV2OrOidc4VpUrl(uri) ||
+        uri.toString().startsWith(Parameters.universalLink)) {
+      context.read<DeepLinkCubit>().addDeepLink(uri.toString());
+      return;
     }
   }
 
