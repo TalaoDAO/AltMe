@@ -350,7 +350,11 @@ abstract class ConstantsJson {
       'client_secret_basic',
       'client_secret_jwt',
     ],
-    'credential_offer_endpoint': ['openid-credential-offer://', 'haip://', 'compellio-openid-credential-offer'],
+    'credential_offer_endpoint': [
+      'openid-credential-offer://',
+      'haip://',
+      'compellio-openid-credential-offer'
+    ],
     'client_name': '${Parameters.appName} wallet',
     'contacts': ['contact@compellio.com'],
   };
