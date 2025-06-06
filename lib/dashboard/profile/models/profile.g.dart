@@ -47,9 +47,9 @@ const _$WalletProtectionTypeEnumMap = {
 const _$ProfileTypeEnumMap = {
   ProfileType.defaultOne: 'defaultOne',
   ProfileType.ebsiV3: 'ebsiV3',
-  ProfileType.ebsiV4: 'ebsiV4',
   ProfileType.diipv3: 'diipv3',
   ProfileType.europeanWallet: 'europeanWallet',
+  ProfileType.inji: 'inji',
   ProfileType.custom: 'custom',
   ProfileType.enterprise: 'enterprise',
 };

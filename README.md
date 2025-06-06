@@ -1,624 +1,152 @@
-# Talao
+# ALTME & TALAO — EU Digital Identity Wallet Implementations for Holders
 
-[![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
-[![License: MIT][license_badge]][license_link]
+**ALTME** = **TALAO** + **crypto wallet**
 
-`ALTME` – THE UNIVERSAL WALLET THAT WORKS FOR YOU
-The Web 3 revolution is all about redistributing the power to the average consumer.
-This is why we are building Altme, to help you get control over your data back.
-Here is the last security audit done on our solution: [AltMe security audit report for Web3 Digital Wallet.pdf](https://github.com/TalaoDAO/AltMe/files/13362734/AltMe.security.audit.report.for.Web3.Digital.Wallet.pdf)
+## Overview
 
----
+**ALTME** and **TALAO** are open-source implementations of the **EU Digital Identity Wallet Architecture and Reference Framework (ARF)**, focused on the **Holder** role. These wallets are developed to align with **eIDAS 2.0**, enabling secure and privacy-preserving identity credential management within the European regulatory framework.
 
-## Getting Started 🚀
-
-This project contains 3 flavors:
-
-- development
-- staging
-- production
-
-To run the desired flavor either use the launch configuration in VSCode/Android Studio or use the following commands:
-
-```bash
-# Development
-$ flutter run --flavor development --target lib/main_development.dart
-
-# Staging
-$ flutter run --flavor staging --target lib/main_staging.dart
-
-# Production
-$ flutter run --flavor production --target lib/main_production.dart
-```
-
-_\*Talao works on iOS and Android._
+They are designed to support standardized credential issuance, presentation, and cryptographic operations as required for ARF compliance.
 
 ---
 
-## Common Dependencies
-
-To manually build Altme for either Android or iOS, you will need to install
-the following dependencies:
-
-- Rust
-- Java 7 or higher
-- Flutter (`dev` channel)
-- [DIDKit](https://github.com/spruceid/didkit)/[SSI](https://github.com/spruceid/ssi)
-
-### Rust
-
-It is recommended to use [rustup](https://www.rust-lang.org/tools/install) to
-manage your Rust installation.
-
-### Java
-
-On Ubuntu you could run:
-
-```bash
-$ apt update
-$ apt install openjdk-8-jdk
-```
-
-For more information, please refer to the documentation of your favorite flavour
-of Java and your operating system/package manager.
-
-### Flutter
-
-Please follow the official instalation instructions available
-[here](https://flutter.dev/docs/get-started/install) to install Flutter,
-don't forget to also install the build dependencies for the platform you
-will be building (Android SDK/NDK, Xcode, etc).
-
-We currently only support build this project using the `dev` channel of Flutter.
-
-To change your installation to the `dev` channel, please execute the following command:
-
-```bash
-$ flutter channel dev
-$ flutter upgrade
-```
-
-To confirm that everything is setup correctly, please run the following command
-and resolve any issues that arise before proceeding to the next steps.
-
-```bash
-$ flutter doctor
-```
-
-### DIDKit and SSI
-
-This project also depends on two other [`Spruce`](https://github.com/spruceid) projects,
-[`DIDKit`](https://github.com/spruceid/didkit) and
-[`SSI`](https://github.com/spruceid/ssi).
-
-These projects are all configured to work with relative paths by default,
-so it is recommended to clone them all under the same root directory, for
-example `$HOME/$FOLDER_NAME/{didkit,ssi,altme}`.
-
-## Target-Specific Dependencies
-
-### Android Dependencies
-
-To build Altme for Android, you will require both the Android SDK and NDK.
-
-These two dependencies can be easily obtained with [Android
-Studio](https://developer.android.com/studio/install), which install further
-dependencies upon first being opened after installation. Installing the
-appropriate Android NDK (often not the newest) in Android Studio can be
-accomplished by going to Settings > Appearance & Behavior > System Settings >
-Android SDK and selecting to install the "NDK (Side by Side)".
-
-An alternative method of installing SDK and NDK without Android Studio can be
-found in the script below:
-
-```
-cd $HOME
-wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
-unzip sdk-tools-linux-4333796.zip -d Android
-rm sdk-tools-linux-4333796.zip
-wget https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip
-unzip commandlinetools-linux-6200805_latest.zip -d Android/cmdline-tools
-rm commandlinetools-linux-6200805_latest.zip
-echo 'export ANDROID_SDK_ROOT=$HOME/Android' >> $HOME/.bashrc
-echo 'export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64' >> $HOME/.bashrc
-echo 'export PATH=$ANDROID_SDK_ROOT/cmdline-tools/tools/bin:"$PATH"' >> $HOME/.bashrc
-echo 'export PATH=$ANDROID_SDK_ROOT/cmdline-tools/tools/lib:"$PATH"' >> $HOME/.bashrc
-echo 'export PATH=$ANDROID_SDK_ROOT/tools:"$PATH"' >> $HOME/.bashrc
-echo 'export PATH=$JAVA_HOME/bin:"$PATH"' >> $HOME/.bashrc
-. $HOME/.bashrc
-sdkmanager --sdk_root=$ANDROID_SDK_ROOT --install "system-images;android-29;google_apis;x86" "system-images;android-29;google_apis;x86_64" "platform-tools" "platforms;android-29" "build-tools;29.0.3" "ndk;22.0.7026061" "cmdline-tools;latest"
-sdkmanager --licenses
-```
-
-If your Android SDK doesn't live at `$HOME/Android/Sdk` you will need to set
-`ANDROID_SDK_ROOT` like so:
-
-```bash
-$ export ANDROID_SDK_ROOT=/path/to/Android/Sdk
-```
-
-Note: Some users have experienced difficulties with cross-compilation
-artefacts missing from the newest NDK, which is downloaded by default in the
-installation process. If you experience errors of this kind, you may have to
-manually downgrade or install multiple NDK versions as [shown
-here])(img/ndk_downgrade.png) in the Android Studio installer (screengrabbed
-from an Ubuntu installation).
-
-If your `build-tools` and/or `NDK` live in different locations than the default ones inside /SDK/, or if you want to specify a specific NDK or build-tools version, you can manually configure the following two environment variables:
-
-```bash
-$ export ANDROID_TOOLS=/path/to/SDK/build-tools/XX.X.X/
-$ export ANDROID_NDK_HOME=/path/to/SDK/ndk/XX.X.XXXXX/
-```
-
-:::
-
-### iOS Dependencies
-
-To build Altme for iOS you will need to install CocoaPods, which can be done
-with Homebrew on MacOS.
-
-```bash
-$ brew install cocoapods
-```
-
-## Building DIDKit for different targets
-
-### Android
-
-To build `DIDKit` for the Android targets, you will go to the root of `DIDKit`
-and run:
-
-```bash
-$ make -C lib install-rustup-android
-$ make -C lib ../target/test/java.stamp
-$ make -C lib ../target/test/android.stamp
-$ make -C lib ../target/test/flutter.stamp
-$ cargo build
-```
-
-_This may take some time as it compiles the entire project for multiple targets_
-
-### iOS
-
-To build DIDKit for the iOS targets, you will go to the root of `DIDKit` and run:
-
-```bash
-$ make -C lib install-rustup-ios
-$ make -C lib ../target/test/ios.stamp
-$ cargo build
-```
-
-## Shortcut setup
-
-In order to handle installation of didkit, ssi and altme, we can run shortcut script. We can also get the warnings if we have not configured the required things for building Altme.
-
-For consistent app builts we can use [`fvm`](https://fvm.app/docs/getting_started/installation).
-
-You have to add the [`install_altme.sh`](https://github.com/TalaoDAO/mobile-install-deploy/blob/main/install_altme.sh) in the directory `$HOME/$FOLDER_NAME/`. Then run the following command to
-do the setup:
-
-```bash
-# Android
-$ ./install_altme.sh -android
-
-# iOS
-$ ./install_altme.sh -ios
-```
-
-## Generate missing .g.dart file
-
-In order to generate all \*.g.dart files, run the following command:
-
-```bash
-$ flutter packages pub run build_runner build --delete-conflicting-outputs
-```
-
-## Key Dependencies
-
-For smooth running of the functionalities of Altme, you need to add the following
-keys:
-
-1. PASSBASE_WEBHOOK_AUTH_TOKEN<br />
-   You can get this key from [`here`](https://passbase.com/).
-
-2. PASSBASE_CHECK_DID_AUTH_TOKEN<br />
-   The key is available [`here`](https://passbase.com/).
-
-3. YOTI_AI_API_KEY<br />
-   This key can be obtained from [`here`](https://developers.yoti.com/).
-
-4. TALAO_ISSUER_API_KEY<br />
-   The key is available [`here`](https://talao.io/).
-
-5. INFURA_API_KEY<br />
-   This key can be obtained from [`here`](https://docs.infura.io/infura/networks/ethereum/how-to/secure-a-project/project-id).
-
-6. MORALIS_API_KEY<br />
-   You can get this key from [`here`](https://docs.moralis.io/web3-data-api/get-your-api-key).
-
-7. INFURA_URL<br />
-   URL of the blockchain (eg: https://polygon-mumbai.infura.io/v3/)
-
-8. INFURA_RDP_URL<br />  
-   RDP URL (eg: wss://polygon-mumbai.infura.io/v3/)
-
-9. ID_STATE_CONTRACT_ADDR<br />  
-   The ID state contract (eg: 0x453A1BC32122E39A8398ec6288783389730807a5)
-
-10. PUSH_URL<br />  
-    The push notification URL (eg: https://push.service.io/api/v1)
-
-11. TALAO_MATRIX_API_KEY<br />
-    The key is available [`here`](https://matrix.org/).
-
-#### Note
-
-P.S. Using iOS simulator for testing wallet sdk is right now under maintenance and will be available soon.
-
-## Building Altme
-
-You are now ready to build or run Altme.
-
-### Run on emulator
-
-If you want to run the project on your connected device, you can use:
-
-```bash
-# Development
-$ flutter run --flavor development --target lib/main_development.dart
-
-# Staging
-$ flutter run --flavor staging --target lib/main_staging.dart
-
-# Production
-$ flutter run --flavor production --target lib/main_production.dart
-```
-
-### Android APK
-
-```bash
-# Development
-$ flutter build apk --release --split-per-abi --flavor development -t lib/main_development.dart
-
-# Staging
-$ flutter build apk --release --split-per-abi --flavor staging -t lib/main_staging.dart
-
-# Production
-$ flutter build apk --release --split-per-abi --flavor production -t lib/main_production.dart
-```
-
-### Android App Bundle
-
-```bash
-# Development
-$ flutter build appbundle --flavor "development" --target "lib/main_development.dart"
-
-# Staging
-$ flutter build appbundle --flavor "staging" --target "lib/main_staging.dart"
-
-# Production
-$ flutter build appbundle --flavor "production" --target "lib/main_production.dart"
-```
-
-### iOS .app for Devices
-
-```bash
-# Development
-$ flutter build ios --no-codesign --flavor "development" --target "lib/main_development.dart"
-
-# Staging
-$ flutter build ios --no-codesign --flavor "staging" --target "lib/main_staging.dart"
-
-# Production
-$ flutter build ios --no-codesign --flavor "production" --target "lib/main_production.dart"
-```
-
-### iOS IPA
-
-```bash
-# Development
-$ flutter build ipa --flavor "development" --target "lib/main_development.dart"
-
-# Staging
-$ flutter build ipa --flavor "staging" --target "lib/main_staging.dart"
-
-# Production
-$ flutter build ipa --flavor "production" --target "lib/main_production.dart"
-```
-
-### iOS Continuous Delivery
-
-If you have setup the [`fastlane`](https://docs.flutter.dev/deployment/cd) for continuous delivery, then you can run the following command to publish:
-
-```bash
-$ flutter pub get
-$ flutter packages pub run build_runner build --delete-conflicting-outputs
-$ flutter build ios --release --flavor "production" --target "lib/main_production.dart"
-$ $cd ios
-$ fastlane beta
-```
-
-### Wallet Setup
-
-[`https://doc.wallet-provider.io/wallet/setup_wallet`](https://doc.wallet-provider.io/wallet/setup_wallet)
-
-## Troubleshooting
-
-If you encounter any errors in the build process described here, please first try
-clean builds of the projects listed.
-
-For instance, on Flutter, you can delete build files to start over by running:
-
-```bash
-$ flutter clean
-```
-
-Also, reviewing the
-[`install_altme.sh`](https://github.com/TalaoDAO/mobile-install-deploy/blob/main/install_altme.sh)
-script may be helpful.
-
-## Supported Protocols
-
-All QRCode interactions start as listed below:
-
-- User scans a QRCode containing a URL;
-- User is presented the choice to trust the domain in the URL;
-- App makes a GET request to the URL;
-
-Then, depending on the type of message, one of the following protocols will be
-executed.
-
-### CredentialOffer
-
-After receiving a `CredentialOffer` from a trusted host, the app calls the API
-with `subject_id` in the form body, that value is the didKey obtained from the
-private key stored in the `FlutterSecureStorage`, which is backed by KeyStore
-on Android and Keychain on iOS.
-
-The flow of events and actions is listed below:
-
-- User is presented a credential preview to review and make a decision;
-- App generates `didKey` from the stored private key using `DIDKit.keyToDIDKey`;
-- App makes a POST request to the initial URL with the subject set to the `didKey`;
-- App receives and stores the new credential;
-- User is redirect back to the wallet.
-
-And below is another version of the step-by-step:
-
-| Wallet                   | <sup>1</sup> |     |                      Server |
-| ------------------------ | ------------ | :-: | --------------------------: |
-| Scan QRCode <sup>2</sup> |              |     |
-| Trust Host               | ○ / ×        |     |                             |
-| HTTP GET                 |              |  →  | https://domain.tld/endpoint |
-|                          |              |  ←  |             CredentialOffer |
-| Preview Credential       |              |     |                             |
-| Choose DID               | ○ / ×        |     |                             |
-| HTTP POST <sup>3</sup>   |              |  →  | https://domain.tld/endpoint |
-|                          |              |  ←  |        VerifiableCredential |
-| Verify Credential        |              |     |                             |
-| Store Credential         |              |     |                             |
-
-_<sup>1</sup> Whether this action requires user confirmation, exiting the flow
-early when the user denies._  
-_<sup>2</sup> The QRCode should contain the HTTP endpoint where the requests
-will be made._  
-_<sup>3</sup> The body of the request contains a field `subject_id` set to the
-chosen DID._
-
-### VerifiablePresentationRequest
-
-After receiving a `VerifiablePresentationRequest` from a trusted host, the app
-calls the API with `presentation` the form body, that value is a JSON encoded
-string with the presentation obtained from the selected credential and signed
-with the credential's private key using `DIDKit.issuePresentation`.
-
-Here are some of the parameters used to generate a presentation:
-
-- `presentation`
-  - `id` is set to a random `UUID.v4` string;
-  - `holder` is set to the selected credential's `didKey`;
-  - `verifiableCredential` is set to the credential value;
-- `options`
-  - `verificationMethod` is set to the DID's `verificationMethod` `id`;
-  - `proofPurpose` is set to `'authentication'`;
-  - `challenge` is set to the request's `challenge';
-  - `domain` is set to the request's `domain';
-- `key` is the credential's stored private key;
-
-The flow of events and actions is listed below:
-
-- User is presented a presentation request to review and make a decision;
-- App generates `didKey` from the stored private key using `DIDKit.keyToDIDKey`;
-- App issues a presentation using `DIDKit.issuePresentation`;
-- App makes a POST request to the initial URL with the presentation;
-- User is redirect back to the wallet.
-
-And below is another version of the step-by-step:
-
-| Wallet                       | <sup>1</sup> |     |                        Server |
-| ---------------------------- | ------------ | :-: | ----------------------------: |
-| Scan QRCode <sup>2</sup>     |              |     |
-| Trust Host                   | ○ / ×        |     |                               |
-| HTTP GET                     |              |  →  |   https://domain.tld/endpoint |
-|                              |              |  ←  | VerifiablePresentationRequest |
-| Preview Presentation         |              |     |                               |
-| Choose Verifiable Credential | ○ / ×        |     |                               |
-| HTTP POST <sup>3</sup>       |              |  →  |   https://domain.tld/endpoint |
-|                              |              |  ←  |                        Result |
-
-## Running Tests 🧪
-
-To run all unit and widget tests use the following command:
-
-```sh
-$ flutter test --coverage --test-randomize-ordering-seed random
-```
-
-To view the generated coverage report you can use [lcov](https://github.com/linux-test-project/lcov).
-
-```sh
-# Generate Coverage Report
-$ genhtml coverage/lcov.info -o coverage/
-
-# Open Coverage Report
-$ open coverage/index.html
-```
+## Conformance with ARF
+
+ALTME and TALAO implement all major holder-side components defined by [ARF 1.10.0](https://eu-digital-identity-wallet.github.io/eudi-doc-architecture-and-reference-framework/1.10.0/architecture-and-reference-framework-main/):
+
+- **Wallet Instance (WI)** for secure credential handling
+- **Wallet Provider (WP)** and **Wallet Provider Backend (WPB)** for distribution, support, and maintenance
+- **Wallet Secure Cryptographic Application (WSCA)**: phone OS
+- **Wallet Secure Cryptographic Device (WSCD)** for compliant cryptographic operations: phone native  
+- Secure communication with:
+  - **Authentic Sources (AS)**
+  - **Attestation Providers (AP)**
+  - **PID Providers (PP)**
+  - **Remote QES Providers (QP)**
+  - **Relying Parties (RPIs)**
+
+> ⚠️ **Note:** The ISO/IEC 18013-5 standard (mDL presentation) is **not yet implemented**.
 
 ---
 
-## Working with Translations 🌐
+## Supported Standards
 
-This project relies on [flutter_localizations][flutter_localizations_link] and follows the [official internationalization guide for Flutter][internationalization_link].
+| Specification                                | Purpose |
+|---------------------------------------------|---------|
+| [W3C VC Data Model 2.0](https://www.w3.org/TR/vc-data-model-2.0/) | Model for interoperable, tamper-evident verifiable credentials |
+| **SD-JWT-based Verifiable Credentials**      | Credentials enabling selective disclosure and privacy preservation |
+| **OpenID4VCI**                               | Credential issuance protocol |
+| **OpenID4VP**                                | Credential presentation protocol |
+| **eIDAS 2.0 (Article 5a)**                   | Interoperability and legal compliance within the EU digital identity ecosystem |
 
-### Adding Strings
+---
 
-1. To add a new localizable string, open the `app_en.arb` file at `lib/l10n/arb/app_en.arb`.
+## Architecture
 
-```arb
-{
-    "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
-    }
-}
-```
+![Global Architecture](doc/assets/architecture.png)
 
-2. Then add a new key/value and description
+The architecture shown above describes the full integration of components as specified in the ARF:
 
-```arb
-{
-    "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
-    },
-    "helloWorld": "Hello World",
-    "@helloWorld": {
-        "description": "Hello World Text"
-    }
-}
-```
+- **Wallet Instance (WI)** runs securely on the user’s device
+- **Secure Cryptographic Interface (SCI)** connects to hardware security modules or secure elements (HSM, smartcard, eSIM, native)
+- Trust relationships with issuing and verifying parties are built through standardized, open protocols
+- The **User Interface (UI)** allows the holder to manage credentials and consent to transactions
 
-3. Use the new string
+This modular design ensures both **compliance** and **interoperability** with EU digital identity infrastructure.
 
-```dart
-import 'package:altme/l10n/l10n.dart';
+Currently, the wallet is non-custodial, meaning users retain full control over their credentials and private keys. Those keys and credentials are stored securely on the device, ensuring privacy and security:
+- Keychain is used for iOS
+- AES encryption and SharedPreferences are used for Android. AES secret key is encrypted with RSA and RSA key is stored in KeyStore
 
-@override
-Widget build(BuildContext context) {
-  final l10n = context.l10n;
-  return Text(l10n.helloWorld);
-}
-```
+---
 
-### Adding Supported Locales
+## Wallet features
 
-Update the `CFBundleLocalizations` array in the `Info.plist` at `ios/Runner/Info.plist` to include the new locale.
+### Protocols
+* OIDC4VC:
+  * OIDC4VCI Draft 11 and 13,
+  * OIDC4VP Draft 20,
+  * SIOPV2 Draft 12
+* W3C Verifiable presentation request,
+* VC formats:
+    * ldp_vc, jwt_vc_json, jwt_vc_json-ld,
+    * vc+sd-jwt vc.
+#### OIDC4VCI
+* Flows : authorization code flow, pre-authorized code flow with Tx, PAR,
+* credential_offer_uri,
+* issuer endpoints supported : credential, deferred, nonce
+* wallet attestations, PKCE, scope and authorization details,
+* client authentication methode : anonymous, client_id, client secret basic, client secret post, jwt,
+* identifier : jwk thumbprint, did:key, did:jwk,
+* proof type : jwt, ldp_vp.
+#### OIDC4VP
+* client_id_scheme : did, verifier_attestation, X509, redirect_uri,
+* presentation_definition and presentation_definition_uri,
+* request object and request_uri,
+* direct_post and direct_post.jwt,
+* PEX 2.0 partial.
+#### Signature suites
+JWT: ES256, ES256K, EdDSA, RSA
+linked data proof : Ed25519Signature2018, Ed25519Signature20, Secp256r1Signature2019, EcdsaSecp256r1Signature2019, RsaSignature2018.
+#### Other features
+* Bitstring status list 1.0 and IETF token status list,
+* OIDC4VC Embedded profiles: HAIP, EBSI-V3 (compliant wallet), DIIP V2.1, DIIP V3.0,
+* Talao DID resolver for did:web, did:ethr, did:ebsi, did:dht, did:sov, did:cheqd...,
+* wallet user authentication : PIN and biometric, ACL
+* user chat and notification through Matrix.org,
+* developer mode for internal data and protocol requests and responses,
+* embedded issuers for PID, email proof, phone proof, age proof with AI or document authentication.
+## Altme Wallet features
+* Same features as Talao wallet,
+* blockchain support: Tezos, Ethereum, Polygon, Fantom, BNB, Etherlink,
+* send/receive crypto, token, NFT,
+* buy crypto with Wert.io
+## Accessibility
+We have many accessibility elements implemented by the Flutter development framework that we use, especially for screen readers. Namely that as standard the phone's accessibility settings are taken into account:
 
-```xml
-    ...
+* TalkBack (Android) and VoiceOver (IOS)
+* BrailleBack on Android
+* Dynamic font size
+* Contrast management
+* "Invert colors" mode, Light and Dark built-in themes
+* Addition of custom themes
+* Focus support for navigation
+* Accessible gesture management
 
-    <key>CFBundleLocalizations</key>
-	<array>
-		<string>en</string>
-		<string>es</string>
-	</array>
+The wallet supports screen readers, keyboard navigation, high contrasts and text adaptation.
 
-    ...
-```
+## GDPR
+We are committed to ensuring your data protection rights are upheld in accordance with the General Data Protection Regulation (GDPR). We protect the important rights under the GDPR, and we assist users to exercising them:
 
-### Adding Translations
+* The Right to Access, Update, or Delete: Users can access, update, or request the deletion of their Personal Data directly within their account settings on our platform. If they need assistance with these actions, they can access the support by email and through the app itself.
+* The Right of Rectification: If they believe their Personal Data is inaccurate or incomplete, they have the right to request corrections.
+* The Right to Object: They can object to the processing of their Personal Data.
+* The Right of Restriction: Request the restriction of the processing of their Personal Data when necessary.
+* The Right to Data Portability: Obtain a copy of your Personal Data in a structured, machine-readable format.
+* The Right to Withdraw Consent: If we rely on their consent to process their Personal Data, they have the right to withdraw it at any time.
 
-1. For each supported locale, add a new ARB file in `lib/l10n/arb`.
+In order to allow users to assert their rights, we have set up numerous means of communication between the user and the wallet provider. These technical means are also respectful of their privacy and for this reason are supported in the wallet itself by decentralized tools, in particular by a chat built on https://matrix.org/ and an integrated email. The privacy policy is available in the wallet itself and on our website at https://talao.io/privacy/ .
 
-```
-├── l10n
-│   ├── arb
-│   │   ├── app_en.arb
-│   │   └── app_es.arb
-```
 
-2. Add the translated strings to each `.arb` file:
+## Project Installation
 
-`app_en.arb`
+Please follow the step-by-step installation guide here:  
+👉 [Installation Guide](https://github.com/TalaoDAO/AltMe/blob/master/doc/installation.md)
 
-```arb
-{
-    "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
-    }
-}
-```
+---
 
-`app_es.arb`
+## License
 
-```arb
-{
-    "@@locale": "es",
-    "counterAppBarTitle": "Contador",
-    "@counterAppBarTitle": {
-        "description": "Texto mostrado en la AppBar de la página del contador"
-    }
-}
-```
+This project is released under the **Apache License 2.0**. See the [LICENSE](LICENSE) file for full terms.
 
-## Run shortcut scripts
+---
 
-```bash
-# generate .g.dart files
-$ ./script.sh -build_runner
+## Further Reading
 
-# build app for development
-$ ./script.sh -rundev
+- [EU Digital Identity Wallet ARF](https://eu-digital-identity-wallet.github.io/eudi-doc-architecture-and-reference-framework/)
+- [W3C VC Data Model 2.0](https://www.w3.org/TR/vc-data-model-2.0/)
+- [SD-JWT Draft (IETF)](https://www.ietf.org/archive/id/draft-ietf-oauth-selective-disclosure-jwt-07.html)
 
-# build app for stage
-$ ./script.sh -runstage
+---
 
-# build app for production
-$ ./script.sh -run
-
-# add/update pod
-$ ./script.sh -pod install
-
-# build app bundle for ios
-$ ./script.sh -build appbundle
-
-# deploy ios app with fastlane setup
-$ ./script.sh -deploy ios
-```
-
-```bash
-#For permission
-$ sudo chmod 777 script.sh
-```
-
-## Current store's versions
-
-<pre>prod  
-  altme  
-    android:    365 (2.2.3)  
-    ios:        365 (2.2.3)  
-    talao  
-    android: 	363 (2.2.0)  
-    ios: 	    359 (2.2.0)  
-test  
-  altme  
-    android: 	368 (2.2.6)  
-    ios: 	    368 (2.2.6)  
-  talao  
-    android: 	368 (2.2.6)  
-    ios: 	    368 (2.2.6)  
-</pre>
-
-[coverage_badge]: coverage_badge.svg
-[flutter_localizations_link]: https://api.flutter.dev/flutter/flutter_localizations/flutter_localizations-library.html
-[internationalization_link]: https://flutter.dev/docs/development/accessibility-and-localization/internationalization
-[license_badge]: https://img.shields.io/badge/license-APACHE-blue.svg
-[license_link]: https://opensource.org/license/apache-2-0/
-[very_good_analysis_badge]: https://img.shields.io/badge/style-very_good_analysis-B22C89.svg
-[very_good_analysis_link]: https://pub.dev/packages/very_good_analysis
-[very_good_cli_link]: https://github.com/VeryGoodOpenSource/very_good_cli
+**Maintained by [WEB3 DIGITAL WALLET](https://github.com/TalaoDAO) — Contributor to decentralized identity standards and European digital identity infrastructure.**

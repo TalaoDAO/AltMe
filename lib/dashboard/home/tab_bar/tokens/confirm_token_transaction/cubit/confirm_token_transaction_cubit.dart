@@ -41,7 +41,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     final responseOfXTZUsdPrice = await client.get(
       '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
       queryParameters: {
-        'x_cg_pro_api_key': apiKey,
+        'x_cg_demo_api_key': apiKey,
       },
     ) as Map<String, dynamic>;
     final xtzUSDPrice = responseOfXTZUsdPrice['tezos']['usd'] as double;

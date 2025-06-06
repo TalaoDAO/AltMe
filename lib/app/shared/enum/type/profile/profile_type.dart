@@ -1,10 +1,11 @@
 enum ProfileType {
   defaultOne,
   ebsiV3,
-  ebsiV4,
+  // ebsiV4,
   //diipv2point1,
   diipv3,
   europeanWallet,
+  inji,
   custom,
   enterprise,
 }
@@ -16,8 +17,8 @@ extension ProfileTypeX on ProfileType {
         return 'Custom';
       case ProfileType.ebsiV3:
         return 'European Blockchain Services Infrastructure (EBSI v3.x)';
-      case ProfileType.ebsiV4:
-        return 'European Blockchain Services Infrastructure (EBSI v4.0)';
+      // case ProfileType.ebsiV4:
+      //   return 'European Blockchain Services Infrastructure (EBSI v4.0)';
       case ProfileType.enterprise:
         return name.isEmpty ? 'Enterprise' : name;
       // case ProfileType.diipv2point1:
@@ -28,24 +29,12 @@ extension ProfileTypeX on ProfileType {
         return 'Default';
       case ProfileType.europeanWallet:
         return 'Prototype for EWC pilot';
+      case ProfileType.inji:
+        return 'Inji by MOSIP';
     }
   }
 
   String get profileId => name;
-
-  bool get showSponseredBy {
-    switch (this) {
-      case ProfileType.custom:
-      case ProfileType.defaultOne:
-      case ProfileType.europeanWallet:
-        return false;
-      case ProfileType.ebsiV3:
-      case ProfileType.ebsiV4:
-      case ProfileType.enterprise:
-      case ProfileType.diipv3:
-        return true;
-    }
-  }
 
   String get getVCId {
     switch (this) {
@@ -53,8 +42,8 @@ extension ProfileTypeX on ProfileType {
         return 'A7G9B4C';
       case ProfileType.ebsiV3:
         return 'Q2X5T8L';
-      case ProfileType.ebsiV4:
-        return 'J9R3N6P';
+      // case ProfileType.ebsiV4:
+      //   return 'J9R3N6P';
       case ProfileType.diipv3:
         return 'M5K8Y2W';
       case ProfileType.defaultOne:
@@ -63,6 +52,8 @@ extension ProfileTypeX on ProfileType {
         return 'L8F6V3P';
       case ProfileType.europeanWallet:
         return 'M3FN2K8';
+      case ProfileType.inji:
+        return 'P9K4H7M';
     }
   }
 }

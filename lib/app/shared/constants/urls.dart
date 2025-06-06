@@ -49,7 +49,7 @@ class Urls {
 
   static const ghostnetRPC = 'https://rpc.tzkt.io/ghostnet';
 
-  static const coinGeckoBase = 'https://pro-api.coingecko.com/api/v3/';
+  static const coinGeckoBase = 'https://api.coingecko.com/api/v3/';
 
   static const cryptoCompareBaseUrl = 'https://min-api.cryptocompare.com';
   static String ethPrice(String symbol) =>
@@ -81,9 +81,6 @@ class Urls {
   static const getNonce = 'https://talao.co/matrix/nonce';
   static const registerToMatrix = 'https://talao.co/matrix/register';
 
-  //deeplink
-  static const appDeepLink = 'https://app.talao.co/app/download';
-
   //ID360
   static const getCodeForId360 = 'https://talao.co/id360/get_code';
   static const authenticateForId360 = 'https://talao.co/id360/authenticate';
@@ -100,6 +97,4 @@ class Urls {
   // wallet provider
   static const walletConfigurationAltme = 'https://app.altme.io/configuration';
   static const walletConfigurationTalao = 'https://app.talao.co/configuration';
-
-
 }

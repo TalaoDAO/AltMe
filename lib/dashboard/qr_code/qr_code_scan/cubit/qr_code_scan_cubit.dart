@@ -102,9 +102,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         /// wallet connect
         await walletConnectCubit.connect(scannedResponse);
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-      } else if (scannedResponse.startsWith('${Urls.appDeepLink}?uri=')) {
+      } else if (scannedResponse
+          .startsWith('${Parameters.universalLink}?uri=')) {
         final url = Uri.decodeFull(
-          scannedResponse.substring('${Urls.appDeepLink}?uri='.length),
+          scannedResponse.substring('${Parameters.universalLink}?uri='.length),
         );
         await verify(uri: Uri.parse(url));
       } else if (scannedResponse.startsWith('configuration://?')) {
@@ -201,7 +202,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       /// presentation_definition as the verifier can request with AND / OR as :
       /// i want to see your Passport OR your ID card AND your email pass...
 
-      if (isSIOPV2OROIDC4VPUrl(uri)) {
+      if (isSiopV2OrOidc4VpUrl(uri)) {
         /// verfier case
 
         final String? requestUri = state.uri?.queryParameters['request_uri'];
@@ -249,7 +250,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         return;
       }
 
-      if (isSIOPV2OROIDC4VPUrl(oidc4vcParameters.initialUri)) {
+      if (isSiopV2OrOidc4VpUrl(oidc4vcParameters.initialUri)) {
         await startSIOPV2OIDC4VPProcess(oidc4vcParameters.initialUri);
         return;
       }
@@ -432,7 +433,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
     try {
-      if (isSIOPV2OROIDC4VPUrl(uri)) {
+      if (isSiopV2OrOidc4VpUrl(uri)) {
         await startSIOPV2OIDC4VPProcess(uri);
         return;
       }
@@ -1325,7 +1326,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       if (url != null) {
         final uri = Uri.parse(url);
-        if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
+        if (uri.toString().startsWith(Parameters.redirectUri)) {
           await authorizedFlowStart(uri);
           return;
         }
@@ -1470,7 +1471,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               txCode: txCode,
               clientSecret: clientSecret,
               authorization: authorization,
-              redirectUri: Parameters.oidc4vcUniversalLink,
+              redirectUri: Parameters.redirectUri,
               oAuthClientAttestation: oAuthClientAttestation,
               oAuthClientAttestationPop: oAuthClientAttestationPop,
             );

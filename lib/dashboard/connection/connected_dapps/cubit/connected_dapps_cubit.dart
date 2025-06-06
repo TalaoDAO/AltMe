@@ -88,7 +88,7 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
       final responseOfXTZUsdPrice = await client.get(
         '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
         queryParameters: {
-          'x_cg_pro_api_key': apiKey,
+          'x_cg_demo_api_key': apiKey,
         },
       ) as Map<String, dynamic>;
       return responseOfXTZUsdPrice['tezos']['usd'] as double;
