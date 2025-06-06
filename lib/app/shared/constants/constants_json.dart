@@ -337,7 +337,7 @@ abstract class ConstantsJson {
       },
     },
     'grant_types': ['authorization code', 'pre-authorized_code'],
-    'redirect_uris': [Parameters.authorizationEndPoint],
+    'redirect_uris': [Parameters.redirectUri],
     'subject_syntax_types_supported': ['did:key', 'did:jwk'],
     'subject_syntax_types_discriminations': [
       'did:key:jwk_jcs-pub',
@@ -350,7 +350,11 @@ abstract class ConstantsJson {
       'client_secret_basic',
       'client_secret_jwt',
     ],
-    'credential_offer_endpoint': ['openid-credential-offer://', 'haip://', 'altme-openid-credential-offer'],
+    'credential_offer_endpoint': [
+      'openid-credential-offer://',
+      'haip://',
+      'altme-openid-credential-offer'
+    ],
     'client_name': '${Parameters.appName} wallet',
     'contacts': ['contact@talao.io'],
   };

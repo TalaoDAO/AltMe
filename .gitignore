@@ -41,7 +41,6 @@ version
 .packages.generated
 
 # Flutter/Dart/Pub related
-**/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
 .flutter-plugins
@@ -139,3 +138,6 @@ app.*.map.json
 *.env.dev
 *.env.main
 *.env.COMP
+
+#case sensitive files issue on macOS
+doc/api/

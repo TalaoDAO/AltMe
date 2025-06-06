@@ -1,3 +1,4 @@
+import 'package:altme/app/shared/constants/parameters.dart';
 import 'package:altme/app/shared/dio_client/dio_client.dart';
 import 'package:altme/app/shared/message_handler/response_message.dart';
 import 'package:altme/oidc4vc/helper_function/get_credential_offer_json.dart';
@@ -146,7 +147,9 @@ Future<Oidc4vcParameters> getIssuanceData({
     credSupported = credentialsSupported[0];
   }
   for (final oidc4vcType in OIDC4VCType.values) {
-    if (oidc4vcType.isEnabled && url.startsWith(oidc4vcType.offerPrefix)) {
+    if (oidc4vcType.isEnabled &&
+        (url.startsWith(oidc4vcType.offerPrefix) ||
+            url.startsWith(Parameters.universalLink))) {
       if (oidc4vcType == OIDC4VCType.DEFAULT ||
           oidc4vcType == OIDC4VCType.WALLET ||
           oidc4vcType == OIDC4VCType.EBSI) {

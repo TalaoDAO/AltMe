@@ -50,6 +50,7 @@ const _$AppStatusEnumMap = {
   AppStatus.successAdd: 'successAdd',
   AppStatus.successUpdate: 'successUpdate',
   AppStatus.addEuropeanProfile: 'addEuropeanProfile',
+  AppStatus.addInjiProfile: 'addInjiProfile',
 };
 
 const _$CredentialStatusEnumMap = {

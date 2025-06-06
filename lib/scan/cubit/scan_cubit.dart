@@ -81,7 +81,7 @@ class ScanCubit extends Cubit<ScanState> {
         didKeyType: didKeyType,
       );
 
-      if (isSIOPV2OROIDC4VPUrl(uri)) {
+      if (isSiopV2OrOidc4VpUrl(uri)) {
         final responseType = uri.queryParameters['response_type'] ?? '';
         final stateValue = uri.queryParameters['state'];
 
@@ -700,7 +700,7 @@ class ScanCubit extends Cubit<ScanState> {
 
         if (url != null) {
           final uri = Uri.parse(url);
-          if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
+          if (uri.toString().startsWith(Parameters.redirectUri)) {
             emit(state.copyWith(status: ScanStatus.goBack));
             await qrCodeScanCubit.authorizedFlowStart(uri);
             return;

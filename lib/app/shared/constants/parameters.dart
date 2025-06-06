@@ -27,13 +27,15 @@ class Parameters {
     isWalletIntegrityEnabled: true,
   );
 
-  static const oidc4vcUniversalLink =
-      'https://app.altme.io/app/download/callback';
+  static const universalLink = 'https://app.altme.io/app/download';
   static const walletOfferDeepLink = 'altme-openid-credential-offer';
   static const walletPresentationDeepLink = 'altme-openid-vc';
 
-  static const authorizeEndPoint =
-      'https://app.altme.io/app/download/authorize';
+  static const authorizationEndPoint = '$universalLink/authorize';
+
+  //'https://app.talao.co/app/download/callback' for Talao
+  // 'https://app.altme.io/app/download/callback' for altme
+  static const String redirectUri = '$universalLink/callback';
 
   static const web3RpcMainnetUrl = 'https://mainnet.infura.io/v3/';
 
@@ -122,11 +124,6 @@ class Parameters {
   // false for talao
   // true for altme
   static const bool showTezotopiaCard = true;
-
-  //'https://app.talao.co/app/download/callback' for Talao
-  // 'https://app.altme.io/app/download/callback' for altme
-  static const String authorizationEndPoint =
-      'https://app.altme.io/app/download/callback';
 
   // 'Talao_wallet'for talao
   // 'Altme_wallet' for altme
