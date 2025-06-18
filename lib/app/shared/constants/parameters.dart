@@ -7,7 +7,7 @@ class Parameters {
 
   // 'false' for talao
   // 'true' for altme
-  static const bool walletHandlesCrypto = true;
+  static const bool walletHandlesCrypto = false;
 
   static const bool isAIServiceEnabled = false;
 
