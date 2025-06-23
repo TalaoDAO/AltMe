@@ -67,7 +67,7 @@ class AiRequestAnalysisButton extends StatelessWidget {
             ) ??
             false;
         if (acceptAnalysis) {
-          LoadingView().show(context: context);
+          LoadingView().show(context: context, text: l10n.aiPleaseWait);
           final client = DioClient(
             secureStorageProvider: getSecureStorage,
             dio: Dio(),

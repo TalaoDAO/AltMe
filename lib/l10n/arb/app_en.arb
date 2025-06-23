@@ -1171,5 +1171,6 @@
   "back": "Back",
   "iaAnalyze": "Data will be shared with a remote AI engine. Don't share personal data.",
   "iaAnalyzeTitle": "AI Agent",
-  "deleteDigit": "Delete"
+  "deleteDigit": "Delete",
+  "aiPleaseWait": "This treatment can take up to 30s"
 }
