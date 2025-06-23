@@ -347,10 +347,10 @@ packages:
     dependency: transitive
     description:
       name: camera_avfoundation
-      sha256: fdc0e668f65c8ddfb3be6c10ef4737fb6274cd04d8053a9525d410642f7989c0
+      sha256: "71dacf6c30aee386617c2b72ad46517706f8ef625aa637313c0d4dc93ddd8d76"
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.19+1"
+    version: "0.9.20+1"
   camera_platform_interface:
     dependency: transitive
     description:
@@ -467,10 +467,10 @@ packages:
     dependency: transitive
     description:
       name: coverage
-      sha256: "4b8701e48a58f7712492c9b1f7ba0bb9d525644dd66d023b62e1fc8cdb560c8a"
+      sha256: aa07dbe5f2294c827b7edb9a87bba44a9c15a3cc81bc8da2ca19b37322d30080
       url: "https://pub.dev"
     source: hosted
-    version: "1.14.0"
+    version: "1.14.1"
   credential_manifest:
     dependency: "direct main"
     description:
@@ -1068,10 +1068,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_svg
-      sha256: d44bf546b13025ec7353091516f6881f1d4c633993cb109c3916c3a0159dadf1
+      sha256: cd57f7969b4679317c17af6fd16ee233c1e60a82ed209d8a475c54fd6fd6f845
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.2.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -1445,10 +1445,10 @@ packages:
     dependency: transitive
     description:
       name: logger
-      sha256: be4b23575aac7ebf01f225a241eb7f6b5641eeaf43c6a8613510fc2f8cf187d1
+      sha256: "2621da01aabaf223f8f961e751f2c943dbb374dc3559b982f200ccedadaa6999"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.0"
+    version: "2.6.0"
   logging:
     dependency: transitive
     description:
@@ -1577,6 +1577,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.0"
+  msgpack_dart:
+    dependency: transitive
+    description:
+      name: msgpack_dart
+      sha256: c2d235ed01f364719b5296aecf43ac330f0d7bc865fa134d0d7910a40454dffb
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   nested:
     dependency: transitive
     description:
@@ -1940,18 +1948,18 @@ packages:
     dependency: transitive
     description:
       name: reown_core
-      sha256: "171ce977b563b7b2fe0a17393517a4743ab758152d6c0c5158921a7ed3746326"
+      sha256: "3fe69935afc39fa9bf3ba6721dfde5396d1880c61803feadc217bed1859e2184"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.5"
+    version: "1.1.6"
   reown_sign:
     dependency: transitive
     description:
       name: reown_sign
-      sha256: "718fe045adafc681c9276cfacb5702bee36b5ca24035d2917a5053e1ca961abb"
+      sha256: "9401c7c74f29b35b65b47113bbb95e653276a122dc685f1aa07c3150a8dad6fd"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.6+1"
+    version: "1.1.7"
   reown_walletkit:
     dependency: "direct main"
     description:
@@ -2458,10 +2466,10 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics
-      sha256: "44cc7104ff32563122a929e4620cf3efd584194eec6d1d913eb5ba593dbcf6de"
+      sha256: a4f059dc26fc8295b5921376600a194c4ec7d55e72f2fe4c7d2831e103d461e6
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.18"
+    version: "1.1.19"
   vector_graphics_codec:
     dependency: transitive
     description:
@@ -2522,10 +2530,10 @@ packages:
     dependency: transitive
     description:
       name: watcher
-      sha256: "69da27e49efa56a15f8afe8f4438c4ec02eff0a117df1b22ea4aad194fe1c104"
+      sha256: "0b7fd4a0bbc4b92641dbf20adfd7e3fd1398fe17102d94b674234563e110088a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.2"
   web:
     dependency: transitive
     description:
@@ -2594,10 +2602,10 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_platform_interface
-      sha256: "7cb32b21825bd65569665c32bb00a34ded5779786d6201f5350979d2d529940d"
+      sha256: f0dc2dc3a2b1e3a6abdd6801b9355ebfeb3b8f6cde6b9dc7c9235909c4a1f147
       url: "https://pub.dev"
     source: hosted
-    version: "2.13.0"
+    version: "2.13.1"
   webview_flutter_wkwebview:
     dependency: "direct main"
     description:
