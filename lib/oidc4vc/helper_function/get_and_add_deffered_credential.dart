@@ -35,6 +35,7 @@ Future<void> getAndAddDefferedCredential({
       };
     case OIDC4VCIDraftType.draft13:
     case OIDC4VCIDraftType.draft14:
+    case OIDC4VCIDraftType.draft15:
 
       /// trasanction_id is NEW for draft 13. it was
       /// acceptance_token for draft 11

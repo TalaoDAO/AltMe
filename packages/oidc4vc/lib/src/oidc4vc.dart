@@ -596,6 +596,7 @@ class OIDC4VC {
         }
       case OIDC4VCIDraftType.draft13:
       case OIDC4VCIDraftType.draft14:
+      case OIDC4VCIDraftType.draft15:
         String? authorizationServer;
 
         /// Extract the authorization endpoint from from first element of
@@ -894,6 +895,7 @@ class OIDC4VC {
 
       case OIDC4VCIDraftType.draft13:
       case OIDC4VCIDraftType.draft14:
+      case OIDC4VCIDraftType.draft15:
         credentialData['format'] = format;
 
         if (credentialDefinition != null) {
