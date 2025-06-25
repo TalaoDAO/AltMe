@@ -28,6 +28,8 @@ extension on ProfileType {
         return 'EBSI';
       case ProfileType.diipv3:
         return 'DIIP_V3';
+      case ProfileType.diipv4:
+        return 'DIIP_V4';
       case ProfileType.europeanWallet:
         return 'EWC';
     }

@@ -345,6 +345,90 @@ oidc4VCIStack ??= Oidc4VCIStack.initial();
         ),
       );
 
+factory ProfileModel.diipv4({
+    required WalletType walletType,
+    required WalletProtectionType walletProtectionType,
+    required bool isDeveloperMode,
+    required String? clientId,
+    required String? clientSecret,
+    String? enterpriseWalletName,
+  }) =>
+      ProfileModel(
+        enterpriseWalletName: enterpriseWalletName,
+        walletType: walletType,
+        walletProtectionType: walletProtectionType,
+        isDeveloperMode: isDeveloperMode,
+        profileType: ProfileType.diipv3,
+        profileSetting: ProfileSetting(
+          blockchainOptions: BlockchainOptions.initial(),
+          generalOptions: GeneralOptions.empty(),
+          helpCenterOptions: HelpCenterOptions.initial(),
+          discoverCardsOptions: const DiscoverCardsOptions(
+            displayDefi: false,
+            displayHumanity: false,
+            displayHumanityJwt: false,
+            displayOver13: false,
+            displayOver15: false,
+            displayOver18: false,
+            displayOver18Jwt: false,
+            displayOver18SdJwt: true,
+            displayOver21: false,
+            displayOver50: false,
+            displayChainborn: false,
+            displayTezotopia: false,
+            displayVerifiableId: false,
+            displayVerifiableIdJwt: false,
+            displayOver65: false,
+            displayEmailPass: false,
+            displayEmailPassJwt: false,
+            displayPhonePass: false,
+            displayPhonePassJwt: false,
+            displayPhonePassSdJwt: true,
+            displayAgeRange: false,
+            displayGender: false,
+            displayExternalIssuer: [],
+            displayEmailPassSdJwt: true,
+            displayVerifiableIdSdJwt: true,
+          ),
+          selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
+            displayManageDecentralizedId: true,
+            customOidc4vcProfile: CustomOidc4VcProfile(
+              clientAuthentication: ClientAuthentication.clientId,
+              credentialManifestSupport: true,
+              cryptoHolderBinding: true,
+              defaultDid: Parameters.didKeyTypeForOwfBaselineProfile,
+              oidc4vciDraft: OIDC4VCIDraftType.draft15,
+              oidc4vpDraft: OIDC4VPDraftType.draft28,
+              scope: true,
+              securityLevel: true,
+              proofHeader: ProofHeaderType.kid,
+              siopv2Draft: SIOPV2DraftType.draft12,
+              clientType: ClientType.did,
+              clientId: clientId,
+              clientSecret: clientSecret,
+              vcFormatType: VCFormatType.auto,
+
+              /// pas ldp_vc
+              proofType: ProofType.jwt,
+              formatsSupported: const [
+                VCFormatType.jwtVcJson,
+                VCFormatType.jwtVcJsonLd,
+                VCFormatType.vcSdJWT,
+              ],
+              displayMode: false,
+            ),
+          ),
+          settingsMenu: SettingsMenu.initial(),
+          version: '',
+          walletSecurityOptions: const WalletSecurityOptions(
+            confirmSecurityVerifierAccess: true,
+            displaySecurityAdvancedSettings: true,
+            secureSecurityAuthenticationWithPinCode: true,
+            verifySecurityIssuerWebsiteIdentity: true,
+          ),
+        ),
+      );
+
   final WalletType walletType;
   final WalletProtectionType walletProtectionType;
   final bool isDeveloperMode;

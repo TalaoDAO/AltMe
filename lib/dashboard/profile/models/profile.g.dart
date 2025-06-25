@@ -48,6 +48,7 @@ const _$ProfileTypeEnumMap = {
   ProfileType.defaultOne: 'defaultOne',
   ProfileType.ebsiV3: 'ebsiV3',
   ProfileType.diipv3: 'diipv3',
+  ProfileType.diipv4: 'diipv4',
   ProfileType.europeanWallet: 'europeanWallet',
   ProfileType.inji: 'inji',
   ProfileType.custom: 'custom',
