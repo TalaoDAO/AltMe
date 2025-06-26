@@ -125,6 +125,14 @@ class OIDC4VC {
               'vct': credentialSupported['vct'].toString(),
             };
           }
+          if (int.parse(oidc4vcParameters.oidc4vciDraftType.numbering) > 14 &&
+              credentialSupportedType == VCFormatType.dcSdJWT) {
+            data = {
+              'type': 'openid_credential',
+              'format': 'dc+sd-jwt',
+              'vct': credentialSupported['vct'].toString(),
+            };
+          }
           final scope = credentialSupported['scope'];
 
           if (scope == null) {

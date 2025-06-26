@@ -84,6 +84,7 @@ const _$VCFormatTypeEnumMap = {
   VCFormatType.jwtVcJson: 'jwt_vc_json',
   VCFormatType.jwtVcJsonLd: 'jwt_vc_json-ld',
   VCFormatType.vcSdJWT: 'vc+sd-jwt',
+  VCFormatType.dcSdJWT: 'dc+sd-jwt',
   VCFormatType.auto: 'auto',
 };
 

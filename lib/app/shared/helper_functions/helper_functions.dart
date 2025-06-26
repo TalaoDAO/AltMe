@@ -1638,7 +1638,8 @@ List<String> getStringCredentialsForToken({
   required ProfileCubit profileCubit,
 }) {
   final credentialList = credentialsToBePresented.map((item) {
-    final isVcSdJWT = item.getFormat == VCFormatType.vcSdJWT.vcValue;
+    final isVcSdJWT = item.getFormat == VCFormatType.vcSdJWT.vcValue ||
+        item.getFormat == VCFormatType.dcSdJWT.vcValue;
 
     if (isVcSdJWT) {
       return item.selectiveDisclosureJwt ?? jsonEncode(item.toJson());
@@ -1682,7 +1683,7 @@ List<VCFormatType> getPresentVCDetails({
         format?.jwtVcJsonLd != null || format?.jwtVpJson != null;
 
     /// vc+sd-jwt
-    presentVcSdJwt = format?.vcSdJwt != null;
+    presentVcSdJwt = format?.vcSdJwt != null || format?.dcSdJwt != null;
   } else {
     if (clientMetaData == null) {
       /// credential manifest case
@@ -1711,7 +1712,8 @@ List<VCFormatType> getPresentVCDetails({
           vpFormats.containsKey('jwt_vp_json-ld');
 
       /// vc+sd-jwt
-      presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');
+      presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt') ||
+          vpFormats.containsKey('dc+sd-jwt');
     }
   }
 
@@ -1744,6 +1746,9 @@ List<VCFormatType> getPresentVCDetails({
   }
   if (presentVcSdJwt && formatsSupported.contains(VCFormatType.vcSdJWT)) {
     supportingFormats.add(VCFormatType.vcSdJWT);
+  }
+  if (presentVcSdJwt && formatsSupported.contains(VCFormatType.dcSdJWT)) {
+    supportingFormats.add(VCFormatType.dcSdJWT);
   }
 
   return supportingFormats;
@@ -2242,7 +2247,8 @@ Map<String, dynamic> getCredentialDataFromJson({
   late Map<String, dynamic> credential;
 
   final jsonContent = jwtDecode.parseJwt(data);
-  if (format == VCFormatType.vcSdJWT.vcValue) {
+  if (format == VCFormatType.vcSdJWT.vcValue ||
+      format == VCFormatType.dcSdJWT.vcValue) {
     final sdAlg = jsonContent['_sd_alg'] ?? 'sha-256';
 
     if (sdAlg != 'sha-256') {
@@ -2259,7 +2265,8 @@ Map<String, dynamic> getCredentialDataFromJson({
     credential = jsonContent['vc'] as Map<String, dynamic>;
   }
 
-  if (format == VCFormatType.vcSdJWT.vcValue) {
+  if (format == VCFormatType.vcSdJWT.vcValue ||
+      format == VCFormatType.dcSdJWT.vcValue) {
     /// type
     if (!credential.containsKey('type')) {
       credential['type'] = [credentialType];

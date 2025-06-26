@@ -353,13 +353,14 @@ class DiscoverCardsOptions extends Equatable {
     final isLdpVc = vcFormatType == VCFormatType.ldpVc;
     final isJwtVcJson = vcFormatType == VCFormatType.jwtVcJson;
     final isVcSdJWT = vcFormatType == VCFormatType.vcSdJWT;
+    final isDcSdJWT = vcFormatType == VCFormatType.dcSdJWT;
 
     switch (credentialSubjectType) {
       case CredentialSubjectType.defiCompliance:
         if (isLdpVc && displayDefi) return VCFormatType.ldpVc;
       case CredentialSubjectType.livenessCard:
         if (isLdpVc && displayHumanity) return VCFormatType.ldpVc;
-        if (isJwtVcJson && displayHumanityJwt) return VCFormatType.vcSdJWT;
+        if (isJwtVcJson && displayHumanityJwt) return VCFormatType.jwtVcJson;
       case CredentialSubjectType.gender:
         if (isLdpVc && displayGender) return VCFormatType.ldpVc;
       case CredentialSubjectType.verifiableIdCard:
@@ -368,6 +369,7 @@ class DiscoverCardsOptions extends Equatable {
           return VCFormatType.jwtVcJson;
         }
         if (isVcSdJWT && displayVerifiableIdSdJwt) return VCFormatType.vcSdJWT;
+        if (isDcSdJWT && displayVerifiableIdSdJwt) return VCFormatType.dcSdJWT;
       case CredentialSubjectType.over13:
         if (isLdpVc && displayOver13) return VCFormatType.ldpVc;
       case CredentialSubjectType.over15:
@@ -376,6 +378,7 @@ class DiscoverCardsOptions extends Equatable {
         if (isLdpVc && displayOver18) return VCFormatType.ldpVc;
         if (isJwtVcJson && displayOver18Jwt) return VCFormatType.jwtVcJson;
         if (isVcSdJWT && displayOver18SdJwt) return VCFormatType.vcSdJWT;
+        if (isDcSdJWT && displayOver18SdJwt) return VCFormatType.dcSdJWT;
       case CredentialSubjectType.over21:
         if (isLdpVc && displayOver21) return VCFormatType.ldpVc;
       case CredentialSubjectType.over50:
@@ -386,6 +389,7 @@ class DiscoverCardsOptions extends Equatable {
         if (isLdpVc && displayEmailPass) return VCFormatType.ldpVc;
         if (isJwtVcJson && displayEmailPassJwt) return VCFormatType.jwtVcJson;
         if (isVcSdJWT && displayEmailPassSdJwt) return VCFormatType.vcSdJWT;
+        if (isDcSdJWT && displayEmailPassSdJwt) return VCFormatType.dcSdJWT;
       case CredentialSubjectType.learningAchievement:
       case CredentialSubjectType.phonePass:
         if (isLdpVc && displayPhonePass) return VCFormatType.ldpVc;

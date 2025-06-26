@@ -19,7 +19,7 @@ class ProfileModel extends Equatable {
     this.enterpriseWalletName,
     this.oidc4VCIStack,
   }) {
-oidc4VCIStack ??= Oidc4VCIStack.initial();
+    oidc4VCIStack ??= Oidc4VCIStack.initial();
   }
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>
@@ -345,7 +345,7 @@ oidc4VCIStack ??= Oidc4VCIStack.initial();
         ),
       );
 
-factory ProfileModel.diipv4({
+  factory ProfileModel.diipv4({
     required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
@@ -358,7 +358,7 @@ factory ProfileModel.diipv4({
         walletType: walletType,
         walletProtectionType: walletProtectionType,
         isDeveloperMode: isDeveloperMode,
-        profileType: ProfileType.diipv3,
+        profileType: ProfileType.diipv4,
         profileSetting: ProfileSetting(
           blockchainOptions: BlockchainOptions.initial(),
           generalOptions: GeneralOptions.empty(),
@@ -413,7 +413,7 @@ factory ProfileModel.diipv4({
               formatsSupported: const [
                 VCFormatType.jwtVcJson,
                 VCFormatType.jwtVcJsonLd,
-                VCFormatType.vcSdJWT,
+                VCFormatType.dcSdJWT,
               ],
               displayMode: false,
             ),

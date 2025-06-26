@@ -70,7 +70,7 @@ Currently, the wallet is non-custodial, meaning users retain full control over t
 * W3C Verifiable presentation request,
 * VC formats:
     * ldp_vc, jwt_vc_json, jwt_vc_json-ld,
-    * vc+sd-jwt vc.
+    * vc+sd-jwt, dc+sd-jwt.
 #### OIDC4VCI
 * Flows : authorization code flow, pre-authorized code flow with Tx, PAR,
 * credential_offer_uri,

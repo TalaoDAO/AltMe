@@ -621,6 +621,15 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 ),
               );
             }
+            if (formatsSupported.contains(VCFormatType.dcSdJWT) &&
+                discoverCardsOptions.displayOver18SdJwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.over18,
+                  formatType: VCFormatType.dcSdJWT,
+                ),
+              );
+            }
             if (formatsSupported.contains(VCFormatType.jwtVcJson) &&
                 discoverCardsOptions.displayOver18Jwt) {
               allCategoryVC.add(
@@ -680,6 +689,15 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 CredInfo(
                   credentialType: CredentialSubjectType.verifiableIdCard,
                   formatType: VCFormatType.vcSdJWT,
+                ),
+              );
+            }
+            if (formatsSupported.contains(VCFormatType.dcSdJWT) &&
+                discoverCardsOptions.displayVerifiableIdSdJwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.verifiableIdCard,
+                  formatType: VCFormatType.dcSdJWT,
                 ),
               );
             }
@@ -797,6 +815,15 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 ),
               );
             }
+            if (formatsSupported.contains(VCFormatType.dcSdJWT) &&
+                discoverCardsOptions.displayEmailPassSdJwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.emailPass,
+                  formatType: VCFormatType.dcSdJWT,
+                ),
+              );
+            }
 
             /// Phone Pass
             ///
@@ -825,6 +852,15 @@ class CredentialsCubit extends Cubit<CredentialsState> {
                 CredInfo(
                   credentialType: CredentialSubjectType.phonePass,
                   formatType: VCFormatType.vcSdJWT,
+                ),
+              );
+            }
+            if (formatsSupported.contains(VCFormatType.dcSdJWT) &&
+                discoverCardsOptions.displayPhonePassSdJwt) {
+              allCategoryVC.add(
+                CredInfo(
+                  credentialType: CredentialSubjectType.phonePass,
+                  formatType: VCFormatType.dcSdJWT,
                 ),
               );
             }

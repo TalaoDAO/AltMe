@@ -524,10 +524,6 @@ class ScanCubit extends Cubit<ScanState> {
       if (presentationDefinition.format == null) {
         clientMetaData = await getClientMetada(client: client, uri: uri);
       }
-      // final String vpFormat = getVpFormat(
-      //   presentationDefinition: presentationDefinition,
-      //   clientMetaData: clientMetaData,
-      // );
 
       final (presentationSubmission, formatFromPresentationSubmission) =
           await getPresentationSubmission(
@@ -757,7 +753,13 @@ class ScanCubit extends Cubit<ScanState> {
     //     .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
     final inputDescriptors = <Map<String, dynamic>>[];
-    VCFormatType formatFromPresentationSubmission = VCFormatType.vcSdJWT;
+    VCFormatType formatFromPresentationSubmission = int.parse(
+              profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile
+                  .oidc4vciDraft.numbering,
+            ) <
+            15
+        ? VCFormatType.vcSdJWT
+        : VCFormatType.dcSdJWT;
     for (int i = 0; i < credentialsToBePresented.length; i++) {
       for (final InputDescriptor inputDescriptor
           in presentationDefinition.inputDescriptors) {
@@ -778,7 +780,8 @@ class ScanCubit extends Cubit<ScanState> {
             'format': format.vpValue,
           };
 
-          if (format == VCFormatType.vcSdJWT) {
+          if (format == VCFormatType.vcSdJWT ||
+              format == VCFormatType.dcSdJWT) {
             if (credentialsToBePresented.length == 1) {
               descriptor['path'] = r'$';
             } else {
@@ -860,7 +863,8 @@ class ScanCubit extends Cubit<ScanState> {
 
     final clientId = uri.queryParameters['client_id'];
 
-    if (formatFromPresentationSubmission == VCFormatType.vcSdJWT) {
+    if (formatFromPresentationSubmission == VCFormatType.vcSdJWT || 
+        formatFromPresentationSubmission == VCFormatType.dcSdJWT) {
       final credentialListJwt = getStringCredentialsForToken(
         credentialsToBePresented: credentialsToBePresented,
         profileCubit: profileCubit,
@@ -923,7 +927,8 @@ class ScanCubit extends Cubit<ScanState> {
         data: {
           'error': 'invalid_format',
           'error_description':
-              'Please present ldp_vc, jwt_vc, jwt_vc_json or vc+sd-jwt.',
+              // ignore: lines_longer_than_80_chars
+              'Please present ldp_vc, jwt_vc, jwt_vc_json, dc+sd-jwt or vc+sd-jwt.',
         },
       );
     }
@@ -1003,12 +1008,5 @@ class ScanCubit extends Cubit<ScanState> {
         showMessage: false,
       );
     }
-  }
-
-  String getVpFormat({
-    required PresentationDefinition presentationDefinition,
-    Map<String, dynamic>? clientMetaData,
-  }) {
-    return 'vc+sd-jwt';
   }
 }

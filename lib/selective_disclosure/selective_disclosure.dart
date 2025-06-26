@@ -165,7 +165,8 @@ class SelectiveDisclosure {
   }
 
   String? get getPicture {
-    if (credentialModel.format.toString() != VCFormatType.vcSdJWT.vcValue) {
+    if (credentialModel.format.toString() != VCFormatType.vcSdJWT.vcValue ||
+        credentialModel.format.toString() != VCFormatType.dcSdJWT.vcValue) {
       return null;
     }
 
