@@ -605,6 +605,7 @@ class OIDC4VC {
       case OIDC4VCIDraftType.draft13:
       case OIDC4VCIDraftType.draft14:
       case OIDC4VCIDraftType.draft15:
+      case OIDC4VCIDraftType.draft16:
         String? authorizationServer;
 
         /// Extract the authorization endpoint from from first element of
@@ -904,6 +905,7 @@ class OIDC4VC {
       case OIDC4VCIDraftType.draft13:
       case OIDC4VCIDraftType.draft14:
       case OIDC4VCIDraftType.draft15:
+      case OIDC4VCIDraftType.draft16:
         credentialData['format'] = format;
 
         if (credentialDefinition != null) {
@@ -1471,6 +1473,7 @@ class OIDC4VC {
   }) async {
     var url = '$baseUrl/.well-known/openid-credential-issuer';
 
+// used to retreive public keys for SD-JWT-VC
     if (isSdJwtVc) {
       final uri = Uri.parse(baseUrl);
 
