@@ -81,7 +81,7 @@ class ScanCubit extends Cubit<ScanState> {
         didKeyType: didKeyType,
       );
 
-      if (isSIOPV2OROIDC4VPUrl(uri)) {
+      if (isSiopV2OrOidc4VpUrl(uri)) {
         final responseType = uri.queryParameters['response_type'] ?? '';
         final stateValue = uri.queryParameters['state'];
 
@@ -276,7 +276,6 @@ class ScanCubit extends Cubit<ScanState> {
         CredentialManifest? credentialManifest;
 
         await credentialsCubit.insertCredential(
-          blockchainType: walletCubit.state.currentAccount!.blockchainType,
           credential: CredentialModel.copyWithData(
             oldCredentialModel: credentialModel,
             newData: jsonCredential as Map<String, dynamic>,
@@ -525,10 +524,6 @@ class ScanCubit extends Cubit<ScanState> {
       if (presentationDefinition.format == null) {
         clientMetaData = await getClientMetada(client: client, uri: uri);
       }
-      // final String vpFormat = getVpFormat(
-      //   presentationDefinition: presentationDefinition,
-      //   clientMetaData: clientMetaData,
-      // );
 
       final (presentationSubmission, formatFromPresentationSubmission) =
           await getPresentationSubmission(
@@ -561,9 +556,7 @@ class ScanCubit extends Cubit<ScanState> {
         final customOidc4vcProfile = profileCubit.state.model.profileSetting
             .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-        final clientId = getClientIdForPresentation(
-          uri.queryParameters['client_id'],
-        );
+        final clientId = uri.queryParameters['client_id'];
 
         final didKeyType = customOidc4vcProfile.defaultDid;
 
@@ -703,7 +696,7 @@ class ScanCubit extends Cubit<ScanState> {
 
         if (url != null) {
           final uri = Uri.parse(url);
-          if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
+          if (uri.toString().startsWith(Parameters.redirectUri)) {
             emit(state.copyWith(status: ScanStatus.goBack));
             await qrCodeScanCubit.authorizedFlowStart(uri);
             return;
@@ -760,7 +753,13 @@ class ScanCubit extends Cubit<ScanState> {
     //     .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
     final inputDescriptors = <Map<String, dynamic>>[];
-    VCFormatType formatFromPresentationSubmission = VCFormatType.vcSdJWT;
+    VCFormatType formatFromPresentationSubmission = int.parse(
+              profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile
+                  .oidc4vciDraft.numbering,
+            ) <
+            15
+        ? VCFormatType.vcSdJWT
+        : VCFormatType.dcSdJWT;
     for (int i = 0; i < credentialsToBePresented.length; i++) {
       for (final InputDescriptor inputDescriptor
           in presentationDefinition.inputDescriptors) {
@@ -781,7 +780,8 @@ class ScanCubit extends Cubit<ScanState> {
             'format': format.vpValue,
           };
 
-          if (format == VCFormatType.vcSdJWT) {
+          if (format == VCFormatType.vcSdJWT ||
+              format == VCFormatType.dcSdJWT) {
             if (credentialsToBePresented.length == 1) {
               descriptor['path'] = r'$';
             } else {
@@ -861,11 +861,10 @@ class ScanCubit extends Cubit<ScanState> {
     final customOidc4vcProfile = profileCubit.state.model.profileSetting
         .selfSovereignIdentityOptions.customOidc4vcProfile;
 
-    final clientId = getClientIdForPresentation(
-      uri.queryParameters['client_id'],
-    );
+    final clientId = uri.queryParameters['client_id'];
 
-    if (formatFromPresentationSubmission == VCFormatType.vcSdJWT) {
+    if (formatFromPresentationSubmission == VCFormatType.vcSdJWT || 
+        formatFromPresentationSubmission == VCFormatType.dcSdJWT) {
       final credentialListJwt = getStringCredentialsForToken(
         credentialsToBePresented: credentialsToBePresented,
         profileCubit: profileCubit,
@@ -874,7 +873,7 @@ class ScanCubit extends Cubit<ScanState> {
       if (credentialListJwt.length == 1) {
         return credentialListJwt.first;
       } else {
-        return credentialListJwt.toString();
+        return jsonEncode(credentialListJwt);
       }
     } else if (formatFromPresentationSubmission == VCFormatType.jwtVc ||
         formatFromPresentationSubmission == VCFormatType.jwtVcJson ||
@@ -896,17 +895,6 @@ class ScanCubit extends Cubit<ScanState> {
 
       return vpToken;
     } else if (formatFromPresentationSubmission == VCFormatType.ldpVc) {
-      ///didkit does not support did:jwk
-      if (did.startsWith('did:jwk')) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_format',
-            'error_description':
-                'This VC format is not supported with this profile.',
-          },
-        );
-      }
-
       /// proof is done with a creation date 20 seconds in the past to avoid
       /// proof check to fail because of time difference on server
       final options = jsonEncode({
@@ -927,9 +915,8 @@ class ScanCubit extends Cubit<ScanState> {
           'type': ['VerifiablePresentation'],
           'holder': did,
           'id': presentationId,
-          'verifiableCredential': credentialsToBePresented.length == 1
-              ? credentialsToBePresented.first.data
-              : credentialsToBePresented.map((c) => c.data).toList(),
+          'verifiableCredential':
+              credentialsToBePresented.map((c) => c.data).toList(),
         }),
         options,
         privateKey,
@@ -940,7 +927,8 @@ class ScanCubit extends Cubit<ScanState> {
         data: {
           'error': 'invalid_format',
           'error_description':
-              'Please present ldp_vc, jwt_vc, jwt_vc_json or vc+sd-jwt.',
+              // ignore: lines_longer_than_80_chars
+              'Please present ldp_vc, jwt_vc, jwt_vc_json, dc+sd-jwt or vc+sd-jwt.',
         },
       );
     }
@@ -1020,12 +1008,5 @@ class ScanCubit extends Cubit<ScanState> {
         showMessage: false,
       );
     }
-  }
-
-  String getVpFormat({
-    required PresentationDefinition presentationDefinition,
-    Map<String, dynamic>? clientMetaData,
-  }) {
-    return 'vc+sd-jwt';
   }
 }

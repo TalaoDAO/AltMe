@@ -3,7 +3,6 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 
-import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,7 +17,7 @@ class ProfileSelectorWidget extends StatelessWidget {
         profile.walletType == WalletType.enterprise;
 
     return BlocBuilder<ProfileCubit, ProfileState>(
-      builder: (context, state) {
+      builder: (buildContext, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.max,
@@ -27,7 +26,7 @@ class ProfileSelectorWidget extends StatelessWidget {
               padding: const EdgeInsets.all(Sizes.spaceSmall),
               margin: const EdgeInsets.all(Sizes.spaceXSmall),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
+                color: Theme.of(buildContext).colorScheme.surface,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(Sizes.largeRadius),
                 ),
@@ -42,8 +41,9 @@ class ProfileSelectorWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          context.l10n.chooseYourSSIProfileOrCustomizeYourOwn,
-                          style: Theme.of(context).textTheme.titleMedium,
+                          buildContext
+                              .l10n.chooseYourSSIProfileOrCustomizeYourOwn,
+                          style: Theme.of(buildContext).textTheme.titleMedium,
                         ),
                       ],
                     ),
@@ -83,24 +83,20 @@ class ProfileSelectorWidget extends StatelessWidget {
                                     false;
                                 if (!moveAhead) return;
                               }
+                              LoadingView().show(context: buildContext);
 
                               await context
                                   .read<ProfileCubit>()
                                   .setProfile(profileType);
                               await context
                                   .read<CredentialsCubit>()
-                                  .loadAllCredentials(
-                                    blockchainType: context
-                                        .read<WalletCubit>()
-                                        .state
-                                        .currentAccount!
-                                        .blockchainType,
-                                  );
+                                  .loadAllCredentials();
 
                               if (profileType == ProfileType.custom) {
                                 return Navigator.of(context)
                                     .push<void>(Oidc4vcSettingMenu.route());
                               }
+                              LoadingView().hide();
                             },
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
@@ -129,7 +125,7 @@ class ProfileSelectorWidget extends StatelessWidget {
                               color: Theme.of(context)
                                   .colorScheme
                                   .onSurface
-                                  .withOpacity(0.12),
+                                  .withValues(alpha: 0.12),
                             ),
                           ),
                         ],

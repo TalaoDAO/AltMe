@@ -48,8 +48,10 @@ class CachedImageFromNetwork extends StatelessWidget {
                 placeholderBuilder: (_) => Container(
                   width: width,
                   height: height,
-                  color:
-                      Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.6),
                 ),
               )
             : url.startsWith('http')
@@ -79,7 +81,7 @@ class CachedImageFromNetwork extends StatelessWidget {
                                   Theme.of(context)
                                       .colorScheme
                                       .onSurface
-                                      .withOpacity(0.6),
+                                      .withValues(alpha: 0.6),
                             );
                     },
                     errorWidget: (context, error, dynamic _) => errorMessage ==
@@ -88,7 +90,7 @@ class CachedImageFromNetwork extends StatelessWidget {
                             color: Theme.of(context)
                                 .colorScheme
                                 .onSurface
-                                .withOpacity(0.6),
+                                .withValues(alpha: 0.6),
                             child: Icon(
                               Icons.error,
                               color: Theme.of(context).colorScheme.onSurface,

@@ -11,6 +11,7 @@ import 'package:json_path/json_path.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:oidc4vc/src/functions/dio_get.dart';
 import 'package:oidc4vc/src/functions/get_authorization_server_from_credential_offer.dart';
+import 'package:oidc4vc/src/functions/public_key_multibase_to_public_jwk.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -121,6 +122,14 @@ class OIDC4VC {
             data = {
               'type': 'openid_credential',
               'format': 'vc+sd-jwt',
+              'vct': credentialSupported['vct'].toString(),
+            };
+          }
+          if (int.parse(oidc4vcParameters.oidc4vciDraftType.numbering) > 14 &&
+              credentialSupportedType == VCFormatType.dcSdJWT) {
+            data = {
+              'type': 'openid_credential',
+              'format': 'dc+sd-jwt',
               'vct': credentialSupported['vct'].toString(),
             };
           }
@@ -399,7 +408,7 @@ class OIDC4VC {
     return tokenData;
   }
 
-  Future<Map<String, dynamic>> getDidDocument({
+  Future<Map<String, dynamic>> getOpenIdConfiguration({
     required String didKey,
     required bool fromStatusList,
     required bool isCachingEnabled,
@@ -480,24 +489,35 @@ class OIDC4VC {
         } else if (openIdConfiguration.jwks != null) {
           response = openIdConfiguration.jwks;
         } else {
-          throw Exception();
+          throw Exception('no jwks_uri or jwks found');
         }
 
         return response as Map<String, dynamic>;
       } else {
-        try {
-          final didDocument = await dio.get<dynamic>(
-            'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
-          );
-          return didDocument.data as Map<String, dynamic>;
-        } catch (e) {
+        if (didKey.startsWith('did:ebsi')) {
           try {
             final didDocument = await dio.get<dynamic>(
-              'https://dev.uniresolver.io/1.0/identifiers/$didKey',
+              'https://api-pilot.ebsi.eu/did-registry/v5/identifiers/$didKey',
             );
             return didDocument.data as Map<String, dynamic>;
           } catch (e) {
             rethrow;
+          }
+        } else {
+          try {
+            final didDocument = await dio.get<dynamic>(
+              'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
+            );
+            return didDocument.data as Map<String, dynamic>;
+          } catch (e) {
+            try {
+              final didDocument = await dio.get<dynamic>(
+                'https://dev.uniresolver.io/1.0/identifiers/$didKey',
+              );
+              return didDocument.data as Map<String, dynamic>;
+            } catch (e) {
+              rethrow;
+            }
           }
         }
       }
@@ -507,7 +527,7 @@ class OIDC4VC {
   }
 
   bool isURL(String input) {
-    final uri = Uri.tryParse(input)?.hasAbsolutePath ?? false;
+    final uri = Uri.tryParse(input)?.host.isNotEmpty ?? false;
     return uri;
   }
 
@@ -584,6 +604,8 @@ class OIDC4VC {
         }
       case OIDC4VCIDraftType.draft13:
       case OIDC4VCIDraftType.draft14:
+      case OIDC4VCIDraftType.draft15:
+      case OIDC4VCIDraftType.draft16:
         String? authorizationServer;
 
         /// Extract the authorization endpoint from from first element of
@@ -720,12 +742,18 @@ class OIDC4VC {
 
       return jsonDecode(jsonEncode(data)) as Map<String, dynamic>;
     } else {
-      final idAndVerificationMethodPath =
-          JsonPath(r'$..[?(@.verificationMethod)]');
-      final idAndVerificationMethod = (idAndVerificationMethodPath
-          .read(didDocument)
-          .first
-          .value!) as Map<String, dynamic>;
+      Map<String, dynamic> idAndVerificationMethod;
+      final topLevelDid = didDocument['verificationMethod'] != null;
+      if (topLevelDid) {
+        idAndVerificationMethod = didDocument;
+      } else {
+        final idAndVerificationMethodPath =
+            JsonPath(r'$..[?(@.verificationMethod)]');
+        idAndVerificationMethod = (idAndVerificationMethodPath
+            .read(didDocument)
+            .first
+            .value!) as Map<String, dynamic>;
+      }
       final jsonPath = JsonPath(r'$..verificationMethod');
       late List<dynamic> data;
 
@@ -760,6 +788,10 @@ class OIDC4VC {
       } else if (method.containsKey('publicKeyBase58')) {
         publicKeyJwk =
             publicKeyBase58ToPublicJwk(method['publicKeyBase58'].toString());
+      } else if (method.containsKey('publicKeyMultibase')) {
+        publicKeyJwk = publicKeyMultibaseToPublicJwk(
+          method['publicKeyMultibase'].toString(),
+        );
       } else {
         throw Exception('PUBLICKEYJWK_EXTRACTION_ERROR');
       }
@@ -785,6 +817,7 @@ class OIDC4VC {
     required String kid,
     required String privateKey,
     required List<VCFormatType> formatsSupported,
+    required String? clientId,
   }) async {
     final credentialData = <String, dynamic>{};
 // check if we support the requested format
@@ -836,7 +869,7 @@ class OIDC4VC {
             tokenParameters: issuerTokenParameters,
             clientAuthentication: clientAuthentication,
             cnonce: nonce,
-            iss: issuerTokenParameters.clientId,
+            iss: clientId,
           );
 
           credentialData['proof'] = {
@@ -871,6 +904,8 @@ class OIDC4VC {
 
       case OIDC4VCIDraftType.draft13:
       case OIDC4VCIDraftType.draft14:
+      case OIDC4VCIDraftType.draft15:
+      case OIDC4VCIDraftType.draft16:
         credentialData['format'] = format;
 
         if (credentialDefinition != null) {
@@ -1019,7 +1054,7 @@ class OIDC4VC {
       if (publicJwk != null) {
         publicKeyJwk = publicJwk;
       } else {
-        final didDocument = await getDidDocument(
+        final openIdConfiguration = await getOpenIdConfiguration(
           didKey: issuer,
           fromStatusList: fromStatusList,
           isCachingEnabled: isCachingEnabled,
@@ -1031,7 +1066,7 @@ class OIDC4VC {
         publicKeyJwk = readPublicKeyJwk(
           issuer: issuer,
           holderKid: issuerKid,
-          didDocument: didDocument,
+          didDocument: openIdConfiguration,
         );
       }
 
@@ -1110,17 +1145,18 @@ class OIDC4VC {
   Future<String> getIssuerJwt({
     required IssuerTokenParameters tokenParameters,
     required ClientAuthentication clientAuthentication,
-    required String iss,
+    required String? iss,
     String? cnonce,
   }) async {
     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round() - 30;
 
     final payload = {
-      //'iss': iss,
       'iat': iat,
       'aud': tokenParameters.issuer,
     };
-
+    if (iss != null) {
+      payload['iss'] = iss;
+    }
     if (cnonce != null) {
       payload['nonce'] = cnonce;
     }
@@ -1437,6 +1473,7 @@ class OIDC4VC {
   }) async {
     var url = '$baseUrl/.well-known/openid-credential-issuer';
 
+// used to retreive public keys for SD-JWT-VC
     if (isSdJwtVc) {
       final uri = Uri.parse(baseUrl);
 

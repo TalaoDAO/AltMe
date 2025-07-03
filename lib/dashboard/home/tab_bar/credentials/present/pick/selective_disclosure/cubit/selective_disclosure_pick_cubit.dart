@@ -7,17 +7,12 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:oidc4vc/oidc4vc.dart';
 
 part 'selective_disclosure_pick_state.dart';
 part 'selective_disclosure_pick_cubit.g.dart';
 
 class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
-  SelectiveDisclosureCubit({
-    required this.oidc4vc,
-  }) : super(const SelectiveDisclosureState());
-
-  final OIDC4VC oidc4vc;
+  SelectiveDisclosureCubit() : super(const SelectiveDisclosureState());
 
   void dataFromPresentation({
     required CredentialModel credentialModel,
@@ -29,7 +24,7 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
     if (presentationDefinition != null) {
       final selectiveDisclosure = SelectiveDisclosure(credentialModel);
 
-      final credentialData = createJsonByDecryptingSDValues(
+      final credentialData = valuesJson(
         encryptedJson: credentialModel.data,
         selectiveDisclosure: selectiveDisclosure,
       );
@@ -82,6 +77,20 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
       ];
     }
     emit(state.copyWith(selectedClaimsKeyIds: ids));
+  }
+
+  bool isSelectedDisclosure(String claimKeyId, String? sd) {
+    final List<SelectedClaimsKeyIds> selectedClaimsKeys =
+        List.of(state.selectedClaimsKeyIds);
+
+    final selectedKey = selectedClaimsKeys
+        .firstWhereOrNull((ele) => ele.keyId == '$claimKeyId#$sd');
+
+    if (selectedKey != null) {
+      return selectedKey.isSelected;
+    } else {
+      return false;
+    }
   }
 
   void saveIndexOfSDJWT({

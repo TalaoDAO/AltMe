@@ -31,7 +31,7 @@ List<CredentialModel> getCredentialsFromFilterList({
         } else {
           pathLoop:
           for (final path in field.path) {
-            final credentialData = createJsonByDecryptingSDValues(
+            final credentialData = valuesJson(
               encryptedJson: credential.data,
               selectiveDisclosure: SelectiveDisclosure(credential),
             );

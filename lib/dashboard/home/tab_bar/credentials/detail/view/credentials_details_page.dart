@@ -1,14 +1,15 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'dart:convert';
+import 'package:altme/ai/widget/ai_credential_analysis_button.dart';
 import 'package:altme/app/app.dart';
-import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/delete_credential.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/ldp_vc/ldp_vc.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/display_selective_disclosure.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -99,30 +100,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
     });
   }
 
-  Future<void> delete() async {
-    final l10n = context.l10n;
-    final confirm = await showDialog<bool>(
-          context: context,
-          builder: (BuildContext context) {
-            return ConfirmDialog(
-              title: l10n.credentialDetailDeleteConfirmationDialog,
-              yes: l10n.credentialDetailDeleteConfirmationDialogYes,
-              no: l10n.credentialDetailDeleteConfirmationDialogNo,
-            );
-          },
-        ) ??
-        false;
-
-    if (confirm) {
-      final credentialsCubit = context.read<CredentialsCubit>();
-      await credentialsCubit.deleteById(
-        id: widget.credentialModel.id,
-        blockchainType:
-            context.read<WalletCubit>().state.currentAccount!.blockchainType,
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -148,6 +125,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
 
     if (containClaims) {
       credentialImage = SelectiveDisclosure(widget.credentialModel).getPicture;
+    }
+
+    if (widget.credentialModel.format == 'ldp_vc') {
+      credentialImage = LdpVc(widget.credentialModel).getPicture;
     }
 
     final credentialSubjectType = widget.credentialModel.credentialPreview
@@ -360,8 +341,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             DeveloperDetails(
                               credentialModel: widget.credentialModel,
                               showVertically: showVerticalDescription,
-                              statusListIndex: state.statusListIndex,
-                              statusListUri: state.statusListUrl,
                             ),
                           ],
 
@@ -404,45 +383,48 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   MyOutlinedButton(
-                    onPressed:
-                        widget.credentialModel.disAllowDelete ? null : delete,
+                    onPressed: widget.credentialModel.disAllowDelete
+                        ? null
+                        : () => deleteCredential(
+                              context,
+                              widget.credentialModel.id,
+                            ),
                     text: l10n.credentialDetailDeleteCard,
                   ),
                   const SizedBox(height: 8),
                   if (widget.credentialModel.pendingInfo == null) ...[
-                    if (isDeveloperMode)
-                      MyOutlinedButton(
-                        text: l10n.download,
-                        onPressed: () {
-                          if (widget.credentialModel.isEbsiCard) {
-                            /// removing type that was added in add_ebsi_credential.dart
-                            widget.credentialModel.data['credentialSubject']
-                                .remove('type');
-                          }
+                    MyOutlinedButton(
+                      text: l10n.download,
+                      onPressed: () {
+                        if (widget.credentialModel.isEbsiCard) {
+                          /// removing type that was added in add_ebsi_credential.dart
+                          widget.credentialModel.data['credentialSubject']
+                              .remove('type');
+                        }
 
-                          late String data;
-                          final String? jwt = widget.credentialModel.jwt;
-                          if (jwt != null) {
-                            data = jwt;
-                          } else {
-                            data = jsonEncode(widget.credentialModel.data);
-                          }
+                        late String data;
+                        final String? jwt = widget.credentialModel.jwt;
+                        if (jwt != null) {
+                          data = jwt;
+                        } else {
+                          data = jsonEncode(widget.credentialModel.data);
+                        }
 
-                          getLogger(
-                            'CredentialDetailsPage - shared date',
-                          ).i(data);
+                        getLogger(
+                          'CredentialDetailsPage - shared date',
+                        ).i(data);
 
-                          final box = context.findRenderObject() as RenderBox?;
-                          final subject = l10n.shareWith;
+                        final box = context.findRenderObject() as RenderBox?;
+                        final subject = l10n.shareWith;
 
-                          Share.share(
-                            data,
-                            subject: subject,
-                            sharePositionOrigin:
-                                box!.localToGlobal(Offset.zero) & box.size,
-                          );
-                        },
-                      ),
+                        Share.share(
+                          data,
+                          subject: subject,
+                          sharePositionOrigin:
+                              box!.localToGlobal(Offset.zero) & box.size,
+                        );
+                      },
+                    ),
                   ] else ...[
                     MyOutlinedButton(
                       text: l10n.getItNow,
@@ -476,7 +458,19 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                       text: l10n.credentialDetailShare,
                     )
                   else
-                    Container(),
+                    const SizedBox.shrink(),
+                  if (context
+                          .read<ProfileCubit>()
+                          .state
+                          .model
+                          .isDeveloperMode &&
+                      Parameters.isAIServiceEnabled)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8, bottom: 8),
+                      child: AiCredentialAnalysisButton(
+                        credential: widget.credentialModel,
+                      ),
+                    ),
                 ],
               ),
             ),

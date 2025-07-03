@@ -19,7 +19,6 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -48,6 +47,23 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
     context.read<AdvanceSettingsCubit>().setState(
           Parameters.defaultAdvanceSettingsState,
         );
+  },
+);
+
+final ProfileCubitListener = BlocListener<ProfileCubit, ProfileState>(
+  listener: (BuildContext context, ProfileState state) {
+    if (state.status == AppStatus.addEuropeanProfile) {
+      context.read<CredentialsCubit>().addWalletCredential(
+            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+            profileLinkedId: ProfileType.europeanWallet.getVCId,
+          );
+    }
+    if (state.status == AppStatus.addInjiProfile) {
+      context.read<CredentialsCubit>().addWalletCredential(
+            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+            profileLinkedId: ProfileType.inji.getVCId,
+          );
+    }
   },
 );
 
@@ -106,7 +122,10 @@ final credentialsBlocListener =
     }
     if (state.status == CredentialsStatus.delete) {
       if (state.message != null) {
-        Navigator.of(context).pop();
+        Navigator.popUntil(
+          context,
+          (route) => route.settings.name == AltMeStrings.dashBoardPage,
+        );
       }
     }
   },
@@ -231,11 +250,11 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               confirmSecurityVerifierAccess;
 
           final bool isOpenIDUrl = isOIDC4VCIUrl(state.uri!);
-          final bool isPresentation = isSIOPV2OROIDC4VPUrl(state.uri!);
-          final bool isFromDeeplink = state.uri
+          final bool isPresentation = isSiopV2OrOidc4VpUrl(state.uri!);
+          final bool isFromUniversallink = state.uri
                   .toString()
-                  .startsWith(Parameters.authorizeEndPoint) ||
-              state.uri.toString().startsWith(Parameters.oidc4vcUniversalLink);
+                  .startsWith(Parameters.authorizationEndPoint) ||
+              state.uri.toString().startsWith(Parameters.universalLink);
 
           OIDC4VCType? oidc4vcTypeForIssuance;
           dynamic credentialOfferJsonForIssuance;
@@ -254,7 +273,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             );
             return;
           }
-          if (isOpenIDUrl || isFromDeeplink) {
+          if (isOpenIDUrl || isFromUniversallink) {
             final Oidc4vcParameters oidc4vcParameters = await getIssuanceData(
               url: state.uri.toString(),
               client: client,
@@ -309,7 +328,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   );
             } else {
               context.read<QRCodeScanCubit>().emitError(
-                    ResponseMessage(
+                    error: ResponseMessage(
                       message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
                     ),
                   );
@@ -372,7 +391,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                 );
           }
         } catch (e) {
-          context.read<QRCodeScanCubit>().emitError(e);
+          context.read<QRCodeScanCubit>().emitError(error: e);
         }
       }
 
@@ -481,7 +500,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         );
       }
     } catch (e) {
-      context.read<QRCodeScanCubit>().emitError(e);
+      context.read<QRCodeScanCubit>().emitError(error: e);
     }
   },
 );
@@ -501,8 +520,7 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
       if (state.status != BeaconStatus.signPayload) {
         final manageNetworkCubit = context.read<ManageNetworkCubit>();
 
-        final incomingNetworkType =
-            describeEnum(beaconRequest.request!.network!.type!);
+        final incomingNetworkType = beaconRequest.request!.network!.type!.name;
         final currentNetworkType =
             manageNetworkCubit.state.network.networkname.toLowerCase();
 
@@ -654,8 +672,8 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
       );
     }
     if (state.status == AppStatus.successAdd) {
-      // TODO: when we create vc+sd-jwt associated address cards, we need
-      //to check also for vc+sd-jwt
+      // TODO(hawkbee): when we create vc+sd-jwt associated address cards
+      // we need to check also for vc+sd-jwt
       if (context
               .read<ProfileCubit>()
               .state

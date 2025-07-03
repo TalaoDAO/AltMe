@@ -41,7 +41,6 @@ version
 .packages.generated
 
 # Flutter/Dart/Pub related
-**/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
 .flutter-plugins
@@ -64,7 +63,7 @@ unlinked_spec.ds
 **/android/gradlew.bat
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
-**/android/key.properties
+**/android/key.properties*
 **/android/.idea/
 *.jks
 
@@ -137,3 +136,8 @@ app.*.map.json
 #private key related
 *.env
 *.env.dev
+*.env.main
+*.env.COMP
+
+#case sensitive files issue on macOS
+doc/api/

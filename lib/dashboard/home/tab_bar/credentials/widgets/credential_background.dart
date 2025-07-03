@@ -27,7 +27,8 @@ class CredentialBackground extends StatelessWidget {
               credentialModel.credentialPreview.credentialSubjectModel
                   .credentialSubjectType
                   .backgroundColor(credentialModel),
-          shapeColor: Theme.of(context).colorScheme.primary.withOpacity(0.05),
+          shapeColor:
+              Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
           value: 0,
           shapeSize: 256,
           anchors: showBgDecoration

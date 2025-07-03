@@ -4,14 +4,13 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/verify_credential.dart';
+import 'package:altme/dashboard/profile/profile_provider/get_profile_from_provider.dart';
+import 'package:altme/dashboard/profile/profile_provider/get_wallet_attestation_data.dart';
 import 'package:altme/matrix_notification/matrix_notification.dart';
-import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:oidc4vc/oidc4vc.dart';
-import 'package:uuid/uuid.dart';
 
 part 'enterprise_cubit.g.dart';
 
@@ -54,7 +53,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       }
 
       /// get vc and store it in the wallet
-      final walletAttestationData = await getWalletAttestationData(url);
+      final walletAttestationData = await fetchWalletAttestationData(url);
 
       /// request the configuration and verify
       await verifyAndGetConfiguration(
@@ -85,27 +84,13 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     required String url,
   }) async {
     /// request the configuration
-    final encodedData = utf8.encode('$email:$password');
-    final base64Encoded = base64UrlEncode(encodedData).replaceAll('=', '');
-
-    final headers = <String, dynamic>{
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic $base64Encoded',
-    };
-
-    final data = <String, dynamic>{
-      'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-      'assertion': jwtVc,
-    };
-
-    final response = await client.post(
-      '$url/configuration',
-      headers: headers,
-      data: data,
+    final profileSettingJson = await getProfileFromProvider(
+      email: email,
+      password: password,
+      jwtVc: jwtVc,
+      url: url,
+      client: client,
     );
-
-    final profileSettingJson =
-        jsonEncode(profileCubit.jwtDecode.parseJwt(response as String));
 
     final savedEmail = await profileCubit.secureStorageProvider.get(
       SecureStorageKeys.enterpriseEmail,
@@ -190,7 +175,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       );
 
       final blockchainOptions = profileSetting.blockchainOptions;
-      if (blockchainOptions != null) {
+      if (blockchainOptions != null && Parameters.walletHandlesCrypto) {
         await setUpBlockChainOptions(
           blockchainOptions: blockchainOptions,
           manageNetworkCubit: manageNetworkCubit,
@@ -199,10 +184,8 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
       // if enterprise and walletAttestation data is available and added
       await credentialsCubit.addWalletCredential(
-        blockchainType:
-            credentialsCubit.walletCubit.state.currentAccount?.blockchainType,
         qrCodeScanCubit: qrCodeScanCubit,
-        uri: Uri.parse(Parameters.walletIssuer),
+        profileLinkedId: ProfileType.enterprise.getVCId,
       );
 
       emit(
@@ -224,171 +207,14 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     }
   }
 
-  Future<String> getNonce(String url) async {
-    final dynamic getRepsponse = await client.get('$url/nonce');
-    final nonce = getRepsponse['nonce'].toString();
-    return nonce;
-  }
-
-  Future<Map<String, dynamic>> getDataForRequest(String nonce) async {
-    /// get private key
-    final p256KeyForWallet =
-        await getWalletAttestationP256Key(profileCubit.secureStorageProvider);
-    final privateKey = jsonDecode(p256KeyForWallet) as Map<String, dynamic>;
-
-    final customOidc4vcProfile = profileCubit.state.model.profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile;
-
-    final tokenParameters = TokenParameters(
-      privateKey: privateKey,
-      did: '',
-      kid: null,
-      mediaType: MediaType.walletAttestation,
-      clientType: customOidc4vcProfile.clientType,
-      proofHeaderType: customOidc4vcProfile.proofHeader,
-      clientId: customOidc4vcProfile.clientId ?? '',
-    );
-
-    final thumbPrint = tokenParameters.thumbprint;
-
-    final publicJWKString = sortedPublcJwk(p256KeyForWallet);
-    final publicJWK = jsonDecode(publicJWKString) as Map<String, dynamic>;
-
-    final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-
-    final payload = {
-      'iss': thumbPrint,
-      'wallet': Parameters.appName.toLowerCase(),
-      'aud': 'https://wallet-provider.altme.io',
-      'jti': const Uuid().v4(),
-      'nonce': nonce,
-      'cnf': {
-        'jwk': {
-          ...publicJWK,
-          'kid': thumbPrint,
-        },
-      },
-      'iat': iat,
-      'exp': iat + 1000,
-    };
-
-    /// sign and get token
-    final jwtToken = generateToken(
-      payload: payload,
-      tokenParameters: tokenParameters,
-    );
-
-    final data = {
-      'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-      'assertion': jwtToken,
-    };
-    return data;
-  }
-
-  Future<String> getWalletAttestationData(String url) async {
-    /// GET nonce
-    final nonce = await getNonce(url);
-
-    /// get data to send to attestation request
-    final Map<String, dynamic> data = await getDataForRequest(nonce);
-
-    /// get vc
-    final response = await client.post(
-      '$url/token',
-      headers: <String, dynamic>{
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      data: data,
-    );
-
-    final jwtVc = response.toString();
-
-    /// parse
-    final header = profileCubit.jwtDecode.parseJwtHeader(jwtVc);
-    final issuerKid = header['kid'].toString();
-    final did = issuerKid.split('#')[0];
-
-    /// verify
-    final VerificationType isVerified = await verifyEncodedData(
-      issuer: did,
+  Future<String> fetchWalletAttestationData(String url) async {
+    return getWalletAttestationData(
+      url: url,
+      client: client,
+      secureStorageProvider: profileCubit.secureStorageProvider,
+      profileModel: profileCubit.state.model,
       jwtDecode: profileCubit.jwtDecode,
-      jwt: jwtVc,
-      useOAuthAuthorizationServerLink:
-          useOauthServerAuthEndPoint(profileCubit.state.model),
     );
-
-    if (isVerified != VerificationType.verified) {
-      throw ResponseMessage(
-        message: ResponseString.RESPONSE_STRING_invalidStatus,
-      );
-    }
-
-    final payload = profileCubit.jwtDecode.parseJwt(jwtVc);
-    final status = payload['status'];
-
-    if (status != null && status is Map<String, dynamic>) {
-      final statusList = status['status_list'];
-      if (statusList != null && statusList is Map<String, dynamic>) {
-        final uri = statusList['uri'];
-        final idx = statusList['idx'];
-
-        if (idx != null && idx is int && uri != null && uri is String) {
-          final headers = {
-            'Content-Type': 'application/json; charset=UTF-8',
-            'accept': 'application/statuslist+jwt',
-          };
-
-          final response = await client.get(
-            uri,
-            headers: headers,
-            options: Options().copyWith(
-              sendTimeout: const Duration(seconds: 10),
-              receiveTimeout: const Duration(seconds: 10),
-            ),
-          );
-
-          final payload = profileCubit.jwtDecode.parseJwt(response.toString());
-
-          /// verify the signature of the VC with the kid of the JWT
-          final VerificationType isVerified = await verifyEncodedData(
-            issuer: payload['iss'].toString(),
-            jwtDecode: profileCubit.jwtDecode,
-            jwt: response.toString(),
-            fromStatusList: true,
-            useOAuthAuthorizationServerLink:
-                useOauthServerAuthEndPoint(profileCubit.state.model),
-          );
-
-          if (isVerified != VerificationType.verified) {
-            throw ResponseMessage(
-              message:
-                  ResponseString.RESPONSE_STRING_statusListInvalidSignature,
-            );
-          }
-
-          final newStatusList = payload['status_list'];
-          if (newStatusList != null && newStatusList is Map<String, dynamic>) {
-            final lst = newStatusList['lst'].toString();
-
-            final bit = getBit(index: idx, encodedList: lst);
-
-            if (bit == 0) {
-              // active
-            } else {
-              // revoked
-              throw ResponseMessage(
-                message: ResponseString.RESPONSE_STRING_theWalletIsSuspended,
-              );
-            }
-          }
-        }
-      }
-    }
-
-    await profileCubit.secureStorageProvider
-        .set(SecureStorageKeys.walletAttestationData, jwtVc);
-
-    return jwtVc;
   }
 
   Future<void> getWalletAttestationBitStatus() async {
@@ -557,7 +383,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       }
 
       final blockchainOptions = profileSetting.blockchainOptions;
-      if (blockchainOptions != null) {
+      if (blockchainOptions != null && Parameters.walletHandlesCrypto) {
         await setUpBlockChainOptions(
           blockchainOptions: blockchainOptions,
           manageNetworkCubit: manageNetworkCubit,

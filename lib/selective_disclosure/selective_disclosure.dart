@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/helper_functions/value_type_if_null.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:json_path/json_path.dart';
@@ -164,7 +165,8 @@ class SelectiveDisclosure {
   }
 
   String? get getPicture {
-    if (credentialModel.format.toString() != VCFormatType.vcSdJWT.vcValue) {
+    if (credentialModel.format.toString() != VCFormatType.vcSdJWT.vcValue ||
+        credentialModel.format.toString() != VCFormatType.dcSdJWT.vcValue) {
       return null;
     }
 
@@ -174,24 +176,33 @@ class SelectiveDisclosure {
     final claims = credentialSupported['claims'];
     if (claims is! Map<String, dynamic>) return null;
 
-    final picture = claims['picture'];
-    if (picture == null) return null;
-    if (picture is! Map<String, dynamic>) return null;
+    for (final key in Parameters.pictureOnCardKeyList) {
+      // Use JsonPath to check if the key exists anywhere in the claims
+      // structure
+      final jsonPath = JsonPath(r'$..' + key);
+      final matches = jsonPath.read(claims);
 
-    final valueType = picture['value_type'];
-    if (valueType == null) return null;
+      // keyPresent is true if the key is found at any level in the structure
+      final keyPresent = matches.isNotEmpty;
 
-    if (valueType == 'image/jpeg') {
-      final (claimsData, _) = getClaimsData(
-        key: 'picture',
-        parentKeyId: null,
-      );
-
-      if (claimsData.isEmpty) return null;
-      return claimsData[0].data;
-    } else {
-      return null;
+      if (keyPresent) {
+        final value = matches.first.value;
+        if (value is Map<String, dynamic>) {
+          final (claimsData, _) = getClaimsData(
+            key: key,
+            parentKeyId: null,
+          );
+          if (claimsData.isEmpty) return null;
+          final valueType =
+              value['value_type'] ?? valueTypeIfNull(claimsData[0].data);
+          if (Parameters.pictureOnCardValueTypeList.contains(valueType)) {
+            return claimsData[0].data;
+          }
+        }
+      }
     }
+
+    return null;
   }
 
   (List<ClaimsData>, String?) getClaimsData({
@@ -233,7 +244,39 @@ class SelectiveDisclosure {
           ),
         );
       } catch (e) {
-        data = null;
+        if (parentKeyId != null) {
+          final JsonPath fallbackDataPath = JsonPath(
+            // ignore: prefer_interpolation_to_compose_strings
+            r'$..["' + key + '"]',
+          );
+          try {
+            final uncryptedDataPath =
+                fallbackDataPath.read(extractedValuesFromJwt).first;
+            data = uncryptedDataPath.value;
+
+            value.add(
+              ClaimsData(
+                isfromDisclosureOfJWT: true,
+                data: data is Map ? jsonEncode(data) : data.toString(),
+              ),
+            );
+          } catch (e) {
+            try {
+              final credentialModelPath =
+                  fallbackDataPath.read(credentialModel.data).first;
+              data = credentialModelPath.value;
+
+              value.add(
+                ClaimsData(
+                  isfromDisclosureOfJWT: false,
+                  data: data is Map ? jsonEncode(data) : data.toString(),
+                ),
+              );
+            } catch (e) {
+              data = null;
+            }
+          }
+        }
       }
     }
 
@@ -310,8 +353,7 @@ class SelectiveDisclosure {
           final sdList = value['_sd'] as List;
           for (final sdElement in sdList) {
             for (final element in disclosureListToContent.entries.toList()) {
-              final digest =
-                  sh256HashOfContent(element.value.toString());
+              final digest = sh256HashOfContent(element.value.toString());
               if (digest == sdElement) {
                 final toto = getMapFromList(
                   jsonDecode(element.value.toString()) as List,
@@ -413,8 +455,7 @@ class SelectiveDisclosure {
           final digestList = value['_sd'] as List;
           for (final digest in digestList) {
             for (final element in disclosureListToContent.entries.toList()) {
-              final digestFromSd =
-                  sh256HashOfContent(element.value.toString());
+              final digestFromSd = sh256HashOfContent(element.value.toString());
               if (digestFromSd == digest) {
                 final keyFromSd = getMapFromList(
                   jsonDecode(element.value.toString()) as List,

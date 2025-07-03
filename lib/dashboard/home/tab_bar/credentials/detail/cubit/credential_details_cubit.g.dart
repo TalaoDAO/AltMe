@@ -20,8 +20,6 @@ CredentialDetailsState _$CredentialDetailsStateFromJson(
               _$CredentialDetailTabStatusEnumMap,
               json['credentialDetailTabStatus']) ??
           CredentialDetailTabStatus.informations,
-      statusListUrl: json['statusListUrl'] as String?,
-      statusListIndex: (json['statusListIndex'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$CredentialDetailsStateToJson(
@@ -32,8 +30,6 @@ Map<String, dynamic> _$CredentialDetailsStateToJson(
       'credentialStatus': _$CredentialStatusEnumMap[instance.credentialStatus],
       'credentialDetailTabStatus': _$CredentialDetailTabStatusEnumMap[
           instance.credentialDetailTabStatus]!,
-      'statusListUrl': instance.statusListUrl,
-      'statusListIndex': instance.statusListIndex,
     };
 
 const _$AppStatusEnumMap = {
@@ -53,6 +49,8 @@ const _$AppStatusEnumMap = {
   AppStatus.restoreWallet: 'restoreWallet',
   AppStatus.successAdd: 'successAdd',
   AppStatus.successUpdate: 'successUpdate',
+  AppStatus.addEuropeanProfile: 'addEuropeanProfile',
+  AppStatus.addInjiProfile: 'addInjiProfile',
 };
 
 const _$CredentialStatusEnumMap = {

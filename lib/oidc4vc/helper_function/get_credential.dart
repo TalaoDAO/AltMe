@@ -103,6 +103,7 @@ Future<
         privateKey: privateKey,
         formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
         oidc4vcParameters: oidc4vcParameters,
+        clientId: clientId,
       );
 
       if (profileCubit.state.model.isDeveloperMode) {
@@ -161,6 +162,7 @@ Future<
       privateKey: privateKey,
       formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
       oidc4vcParameters: oidc4vcParameters,
+      clientId: clientId,
     );
 
     if (profileCubit.state.model.isDeveloperMode) {

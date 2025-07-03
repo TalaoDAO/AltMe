@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'state_message.g.dart';
@@ -13,6 +14,7 @@ class StateMessage extends Equatable {
     this.injectedMessage,
     this.showDialog = false,
     this.duration = const Duration(milliseconds: 2 * 800),
+    this.callToAction,
   });
 
   factory StateMessage.fromJson(Map<String, dynamic> json) =>
@@ -24,6 +26,7 @@ class StateMessage extends Equatable {
     this.injectedMessage,
     this.showDialog = false,
     this.duration = const Duration(milliseconds: 2 * 800),
+    this.callToAction,
   }) : type = MessageType.error;
 
   const StateMessage.warning({
@@ -32,6 +35,7 @@ class StateMessage extends Equatable {
     this.injectedMessage,
     this.showDialog = false,
     this.duration = const Duration(milliseconds: 2 * 800),
+    this.callToAction,
   }) : type = MessageType.warning;
 
   const StateMessage.info({
@@ -40,6 +44,7 @@ class StateMessage extends Equatable {
     this.injectedMessage,
     this.showDialog = false,
     this.duration = const Duration(milliseconds: 2 * 800),
+    this.callToAction,
   }) : type = MessageType.info;
 
   const StateMessage.success({
@@ -48,6 +53,7 @@ class StateMessage extends Equatable {
     this.injectedMessage,
     this.showDialog = false,
     this.duration = const Duration(milliseconds: 2 * 800),
+    this.callToAction,
   }) : type = MessageType.success;
 
   final MessageType type;
@@ -57,6 +63,8 @@ class StateMessage extends Equatable {
   final String? injectedMessage;
   final bool showDialog;
   final Duration duration;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final Widget? callToAction;
 
   Map<String, dynamic> toJson() => _$StateMessageToJson(this);
 
@@ -68,5 +76,6 @@ class StateMessage extends Equatable {
         injectedMessage,
         showDialog,
         duration,
+        callToAction,
       ];
 }

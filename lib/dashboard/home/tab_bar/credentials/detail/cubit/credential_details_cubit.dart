@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/verify_credential.dart';
@@ -13,7 +14,6 @@ import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'credential_details_cubit.g.dart';
-
 part 'credential_details_state.dart';
 
 class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
@@ -67,8 +67,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
             final statusList = status['status_list'];
             if (statusList != null && statusList is Map<String, dynamic>) {
               statusListUri = statusList['uri']?.toString();
-              final idx = statusList['idx'];
-              statusListIndex = idx is int ? idx : null;
+              statusListIndex = int.tryParse(statusList['idx'].toString());
             }
           }
         }
@@ -77,8 +76,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           state.copyWith(
             credentialStatus: CredentialStatus.active,
             status: AppStatus.idle,
-            statusListIndex: statusListIndex,
-            statusListUrl: statusListUri,
           ),
         );
         return;
@@ -92,8 +89,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
             state.copyWith(
               credentialStatus: CredentialStatus.expired,
               status: AppStatus.idle,
-              statusListIndex: statusListIndex,
-              statusListUrl: statusListUri,
             ),
           );
           return;
@@ -109,26 +104,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       final listOfSd = collectSdValues(data);
 
       if (claims != null && listOfSd.isNotEmpty) {
-        // final selectiveDisclosure = SelectiveDisclosure(item);
-        // final decryptedDatas = selectiveDisclosure.contents;
-
-        // /// check if sd already contain sh256 hash
-        // for (final element in decryptedDatas) {
-        //   final sh256Hash = profileCubit.oidc4vc.sh256HashOfContent(element);
-
-        //   if (!listOfSd.contains(sh256Hash)) {
-        //     emit(
-        //       state.copyWith(
-        //         credentialStatus: CredentialStatus.invalidSignature,
-        //         status: AppStatus.idle,
-        //         statusListIndex: statusListIndex,
-        //         statusListUrl: statusListUri,
-        //       ),
-        //     );
-        //     return;
-        //   }
-        // }
-
         /// check the status
         final status = item.data['status'];
 
@@ -136,9 +111,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           final statusList = status['status_list'];
           if (statusList != null && statusList is Map<String, dynamic>) {
             statusListUri = statusList['uri']?.toString();
-
-            final idx = statusList['idx'];
-            statusListIndex = idx is int ? idx : null;
+            statusListIndex = int.tryParse(statusList['idx'].toString());
 
             if (statusListUri != null && statusListIndex is int) {
               final headers = {
@@ -175,8 +148,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                     credentialStatus:
                         CredentialStatus.statusListInvalidSignature,
                     status: AppStatus.idle,
-                    statusListIndex: statusListIndex,
-                    statusListUrl: statusListUri,
                   ),
                 );
                 return;
@@ -198,8 +169,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                       credentialStatus:
                           CredentialStatus.statusListInvalidSignature,
                       status: AppStatus.idle,
-                      statusListIndex: statusListIndex,
-                      statusListUrl: statusListUri,
                     ),
                   );
                   return;
@@ -212,85 +181,21 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
 
       final credentialStatus = item.credentialPreview.credentialStatus;
       if (credentialStatus != null) {
+        if (credentialStatus is Map<String, dynamic>) {
+          final isStatusInvalid = await checkStatusList(
+            credentialStatus: credentialStatus,
+            item: item,
+          );
+          if (isStatusInvalid) return;
+        }
         if (credentialStatus is List<dynamic>) {
           for (final iteratedData in credentialStatus) {
             if (iteratedData is Map<String, dynamic>) {
-              final data = CredentialStatusField.fromJson(iteratedData);
-
-              statusListUri = data.statusListCredential;
-              final headers = {
-                'Content-Type': 'application/json; charset=UTF-8',
-                'accept': 'application/statuslist+jwt',
-              };
-
-              final response = await client.get(
-                statusListUri,
-                headers: headers,
-                isCachingEnabled: customOidc4vcProfile.statusListCache,
-                options: Options().copyWith(
-                  sendTimeout: const Duration(seconds: 10),
-                  receiveTimeout: const Duration(seconds: 10),
-                ),
+              final isStatusInvalid = await checkStatusList(
+                credentialStatus: iteratedData,
+                item: item,
               );
-
-              final payload = jwtDecode.parseJwt(response.toString());
-
-              // verify the signature of the VC with the kid of the JWT
-              final VerificationType isVerified = await verifyEncodedData(
-                issuer: payload['iss']?.toString() ?? item.issuer,
-                jwtDecode: jwtDecode,
-                jwt: response.toString(),
-                fromStatusList: true,
-                isCachingEnabled: customOidc4vcProfile.statusListCache,
-                useOAuthAuthorizationServerLink:
-                    useOauthServerAuthEndPoint(profileCubit.state.model),
-              );
-
-              if (isVerified != VerificationType.verified) {
-                emit(
-                  state.copyWith(
-                    credentialStatus:
-                        CredentialStatus.statusListInvalidSignature,
-                    status: AppStatus.idle,
-                    statusListIndex: statusListIndex,
-                    statusListUrl: statusListUri,
-                  ),
-                );
-                return;
-              }
-
-              final vc = payload['vc'];
-              if (vc != null && vc is Map<String, dynamic>) {
-                final credentialSubject = vc['credentialSubject'];
-                if (credentialSubject != null &&
-                    credentialSubject is Map<String, dynamic>) {
-                  final encodedList = credentialSubject['encodedList'];
-
-                  if (encodedList != null && encodedList is String) {
-                    statusListIndex = int.parse(data.statusListIndex);
-
-                    final bit = getBit(
-                      index: statusListIndex,
-                      encodedList: encodedList,
-                    );
-
-                    if (bit == 0) {
-                      // active
-                    } else {
-                      // revoked
-                      emit(
-                        state.copyWith(
-                          credentialStatus: CredentialStatus.invalidStatus,
-                          status: AppStatus.idle,
-                          statusListIndex: statusListIndex,
-                          statusListUrl: statusListUri,
-                        ),
-                      );
-                      return;
-                    }
-                  }
-                }
-              }
+              if (isStatusInvalid) return;
             }
           }
         }
@@ -320,7 +225,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           publicKeyJwk: publicKeyJwk,
           useOAuthAuthorizationServerLink:
               useOauthServerAuthEndPoint(profileCubit.state.model),
-          isSdJwtVc: item.getFormat == VCFormatType.vcSdJWT.vcValue,
+          isSdJwtVc: item.getFormat == VCFormatType.vcSdJWT.vcValue ||
+              item.getFormat == VCFormatType.dcSdJWT.vcValue,
         );
 
         if (isVerified == VerificationType.verified) {
@@ -328,8 +234,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
             state.copyWith(
               credentialStatus: CredentialStatus.active,
               status: AppStatus.idle,
-              statusListIndex: statusListIndex,
-              statusListUrl: statusListUri,
             ),
           );
         } else {
@@ -337,12 +241,10 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
             state.copyWith(
               credentialStatus: CredentialStatus.invalidSignature,
               status: AppStatus.idle,
-              statusListIndex: statusListIndex,
-              statusListUrl: statusListUri,
             ),
           );
         }
-      }  else {
+      } else {
         if (item.credentialPreview.credentialStatus != null) {
           final CredentialStatus credentialStatus =
               await item.checkRevocationStatus();
@@ -353,8 +255,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
               state.copyWith(
                 credentialStatus: CredentialStatus.invalidStatus,
                 status: AppStatus.idle,
-                statusListIndex: statusListIndex,
-                statusListUrl: statusListUri,
               ),
             );
           }
@@ -417,5 +317,90 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         ),
       );
     }
+  }
+
+  Future<bool> checkStatusList({
+    required Map<String, dynamic> credentialStatus,
+    required CredentialModel item,
+  }) async {
+    final data = CredentialStatusField.fromJson(credentialStatus);
+
+    final statusListUri = data.statusListCredential;
+    final headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+      // 'accept': 'application/statuslist+jwt',
+    };
+    final customOidc4vcProfile = profileCubit.state.model.profileSetting
+        .selfSovereignIdentityOptions.customOidc4vcProfile;
+
+    // TODO(hawkbee): Using Dio directly is solving the issue but it probably
+    /// means an issue.
+    /// in the paramaers of DioClient
+    /// Status invalid of an emailpass in a jwt_vc_json format #3283
+    final response = await Dio().get<String>(
+      statusListUri,
+      options: Options(
+        headers: headers,
+        sendTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 10),
+      ),
+    );
+
+    final payload = jwtDecode.parseJwt(response.toString());
+
+    // verify the signature of the VC with the kid of the JWT
+    final VerificationType isVerified = await verifyEncodedData(
+      issuer: payload['iss']?.toString() ?? item.issuer,
+      jwtDecode: jwtDecode,
+      jwt: response.toString(),
+      fromStatusList: true,
+      isCachingEnabled: customOidc4vcProfile.statusListCache,
+      useOAuthAuthorizationServerLink:
+          useOauthServerAuthEndPoint(profileCubit.state.model),
+    );
+
+    if (isVerified != VerificationType.verified) {
+      emit(
+        state.copyWith(
+          credentialStatus: CredentialStatus.statusListInvalidSignature,
+          status: AppStatus.idle,
+        ),
+      );
+      return true;
+    }
+
+    final vc = payload['vc'];
+    if (vc != null && vc is Map<String, dynamic>) {
+      final credentialSubject = vc['credentialSubject'];
+      if (credentialSubject != null &&
+          credentialSubject is Map<String, dynamic>) {
+        final encodedList = credentialSubject['encodedList'];
+
+        if (encodedList != null && encodedList is String) {
+          final statusListIndex = int.tryParse(data.statusListIndex);
+          if (statusListIndex == null) {
+            throw Exception('statusListIndex is not a numeric value');
+          }
+          final bit = getBit(
+            index: statusListIndex,
+            encodedList: encodedList,
+          );
+
+          if (bit == 0) {
+            // active
+          } else {
+            // revoked
+            emit(
+              state.copyWith(
+                credentialStatus: CredentialStatus.invalidStatus,
+                status: AppStatus.idle,
+              ),
+            );
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 }

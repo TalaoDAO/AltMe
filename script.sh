@@ -1,3 +1,21 @@
+# function env wich take string project as an argument and copy .env.project to .env
+function env {
+  echo "env"
+  if [ -f ".env.$1" ]; then
+    cp ".env.$1" ".env"
+    chmod g-w ".env"
+    echo "copy .env.$1 to .env"
+  else
+    echo "file .env.$1 not found"
+  fi
+  if [ -f "android/key.properties.$1" ]; then
+    cp "android/key.properties.$1" "android/key.properties"
+    chmod g-w "android/key.properties"
+    echo "copy android/key.properties.$1 to android/key.properties"
+  else
+    echo "file android/key.properties.$1 not found"
+  fi
+}  
 
 function pub {
   flutter clean
@@ -82,6 +100,14 @@ then
 elif [[ "$*" == *-pub* ]];
 then
 pub
+elif [[ "$*" == *-main* ]];
+# call env function with main as project
+then
+  env main
+elif [[ "$*" == *-COMP* ]];
+# call env function with COMP as project
+then
+  env COMP
 else
   pub
   buildRunner

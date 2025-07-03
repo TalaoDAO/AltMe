@@ -10,7 +10,7 @@ class SearchItemShimmer extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: BackgroundCard(
         padding: EdgeInsets.zero,
-        color: Theme.of(context).colorScheme.surface.withOpacity(0.07),
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.07),
         child: const AspectRatio(
           aspectRatio: Sizes.credentialAspectRatio,
           child: ShimmerWidget.rectangular(

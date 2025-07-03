@@ -12,6 +12,7 @@ class ErrorDialog extends StatelessWidget {
     this.dialogColor,
     this.bgColor,
     this.textColor,
+    this.callToAction,
   });
 
   final String title;
@@ -20,6 +21,7 @@ class ErrorDialog extends StatelessWidget {
   final Color? dialogColor;
   final Color? bgColor;
   final Color? textColor;
+  final Widget? callToAction;
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +56,10 @@ class ErrorDialog extends StatelessWidget {
                 text: l10n.moreDetails,
                 verticalSpacing: 14,
                 fontSize: 15,
-                borderColor:
-                    Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                borderColor: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.2),
                 backgroundColor: background,
                 textColor: textColor,
                 borderRadius: Sizes.smallRadius,
@@ -81,6 +85,10 @@ class ErrorDialog extends StatelessWidget {
                 Navigator.of(context).pop(true);
               },
             ),
+            if (callToAction != null) ...[
+              const SizedBox(height: 10),
+              callToAction!,
+            ],
             const SizedBox(height: 10),
           ],
         ),

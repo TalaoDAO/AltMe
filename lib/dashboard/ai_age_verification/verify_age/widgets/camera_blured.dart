@@ -21,7 +21,7 @@ class CameraBlured extends StatelessWidget {
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0),
+              color: Colors.white.withValues(alpha: 0),
             ),
           ),
         ),

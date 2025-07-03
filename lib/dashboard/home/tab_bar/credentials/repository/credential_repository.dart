@@ -46,6 +46,7 @@ class CredentialsRepository {
   }
 
   Future<int> deleteAll() async {
+
     final data = await _secureStorageProvider.getAllValues();
 
     data.removeWhere(

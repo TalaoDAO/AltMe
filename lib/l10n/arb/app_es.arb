@@ -335,7 +335,7 @@
   "blockchainAccounts": "Cuentas de blockchain",
   "educationCredentials": "Credenciales de formación",
   "educationDiscoverCredentials": "Verifique su trayectoria académica",
-  "educationCredentialsDiscoverSubtitle": "Obtenga su diploma digital (EBSI)",
+  "educationCredentialsDiscoverSubtitle": "Obtenga su diploma digital",
   "security": "Seguridad",
   "networkAndRegistries": "Red y registros",
   "chooseNetwork": "Elegir red",
@@ -1168,5 +1168,6 @@
     "placeholders": {
       "domain": {}
     }
-  }
+  },
+  "deleteDigit": "Eliminar"
 }

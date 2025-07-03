@@ -556,15 +556,6 @@ Future<(String, String)> getDidAndKid({
       kid = await profileCubit.didKitProvider
           .keyToVerificationMethod(didMethod, privateKey);
     case DidKeyType.jwtClientAttestation:
-      if (profileCubit.state.model.walletType != WalletType.enterprise) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'Please switch to enterprise account',
-          },
-        );
-      }
-
       final walletAttestationData = await profileCubit.secureStorageProvider
           .get(SecureStorageKeys.walletAttestationData);
 
@@ -663,10 +654,11 @@ bool isOIDC4VCIUrl(Uri uri) {
       uri.toString().startsWith(Parameters.walletOfferDeepLink);
 }
 
-bool isSIOPV2OROIDC4VPUrl(Uri uri) {
+bool isSiopV2OrOidc4VpUrl(Uri uri) {
   final isOpenIdUrl = uri.toString().startsWith('openid://?') ||
       uri.toString().startsWith('openid-vc://?') ||
       uri.toString().startsWith(Parameters.walletPresentationDeepLink) ||
+      uri.toString().startsWith('openid4vp://') ||
       uri.toString().startsWith('openid-hedera://?') ||
       uri.toString().startsWith('haip://?') &&
           (uri.queryParameters['request_uri'] != null ||
@@ -674,7 +666,7 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
 
   final isSiopv2Url = uri.toString().startsWith('siopv2://?');
   final isAuthorizeEndPoint =
-      uri.toString().startsWith(Parameters.authorizeEndPoint) ||
+      uri.toString().startsWith(Parameters.authorizationEndPoint) ||
           uri.toString().startsWith('haip://authorize?');
 
   return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;
@@ -682,6 +674,8 @@ bool isSIOPV2OROIDC4VPUrl(Uri uri) {
 
 Future<void> handleErrorForOID4VCI({
   required Oidc4vcParameters oidc4vcParameters,
+  required DidKeyType didKeyType,
+  required ClientType clientType,
 }) async {
   List<dynamic>? subjectSyntaxTypesSupported =
       oidc4vcParameters.issuerOpenIdConfiguration.subjectSyntaxTypesSupported;
@@ -736,14 +730,33 @@ Future<void> handleErrorForOID4VCI({
     );
   }
 
-  if (subjectSyntaxTypesSupported != null &&
-      !subjectSyntaxTypesSupported.contains('did:key')) {
-    throw ResponseMessage(
-      data: {
-        'error': 'subject_syntax_type_not_supported',
-        'error_description': 'The subject syntax type is not supported.',
-      },
-    );
+// Check we are handling one of the subjectSyntaxTypesSupported, if present
+// #3285
+
+  if (subjectSyntaxTypesSupported != null) {
+    switch (clientType) {
+      case ClientType.p256JWKThumprint:
+        break;
+      case ClientType.confidential:
+        break;
+      case ClientType.did:
+        // check if subjectSyntaxTypesSupported has an element which start with
+        // didKeyType.subjectSyntaxTypesSupported
+        if (subjectSyntaxTypesSupported
+            .where(
+              (element) => element.toString().startsWith(
+                    didKeyType.subjectSyntaxTypesSupported,
+                  ),
+            )
+            .isEmpty) {
+          throw ResponseMessage(
+            data: {
+              'error': 'subject_syntax_type_not_supported',
+              'error_description': 'The subject syntax type is not supported.',
+            },
+          );
+        }
+    }
   }
 }
 
@@ -957,7 +970,7 @@ Future<String> getHost({
 }
 
 bool isURL(String input) {
-  final bool uri = Uri.tryParse(input)?.hasAbsolutePath ?? false;
+  final bool uri = Uri.tryParse(input)?.host.isNotEmpty ?? false;
   return uri;
 }
 
@@ -1239,7 +1252,7 @@ ${credentialData != null ? const JsonEncoder.withIndent('  ').convert(credential
 ''';
 }
 
-Future<String> getFormattedStringOIDC4VPSIOPV2({
+Future<String> getFormattedStringOIDC4VPSIOPV2FromRequest({
   required String url,
   required DioClient client,
   required Map<String, dynamic>? response,
@@ -1255,7 +1268,23 @@ Future<String> getFormattedStringOIDC4VPSIOPV2({
     uri: Uri.parse(url),
   );
 
-  final data = '''
+  final data = getFormattedStringOIDC4VPSIOPV2(
+    url,
+    response,
+    clientMetaData,
+    presentationDefinition,
+  );
+
+  return data;
+}
+
+String getFormattedStringOIDC4VPSIOPV2(
+  String url,
+  Map<String, dynamic>? response,
+  Map<String, dynamic>? clientMetaData,
+  Map<String, dynamic>? presentationDefinition,
+) {
+  return '''
 <b>SCHEME :</b> ${getSchemeFromUrl(url)}\n
 <b>AUTHORIZATION REQUEST :</b>
 ${response != null ? const JsonEncoder.withIndent('  ').convert(response) : Uri.decodeComponent(url)}\n
@@ -1264,8 +1293,6 @@ ${clientMetaData != null ? const JsonEncoder.withIndent('  ').convert(clientMeta
 <b>PRESENTATION DEFINITION  :</b> 
 ${presentationDefinition != null ? const JsonEncoder.withIndent('  ').convert(presentationDefinition) : 'None'}
 ''';
-
-  return data;
 }
 
 String getSchemeFromUrl(String url) {
@@ -1289,6 +1316,7 @@ Future<dynamic> fetchRequestUriPayload({
       error: e,
       stackTrace: s,
     );
+    data = '';
   }
   return data;
 }
@@ -1537,17 +1565,10 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
       final credSupportedDisplay = credSupported.display;
 
       if (credSupportedDisplay != null) {
-        display = credSupportedDisplay.firstWhereOrNull(
-              (Display display) =>
-                  display.locale.toString().contains(languageCode),
-            ) ??
-            credSupportedDisplay.firstWhereOrNull(
-              (Display display) => display.locale.toString().contains('en'),
-            ) ??
-            credSupportedDisplay.firstWhereOrNull(
-              (Display display) => display.locale == null,
-            ) ??
-            credSupportedDisplay.first; // if local is not provided
+        display = extractDisplay(
+          credSupportedDisplay,
+          languageCode,
+        ); // if local is not provided
       }
     }
   } else if (openIdConfiguration.credentialConfigurationsSupported != null) {
@@ -1571,17 +1592,10 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
                 .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
                 .toList();
 
-            display = displays.firstWhereOrNull(
-                  (Display display) =>
-                      display.locale.toString().contains(languageCode),
-                ) ??
-                displays.firstWhereOrNull(
-                  (Display display) => display.locale.toString().contains('en'),
-                ) ??
-                displays.firstWhereOrNull(
-                  (Display display) => display.locale != null,
-                ) ??
-                displays.first; // if local is not provided
+            display = extractDisplay(
+              displays,
+              languageCode,
+            ); // if local is not provided
           }
         }
       }
@@ -1591,18 +1605,32 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
   if (display == null && openIdConfiguration.display != null) {
     final displays = openIdConfiguration.display!;
 
-    display = displays.firstWhereOrNull(
-          (Display display) => display.locale.toString().contains(languageCode),
-        ) ??
-        displays.firstWhereOrNull(
-          (Display display) => display.locale.toString().contains('en'),
-        ) ??
-        displays.firstWhereOrNull(
-          (Display display) => display.locale == null,
-        ) ??
-        displays.first; // if local is not provided;
+    display = extractDisplay(
+      displays,
+      languageCode,
+    ); // if local is not provided;
   }
   return (display, credentialSupported);
+}
+
+Display? extractDisplay(
+  List<Display> credSupportedDisplay,
+  String languageCode,
+) {
+  try {
+    return credSupportedDisplay.firstWhereOrNull(
+          (Display display) => display.locale.toString().contains(languageCode),
+        ) ??
+        credSupportedDisplay.firstWhereOrNull(
+          (Display display) => display.locale.toString().contains('en'),
+        ) ??
+        credSupportedDisplay.firstWhereOrNull(
+          (Display display) => display.locale == null,
+        ) ??
+        credSupportedDisplay.first;
+  } catch (e) {
+    return null;
+  }
 }
 
 List<String> getStringCredentialsForToken({
@@ -1610,7 +1638,8 @@ List<String> getStringCredentialsForToken({
   required ProfileCubit profileCubit,
 }) {
   final credentialList = credentialsToBePresented.map((item) {
-    final isVcSdJWT = item.getFormat == VCFormatType.vcSdJWT.vcValue;
+    final isVcSdJWT = item.getFormat == VCFormatType.vcSdJWT.vcValue ||
+        item.getFormat == VCFormatType.dcSdJWT.vcValue;
 
     if (isVcSdJWT) {
       return item.selectiveDisclosureJwt ?? jsonEncode(item.toJson());
@@ -1654,7 +1683,7 @@ List<VCFormatType> getPresentVCDetails({
         format?.jwtVcJsonLd != null || format?.jwtVpJson != null;
 
     /// vc+sd-jwt
-    presentVcSdJwt = format?.vcSdJwt != null;
+    presentVcSdJwt = format?.vcSdJwt != null || format?.dcSdJwt != null;
   } else {
     if (clientMetaData == null) {
       /// credential manifest case
@@ -1683,7 +1712,8 @@ List<VCFormatType> getPresentVCDetails({
           vpFormats.containsKey('jwt_vp_json-ld');
 
       /// vc+sd-jwt
-      presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');
+      presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt') ||
+          vpFormats.containsKey('dc+sd-jwt');
     }
   }
 
@@ -1716,6 +1746,9 @@ List<VCFormatType> getPresentVCDetails({
   }
   if (presentVcSdJwt && formatsSupported.contains(VCFormatType.vcSdJWT)) {
     supportingFormats.add(VCFormatType.vcSdJWT);
+  }
+  if (presentVcSdJwt && formatsSupported.contains(VCFormatType.dcSdJWT)) {
+    supportingFormats.add(VCFormatType.dcSdJWT);
   }
 
   return supportingFormats;
@@ -1757,7 +1790,7 @@ List<dynamic> collectSdValues(Map<String, dynamic> data) {
   return result;
 }
 
-Map<String, dynamic> createJsonByDecryptingSDValues({
+Map<String, dynamic> valuesJson({
   required Map<String, dynamic> encryptedJson,
   required SelectiveDisclosure selectiveDisclosure,
 }) {
@@ -1777,7 +1810,7 @@ Map<String, dynamic> createJsonByDecryptingSDValues({
               content.forEach((key, value) {
                 if (value is Map<String, dynamic>) {
                   if (value.containsKey('_sd')) {
-                    final nestedJson = createJsonByDecryptingSDValues(
+                    final nestedJson = valuesJson(
                       selectiveDisclosure: selectiveDisclosure,
                       encryptedJson: value,
                     );
@@ -1795,7 +1828,79 @@ Map<String, dynamic> createJsonByDecryptingSDValues({
       }
     } else {
       if (value is Map<String, dynamic>) {
-        final nestedJson = createJsonByDecryptingSDValues(
+        final nestedJson = valuesJson(
+          selectiveDisclosure: selectiveDisclosure,
+          encryptedJson: value,
+        );
+        json[key] = nestedJson;
+      } else if (value is List<dynamic>) {
+        final list = <String>[];
+
+        for (final ele in value) {
+          if (ele is Map) {
+            final threeDotValue = ele['...'];
+            if (sh256HashToContent.containsKey(threeDotValue)) {
+              final content = sh256HashToContent[threeDotValue];
+              if (content is Map) {
+                content.forEach((key, value) {
+                  list.add(value.toString());
+                });
+              }
+            }
+          } else {
+            list.add(ele.toString());
+          }
+        }
+
+        json[key] = list;
+      } else {
+        json[key] = value;
+      }
+    }
+  });
+
+  return json;
+}
+
+Map<String, dynamic> valuesSD({
+  required Map<String, dynamic> encryptedJson,
+  required SelectiveDisclosure selectiveDisclosure,
+}) {
+  final json = <String, dynamic>{};
+
+  final sh256HashToContent = selectiveDisclosure.sh256HashToContent;
+
+  encryptedJson.forEach((key, value) {
+    if (key == '_sd') {
+      final sd = encryptedJson['_sd'];
+
+      if (sd is List<dynamic>) {
+        for (final sdValue in sd) {
+          if (sh256HashToContent.containsKey(sdValue)) {
+            final content = sh256HashToContent[sdValue];
+            if (content is Map) {
+              content.forEach((key, value) {
+                if (value is Map<String, dynamic>) {
+                  if (value.containsKey('_sd')) {
+                    final nestedJson = valuesSD(
+                      selectiveDisclosure: selectiveDisclosure,
+                      encryptedJson: value,
+                    );
+                    json[key.toString()] = nestedJson;
+                  } else {
+                    json[key.toString()] = value;
+                  }
+                } else {
+                  json[key.toString()] = value;
+                }
+              });
+            }
+          }
+        }
+      }
+    } else {
+      if (value is Map<String, dynamic>) {
+        final nestedJson = valuesSD(
           selectiveDisclosure: selectiveDisclosure,
           encryptedJson: value,
         );
@@ -1888,7 +1993,21 @@ Future<Map<String, dynamic>?> checkX509({
 
     final extnValue = extension.extnValue.toString();
 
-    if (!extnValue.contains(clientId)) {
+    /// clientId is an url. string domain is the domain from this url
+    final domain = Uri.parse(clientId).host;
+
+    /// valid domains is the list from the extnValue in which DNS: prefix
+    /// is removed. scheme like http:// or https:// is also removed
+    final validDomains = extnValue
+        .replaceAll('DNS:', '')
+        .split(',')
+        .map(
+          (String domain) => domain.replaceAll(RegExp('^(http|https)://'), ''),
+        )
+        .toList();
+
+    /// check if the domain is in the validDomains list
+    if (!validDomains.contains(domain)) {
       throw ResponseMessage(
         data: {
           'error': 'invalid_format',
@@ -2055,8 +2174,11 @@ bool useOauthServerAuthEndPoint(ProfileModel profileModel) {
   final customOidc4vcProfile =
       profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
 
-  final bool notEligible = profileModel.profileType == ProfileType.ebsiV3 ||
-      profileModel.profileType == ProfileType.ebsiV4;
+  // Commenting while EBSI V4 is not live
+  // final bool notEligible = profileModel.profileType == ProfileType.ebsiV3 ||
+  //     profileModel.profileType == ProfileType.ebsiV4;
+
+  final bool notEligible = profileModel.profileType == ProfileType.ebsiV3;
 
   if (notEligible) return false;
 
@@ -2125,7 +2247,8 @@ Map<String, dynamic> getCredentialDataFromJson({
   late Map<String, dynamic> credential;
 
   final jsonContent = jwtDecode.parseJwt(data);
-  if (format == VCFormatType.vcSdJWT.vcValue) {
+  if (format == VCFormatType.vcSdJWT.vcValue ||
+      format == VCFormatType.dcSdJWT.vcValue) {
     final sdAlg = jsonContent['_sd_alg'] ?? 'sha-256';
 
     if (sdAlg != 'sha-256') {
@@ -2142,7 +2265,8 @@ Map<String, dynamic> getCredentialDataFromJson({
     credential = jsonContent['vc'] as Map<String, dynamic>;
   }
 
-  if (format == VCFormatType.vcSdJWT.vcValue) {
+  if (format == VCFormatType.vcSdJWT.vcValue ||
+      format == VCFormatType.dcSdJWT.vcValue) {
     /// type
     if (!credential.containsKey('type')) {
       credential['type'] = [credentialType];

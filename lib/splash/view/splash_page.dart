@@ -5,7 +5,6 @@ import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/enterprise.dart';
-import 'package:altme/l10n/l10n.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
@@ -68,17 +67,32 @@ class _SplashViewState extends State<SplashView> {
   String? _deeplink;
 
   Future<void> processIncomingUri(Uri? uri) async {
-    final l10n = context.l10n;
     String beaconData = '';
     bool isBeaconRequest = false;
+    late Uri? newUri;
+    if (uri.toString().startsWith('${Parameters.universalLink}/oidc4vc?uri=')) {
+      newUri = Uri.parse(
+        Uri.decodeFull(
+          uri
+              .toString()
+              .substring('${Parameters.universalLink}/oidc4vc?uri='.length),
+        ),
+      );
+    } else {
+      newUri = uri;
+    }
 
-    if (_deeplink != null && _deeplink == uri.toString()) {
+    if (_deeplink != null && _deeplink == newUri.toString()) {
       return;
     }
 
-    _deeplink = uri.toString();
+    // If the deeplink is already processed, do not process it again.
+    _deeplink = newUri.toString();
+    Future.delayed(const Duration(seconds: 2), () async {
+      _deeplink = null;
+    });
 
-    if (uri.toString().startsWith('${Urls.appDeepLink}/dashboard')) {
+    if (newUri.toString().startsWith('${Parameters.universalLink}/dashboard')) {
       await Navigator.pushAndRemoveUntil<void>(
         context,
         DashboardPage.route(),
@@ -87,42 +101,20 @@ class _SplashViewState extends State<SplashView> {
       return;
     }
 
-    if (uri.toString().startsWith(Parameters.oidc4vcUniversalLink)) {
-      await context.read<QRCodeScanCubit>().authorizedFlowStart(uri!);
+    if (newUri.toString().startsWith(Parameters.redirectUri)) {
+      await context.read<QRCodeScanCubit>().authorizedFlowStart(newUri!);
       return;
     }
 
-    if (uri.toString().startsWith('configuration://?')) {
+    if (newUri.toString().startsWith('configuration://?')) {
       await context.read<EnterpriseCubit>().requestTheConfiguration(
-            uri: uri!,
+            uri: newUri!,
             qrCodeScanCubit: context.read<QRCodeScanCubit>(),
           );
       return;
     }
 
-    if (uri.toString().startsWith(Parameters.authorizeEndPoint)) {
-      context.read<DeepLinkCubit>().addDeepLink(uri!.toString());
-      return;
-    }
-
-    if (uri.toString().startsWith('iden3comm://')) {
-      /// if wallet has not been created then alert user
-      final ssiKey =
-          await secure_storage.getSecureStorage.get(SecureStorageKeys.ssiKey);
-      if (ssiKey == null) {
-        await showDialog<bool>(
-          context: context,
-          builder: (BuildContext context) {
-            return ConfirmDialog(
-              title: l10n.createWalletMessage,
-            );
-          },
-        );
-        return;
-      }
-    }
-
-    uri!.queryParameters.forEach((key, value) async {
+    newUri!.queryParameters.forEach((key, value) async {
       if (key == 'uri') {
         final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
         final ssiKey =
@@ -140,15 +132,16 @@ class _SplashViewState extends State<SplashView> {
       }
     });
 
-    if (isOIDC4VCIUrl(uri) || isSIOPV2OROIDC4VPUrl(uri)) {
-      context.read<DeepLinkCubit>().addDeepLink(uri.toString());
-      return;
-    }
-
     if (isBeaconRequest && beaconData != '') {
       unawaited(
         context.read<BeaconCubit>().peerFromDeepLink(beaconData),
       );
+    }
+    if (isOIDC4VCIUrl(newUri) ||
+        isSiopV2OrOidc4VpUrl(newUri) ||
+        newUri.toString().startsWith(Parameters.universalLink)) {
+      context.read<DeepLinkCubit>().addDeepLink(newUri.toString());
+      return;
     }
   }
 
@@ -165,6 +158,7 @@ class _SplashViewState extends State<SplashView> {
         beaconBlocListener,
         walletConnectBlocListener,
         enterpriseBlocListener,
+        ProfileCubitListener,
       ],
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {

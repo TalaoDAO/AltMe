@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/json_viewer/view/json_viewer_page.dart';
+import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
 import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.dart';
 import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -30,6 +31,7 @@ Future<void> oidc4vciAcceptHost({
           context: context,
           builder: (_) {
             return DeveloperModeDialog(
+              uri: oidc4vcParameters.initialUri,
               onDisplay: () async {
                 final returnedValue = await Navigator.of(context).push<dynamic>(
                   JsonViewerPage.route(
@@ -56,9 +58,24 @@ Future<void> oidc4vciAcceptHost({
   }
 
   /// if dev mode is ON show some dialog to show data
-
   await handleErrorForOID4VCI(
     oidc4vcParameters: oidc4vcParameters,
+    didKeyType: context
+        .read<ProfileCubit>()
+        .state
+        .model
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile
+        .defaultDid,
+    clientType: context
+        .read<ProfileCubit>()
+        .state
+        .model
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile
+        .clientType,
   );
 
   if (showPrompt) {
@@ -99,7 +116,7 @@ Future<void> oidc4vciAcceptHost({
         );
   } else {
     context.read<QRCodeScanCubit>().emitError(
-          ResponseMessage(
+          error: ResponseMessage(
             message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
           ),
         );

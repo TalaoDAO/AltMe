@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -10,8 +11,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 // #docregion platform_imports
 // Import for Android features.
 import 'package:webview_flutter_android/webview_flutter_android.dart';
-// Import for iOS features.
-import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 // #enddocregion platform_imports
 
 class WertPage extends StatelessWidget {
@@ -23,6 +22,10 @@ class WertPage extends StatelessWidget {
       create: (context) => WertCubit(
         walletCubit: context.read<WalletCubit>(),
         credentialsRepository: CredentialsRepository(getSecureStorage),
+        dioClient: DioClient(
+          secureStorageProvider: getSecureStorage,
+          dio: Dio(),
+        ),
       ),
       child: const WertView(),
     );
@@ -44,15 +47,7 @@ class _WertViewState extends State<WertView> {
     super.initState();
     final log = getLogger('WertInitState');
 
-    late final PlatformWebViewControllerCreationParams params;
-    if (WebViewPlatform.instance is WebKitWebViewPlatform) {
-      params = WebKitWebViewControllerCreationParams(
-        allowsInlineMediaPlayback: true,
-        mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
-      );
-    } else {
-      params = const PlatformWebViewControllerCreationParams();
-    }
+    const params = PlatformWebViewControllerCreationParams();
 
     final WebViewController controller =
         WebViewController.fromPlatformCreationParams(params);

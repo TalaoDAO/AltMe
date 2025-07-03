@@ -31,9 +31,7 @@ class MockMatrixNotificationCubit extends MockCubit<ChatRoomState>
 class MockCredentialsCubit extends MockCubit<CredentialsState>
     implements CredentialsCubit {
   @override
-  Future<void> loadAllCredentials({
-    required BlockchainType blockchainType,
-  }) async {}
+  Future<void> loadAllCredentials() async {}
 }
 
 class MockWalletConnectCubit extends MockCubit<WalletConnectState>

@@ -25,8 +25,10 @@ class HomeCredentialCategoryList extends StatefulWidget {
 class _HomeCredentialCategoryListState
     extends State<HomeCredentialCategoryList> {
   Future<String> getDid() async {
-    final currentAccount = context.read<WalletCubit>().state.currentAccount!;
-
+    final currentAccount = context.read<WalletCubit>().state.currentAccount;
+    if (currentAccount == null) {
+      return '';
+    }
     final didMethod = getDidMethod(currentAccount.blockchainType);
 
     final String jwkKey = await KeyGenerator().jwkFromSecretKey(
@@ -57,7 +59,7 @@ class _HomeCredentialCategoryListState
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.done:
-                    final issuerDid = snapshot.data!;
+                    final issuerDid = snapshot.data;
                     return ListView(
                       scrollDirection: Axis.vertical,
                       children: getCredentialCategorySorted.where(

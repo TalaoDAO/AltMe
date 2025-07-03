@@ -42,9 +42,7 @@ Future<bool> isWalletCreated({
   );
 
   log.i('wallet initialisation');
-  await credentialsCubit.loadAllCredentials(
-    blockchainType: walletCubit.state.currentAccount!.blockchainType,
-  );
+  await credentialsCubit.loadAllCredentials();
 
   return true;
 }

@@ -34,6 +34,9 @@ Format _$FormatFromJson(Map<String, dynamic> json) => Format(
       jwtVpJsonLd: json['jwt_vp_json_ld'] == null
           ? null
           : FormatType.fromJson(json['jwt_vp_json_ld'] as Map<String, dynamic>),
+      dcSdJwt: json['dc+sd-jwt'] == null
+          ? null
+          : FormatType.fromJson(json['dc+sd-jwt'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$FormatToJson(Format instance) => <String, dynamic>{
@@ -46,4 +49,5 @@ Map<String, dynamic> _$FormatToJson(Format instance) => <String, dynamic>{
       'ldp_vp': instance.ldpVp?.toJson(),
       'ldp_vc': instance.ldpVc?.toJson(),
       'vc+sd-jwt': instance.vcSdJwt?.toJson(),
+      'dc+sd-jwt': instance.dcSdJwt?.toJson(),
     };

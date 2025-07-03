@@ -54,19 +54,35 @@ Future<void> oidc4vpSiopV2AcceptHost({
         response: response,
         clientId: clientId.toString(),
       );
+      formattedData = await getFormattedStringOIDC4VPSIOPV2FromRequest(
+        url: url,
+        client: client,
+        response: response,
+      );
+    } else if (uri.queryParameters['presentation_definition'] != null ||
+        uri.queryParameters['presentation_definition_uri'] != null) {
+      final Map<String, dynamic>? presentationDefinition =
+          await getPresentationDefinition(uri: uri, client: client);
+      final Map<String, dynamic>? clientMetaData = await getClientMetada(
+        client: client,
+        uri: uri,
+      );
+      formattedData = getFormattedStringOIDC4VPSIOPV2(
+        '',
+        uri.queryParameters,
+        clientMetaData,
+        presentationDefinition,
+      );
+    } else {
+      throw Exception('Invalid Presentation Request');
     }
-
-    formattedData = await getFormattedStringOIDC4VPSIOPV2(
-      url: url,
-      client: client,
-      response: response,
-    );
 
     LoadingView().hide();
     final bool moveAhead = await showDialog<bool>(
           context: context,
           builder: (_) {
             return DeveloperModeDialog(
+              uri: uri,
               onDisplay: () async {
                 final returnedValue = await Navigator.of(context).push<dynamic>(
                   JsonViewerPage.route(
@@ -123,7 +139,7 @@ Future<void> oidc4vpSiopV2AcceptHost({
     await context.read<QRCodeScanCubit>().startSIOPV2OIDC4VPProcess(uri);
   } else {
     context.read<QRCodeScanCubit>().emitError(
-          ResponseMessage(
+          error: ResponseMessage(
             message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
           ),
         );

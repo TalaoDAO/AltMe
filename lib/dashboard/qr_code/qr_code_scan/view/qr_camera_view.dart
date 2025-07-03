@@ -210,7 +210,9 @@ class _QrCameraViewState extends State<QrCameraView> {
     // * bgra8888 for iOS
     if (format == null ||
         (Platform.isAndroid && format != InputImageFormat.nv21) ||
-        (Platform.isIOS && format != InputImageFormat.bgra8888)) return null;
+        (Platform.isIOS && format != InputImageFormat.bgra8888)) {
+      return null;
+    }
 
     // since format is constraint to nv21 or bgra8888, both only have one plane
     if (image.planes.length != 1) return null;
@@ -237,7 +239,7 @@ class BlurPainter extends CustomPainter {
 
     // Create a Paint object for the blur effect
     final Paint blurPaint = Paint();
-    blurPaint.color = Colors.black.withOpacity(0.5);
+    blurPaint.color = Colors.black.withValues(alpha: 0.5);
 
     // Calculate the size of the middle square
     final double squareSize = size.width * 0.8;

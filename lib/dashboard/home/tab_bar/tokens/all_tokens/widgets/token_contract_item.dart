@@ -15,6 +15,7 @@ class TokenContractItem extends StatelessWidget {
 
   final ContractModel tokenContractModel;
   final bool isOn;
+  // ignore: avoid_positional_boolean_parameters
   final dynamic Function(bool) onChange;
 
   @override

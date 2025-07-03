@@ -81,7 +81,8 @@ class HomeCubit extends Cubit<HomeState> {
       'did': did,
     };
 
-    if (vcFormatType != VCFormatType.vcSdJWT) {
+    if (vcFormatType != VCFormatType.vcSdJWT &&
+        vcFormatType != VCFormatType.dcSdJWT) {
       final String did_auth = await didKitProvider.didAuth(
         did,
         jsonEncode(options),
@@ -198,6 +199,7 @@ class HomeCubit extends Cubit<HomeState> {
         if (vcFormatType == VCFormatType.jwtVc ||
             vcFormatType == VCFormatType.jwtVcJson ||
             vcFormatType == VCFormatType.vcSdJWT ||
+            vcFormatType == VCFormatType.dcSdJWT ||
             vcFormatType == VCFormatType.jwtVcJsonLd) {
           credential = getCredentialDataFromJson(
             data: response.toString(),
@@ -245,7 +247,6 @@ class HomeCubit extends Cubit<HomeState> {
         await credentialsCubit.insertCredential(
           credential: credentialModel,
           showMessage: true,
-          blockchainType: blockchainType,
           uri: Uri.parse(url),
         );
         await cameraCubit.incrementAcquiredCredentialsQuantity();
