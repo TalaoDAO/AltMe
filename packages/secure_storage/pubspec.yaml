@@ -1,6 +1,6 @@
 name: secure_storage
 description: Secure storage package
-version: 0.0.8+8
+version: 1.0.0+1
 publish_to: none
 
 environment:
