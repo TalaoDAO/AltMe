@@ -334,6 +334,7 @@ const _$OIDC4VPDraftTypeEnumMap = {
   OIDC4VPDraftType.draft21: '21',
   OIDC4VPDraftType.draft22: '22',
   OIDC4VPDraftType.draft23: '23',
+  OIDC4VPDraftType.draft25: '25',
   OIDC4VPDraftType.draft28: '28',
   OIDC4VPDraftType.draft29: '29',
 };

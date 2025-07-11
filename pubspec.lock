@@ -467,10 +467,10 @@ packages:
     dependency: transitive
     description:
       name: coverage
-      sha256: aa07dbe5f2294c827b7edb9a87bba44a9c15a3cc81bc8da2ca19b37322d30080
+      sha256: "5da775aa218eaf2151c721b16c01c7676fbfdd99cebba2bf64e8b807a28ff94d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.14.1"
+    version: "1.15.0"
   credential_manifest:
     dependency: "direct main"
     description:
@@ -1421,10 +1421,10 @@ packages:
     dependency: transitive
     description:
       name: local_auth_darwin
-      sha256: "630996cd7b7f28f5ab92432c4b35d055dd03a747bc319e5ffbb3c4806a3e50d2"
+      sha256: "25163ce60a5a6c468cf7a0e3dc8a165f824cabc2aa9e39a5e9fc5c2311b7686f"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.3"
+    version: "1.5.0"
   local_auth_platform_interface:
     dependency: transitive
     description:
@@ -1948,18 +1948,18 @@ packages:
     dependency: transitive
     description:
       name: reown_core
-      sha256: bd7ce8f3a34bed195efbb8fd862d7ca446f69adcb999913bc1bc4e15ec36a9df
+      sha256: "280dc365fc18e78094b92ed99e0e489dbe75d7f78bb0b1e45c08482bd8e98d47"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.6+1"
+    version: "1.1.7"
   reown_sign:
     dependency: transitive
     description:
       name: reown_sign
-      sha256: "39dfceedb9122a0d31303f9d2fbfe05cf3967c3096c2a26553cb66021fa29478"
+      sha256: e78b3012972883ecc98bcacee937d13b28a918057b7c760564b23d8689bb14be
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.7+1"
+    version: "1.1.8"
   reown_walletkit:
     dependency: "direct main"
     description:
@@ -2394,10 +2394,10 @@ packages:
     dependency: "direct main"
     description:
       name: url_launcher
-      sha256: "9d06212b1362abc2f0f0d78e6f09f726608c74e3b9462e8368bb03314aa8d603"
+      sha256: f6a7e5c4835bb4e3026a04793a4199ca2d14c739ec378fdfe23fc8075d0439f8
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.1"
+    version: "6.3.2"
   url_launcher_android:
     dependency: transitive
     description:
