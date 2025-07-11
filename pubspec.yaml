@@ -120,7 +120,6 @@ dependencies:
   webview_flutter: ^4.2.1
   webview_flutter_android: ^3.7.1
   webview_flutter_wkwebview: ^3.4.4
-  x509: ^0.2.4+2
 
 dependency_overrides:
   ffi: 2.1.0 #didkit from path which depends on ffi ^1.0.0

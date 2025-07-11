@@ -2638,14 +2638,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.1"
-  x509:
-    dependency: "direct main"
-    description:
-      name: x509
-      sha256: cbd1a63846884afd273cda247b0365284c8d85a365ca98e110413f93d105b935
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.4+3"
   x509_plus:
     dependency: transitive
     description:

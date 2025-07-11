@@ -20,8 +20,7 @@ import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
-import 'package:x509/x509.dart' as x509;
-import 'package:x509/x509.dart';
+import 'package:x509_plus/x509.dart' as x509;
 
 export 'is_connected_to_internet.dart';
 export 'test_platform.dart';
@@ -659,6 +658,7 @@ bool isSiopV2OrOidc4VpUrl(Uri uri) {
       uri.toString().startsWith('openid-vc://?') ||
       uri.toString().startsWith(Parameters.walletPresentationDeepLink) ||
       uri.toString().startsWith('openid4vp://') ||
+      uri.toString().startsWith('eudi-openid4vp://') ||
       uri.toString().startsWith('openid-hedera://?') ||
       uri.toString().startsWith('haip://?') &&
           (uri.queryParameters['request_uri'] != null ||
@@ -1979,7 +1979,9 @@ Future<Map<String, dynamic>?> checkX509({
     }
 
     final extension = extensions
-        .where((Extension element) => element.extnId.name == 'subjectAltName')
+        .where(
+          (x509.Extension element) => element.extnId.name == 'subjectAltName',
+        )
         .firstOrNull;
 
     if (extension == null) {
