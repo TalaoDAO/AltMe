@@ -2002,9 +2002,10 @@ Future<Map<String, dynamic>?> checkX509({
     /// is removed. scheme like http:// or https:// is also removed
     final validDomains = extnValue
         .replaceAll('DNS:', '')
+        .replaceAll('URI:', '')
         .split(',')
         .map(
-          (String domain) => domain.replaceAll(RegExp('^(http|https)://'), ''),
+          (String extnValueDomain) => extnValueDomain.replaceAll(RegExp('^(http|https)://'), ''),
         )
         .toList();
 
