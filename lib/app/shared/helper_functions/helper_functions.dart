@@ -2005,7 +2005,8 @@ Future<Map<String, dynamic>?> checkX509({
         .replaceAll('URI:', '')
         .split(',')
         .map(
-          (String extnValueDomain) => extnValueDomain.replaceAll(RegExp('^(http|https)://'), ''),
+          (String extnValueDomain) =>
+              extnValueDomain.replaceAll(RegExp('^(http|https)://'), ''),
         )
         .toList();
 
