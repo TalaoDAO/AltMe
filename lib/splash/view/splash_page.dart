@@ -69,18 +69,30 @@ class _SplashViewState extends State<SplashView> {
   Future<void> processIncomingUri(Uri? uri) async {
     String beaconData = '';
     bool isBeaconRequest = false;
+    late Uri? newUri;
+    if (uri.toString().startsWith('${Parameters.universalLink}/oidc4vc?uri=')) {
+      newUri = Uri.parse(
+        Uri.decodeFull(
+          uri
+              .toString()
+              .substring('${Parameters.universalLink}/oidc4vc?uri='.length),
+        ),
+      );
+    } else {
+      newUri = uri;
+    }
 
-    if (_deeplink != null && _deeplink == uri.toString()) {
+    if (_deeplink != null && _deeplink == newUri.toString()) {
       return;
     }
 
     // If the deeplink is already processed, do not process it again.
-    _deeplink = uri.toString();
+    _deeplink = newUri.toString();
     Future.delayed(const Duration(seconds: 2), () async {
       _deeplink = null;
     });
 
-    if (uri.toString().startsWith('${Parameters.universalLink}/dashboard')) {
+    if (newUri.toString().startsWith('${Parameters.universalLink}/dashboard')) {
       await Navigator.pushAndRemoveUntil<void>(
         context,
         DashboardPage.route(),
@@ -89,20 +101,20 @@ class _SplashViewState extends State<SplashView> {
       return;
     }
 
-    if (uri.toString().startsWith(Parameters.redirectUri)) {
-      await context.read<QRCodeScanCubit>().authorizedFlowStart(uri!);
+    if (newUri.toString().startsWith(Parameters.redirectUri)) {
+      await context.read<QRCodeScanCubit>().authorizedFlowStart(newUri!);
       return;
     }
 
-    if (uri.toString().startsWith('configuration://?')) {
+    if (newUri.toString().startsWith('configuration://?')) {
       await context.read<EnterpriseCubit>().requestTheConfiguration(
-            uri: uri!,
+            uri: newUri!,
             qrCodeScanCubit: context.read<QRCodeScanCubit>(),
           );
       return;
     }
 
-    uri!.queryParameters.forEach((key, value) async {
+    newUri!.queryParameters.forEach((key, value) async {
       if (key == 'uri') {
         final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
         final ssiKey =
@@ -125,10 +137,10 @@ class _SplashViewState extends State<SplashView> {
         context.read<BeaconCubit>().peerFromDeepLink(beaconData),
       );
     }
-    if (isOIDC4VCIUrl(uri) ||
-        isSiopV2OrOidc4VpUrl(uri) ||
-        uri.toString().startsWith(Parameters.universalLink)) {
-      context.read<DeepLinkCubit>().addDeepLink(uri.toString());
+    if (isOIDC4VCIUrl(newUri) ||
+        isSiopV2OrOidc4VpUrl(newUri) ||
+        newUri.toString().startsWith(Parameters.universalLink)) {
+      context.read<DeepLinkCubit>().addDeepLink(newUri.toString());
       return;
     }
   }

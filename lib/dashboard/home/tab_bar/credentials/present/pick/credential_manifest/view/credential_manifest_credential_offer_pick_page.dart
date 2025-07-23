@@ -103,12 +103,19 @@ class _CredentialManifestOfferPickViewState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final isVcSdJWT = context
-              .read<CredentialManifestPickCubit>()
-              .state
-              .filteredCredentialList
-              .firstOrNull
-              ?.getFormat ==
-          VCFormatType.vcSdJWT.vcValue;
+                  .read<CredentialManifestPickCubit>()
+                  .state
+                  .filteredCredentialList
+                  .firstOrNull
+                  ?.getFormat ==
+              VCFormatType.vcSdJWT.vcValue ||
+          context
+                  .read<CredentialManifestPickCubit>()
+                  .state
+                  .filteredCredentialList
+                  .firstOrNull
+                  ?.getFormat ==
+              VCFormatType.dcSdJWT.vcValue;
       if (isVcSdJWT) {
         final element = context
             .read<CredentialManifestPickCubit>()
@@ -170,7 +177,9 @@ class _CredentialManifestOfferPickViewState
 
         final isVcSdJWT = credentialManifestState
                 .filteredCredentialList.firstOrNull?.getFormat ==
-            VCFormatType.vcSdJWT.vcValue;
+            VCFormatType.vcSdJWT.vcValue || credentialManifestState
+                .filteredCredentialList.firstOrNull?.getFormat ==
+            VCFormatType.dcSdJWT.vcValue;
 
         return BlocListener<ScanCubit, ScanState>(
           listener: (context, scanState) {

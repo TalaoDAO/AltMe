@@ -20,8 +20,7 @@ import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
-import 'package:x509/x509.dart' as x509;
-import 'package:x509/x509.dart';
+import 'package:x509_plus/x509.dart' as x509;
 
 export 'is_connected_to_internet.dart';
 export 'test_platform.dart';
@@ -659,6 +658,7 @@ bool isSiopV2OrOidc4VpUrl(Uri uri) {
       uri.toString().startsWith('openid-vc://?') ||
       uri.toString().startsWith(Parameters.walletPresentationDeepLink) ||
       uri.toString().startsWith('openid4vp://') ||
+      uri.toString().startsWith('eudi-openid4vp://') ||
       uri.toString().startsWith('openid-hedera://?') ||
       uri.toString().startsWith('haip://?') &&
           (uri.queryParameters['request_uri'] != null ||
@@ -1638,7 +1638,8 @@ List<String> getStringCredentialsForToken({
   required ProfileCubit profileCubit,
 }) {
   final credentialList = credentialsToBePresented.map((item) {
-    final isVcSdJWT = item.getFormat == VCFormatType.vcSdJWT.vcValue;
+    final isVcSdJWT = item.getFormat == VCFormatType.vcSdJWT.vcValue ||
+        item.getFormat == VCFormatType.dcSdJWT.vcValue;
 
     if (isVcSdJWT) {
       return item.selectiveDisclosureJwt ?? jsonEncode(item.toJson());
@@ -1682,7 +1683,7 @@ List<VCFormatType> getPresentVCDetails({
         format?.jwtVcJsonLd != null || format?.jwtVpJson != null;
 
     /// vc+sd-jwt
-    presentVcSdJwt = format?.vcSdJwt != null;
+    presentVcSdJwt = format?.vcSdJwt != null || format?.dcSdJwt != null;
   } else {
     if (clientMetaData == null) {
       /// credential manifest case
@@ -1711,7 +1712,8 @@ List<VCFormatType> getPresentVCDetails({
           vpFormats.containsKey('jwt_vp_json-ld');
 
       /// vc+sd-jwt
-      presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt');
+      presentVcSdJwt = vpFormats.containsKey('vc+sd-jwt') ||
+          vpFormats.containsKey('dc+sd-jwt');
     }
   }
 
@@ -1744,6 +1746,9 @@ List<VCFormatType> getPresentVCDetails({
   }
   if (presentVcSdJwt && formatsSupported.contains(VCFormatType.vcSdJWT)) {
     supportingFormats.add(VCFormatType.vcSdJWT);
+  }
+  if (presentVcSdJwt && formatsSupported.contains(VCFormatType.dcSdJWT)) {
+    supportingFormats.add(VCFormatType.dcSdJWT);
   }
 
   return supportingFormats;
@@ -1974,7 +1979,9 @@ Future<Map<String, dynamic>?> checkX509({
     }
 
     final extension = extensions
-        .where((Extension element) => element.extnId.name == 'subjectAltName')
+        .where(
+          (x509.Extension element) => element.extnId.name == 'subjectAltName',
+        )
         .firstOrNull;
 
     if (extension == null) {
@@ -1995,9 +2002,11 @@ Future<Map<String, dynamic>?> checkX509({
     /// is removed. scheme like http:// or https:// is also removed
     final validDomains = extnValue
         .replaceAll('DNS:', '')
+        .replaceAll('URI:', '')
         .split(',')
         .map(
-          (String domain) => domain.replaceAll(RegExp('^(http|https)://'), ''),
+          (String extnValueDomain) =>
+              extnValueDomain.replaceAll(RegExp('^(http|https)://'), ''),
         )
         .toList();
 
@@ -2242,7 +2251,8 @@ Map<String, dynamic> getCredentialDataFromJson({
   late Map<String, dynamic> credential;
 
   final jsonContent = jwtDecode.parseJwt(data);
-  if (format == VCFormatType.vcSdJWT.vcValue) {
+  if (format == VCFormatType.vcSdJWT.vcValue ||
+      format == VCFormatType.dcSdJWT.vcValue) {
     final sdAlg = jsonContent['_sd_alg'] ?? 'sha-256';
 
     if (sdAlg != 'sha-256') {
@@ -2259,7 +2269,8 @@ Map<String, dynamic> getCredentialDataFromJson({
     credential = jsonContent['vc'] as Map<String, dynamic>;
   }
 
-  if (format == VCFormatType.vcSdJWT.vcValue) {
+  if (format == VCFormatType.vcSdJWT.vcValue ||
+      format == VCFormatType.dcSdJWT.vcValue) {
     /// type
     if (!credential.containsKey('type')) {
       credential['type'] = [credentialType];

@@ -45,7 +45,7 @@ subprojects {
 
 android {
     namespace = "co.talao.wallet"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     packagingOptions {

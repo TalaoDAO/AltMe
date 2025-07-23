@@ -84,6 +84,7 @@ const _$VCFormatTypeEnumMap = {
   VCFormatType.jwtVcJson: 'jwt_vc_json',
   VCFormatType.jwtVcJsonLd: 'jwt_vc_json-ld',
   VCFormatType.vcSdJWT: 'vc+sd-jwt',
+  VCFormatType.dcSdJWT: 'dc+sd-jwt',
   VCFormatType.auto: 'auto',
 };
 
@@ -321,6 +322,8 @@ const _$OIDC4VCIDraftTypeEnumMap = {
   OIDC4VCIDraftType.draft11: '11',
   OIDC4VCIDraftType.draft13: '13',
   OIDC4VCIDraftType.draft14: '14',
+  OIDC4VCIDraftType.draft15: '15',
+  OIDC4VCIDraftType.draft16: '16',
 };
 
 const _$OIDC4VPDraftTypeEnumMap = {
@@ -331,6 +334,9 @@ const _$OIDC4VPDraftTypeEnumMap = {
   OIDC4VPDraftType.draft21: '21',
   OIDC4VPDraftType.draft22: '22',
   OIDC4VPDraftType.draft23: '23',
+  OIDC4VPDraftType.draft25: '25',
+  OIDC4VPDraftType.draft28: '28',
+  OIDC4VPDraftType.draft29: '29',
 };
 
 const _$SIOPV2DraftTypeEnumMap = {

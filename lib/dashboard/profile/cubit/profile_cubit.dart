@@ -278,6 +278,26 @@ class ProfileCubit extends Cubit<ProfileState> {
             clientSecret: randomString(12),
             enterpriseWalletName: enterpriseWalletName,
           );
+        case ProfileType.diipv4:
+          final privateKey = await getPrivateKey(
+            didKeyType: Parameters.didKeyTypeForOwfBaselineProfile,
+            profileCubit: this,
+          );
+
+          final (did, _) = await getDidAndKid(
+            didKeyType: Parameters.didKeyTypeForOwfBaselineProfile,
+            privateKey: privateKey,
+            profileCubit: this,
+          );
+
+          profileModel = ProfileModel.diipv4(
+            walletType: walletType,
+            walletProtectionType: walletProtectionType,
+            isDeveloperMode: isDeveloperMode,
+            clientId: did,
+            clientSecret: randomString(12),
+            enterpriseWalletName: enterpriseWalletName,
+          );
 
         case ProfileType.enterprise:
           if (enterpriseProfileSettingJsonString != null) {
@@ -671,6 +691,19 @@ class ProfileCubit extends Cubit<ProfileState> {
       case ProfileType.diipv3:
         await update(
           ProfileModel.diipv3(
+            walletProtectionType: state.model.walletProtectionType,
+            isDeveloperMode: state.model.isDeveloperMode,
+            walletType: state.model.walletType,
+            enterpriseWalletName: state.model.enterpriseWalletName,
+            clientId: state.model.profileSetting.selfSovereignIdentityOptions
+                .customOidc4vcProfile.clientId,
+            clientSecret: state.model.profileSetting
+                .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
+          ),
+        );
+      case ProfileType.diipv4:
+        await update(
+          ProfileModel.diipv4(
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,

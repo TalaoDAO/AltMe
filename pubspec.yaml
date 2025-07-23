@@ -1,7 +1,7 @@
 name: altme
 description: AltMe Flutter App
 
-version: 3.1.5+5639
+version: 3.1.6+5639
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 environment:
@@ -119,7 +119,6 @@ dependencies:
   webview_flutter: ^4.2.1
   webview_flutter_android: ^3.7.1
   webview_flutter_wkwebview: ^3.4.4
-  x509: ^0.2.4+2
 
 dependency_overrides:
   camera_avfoundation: 0.9.19+1
