@@ -18,7 +18,8 @@ class EmailPassWidget extends StatelessWidget {
 
     var emailAddress = emailPassModel.email;
 
-    if (credentialModel.getFormat == VCFormatType.vcSdJWT.vcValue &&
+    if ((credentialModel.getFormat == VCFormatType.vcSdJWT.vcValue ||
+            credentialModel.getFormat == VCFormatType.dcSdJWT.vcValue) &&
         (emailAddress == null || emailAddress.isEmpty)) {
       final languageCode = context.read<LangCubit>().state.locale.languageCode;
       final mapToDisplay = SelectiveDisclosureDisplayMap(

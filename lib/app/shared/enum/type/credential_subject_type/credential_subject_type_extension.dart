@@ -624,96 +624,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     }
   }
 
-  List<VCFormatType> get getVCFormatType {
-    switch (this) {
-      case CredentialSubjectType.ethereumAssociatedWallet:
-      case CredentialSubjectType.fantomAssociatedWallet:
-      case CredentialSubjectType.polygonAssociatedWallet:
-      case CredentialSubjectType.binanceAssociatedWallet:
-      case CredentialSubjectType.tezosAssociatedWallet:
-      case CredentialSubjectType.etherlinkAssociatedWallet:
-        return VCFormatType.values;
-
-      case CredentialSubjectType.over13:
-      case CredentialSubjectType.over15:
-      case CredentialSubjectType.over21:
-      case CredentialSubjectType.over50:
-      case CredentialSubjectType.over65:
-      case CredentialSubjectType.ageRange:
-      case CredentialSubjectType.gender:
-      case CredentialSubjectType.chainbornMembership:
-      case CredentialSubjectType.tezotopiaMembership:
-      case CredentialSubjectType.defiCompliance:
-        return [VCFormatType.ldpVc, VCFormatType.auto];
-
-      case CredentialSubjectType.over18:
-      case CredentialSubjectType.livenessCard:
-      case CredentialSubjectType.phonePass:
-        return [
-          VCFormatType.ldpVc,
-          VCFormatType.jwtVcJson,
-          VCFormatType.auto,
-        ];
-
-      case CredentialSubjectType.verifiableIdCard:
-        return [
-          VCFormatType.ldpVc,
-          VCFormatType.jwtVcJson,
-          VCFormatType.vcSdJWT,
-          VCFormatType.jwtVc,
-          VCFormatType.auto,
-        ];
-
-      case CredentialSubjectType.emailPass:
-        return [
-          VCFormatType.ldpVc,
-          VCFormatType.jwtVcJson,
-          VCFormatType.auto,
-          VCFormatType.vcSdJWT,
-        ];
-
-      /// Exceptions
-      case CredentialSubjectType.identityCredential:
-      case CredentialSubjectType.eudiPid:
-      case CredentialSubjectType.pid:
-        return [VCFormatType.vcSdJWT, VCFormatType.auto];
-
-      case CredentialSubjectType.nationality:
-      case CredentialSubjectType.identityPass:
-      case CredentialSubjectType.passportFootprint:
-      case CredentialSubjectType.residentCard:
-      case CredentialSubjectType.voucher:
-      case CredentialSubjectType.tezVoucher:
-      case CredentialSubjectType.diplomaCard:
-      case CredentialSubjectType.twitterCard:
-      case CredentialSubjectType.walletCredential:
-      case CredentialSubjectType.tezosPooAddress:
-      case CredentialSubjectType.ethereumPooAddress:
-      case CredentialSubjectType.fantomPooAddress:
-      case CredentialSubjectType.polygonPooAddress:
-      case CredentialSubjectType.binancePooAddress:
-      case CredentialSubjectType.certificateOfEmployment:
-      case CredentialSubjectType.defaultCredential:
-      case CredentialSubjectType.learningAchievement:
-      case CredentialSubjectType.professionalExperienceAssessment:
-      case CredentialSubjectType.professionalSkillAssessment:
-      case CredentialSubjectType.professionalStudentCard:
-      case CredentialSubjectType.selfIssued:
-      case CredentialSubjectType.studentCard:
-      case CredentialSubjectType.aragoPass:
-      case CredentialSubjectType.aragoEmailPass:
-      case CredentialSubjectType.aragoIdentityCard:
-      case CredentialSubjectType.aragoLearningAchievement:
-      case CredentialSubjectType.aragoOver18:
-      case CredentialSubjectType.pcdsAgentCertificate:
-      case CredentialSubjectType.euDiplomaCard:
-      case CredentialSubjectType.euVerifiableId:
-      case CredentialSubjectType.employeeCredential:
-      case CredentialSubjectType.legalPersonalCredential:
-        return [VCFormatType.jwtVc, VCFormatType.auto];
-    }
-  }
-
   DiscoverDummyCredential dummyCredential({
     required ProfileSetting profileSetting,
     required VCFormatType assignedVCFormatType,
@@ -889,7 +799,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
 
         if (discoverCardsOptions != null) {
           if (discoverCardsOptions.displayVerifiableIdSdJwt &&
-              assignedVCFormatType == VCFormatType.vcSdJWT) {
+              (assignedVCFormatType == VCFormatType.vcSdJWT ||
+                  assignedVCFormatType == VCFormatType.dcSdJWT)) {
             type = 'pid';
             image = ImageStrings.dummyPIDCard;
           } else if (discoverCardsOptions.displayVerifiableIdJwt &&

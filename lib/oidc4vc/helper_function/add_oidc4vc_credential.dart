@@ -21,30 +21,11 @@ Future<void> addOIDC4VCCredential({
   String? issuer,
 }) async {
   late Map<String, dynamic> credentialFromOIDC4VC;
+  late VCFormatType vcFormatType;
 
-  if (format == VCFormatType.jwtVc.vcValue ||
-      format == VCFormatType.jwtVcJson.vcValue ||
-      format == VCFormatType.vcSdJWT.vcValue ||
-      format == VCFormatType.jwtVcJsonLd.vcValue) {
-    //jwt_vc
-    final data = encodedCredentialFromOIDC4VC['credential'] as String;
-
-    credentialFromOIDC4VC = getCredentialDataFromJson(
-      data: data,
-      format: format,
-      jwtDecode: jwtDecode,
-      credentialType: credentialType,
-    );
-  } else if (format == VCFormatType.ldpVc.vcValue) {
-    //ldp_vc
-
-    final data = encodedCredentialFromOIDC4VC['credential'];
-
-    credentialFromOIDC4VC = data is Map<String, dynamic>
-        ? data
-        : jsonDecode(encodedCredentialFromOIDC4VC['credential'].toString())
-            as Map<String, dynamic>;
-  } else {
+  try {
+    vcFormatType = getVcFormatType(format);
+  } on Exception catch (_) {
     throw ResponseMessage(
       data: {
         'error': 'invalid_format',
@@ -53,6 +34,76 @@ Future<void> addOIDC4VCCredential({
     );
   }
 
+  switch (vcFormatType) {
+    case VCFormatType.jwtVc:
+    case VCFormatType.jwtVcJson:
+    case VCFormatType.vcSdJWT:
+    case VCFormatType.jwtVcJsonLd:
+      //jwt_vc
+      final data = encodedCredentialFromOIDC4VC['credential'] as String;
+      credentialFromOIDC4VC = getCredentialDataFromJson(
+        data: data,
+        format: format,
+        jwtDecode: jwtDecode,
+        credentialType: credentialType,
+      );
+
+    case VCFormatType.ldpVc:
+      //ldp_vc
+      final data = encodedCredentialFromOIDC4VC['credential'];
+      credentialFromOIDC4VC = data is Map<String, dynamic>
+          ? data
+          : jsonDecode(encodedCredentialFromOIDC4VC['credential'].toString())
+              as Map<String, dynamic>;
+
+    case VCFormatType.auto:
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_format',
+          'error_description': "The format 'auto' of vc is incorrect.",
+        },
+      );
+    case VCFormatType.dcSdJWT:
+      // Check if OIDC4VCI Draft 15 or above is used. If not then throw an error
+      if (int.parse(
+            credentialsCubit
+                .profileCubit
+                .state
+                .model
+                .profileSetting
+                .selfSovereignIdentityOptions
+                .customOidc4vcProfile
+                .oidc4vciDraft
+                .numbering,
+          ) <
+          15) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_format',
+            'error_description':
+                // ignore: lines_longer_than_80_chars
+                'The format of vc is incorrect. OIDC4VCI Draft 15 or above is required.',
+          },
+        );
+      }
+
+      // get the array of credentials from ['credentials'] key
+      final data = encodedCredentialFromOIDC4VC['credentials'] as List<dynamic>;
+      if (data.isEmpty) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_format',
+            'error_description': 'The format of vc is incorrect.',
+          },
+        );
+      }
+      credentialFromOIDC4VC = getCredentialDataFromJson(
+        data: data.first['credential'] as String,
+        format: format,
+        jwtDecode: jwtDecode,
+        credentialType: credentialType,
+      );
+  }
   final Map<String, dynamic> newCredential =
       Map<String, dynamic>.from(credentialFromOIDC4VC);
 

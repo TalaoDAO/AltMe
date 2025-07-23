@@ -45,7 +45,7 @@ subprojects {
 
 android {
     namespace = "co.altme.alt.me.altme"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     packagingOptions {

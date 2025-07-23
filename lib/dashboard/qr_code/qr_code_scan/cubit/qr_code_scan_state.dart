@@ -58,11 +58,23 @@ class QRCodeScanState extends Equatable {
     bool? isScan,
     String? dialogData,
   }) {
+    late Uri? newUri;
+    if (uri.toString().startsWith('${Parameters.universalLink}/oidc4vc?uri=')) {
+      newUri = Uri.parse(
+        Uri.decodeFull(
+          uri
+              .toString()
+              .substring('${Parameters.universalLink}/oidc4vc?uri='.length),
+        ),
+      );
+    } else {
+      newUri = uri;
+    }
     return QRCodeScanState(
       status: qrScanStatus,
       message: message,
       isScan: isScan ?? this.isScan,
-      uri: uri ?? this.uri,
+      uri: newUri ?? this.uri,
       route: route, // route should be cleared when one route is done
       dialogData: dialogData,
     );

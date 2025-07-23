@@ -7,6 +7,10 @@ enum OIDC4VCIDraftType {
   draft13,
   @JsonValue('14')
   draft14,
+  @JsonValue('15')
+  draft15,
+  @JsonValue('16')
+  draft16,
 }
 
 extension OIDC4VCIDraftTypeX on OIDC4VCIDraftType {
@@ -18,6 +22,10 @@ extension OIDC4VCIDraftTypeX on OIDC4VCIDraftType {
         return 'Draft 13';
       case OIDC4VCIDraftType.draft14:
         return 'Draft 14';
+      case OIDC4VCIDraftType.draft15:
+        return 'Draft 15';
+      case OIDC4VCIDraftType.draft16:
+        return 'Draft 16';
     }
   }
 
@@ -29,6 +37,10 @@ extension OIDC4VCIDraftTypeX on OIDC4VCIDraftType {
         return '13';
       case OIDC4VCIDraftType.draft14:
         return '14';
+      case OIDC4VCIDraftType.draft15:
+        return '15';
+      case OIDC4VCIDraftType.draft16:
+        return '16';
     }
   }
 
@@ -40,6 +52,8 @@ extension OIDC4VCIDraftTypeX on OIDC4VCIDraftType {
       case OIDC4VCIDraftType.draft13:
         return false;
       case OIDC4VCIDraftType.draft14:
+      case OIDC4VCIDraftType.draft15:
+      case OIDC4VCIDraftType.draft16:
         return true;
     }
   }

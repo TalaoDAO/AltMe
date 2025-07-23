@@ -11,6 +11,8 @@ enum VCFormatType {
   jwtVcJsonLd,
   @JsonValue('vc+sd-jwt')
   vcSdJWT,
+  @JsonValue('dc+sd-jwt')
+  dcSdJWT,
   @JsonValue('auto')
   auto,
 }
@@ -28,6 +30,8 @@ extension VCFormatTypeX on VCFormatType {
         return 'jwt_vc_json-ld';
       case VCFormatType.vcSdJWT:
         return 'vc+sd-jwt';
+      case VCFormatType.dcSdJWT:
+        return 'dc+sd-jwt';
       case VCFormatType.auto:
         return 'auto';
     }
@@ -45,13 +49,15 @@ extension VCFormatTypeX on VCFormatType {
         return 'jwt_vc_json';
       case VCFormatType.jwtVcJsonLd:
         return 'jwt_vc_json-ld';
+      case VCFormatType.dcSdJWT:
+      // Same as vcSdJWT because draft version is also sent and the return
+      // will be with correct dc+sd-jwt format.
       case VCFormatType.vcSdJWT:
         if (isEmailPassOrPhonePass) {
           return 'vc_sd_jwt';
         } else {
           return 'vcsd-jwt';
         }
-
       case VCFormatType.auto:
         return 'auto';
     }
@@ -65,6 +71,7 @@ extension VCFormatTypeX on VCFormatType {
       case VCFormatType.jwtVc:
       case VCFormatType.jwtVcJsonLd:
       case VCFormatType.vcSdJWT:
+      case VCFormatType.dcSdJWT:
       case VCFormatType.auto:
         return false;
     }
@@ -82,6 +89,8 @@ extension VCFormatTypeX on VCFormatType {
         return 'jwt_vp_json-ld';
       case VCFormatType.vcSdJWT:
         return 'vc+sd-jwt';
+      case VCFormatType.dcSdJWT:
+        return 'dc+sd-jwt';
       case VCFormatType.auto:
         return 'auto';
     }
