@@ -464,6 +464,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     String? clientSecret,
     bool? confirmSecurityVerifierAccess,
     bool? secureSecurityAuthenticationWithPinCode,
+    bool? trustedList,
     bool? verifySecurityIssuerWebsiteIdentity,
     OIDC4VCIDraftType? oidc4vciDraftType,
     OIDC4VPDraftType? oidc4vpDraftType,
@@ -487,6 +488,7 @@ class ProfileCubit extends Cubit<ProfileState> {
               verifySecurityIssuerWebsiteIdentity,
           secureSecurityAuthenticationWithPinCode:
               secureSecurityAuthenticationWithPinCode,
+          trustedList: trustedList,
         ),
         helpCenterOptions:
             state.model.profileSetting.helpCenterOptions.copyWith(

@@ -103,6 +103,7 @@ class ProfileModel extends Equatable {
             displaySecurityAdvancedSettings: true,
             secureSecurityAuthenticationWithPinCode: true,
             verifySecurityIssuerWebsiteIdentity: true,
+            trustedList: false,
           ),
         ),
       );
@@ -257,6 +258,7 @@ class ProfileModel extends Equatable {
             displaySecurityAdvancedSettings: true,
             secureSecurityAuthenticationWithPinCode: true,
             verifySecurityIssuerWebsiteIdentity: true,
+            trustedList: false,
           ),
         ),
       );
@@ -341,6 +343,7 @@ class ProfileModel extends Equatable {
             displaySecurityAdvancedSettings: true,
             secureSecurityAuthenticationWithPinCode: true,
             verifySecurityIssuerWebsiteIdentity: true,
+            trustedList: false,
           ),
         ),
       );
@@ -425,6 +428,7 @@ class ProfileModel extends Equatable {
             displaySecurityAdvancedSettings: true,
             secureSecurityAuthenticationWithPinCode: true,
             verifySecurityIssuerWebsiteIdentity: true,
+            trustedList: false,
           ),
         ),
       );

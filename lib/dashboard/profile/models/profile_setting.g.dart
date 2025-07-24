@@ -388,6 +388,9 @@ WalletSecurityOptions _$WalletSecurityOptionsFromJson(
           json['secureSecurityAuthenticationWithPinCode'] as bool,
       verifySecurityIssuerWebsiteIdentity:
           json['verifySecurityIssuerWebsiteIdentity'] as bool,
+      trustedListUrl:
+          json['trustedListUrl'] as String? ?? Parameters.trustedListUrl,
+      trustedList: json['trustedList'] as bool,
     );
 
 Map<String, dynamic> _$WalletSecurityOptionsToJson(
@@ -400,4 +403,6 @@ Map<String, dynamic> _$WalletSecurityOptionsToJson(
           instance.secureSecurityAuthenticationWithPinCode,
       'verifySecurityIssuerWebsiteIdentity':
           instance.verifySecurityIssuerWebsiteIdentity,
+      'trustedListUrl': instance.trustedListUrl,
+      'trustedList': instance.trustedList,
     };

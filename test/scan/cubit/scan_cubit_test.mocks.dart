@@ -1302,6 +1302,7 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
     String? clientSecret,
     bool? confirmSecurityVerifierAccess,
     bool? secureSecurityAuthenticationWithPinCode,
+    bool? trustedList,
     bool? verifySecurityIssuerWebsiteIdentity,
     _i9.OIDC4VCIDraftType? oidc4vciDraftType,
     _i9.OIDC4VPDraftType? oidc4vpDraftType,
@@ -1332,6 +1333,7 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
             #confirmSecurityVerifierAccess: confirmSecurityVerifierAccess,
             #secureSecurityAuthenticationWithPinCode:
                 secureSecurityAuthenticationWithPinCode,
+            #trustedList: trustedList,
             #verifySecurityIssuerWebsiteIdentity:
                 verifySecurityIssuerWebsiteIdentity,
             #oidc4vciDraftType: oidc4vciDraftType,
