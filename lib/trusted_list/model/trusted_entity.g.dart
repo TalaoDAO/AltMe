@@ -9,7 +9,7 @@ part of 'trusted_entity.dart';
 TrustedEntity _$TrustedEntityFromJson(Map<String, dynamic> json) =>
     TrustedEntity(
       id: json['id'] as String,
-      type: json['type'] as String,
+      type: $enumDecode(_$TrustedEntityTypeEnumMap, json['type']),
       name: json['name'] as String?,
       description: json['description'] as String?,
       endpoint: json['endpoint'] as String?,
@@ -31,7 +31,7 @@ TrustedEntity _$TrustedEntityFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$TrustedEntityToJson(TrustedEntity instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'type': instance.type,
+      'type': _$TrustedEntityTypeEnumMap[instance.type]!,
       'name': instance.name,
       'description': instance.description,
       'endpoint': instance.endpoint,
@@ -40,3 +40,9 @@ Map<String, dynamic> _$TrustedEntityToJson(TrustedEntity instance) =>
       'rootCertificates': instance.rootCertificates,
       'vcTypes': instance.vcTypes,
     };
+
+const _$TrustedEntityTypeEnumMap = {
+  TrustedEntityType.issuer: 'issuer',
+  TrustedEntityType.verifier: 'verifier',
+  TrustedEntityType.walletProvider: 'wallet-provider',
+};

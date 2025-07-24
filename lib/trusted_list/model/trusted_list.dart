@@ -6,7 +6,6 @@ part 'trusted_list.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class TrustedList extends Equatable {
-
   const TrustedList({
     required this.ecosystem,
     required this.lastUpdated,
@@ -18,9 +17,13 @@ class TrustedList extends Equatable {
   final String ecosystem;
   final String lastUpdated;
   final List<TrustedEntity> entities;
-  
+
   Map<String, dynamic> toJson() => _$TrustedListToJson(this);
 
   @override
-  List<Object?> get props => [ecosystem, lastUpdated, entities];
+  List<Object?> get props => [
+        ecosystem,
+        lastUpdated,
+        entities,
+      ];
 }

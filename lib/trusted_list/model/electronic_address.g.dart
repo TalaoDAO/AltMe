@@ -9,11 +9,11 @@ part of 'electronic_address.dart';
 ElectronicAddress _$ElectronicAddressFromJson(Map<String, dynamic> json) =>
     ElectronicAddress(
       uri: json['uri'] as String,
-      language: json['language'] as String?,
+      lang: json['lang'] as String?,
     );
 
 Map<String, dynamic> _$ElectronicAddressToJson(ElectronicAddress instance) =>
     <String, dynamic>{
       'uri': instance.uri,
-      'language': instance.language,
+      'lang': instance.lang,
     };
