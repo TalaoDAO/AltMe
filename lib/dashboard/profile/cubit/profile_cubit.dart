@@ -10,6 +10,7 @@ import 'package:altme/dashboard/profile/profile_provider/get_wallet_attestation_
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/oidc4vc/model/oidc4vci_stack.dart';
 import 'package:altme/oidc4vc/model/oidc4vci_state.dart';
+import 'package:altme/trusted_list/model/trusted_list.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
@@ -368,7 +369,47 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
       }
 
-      await update(profileModel.copyWith(oidc4VCIStack: oidc4VCIStack));
+      // TrustedList logic
+      if (profileModel.profileSetting.walletSecurityOptions.trustedList) {
+        final trustedListUrl =
+            profileModel.profileSetting.walletSecurityOptions.trustedListUrl;
+        final today = DateTime.now();
+        final needsUpdate = profileModel.trustedList == null ||
+            profileModel.trustedList!.uploadDateTime == null ||
+            profileModel.trustedList!.uploadDateTime!.year != today.year ||
+            profileModel.trustedList!.uploadDateTime!.month != today.month ||
+            profileModel.trustedList!.uploadDateTime!.day != today.day;
+        if (trustedListUrl != null &&
+            trustedListUrl.isNotEmpty &&
+            needsUpdate) {
+          try {
+            final response = await http.get(Uri.parse(trustedListUrl));
+            if (response.statusCode == 200) {
+              final trustedList = TrustedList.fromJson(
+                  jsonDecode(response.body) as Map<String, dynamic>,);
+              final updatedTrustedList = TrustedList(
+                ecosystem: trustedList.ecosystem,
+                lastUpdated: trustedList.lastUpdated,
+                entities: trustedList.entities,
+                uploadDateTime: DateTime.now(),
+              );
+              profileModel = profileModel.copyWith(
+                trustedList: updatedTrustedList,
+                oidc4VCIStack: oidc4VCIStack,
+              );
+            } else {
+              // Optionally handle download error
+            }
+          } catch (e) {
+            // Optionally handle fetch error
+          }
+        } else {
+          profileModel = profileModel.copyWith(oidc4VCIStack: oidc4VCIStack);
+        }
+      } else {
+        profileModel = profileModel.copyWith(oidc4VCIStack: oidc4VCIStack);
+      }
+      await update(profileModel);
     } catch (e, s) {
       log.e(
         'something went wrong',
@@ -673,6 +714,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       //       clientId: state.model.profileSetting.selfSovereignIdentityOptions
       //           .customOidc4vcProfile.clientId,
       //       clientSecret: state.model.profileSetting
+      // ignore: lines_longer_than_80_chars
       //           .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret,
       //     ),
       //   );

@@ -10,6 +10,7 @@ class TrustedList extends Equatable {
     required this.ecosystem,
     required this.lastUpdated,
     required this.entities,
+    this.uploadDateTime,
   });
 
   factory TrustedList.fromJson(Map<String, dynamic> json) =>
@@ -17,6 +18,7 @@ class TrustedList extends Equatable {
   final String ecosystem;
   final String lastUpdated;
   final List<TrustedEntity> entities;
+  final DateTime? uploadDateTime;
 
   Map<String, dynamic> toJson() => _$TrustedListToJson(this);
 
@@ -25,5 +27,6 @@ class TrustedList extends Equatable {
         ecosystem,
         lastUpdated,
         entities,
+        uploadDateTime,
       ];
 }
