@@ -24,11 +24,6 @@ class ProfileModel extends Equatable {
     this.trustedList,
   }) {
     oidc4VCIStack ??= Oidc4VCIStack.initial();
-    if (profileSetting.walletSecurityOptions.trustedList &&
-        trustedList == null) {
-      throw ArgumentError(
-          'trustedList must be provided when trustedList option is enabled',);
-    }
   }
   // final TrustedList? trustedList;
 

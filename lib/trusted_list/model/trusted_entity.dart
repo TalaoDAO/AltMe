@@ -29,7 +29,9 @@ class TrustedEntity extends Equatable {
   }) {
     // rootCertificates: REQUIRED if id is not a DID
     final isDid = id.startsWith('did:');
-    if (!isDid && (rootCertificates == null || rootCertificates!.isEmpty)) {
+    if (!isDid &&
+        (rootCertificates == null || rootCertificates!.isEmpty) &&
+        type != TrustedEntityType.walletProvider) {
       throw ArgumentError('rootCertificates is required if id is not a DID');
     }
     // vcTypes: REQUIRED for issuers and verifiers

@@ -88,8 +88,8 @@ class AdvancedSecuritySettingsView extends StatelessWidget {
                             trustedList: value,
                           );
                     },
-                    value: state.model.profileSetting.walletSecurityOptions
-                        .trustedList,
+                    value: state
+                        .model.profileSetting.walletSecurityOptions.trustedList,
                     activeColor: Theme.of(context).colorScheme.primary,
                   ),
                 ),

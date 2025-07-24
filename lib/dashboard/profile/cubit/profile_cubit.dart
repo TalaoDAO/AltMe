@@ -382,33 +382,14 @@ class ProfileCubit extends Cubit<ProfileState> {
         if (trustedListUrl != null &&
             trustedListUrl.isNotEmpty &&
             needsUpdate) {
-          try {
-            final response = await http.get(Uri.parse(trustedListUrl));
-            if (response.statusCode == 200) {
-              final trustedList = TrustedList.fromJson(
-                  jsonDecode(response.body) as Map<String, dynamic>,);
-              final updatedTrustedList = TrustedList(
-                ecosystem: trustedList.ecosystem,
-                lastUpdated: trustedList.lastUpdated,
-                entities: trustedList.entities,
-                uploadDateTime: DateTime.now(),
-              );
-              profileModel = profileModel.copyWith(
-                trustedList: updatedTrustedList,
-                oidc4VCIStack: oidc4VCIStack,
-              );
-            } else {
-              // Optionally handle download error
-            }
-          } catch (e) {
-            // Optionally handle fetch error
-          }
-        } else {
-          profileModel = profileModel.copyWith(oidc4VCIStack: oidc4VCIStack);
+          profileModel = await getTrustedList(
+            trustedListUrl,
+            profileModel,
+          );
         }
-      } else {
-        profileModel = profileModel.copyWith(oidc4VCIStack: oidc4VCIStack);
       }
+      profileModel = profileModel.copyWith(oidc4VCIStack: oidc4VCIStack);
+
       await update(profileModel);
     } catch (e, s) {
       log.e(
@@ -422,6 +403,38 @@ class ProfileCubit extends Cubit<ProfileState> {
             message: ResponseString.RESPONSE_STRING_FAILED_TO_LOAD_PROFILE,
           ),
         ),
+      );
+    }
+  }
+
+  Future<ProfileModel> getTrustedList(
+    String trustedListUrl,
+    ProfileModel profileModel,
+  ) async {
+    try {
+      final response = await http.get(Uri.parse(trustedListUrl));
+      if (response.statusCode == 200) {
+        final trustedList = TrustedList.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>,
+        );
+        final updatedTrustedList = TrustedList(
+          ecosystem: trustedList.ecosystem,
+          lastUpdated: trustedList.lastUpdated,
+          entities: trustedList.entities,
+          uploadDateTime: DateTime.now(),
+        );
+        final newProfileModel = profileModel.copyWith(
+          trustedList: updatedTrustedList,
+        );
+        return newProfileModel;
+      } else {
+        throw Exception(
+          'Failed to download trusted list: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      throw Exception(
+        'Failed to fetch trusted list: $e',
       );
     }
   }
@@ -520,7 +533,29 @@ class ProfileCubit extends Cubit<ProfileState> {
     bool? dpopSupport,
     bool? displayMode,
   }) async {
+    late TrustedList? trustedListContent;
+    if (trustedList != null) {
+      if (trustedList) {
+        final trustedListUrl =
+            state.model.profileSetting.walletSecurityOptions.trustedListUrl;
+        if (trustedListUrl == null || trustedListUrl.isEmpty) {
+          throw Exception(
+            'Trusted list URL is not set in the profile settings.',
+          );
+        }
+        trustedListContent = (await getTrustedList(
+          trustedListUrl,
+          state.model,
+        ))
+            .trustedList;
+      } else {
+        trustedListContent = null;
+      }
+    } else {
+      trustedListContent = null;
+    }
     final profileModel = state.model.copyWith(
+      trustedList: trustedListContent,
       profileSetting: state.model.profileSetting.copyWith(
         walletSecurityOptions:
             state.model.profileSetting.walletSecurityOptions.copyWith(
