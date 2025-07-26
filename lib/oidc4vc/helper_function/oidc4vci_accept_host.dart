@@ -60,7 +60,7 @@ Future<void> oidc4vciAcceptHost({
   }
 
   /// if dev mode is ON show some dialog to show data
-  await handleErrorForOID4VCI(
+  await handleErrorForOidc4Vci(
     oidc4vcParameters: oidc4vcParameters,
     didKeyType: context
         .read<ProfileCubit>()

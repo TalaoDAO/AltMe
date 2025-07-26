@@ -672,7 +672,7 @@ bool isSiopV2OrOidc4VpUrl(Uri uri) {
   return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;
 }
 
-Future<void> handleErrorForOID4VCI({
+Future<void> handleErrorForOidc4Vci({
   required Oidc4vcParameters oidc4vcParameters,
   required DidKeyType didKeyType,
   required ClientType clientType,

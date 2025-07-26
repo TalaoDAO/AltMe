@@ -916,7 +916,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             useOauthServerAuthEndPoint(profileCubit.state.model),
       );
 
-      await handleErrorForOID4VCI(
+      await handleErrorForOidc4Vci(
         oidc4vcParameters: oidc4vcParameters,
         didKeyType: profileCubit.state.model.profileSetting
             .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid,
