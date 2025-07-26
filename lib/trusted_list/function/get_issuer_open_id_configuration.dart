@@ -20,13 +20,13 @@ OpenIdConfiguration getIssuerOpenIdConfiguration({
 
       // Check for required claims
       if (!payload.containsKey('iat')) {
-        throw Exception('Missing required claim: iat');
+        throw Exception('Missing required claim in signed metadata: iat');
       }
       if (!payload.containsKey('iss')) {
-        throw Exception('Missing required claim: iss');
+        throw Exception('Missing required claim in signed metadata: iss');
       }
       if (!payload.containsKey('sub')) {
-        throw Exception('Missing required claim: sub');
+        throw Exception('Missing required claim in signed metadata: sub');
       }
 
       // Check that 'sub' matches the Credential Issuer identifier
