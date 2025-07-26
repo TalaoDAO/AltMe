@@ -4,6 +4,8 @@ import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
 import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.dart';
 import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
+import 'package:altme/trusted_list/function/get_issuer_open_id_configuration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -77,8 +79,82 @@ Future<void> oidc4vciAcceptHost({
         .customOidc4vcProfile
         .clientType,
   );
+  final profile = context.read<ProfileCubit>().state.model;
+  final trustedListEnabled =
+      profile.profileSetting.walletSecurityOptions.trustedList;
+  final trustedList = profile.trustedList;
+  if (trustedListEnabled) {
+    try {
+      if (trustedList == null) {
+        throw Exception(
+          'Missing trusted list.',
+        );
+      }
+      // issuer open id configuration from signed metadata is used instead of
+      // unsigned open id configuration
+      oidc4vcParameters = oidc4vcParameters.copyWith(
+        issuerOpenIdConfiguration: getIssuerOpenIdConfiguration(
+          issuerOpenIdConfiguration:
+              oidc4vcParameters.issuerOpenIdConfiguration,
+        ),
+      );
 
-  if (showPrompt) {
+      if (oidc4vcParameters.issuerOpenIdConfiguration.signedMetadata != null) {
+        // if signed metadata is present, show the json viewer
+        final formattedData = getFormattedStringOIDC4VCI(
+          url: oidc4vcParameters.initialUri.toString(),
+          oidc4vcParameters: oidc4vcParameters,
+        );
+        LoadingView().hide();
+        await Navigator.of(context).push<dynamic>(
+          JsonViewerPage.route(
+            title: l10n.display,
+            data: formattedData,
+          ),
+        );
+      }
+// get new issuer open id configuration from signed metadata
+      final trustedEntity = getIssuerFromTrustedList(
+        issuerOpenIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
+        trustedList: trustedList,
+      );
+      if (trustedEntity != null) {
+        LoadingView().hide();
+        acceptHost = await showDialog<bool>(
+              context: context,
+              builder: (BuildContext context) {
+                return ConfirmDialog(
+                  title: l10n.scanPromptHost,
+                  subtitle: 'is trusted',
+                  yes: l10n.communicationHostAllow,
+                  no: l10n.communicationHostDeny,
+                );
+              },
+            ) ??
+            false;
+      } else {
+        LoadingView().hide();
+        acceptHost = await showDialog<bool>(
+              context: context,
+              builder: (BuildContext context) {
+                return ConfirmDialog(
+                  title: l10n.scanPromptHost,
+                  subtitle: 'is not trusted',
+                  yes: l10n.communicationHostAllow,
+                  no: l10n.communicationHostDeny,
+                );
+              },
+            ) ??
+            false;
+      }
+    } catch (e) {
+      context.read<QRCodeScanCubit>().emitError(
+            error: e.toString(),
+          );
+      return;
+    }
+  }
+  if (showPrompt && !trustedListEnabled) {
     /// OIDC4VCI Case
 
     final String title = l10n.scanPromptHost;

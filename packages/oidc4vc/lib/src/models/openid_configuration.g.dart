@@ -50,6 +50,7 @@ OpenIdConfiguration _$OpenIdConfigurationFromJson(Map<String, dynamic> json) =>
       grantTypesSupported: (json['grant_types_supported'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      signedMetadata: json['signed_metadata'] as String?,
     );
 
 Map<String, dynamic> _$OpenIdConfigurationToJson(
@@ -82,6 +83,7 @@ Map<String, dynamic> _$OpenIdConfigurationToJson(
       'require_pushed_authorization_requests':
           instance.requirePushedAuthorizationRequests,
       'grant_types_supported': instance.grantTypesSupported,
+      'signed_metadata': instance.signedMetadata,
     };
 
 CredentialsSupported _$CredentialsSupportedFromJson(

@@ -995,6 +995,13 @@ MessageHandler getMessageHandler(dynamic e) {
         'error_description': 'Some issue in the response from the server.',
       },
     );
+  } else if (e is Exception) {
+    return ResponseMessage(
+      data: {
+        'error': 'error',
+        'error_description': e.toString(),
+      },
+    );
   } else {
     final stringException = e.toString().replaceAll('Exception: ', '');
     if (stringException.contains('CREDENTIAL_SUPPORT_DATA_ERROR')) {
