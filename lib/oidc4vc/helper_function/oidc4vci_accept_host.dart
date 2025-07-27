@@ -6,6 +6,8 @@ import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
 import 'package:altme/trusted_list/function/get_issuer_open_id_configuration.dart';
+import 'package:altme/trusted_list/function/is_certificate_valid.dart';
+import 'package:altme/trusted_list/widget/trusted_entity_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -92,6 +94,10 @@ Future<void> oidc4vciAcceptHost({
       }
       // issuer open id configuration from signed metadata is used instead of
       // unsigned open id configuration
+
+      final signedMetadata =
+          oidc4vcParameters.issuerOpenIdConfiguration.signedMetadata;
+
       oidc4vcParameters = oidc4vcParameters.copyWith(
         issuerOpenIdConfiguration: getIssuerOpenIdConfiguration(
           issuerOpenIdConfiguration:
@@ -99,33 +105,30 @@ Future<void> oidc4vciAcceptHost({
         ),
       );
 
-      if (oidc4vcParameters.issuerOpenIdConfiguration.signedMetadata != null) {
-        // if signed metadata is present, show the json viewer
-        final formattedData = getFormattedStringOIDC4VCI(
-          url: oidc4vcParameters.initialUri.toString(),
-          oidc4vcParameters: oidc4vcParameters,
-        );
-        LoadingView().hide();
-        await Navigator.of(context).push<dynamic>(
-          JsonViewerPage.route(
-            title: l10n.display,
-            data: formattedData,
-          ),
-        );
-      }
-// get new issuer open id configuration from signed metadata
+      // get new issuer open id configuration from signed metadata
       final trustedEntity = getIssuerFromTrustedList(
         issuerOpenIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
         trustedList: trustedList,
       );
       if (trustedEntity != null) {
+        isCertificateValid(
+          trustedEntity: trustedEntity,
+          signedMetadata: signedMetadata!,
+        );
+        // check certificate is trusted
+
         LoadingView().hide();
         acceptHost = await showDialog<bool>(
               context: context,
               builder: (BuildContext context) {
                 return ConfirmDialog(
                   title: l10n.scanPromptHost,
-                  subtitle: 'is trusted',
+                  content: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: SingleChildScrollView(
+                      child: TrustedEntityDetails(trustedEntity: trustedEntity),
+                    ),
+                  ),
                   yes: l10n.communicationHostAllow,
                   no: l10n.communicationHostDeny,
                 );
@@ -139,9 +142,10 @@ Future<void> oidc4vciAcceptHost({
               builder: (BuildContext context) {
                 return ConfirmDialog(
                   title: l10n.scanPromptHost,
-                  subtitle: 'is not trusted',
+                  subtitle: l10n.notTrustedEntity,
                   yes: l10n.communicationHostAllow,
                   no: l10n.communicationHostDeny,
+                  invertedCallToAction: true,
                 );
               },
             ) ??
