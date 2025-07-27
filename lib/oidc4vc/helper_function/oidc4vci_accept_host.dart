@@ -153,7 +153,7 @@ Future<void> oidc4vciAcceptHost({
       }
     } catch (e) {
       context.read<QRCodeScanCubit>().emitError(
-            error: e.toString(),
+            error: e,
           );
       return;
     }
