@@ -5,6 +5,7 @@ import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.da
 import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
+import 'package:altme/trusted_list/function/check_presentation_is_trusted.dart';
 import 'package:altme/trusted_list/function/is_certificate_valid.dart';
 import 'package:altme/trusted_list/model/trusted_entity.dart';
 import 'package:altme/trusted_list/widget/trusted_entity_details.dart';
@@ -132,9 +133,13 @@ Future<void> oidc4vpSiopV2AcceptHost({
         TrustedEntityType.verifier,
       );
       if (trustedEntity != null) {
+        checkPresentationIsTrusted(
+          trustedEntity: trustedEntity,
+          encodedPresentation: encodedData as String,
+        );
         isCertificateValid(
           trustedEntity: trustedEntity,
-          signedMetadata: encodedData as String,
+          signedMetadata: encodedData,
         );
         // check certificate is trusted
 

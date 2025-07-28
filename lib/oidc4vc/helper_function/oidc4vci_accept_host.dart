@@ -111,6 +111,32 @@ Future<void> oidc4vciAcceptHost({
         trustedList: trustedList,
       );
       if (trustedEntity != null) {
+        // check if each element of
+        // oidc4vcParameters.credentialOffer['credential_configuration_ids'] are
+        // in trustedEntity.vcTypes
+
+        final credentialConfigurationIds =
+            oidc4vcParameters.credentialOffer['credential_configuration_ids'];
+        if (credentialConfigurationIds != null &&
+            credentialConfigurationIds is List) {
+          for (final credentialConfigurationId in credentialConfigurationIds) {
+            if (!trustedEntity.vcTypes!.contains(
+              oidc4vcParameters.issuerOpenIdConfiguration
+                      .credentialConfigurationsSupported[
+                  credentialConfigurationId]['vct'],
+            )) {
+              throw Exception(
+                // ignore: lines_longer_than_80_chars
+                "$credentialConfigurationId is not in the trusted entity's vcTypes",
+              );
+            }
+          }
+        } else {
+          throw Exception(
+            'credential_configuration_ids from credential offer is not valid',
+          );
+        }
+
         isCertificateValid(
           trustedEntity: trustedEntity,
           signedMetadata: signedMetadata!,
