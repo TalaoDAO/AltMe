@@ -147,16 +147,21 @@ Future<void> oidc4vciAcceptHost({
         acceptHost = await showDialog<bool>(
               context: context,
               builder: (BuildContext context) {
-                return ConfirmDialog(
-                  title: l10n.scanPromptHost,
-                  content: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.6,
-                    child: SingleChildScrollView(
-                      child: TrustedEntityDetails(trustedEntity: trustedEntity),
+                return SafeArea(
+                  child: ConfirmDialog(
+                    title: l10n.scanPromptHost,
+                    content: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.6,
+                      ),
+                      child: SingleChildScrollView(
+                        child:
+                            TrustedEntityDetails(trustedEntity: trustedEntity),
+                      ),
                     ),
+                    yes: l10n.communicationHostAllow,
+                    no: l10n.communicationHostDeny,
                   ),
-                  yes: l10n.communicationHostAllow,
-                  no: l10n.communicationHostDeny,
                 );
               },
             ) ??

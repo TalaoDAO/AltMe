@@ -17,9 +17,10 @@ class TrustedEntityDetails extends StatelessWidget {
         if (trustedEntity.name != null)
           Padding(
             padding: const EdgeInsets.all(8),
-            child: Text(trustedEntity.name!,
-                style:
-                    textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
+            child: Text(
+              trustedEntity.name!,
+              style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+            ),
           ),
         if (trustedEntity.description != null)
           Padding(
