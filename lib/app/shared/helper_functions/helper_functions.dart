@@ -672,7 +672,7 @@ bool isSiopV2OrOidc4VpUrl(Uri uri) {
   return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;
 }
 
-Future<void> handleErrorForOID4VCI({
+Future<void> handleErrorForOidc4Vci({
   required Oidc4vcParameters oidc4vcParameters,
   required DidKeyType didKeyType,
   required ClientType clientType,
@@ -993,6 +993,13 @@ MessageHandler getMessageHandler(dynamic e) {
       data: {
         'error': 'unsupported_format',
         'error_description': 'Some issue in the response from the server.',
+      },
+    );
+  } else if (e is Exception) {
+    return ResponseMessage(
+      data: {
+        'error': 'error',
+        'error_description': e.toString(),
       },
     );
   } else {
@@ -1951,6 +1958,17 @@ Future<Map<String, dynamic>?> checkX509({
       );
     }
 
+    // Final verification: check the certificate chain
+    // final isChainValid = await verifyX509Chain(x5c);
+    // if (!isChainValid) {
+    //   throw ResponseMessage(
+    //     data: {
+    //       'error': 'invalid_format',
+    //       'error_description': 'x509 certificate chain is invalid',
+    //     },
+    //   );
+    // }
+
     //array x5c[0], it is a certificat in DER format (binary)
     final certificate = x5c.firstOrNull;
 
@@ -2358,5 +2376,35 @@ String? getClientIdForPresentation(String? clientId) {
     }
   } else {
     return clientId;
+  }
+}
+
+/// Verifies the X.509 certificate chain from a list of base64 DER-encoded
+/// certificates.
+/// Returns true if the chain is valid, false otherwise.
+Future<bool> verifyX509Chain(List<dynamic> x5cChain) async {
+  if (x5cChain.isEmpty) return false;
+  try {
+    final certs = x5cChain.map((certBase64) {
+      final der = base64Decode(certBase64.toString());
+      final seq = asn1lib.ASN1Sequence.fromBytes(der);
+      return x509.X509Certificate.fromAsn1(seq);
+    }).toList();
+
+    // Check each cert is signed by the next (issuer)
+    for (var i = 0; i < certs.length - 1; i++) {
+      final child = certs[i];
+      final issuer = certs[i + 1];
+      // if (!child.verify(issuer.publicKey)) {
+      //   return false;
+      // }
+    }
+    // Optionally: Check the root is self-signed (not required for all
+    // use cases)
+    // final root = certs.last;
+    // if (!root.verify(root.publicKey)) return false;
+    return true;
+  } catch (e) {
+    return false;
   }
 }

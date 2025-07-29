@@ -1,6 +1,8 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/profile/models/profile_setting.dart';
 import 'package:altme/oidc4vc/model/oidc4vci_stack.dart';
+import 'package:altme/trusted_list/model/trusted_list.dart';
+// import 'package:http/http.dart' as http;
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -8,6 +10,7 @@ import 'package:oidc4vc/oidc4vc.dart';
 part 'profile.g.dart';
 
 @JsonSerializable()
+
 // ignore: must_be_immutable
 class ProfileModel extends Equatable {
   ProfileModel({
@@ -18,9 +21,11 @@ class ProfileModel extends Equatable {
     required this.profileSetting,
     this.enterpriseWalletName,
     this.oidc4VCIStack,
+    this.trustedList,
   }) {
     oidc4VCIStack ??= Oidc4VCIStack.initial();
   }
+  // final TrustedList? trustedList;
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) =>
       _$ProfileModelFromJson(json);
@@ -103,6 +108,7 @@ class ProfileModel extends Equatable {
             displaySecurityAdvancedSettings: true,
             secureSecurityAuthenticationWithPinCode: true,
             verifySecurityIssuerWebsiteIdentity: true,
+            trustedList: false,
           ),
         ),
       );
@@ -257,6 +263,7 @@ class ProfileModel extends Equatable {
             displaySecurityAdvancedSettings: true,
             secureSecurityAuthenticationWithPinCode: true,
             verifySecurityIssuerWebsiteIdentity: true,
+            trustedList: false,
           ),
         ),
       );
@@ -341,6 +348,7 @@ class ProfileModel extends Equatable {
             displaySecurityAdvancedSettings: true,
             secureSecurityAuthenticationWithPinCode: true,
             verifySecurityIssuerWebsiteIdentity: true,
+            trustedList: false,
           ),
         ),
       );
@@ -425,6 +433,7 @@ class ProfileModel extends Equatable {
             displaySecurityAdvancedSettings: true,
             secureSecurityAuthenticationWithPinCode: true,
             verifySecurityIssuerWebsiteIdentity: true,
+            trustedList: false,
           ),
         ),
       );
@@ -436,6 +445,7 @@ class ProfileModel extends Equatable {
   final ProfileType profileType;
   final String? enterpriseWalletName;
   late Oidc4VCIStack? oidc4VCIStack;
+  final TrustedList? trustedList;
 
   @override
   List<Object?> get props => [
@@ -446,6 +456,7 @@ class ProfileModel extends Equatable {
         enterpriseWalletName,
         profileSetting,
         oidc4VCIStack,
+        trustedList,
       ];
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
@@ -458,6 +469,7 @@ class ProfileModel extends Equatable {
     ProfileSetting? profileSetting,
     String? enterpriseWalletName,
     Oidc4VCIStack? oidc4VCIStack,
+    TrustedList? trustedList,
   }) {
     return ProfileModel(
       walletType: walletType ?? this.walletType,
@@ -467,6 +479,7 @@ class ProfileModel extends Equatable {
       profileSetting: profileSetting ?? this.profileSetting,
       enterpriseWalletName: enterpriseWalletName ?? this.enterpriseWalletName,
       oidc4VCIStack: oidc4VCIStack ?? this.oidc4VCIStack,
+      trustedList: trustedList ?? this.trustedList,
     );
   }
 }

@@ -77,6 +77,24 @@ class AdvancedSecuritySettingsView extends StatelessWidget {
                 ),
               ),
               DrawerItem2(
+                title: l10n.trustedList,
+                subtitle: l10n.trustedListSubtitle,
+                padding: const EdgeInsets.all(Sizes.spaceSmall),
+                trailing: SizedBox(
+                  height: 25,
+                  child: Switch(
+                    onChanged: (value) async {
+                      await context.read<ProfileCubit>().updateProfileSetting(
+                            trustedList: value,
+                          );
+                    },
+                    value: state
+                        .model.profileSetting.walletSecurityOptions.trustedList,
+                    activeColor: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+              DrawerItem2(
                 title: l10n.secureAuthenticationWithPINCode,
                 subtitle: l10n.secureAuthenticationWithPINCodeSubtitle,
                 padding: const EdgeInsets.all(Sizes.spaceSmall),

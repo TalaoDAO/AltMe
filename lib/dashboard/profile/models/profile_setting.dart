@@ -899,6 +899,8 @@ class WalletSecurityOptions extends Equatable {
     required this.displaySecurityAdvancedSettings,
     required this.secureSecurityAuthenticationWithPinCode,
     required this.verifySecurityIssuerWebsiteIdentity,
+    this.trustedListUrl = Parameters.trustedListUrl,
+    required this.trustedList,
   });
 
   factory WalletSecurityOptions.fromJson(Map<String, dynamic> json) =>
@@ -909,12 +911,15 @@ class WalletSecurityOptions extends Equatable {
         displaySecurityAdvancedSettings: true,
         secureSecurityAuthenticationWithPinCode: false,
         verifySecurityIssuerWebsiteIdentity: false,
+        trustedList: false,
       );
 
   final bool confirmSecurityVerifierAccess;
   final bool displaySecurityAdvancedSettings;
   final bool secureSecurityAuthenticationWithPinCode;
   final bool verifySecurityIssuerWebsiteIdentity;
+  final String? trustedListUrl;
+  final bool trustedList;
 
   Map<String, dynamic> toJson() => _$WalletSecurityOptionsToJson(this);
 
@@ -923,6 +928,8 @@ class WalletSecurityOptions extends Equatable {
     bool? displaySecurityAdvancedSettings,
     bool? secureSecurityAuthenticationWithPinCode,
     bool? verifySecurityIssuerWebsiteIdentity,
+    String? trustedListUrl,
+    bool? trustedList,
   }) =>
       WalletSecurityOptions(
         confirmSecurityVerifierAccess:
@@ -935,6 +942,8 @@ class WalletSecurityOptions extends Equatable {
         verifySecurityIssuerWebsiteIdentity:
             verifySecurityIssuerWebsiteIdentity ??
                 this.verifySecurityIssuerWebsiteIdentity,
+        trustedListUrl: trustedListUrl ?? this.trustedListUrl,
+        trustedList: trustedList ?? this.trustedList,
       );
 
   @override
@@ -943,5 +952,7 @@ class WalletSecurityOptions extends Equatable {
         displaySecurityAdvancedSettings,
         secureSecurityAuthenticationWithPinCode,
         verifySecurityIssuerWebsiteIdentity,
+        trustedListUrl,
+        trustedList,
       ];
 }
