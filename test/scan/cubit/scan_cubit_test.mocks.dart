@@ -207,8 +207,8 @@ class _FakeProfileState_15 extends _i1.SmartFake implements _i5.ProfileState {
         );
 }
 
-class _FakeHomeCubit_16 extends _i1.SmartFake implements _i5.HomeCubit {
-  _FakeHomeCubit_16(
+class _FakeProfileModel_16 extends _i1.SmartFake implements _i5.ProfileModel {
+  _FakeProfileModel_16(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -217,8 +217,8 @@ class _FakeHomeCubit_16 extends _i1.SmartFake implements _i5.HomeCubit {
         );
 }
 
-class _FakeWalletState_17 extends _i1.SmartFake implements _i10.WalletState {
-  _FakeWalletState_17(
+class _FakeHomeCubit_17 extends _i1.SmartFake implements _i5.HomeCubit {
+  _FakeHomeCubit_17(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -227,9 +227,19 @@ class _FakeWalletState_17 extends _i1.SmartFake implements _i10.WalletState {
         );
 }
 
-class _FakeCryptoAccountData_18 extends _i1.SmartFake
+class _FakeWalletState_18 extends _i1.SmartFake implements _i10.WalletState {
+  _FakeWalletState_18(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeCryptoAccountData_19 extends _i1.SmartFake
     implements _i10.CryptoAccountData {
-  _FakeCryptoAccountData_18(
+  _FakeCryptoAccountData_19(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -238,9 +248,9 @@ class _FakeCryptoAccountData_18 extends _i1.SmartFake
         );
 }
 
-class _FakeOidc4vcParameters_19 extends _i1.SmartFake
+class _FakeOidc4vcParameters_20 extends _i1.SmartFake
     implements _i9.Oidc4vcParameters {
-  _FakeOidc4vcParameters_19(
+  _FakeOidc4vcParameters_20(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -249,8 +259,8 @@ class _FakeOidc4vcParameters_19 extends _i1.SmartFake
         );
 }
 
-class _FakeResponse_20<T> extends _i1.SmartFake implements _i4.Response<T> {
-  _FakeResponse_20(
+class _FakeResponse_21<T> extends _i1.SmartFake implements _i4.Response<T> {
+  _FakeResponse_21(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -259,9 +269,9 @@ class _FakeResponse_20<T> extends _i1.SmartFake implements _i4.Response<T> {
         );
 }
 
-class _FakeOpenIdConfiguration_21 extends _i1.SmartFake
+class _FakeOpenIdConfiguration_22 extends _i1.SmartFake
     implements _i9.OpenIdConfiguration {
-  _FakeOpenIdConfiguration_21(
+  _FakeOpenIdConfiguration_22(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -1255,6 +1265,31 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
       ) as _i16.Future<void>);
 
   @override
+  _i16.Future<_i5.ProfileModel> getTrustedList(
+    String? trustedListUrl,
+    _i5.ProfileModel? profileModel,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getTrustedList,
+          [
+            trustedListUrl,
+            profileModel,
+          ],
+        ),
+        returnValue: _i16.Future<_i5.ProfileModel>.value(_FakeProfileModel_16(
+          this,
+          Invocation.method(
+            #getTrustedList,
+            [
+              trustedListUrl,
+              profileModel,
+            ],
+          ),
+        )),
+      ) as _i16.Future<_i5.ProfileModel>);
+
+  @override
   _i16.Future<void> update(_i5.ProfileModel? profileModel) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1302,6 +1337,7 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
     String? clientSecret,
     bool? confirmSecurityVerifierAccess,
     bool? secureSecurityAuthenticationWithPinCode,
+    bool? trustedList,
     bool? verifySecurityIssuerWebsiteIdentity,
     _i9.OIDC4VCIDraftType? oidc4vciDraftType,
     _i9.OIDC4VPDraftType? oidc4vpDraftType,
@@ -1332,6 +1368,7 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
             #confirmSecurityVerifierAccess: confirmSecurityVerifierAccess,
             #secureSecurityAuthenticationWithPinCode:
                 secureSecurityAuthenticationWithPinCode,
+            #trustedList: trustedList,
             #verifySecurityIssuerWebsiteIdentity:
                 verifySecurityIssuerWebsiteIdentity,
             #oidc4vciDraftType: oidc4vciDraftType,
@@ -1503,7 +1540,7 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
   @override
   _i5.HomeCubit get homeCubit => (super.noSuchMethod(
         Invocation.getter(#homeCubit),
-        returnValue: _FakeHomeCubit_16(
+        returnValue: _FakeHomeCubit_17(
           this,
           Invocation.getter(#homeCubit),
         ),
@@ -1530,7 +1567,7 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
   @override
   _i10.WalletState get state => (super.noSuchMethod(
         Invocation.getter(#state),
-        returnValue: _FakeWalletState_17(
+        returnValue: _FakeWalletState_18(
           this,
           Invocation.getter(#state),
         ),
@@ -1618,7 +1655,7 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
           },
         ),
         returnValue:
-            _i16.Future<_i10.CryptoAccountData>.value(_FakeCryptoAccountData_18(
+            _i16.Future<_i10.CryptoAccountData>.value(_FakeCryptoAccountData_19(
           this,
           Invocation.method(
             #generateAccount,
@@ -2105,7 +2142,7 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
           },
         ),
         returnValue:
-            _i16.Future<_i9.Oidc4vcParameters>.value(_FakeOidc4vcParameters_19(
+            _i16.Future<_i9.Oidc4vcParameters>.value(_FakeOidc4vcParameters_20(
           this,
           Invocation.method(
             #authorizationParameters,
@@ -2516,7 +2553,7 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
           },
         ),
         returnValue:
-            _i16.Future<_i4.Response<dynamic>>.value(_FakeResponse_20<dynamic>(
+            _i16.Future<_i4.Response<dynamic>>.value(_FakeResponse_21<dynamic>(
           this,
           Invocation.method(
             #siopv2Flow,
@@ -2585,7 +2622,7 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
           },
         ),
         returnValue: _i16.Future<_i9.OpenIdConfiguration>.value(
-            _FakeOpenIdConfiguration_21(
+            _FakeOpenIdConfiguration_22(
           this,
           Invocation.method(
             #getAuthorizationServerMetaData,
@@ -2622,7 +2659,7 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
           },
         ),
         returnValue: _i16.Future<_i9.OpenIdConfiguration>.value(
-            _FakeOpenIdConfiguration_21(
+            _FakeOpenIdConfiguration_22(
           this,
           Invocation.method(
             #getIssuerMetaData,

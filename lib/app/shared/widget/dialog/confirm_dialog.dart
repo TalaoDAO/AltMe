@@ -8,6 +8,7 @@ class ConfirmDialog extends StatelessWidget {
     super.key,
     required this.title,
     this.subtitle,
+    this.content,
     this.yes,
     this.no,
     this.icon = IconStrings.cardReceive,
@@ -15,10 +16,12 @@ class ConfirmDialog extends StatelessWidget {
     this.bgColor,
     this.textColor,
     this.showNoButton = true,
+    this.invertedCallToAction = false,
   });
 
   final String title;
   final String? subtitle;
+  final Widget? content;
   final String? yes;
   final String? no;
   final Color? dialogColor;
@@ -26,6 +29,7 @@ class ConfirmDialog extends StatelessWidget {
   final Color? textColor;
   final String icon;
   final bool showNoButton;
+  final bool invertedCallToAction;
 
   @override
   Widget build(BuildContext context) {
@@ -73,34 +77,63 @@ class ConfirmDialog extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ],
+            if (content != null) ...[
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: content,
+              ),
+            ],
             const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 if (showNoButton) ...[
-                  Expanded(
-                    child: MyOutlinedButton(
-                      text: no ?? l10n.no,
-                      verticalSpacing: 14,
-                      fontSize: 15,
-                      elevation: 0,
-                      onPressed: () {
-                        Navigator.of(context).pop(false);
-                      },
+                  if (invertedCallToAction)
+                    Expanded(
+                      child: MyElevatedButton(
+                        text: no ?? l10n.no,
+                        verticalSpacing: 14,
+                        fontSize: 15,
+                        elevation: 0,
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        },
+                      ),
+                    )
+                  else
+                    Expanded(
+                      child: MyOutlinedButton(
+                        text: no ?? l10n.no,
+                        verticalSpacing: 14,
+                        fontSize: 15,
+                        elevation: 0,
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        },
+                      ),
                     ),
-                  ),
                   const SizedBox(width: 16),
                 ],
                 Expanded(
-                  child: MyElevatedButton(
-                    text: yes ?? l10n.yes,
-                    verticalSpacing: 14,
-                    fontSize: 15,
-                    elevation: 0,
-                    onPressed: () {
-                      Navigator.of(context).pop(true);
-                    },
-                  ),
+                  child: invertedCallToAction
+                      ? MyOutlinedButton(
+                          text: yes ?? l10n.yes,
+                          verticalSpacing: 14,
+                          fontSize: 15,
+                          elevation: 0,
+                          onPressed: () {
+                            Navigator.of(context).pop(true);
+                          },
+                        )
+                      : MyElevatedButton(
+                          text: yes ?? l10n.yes,
+                          verticalSpacing: 14,
+                          fontSize: 15,
+                          elevation: 0,
+                          onPressed: () {
+                            Navigator.of(context).pop(true);
+                          },
+                        ),
                 ),
               ],
             ),

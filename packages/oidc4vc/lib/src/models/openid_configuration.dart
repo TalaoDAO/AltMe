@@ -31,6 +31,7 @@ class OpenIdConfiguration extends Equatable {
     this.jwks,
     this.grantTypesSupported,
     this.rawConfiguration,
+    this.signedMetadata,
   });
 
   factory OpenIdConfiguration.fromJson(Map<String, dynamic> json) =>
@@ -81,6 +82,8 @@ class OpenIdConfiguration extends Equatable {
   final List<String>? grantTypesSupported;
   @JsonKey(includeFromJson: false, includeToJson: false)
   final Map<String, dynamic>? rawConfiguration;
+  @JsonKey(name: 'signed_metadata')
+  final String? signedMetadata;
 
   Map<String, dynamic> toJson() => _$OpenIdConfigurationToJson(this);
 
@@ -109,6 +112,7 @@ class OpenIdConfiguration extends Equatable {
     Map<String, dynamic>? jwks,
     List<String>? grantTypesSupported,
     Map<String, dynamic>? rawConfiguration,
+    String? signedMetadata,
   }) {
     return OpenIdConfiguration(
       requirePushedAuthorizationRequests: requirePushedAuthorizationRequests ??
@@ -142,6 +146,7 @@ class OpenIdConfiguration extends Equatable {
       jwks: jwks ?? this.jwks,
       grantTypesSupported: grantTypesSupported ?? this.grantTypesSupported,
       rawConfiguration: rawConfiguration ?? this.rawConfiguration,
+      signedMetadata: signedMetadata ?? this.signedMetadata,
     );
   }
 
@@ -170,6 +175,7 @@ class OpenIdConfiguration extends Equatable {
         requirePushedAuthorizationRequests,
         grantTypesSupported,
         rawConfiguration,
+        signedMetadata,
       ];
 }
 
