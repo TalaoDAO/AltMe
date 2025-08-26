@@ -1,7 +1,7 @@
 name: altme
 description: AltMe Flutter App
 
-version: 3.2.0+5643
+version: 3.2.1+5644
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 environment:
@@ -22,7 +22,7 @@ dependencies:
   #   path: ../beacon
   bip32: ^2.0.0
   bip39: ^1.0.6
-  bloc: ^8.1.2
+  bloc: ^8.1.2  
   cached_network_image: ^3.2.3
   camera: ^0.10.5+2
   confetti: ^0.7.0
@@ -91,7 +91,7 @@ dependencies:
   no_screenshot: ^0.0.1+6
   oidc4vc:
     path: packages/oidc4vc
-  open_filex: ^4.3.2
+  open_file: ^3.5.10
   path: ^1.8.3
   permission_handler: ^11.3.1
   pinenacl: ^0.6.0

@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:matrix/matrix.dart' hide User;
 import 'package:oidc4vc/oidc4vc.dart';
-import 'package:open_filex/open_filex.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -95,7 +95,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
         }
       }
 
-      await OpenFilex.open(localPath);
+      await OpenFile.open(localPath);
     }
   }
 
