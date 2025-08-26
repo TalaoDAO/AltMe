@@ -2014,13 +2014,14 @@ Future<Map<String, dynamic>?> checkX509({
     final extnValue = extension.extnValue.toString();
 
     /// clientId is an url. string domain is the domain from this url
-    final domain = Uri.parse(clientId).host;
+    final domain = clientId;
 
     /// valid domains is the list from the extnValue in which DNS: prefix
     /// is removed. scheme like http:// or https:// is also removed
     final validDomains = extnValue
         .replaceAll('DNS:', '')
         .replaceAll('URI:', '')
+        .replaceAll(' ', '')
         .split(',')
         .map(
           (String extnValueDomain) =>
