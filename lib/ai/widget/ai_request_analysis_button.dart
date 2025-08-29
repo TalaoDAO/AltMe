@@ -116,6 +116,7 @@ class AiRequestAnalysisButton extends StatelessWidget {
                     .aiProfile,
               },
               headers: headers,
+              timeout: 90,
             ) as String;
             if (response == '') {
               throw Exception('Ai analysis is null or empty');

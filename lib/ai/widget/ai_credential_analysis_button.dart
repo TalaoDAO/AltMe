@@ -87,6 +87,7 @@ class AiCredentialAnalysisButton extends StatelessWidget {
                 'vc': encodedCredential,
               },
               headers: headers,
+              timeout: 90,
             ) as String;
             if (response == '') {
               throw Exception('Ai analysis is null or empty');

@@ -371,16 +371,17 @@ class MockDioClient extends _i1.Mock implements _i15.DioClient {
 
   @override
   _i16.Future<dynamic> post(
-    String? uri, {
+    String uri, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     _i4.Options? options,
     _i4.CancelToken? cancelToken,
     _i4.ProgressCallback? onSendProgress,
     _i4.ProgressCallback? onReceiveProgress,
-    Map<String, dynamic>? headers = const {
+    Map<String, dynamic> headers = const {
       'Content-Type': 'application/json; charset=UTF-8'
     },
+    int? timeout,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -394,6 +395,7 @@ class MockDioClient extends _i1.Mock implements _i15.DioClient {
             #onSendProgress: onSendProgress,
             #onReceiveProgress: onReceiveProgress,
             #headers: headers,
+            #timeout: timeout,
           },
         ),
         returnValue: _i16.Future<dynamic>.value(),
