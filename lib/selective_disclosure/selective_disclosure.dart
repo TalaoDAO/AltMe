@@ -37,7 +37,7 @@ class SelectiveDisclosure {
   List<String> get contents => _delegate.contents;
   String? get getPicture => _delegate.getPicture;
   (List<ClaimsData>, String?) getClaimsData(
-          {required String key, required String? parentKeyId}) =>
+          {required String key, required String? parentKeyId,}) =>
       _delegate.getClaimsData(key: key, parentKeyId: parentKeyId);
   String disclosureToContent(String element) =>
       _delegate.disclosureToContent(element);
@@ -48,7 +48,7 @@ class SelectiveDisclosure {
   String? sdForNested({required String searchedKey, String? parentKeyId}) =>
       _delegate.sdForNested(searchedKey: searchedKey, parentKeyId: parentKeyId);
   String? gestSdFromDigestList(
-          String key, String parentKeyId, dynamic value, String searchedKey) =>
+          String key, String parentKeyId, dynamic value, String searchedKey,) =>
       _delegate.gestSdFromDigestList(key, parentKeyId, value, searchedKey);
   Map<String, dynamic> contentOfSh256Hash(String element) =>
       _delegate.contentOfSh256Hash(element);

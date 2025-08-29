@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:gpt_markdown/gpt_markdown.dart';
 
 class MarkdownPage extends StatelessWidget {
   MarkdownPage({super.key, required this.title, required this.file});
@@ -28,24 +28,15 @@ class MarkdownPage extends StatelessWidget {
           future: _loadFile(),
           builder: (context, snapshot) {
             if (snapshot.data != null) {
-              return Markdown(
-                data: snapshot.data!,
-                styleSheet: MarkdownStyleSheet(
-                  h1: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                  h2: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                  a: TextStyle(color: Theme.of(context).colorScheme.primary),
-                  p: TextStyle(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withValues(alpha: 0.6),
-                  ),
+              return GptMarkdown(
+                snapshot.data!,
+                style: TextStyle(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.6),
                 ),
-                onTapLink: (text, href, title) => _onTapLink(href),
+                onLinkTab: (href, title) => _onTapLink(href),
               );
             }
 
