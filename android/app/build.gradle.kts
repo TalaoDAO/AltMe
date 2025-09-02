@@ -1,4 +1,5 @@
-
+import java.util.Properties
+import java.io.FileInputStream
 
 plugins {
     id("com.android.application")
@@ -6,41 +7,10 @@ plugins {
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
 if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-}
-subprojects {
-    afterEvaluate { project ->
-        if (project.hasProperty('android')) {
-            project.android {
-                if (namespace == null) {
-                    namespace = project.group.toString()  // Set namespace as fallback
-                }
-                project.tasks.whenTaskAdded { task ->
-                    if (task.name.contains('processDebugManifest') || task.name.contains('processReleaseManifest')) {
-                        task.doFirst {
-                            File manifestFile = file("${projectDir}/src/main/AndroidManifest.xml")
-                            if (manifestFile.exists()) {
-                                String manifestContent = manifestFile.text
-                                if (manifestContent.contains('package=')) {
-                                    manifestContent = manifestContent.replaceAll(/package="[^"]*"/, "")
-                                    manifestFile.write(manifestContent)
-                                    println "Removed 'package' attribute from ${manifestFile}"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
-            kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_11.toString()
-            }
-        }
-    }
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
 android {
@@ -49,18 +19,18 @@ android {
     ndkVersion = flutter.ndkVersion
 
     packagingOptions {
-      pickFirst 'lib/x86/libsodium.so'
-      pickFirst 'lib/x86_64/libsodium.so'
-      pickFirst 'lib/armeabi-v7a/libsodium.so'
-      pickFirst 'lib/arm64-v8a/libsodium.so'
+      jniLibs.pickFirsts += "lib/x86/libsodium.so"
+      jniLibs.pickFirsts += "lib/x86_64/libsodium.so"
+      jniLibs.pickFirsts += "lib/armeabi-v7a/libsodium.so"
+      jniLibs.pickFirsts += "lib/arm64-v8a/libsodium.so"
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = '21'
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
     defaultConfig {
@@ -75,48 +45,47 @@ android {
     }
     
     signingConfigs {
-        if (System.getenv("ANDROID_KEYSTORE_PATH")) {
-            release {
-                storeFile = file(System.getenv("ANDROID_KEYSTORE_PATH"))
-                keyAlias = System.getenv("ANDROID_KEYSTORE_ALIAS")
-                keyPassword = System.getenv("ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
-                storePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
+            create("release") {
+              keyAlias = keystoreProperties["keyAlias"] as String
+              keyPassword = keystoreProperties["keyPassword"] as String
+              storeFile = keystoreProperties["storeFile"]?.let { file(it) }
+              storePassword = keystoreProperties["storePassword"] as String
             }
-        } else {
-            release {
-                keyAlias = keystoreProperties['keyAlias']
-                keyPassword = keystoreProperties['keyPassword']
-                storeFile = keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-                storePassword = keystoreProperties['storePassword']
-            }
-        }
     }
-    flavorDimensions = ["default"]
+    flavorDimensions += "default"
     productFlavors { 
-        production {
+        create("production") {
             dimension = "default"
             applicationIdSuffix = ""
-            manifestPlaceholders = [appName: "Altme"]
+            resValue(
+              type = "string",
+              name = "app_name",
+              value = "Altme")
         }
-        staging {
+        create("staging") {
             dimension = "default"
             applicationIdSuffix = ".stg"
-            manifestPlaceholders = [appName: "[STG] Altme"]
+            resValue(
+              type = "string",
+              name = "app_name",
+              value = "[STG] Altme")
         }        
-        development {
+        create("development") {
             dimension = "default"
             applicationIdSuffix = ".dev"
-            manifestPlaceholders = [appName: "[DEV] Altme"]
+            resValue(
+              type = "string",
+              name = "app_name",
+              value = "[DEV] Altme")
         }
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.release
-            minifyEnabled = true
+            signingConfig = signingConfigs.getByName("release")
         }
         debug {
-            signingConfig = signingConfigs.debug
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 }
@@ -124,4 +93,3 @@ android {
 flutter {
     source = "../.."
 }
-
