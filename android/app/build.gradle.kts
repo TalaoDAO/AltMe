@@ -1,10 +1,10 @@
 
 
 plugins {
-    id "com.android.application"
-    id "kotlin-android"
+    id("com.android.application")
+    id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
-    id "dev.flutter.flutter-gradle-plugin"
+    id("dev.flutter.flutter-gradle-plugin")
 }
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
@@ -37,7 +37,7 @@ subprojects {
         }
         tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
             kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_1_8.toString()
+                jvmTarget = JavaVersion.VERSION_11.toString()
             }
         }
     }
@@ -45,7 +45,7 @@ subprojects {
 
 android {
     namespace = "co.altme.alt.me.altme"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     packagingOptions {
@@ -60,7 +60,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = '21'
     }
 
     defaultConfig {
