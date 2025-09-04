@@ -2936,7 +2936,8 @@ class AppLocalizationsCa extends AppLocalizations {
   String get updateConfigurationNow => 'Actualitza la configuració ara';
 
   @override
-  String get pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration =>
+  String
+  get pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration =>
       'Indica el correu electrònic i la contrasenya per actualitzar la configuració de la cartera de la teva organització.';
 
   @override

@@ -36,7 +36,6 @@ class MarkdownPage extends StatelessWidget {
                       .onSurface
                       .withValues(alpha: 0.6),
                 ),
-                onLinkTab: (href, title) => _onTapLink(href),
               );
             }
 
@@ -57,10 +56,5 @@ class MarkdownPage extends StatelessWidget {
 
   Future<String> _loadFile() async {
     return rootBundle.loadString(file);
-  }
-
-  Future<void> _onTapLink(String? href) async {
-    if (href == null) return;
-    await LaunchUrl.launch(href);
   }
 }

@@ -2966,7 +2966,8 @@ class AppLocalizationsFr extends AppLocalizations {
       'Mettre à jour la configuration maintenant';
 
   @override
-  String get pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration =>
+  String
+  get pleaseEnterYourEmailAndPasswordToUpdateYourOrganizationWalletConfiguration =>
       'Veuillez entrer votre email et votre mot de passe pour mettre à jour votre wallet';
 
   @override

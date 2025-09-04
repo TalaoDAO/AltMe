@@ -9,6 +9,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   flutter_secure_storage_linux
   gtk
   open_file_linux
+  sodium_libs
   url_launcher_linux
 )
 
