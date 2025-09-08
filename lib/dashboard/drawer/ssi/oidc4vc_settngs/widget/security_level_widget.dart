@@ -21,7 +21,7 @@ class SecurityLevelWidget extends StatelessWidget {
             },
             value: state.model.profileSetting.selfSovereignIdentityOptions
                 .customOidc4vcProfile.securityLevel,
-            activeColor: Theme.of(context).colorScheme.primary,
+            activeThumbColor: Theme.of(context).colorScheme.primary,
           ),
         );
       },

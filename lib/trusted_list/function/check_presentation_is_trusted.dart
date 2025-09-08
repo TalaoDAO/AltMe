@@ -15,7 +15,7 @@ bool checkPresentationIsTrusted({
       ['input_descriptors'] as List<dynamic>?;
   if (inputDescriptors == null) {
     throw Exception(
-        'No input descriptors found in the presentation definition');
+        'No input descriptors found in the presentation definition',);
   }
   for (final inputDescriptor in inputDescriptors) {
     final constraints = inputDescriptor['constraints'];

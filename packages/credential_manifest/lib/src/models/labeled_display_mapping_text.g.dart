@@ -7,15 +7,9 @@ part of 'labeled_display_mapping_text.dart';
 // **************************************************************************
 
 LabeledDisplayMappingText _$LabeledDisplayMappingTextFromJson(
-        Map<String, dynamic> json) =>
-    LabeledDisplayMappingText(
-      json['text'] as String,
-      json['label'] as String,
-    );
+  Map<String, dynamic> json,
+) => LabeledDisplayMappingText(json['text'] as String, json['label'] as String);
 
 Map<String, dynamic> _$LabeledDisplayMappingTextToJson(
-        LabeledDisplayMappingText instance) =>
-    <String, dynamic>{
-      'label': instance.label,
-      'text': instance.text,
-    };
+  LabeledDisplayMappingText instance,
+) => <String, dynamic>{'label': instance.label, 'text': instance.text};

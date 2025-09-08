@@ -17,12 +17,21 @@ VoucherModel _$VoucherModelFromJson(Map<String, dynamic> json) => VoucherModel(
           : Offer.fromJson(json['offer'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$VoucherModelToJson(VoucherModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'type': instance.type,
-      'issuedBy': instance.issuedBy?.toJson(),
-      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
-      'identifier': instance.identifier,
-      'offer': instance.offer?.toJson(),
-    };
+Map<String, dynamic> _$VoucherModelToJson(VoucherModel instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'type': instance.type,
+    'issuedBy': instance.issuedBy?.toJson(),
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('offeredBy', instance.offeredBy?.toJson());
+  val['identifier'] = instance.identifier;
+  val['offer'] = instance.offer?.toJson();
+  return val;
+}

@@ -22,16 +22,25 @@ VerifiableIdCardModel _$VerifiableIdCardModelFromJson(
     );
 
 Map<String, dynamic> _$VerifiableIdCardModelToJson(
-        VerifiableIdCardModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'type': instance.type,
-      'issuedBy': instance.issuedBy?.toJson(),
-      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
-      'familyName': instance.familyName,
-      'firstName': instance.firstName,
-      'birthDate': instance.birthDate,
-      'dateOfBirth': instance.dateOfBirth,
-      'bithPlace': instance.bithPlace,
-      'addressCountry': instance.addressCountry,
-    };
+    VerifiableIdCardModel instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'type': instance.type,
+    'issuedBy': instance.issuedBy?.toJson(),
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('offeredBy', instance.offeredBy?.toJson());
+  val['familyName'] = instance.familyName;
+  val['firstName'] = instance.firstName;
+  val['birthDate'] = instance.birthDate;
+  val['dateOfBirth'] = instance.dateOfBirth;
+  val['bithPlace'] = instance.bithPlace;
+  val['addressCountry'] = instance.addressCountry;
+  return val;
+}

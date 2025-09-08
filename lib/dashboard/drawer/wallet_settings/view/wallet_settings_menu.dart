@@ -84,7 +84,7 @@ class WalletSettingsMenuView extends StatelessWidget {
                                   );
                             },
                             value: helpCenterOptions.displayNotification,
-                            activeColor: Theme.of(context).colorScheme.primary,
+                            activeThumbColor: Theme.of(context).colorScheme.primary,
                           );
                         },
                       ),
