@@ -70,7 +70,7 @@ class _MxcImageState extends State<MxcImage> {
     } catch (_) {
       if (!mounted) return;
       await Future<void>.delayed(widget.retryDuration);
-      unawaited(_tryLoad(_));
+      unawaited(_tryLoad(null));
     }
   }
 
@@ -95,17 +95,16 @@ class _MxcImageState extends State<MxcImage> {
     final hasData = data != null && data.isNotEmpty;
 
     return AnimatedCrossFade(
-      crossFadeState:
-          hasData ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      crossFadeState: hasData
+          ? CrossFadeState.showSecond
+          : CrossFadeState.showFirst,
       duration: const Duration(milliseconds: 250),
       firstChild: placeholder(context),
       secondChild: hasData
           ? TransparentInkWell(
               onTap: () {
                 Navigator.of(context).push<void>(
-                  PhotoViewer.route(
-                    imageProvider: MemoryImage(data),
-                  ),
+                  PhotoViewer.route(imageProvider: MemoryImage(data)),
                 );
               },
               child: Image.memory(
@@ -121,10 +120,7 @@ class _MxcImageState extends State<MxcImage> {
                 },
               ),
             )
-          : SizedBox(
-              width: widget.width,
-              height: widget.height,
-            ),
+          : SizedBox(width: widget.width, height: widget.height),
     );
   }
 }

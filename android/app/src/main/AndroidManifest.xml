@@ -19,7 +19,7 @@
     </queries>
 
     <application
-        android:label="${appName}"
+        android:label="Altme"
         android:icon="@mipmap/ic_launcher"
         android:allowBackup="false"
         android:fullBackupContent="false"

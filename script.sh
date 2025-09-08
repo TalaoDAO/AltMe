@@ -26,10 +26,12 @@ function pub {
       flutter clean
       flutter pub get
       flutter pub upgrade
+      flutter packages upgrade
     )
   done 
   flutter pub get
   flutter pub upgrade
+  flutter packages upgrade
 }
 
 function buildRunner {

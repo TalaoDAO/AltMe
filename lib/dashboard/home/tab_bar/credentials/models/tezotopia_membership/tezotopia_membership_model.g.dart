@@ -20,12 +20,21 @@ TezotopiaMembershipModel _$TezotopiaMembershipModelFromJson(
     );
 
 Map<String, dynamic> _$TezotopiaMembershipModelToJson(
-        TezotopiaMembershipModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'type': instance.type,
-      'issuedBy': instance.issuedBy?.toJson(),
-      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
-      'expires': instance.expires,
-      'offers': instance.offers?.toJson(),
-    };
+    TezotopiaMembershipModel instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'type': instance.type,
+    'issuedBy': instance.issuedBy?.toJson(),
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('offeredBy', instance.offeredBy?.toJson());
+  val['expires'] = instance.expires;
+  val['offers'] = instance.offers?.toJson();
+  return val;
+}
