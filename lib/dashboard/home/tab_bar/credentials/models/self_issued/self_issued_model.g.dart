@@ -20,24 +20,16 @@ SelfIssuedModel _$SelfIssuedModelFromJson(Map<String, dynamic> json) =>
       jobTitle: json['jobTitle'] as String?,
     );
 
-Map<String, dynamic> _$SelfIssuedModelToJson(SelfIssuedModel instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('id', instance.id);
-  writeNotNull('type', instance.type);
-  writeNotNull('address', instance.address);
-  writeNotNull('familyName', instance.familyName);
-  writeNotNull('givenName', instance.givenName);
-  writeNotNull('telephone', instance.telephone);
-  writeNotNull('email', instance.email);
-  writeNotNull('workFor', instance.workFor);
-  writeNotNull('companyWebsite', instance.companyWebsite);
-  writeNotNull('jobTitle', instance.jobTitle);
-  return val;
-}
+Map<String, dynamic> _$SelfIssuedModelToJson(SelfIssuedModel instance) =>
+    <String, dynamic>{
+      if (instance.id case final value?) 'id': value,
+      if (instance.type case final value?) 'type': value,
+      if (instance.address case final value?) 'address': value,
+      if (instance.familyName case final value?) 'familyName': value,
+      if (instance.givenName case final value?) 'givenName': value,
+      if (instance.telephone case final value?) 'telephone': value,
+      if (instance.email case final value?) 'email': value,
+      if (instance.workFor case final value?) 'workFor': value,
+      if (instance.companyWebsite case final value?) 'companyWebsite': value,
+      if (instance.jobTitle case final value?) 'jobTitle': value,
+    };

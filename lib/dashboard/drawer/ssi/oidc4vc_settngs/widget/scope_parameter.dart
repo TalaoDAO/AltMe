@@ -21,7 +21,7 @@ class ScopeParameterWidget extends StatelessWidget {
             },
             value: state.model.profileSetting.selfSovereignIdentityOptions
                 .customOidc4vcProfile.scope,
-            activeThumbColor: Theme.of(context).colorScheme.primary,
+            activeColor: Theme.of(context).colorScheme.primary,
           ),
         );
       },

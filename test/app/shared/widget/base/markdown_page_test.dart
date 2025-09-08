@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gpt_markdown/gpt_markdown.dart';
 
 void main() {
   Widget makeTestableWidget() {
@@ -21,7 +21,7 @@ void main() {
     expect(find.byType(Spinner), findsOneWidget);
 
     await tester.pumpAndSettle();
-    expect(find.byType(GptMarkdown), findsOneWidget);
+    expect(find.byType(Markdown), findsOneWidget);
     expect(
       find.text(
         'The Altme wallet is an open source project under Apache 2.0 licence',
@@ -41,6 +41,6 @@ void main() {
     expect(find.byType(Spinner), findsOneWidget);
 
     await tester.pumpAndSettle();
-    expect(find.byType(GptMarkdown), findsNothing);
+    expect(find.byType(Markdown), findsNothing);
   });
 }

@@ -142,7 +142,7 @@ class DrawerView extends StatelessWidget {
                                     );
                                   },
                                   value: state.model.isDeveloperMode,
-                                  activeThumbColor:
+                                  activeColor:
                                       Theme.of(context).colorScheme.primary,
                                 );
                               },

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gpt_markdown/gpt_markdown.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class MarkdownBody extends StatelessWidget {
   const MarkdownBody({
@@ -15,10 +15,21 @@ class MarkdownBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GptMarkdown(
-      data,
-      style: TextStyle(
-        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+    return Markdown(
+      physics: physics,
+      shrinkWrap: shrinkWrap,
+      data: data,
+      styleSheet: MarkdownStyleSheet(
+        h1: TextStyle(
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+        h2: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        a: TextStyle(color: Theme.of(context).colorScheme.primary),
+        p: TextStyle(
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+        ),
+
+        //onTapLink: (text, href, title) => _onTapLink(href),
       ),
     );
   }

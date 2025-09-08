@@ -22,7 +22,7 @@ class DisplayModeWidget extends StatelessWidget {
             },
             value: state.model.profileSetting.selfSovereignIdentityOptions
                 .customOidc4vcProfile.displayMode,
-            activeThumbColor: Theme.of(context).colorScheme.primary,
+            activeColor: Theme.of(context).colorScheme.primary,
           ),
         );
       },

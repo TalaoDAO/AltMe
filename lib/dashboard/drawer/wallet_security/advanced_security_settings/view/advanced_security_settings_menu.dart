@@ -54,7 +54,7 @@ class AdvancedSecuritySettingsView extends StatelessWidget {
                     },
                     value: state.model.profileSetting.walletSecurityOptions
                         .verifySecurityIssuerWebsiteIdentity,
-                    activeThumbColor: Theme.of(context).colorScheme.primary,
+                    activeColor: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),
@@ -72,7 +72,7 @@ class AdvancedSecuritySettingsView extends StatelessWidget {
                     },
                     value: state.model.profileSetting.walletSecurityOptions
                         .confirmSecurityVerifierAccess,
-                    activeThumbColor: Theme.of(context).colorScheme.primary,
+                    activeColor: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),
@@ -90,7 +90,7 @@ class AdvancedSecuritySettingsView extends StatelessWidget {
                     },
                     value: state
                         .model.profileSetting.walletSecurityOptions.trustedList,
-                    activeThumbColor: Theme.of(context).colorScheme.primary,
+                    activeColor: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),
@@ -108,7 +108,7 @@ class AdvancedSecuritySettingsView extends StatelessWidget {
                     },
                     value: state.model.profileSetting.walletSecurityOptions
                         .secureSecurityAuthenticationWithPinCode,
-                    activeThumbColor: Theme.of(context).colorScheme.primary,
+                    activeColor: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),

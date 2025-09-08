@@ -44,8 +44,8 @@ class BiometricsSwitch extends StatelessWidget {
           const Spacer(),
           CupertinoSwitch(
             value: value,
-            inactiveTrackColor: Theme.of(context).colorScheme.surface,
-            activeTrackColor: Theme.of(context).colorScheme.primary,
+            trackColor: Theme.of(context).colorScheme.surface,
+            activeColor: Theme.of(context).colorScheme.primary,
             onChanged: onChange,
           ),
         ],

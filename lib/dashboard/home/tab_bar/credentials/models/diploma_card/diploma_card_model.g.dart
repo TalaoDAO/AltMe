@@ -18,23 +18,14 @@ DiplomaCardModel _$DiplomaCardModelFromJson(Map<String, dynamic> json) =>
       identifier: json['identifier'] as String? ?? '',
     );
 
-Map<String, dynamic> _$DiplomaCardModelToJson(DiplomaCardModel instance) {
-  final val = <String, dynamic>{
-    'id': instance.id,
-    'type': instance.type,
-    'issuedBy': instance.issuedBy?.toJson(),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('offeredBy', instance.offeredBy?.toJson());
-  val['identifier'] = instance.identifier;
-  val['familyName'] = instance.familyName;
-  val['givenName'] = instance.givenName;
-  val['programName'] = instance.programName;
-  return val;
-}
+Map<String, dynamic> _$DiplomaCardModelToJson(DiplomaCardModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'type': instance.type,
+      'issuedBy': instance.issuedBy?.toJson(),
+      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
+      'identifier': instance.identifier,
+      'familyName': instance.familyName,
+      'givenName': instance.givenName,
+      'programName': instance.programName,
+    };

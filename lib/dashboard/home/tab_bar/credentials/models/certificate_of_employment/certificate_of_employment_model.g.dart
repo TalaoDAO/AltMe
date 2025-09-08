@@ -25,25 +25,17 @@ CertificateOfEmploymentModel _$CertificateOfEmploymentModelFromJson(
     );
 
 Map<String, dynamic> _$CertificateOfEmploymentModelToJson(
-    CertificateOfEmploymentModel instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('id', instance.id);
-  writeNotNull('type', instance.type);
-  writeNotNull('issuedBy', instance.issuedBy?.toJson());
-  writeNotNull('offeredBy', instance.offeredBy?.toJson());
-  writeNotNull('familyName', instance.familyName);
-  writeNotNull('givenName', instance.givenName);
-  writeNotNull('startDate', instance.startDate);
-  writeNotNull('workFor', instance.workFor?.toJson());
-  writeNotNull('employmentType', instance.employmentType);
-  writeNotNull('jobTitle', instance.jobTitle);
-  writeNotNull('baseSalary', instance.baseSalary);
-  return val;
-}
+        CertificateOfEmploymentModel instance) =>
+    <String, dynamic>{
+      if (instance.id case final value?) 'id': value,
+      if (instance.type case final value?) 'type': value,
+      if (instance.issuedBy?.toJson() case final value?) 'issuedBy': value,
+      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
+      if (instance.familyName case final value?) 'familyName': value,
+      if (instance.givenName case final value?) 'givenName': value,
+      if (instance.startDate case final value?) 'startDate': value,
+      if (instance.workFor?.toJson() case final value?) 'workFor': value,
+      if (instance.employmentType case final value?) 'employmentType': value,
+      if (instance.jobTitle case final value?) 'jobTitle': value,
+      if (instance.baseSalary case final value?) 'baseSalary': value,
+    };
