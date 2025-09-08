@@ -16,16 +16,14 @@ CredentialManifest _$CredentialManifestFromJson(Map<String, dynamic> json) =>
           ?.map((e) => OutputDescriptor.fromJson(e as Map<String, dynamic>))
           .toList(),
       CredentialManifest.presentationDefinitionFromJson(
-        json['presentation_definition'],
-      ),
+          json['presentation_definition']),
     );
 
 Map<String, dynamic> _$CredentialManifestToJson(CredentialManifest instance) =>
     <String, dynamic>{
       'id': instance.id,
       'issuer': instance.issuedBy?.toJson(),
-      'output_descriptors': instance.outputDescriptors
-          ?.map((e) => e.toJson())
-          .toList(),
+      'output_descriptors':
+          instance.outputDescriptors?.map((e) => e.toJson()).toList(),
       'presentation_definition': instance.presentationDefinition?.toJson(),
     };

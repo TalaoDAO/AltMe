@@ -9,14 +9,11 @@ part of 'display_object.dart';
 DisplayObject _$DisplayObjectFromJson(Map<String, dynamic> json) =>
     DisplayObject(
       DisplayObject._displayMappingFromJson(
-        json['title'] as Map<String, dynamic>?,
-      ),
+          json['title'] as Map<String, dynamic>?),
       DisplayObject._displayMappingFromJson(
-        json['subtitle'] as Map<String, dynamic>?,
-      ),
+          json['subtitle'] as Map<String, dynamic>?),
       DisplayObject._displayMappingFromJson(
-        json['description'] as Map<String, dynamic>?,
-      ),
+          json['description'] as Map<String, dynamic>?),
       DisplayObject._labeledDisplayMappingFromJson(json['properties']),
     );
 

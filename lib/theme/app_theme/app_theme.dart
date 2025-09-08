@@ -23,7 +23,7 @@ class AppTheme {
           fontWeight: FontWeight.w400,
         ),
       ),
-      tabBarTheme: const TabBarThemeData(dividerColor: Colors.transparent),
+      tabBarTheme: const TabBarTheme(dividerColor: Colors.transparent),
       textTheme: const TextTheme(
         titleLarge: TextStyle(
           fontSize: 20,

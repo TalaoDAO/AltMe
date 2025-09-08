@@ -12,7 +12,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   permission_handler_windows
   secure_application
   share_plus
-  sodium_libs
   url_launcher_windows
 )
 

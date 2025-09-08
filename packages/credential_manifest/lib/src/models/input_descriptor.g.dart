@@ -9,9 +9,8 @@ part of 'input_descriptor.dart';
 InputDescriptor _$InputDescriptorFromJson(Map<String, dynamic> json) =>
     InputDescriptor(
       id: json['id'] as String?,
-      group: (json['group'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+      group:
+          (json['group'] as List<dynamic>?)?.map((e) => e as String).toList(),
       constraints: json['constraints'] == null
           ? null
           : Constraints.fromJson(json['constraints'] as Map<String, dynamic>),

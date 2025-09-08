@@ -205,7 +205,7 @@ void main() {
             BlocProvider<WalletCubit>.value(value: mockWalletCubit),
             BlocProvider<WertCubit>.value(value: mockWertCubit),
             BlocProvider<ManageNetworkCubit>.value(
-                value: mockManageNetworkCubit,),
+                value: mockManageNetworkCubit),
           ],
           child: const WertView(),
         ),
@@ -243,7 +243,7 @@ void main() {
             BlocProvider<WalletCubit>.value(value: mockWalletCubit),
             BlocProvider<WertCubit>.value(value: mockWertCubit),
             BlocProvider<ManageNetworkCubit>.value(
-                value: mockManageNetworkCubit,),
+                value: mockManageNetworkCubit),
           ],
           child: const WertView(),
         ),
@@ -282,7 +282,7 @@ void main() {
             BlocProvider<WalletCubit>.value(value: mockWalletCubit),
             BlocProvider<WertCubit>.value(value: mockWertCubit),
             BlocProvider<ManageNetworkCubit>.value(
-                value: mockManageNetworkCubit,),
+                value: mockManageNetworkCubit),
           ],
           child: const WertView(),
         ),

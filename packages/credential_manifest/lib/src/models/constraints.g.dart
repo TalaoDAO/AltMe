@@ -7,11 +7,11 @@ part of 'constraints.dart';
 // **************************************************************************
 
 Constraints _$ConstraintsFromJson(Map<String, dynamic> json) => Constraints(
-  fields: (json['fields'] as List<dynamic>?)
-      ?.map((e) => Field.fromJson(e as Map<String, dynamic>))
-      .toList(),
-  limitDisclosure: json['limit_disclosure'] as String?,
-);
+      fields: (json['fields'] as List<dynamic>?)
+          ?.map((e) => Field.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      limitDisclosure: json['limit_disclosure'] as String?,
+    );
 
 Map<String, dynamic> _$ConstraintsToJson(Constraints instance) =>
     <String, dynamic>{

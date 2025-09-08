@@ -17,20 +17,11 @@ PolygonPooAddressModel _$PolygonPooAddressModelFromJson(
     );
 
 Map<String, dynamic> _$PolygonPooAddressModelToJson(
-    PolygonPooAddressModel instance) {
-  final val = <String, dynamic>{
-    'id': instance.id,
-    'type': instance.type,
-    'issuedBy': instance.issuedBy?.toJson(),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('offeredBy', instance.offeredBy?.toJson());
-  val['associatedAddress'] = instance.associatedAddress;
-  return val;
-}
+        PolygonPooAddressModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'type': instance.type,
+      'issuedBy': instance.issuedBy?.toJson(),
+      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
+      'associatedAddress': instance.associatedAddress,
+    };

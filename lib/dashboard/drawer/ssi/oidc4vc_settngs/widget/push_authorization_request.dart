@@ -21,7 +21,7 @@ class PushAuthorizationRequesWidget extends StatelessWidget {
             },
             value: state.model.profileSetting.selfSovereignIdentityOptions
                 .customOidc4vcProfile.pushAuthorizationRequest,
-            activeThumbColor: Theme.of(context).colorScheme.primary,
+            activeColor: Theme.of(context).colorScheme.primary,
           ),
         );
       },

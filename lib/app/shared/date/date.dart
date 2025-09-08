@@ -1,5 +1,5 @@
 import 'package:altme/app/logger/logger.dart';
-import 'package:altme/l10n/arb/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 class UiDate {
