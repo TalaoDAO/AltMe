@@ -3374,7 +3374,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get deleteDigit => 'Effacer';
 
   @override
-  String get aiPleaseWait => 'Ce traitement peut prendre jusqu\'à 30s';
+  String get aiPleaseWait => 'Ce traitement peut prendre jusqu\'à 1 min';
 
   @override
   String get trustedList => 'Use trusted list';

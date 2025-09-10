@@ -6058,7 +6058,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiPleaseWait.
   ///
   /// In en, this message translates to:
-  /// **'This treatment can take up to 1min'**
+  /// **'This treatment can take up to 1 min'**
   String get aiPleaseWait;
 
   /// No description provided for @trustedList.

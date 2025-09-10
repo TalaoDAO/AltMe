@@ -3329,7 +3329,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteDigit => 'Delete';
 
   @override
-  String get aiPleaseWait => 'This treatment can take up to 1min';
+  String get aiPleaseWait => 'This treatment can take up to 1 min';
 
   @override
   String get trustedList => 'Use trusted list';
