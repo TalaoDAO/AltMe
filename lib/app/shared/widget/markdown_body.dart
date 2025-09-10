@@ -1,3 +1,4 @@
+import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
 
@@ -16,10 +17,14 @@ class MarkdownBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GptMarkdown(
+      onLinkTap: (url, title) {
+        LaunchUrl.launch(url);
+      },
+      linkBuilder: (context, label, path, style) {
+        return Text.rich(label, style: style.copyWith(color: Colors.blue));
+      },
       data,
-      style: TextStyle(
-        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
-      ),
+      style: const TextStyle(),
     );
   }
 }
