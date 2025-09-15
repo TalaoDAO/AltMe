@@ -8,9 +8,9 @@ SecureStorageProvider get getSecureStorage {
 }
 
 AndroidOptions _getAndroidOptions() => const AndroidOptions(
-      encryptedSharedPreferences: true,
-      sharedPreferencesName: 'altme',
-    );
+  encryptedSharedPreferences: true,
+  sharedPreferencesName: 'altme',
+);
 
 /// Initialize and test secure storage availability on the phone.
 Future<void> get initSecureStorage async {
@@ -21,22 +21,18 @@ Future<void> get initSecureStorage async {
       /// required. We don't set it by default because old wallets would loose
       /// their data.
       /// https://github.com/mogol/flutter_secure_storage/issues/354
-      final storage = FlutterSecureStorage();
+      const storage = FlutterSecureStorage();
       await testStorage(storage);
     } catch (e) {
-
-      const storage = FlutterSecureStorage(
-        aOptions: _getAndroidOptions(),
-      );
+      final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
       await testStorage(storage);
     }
   } else {
-    const defaultIOSOptions =
-        IOSOptions(accessibility: KeychainAccessibility.first_unlock);
-
-    const storage = FlutterSecureStorage(
-      iOptions: defaultIOSOptions,
+    const defaultIOSOptions = IOSOptions(
+      accessibility: KeychainAccessibility.first_unlock,
     );
+
+    const storage = FlutterSecureStorage(iOptions: defaultIOSOptions);
     await testStorage(storage);
   }
 }
@@ -53,9 +49,7 @@ Future<void> testStorage(FlutterSecureStorage storage) async {
 ///SecureStorageProvider
 class SecureStorageProvider {
   ///SecureStorageProvider
-  factory SecureStorageProvider({
-    FlutterSecureStorage? storage,
-  }) {
+  factory SecureStorageProvider({FlutterSecureStorage? storage}) {
     if (storage != null) {
       _instance._storage = storage;
       return _instance;
@@ -77,9 +71,7 @@ class SecureStorageProvider {
   ///get
   Future<String?> get(String key) async {
     try {
-      return await _storage!.read(
-        key: key,
-      );
+      return await _storage!.read(key: key);
     } catch (e) {
       return null;
     }
@@ -87,17 +79,12 @@ class SecureStorageProvider {
 
   ///set
   Future<void> set(String key, String val) async {
-    return _storage!.write(
-      key: key,
-      value: val,
-    );
+    return _storage!.write(key: key, value: val);
   }
 
   ///delete
   Future<void> delete(String key) async {
-    return _storage!.delete(
-      key: key,
-    );
+    return _storage!.delete(key: key);
   }
 
   ///getAllValues
