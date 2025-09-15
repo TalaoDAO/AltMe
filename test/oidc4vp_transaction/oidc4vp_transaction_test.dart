@@ -1,0 +1,157 @@
+// Add transaction information in the dialog
+// Add transaction information in the dev mode dialog
+// Check request validity: only the attended fields and all the attended fields (error if additional fields)
+// Add token transaction
+// Bypass user validation for token transaction since consent was made beforehand
+// Test the whole process
+// If there is only one candidate for presentation, skip the selection screen and present directly
+
+
+// eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDp3ZWI6YXBwLmFsdG1lLmlvOmlzc3VlciNrZXktMSIsInR5cCI6InZjK3NkLWp3dCJ9.eyJfc2QiOlsiZ0JYanFsRXoxQkxJclBjRzNCZmdJX3hiMVNheUtqS2dwOFdndVNUN3NKUSIsIjlOSl85bzQyZWxxMW1OR3E1U1otMUJLaW5XUkp1MWNYeUpXUTN6RGdITTgiLCJfbk9jUEg4YklfaHNuWHUzMUY0cHV0YjNFbGFFVnAxY1JQZ00yVFROT1BZIiwiZGo3ZnR3TmlUWDV2SmNxWkMtRG5sX2JpOGd0c3NPQ1ZJbE8zMEN6aFl2SSIsImJRdjJSVW1tNjkxck85cU1NSkFwSThMUWRncDc1QjJVU2FGbTVJcGRaMWciLCJZd0dQUEFudUYxM3BaZjlPS1laQlFVUzlnR3NiLWxLbkZaaFJtUGNmbXl3IiwiUTBsMHhOamdCblVKbTVmUzZVMUNKVkxKdFpEUDgwemVaTmFsSlYycTZSVSJdLCJfc2RfYWxnIjoic2hhLTI1NiIsImNuZiI6eyJraWQiOiJkaWQ6andrOmV5SmpjbllpT2lKUUxUSTFOaUlzSW10MGVTSTZJa1ZESWl3aWVDSTZJbFprUjAxRFdFaDNYM0pOYVUxNk4wRnhNbFpNUWxvMGIwaElSVlk1UlhkME1sWXdkVmhsUTIxMVlrVWlMQ0o1SWpvaVFXdHlYMmhoZVhaSk9FMXlkRE5MU1ROc2EwOWxTSHAwY0RoUVFrMDBTVU5aWWs5elJHZFNSa2hVVFNKOSJ9LCJleHAiOjE3ODkyMDc3NDcsImlhdCI6MTc1NzY3MTc0NywiaXNzIjoiZGlkOndlYjphcHAuYWx0bWUuaW86aXNzdWVyIiwidmN0IjoidXJuOmV4YW1wbGU6dGFsYW86YWdlX292ZXIifQ.9hb_b7-y5YOEt888ZzkXE4aw7kXNmDwKcDmkqSOTl12gCR1IUCwtI8BmKDE6lSnactUxztvyRNgGAzes_7VLCg~WyJ5Yzd4SnRvVmpaaUxzOEZwaV92THBBIiwgImFnZV9vdmVyXzEyIiwgdHJ1ZV0~WyIzeHpPTE1JblBlM0tUTFBsLTBSdFZRIiwgImFnZV9vdmVyXzE0IiwgdHJ1ZV0~WyJsS3lqNjNheHozd1RGWVgtSGZJQWpnIiwgImFnZV9vdmVyXzE2IiwgdHJ1ZV0~WyJhUDFzVHhjV3k4OU9UdWdyTDZEVjl3IiwgImFnZV9vdmVyXzE4IiwgdHJ1ZV0~WyJwS0gwc0dBNk1WanZOa1hfZ3BVUDN3IiwgImFnZV9vdmVyXzIxIiwgdHJ1ZV0~WyJvSkVTYl9DeWhIcVRqd3NLa3RpZjFnIiwgImFnZV9vdmVyXzUwIiwgZmFsc2Vd~WyI4bWNOZy02MjVyZWN6TUFyWWZqZTNRIiwgImFnZV9vdmVyXzY1IiwgZmFsc2Vd~
+
+// openid-vc://?client_id=talao.co&request_uri=https%3A%2F%2Ftalao.co%2Fverifier%2Fwallet%2Frequest_uri%2F5d0427ce-8fd1-11f0-b549-0a1628958560&response_uri=https%3A%2F%2Ftalao.co%2Fverifier%2Fwallet%2Fendpoint%2F5d0427ce-8fd1-11f0-b549-0a1628958560&response_mode=direct_post.jwt&nonce=5d045868-8fd1-11f0-9d81-0a1628958560&state=5d04592e-8fd1-11f0-8b47-0a1628958560&response_type=vp_token&presentation_definition=%7B%27id%27%3A%27pid%27%2C%27input_descriptors%27%3A%5B%7B%27constraints%27%3A%7B%27fields%27%3A%5B%7B%27filter%27%3A%7B%27const%27%3A%27eu.europa.ec.eudi.pid.1%27%2C%27type%27%3A%27string%27%7D%2C%27path%27%3A%5B%27%24.vct%27%5D%7D%2C%7B%27path%27%3A%5B%27%24.family_name%27%5D%7D%2C%7B%27path%27%3A%5B%27%24.given_name%27%5D%7D%5D%2C%27limit_disclosure%27%3A%27required%27%7D%2C%27format%27%3A%7B%27vc%2Bsd-jwt%27%3A%7B%27kb-jwt_alg_values%27%3A%5B%27ES256%27%2C%27ES256K%27%2C%27EdDSA%27%5D%2C%27sd-jwt_alg_values%27%3A%5B%27ES256%27%2C%27ES256K%27%2C%27EdDSA%27%5D%7D%7D%2C%27id%27%3A%27pid_credential%27%7D%5D%7D&client_metadata=%7B%22vp_formats%22%3A%7B%22jwt_vp_json%22%3A%7B%22alg_values_supported%22%3A%5B%22ES256%22%2C%22ES256K%22%2C%22EdDSA%22%5D%7D%2C%22ldp_vc%22%3A%7B%22proof_type%22%3A%5B%22Ed25519Signature2018%22%2C%22EcdsaSecp256k1Signature2019%22%2C%22RsaSignature2018%22%5D%7D%2C%22ldp_vp%22%3A%7B%22proof_type%22%3A%5B%22Ed25519Signature2018%22%2C%22EcdsaSecp256k1Signature2019%22%2C%22RsaSignature2018%22%5D%7D%2C%22vc%2Bsd-jwt%22%3A%7B%22kb-jwt_alg_values%22%3A%5B%22ES256%22%2C%22ES256K%22%2C%22EdDSA%22%5D%2C%22sd-jwt_alg_values%22%3A%5B%22ES256%22%2C%22ES256K%22%2C%22EdDSA%22%5D%7D%7D%7D
+
+// eyJhbGciOiJFUzI1NiIsInR5cCI6Im9hdXRoLWF1dGh6LXJlcStqd3QiLCJ4NWMiOlsiTUlJQ29EQ0NBWWlnQXdJQkFnSVVRZjc5dTdWcVJFQ0pZYWtjQ0FQbzc0T2I5VXN3RFFZSktvWklodmNOQVFFTEJRQXdXekVMTUFrR0ExVUVCaE1DUmxJeERqQU1CZ05WQkFjTUJWQmhjbWx6TVNrd0p3WURWUVFLRENCWFpXSXpJRVJwWjJsMFlXd2dWMkZzYkdWMElGUnlkWE4wSUVGdVkyaHZjakVSTUE4R0ExVUVBd3dJZEdGc1lXOHVhVzh3SGhjTk1qVXdOakkyTVRVeU5ESTRXaGNOTXpVd05qSTBNVFV5TkRJNFdqQk9NUXN3Q1FZRFZRUUdFd0pHVWpFT01Bd0dBMVVFQnd3RlVHRnlhWE14SERBYUJnTlZCQW9NRTFkbFlqTWdSR2xuYVhSaGJDQlhZV3hzWlhReEVUQVBCZ05WQkFNTUNIUmhiR0Z2TG1Odk1Ga3dFd1lIS29aSXpqMENBUVlJS29aSXpqMERBUWNEUWdBRU5CMXlsTXZlVjQvUFBZdHg5S1lFam9TMVdXQThxTjMzU0phdjlvcFdUYU5TMDRiYU5IYzBkcDB3d252QjFnU3JuK2Nja2RWOXpMdEErMzg0RWVFR3NhTTBNREl3Q1FZRFZSMFRCQUl3QURBbEJnTlZIUkVFSGpBY2dnaDBZV3hoYnk1amI0WVFhSFIwY0hNNkx5OTBZV3hoYnk1amJ6QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFXUlhuR0lMdHRHSzlnSjM5ZDV1WVk0YU90NWdTbFJOa3hsRW1Mdi85ZVhjVFJUeDM2VVo1ZmppbDhxVTA2V25FTkFZMGs1RndUb1FqMlZpSXNPd21mZUp0NGdqQkRBeE9MT3dDUlE3NitZc2tnLzhlVlByeVZpbUVsaklKbzhEdHdIOWd2dzk0eEtjUWZpZDVlTjhmMWxPV2lmWHRQbmd5YUlHN043dGFaZnBWOUxqUUwrOW9ROHAvYzdna0txUzJCdVQxTXI5STJaL3JNVWk3czN3Nzk2ek41TXNrY3A5Mjcvc3pCRGo1MWlKSmxZOEtpaWVseTFwQjlnQllWZ3RwS2UxcmZrcDRPWHgwQkwxVStJVXIwRHkvMTgvejBtY3RjLzZuUjh4SkJ4SjNaQmVyemlvQm95Um1XL2ZFZkhvcW5yRmJzUmpVRnM5ZEt1K0dTR0VDZlE9PSIsIk1JSURiRENDQWxTZ0F3SUJBZ0lVQXR5L2xTcmViM3AzWE1mMmc2Y0pOZW85akNRd0RRWUpLb1pJaHZjTkFRRUxCUUF3V3pFTE1Ba0dBMVVFQmhNQ1JsSXhEakFNQmdOVkJBY01CVkJoY21sek1Ta3dKd1lEVlFRS0RDQlhaV0l6SUVScFoybDBZV3dnVjJGc2JHVjBJRlJ5ZFhOMElFRnVZMmh2Y2pFUk1BOEdBMVVFQXd3SWRHRnNZVzh1YVc4d0hoY05NalV3TmpJMk1UVXlOREk0V2hjTk16VXdOakkwTVRVeU5ESTRXakJiTVFzd0NRWURWUVFHRXdKR1VqRU9NQXdHQTFVRUJ3d0ZVR0Z5YVhNeEtUQW5CZ05WQkFvTUlGZGxZak1nUkdsbmFYUmhiQ0JYWVd4c1pYUWdWSEoxYzNRZ1FXNWphRzl5TVJFd0R3WURWUVFEREFoMFlXeGhieTVwYnpDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBS1Q2SE1pcTNrd0o5Mks1aHNqMkZ4NUpXS2xJa2trSXF4Z0FzQ1VtR0xQcExIOE9HNjdRTjBtUXBnTnJIUUR2R3RnMTM2Z0E4QllGVXNTUmJTZHhwQnkxZG1iemlEcDJRbCtqQmVqU0Zod2ZYT3VNbmEyRFNXeE11OXFNaHYvci9yQk9xMjlNZmcvcmlYdlF4V0NGRWM0ck1nWlRRTzRwckltVDBKNGpvenk3OUFWSUJBOUwzVHVSNG94WHUxMjZWWWFGUHRxRTVCeDBPQW1uWmdXWVhwUW5Nd0FwRjZUbE81c0hDSmhvL1lkZi96N01rK1ZRUzR2L2R2dmR6WXBtWTNuSVQybWsyQkZOcnRLMzUzMVZ1WGhnMkRRTXB6dUVObTRhUlQwVTExbWVTNFo0WjZ1ek8raytneGdOeG5nTHZ6RHN3ZEplSGNhUlRDZXNCNTNwSFpFQ0F3RUFBYU1vTUNZd0R3WURWUjBUQkFnd0JnRUIvd0lCQURBVEJnTlZIUkVFRERBS2dnaDBZV3hoYnk1cGJ6QU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFFQnhycTNkKzYzMWpqRzdDYjJHTUhxTUNvV2hKRUpibHI0Q3BPM1UwWE41cis1T3NJNTE2VjNwM1dFTDBYUGxmWXc2cWVvUWRuYjZoQm1taG1zam5SQkVmVkt5SWg2NzhFc3FodjVYeUQzSTE5NjlyZ1k0VHpnSWRXNUtNRmoxWWJJdXZrelMvc3pHejhVaWRJMnQrYlJsak4wZ3VRd1pOdmtUSWRLT0lGNkIrQVJpUUNjSkVWTmZxMEl6UFdoVlk2N0VTTGZEeWVvR2FXRGlGVDFMNHVObVJNNWRYZDVlRmhmSHpPVVg0QndTZHc0akp0R1d5L3BsaldWZUR5OUkyRjl2cmRhQVpSMk5LejZJS2FSTm0xNGdNL0wrNi9PQW03NWtUSStVS1FXam05bUs3R21uQi8yYmZiU2VUNVpNUi9HUDZROXJmV3ljem5vZmd3YnBVQmc9PSJdfQ.eyJhdWQiOiJodHRwczovL3NlbGYtaXNzdWVkLm1lL3YyIiwiY2xpZW50X2lkIjoieDUwOV9zYW5fZG5zOnRhbGFvLmNvIiwiY2xpZW50X21ldGFkYXRhIjp7InZwX2Zvcm1hdHMiOnsiand0X3ZwX2pzb24iOnsiYWxnX3ZhbHVlc19zdXBwb3J0ZWQiOlsiRVMyNTYiLCJFUzI1NksiLCJFZERTQSJdfSwibGRwX3ZjIjp7InByb29mX3R5cGUiOlsiRWQyNTUxOVNpZ25hdHVyZTIwMTgiLCJFY2RzYVNlY3AyNTZrMVNpZ25hdHVyZTIwMTkiLCJSc2FTaWduYXR1cmUyMDE4Il19LCJsZHBfdnAiOnsicHJvb2ZfdHlwZSI6WyJFZDI1NTE5U2lnbmF0dXJlMjAxOCIsIkVjZHNhU2VjcDI1NmsxU2lnbmF0dXJlMjAxOSIsIlJzYVNpZ25hdHVyZTIwMTgiXX0sInZjK3NkLWp3dCI6eyJrYi1qd3RfYWxnX3ZhbHVlcyI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl0sInNkLWp3dF9hbGdfdmFsdWVzIjpbIkVTMjU2IiwiRVMyNTZLIiwiRWREU0EiXX19fSwiZXhwIjoxNzU3NjgwMTE3LCJpc3MiOiJ0YWxhby5jbyIsIm5vbmNlIjoiYWRmZmM2ZDgtOGZkMS0xMWYwLWIzMzAtMGExNjI4OTU4NTYwIiwicHJlc2VudGF0aW9uX2RlZmluaXRpb24iOnsiaWQiOiJwaWQiLCJpbnB1dF9kZXNjcmlwdG9ycyI6W3siY29uc3RyYWludHMiOnsiZmllbGRzIjpbeyJmaWx0ZXIiOnsiY29uc3QiOiJldS5ldXJvcGEuZWMuZXVkaS5waWQuMSIsInR5cGUiOiJzdHJpbmcifSwicGF0aCI6WyIkLnZjdCJdfSx7InBhdGgiOlsiJC5mYW1pbHlfbmFtZSJdfSx7InBhdGgiOlsiJC5naXZlbl9uYW1lIl19XSwibGltaXRfZGlzY2xvc3VyZSI6InJlcXVpcmVkIn0sImZvcm1hdCI6eyJ2YytzZC1qd3QiOnsia2Itand0X2FsZ192YWx1ZXMiOlsiRVMyNTYiLCJFUzI1NksiLCJFZERTQSJdLCJzZC1qd3RfYWxnX3ZhbHVlcyI6WyJFUzI1NiIsIkVTMjU2SyIsIkVkRFNBIl19fSwiaWQiOiJwaWRfY3JlZGVudGlhbCJ9XX0sInJlc3BvbnNlX21vZGUiOiJkaXJlY3RfcG9zdC5qd3QiLCJyZXNwb25zZV90eXBlIjoidnBfdG9rZW4iLCJyZXNwb25zZV91cmkiOiJodHRwczovL3RhbGFvLmNvL3ZlcmlmaWVyL3dhbGxldC9lbmRwb2ludC9hZGZmYjBiNi04ZmQxLTExZjAtOGY1My0wYTE2Mjg5NTg1NjAiLCJzdGF0ZSI6ImFkZmZjNzk3LThmZDEtMTFmMC05MGI1LTBhMTYyODk1ODU2MCIsInRyYW5zYWN0aW9uX2RhdGEiOlsiZXlKMGVYQmxJam9pWlhadExtVnlZekl3WDNSeVlXNXpabVZ5SWl3aVkzSmxaR1Z1ZEdsaGJGOXBaSE1pT2xzaWNHbGtYMk55WldSbGJuUnBZV3dpWFN3aVkyaGhhVzVmYVdRaU9qRXNJbUZ6YzJWMElqcDdJbk41YldKdmJDSTZJbFJCVEVGUElpd2lZV1JrY21WemN5STZJakI0TVVRMFkwTkRNekZrUVVJMlJVRXlNR1kwTmpGa016STVZVEExTmpKRE1XTTFPRFF4TWpVeE5TSXNJbVJsWTJsdFlXeHpJam94T0gwc0ltRnRiM1Z1ZENJNklqVXdNREF3TURBd01EQXdNREF3TURBd01EQWlMQ0p5WldOcGNHbGxiblFpT2lJd2VEQXpPREUzTWpVMU5qVTVaR00wTlRVd056bGtaalV4Tm1NMU1qY3hZalF3TkRaaU1qQTJOV0lpTENKeWNHTWlPbnNpYldWMGFHOWtJam9pWlhSb1gzTmxibVJVY21GdWMyRmpkR2x2YmlJc0luQmhjbUZ0Y3lJNlczc2lkRzhpT2lJd2VERkVOR05EUXpNeFpFRkNOa1ZCTWpCbU5EWXhaRE15T1dFd05UWXlRekZqTlRnME1USTFNVFVpTENKMllXeDFaU0k2SWpCNE1DSXNJbVJoZEdFaU9pSXdlR0U1TURVNVkySmlNREF3TURBd01EQXdNREF3TURBd01EQXdNREF3TURBd01ETTRNVGN5TlRVMk5UbGtZelExTlRBM09XUm1OVEUyWXpVeU56RmlOREEwTm1JeU1EWTFZakF3TURBd01EQXdNREF3TURBd01EQXdNREF3TURBd01EQXdNREF3TURBd01EQXdNREF3TURBd01EQXdNREF3TURRMU5qTTVNVGd5TkRSbU5EQXdNREFpZlYxOUxDSnZjbVJsY2w5cFpDSTZJakUyT0RBMUlpd2lkV2xmYUdsdWRITWlPbnNpZEdsMGJHVWlPaUpVYUdseklHbHpJR0VnZEdWemRDQm1iM0lnWVc0Z1JWSkRNakFnZEhKaGJuTm1aWElpTENKemRXSjBhWFJzWlNJNklrTjVjSFJ2SUNCd1lXbGxiV1Z1ZENJc0luQjFjbkJ2YzJVaU9pSlVjbUZ1YzJabGNpQTFJRlJCVEVGUElIUnZJRkJwZW5waElGTm9iM0FpZlN3aVpXbHdOamd4SWpvaVpYUm9aWEpsZFcwNk1IZ3hSRFJqUTBNek1XUkJRalpGUVRJd1pqUTJNV1F6TWpsaE1EVTJNa014WXpVNE5ERXlOVEUxUURFdmRISmhibk5tWlhJX1lXUmtjbVZ6Y3owd2VEQXpPREUzTWpVMU5qVTVaR00wTlRVd056bGtaalV4Tm1NMU1qY3hZalF3TkRaaU1qQTJOV0ltZFdsdWRESTFOajAxTURBd01EQXdNREF3TURBd01EQXdNREF3SW4wIl19.ibfC3Ie1QHCK4e1xII_NjFCIdv3J3_fLhUYcrCA--PHaIvRPAtkFUcnmKeIkhrIsyOd2S-TV9ssagG7gP-TUBg
+
+// {
+//   "alg": "ES256",
+//   "typ": "oauth-authz-req+jwt",
+//   "x5c": [
+//     "MIICoDCCAYigAwIBAgIUQf79u7VqRECJYakcCAPo74Ob9UswDQYJKoZIhvcNAQELBQAwWzELMAkGA1UEBhMCRlIxDjAMBgNVBAcMBVBhcmlzMSkwJwYDVQQKDCBXZWIzIERpZ2l0YWwgV2FsbGV0IFRydXN0IEFuY2hvcjERMA8GA1UEAwwIdGFsYW8uaW8wHhcNMjUwNjI2MTUyNDI4WhcNMzUwNjI0MTUyNDI4WjBOMQswCQYDVQQGEwJGUjEOMAwGA1UEBwwFUGFyaXMxHDAaBgNVBAoME1dlYjMgRGlnaXRhbCBXYWxsZXQxETAPBgNVBAMMCHRhbGFvLmNvMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAENB1ylMveV4/PPYtx9KYEjoS1WWA8qN33SJav9opWTaNS04baNHc0dp0wwnvB1gSrn+cckdV9zLtA+384EeEGsaM0MDIwCQYDVR0TBAIwADAlBgNVHREEHjAcggh0YWxhby5jb4YQaHR0cHM6Ly90YWxhby5jbzANBgkqhkiG9w0BAQsFAAOCAQEAWRXnGILttGK9gJ39d5uYY4aOt5gSlRNkxlEmLv/9eXcTRTx36UZ5fjil8qU06WnENAY0k5FwToQj2ViIsOwmfeJt4gjBDAxOLOwCRQ76+Yskg/8eVPryVimEljIJo8DtwH9gvw94xKcQfid5eN8f1lOWifXtPngyaIG7N7taZfpV9LjQL+9oQ8p/c7gkKqS2BuT1Mr9I2Z/rMUi7s3w796zN5Mskcp927/szBDj51iJJlY8Kiiely1pB9gBYVgtpKe1rfkp4OXx0BL1U+IUr0Dy/18/z0mctc/6nR8xJBxJ3ZBerzioBoyRmW/fEfHoqnrFbsRjUFs9dKu+GSGECfQ==",
+//     "MIIDbDCCAlSgAwIBAgIUAty/lSreb3p3XMf2g6cJNeo9jCQwDQYJKoZIhvcNAQELBQAwWzELMAkGA1UEBhMCRlIxDjAMBgNVBAcMBVBhcmlzMSkwJwYDVQQKDCBXZWIzIERpZ2l0YWwgV2FsbGV0IFRydXN0IEFuY2hvcjERMA8GA1UEAwwIdGFsYW8uaW8wHhcNMjUwNjI2MTUyNDI4WhcNMzUwNjI0MTUyNDI4WjBbMQswCQYDVQQGEwJGUjEOMAwGA1UEBwwFUGFyaXMxKTAnBgNVBAoMIFdlYjMgRGlnaXRhbCBXYWxsZXQgVHJ1c3QgQW5jaG9yMREwDwYDVQQDDAh0YWxhby5pbzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKT6HMiq3kwJ92K5hsj2Fx5JWKlIkkkIqxgAsCUmGLPpLH8OG67QN0mQpgNrHQDvGtg136gA8BYFUsSRbSdxpBy1dmbziDp2Ql+jBejSFhwfXOuMna2DSWxMu9qMhv/r/rBOq29Mfg/riXvQxWCFEc4rMgZTQO4prImT0J4jozy79AVIBA9L3TuR4oxXu126VYaFPtqE5Bx0OAmnZgWYXpQnMwApF6TlO5sHCJho/Ydf/z7Mk+VQS4v/dvvdzYpmY3nIT2mk2BFNrtK3531VuXhg2DQMpzuENm4aRT0U11meS4Z4Z6uzO+k+gxgNxngLvzDswdJeHcaRTCesB53pHZECAwEAAaMoMCYwDwYDVR0TBAgwBgEB/wIBADATBgNVHREEDDAKggh0YWxhby5pbzANBgkqhkiG9w0BAQsFAAOCAQEAEBxrq3d+631jjG7Cb2GMHqMCoWhJEJblr4CpO3U0XN5r+5OsI516V3p3WEL0XPlfYw6qeoQdnb6hBmmhmsjnRBEfVKyIh678Esqhv5XyD3I1969rgY4TzgIdW5KMFj1YbIuvkzS/szGz8UidI2t+bRljN0guQwZNvkTIdKOIF6B+ARiQCcJEVNfq0IzPWhVY67ESLfDyeoGaWDiFT1L4uNmRM5dXd5eFhfHzOUX4BwSdw4jJtGWy/pljWVeDy9I2F9vrdaAZR2NKz6IKaRNm14gM/L+6/OAm75kTI+UKQWjm9mK7GmnB/2bfbSeT5ZMR/GP6Q9rfWycznofgwbpUBg=="
+//   ]
+// }
+
+
+// {
+//   "aud": "https://self-issued.me/v2",
+//   "client_id": "x509_san_dns:talao.co",
+//   "client_metadata": {
+//     "vp_formats": {
+//       "jwt_vp_json": {
+//         "alg_values_supported": [
+//           "ES256",
+//           "ES256K",
+//           "EdDSA"
+//         ]
+//       },
+//       "ldp_vc": {
+//         "proof_type": [
+//           "Ed25519Signature2018",
+//           "EcdsaSecp256k1Signature2019",
+//           "RsaSignature2018"
+//         ]
+//       },
+//       "ldp_vp": {
+//         "proof_type": [
+//           "Ed25519Signature2018",
+//           "EcdsaSecp256k1Signature2019",
+//           "RsaSignature2018"
+//         ]
+//       },
+//       "vc+sd-jwt": {
+//         "kb-jwt_alg_values": [
+//           "ES256",
+//           "ES256K",
+//           "EdDSA"
+//         ],
+//         "sd-jwt_alg_values": [
+//           "ES256",
+//           "ES256K",
+//           "EdDSA"
+//         ]
+//       }
+//     }
+//   },
+//   "exp": 1757680117,
+//   "iss": "talao.co",
+//   "nonce": "adffc6d8-8fd1-11f0-b330-0a1628958560",
+//   "presentation_definition": {
+//     "id": "pid",
+//     "input_descriptors": [
+//       {
+//         "constraints": {
+//           "fields": [
+//             {
+//               "filter": {
+//                 "const": "eu.europa.ec.eudi.pid.1",
+//                 "type": "string"
+//               },
+//               "path": [
+//                 "$.vct"
+//               ]
+//             },
+//             {
+//               "path": [
+//                 "$.family_name"
+//               ]
+//             },
+//             {
+//               "path": [
+//                 "$.given_name"
+//               ]
+//             }
+//           ],
+//           "limit_disclosure": "required"
+//         },
+//         "format": {
+//           "vc+sd-jwt": {
+//             "kb-jwt_alg_values": [
+//               "ES256",
+//               "ES256K",
+//               "EdDSA"
+//             ],
+//             "sd-jwt_alg_values": [
+//               "ES256",
+//               "ES256K",
+//               "EdDSA"
+//             ]
+//           }
+//         },
+//         "id": "pid_credential"
+//       }
+//     ]
+//   },
+//   "response_mode": "direct_post.jwt",
+//   "response_type": "vp_token",
+//   "response_uri": "https://talao.co/verifier/wallet/endpoint/adffb0b6-8fd1-11f0-8f53-0a1628958560",
+//   "state": "adffc797-8fd1-11f0-90b5-0a1628958560",
+//   "transaction_data": [
+//     "eyJ0eXBlIjoiZXZtLmVyYzIwX3RyYW5zZmVyIiwiY3JlZGVudGlhbF9pZHMiOlsicGlkX2NyZWRlbnRpYWwiXSwiY2hhaW5faWQiOjEsImFzc2V0Ijp7InN5bWJvbCI6IlRBTEFPIiwiYWRkcmVzcyI6IjB4MUQ0Y0NDMzFkQUI2RUEyMGY0NjFkMzI5YTA1NjJDMWM1ODQxMjUxNSIsImRlY2ltYWxzIjoxOH0sImFtb3VudCI6IjUwMDAwMDAwMDAwMDAwMDAwMDAiLCJyZWNpcGllbnQiOiIweDAzODE3MjU1NjU5ZGM0NTUwNzlkZjUxNmM1MjcxYjQwNDZiMjA2NWIiLCJycGMiOnsibWV0aG9kIjoiZXRoX3NlbmRUcmFuc2FjdGlvbiIsInBhcmFtcyI6W3sidG8iOiIweDFENGNDQzMxZEFCNkVBMjBmNDYxZDMyOWEwNTYyQzFjNTg0MTI1MTUiLCJ2YWx1ZSI6IjB4MCIsImRhdGEiOiIweGE5MDU5Y2JiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDM4MTcyNTU2NTlkYzQ1NTA3OWRmNTE2YzUyNzFiNDA0NmIyMDY1YjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDQ1NjM5MTgyNDRmNDAwMDAifV19LCJvcmRlcl9pZCI6IjE2ODA1IiwidWlfaGludHMiOnsidGl0bGUiOiJUaGlzIGlzIGEgdGVzdCBmb3IgYW4gRVJDMjAgdHJhbnNmZXIiLCJzdWJ0aXRsZSI6IkN5cHRvICBwYWllbWVudCIsInB1cnBvc2UiOiJUcmFuc2ZlciA1IFRBTEFPIHRvIFBpenphIFNob3AifSwiZWlwNjgxIjoiZXRoZXJldW06MHgxRDRjQ0MzMWRBQjZFQTIwZjQ2MWQzMjlhMDU2MkMxYzU4NDEyNTE1QDEvdHJhbnNmZXI_YWRkcmVzcz0weDAzODE3MjU1NjU5ZGM0NTUwNzlkZjUxNmM1MjcxYjQwNDZiMjA2NWImdWludDI1Nj01MDAwMDAwMDAwMDAwMDAwMDAwIn0"
+//   ]
+// }
+
+// eyJ0eXBlIjoiZXZtLmVyYzIwX3RyYW5zZmVyIiwiY3JlZGVudGlhbF9pZHMiOlsicGlkX2NyZWRlbnRpYWwiXSwiY2hhaW5faWQiOjEsImFzc2V0Ijp7InN5bWJvbCI6IlRBTEFPIiwiYWRkcmVzcyI6IjB4MUQ0Y0NDMzFkQUI2RUEyMGY0NjFkMzI5YTA1NjJDMWM1ODQxMjUxNSIsImRlY2ltYWxzIjoxOH0sImFtb3VudCI6IjUwMDAwMDAwMDAwMDAwMDAwMDAiLCJyZWNpcGllbnQiOiIweDAzODE3MjU1NjU5ZGM0NTUwNzlkZjUxNmM1MjcxYjQwNDZiMjA2NWIiLCJycGMiOnsibWV0aG9kIjoiZXRoX3NlbmRUcmFuc2FjdGlvbiIsInBhcmFtcyI6W3sidG8iOiIweDFENGNDQzMxZEFCNkVBMjBmNDYxZDMyOWEwNTYyQzFjNTg0MTI1MTUiLCJ2YWx1ZSI6IjB4MCIsImRhdGEiOiIweGE5MDU5Y2JiMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDM4MTcyNTU2NTlkYzQ1NTA3OWRmNTE2YzUyNzFiNDA0NmIyMDY1YjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDQ1NjM5MTgyNDRmNDAwMDAifV19LCJvcmRlcl9pZCI6IjE2ODA1IiwidWlfaGludHMiOnsidGl0bGUiOiJUaGlzIGlzIGEgdGVzdCBmb3IgYW4gRVJDMjAgdHJhbnNmZXIiLCJzdWJ0aXRsZSI6IkN5cHRvICBwYWllbWVudCIsInB1cnBvc2UiOiJUcmFuc2ZlciA1IFRBTEFPIHRvIFBpenphIFNob3AifSwiZWlwNjgxIjoiZXRoZXJldW06MHgxRDRjQ0MzMWRBQjZFQTIwZjQ2MWQzMjlhMDU2MkMxYzU4NDEyNTE1QDEvdHJhbnNmZXI_YWRkcmVzcz0weDAzODE3MjU1NjU5ZGM0NTUwNzlkZjUxNmM1MjcxYjQwNDZiMjA2NWImdWludDI1Nj01MDAwMDAwMDAwMDAwMDAwMDAwIn0
+
+// {
+//   "type": "evm.erc20_transfer",
+//   "credential_ids": [
+//     "pid_credential"
+//   ],
+//   "chain_id": 1,
+//   "asset": {
+//     "symbol": "TALAO",
+//     "address": "0x1D4cCC31dAB6EA20f461d329a0562C1c58412515",
+//     "decimals": 18
+//   },
+//   "amount": "5000000000000000000",
+//   "recipient": "0x03817255659dc455079df516c5271b4046b2065b",
+//   "rpc": {
+//     "method": "eth_sendTransaction",
+//     "params": [
+//       {
+//         "to": "0x1D4cCC31dAB6EA20f461d329a0562C1c58412515",
+//         "value": "0x0",
+//         "data": "0xa9059cbb00000000000000000000000003817255659dc455079df516c5271b4046b2065b0000000000000000000000000000000000000000000000004563918244f40000"
+//       }
+//     ]
+//   },
+//   "order_id": "16805",
+//   "ui_hints": {
+//     "title": "This is a test for an ERC20 transfer",
+//     "subtitle": "Cypto  paiement",
+//     "purpose": "Transfer 5 TALAO to Pizza Shop"
+//   },
+//   "eip681": "ethereum:0x1D4cCC31dAB6EA20f461d329a0562C1c58412515@1/transfer?address=0x03817255659dc455079df516c5271b4046b2065b&uint256=5000000000000000000"
+// }
+
