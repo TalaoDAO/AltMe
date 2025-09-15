@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:secure_storage/secure_storage.dart';
 part 'logging.dart';
@@ -146,10 +147,15 @@ class DioClient {
     Map<String, dynamic> headers = const <String, dynamic>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
+    int? timeout,
   }) async {
     try {
       final stopwatch = Stopwatch()..start();
       await getSpecificHeader(uri, headers);
+      if (timeout != null) {
+        dio.options.connectTimeout = Duration(seconds: timeout);
+        dio.options.receiveTimeout = Duration(seconds: timeout);
+      }
       final response = await dio.post<dynamic>(
         uri,
         data: data,
@@ -160,17 +166,27 @@ class DioClient {
         onReceiveProgress: onReceiveProgress,
       );
       log.i('Time - ${stopwatch.elapsed}');
+      resetTimeout(timeout);
       return response.data;
     } on FormatException catch (_) {
+      resetTimeout(timeout);
       throw ResponseMessage(
         message: ResponseString.RESPONSE_STRING_UNABLE_TO_PROCESS_THE_DATA,
       );
     } catch (e) {
+      resetTimeout(timeout);
       if (e is DioException) {
         throw NetworkException.getDioException(error: e);
       } else {
         rethrow;
       }
     }
+  }
+
+  @visibleForTesting
+  void resetTimeout(int? timeout) {
+    if (timeout == null) return;
+    dio.options.connectTimeout = _defaultConnectTimeout;
+    dio.options.receiveTimeout = _defaultReceiveTimeout;
   }
 }

@@ -62,8 +62,6 @@ class SecureStorageProvider {
       return _instance;
     } else {
       if (_instance._storage == null) {
-        // TODO(all): Explain user and give him
-        // possibility to send issue report?
         throw Exception('SECURE_STORAGE_ISSUE');
       }
       return _instance;

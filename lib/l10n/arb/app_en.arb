@@ -1172,7 +1172,7 @@
   "iaAnalyze": "Data will be shared with a remote AI engine. Don't share personal data.",
   "iaAnalyzeTitle": "AI Agent",
   "deleteDigit": "Delete",
-  "aiPleaseWait": "This treatment can take up to 30s",
+  "aiPleaseWait": "This treatment can take up to 1 min",
   "trustedList": "Use trusted list",
   "trustedListSubtitle": "List of trusted entities in the current ecosystem. You are warned in case of interaction with non trusted entity.",
   "notTrustedEntity": "This entity is not in the trusted list. You should be very cautious with untrusted entities."
