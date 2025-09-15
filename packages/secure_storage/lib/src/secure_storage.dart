@@ -21,12 +21,13 @@ Future<void> get initSecureStorage async {
       /// required. We don't set it by default because old wallets would loose
       /// their data.
       /// https://github.com/mogol/flutter_secure_storage/issues/354
-      final storage = FlutterSecureStorage(
-        aOptions: _getAndroidOptions(),
-      );
+      final storage = FlutterSecureStorage();
       await testStorage(storage);
     } catch (e) {
-      const storage = FlutterSecureStorage();
+
+      const storage = FlutterSecureStorage(
+        aOptions: _getAndroidOptions(),
+      );
       await testStorage(storage);
     }
   } else {
