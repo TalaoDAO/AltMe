@@ -193,11 +193,7 @@ Future<void> oidc4vpSiopV2AcceptHost({
   if (showPrompt && !trustedListEnabled) {
     final String title = l10n.scanPromptHost;
 
-    String subtitle = (approvedIssuer.did.isEmpty)
-        ? uri.host
-        : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
-
-    subtitle = await getHost(
+    final String subtitle = await getHost(
       uri: uri,
       client: client,
     );
