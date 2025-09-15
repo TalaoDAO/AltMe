@@ -29,7 +29,6 @@ Future<void> get initSecureStorage async {
         aOptions: _getAndroidOptions(),
       );
       await testStorage(storage);
-      await testStorage(storage);
     }
   } else {
     const defaultIOSOptions =

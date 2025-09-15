@@ -759,7 +759,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get professional => 'Professional';
 
   @override
-  String get splashSubtitle => 'Own your digital identity and digital assets';
+  String get splashSubtitle => 'Own your digital identity';
 
   @override
   String get poweredBy => 'Powered By';
@@ -804,7 +804,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmYourPinCode => 'Confirm your PIN code';
 
   @override
-  String get walletAltme => 'Wallet Altme';
+  String get walletAltme => 'Wallet Talao';
 
   @override
   String get createTitle => 'Create or import a wallet';
@@ -1709,7 +1709,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get twitterHowToGetIt =>
-      'Follow the steps on TezosProfiles https://tzprofiles.com/connect. Then, claim the “Twitter account” card in Altme. Make sure to sign the transaction on TZPROFILES with the same account you are using in Altme.';
+      'Follow the steps on TezosProfiles https://tzprofiles.com/connect. Then, claim the “Twitter account” card in Talao. Make sure to sign the transaction on TZPROFILES with the same account you are using in Talao.';
 
   @override
   String get twitterWhyGetThisCard =>
@@ -1940,7 +1940,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletReadySubtitle =>
-      'Let’s discover everything \nWeb 3 has to offer.';
+      'Explore the world of true identity ownership.';
 
   @override
   String get failedToInitCamera => 'Camera initialization failed!';

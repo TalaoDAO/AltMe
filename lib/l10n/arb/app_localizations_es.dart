@@ -758,8 +758,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get professional => 'Profesional';
 
   @override
-  String get splashSubtitle =>
-      'Tenga su propia identidad digital y activos digitales.';
+  String get splashSubtitle => 'Tenga su propia identidad digital.';
 
   @override
   String get poweredBy => 'Con tecnología de';

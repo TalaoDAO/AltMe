@@ -757,7 +757,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get professional => 'Professional';
 
   @override
-  String get splashSubtitle => 'Tingues la teva identitat i recursos digitals';
+  String get splashSubtitle => 'Tingues la teva identitat';
 
   @override
   String get poweredBy => 'Impulsat per';

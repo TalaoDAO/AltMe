@@ -1497,7 +1497,7 @@ abstract class AppLocalizations {
   /// No description provided for @splashSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Own your digital identity and digital assets'**
+  /// **'Own your digital identity'**
   String get splashSubtitle;
 
   /// No description provided for @poweredBy.
@@ -1587,7 +1587,7 @@ abstract class AppLocalizations {
   /// No description provided for @walletAltme.
   ///
   /// In en, this message translates to:
-  /// **'Wallet Altme'**
+  /// **'Wallet Talao'**
   String get walletAltme;
 
   /// No description provided for @createTitle.
@@ -3231,7 +3231,7 @@ abstract class AppLocalizations {
   /// No description provided for @twitterHowToGetIt.
   ///
   /// In en, this message translates to:
-  /// **'Follow the steps on TezosProfiles https://tzprofiles.com/connect. Then, claim the “Twitter account” card in Altme. Make sure to sign the transaction on TZPROFILES with the same account you are using in Altme.'**
+  /// **'Follow the steps on TezosProfiles https://tzprofiles.com/connect. Then, claim the “Twitter account” card in Talao. Make sure to sign the transaction on TZPROFILES with the same account you are using in Talao.'**
   String get twitterHowToGetIt;
 
   /// No description provided for @twitterWhyGetThisCard.
@@ -3615,7 +3615,7 @@ abstract class AppLocalizations {
   /// No description provided for @walletReadySubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Let’s discover everything \nWeb 3 has to offer.'**
+  /// **'Explore the world of true identity ownership.'**
   String get walletReadySubtitle;
 
   /// No description provided for @failedToInitCamera.
