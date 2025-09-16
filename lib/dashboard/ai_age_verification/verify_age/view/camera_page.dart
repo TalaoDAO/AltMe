@@ -129,11 +129,6 @@ class _CameraViewState extends State<CameraView> {
                   credentialsCubit: context.read<CredentialsCubit>(),
                   cameraCubit: context.read<CameraCubit>(),
                   oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
-                  blockchainType: context
-                      .read<WalletCubit>()
-                      .state
-                      .currentAccount!
-                      .blockchainType,
                   vcFormatType: widget.vcFormatType,
                   qrCodeScanCubit: context.read<QRCodeScanCubit>(),
                 );
