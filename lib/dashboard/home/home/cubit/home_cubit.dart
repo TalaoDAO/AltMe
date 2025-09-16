@@ -42,7 +42,6 @@ class HomeCubit extends Cubit<HomeState> {
     required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
     required OIDC4VCIDraftType oidc4vciDraftType,
-    required BlockchainType blockchainType,
     required VCFormatType vcFormatType,
     required QRCodeScanCubit qrCodeScanCubit,
   }) async {
@@ -109,7 +108,6 @@ class HomeCubit extends Cubit<HomeState> {
         credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
         oidc4vciDraftType: oidc4vciDraftType,
-        blockchainType: blockchainType,
         vcFormatType: vcFormatType,
         qrCodeScanCubit: qrCodeScanCubit,
       );
@@ -170,7 +168,6 @@ class HomeCubit extends Cubit<HomeState> {
     required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
     required OIDC4VCIDraftType oidc4vciDraftType,
-    required BlockchainType blockchainType,
     required VCFormatType vcFormatType,
     required QRCodeScanCubit qrCodeScanCubit,
   }) async {
@@ -185,6 +182,7 @@ class HomeCubit extends Cubit<HomeState> {
       emit(state.copyWith(status: AppStatus.loading));
 
       final newUrl =
+          // ignore: lines_longer_than_80_chars
           '${Uri.parse(url)}?vc_format=${vcFormatType.urlValue(isEmailPassOrPhonePass: credentialSubjectType == CredentialSubjectType.emailPass || credentialSubjectType == CredentialSubjectType.phonePass)}';
 
       response = await client.post(
