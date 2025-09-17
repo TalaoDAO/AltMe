@@ -4,11 +4,11 @@ import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
 import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.dart';
 import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/oidc4vc/helper_function/oidc4vp_prompt.dart';
 import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
 import 'package:altme/trusted_list/function/check_presentation_is_trusted.dart';
 import 'package:altme/trusted_list/function/is_certificate_valid.dart';
 import 'package:altme/trusted_list/model/trusted_entity.dart';
-import 'package:altme/trusted_list/widget/trusted_entity_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -22,7 +22,6 @@ Future<void> oidc4vpSiopV2AcceptHost({
   required Issuer approvedIssuer,
 }) async {
   final l10n = context.l10n;
-  var acceptHost = true;
 
   /// verification case
   final String? requestUri = uri.queryParameters['request_uri'];
@@ -85,7 +84,8 @@ Future<void> oidc4vpSiopV2AcceptHost({
     }
 
     LoadingView().hide();
-    final bool moveAhead = await showDialog<bool>(
+    final bool moveAhead =
+        await showDialog<bool>(
           context: context,
           builder: (_) {
             return DeveloperModeDialog(
@@ -118,16 +118,15 @@ Future<void> oidc4vpSiopV2AcceptHost({
   final trustedListEnabled =
       profile.profileSetting.walletSecurityOptions.trustedList;
   final trustedList = profile.trustedList;
+  late TrustedEntity? trustedEntity;
   if (trustedListEnabled) {
     try {
       if (trustedList == null) {
-        throw Exception(
-          'Missing trusted list.',
-        );
+        throw Exception('Missing trusted list.');
       }
 
       // get new issuer open id configuration from signed metadata
-      final trustedEntity = getEntityFromTrustedList(
+      trustedEntity = getEntityFromTrustedList(
         trustedList,
         uri.queryParameters['client_id'],
         TrustedEntityType.verifier,
@@ -141,85 +140,27 @@ Future<void> oidc4vpSiopV2AcceptHost({
           trustedEntity: trustedEntity,
           signedMetadata: encodedData,
         );
-
-        LoadingView().hide();
-        acceptHost = await showDialog<bool>(
-              context: context,
-              builder: (BuildContext context) {
-                return SafeArea(
-                  child: ConfirmDialog(
-                    title: l10n.scanPromptHost,
-                    content: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxHeight: MediaQuery.of(context).size.height * 0.6,
-                      ),
-                      child: SingleChildScrollView(
-                        child:
-                            TrustedEntityDetails(trustedEntity: trustedEntity),
-                      ),
-                    ),
-                    yes: l10n.communicationHostAllow,
-                    no: l10n.communicationHostDeny,
-                  ),
-                );
-              },
-            ) ??
-            false;
-      } else {
-        LoadingView().hide();
-        acceptHost = await showDialog<bool>(
-              context: context,
-              builder: (BuildContext context) {
-                return ConfirmDialog(
-                  title: l10n.scanPromptHost,
-                  subtitle: l10n.notTrustedEntity,
-                  yes: l10n.communicationHostAllow,
-                  no: l10n.communicationHostDeny,
-                  invertedCallToAction: true,
-                );
-              },
-            ) ??
-            false;
+        // issuer has passed the trusted list checks
       }
     } catch (e) {
-      context.read<QRCodeScanCubit>().emitError(
-            error: e,
-          );
+      context.read<QRCodeScanCubit>().emitError(error: e);
       return;
     }
-  }
-
-  if (showPrompt && !trustedListEnabled) {
-    final String title = l10n.scanPromptHost;
-
-    final String subtitle = await getHost(
-      uri: uri,
-      client: client,
-    );
-
-    LoadingView().hide();
-    acceptHost = await showDialog<bool>(
-          context: context,
-          builder: (BuildContext context) {
-            return ConfirmDialog(
-              title: title,
-              subtitle: subtitle,
-              yes: l10n.communicationHostAllow,
-              no: l10n.communicationHostDeny,
-            );
-          },
-        ) ??
-        false;
-  }
-  LoadingView().hide();
-  if (acceptHost) {
-    await context.read<QRCodeScanCubit>().startSIOPV2OIDC4VPProcess(uri);
   } else {
-    context.read<QRCodeScanCubit>().emitError(
-          error: ResponseMessage(
-            message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
-          ),
-        );
-    return;
+    trustedEntity = null;
   }
+  await Oidc4VpPrompt(
+    context: context,
+    l10n: l10n,
+    trustedListEnabled: trustedListEnabled,
+    trustedEntity: trustedEntity,
+    uri: uri,
+    client: client,
+    showPrompt: showPrompt,
+  ).show();
+
+  // Default action if there is no prompt
+
+  LoadingView().hide();
+  await context.read<QRCodeScanCubit>().startSIOPV2OIDC4VPProcess(uri);
 }
