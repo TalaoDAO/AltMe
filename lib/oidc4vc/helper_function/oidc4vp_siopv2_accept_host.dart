@@ -141,7 +141,6 @@ Future<void> oidc4vpSiopV2AcceptHost({
           trustedEntity: trustedEntity,
           signedMetadata: encodedData,
         );
-        // check certificate is trusted
 
         LoadingView().hide();
         acceptHost = await showDialog<bool>(
