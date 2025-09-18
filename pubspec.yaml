@@ -26,7 +26,7 @@ dependencies:
   cached_network_image: ^3.2.3
   camera: ^0.11.2
   confetti: ^0.8.0
-  connectivity_plus: ^7.0.0
+  connectivity_plus: ^6.1.5
   convert: ^3.1.1
   credential_manifest:
     path: packages/credential_manifest
@@ -34,7 +34,7 @@ dependencies:
   cryptocurrency_keys:
     path: packages/cryptocurrency_keys
   dart_bip32_bip44: ^0.2.0
-  dart_jsonwebtoken: ^3.2.0
+  dart_jsonwebtoken: ^2.17.0
   dart_web3:
     git:
       url: https://github.com/TalaoDAO/dart_web3.git
@@ -76,9 +76,9 @@ dependencies:
   hex: ^0.2.0
   image: ^4.5.4
   image_picker: ^1.0.7
-  jose_plus: ^0.4.7
+  jose_plus: ^0.4.6
   json_annotation: ^4.9.0
-  json_path: ^0.8.0
+  json_path: ^0.7.6
   jwt_decode:
     path: packages/jwt_decode
   local_auth: ^2.1.6
@@ -129,15 +129,15 @@ dependency_overrides:
 
 dev_dependencies:
   bloc_test: ^10.0.0
-  build_runner: ^2.8.0
+  build_runner: ^2.4.13
   fake_async: ^1.3.1
   flutter_launcher_icons: ^0.14.4
   flutter_test:
     sdk: flutter
   http_mock_adapter: ^0.6.0
-  json_serializable: ^6.11.1
+  json_serializable: ^6.8.0
   mockingjay: ^2.0.0
-  mockito: ^5.5.1
+  mockito: ^5.4.4
   mocktail: ^1.0.2
   very_good_analysis: ^9.0.0
 
