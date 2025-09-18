@@ -1,0 +1,596 @@
+Deleting build...                                                  369ms
+Deleting .dart_tool...                                              27ms
+Deleting ephemeral...                                                0ms
+Deleting Generated.xcconfig...                                       1ms
+Deleting flutter_export_environment.sh...                            0ms
+Deleting ephemeral...                                                0ms
+Deleting ephemeral...                                                0ms
+Deleting ephemeral...                                                0ms
+Deleting .flutter-plugins-dependencies...                            0ms
+Deleting .dart_tool...                                               2ms
+Resolving dependencies...
+Downloading packages...
+  characters 1.4.0 (1.4.1 available)
+  iregexp 0.1.2 (0.2.0 available)
+  json_path 0.7.6 (0.8.0 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  petitparser 6.1.0 (7.0.1 available)
+  test_api 0.7.6 (0.7.7 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+Got dependencies!
+8 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  characters 1.4.0 (1.4.1 available)
+  iregexp 0.1.2 (0.2.0 available)
+  json_path 0.7.6 (0.8.0 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  petitparser 6.1.0 (7.0.1 available)
+  test_api 0.7.6 (0.7.7 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+No dependencies changed.
+8 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  characters 1.4.0 (1.4.1 available)
+  iregexp 0.1.2 (0.2.0 available)
+  json_path 0.7.6 (0.8.0 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  petitparser 6.1.0 (7.0.1 available)
+  test_api 0.7.6 (0.7.7 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+No dependencies changed.
+8 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Deleting .dart_tool...                                               3ms
+Resolving dependencies...
+Downloading packages...
+  characters 1.4.0 (1.4.1 available)
+  crypto_keys 0.3.0+1 (0.3.0+2 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  test_api 0.7.6 (0.7.7 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+Got dependencies!
+7 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  characters 1.4.0 (1.4.1 available)
+  crypto_keys 0.3.0+1 (0.3.0+2 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  test_api 0.7.6 (0.7.7 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+No dependencies changed.
+7 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  characters 1.4.0 (1.4.1 available)
+  crypto_keys 0.3.0+1 (0.3.0+2 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  test_api 0.7.6 (0.7.7 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+No dependencies changed.
+7 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Deleting .dart_tool...                                               0ms
+Deleting .flutter-plugins-dependencies...                            0ms
+Resolving dependencies...
+Downloading packages...
+  characters 1.4.0 (1.4.1 available)
+  dio 5.6.0 (5.9.0 available)
+  dio_web_adapter 2.0.0 (2.1.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  test_api 0.7.6 (0.7.7 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+Got dependencies!
+7 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  characters 1.4.0 (1.4.1 available)
+  dio 5.6.0 (5.9.0 available)
+  dio_web_adapter 2.0.0 (2.1.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  test_api 0.7.6 (0.7.7 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+No dependencies changed.
+7 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  characters 1.4.0 (1.4.1 available)
+  dio 5.6.0 (5.9.0 available)
+  dio_web_adapter 2.0.0 (2.1.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  test_api 0.7.6 (0.7.7 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+No dependencies changed.
+7 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Deleting .dart_tool...                                               0ms
+Resolving dependencies...
+Downloading packages...
+  characters 1.4.0 (1.4.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  test_api 0.7.6 (0.7.7 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+Got dependencies!
+5 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  characters 1.4.0 (1.4.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  test_api 0.7.6 (0.7.7 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+No dependencies changed.
+5 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  characters 1.4.0 (1.4.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  test_api 0.7.6 (0.7.7 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+No dependencies changed.
+5 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Deleting .dart_tool...                                               9ms
+Deleting .flutter-plugins-dependencies...                            0ms
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 67.0.0 (88.0.0 available)
+  analyzer 6.4.1 (8.1.1 available)
+  build 2.4.1 (4.0.0 available)
+  build_config 1.1.2 (1.2.0 available)
+  build_resolvers 2.4.2 (3.0.4 available)
+  build_runner 2.4.13 (2.8.0 available)
+  build_runner_core 7.3.2 (9.3.2 available)
+  characters 1.4.0 (1.4.1 available)
+  crypto_keys_plus 0.4.0 (0.5.0 available)
+  dart_jsonwebtoken 2.17.0 (3.2.0 available)
+  dart_style 2.3.6 (3.1.2 available)
+  dio 5.6.0 (5.9.0 available)
+  dio_web_adapter 2.0.0 (2.1.1 available)
+! ffi 2.1.0 (overridden) (2.1.4 available)
+  iregexp 0.1.2 (0.2.0 available)
+  jose_plus 0.4.6 (0.4.7 available)
+  js 0.6.7 (0.7.2 available)
+  json_path 0.7.6 (0.8.0 available)
+  json_rpc_2 3.0.3 (4.0.0 available)
+  json_serializable 6.8.0 (6.11.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  petitparser 6.1.0 (7.0.1 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  shelf_web_socket 2.0.1 (3.0.0 available)
+  source_gen 1.5.0 (4.0.1 available)
+  source_helper 1.3.5 (1.3.8 available)
+  test_api 0.7.6 (0.7.7 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+  x509_plus 0.3.2 (0.3.3 available)
+Got dependencies!
+30 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 67.0.0 (88.0.0 available)
+  analyzer 6.4.1 (8.1.1 available)
+  build 2.4.1 (4.0.0 available)
+  build_config 1.1.2 (1.2.0 available)
+  build_resolvers 2.4.2 (3.0.4 available)
+  build_runner 2.4.13 (2.8.0 available)
+  build_runner_core 7.3.2 (9.3.2 available)
+  characters 1.4.0 (1.4.1 available)
+  crypto_keys_plus 0.4.0 (0.5.0 available)
+  dart_jsonwebtoken 2.17.0 (3.2.0 available)
+  dart_style 2.3.6 (3.1.2 available)
+  dio 5.6.0 (5.9.0 available)
+  dio_web_adapter 2.0.0 (2.1.1 available)
+! ffi 2.1.0 (overridden) (2.1.4 available)
+  iregexp 0.1.2 (0.2.0 available)
+  jose_plus 0.4.6 (0.4.7 available)
+  js 0.6.7 (0.7.2 available)
+  json_path 0.7.6 (0.8.0 available)
+  json_rpc_2 3.0.3 (4.0.0 available)
+  json_serializable 6.8.0 (6.11.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  petitparser 6.1.0 (7.0.1 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  shelf_web_socket 2.0.1 (3.0.0 available)
+  source_gen 1.5.0 (4.0.1 available)
+  source_helper 1.3.5 (1.3.8 available)
+  test_api 0.7.6 (0.7.7 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+  x509_plus 0.3.2 (0.3.3 available)
+No dependencies changed.
+30 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 67.0.0 (88.0.0 available)
+  analyzer 6.4.1 (8.1.1 available)
+  build 2.4.1 (4.0.0 available)
+  build_config 1.1.2 (1.2.0 available)
+  build_resolvers 2.4.2 (3.0.4 available)
+  build_runner 2.4.13 (2.8.0 available)
+  build_runner_core 7.3.2 (9.3.2 available)
+  characters 1.4.0 (1.4.1 available)
+  crypto_keys_plus 0.4.0 (0.5.0 available)
+  dart_jsonwebtoken 2.17.0 (3.2.0 available)
+  dart_style 2.3.6 (3.1.2 available)
+  dio 5.6.0 (5.9.0 available)
+  dio_web_adapter 2.0.0 (2.1.1 available)
+! ffi 2.1.0 (overridden) (2.1.4 available)
+  iregexp 0.1.2 (0.2.0 available)
+  jose_plus 0.4.6 (0.4.7 available)
+  js 0.6.7 (0.7.2 available)
+  json_path 0.7.6 (0.8.0 available)
+  json_rpc_2 3.0.3 (4.0.0 available)
+  json_serializable 6.8.0 (6.11.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  petitparser 6.1.0 (7.0.1 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  shelf_web_socket 2.0.1 (3.0.0 available)
+  source_gen 1.5.0 (4.0.1 available)
+  source_helper 1.3.5 (1.3.8 available)
+  test_api 0.7.6 (0.7.7 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+  x509_plus 0.3.2 (0.3.3 available)
+No dependencies changed.
+30 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Deleting .dart_tool...                                               0ms
+Deleting .flutter-plugins-dependencies...                            0ms
+Resolving dependencies...
+Downloading packages...
+  bip39_mnemonic 3.0.10 (4.0.1 available)
+  cbor 4.1.0 (6.3.7 available)
+  characters 1.4.0 (1.4.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+Got dependencies!
+6 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  bip39_mnemonic 3.0.10 (4.0.1 available)
+  cbor 4.1.0 (6.3.7 available)
+  characters 1.4.0 (1.4.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+No dependencies changed.
+6 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  bip39_mnemonic 3.0.10 (4.0.1 available)
+  cbor 4.1.0 (6.3.7 available)
+  characters 1.4.0 (1.4.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+No dependencies changed.
+6 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Deleting .dart_tool...                                               0ms
+Deleting .flutter-plugins-dependencies...                            0ms
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 85.0.0 (88.0.0 available)
+  analyzer 7.7.1 (8.1.1 available)
+  characters 1.4.0 (1.4.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  test 1.26.2 (1.26.3 available)
+  test_api 0.7.6 (0.7.7 available)
+  test_core 0.6.11 (0.6.12 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+Got dependencies!
+9 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 85.0.0 (88.0.0 available)
+  analyzer 7.7.1 (8.1.1 available)
+  characters 1.4.0 (1.4.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  test 1.26.2 (1.26.3 available)
+  test_api 0.7.6 (0.7.7 available)
+  test_core 0.6.11 (0.6.12 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+No dependencies changed.
+9 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 85.0.0 (88.0.0 available)
+  analyzer 7.7.1 (8.1.1 available)
+  characters 1.4.0 (1.4.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  test 1.26.2 (1.26.3 available)
+  test_api 0.7.6 (0.7.7 available)
+  test_core 0.6.11 (0.6.12 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+No dependencies changed.
+9 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 67.0.0 (88.0.0 available)
+  analyzer 6.4.1 (8.1.1 available)
+  android_intent_plus 5.3.1 (6.0.0 available)
+  app_links 6.3.3 (6.4.1 available)
+  asn1lib 1.5.3 (1.6.5 available)
+  bloc 8.1.4 (9.0.0 available)
+  bloc_test 9.1.7 (10.0.0 available)
+  build 2.4.1 (4.0.0 available)
+  build_config 1.1.2 (1.2.0 available)
+  build_resolvers 2.4.2 (3.0.4 available)
+  build_runner 2.4.13 (2.8.0 available)
+  build_runner_core 7.3.2 (9.3.2 available)
+  camera 0.10.6 (0.11.2 available)
+  characters 1.4.0 (1.4.1 available)
+  confetti 0.7.0 (0.8.0 available)
+  connectivity_plus 6.1.5 (7.0.0 available)
+  crypto_keys 0.3.0+1 (0.3.0+2 available)
+  crypto_keys_plus 0.4.0 (0.5.0 available)
+  dart_jsonwebtoken 2.17.0 (3.2.0 available)
+  dart_style 2.3.6 (3.1.2 available)
+  decimal 2.3.3 (3.2.4 available)
+  device_info_plus 11.5.0 (12.1.0 available)
+  devicelocale 0.7.1 (0.8.2 available)
+  dio 5.6.0 (5.9.0 available)
+  dio_web_adapter 2.0.0 (2.1.1 available)
+  dotted_border 2.1.0 (3.1.0 available)
+  eip55 1.0.2 (1.0.3 available)
+! ffi 2.1.0 (overridden) (2.1.4 available)
+  file_picker 8.3.7 (10.3.3 available)
+  file_saver 0.2.14 (0.3.1 available)
+  flutter_bloc 8.1.6 (9.1.1 available)
+  flutter_chat_ui 1.6.15 (2.9.0 available)
+  flutter_dotenv 5.2.1 (6.0.0 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  flutter_link_previewer 3.2.2 (4.1.2 available)
+! flutter_secure_storage 10.0.0-beta.4 from git git@github.com:juliansteenbakker/flutter_secure_storage.git at bafd1e in flutter_secure_storage (overridden)
+  flutter_slidable 3.1.2 (4.0.1 available)
+  google_mlkit_barcode_scanning 0.10.0 (0.14.1 available)
+  google_mlkit_commons 0.6.1 (0.11.0 available)
+  gpt_markdown 1.1.3 (1.1.4 available)
+  iregexp 0.1.2 (0.2.0 available)
+  jose_plus 0.4.6 (0.4.7 available)
+  js 0.6.7 (0.7.2 available)
+  json_path 0.7.6 (0.8.0 available)
+  json_rpc_2 3.0.3 (4.0.0 available)
+  json_serializable 6.8.0 (6.11.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  matrix 0.25.13 (2.0.1 available)
+  meta 1.16.0 (1.17.0 available)
+  mime 1.0.6 (2.0.0 available)
+  mobile_scanner 3.5.7 (7.0.1 available)
+  mockingjay 0.5.0 (2.0.0 available)
+  mockito 5.4.4 (5.5.1 available)
+  model_viewer_plus 1.9.0 (1.9.3 available)
+  no_screenshot 0.0.1+7 (0.3.1 available)
+  olm 2.0.4 (3.1.0 available)
+  package_info_plus 8.3.1 (9.0.0 available)
+  permission_handler 11.4.0 (12.0.1 available)
+  permission_handler_android 12.1.0 (13.0.1 available)
+  petitparser 6.1.0 (7.0.1 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  sec 1.1.0 (1.1.1 available)
+  share_plus 7.2.2 (12.0.0 available)
+  share_plus_platform_interface 3.4.0 (6.1.0 available)
+  shelf_web_socket 2.0.1 (3.0.0 available)
+  source_gen 1.5.0 (4.0.1 available)
+  source_helper 1.3.5 (1.3.8 available)
+  test 1.26.2 (1.26.3 available)
+  test_api 0.7.6 (0.7.7 available)
+  test_core 0.6.11 (0.6.12 available)
+  timezone 0.9.4 (0.10.1 available)
+  unorm_dart 0.2.0 (0.3.1+1 available)
+  url_launcher_android 6.3.21 (6.3.22 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+  wallet 0.0.13 (0.0.18 available)
+  web3dart 2.7.3 (3.0.1 available)
+  webview_flutter 4.9.0 (4.13.0 available)
+  webview_flutter_android 3.16.9 (4.10.2 available)
+  x509_plus 0.3.2 (0.3.3 available)
+  xml 6.5.0 (6.6.1 available)
+Got dependencies!
+79 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 67.0.0 (88.0.0 available)
+  analyzer 6.4.1 (8.1.1 available)
+  android_intent_plus 5.3.1 (6.0.0 available)
+  app_links 6.3.3 (6.4.1 available)
+  asn1lib 1.5.3 (1.6.5 available)
+  bloc 8.1.4 (9.0.0 available)
+  bloc_test 9.1.7 (10.0.0 available)
+  build 2.4.1 (4.0.0 available)
+  build_config 1.1.2 (1.2.0 available)
+  build_resolvers 2.4.2 (3.0.4 available)
+  build_runner 2.4.13 (2.8.0 available)
+  build_runner_core 7.3.2 (9.3.2 available)
+  camera 0.10.6 (0.11.2 available)
+  characters 1.4.0 (1.4.1 available)
+  confetti 0.7.0 (0.8.0 available)
+  connectivity_plus 6.1.5 (7.0.0 available)
+  crypto_keys 0.3.0+1 (0.3.0+2 available)
+  crypto_keys_plus 0.4.0 (0.5.0 available)
+  dart_jsonwebtoken 2.17.0 (3.2.0 available)
+  dart_style 2.3.6 (3.1.2 available)
+  decimal 2.3.3 (3.2.4 available)
+  device_info_plus 11.5.0 (12.1.0 available)
+  devicelocale 0.7.1 (0.8.2 available)
+  dio 5.6.0 (5.9.0 available)
+  dio_web_adapter 2.0.0 (2.1.1 available)
+  dotted_border 2.1.0 (3.1.0 available)
+  eip55 1.0.2 (1.0.3 available)
+! ffi 2.1.0 (overridden) (2.1.4 available)
+  file_picker 8.3.7 (10.3.3 available)
+  file_saver 0.2.14 (0.3.1 available)
+  flutter_bloc 8.1.6 (9.1.1 available)
+  flutter_chat_ui 1.6.15 (2.9.0 available)
+  flutter_dotenv 5.2.1 (6.0.0 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  flutter_link_previewer 3.2.2 (4.1.2 available)
+! flutter_secure_storage 10.0.0-beta.4 from git git@github.com:juliansteenbakker/flutter_secure_storage.git at bafd1e in flutter_secure_storage (overridden)
+  flutter_slidable 3.1.2 (4.0.1 available)
+  google_mlkit_barcode_scanning 0.10.0 (0.14.1 available)
+  google_mlkit_commons 0.6.1 (0.11.0 available)
+  gpt_markdown 1.1.3 (1.1.4 available)
+> image_picker_android 0.8.13+3 (was 0.8.13+2)
+  iregexp 0.1.2 (0.2.0 available)
+  jose_plus 0.4.6 (0.4.7 available)
+  js 0.6.7 (0.7.2 available)
+  json_path 0.7.6 (0.8.0 available)
+  json_rpc_2 3.0.3 (4.0.0 available)
+  json_serializable 6.8.0 (6.11.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  matrix 0.25.13 (2.0.1 available)
+  meta 1.16.0 (1.17.0 available)
+  mime 1.0.6 (2.0.0 available)
+  mobile_scanner 3.5.7 (7.0.1 available)
+  mockingjay 0.5.0 (2.0.0 available)
+  mockito 5.4.4 (5.5.1 available)
+  model_viewer_plus 1.9.0 (1.9.3 available)
+  no_screenshot 0.0.1+7 (0.3.1 available)
+  olm 2.0.4 (3.1.0 available)
+  package_info_plus 8.3.1 (9.0.0 available)
+  permission_handler 11.4.0 (12.0.1 available)
+  permission_handler_android 12.1.0 (13.0.1 available)
+  petitparser 6.1.0 (7.0.1 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  sec 1.1.0 (1.1.1 available)
+  share_plus 7.2.2 (12.0.0 available)
+  share_plus_platform_interface 3.4.0 (6.1.0 available)
+  shelf_web_socket 2.0.1 (3.0.0 available)
+  source_gen 1.5.0 (4.0.1 available)
+  source_helper 1.3.5 (1.3.8 available)
+  test 1.26.2 (1.26.3 available)
+  test_api 0.7.6 (0.7.7 available)
+  test_core 0.6.11 (0.6.12 available)
+  timezone 0.9.4 (0.10.1 available)
+  unorm_dart 0.2.0 (0.3.1+1 available)
+> url_launcher_android 6.3.22 (was 6.3.21)
+  very_good_analysis 5.1.0 (9.0.0 available)
+  wallet 0.0.13 (0.0.18 available)
+  web3dart 2.7.3 (3.0.1 available)
+  webview_flutter 4.9.0 (4.13.0 available)
+  webview_flutter_android 3.16.9 (4.10.2 available)
+  x509_plus 0.3.2 (0.3.3 available)
+  xml 6.5.0 (6.6.1 available)
+Changed 2 dependencies!
+78 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 67.0.0 (88.0.0 available)
+  analyzer 6.4.1 (8.1.1 available)
+  android_intent_plus 5.3.1 (6.0.0 available)
+  app_links 6.3.3 (6.4.1 available)
+  asn1lib 1.5.3 (1.6.5 available)
+  bloc 8.1.4 (9.0.0 available)
+  bloc_test 9.1.7 (10.0.0 available)
+  build 2.4.1 (4.0.0 available)
+  build_config 1.1.2 (1.2.0 available)
+  build_resolvers 2.4.2 (3.0.4 available)
+  build_runner 2.4.13 (2.8.0 available)
+  build_runner_core 7.3.2 (9.3.2 available)
+  camera 0.10.6 (0.11.2 available)
+  characters 1.4.0 (1.4.1 available)
+  confetti 0.7.0 (0.8.0 available)
+  connectivity_plus 6.1.5 (7.0.0 available)
+  crypto_keys 0.3.0+1 (0.3.0+2 available)
+  crypto_keys_plus 0.4.0 (0.5.0 available)
+  dart_jsonwebtoken 2.17.0 (3.2.0 available)
+  dart_style 2.3.6 (3.1.2 available)
+  decimal 2.3.3 (3.2.4 available)
+  device_info_plus 11.5.0 (12.1.0 available)
+  devicelocale 0.7.1 (0.8.2 available)
+  dio 5.6.0 (5.9.0 available)
+  dio_web_adapter 2.0.0 (2.1.1 available)
+  dotted_border 2.1.0 (3.1.0 available)
+  eip55 1.0.2 (1.0.3 available)
+! ffi 2.1.0 (overridden) (2.1.4 available)
+  file_picker 8.3.7 (10.3.3 available)
+  file_saver 0.2.14 (0.3.1 available)
+  flutter_bloc 8.1.6 (9.1.1 available)
+  flutter_chat_ui 1.6.15 (2.9.0 available)
+  flutter_dotenv 5.2.1 (6.0.0 available)
+  flutter_launcher_icons 0.13.1 (0.14.4 available)
+  flutter_link_previewer 3.2.2 (4.1.2 available)
+! flutter_secure_storage 10.0.0-beta.4 from git git@github.com:juliansteenbakker/flutter_secure_storage.git at bafd1e in flutter_secure_storage (overridden)
+  flutter_slidable 3.1.2 (4.0.1 available)
+  google_mlkit_barcode_scanning 0.10.0 (0.14.1 available)
+  google_mlkit_commons 0.6.1 (0.11.0 available)
+  gpt_markdown 1.1.3 (1.1.4 available)
+  iregexp 0.1.2 (0.2.0 available)
+  jose_plus 0.4.6 (0.4.7 available)
+  js 0.6.7 (0.7.2 available)
+  json_path 0.7.6 (0.8.0 available)
+  json_rpc_2 3.0.3 (4.0.0 available)
+  json_serializable 6.8.0 (6.11.1 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  matrix 0.25.13 (2.0.1 available)
+  meta 1.16.0 (1.17.0 available)
+  mime 1.0.6 (2.0.0 available)
+  mobile_scanner 3.5.7 (7.0.1 available)
+  mockingjay 0.5.0 (2.0.0 available)
+  mockito 5.4.4 (5.5.1 available)
+  model_viewer_plus 1.9.0 (1.9.3 available)
+  no_screenshot 0.0.1+7 (0.3.1 available)
+  olm 2.0.4 (3.1.0 available)
+  package_info_plus 8.3.1 (9.0.0 available)
+  permission_handler 11.4.0 (12.0.1 available)
+  permission_handler_android 12.1.0 (13.0.1 available)
+  petitparser 6.1.0 (7.0.1 available)
+  pointycastle 3.9.1 (4.0.0 available)
+  sec 1.1.0 (1.1.1 available)
+  share_plus 7.2.2 (12.0.0 available)
+  share_plus_platform_interface 3.4.0 (6.1.0 available)
+  shelf_web_socket 2.0.1 (3.0.0 available)
+  source_gen 1.5.0 (4.0.1 available)
+  source_helper 1.3.5 (1.3.8 available)
+  test 1.26.2 (1.26.3 available)
+  test_api 0.7.6 (0.7.7 available)
+  test_core 0.6.11 (0.6.12 available)
+  timezone 0.9.4 (0.10.1 available)
+  unorm_dart 0.2.0 (0.3.1+1 available)
+  very_good_analysis 5.1.0 (9.0.0 available)
+  wallet 0.0.13 (0.0.18 available)
+  web3dart 2.7.3 (3.0.1 available)
+  webview_flutter 4.9.0 (4.13.0 available)
+  webview_flutter_android 3.16.9 (4.10.2 available)
+  x509_plus 0.3.2 (0.3.3 available)
+  xml 6.5.0 (6.6.1 available)
+No dependencies changed.
+78 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
