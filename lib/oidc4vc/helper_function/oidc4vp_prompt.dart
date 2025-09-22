@@ -17,6 +17,21 @@ class Oidc4VpPrompt {
     required this.client,
     required this.showPrompt,
   });
+
+  /// Builds the FutureBuilder for prompt content
+  static Widget buildPromptContentFutureBuilder(Future<Widget> future) {
+    return FutureBuilder<Widget>(
+      future: future,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData) {
+          return snapshot.data!;
+        }
+        return const SizedBox.shrink();
+      },
+    );
+  }
+
   final BuildContext context;
   final AppLocalizations l10n;
   final bool trustedListEnabled;
@@ -41,8 +56,13 @@ class Oidc4VpPrompt {
                       maxHeight: MediaQuery.of(context).size.height * 0.6,
                     ),
                     child: SingleChildScrollView(
-                      child: TrustedEntityDetails(
-                        trustedEntity: trustedEntity!,
+                      child: Column(
+                        children: [
+                          TrustedEntityDetails(trustedEntity: trustedEntity!),
+                          Oidc4VpPrompt.buildPromptContentFutureBuilder(
+                            promptContent,
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -63,6 +83,9 @@ class Oidc4VpPrompt {
                   yesLabel: l10n.communicationHostAllow,
                   noLabel: l10n.communicationHostDeny,
                   invertedCallToAction: true,
+                  content: Oidc4VpPrompt.buildPromptContentFutureBuilder(
+                    promptContent,
+                  ),
                 );
               },
             ) ??
@@ -81,6 +104,9 @@ class Oidc4VpPrompt {
                   subtitle: subtitle,
                   yesLabel: l10n.communicationHostAllow,
                   noLabel: l10n.communicationHostDeny,
+                  content: Oidc4VpPrompt.buildPromptContentFutureBuilder(
+                    promptContent,
+                  ),
                 );
               },
             ) ??
@@ -88,18 +114,21 @@ class Oidc4VpPrompt {
       }
     }
     final qrCodeScanCubit = context.read<QRCodeScanCubit>();
-    if(promptResult){
-    await qrCodeScanCubit.startSIOPV2OIDC4VPProcess(uri);
-    Navigator.of(context).pop(true);
+    if (promptResult) {
+      await launchProcess();
     } else {
-          qrCodeScanCubit.emitError(
-      error: ResponseMessage(
-        message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
-      ),
-    );
-    Navigator.of(context).pop(false);
-
+      qrCodeScanCubit.emitError(
+        error: ResponseMessage(
+          message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
+        ),
+      );
     }
   }
 
+  Future<Widget> get promptContent async => const SizedBox.shrink();
+
+  Future<void> launchProcess() async {
+    final qrCodeScanCubit = context.read<QRCodeScanCubit>();
+    await qrCodeScanCubit.startSIOPV2OIDC4VPProcess(uri);
+  }
 }

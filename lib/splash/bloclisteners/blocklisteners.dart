@@ -45,8 +45,8 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
 
     // just for next build -> 117 and then we should remove for build -> 118
     context.read<AdvanceSettingsCubit>().setState(
-          Parameters.defaultAdvanceSettingsState,
-        );
+      Parameters.defaultAdvanceSettingsState,
+    );
   },
 );
 
@@ -54,15 +54,15 @@ final ProfileCubitListener = BlocListener<ProfileCubit, ProfileState>(
   listener: (BuildContext context, ProfileState state) {
     if (state.status == AppStatus.addEuropeanProfile) {
       context.read<CredentialsCubit>().addWalletCredential(
-            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-            profileLinkedId: ProfileType.europeanWallet.getVCId,
-          );
+        qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+        profileLinkedId: ProfileType.europeanWallet.getVCId,
+      );
     }
     if (state.status == AppStatus.addInjiProfile) {
       context.read<CredentialsCubit>().addWalletCredential(
-            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-            profileLinkedId: ProfileType.inji.getVCId,
-          );
+        qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+        profileLinkedId: ProfileType.inji.getVCId,
+      );
     }
   },
 );
@@ -89,47 +89,47 @@ final walletBlocListener = BlocListener<WalletCubit, WalletState>(
 
 final credentialsBlocListener =
     BlocListener<CredentialsCubit, CredentialsState>(
-  listener: (BuildContext context, CredentialsState state) async {
-    if (state.status == CredentialsStatus.idle) {
-      if (state.message != null) {
-        AlertMessage.showStateMessage(
-          context: context,
-          stateMessage: state.message!,
-        );
-      }
-      return;
-    }
+      listener: (BuildContext context, CredentialsState state) async {
+        if (state.status == CredentialsStatus.idle) {
+          if (state.message != null) {
+            AlertMessage.showStateMessage(
+              context: context,
+              stateMessage: state.message!,
+            );
+          }
+          return;
+        }
 
-    if (state.status == CredentialsStatus.loading) {
-      LoadingView().show(context: context);
-    } else {
-      /// during onBoarding
-      final onboardingState = context.read<OnboardingCubit>();
-      if (onboardingState.state.status != AppStatus.loading) {
-        LoadingView().hide();
-      }
-    }
+        if (state.status == CredentialsStatus.loading) {
+          LoadingView().show(context: context);
+        } else {
+          /// during onBoarding
+          final onboardingState = context.read<OnboardingCubit>();
+          if (onboardingState.state.status != AppStatus.loading) {
+            LoadingView().hide();
+          }
+        }
 
-    if (state.message != null &&
-        (state.status == CredentialsStatus.error ||
-            state.status == CredentialsStatus.insert ||
-            state.status == CredentialsStatus.delete ||
-            state.status == CredentialsStatus.update)) {
-      AlertMessage.showStateMessage(
-        context: context,
-        stateMessage: state.message!,
-      );
-    }
-    if (state.status == CredentialsStatus.delete) {
-      if (state.message != null) {
-        Navigator.popUntil(
-          context,
-          (route) => route.settings.name == AltMeStrings.dashBoardPage,
-        );
-      }
-    }
-  },
-);
+        if (state.message != null &&
+            (state.status == CredentialsStatus.error ||
+                state.status == CredentialsStatus.insert ||
+                state.status == CredentialsStatus.delete ||
+                state.status == CredentialsStatus.update)) {
+          AlertMessage.showStateMessage(
+            context: context,
+            stateMessage: state.message!,
+          );
+        }
+        if (state.status == CredentialsStatus.delete) {
+          if (state.message != null) {
+            Navigator.popUntil(
+              context,
+              (route) => route.settings.name == AltMeStrings.dashBoardPage,
+            );
+          }
+        }
+      },
+    );
 
 final walletBlocAccountChangeListener = BlocListener<WalletCubit, WalletState>(
   listenWhen: (previous, current) {
@@ -162,7 +162,8 @@ final scanBlocListener = BlocListener<ScanCubit, ScanState>(
     if (state.status == ScanStatus.askPermissionDidAuth) {
       final scanCubit = context.read<ScanCubit>();
       final state = scanCubit.state;
-      final confirm = await showDialog<bool>(
+      final confirm =
+          await showDialog<bool>(
             context: context,
             builder: (context) => ConfirmDialog(
               title: l10n.confimrDIDAuth,
@@ -218,8 +219,10 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
       final log = getLogger('qrCodeBlocListener');
 
       final l10n = context.l10n;
-      final client =
-          DioClient(secureStorageProvider: getSecureStorage, dio: Dio());
+      final client = DioClient(
+        secureStorageProvider: getSecureStorage,
+        dio: Dio(),
+      );
 
       if (state.status == QrScanStatus.loading) {
         LoadingView().show(context: context);
@@ -246,14 +249,16 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
           final bool confirmSecurityVerifierAccess =
               walletSecurityOptions.confirmSecurityVerifierAccess;
 
-          final bool showPrompt = verifySecurityIssuerWebsiteIdentity ||
+          final bool showPrompt =
+              verifySecurityIssuerWebsiteIdentity ||
               confirmSecurityVerifierAccess;
 
           final bool isOpenIDUrl = isOIDC4VCIUrl(state.uri!);
           final bool isPresentation = isSiopV2OrOidc4VpUrl(state.uri!);
-          final bool isFromUniversallink = state.uri
-                  .toString()
-                  .startsWith(Parameters.authorizationEndPoint) ||
+          final bool isFromUniversallink =
+              state.uri.toString().startsWith(
+                Parameters.authorizationEndPoint,
+              ) ||
               state.uri.toString().startsWith(Parameters.universalLink);
 
           OIDC4VCType? oidc4vcTypeForIssuance;
@@ -278,10 +283,13 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               url: state.uri.toString(),
               client: client,
               oidc4vc: oidc4vc,
-              oidc4vciDraftType: profileSetting.selfSovereignIdentityOptions
-                  .customOidc4vcProfile.oidc4vciDraft,
-              useOAuthAuthorizationServerLink:
-                  useOauthServerAuthEndPoint(profileCubit.state.model),
+              oidc4vciDraftType: profileSetting
+                  .selfSovereignIdentityOptions
+                  .customOidc4vcProfile
+                  .oidc4vciDraft,
+              useOAuthAuthorizationServerLink: useOauthServerAuthEndPoint(
+                profileCubit.state.model,
+              ),
             );
             await oidc4vciAcceptHost(
               oidc4vcParameters: oidc4vcParameters,
@@ -301,7 +309,8 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
                   : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
 
               LoadingView().hide();
-              acceptHost = await showDialog<bool>(
+              acceptHost =
+                  await showDialog<bool>(
                     context: context,
                     builder: (BuildContext context) {
                       return ConfirmDialog(
@@ -317,21 +326,21 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             LoadingView().hide();
             if (acceptHost) {
               await context.read<QRCodeScanCubit>().accept(
-                    approvedIssuer: approvedIssuer,
-                    qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-                    oidcType: oidc4vcTypeForIssuance,
-                    credentialOfferJson: credentialOfferJsonForIssuance,
-                    openIdConfiguration: openIdConfiguration,
-                    issuer: issuerForIssuance,
-                    preAuthorizedCode: preAuthorizedCodeForIssuance,
-                    uri: state.uri!,
-                  );
+                approvedIssuer: approvedIssuer,
+                qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                oidcType: oidc4vcTypeForIssuance,
+                credentialOfferJson: credentialOfferJsonForIssuance,
+                openIdConfiguration: openIdConfiguration,
+                issuer: issuerForIssuance,
+                preAuthorizedCode: preAuthorizedCodeForIssuance,
+                uri: state.uri!,
+              );
             } else {
               context.read<QRCodeScanCubit>().emitError(
-                    error: ResponseMessage(
-                      message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
-                    ),
-                  );
+                error: ResponseMessage(
+                  message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
+                ),
+              );
               return;
             }
           }
@@ -348,10 +357,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
             if (error != null) {
               throw ResponseMessage(
-                data: {
-                  'error': error,
-                  'error_description': errorDescription,
-                },
+                data: {'error': error, 'error_description': errorDescription},
               );
             }
 
@@ -376,19 +382,22 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
             }
 
             await dotenv.load();
-            final String authorizationUriSecretKey =
-                dotenv.get('AUTHORIZATION_URI_SECRET_KEY');
+            final String authorizationUriSecretKey = dotenv.get(
+              'AUTHORIZATION_URI_SECRET_KEY',
+            );
 
-            final jwt =
-                JWT.verify(stateValue, SecretKey(authorizationUriSecretKey));
+            final jwt = JWT.verify(
+              stateValue,
+              SecretKey(authorizationUriSecretKey),
+            );
 
             final statePayload = jwt.payload as Map<String, dynamic>;
 
             await context.read<QRCodeScanCubit>().authorizedFlowCompletion(
-                  statePayload: statePayload,
-                  codeForAuthorisedFlow: codeForAuthorisedFlow,
-                  qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-                );
+              statePayload: statePayload,
+              codeForAuthorisedFlow: codeForAuthorisedFlow,
+              qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+            );
           }
         } catch (e) {
           context.read<QRCodeScanCubit>().emitError(error: e);
@@ -431,18 +440,16 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
         final data = state.dialogData ?? '';
 
-        final bool moveAhead = await showDialog<bool>(
+        final bool moveAhead =
+            await showDialog<bool>(
               context: context,
               builder: (_) {
                 return DeveloperModeDialog(
                   onDisplay: () async {
-                    final returnedValue =
-                        await Navigator.of(context).push<dynamic>(
-                      JsonViewerPage.route(
-                        title: l10n.display,
-                        data: data,
-                      ),
-                    );
+                    final returnedValue = await Navigator.of(context)
+                        .push<dynamic>(
+                          JsonViewerPage.route(title: l10n.display, data: data),
+                        );
 
                     if (returnedValue != null &&
                         returnedValue is bool &&
@@ -469,12 +476,9 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
         final data = state.dialogData ?? '';
 
-        final returnedValue = await Navigator.of(context).push<dynamic>(
-          JsonViewerPage.route(
-            title: l10n.display,
-            data: data,
-          ),
-        );
+        final returnedValue = await Navigator.of(
+          context,
+        ).push<dynamic>(JsonViewerPage.route(title: l10n.display, data: data));
 
         var moveAhead = false;
 
@@ -521,8 +525,8 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
         final manageNetworkCubit = context.read<ManageNetworkCubit>();
 
         final incomingNetworkType = beaconRequest.request!.network!.type!.name;
-        final currentNetworkType =
-            manageNetworkCubit.state.network.networkname.toLowerCase();
+        final currentNetworkType = manageNetworkCubit.state.network.networkname
+            .toLowerCase();
 
         // if network type does not match
         if (incomingNetworkType != currentNetworkType) {
@@ -612,45 +616,45 @@ final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
 
 final walletConnectBlocListener =
     BlocListener<WalletConnectCubit, WalletConnectState>(
-  listener: (BuildContext context, WalletConnectState state) async {
-    final log = getLogger('walletConnectStateBlocListener');
+      listener: (BuildContext context, WalletConnectState state) async {
+        final log = getLogger('walletConnectStateBlocListener');
 
-    try {
-      if (state.status == WalletConnectStatus.permission) {
-        await Navigator.of(context).push<void>(
-          ConfirmConnectionPage.route(
-            connectionBridgeType: ConnectionBridgeType.walletconnect,
-          ),
-        );
-      }
+        try {
+          if (state.status == WalletConnectStatus.permission) {
+            await Navigator.of(context).push<void>(
+              ConfirmConnectionPage.route(
+                connectionBridgeType: ConnectionBridgeType.walletconnect,
+              ),
+            );
+          }
 
-      if (state.status == WalletConnectStatus.signPayload) {
-        await Navigator.of(context).push<void>(
-          SignPayloadPage.route(
-            connectionBridgeType: ConnectionBridgeType.walletconnect,
-          ),
-        );
-      }
+          if (state.status == WalletConnectStatus.signPayload) {
+            await Navigator.of(context).push<void>(
+              SignPayloadPage.route(
+                connectionBridgeType: ConnectionBridgeType.walletconnect,
+              ),
+            );
+          }
 
-      if (state.status == WalletConnectStatus.operation) {
-        await Navigator.of(context).push<void>(
-          OperationPage.route(
-            connectionBridgeType: ConnectionBridgeType.walletconnect,
-          ),
-        );
-      }
+          if (state.status == WalletConnectStatus.operation) {
+            await Navigator.of(context).push<void>(
+              OperationPage.route(
+                connectionBridgeType: ConnectionBridgeType.walletconnect,
+              ),
+            );
+          }
 
-      if (state.message != null) {
-        AlertMessage.showStateMessage(
-          context: context,
-          stateMessage: state.message!,
-        );
-      }
-    } catch (e) {
-      log.e(e);
-    }
-  },
-);
+          if (state.message != null) {
+            AlertMessage.showStateMessage(
+              context: context,
+              stateMessage: state.message!,
+            );
+          }
+        } catch (e) {
+          log.e(e);
+        }
+      },
+    );
 
 final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
   listener: (BuildContext context, EnterpriseState state) async {
@@ -690,8 +694,8 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
         final cryptoAccounts = manageAccountsCubit.state.cryptoAccount.data;
         // generate crypto accounts cards
         await context.read<CredentialsCubit>().generateCryptoAccountsCards(
-              cryptoAccounts,
-            );
+          cryptoAccounts,
+        );
       }
     }
     if (state.status == AppStatus.addEnterpriseAccount ||
@@ -724,7 +728,8 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
         }
         LoadingView().hide();
 
-        final confirm = await showDialog<bool>(
+        final confirm =
+            await showDialog<bool>(
               context: context,
               builder: (_) => ConfirmDialog(
                 title: title,
@@ -737,17 +742,15 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
 
         if (confirm) {
           await context.read<EnterpriseCubit>().applyConfiguration(
-                qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-                manageNetworkCubit: context.read<ManageNetworkCubit>(),
-                status: state.status,
-              );
+            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+            manageNetworkCubit: context.read<ManageNetworkCubit>(),
+            status: state.status,
+          );
         } else {
           /// Need to remove the enterprise email from secure storage
           /// because we may think later that the entreprise profile is
           /// already installed.
-          await getSecureStorage.delete(
-            SecureStorageKeys.enterpriseEmail,
-          );
+          await getSecureStorage.delete(SecureStorageKeys.enterpriseEmail);
         }
       }
     }

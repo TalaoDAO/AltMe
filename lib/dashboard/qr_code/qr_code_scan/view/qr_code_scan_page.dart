@@ -12,17 +12,18 @@ class QrCodeScanPage extends StatefulWidget {
   const QrCodeScanPage({super.key});
 
   static Route<dynamic> route() => MaterialPageRoute<void>(
-        builder: (context) => const QrCodeScanPage(),
-        settings: const RouteSettings(name: QRCODE_SCAN_PAGE),
-      );
+    builder: (context) => const QrCodeScanPage(),
+    settings: const RouteSettings(name: QRCODE_SCAN_PAGE),
+  );
 
   @override
   _QrCodeScanPageState createState() => _QrCodeScanPageState();
 }
 
 class _QrCodeScanPageState extends State<QrCodeScanPage> {
-  final BarcodeScanner _barcodeScannerController =
-      BarcodeScanner(formats: [BarcodeFormat.qrCode]);
+  final BarcodeScanner _barcodeScannerController = BarcodeScanner(
+    formats: [BarcodeFormat.qrCode],
+  );
 
   @override
   void dispose() {
@@ -66,8 +67,9 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
         title: l10n.scanTitle,
         onImage: (InputImage inputImage) async {
           if (!isScanned) {
-            final barcodes =
-                await _barcodeScannerController.processImage(inputImage);
+            final barcodes = await _barcodeScannerController.processImage(
+              inputImage,
+            );
             if (barcodes.isEmpty) {
               return;
             }
@@ -83,9 +85,9 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
             isScanned = true;
 
             await context.read<QRCodeScanCubit>().process(
-                  scannedResponse: barcodes.first.rawValue,
-                  qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-                );
+              scannedResponse: barcodes.first.rawValue,
+              qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+            );
           }
         },
         initialCameraLensDirection: _cameraLensDirection,

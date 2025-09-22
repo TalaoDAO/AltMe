@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/json_viewer/view/json_viewer_page.dart';
 import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
 import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.dart';
 import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/oidc4vc/helper_function/get_payload.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vp_prompt.dart';
+import 'package:altme/oidc4vc/helper_function/oidc4vp_transaction_prompt.dart';
 import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
 import 'package:altme/trusted_list/function/check_presentation_is_trusted.dart';
 import 'package:altme/trusted_list/function/is_certificate_valid.dart';
@@ -27,37 +31,29 @@ Future<void> oidc4vpSiopV2AcceptHost({
   final String? requestUri = uri.queryParameters['request_uri'];
   final String? request = uri.queryParameters['request'];
   late dynamic encodedData;
+  Map<String, dynamic>? response;
 
   if (requestUri != null || request != null) {
-    if (request != null) {
-      encodedData = request;
-    } else if (requestUri != null) {
-      encodedData = await fetchRequestUriPayload(
-        url: requestUri,
-        client: client,
-      );
-    }
+    encodedData = await getPayload(client, requestUri, request);
+    response = decodePayload(
+      jwtDecode: JWTDecode(),
+      token: encodedData as String,
+    );
   }
 
   if (isDeveloperMode) {
     late String formattedData;
 
-    Map<String, dynamic>? response;
     late String url;
 
     if (requestUri != null || request != null) {
-      response = decodePayload(
-        jwtDecode: JWTDecode(),
-        token: encodedData as String,
-      );
-
       final clientId = getClientIdForPresentation(
         uri.queryParameters['client_id'],
       );
 
       url = getUpdatedUrlForSIOPV2OIC4VP(
         uri: uri,
-        response: response,
+        response: response!,
         clientId: clientId.toString(),
       );
       formattedData = await getFormattedStringOIDC4VPSIOPV2FromRequest(
@@ -149,15 +145,27 @@ Future<void> oidc4vpSiopV2AcceptHost({
   } else {
     trustedEntity = null;
   }
-  await Oidc4VpPrompt(
-    context: context,
-    l10n: l10n,
-    trustedListEnabled: trustedListEnabled,
-    trustedEntity: trustedEntity,
-    uri: uri,
-    client: client,
-    showPrompt: showPrompt,
-  ).show();
+  if (response!.containsKey('transaction_data')) {
+    await Oidc4VpTransactionPrompt(
+      context: context,
+      l10n: l10n,
+      trustedListEnabled: trustedListEnabled,
+      trustedEntity: trustedEntity,
+      uri: uri,
+      client: client,
+      showPrompt: showPrompt,
+    ).show();
+  } else {
+    await Oidc4VpPrompt(
+      context: context,
+      l10n: l10n,
+      trustedListEnabled: trustedListEnabled,
+      trustedEntity: trustedEntity,
+      uri: uri,
+      client: client,
+      showPrompt: showPrompt,
+    ).show();
+  }
 
   // Default action if there is no prompt
 
