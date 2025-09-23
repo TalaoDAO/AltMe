@@ -8,7 +8,8 @@ import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vc/helper_function/get_payload.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vp_prompt.dart';
-import 'package:altme/oidc4vc/helper_function/oidc4vp_transaction_prompt.dart';
+import 'package:altme/oidc4vp_transaction/accept_oidc4_vp_transaction_page.dart';
+import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
 import 'package:altme/trusted_list/function/check_presentation_is_trusted.dart';
 import 'package:altme/trusted_list/function/is_certificate_valid.dart';
@@ -146,15 +147,22 @@ Future<void> oidc4vpSiopV2AcceptHost({
     trustedEntity = null;
   }
   if (response!.containsKey('transaction_data')) {
-    await Oidc4VpTransactionPrompt(
-      context: context,
-      l10n: l10n,
-      trustedListEnabled: trustedListEnabled,
-      trustedEntity: trustedEntity,
-      uri: uri,
-      client: client,
-      showPrompt: showPrompt,
-    ).show();
+    LoadingView().hide();
+    unawaited(
+      context.read<ScanCubit>().addTransactionData(
+        response['transaction_data'] as List<dynamic>,
+      ),
+    );
+
+    await Navigator.of(context).push<void>(
+      AcceptOidc4VpTransactionPage.route(
+        trustedListEnabled: trustedListEnabled,
+        trustedEntity: trustedEntity,
+        uri: uri,
+        showPrompt: showPrompt,
+        client: client,
+      ),
+    );
   } else {
     await Oidc4VpPrompt(
       context: context,
@@ -170,5 +178,4 @@ Future<void> oidc4vpSiopV2AcceptHost({
   // Default action if there is no prompt
 
   LoadingView().hide();
-  await context.read<QRCodeScanCubit>().startSIOPV2OIDC4VPProcess(uri);
 }
