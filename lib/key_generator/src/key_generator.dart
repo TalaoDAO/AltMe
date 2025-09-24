@@ -42,8 +42,10 @@ class KeyGenerator {
 
     switch (accountType) {
       case AccountType.ssi:
-        final child =
-            await ED25519_HD_KEY.derivePath("m/44'/5467'/0'/0'", seed);
+        final child = await ED25519_HD_KEY.derivePath(
+          "m/44'/5467'/0'/0'",
+          seed,
+        );
         seedBytes = Uint8List.fromList(child.key);
 
       case AccountType.tezos:
@@ -67,10 +69,7 @@ class KeyGenerator {
         seedBytes = Uint8List.fromList(List.from(iterable));
     }
 
-    final key = jwkFromSeed(
-      seedBytes: seedBytes,
-      accountType: accountType,
-    );
+    final key = jwkFromSeed(seedBytes: seedBytes, accountType: accountType);
     return jsonEncode(key);
   }
 
@@ -85,12 +84,7 @@ class KeyGenerator {
 
         final sk = base64Url.encode(seedBytes);
         final pk = base64Url.encode(mypk);
-        final jwk = {
-          'kty': 'OKP',
-          'crv': 'Ed25519',
-          'd': sk,
-          'x': pk,
-        };
+        final jwk = {'kty': 'OKP', 'crv': 'Ed25519', 'd': sk, 'x': pk};
         return jwk;
       case AccountType.ethereum:
       case AccountType.fantom:
@@ -122,7 +116,7 @@ class KeyGenerator {
           'd': d,
           'x': x,
           'y': y,
-          'alg': 'ES256K-R', // or 'alg': "ES256K" for did:key
+          'alg': 'ES256K', // or 'alg': "ES256K" for did:key
         };
         return jwk;
     }
@@ -146,8 +140,10 @@ class KeyGenerator {
 
         final dBytes = base64Url.decode(d);
 
-        final tezosSeed =
-            crypto.encodeWithPrefix(prefix: _seedPrefix, bytes: dBytes);
+        final tezosSeed = crypto.encodeWithPrefix(
+          prefix: _seedPrefix,
+          bytes: dBytes,
+        );
 
         final tezosSecretKey = crypto.seedToSecretKey(tezosSeed);
 
@@ -159,9 +155,7 @@ class KeyGenerator {
       case AccountType.etherlink:
         final seed = bip393.mnemonicToSeed(mnemonic);
         final rootKey = bip32.BIP32.fromSeed(seed);
-        final child = rootKey.derivePath(
-          "m/44'/60'/0'/0/$derivePathIndex",
-        );
+        final child = rootKey.derivePath("m/44'/60'/0'/0/$derivePathIndex");
         final Iterable<int> iterable = child.privateKey!;
         final epk = HEX.encode(List.from(iterable));
         return '0x$epk';
@@ -189,8 +183,10 @@ class KeyGenerator {
 
         final dBytes = base64Url.decode(d);
 
-        final tezosSeed =
-            crypto.encodeWithPrefix(prefix: _seedPrefix, bytes: dBytes);
+        final tezosSeed = crypto.encodeWithPrefix(
+          prefix: _seedPrefix,
+          bytes: dBytes,
+        );
 
         final tezosSecretKey = crypto.seedToSecretKey(tezosSeed);
 
@@ -209,8 +205,9 @@ class KeyGenerator {
         final chain = Chain.seed(seedHex);
 
         final key = chain.forPath("m/44'/60'/0'/0/$derivePathIndex");
-        final Credentials credentials =
-            EthPrivateKey.fromHex(key.privateKeyHex());
+        final Credentials credentials = EthPrivateKey.fromHex(
+          key.privateKeyHex(),
+        );
 
         final walletAddress = await credentials.extractAddress();
 
@@ -264,10 +261,7 @@ class KeyGenerator {
       case AccountType.ssi:
         seedBytes = Uint8List.fromList(hexToBytes(secretKey));
     }
-    final jwk = jwkFromSeed(
-      seedBytes: seedBytes,
-      accountType: accountType,
-    );
+    final jwk = jwkFromSeed(seedBytes: seedBytes, accountType: accountType);
     return jsonEncode(jwk);
   }
 
@@ -275,8 +269,10 @@ class KeyGenerator {
     required String secretKey,
     required AccountType accountType,
   }) async {
-    final jwk =
-        await jwkFromSecretKey(secretKey: secretKey, accountType: accountType);
+    final jwk = await jwkFromSecretKey(
+      secretKey: secretKey,
+      accountType: accountType,
+    );
 
     final json = jsonDecode(jwk) as Map<String, dynamic>;
     final xField = json['x'].toString();

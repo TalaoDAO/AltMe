@@ -7,6 +7,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
 import 'package:altme/key_generator/key_generator.dart';
+import 'package:altme/oidc4vc/helper_function/add_credential_data.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -514,11 +515,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     );
 
     final private = jsonDecode(privateKey) as Map<String, dynamic>;
-
+/// generate the ldp_vc credential
     final credential = await generateAssociatedWalletCredential(
       cryptoAccountData: cryptoAccountData,
       didKitProvider: didKitProvider,
-      blockchainType: cryptoAccountData.blockchainType,
       keyGenerator: keyGenerator,
       did: did,
       customOidc4vcProfile: profileCubit.state.model.profileSetting
@@ -526,15 +526,41 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       oidc4vc: oidc4vc,
       privateKey: private,
       profileType: profileCubit.state.model.profileType,
+      vcFormatType: VCFormatType.ldpVc,
     );
 
-    if (credential != null) {
+    // if (credential != null) {
+    //   await modifyCredential(
+    //     credential: credential,
+    //   );
+
+    //   await insertCredential(
+    //     credential: credential,
+    //     showMessage: false,
+    //     uri: Uri.parse(Parameters.walletIssuer),
+    //   );
+    // }
+/// generate the cd+SD-JWT credential
+    final dcSdJwtCredential = await generateAssociatedWalletCredential(
+      cryptoAccountData: cryptoAccountData,
+      didKitProvider: didKitProvider,
+      keyGenerator: keyGenerator,
+      did: did,
+      customOidc4vcProfile: profileCubit.state.model.profileSetting
+          .selfSovereignIdentityOptions.customOidc4vcProfile,
+      oidc4vc: oidc4vc,
+      privateKey: private,
+      profileType: profileCubit.state.model.profileType,
+      vcFormatType: VCFormatType.dcSdJWT,
+    );
+
+    if (dcSdJwtCredential != null) {
       await modifyCredential(
-        credential: credential,
+        credential: dcSdJwtCredential,
       );
 
       await insertCredential(
-        credential: credential,
+        credential: dcSdJwtCredential,
         showMessage: false,
         uri: Uri.parse(Parameters.walletIssuer),
       );

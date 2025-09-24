@@ -295,7 +295,7 @@ class TransactionPresentation extends StatelessWidget {
       separatorBuilder: (context, index) => const Divider(),
       itemBuilder: (context, index) {
         final tx = decodedTransactions[index];
-        final credentialIds = tx['credential_id'] as List;
+        final credentialIds = tx['credential_ids'] as List;
         final uiHints = tx['ui_hints'] ?? <String, dynamic>{};
         final title = uiHints['title'] as String? ?? '';
         final subtitle = uiHints['subtitle'] as String? ?? '';

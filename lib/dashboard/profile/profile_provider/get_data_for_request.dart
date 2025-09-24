@@ -13,12 +13,15 @@ Future<Map<String, dynamic>> getDataForRequest({
   required ProfileModel profileModel,
 }) async {
   /// get private key
-  final p256KeyForWallet =
-      await getWalletAttestationP256Key(secureStorageProvider);
+  final p256KeyForWallet = await getWalletAttestationP256Key(
+    secureStorageProvider,
+  );
   final privateKey = jsonDecode(p256KeyForWallet) as Map<String, dynamic>;
 
   final customOidc4vcProfile = profileModel
-      .profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
+      .profileSetting
+      .selfSovereignIdentityOptions
+      .customOidc4vcProfile;
 
   final tokenParameters = TokenParameters(
     privateKey: privateKey,
@@ -32,7 +35,7 @@ Future<Map<String, dynamic>> getDataForRequest({
 
   final thumbPrint = tokenParameters.thumbprint;
 
-  final publicJWKString = sortedPublcJwk(p256KeyForWallet);
+  final publicJWKString = sortedPublicJwk(p256KeyForWallet);
   final publicJWK = jsonDecode(publicJWKString) as Map<String, dynamic>;
 
   final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
@@ -43,10 +46,7 @@ Future<Map<String, dynamic>> getDataForRequest({
     'jti': const Uuid().v4(),
     'nonce': nonce,
     'cnf': {
-      'jwk': {
-        ...publicJWK,
-        'kid': thumbPrint,
-      },
+      'jwk': {...publicJWK, 'kid': thumbPrint},
     },
     'iat': iat,
     'exp': iat + 1000,
