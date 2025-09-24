@@ -2301,19 +2301,7 @@ Map<String, dynamic> getCredentialDataFromJson({
     }
   }
 
-  /// issuer -> iss
-  if (!credential.containsKey('issuer')) {
-    if (jsonContent.containsKey('iss')) {
-      credential['issuer'] = jsonContent['iss'];
-    } else {
-      throw ResponseMessage(
-        data: {
-          'error': 'unsupported_format',
-          'error_description': 'Issuer is missing',
-        },
-      );
-    }
-  }
+
 
   /// issuanceDate -> iat
   if (!credential.containsKey('issuanceDate')) {

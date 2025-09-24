@@ -168,9 +168,9 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
 
         final iat = (dateTime.millisecondsSinceEpoch / 1000).round();
         const vct =
-            'https://vc-registry.com/vct/registry/publish/ctLjHuOWr2y-AvjdKvMuOCQzYK5Mqq4UhZyETuVzawY';
+            'https://vc-registry.com/vct/registry/publish/2ab5fa6078eb308aedae7ee438c5bd1807bea3f8a77c014f69f4143da91f077e';
         const vctIntegrity =
-            'sha256-LCd80JW2EdbebH/DejWkG6z59pmJMZaCLCzeXupweNg=';
+            'sha256-1UrQWdTJDYXTB3pzikDEX6ocWm7HV5I8QqNPrw+HeWQ=';
 
         final publicJWKString = sortedPublicJwk(jsonEncode(privateKey));
         final publicJWK = jsonDecode(publicJWKString) as Map<String, dynamic>;
@@ -202,6 +202,13 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           tokenParameters: cryptoAccountTokenParameters,
         );
         log.i('jwt - $jwt');
+        final data = getCredentialDataFromJson(
+          data: jwt,
+          format: VCFormatType.dcSdJWT.vcValue,
+          jwtDecode: JWTDecode(),
+          credentialType:
+              'https://vc-registry.com/vct/registry/publish/2ab5fa6078eb308aedae7ee438c5bd1807bea3f8a77c014f69f4143da91f077e',
+        );
 
         final credential = CredentialModel(
           id: id,
@@ -210,8 +217,8 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           jwt: jwt,
           format: vcFormatType.vcValue,
           activities: [Activity(acquisitionAt: dateTime)],
-          profileLinkedId: profileType.getVCId,
-          data: const {},
+          profileLinkedId: null,
+          data: data,
           credentialPreview: Credential.dummy(),
         );
         return credential;
