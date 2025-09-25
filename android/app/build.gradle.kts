@@ -14,7 +14,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "co.altme.alt.me.altme"
+    namespace = "wallet.compellio.com"
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
@@ -35,7 +35,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "co.altme.alt.me.altme"
+        applicationId = "wallet.compellio.com"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -60,7 +60,7 @@ android {
             resValue(
               type = "string",
               name = "app_name",
-              value = "Altme")
+              value = "Compellio")
         }
         create("staging") {
             dimension = "default"

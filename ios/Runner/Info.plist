@@ -104,7 +104,7 @@
 			<string>openid</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>altme-openid-vc</string>
+				<string>compellio-openid-vc</string>
 			</array>
 		</dict>
 		<dict>
@@ -134,17 +134,17 @@
 			<string>openid</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>altme-openid-credential-offer</string>
+				<string>compellio-openid-credential-offer</string>
 			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>wc-altme</string>
+			<string>wc-compellio</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wc-altme</string>
+				<string>wc-compellio</string>
 			</array>
 		</dict>
 		<dict>
