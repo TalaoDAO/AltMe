@@ -54,7 +54,7 @@ class AdvancedSecuritySettingsView extends StatelessWidget {
                     },
                     value: state.model.profileSetting.walletSecurityOptions
                         .verifySecurityIssuerWebsiteIdentity,
-                    activeColor: Theme.of(context).colorScheme.primary,
+                    activeThumbColor: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),
@@ -72,7 +72,25 @@ class AdvancedSecuritySettingsView extends StatelessWidget {
                     },
                     value: state.model.profileSetting.walletSecurityOptions
                         .confirmSecurityVerifierAccess,
-                    activeColor: Theme.of(context).colorScheme.primary,
+                    activeThumbColor: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+              DrawerItem2(
+                title: l10n.trustedList,
+                subtitle: l10n.trustedListSubtitle,
+                padding: const EdgeInsets.all(Sizes.spaceSmall),
+                trailing: SizedBox(
+                  height: 25,
+                  child: Switch(
+                    onChanged: (value) async {
+                      await context.read<ProfileCubit>().updateProfileSetting(
+                            trustedList: value,
+                          );
+                    },
+                    value: state
+                        .model.profileSetting.walletSecurityOptions.trustedList,
+                    activeThumbColor: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),
@@ -90,7 +108,7 @@ class AdvancedSecuritySettingsView extends StatelessWidget {
                     },
                     value: state.model.profileSetting.walletSecurityOptions
                         .secureSecurityAuthenticationWithPinCode,
-                    activeColor: Theme.of(context).colorScheme.primary,
+                    activeThumbColor: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),

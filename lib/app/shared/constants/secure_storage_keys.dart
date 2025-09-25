@@ -73,6 +73,7 @@ class SecureStorageKeys {
   static const String enterpriseProfileSetting = 'enterpriseProfileSetting';
   static const String europeanWalletProfileSetting =
       'europeanWalletProfileSetting';
+  static const String injiProfileSetting = 'injiProfileSetting';
   static const String enterpriseEmail = 'enterpriseEmail';
   static const String enterprisePassword = 'enterprisePassword';
   static const String enterpriseWalletProvider = 'enterpriseWalletProvider';

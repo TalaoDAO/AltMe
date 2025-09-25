@@ -19,7 +19,7 @@
     </queries>
 
     <application
-        android:label="${appName}"
+        android:label="Altme"
         android:icon="@mipmap/ic_launcher"
         android:allowBackup="false"
         android:fullBackupContent="false"
@@ -93,6 +93,12 @@
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
 				<data android:scheme="openid4vp" />
+			</intent-filter>
+            <intent-filter android:autoVerify="true">
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="eudi-openid4vp" />
 			</intent-filter>
             <intent-filter android:autoVerify="true">
 				<action android:name="android.intent.action.VIEW" />

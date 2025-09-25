@@ -58,6 +58,12 @@ final ProfileCubitListener = BlocListener<ProfileCubit, ProfileState>(
             profileLinkedId: ProfileType.europeanWallet.getVCId,
           );
     }
+    if (state.status == AppStatus.addInjiProfile) {
+      context.read<CredentialsCubit>().addWalletCredential(
+            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+            profileLinkedId: ProfileType.inji.getVCId,
+          );
+    }
   },
 );
 

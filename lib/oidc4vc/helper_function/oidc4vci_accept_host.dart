@@ -4,6 +4,10 @@ import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
 import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.dart';
 import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
+import 'package:altme/trusted_list/function/get_issuer_open_id_configuration.dart';
+import 'package:altme/trusted_list/function/is_certificate_valid.dart';
+import 'package:altme/trusted_list/widget/trusted_entity_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -58,7 +62,7 @@ Future<void> oidc4vciAcceptHost({
   }
 
   /// if dev mode is ON show some dialog to show data
-  await handleErrorForOID4VCI(
+  await handleErrorForOidc4Vci(
     oidc4vcParameters: oidc4vcParameters,
     didKeyType: context
         .read<ProfileCubit>()
@@ -77,8 +81,115 @@ Future<void> oidc4vciAcceptHost({
         .customOidc4vcProfile
         .clientType,
   );
+  final profile = context.read<ProfileCubit>().state.model;
+  final trustedListEnabled =
+      profile.profileSetting.walletSecurityOptions.trustedList;
+  final trustedList = profile.trustedList;
+  if (trustedListEnabled) {
+    try {
+      if (trustedList == null) {
+        throw Exception(
+          'Missing trusted list.',
+        );
+      }
+      // issuer open id configuration from signed metadata is used instead of
+      // unsigned open id configuration
 
-  if (showPrompt) {
+      final signedMetadata =
+          oidc4vcParameters.issuerOpenIdConfiguration.signedMetadata;
+
+      oidc4vcParameters = oidc4vcParameters.copyWith(
+        issuerOpenIdConfiguration: getIssuerOpenIdConfiguration(
+          issuerOpenIdConfiguration:
+              oidc4vcParameters.issuerOpenIdConfiguration,
+        ),
+      );
+
+      // get new issuer open id configuration from signed metadata
+      final trustedEntity = getIssuerFromTrustedList(
+        issuerOpenIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
+        trustedList: trustedList,
+      );
+      if (trustedEntity != null) {
+        // check if each element of
+        // oidc4vcParameters.credentialOffer['credential_configuration_ids'] are
+        // in trustedEntity.vcTypes
+
+        final credentialConfigurationIds =
+            oidc4vcParameters.credentialOffer['credential_configuration_ids'];
+        if (credentialConfigurationIds != null &&
+            credentialConfigurationIds is List) {
+          for (final credentialConfigurationId in credentialConfigurationIds) {
+            if (!trustedEntity.vcTypes!.contains(
+              oidc4vcParameters.issuerOpenIdConfiguration
+                      .credentialConfigurationsSupported[
+                  credentialConfigurationId]['vct'],
+            )) {
+              throw Exception(
+                // ignore: lines_longer_than_80_chars
+                "$credentialConfigurationId is not in the trusted entity's vcTypes",
+              );
+            }
+          }
+        } else {
+          throw Exception(
+            'credential_configuration_ids from credential offer is not valid',
+          );
+        }
+
+        isCertificateValid(
+          trustedEntity: trustedEntity,
+          signedMetadata: signedMetadata!,
+        );
+        // check certificate is trusted
+
+        LoadingView().hide();
+        acceptHost = await showDialog<bool>(
+              context: context,
+              builder: (BuildContext context) {
+                return SafeArea(
+                  child: ConfirmDialog(
+                    title: l10n.scanPromptHost,
+                    content: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.6,
+                      ),
+                      child: SingleChildScrollView(
+                        child:
+                            TrustedEntityDetails(trustedEntity: trustedEntity),
+                      ),
+                    ),
+                    yes: l10n.communicationHostAllow,
+                    no: l10n.communicationHostDeny,
+                  ),
+                );
+              },
+            ) ??
+            false;
+      } else {
+        LoadingView().hide();
+        acceptHost = await showDialog<bool>(
+              context: context,
+              builder: (BuildContext context) {
+                return ConfirmDialog(
+                  title: l10n.scanPromptHost,
+                  subtitle: l10n.notTrustedEntity,
+                  yes: l10n.communicationHostAllow,
+                  no: l10n.communicationHostDeny,
+                  invertedCallToAction: true,
+                );
+              },
+            ) ??
+            false;
+      }
+    } catch (e) {
+      context.read<QRCodeScanCubit>().emitError(
+            error: e,
+          );
+      return;
+    }
+  }
+  if (showPrompt && !trustedListEnabled) {
     /// OIDC4VCI Case
 
     final String title = l10n.scanPromptHost;

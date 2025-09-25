@@ -60,7 +60,7 @@ class AiCredentialAnalysisButton extends StatelessWidget {
             ) ??
             false;
         if (acceptAnalysis) {
-          LoadingView().show(context: context);
+          LoadingView().show(context: context, text: l10n.aiPleaseWait);
           final encodedCredential = base64Encode(
             utf8.encode(
               credential.jwt ?? jsonEncode(credential.data),
@@ -87,6 +87,7 @@ class AiCredentialAnalysisButton extends StatelessWidget {
                 'vc': encodedCredential,
               },
               headers: headers,
+              timeout: 90,
             ) as String;
             if (response == '') {
               throw Exception('Ai analysis is null or empty');

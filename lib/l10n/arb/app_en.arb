@@ -332,7 +332,7 @@
   "blockchainAccounts": "Blockchain accounts",
   "educationCredentials": "Education credentials",
   "educationDiscoverCredentials": "Verify your education background",
-  "educationCredentialsDiscoverSubtitle": "Get your digital diploma (EBSI)",
+  "educationCredentialsDiscoverSubtitle": "Get your digital diploma",
   "security": "Security",
   "networkAndRegistries": "Network & Registries",
   "chooseNetwork": "Choose Network",
@@ -1172,5 +1172,9 @@
   "greek": "Ελληνικά",
   "iaAnalyze": "Data will be shared with a remote AI engine. Don't share personal data.",
   "iaAnalyzeTitle": "AI Agent",
-  "deleteDigit": "Delete"
+  "deleteDigit": "Delete",
+  "aiPleaseWait": "This treatment can take up to 1 min",
+  "trustedList": "Use trusted list",
+  "trustedListSubtitle": "List of trusted entities in the current ecosystem. You are warned in case of interaction with non trusted entity.",
+  "notTrustedEntity": "This entity is not in the trusted list. You should be very cautious with untrusted entities."
 }

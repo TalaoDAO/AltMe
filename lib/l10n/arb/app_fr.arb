@@ -346,7 +346,7 @@
   "blockchainAccounts": "Comptes blockchain",
   "educationCredentials": "Attestations académiques",
   "educationDiscoverCredentials": "Vérifiez votre parcours académique",
-  "educationCredentialsDiscoverSubtitle": "Obtenez vos diplômes sous forme digitale (EBSI)",
+  "educationCredentialsDiscoverSubtitle": "Obtenez vos diplômes sous forme digitale",
   "security": "Sécurité",
   "networkAndRegistries": "Réseau et registres",
   "chooseNetwork": "Choisir un réseau",
@@ -1135,5 +1135,6 @@
   "chooseYourSSIProfileOrCustomizeYourOwn": "Choisissez un écosystème pour votre wallet",
   "recoveryPhraseIncorrectErrorMessage": "Veuillez recommencer dans le bon ordre.",
   "invalidCode": "Code invalide",
-  "deleteDigit": "Effacer"
+  "deleteDigit": "Effacer",
+  "aiPleaseWait": "Ce traitement peut prendre jusqu'à 1 min"
 }

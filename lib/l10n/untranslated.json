@@ -12,7 +12,11 @@
     "back",
     "greek",
     "iaAnalyze",
-    "iaAnalyzeTitle"
+    "iaAnalyzeTitle",
+    "aiPleaseWait",
+    "trustedList",
+    "trustedListSubtitle",
+    "notTrustedEntity"
   ],
 
   "el": [
@@ -50,7 +54,11 @@
     "back",
     "greek",
     "iaAnalyze",
-    "iaAnalyzeTitle"
+    "iaAnalyzeTitle",
+    "aiPleaseWait",
+    "trustedList",
+    "trustedListSubtitle",
+    "notTrustedEntity"
   ],
 
   "fr": [
@@ -58,6 +66,9 @@
     "back",
     "greek",
     "iaAnalyze",
-    "iaAnalyzeTitle"
+    "iaAnalyzeTitle",
+    "trustedList",
+    "trustedListSubtitle",
+    "notTrustedEntity"
   ]
 }

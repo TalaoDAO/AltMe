@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:altme/ai/widget/ai_analysis_page.dart';
 import 'package:altme/app/shared/constants/icon_strings.dart';
 import 'package:altme/app/shared/dio_client/dio_client.dart';
+import 'package:altme/app/shared/enum/type/profile/profile_type.dart';
 import 'package:altme/app/shared/loading/loading_view.dart';
 import 'package:altme/app/shared/widget/button/my_elevated_button.dart';
 import 'package:altme/app/shared/widget/dialog/confirm_dialog.dart';
@@ -14,6 +15,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
+
+extension on ProfileType {
+  String get aiProfile {
+    switch (this) {
+      case ProfileType.defaultOne:
+      case ProfileType.inji:
+      case ProfileType.enterprise:
+      case ProfileType.custom:
+        return 'custom';
+      case ProfileType.ebsiV3:
+        return 'EBSI';
+      case ProfileType.diipv3:
+        return 'DIIP_V3';
+      case ProfileType.diipv4:
+        return 'DIIP_V4';
+      case ProfileType.europeanWallet:
+        return 'EWC';
+    }
+  }
+}
 
 class AiRequestAnalysisButton extends StatelessWidget {
   const AiRequestAnalysisButton({
@@ -48,7 +69,7 @@ class AiRequestAnalysisButton extends StatelessWidget {
             ) ??
             false;
         if (acceptAnalysis) {
-          LoadingView().show(context: context);
+          LoadingView().show(context: context, text: l10n.aiPleaseWait);
           final client = DioClient(
             secureStorageProvider: getSecureStorage,
             dio: Dio(),
@@ -87,8 +108,15 @@ class AiRequestAnalysisButton extends StatelessWidget {
                     .customOidc4vcProfile
                     .oidc4vpDraft
                     .numbering,
+                'profil': context
+                    .read<ProfileCubit>()
+                    .state
+                    .model
+                    .profileType
+                    .aiProfile,
               },
               headers: headers,
+              timeout: 90,
             ) as String;
             if (response == '') {
               throw Exception('Ai analysis is null or empty');

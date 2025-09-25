@@ -145,6 +145,7 @@ class Parameters {
   static const DidKeyType didKeyTypeForDutch = DidKeyType.jwkP256;
   static const DidKeyType didKeyTypeForOwfBaselineProfile = DidKeyType.jwkP256;
 
+static const String trustedListUrl = 'https://talao.co/.well-known/trusted-list.json';
   // seed color for the app Theme
   // Altme
   static const Color seedColor = Color(0xff2c2464);

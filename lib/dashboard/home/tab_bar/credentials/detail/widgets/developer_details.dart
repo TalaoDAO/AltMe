@@ -45,7 +45,8 @@ class DeveloperDetails extends StatelessWidget {
         Map.of(jsonPayload)..removeWhere((key, value) => key == 'jwt'),
       );
 
-      if (credentialModel.getFormat == VCFormatType.vcSdJWT.vcValue) {
+      if (credentialModel.getFormat == VCFormatType.vcSdJWT.vcValue ||
+          credentialModel.getFormat == VCFormatType.dcSdJWT.vcValue) {
         final selectiveDisclosure = SelectiveDisclosure(credentialModel);
 
         final data = valuesJson(
