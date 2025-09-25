@@ -3243,7 +3243,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String restoreAnAppBackup(Object appName) {
-    return 'Restore an $appName backup';
+    return 'Restore a $appName backup';
   }
 
   @override
@@ -3317,6 +3317,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get back => 'Back';
+
+  @override
+  String get greek => 'Ελληνικά';
 
   @override
   String get iaAnalyze =>

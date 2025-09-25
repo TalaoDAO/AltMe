@@ -5908,7 +5908,7 @@ abstract class AppLocalizations {
   /// name of the app
   ///
   /// In en, this message translates to:
-  /// **'Restore an {appName} backup'**
+  /// **'Restore a {appName} backup'**
   String restoreAnAppBackup(Object appName);
 
   /// No description provided for @credentialPickShare.
@@ -6036,6 +6036,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back'**
   String get back;
+
+  /// No description provided for @greek.
+  ///
+  /// In en, this message translates to:
+  /// **'Ελληνικά'**
+  String get greek;
 
   /// No description provided for @iaAnalyze.
   ///

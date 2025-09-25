@@ -3364,6 +3364,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get back => 'Back';
 
   @override
+  String get greek => 'Ελληνικά';
+
+  @override
   String get iaAnalyze =>
       'Data will be shared with a remote AI engine. Don\'t share personal data.';
 

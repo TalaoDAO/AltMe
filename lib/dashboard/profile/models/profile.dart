@@ -10,7 +10,6 @@ import 'package:oidc4vc/oidc4vc.dart';
 part 'profile.g.dart';
 
 @JsonSerializable()
-
 // ignore: must_be_immutable
 class ProfileModel extends Equatable {
   ProfileModel({
@@ -31,12 +30,12 @@ class ProfileModel extends Equatable {
       _$ProfileModelFromJson(json);
 
   factory ProfileModel.empty() => ProfileModel(
-        walletType: WalletType.personal,
-        walletProtectionType: WalletProtectionType.pinCode,
-        isDeveloperMode: false,
-        profileType: ProfileType.custom,
-        profileSetting: ProfileSetting.initial(),
-      );
+    walletType: WalletType.personal,
+    walletProtectionType: WalletProtectionType.pinCode,
+    isDeveloperMode: false,
+    profileType: ProfileType.custom,
+    profileSetting: ProfileSetting.initial(),
+  );
 
   factory ProfileModel.ebsiV3({
     required WalletType walletType,
@@ -45,51 +44,50 @@ class ProfileModel extends Equatable {
     required String? clientId,
     required String? clientSecret,
     String? enterpriseWalletName,
-  }) =>
-      ProfileModel(
-        enterpriseWalletName: enterpriseWalletName,
-        walletType: walletType,
-        walletProtectionType: walletProtectionType,
-        isDeveloperMode: isDeveloperMode,
-        profileType: ProfileType.ebsiV3,
-        profileSetting: ProfileSetting(
-          blockchainOptions: BlockchainOptions.initial(),
-          generalOptions: GeneralOptions.empty(),
-          helpCenterOptions: HelpCenterOptions.initial(),
-          discoverCardsOptions: DiscoverCardsOptions.none(),
-          selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
-            displayManageDecentralizedId: true,
-            customOidc4vcProfile: CustomOidc4VcProfile(
-              clientAuthentication: ClientAuthentication.clientId,
-              credentialManifestSupport: false,
-              cryptoHolderBinding: true,
-              defaultDid: Parameters.didKeyTypeForEbsiV3,
-              oidc4vciDraft: OIDC4VCIDraftType.draft11,
-              oidc4vpDraft: OIDC4VPDraftType.draft10,
-              scope: false,
-              securityLevel: true,
-              proofHeader: ProofHeaderType.kid,
-              siopv2Draft: SIOPV2DraftType.draft12,
-              clientType: ClientType.did,
-              clientId: clientId,
-              clientSecret: clientSecret,
-              vcFormatType: VCFormatType.jwtVc,
-              proofType: ProofType.jwt,
-              formatsSupported: const [VCFormatType.jwtVc],
-              displayMode: false,
-            ),
-          ),
-          settingsMenu: SettingsMenu.initial(),
-          version: '',
-          walletSecurityOptions: const WalletSecurityOptions(
-            confirmSecurityVerifierAccess: true,
-            displaySecurityAdvancedSettings: true,
-            secureSecurityAuthenticationWithPinCode: true,
-            verifySecurityIssuerWebsiteIdentity: true,
-            trustedList: false,
-          ),
+  }) => ProfileModel(
+    enterpriseWalletName: enterpriseWalletName,
+    walletType: walletType,
+    walletProtectionType: walletProtectionType,
+    isDeveloperMode: isDeveloperMode,
+    profileType: ProfileType.ebsiV3,
+    profileSetting: ProfileSetting(
+      blockchainOptions: BlockchainOptions.initial(),
+      generalOptions: GeneralOptions.empty(),
+      helpCenterOptions: HelpCenterOptions.initial(),
+      discoverCardsOptions: DiscoverCardsOptions.none(),
+      selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
+        displayManageDecentralizedId: true,
+        customOidc4vcProfile: CustomOidc4VcProfile(
+          clientAuthentication: ClientAuthentication.clientId,
+          credentialManifestSupport: false,
+          cryptoHolderBinding: true,
+          defaultDid: Parameters.didKeyTypeForEbsiV3,
+          oidc4vciDraft: OIDC4VCIDraftType.draft11,
+          oidc4vpDraft: OIDC4VPDraftType.draft10,
+          scope: false,
+          securityLevel: true,
+          proofHeader: ProofHeaderType.kid,
+          siopv2Draft: SIOPV2DraftType.draft12,
+          clientType: ClientType.did,
+          clientId: clientId,
+          clientSecret: clientSecret,
+          vcFormatType: VCFormatType.jwtVc,
+          proofType: ProofType.jwt,
+          formatsSupported: const [VCFormatType.jwtVc],
+          displayMode: false,
         ),
-      );
+      ),
+      settingsMenu: SettingsMenu.initial(),
+      version: '',
+      walletSecurityOptions: const WalletSecurityOptions(
+        confirmSecurityVerifierAccess: true,
+        displaySecurityAdvancedSettings: true,
+        secureSecurityAuthenticationWithPinCode: true,
+        verifySecurityIssuerWebsiteIdentity: true,
+        trustedList: false,
+      ),
+    ),
+  );
 
   factory ProfileModel.ebsiV4({
     required WalletType walletType,
@@ -98,54 +96,54 @@ class ProfileModel extends Equatable {
     required String? clientId,
     required String? clientSecret,
     String? enterpriseWalletName,
-  }) =>
-      ProfileModel(
-        enterpriseWalletName: enterpriseWalletName,
-        walletType: walletType,
-        walletProtectionType: walletProtectionType,
-        isDeveloperMode: isDeveloperMode,
-        profileType: ProfileType.ebsiV4,
-        profileSetting: ProfileSetting(
-          blockchainOptions: BlockchainOptions.initial(),
-          generalOptions: GeneralOptions.empty(),
-          helpCenterOptions: HelpCenterOptions.initial(),
-          discoverCardsOptions: DiscoverCardsOptions.none(),
-          selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
-            displayManageDecentralizedId: true,
-            customOidc4vcProfile: CustomOidc4VcProfile(
-              clientAuthentication: ClientAuthentication.clientId,
-              credentialManifestSupport: false,
-              cryptoHolderBinding: true,
-              defaultDid: Parameters.didKeyTypeForEbsiV3,
-              oidc4vciDraft: OIDC4VCIDraftType.draft13,
-              oidc4vpDraft: OIDC4VPDraftType.draft10,
-              scope: false,
-              securityLevel: true,
-              proofHeader: ProofHeaderType.kid,
-              siopv2Draft: SIOPV2DraftType.draft12,
-              clientType: ClientType.did,
-              clientId: clientId,
-              clientSecret: clientSecret,
-              vcFormatType: VCFormatType.auto,
-              proofType: ProofType.jwt,
-              formatsSupported: const [
-                VCFormatType.jwtVcJson,
-                VCFormatType.jwtVcJsonLd,
-                VCFormatType.vcSdJWT,
-              ],
-              displayMode: false,
-            ),
-          ),
-          settingsMenu: SettingsMenu.initial(),
-          version: '',
-          walletSecurityOptions: const WalletSecurityOptions(
-            confirmSecurityVerifierAccess: true,
-            displaySecurityAdvancedSettings: true,
-            secureSecurityAuthenticationWithPinCode: true,
-            verifySecurityIssuerWebsiteIdentity: true,
-          ),
+  }) => ProfileModel(
+    enterpriseWalletName: enterpriseWalletName,
+    walletType: walletType,
+    walletProtectionType: walletProtectionType,
+    isDeveloperMode: isDeveloperMode,
+    profileType: ProfileType.ebsiV4,
+    profileSetting: ProfileSetting(
+      blockchainOptions: BlockchainOptions.initial(),
+      generalOptions: GeneralOptions.empty(),
+      helpCenterOptions: HelpCenterOptions.initial(),
+      discoverCardsOptions: DiscoverCardsOptions.none(),
+      selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
+        displayManageDecentralizedId: true,
+        customOidc4vcProfile: CustomOidc4VcProfile(
+          clientAuthentication: ClientAuthentication.clientId,
+          credentialManifestSupport: false,
+          cryptoHolderBinding: true,
+          defaultDid: Parameters.didKeyTypeForEbsiV3,
+          oidc4vciDraft: OIDC4VCIDraftType.draft13,
+          oidc4vpDraft: OIDC4VPDraftType.draft10,
+          scope: false,
+          securityLevel: true,
+          proofHeader: ProofHeaderType.kid,
+          siopv2Draft: SIOPV2DraftType.draft12,
+          clientType: ClientType.did,
+          clientId: clientId,
+          clientSecret: clientSecret,
+          vcFormatType: VCFormatType.auto,
+          proofType: ProofType.jwt,
+          formatsSupported: const [
+            VCFormatType.jwtVcJson,
+            VCFormatType.jwtVcJsonLd,
+            VCFormatType.vcSdJWT,
+          ],
+          displayMode: false,
         ),
-      );
+      ),
+      settingsMenu: SettingsMenu.initial(),
+      version: '',
+      walletSecurityOptions: const WalletSecurityOptions(
+        confirmSecurityVerifierAccess: true,
+        displaySecurityAdvancedSettings: true,
+        secureSecurityAuthenticationWithPinCode: true,
+        verifySecurityIssuerWebsiteIdentity: true,
+        trustedList: false,
+      ),
+    ),
+  );
 
   factory ProfileModel.defaultOne({
     required WalletType walletType,
@@ -154,56 +152,55 @@ class ProfileModel extends Equatable {
     required String? clientId,
     required String? clientSecret,
     String? enterpriseWalletName,
-  }) =>
-      ProfileModel(
-        enterpriseWalletName: enterpriseWalletName,
-        walletType: walletType,
-        walletProtectionType: walletProtectionType,
-        isDeveloperMode: isDeveloperMode,
-        profileType: ProfileType.defaultOne,
-        profileSetting: ProfileSetting(
-          blockchainOptions: BlockchainOptions.initial(),
-          generalOptions: GeneralOptions.empty(),
-          helpCenterOptions: HelpCenterOptions.initial(),
-          discoverCardsOptions: DiscoverCardsOptions.none(),
-          selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
-            displayManageDecentralizedId: true,
-            customOidc4vcProfile: CustomOidc4VcProfile(
-              clientAuthentication: ClientAuthentication.clientId,
-              credentialManifestSupport: false,
-              cryptoHolderBinding: true,
-              defaultDid: Parameters.didKeyTypeForDefault,
-              oidc4vciDraft: OIDC4VCIDraftType.draft13,
-              oidc4vpDraft: OIDC4VPDraftType.draft20,
-              scope: false,
-              securityLevel: false,
-              proofHeader: ProofHeaderType.kid, // N/A
-              siopv2Draft: SIOPV2DraftType.draft12,
-              clientType: ClientType.did,
-              clientId: clientId,
-              clientSecret: clientSecret,
-              vcFormatType: VCFormatType.auto,
-              proofType: ProofType.jwt,
-              formatsSupported: const [
-                VCFormatType.jwtVcJson,
-                VCFormatType.jwtVcJsonLd,
-                VCFormatType.vcSdJWT,
-                VCFormatType.ldpVc,
-              ],
-              displayMode: false,
-            ),
-          ),
-          settingsMenu: SettingsMenu.initial(),
-          version: '',
-          walletSecurityOptions: const WalletSecurityOptions(
-            confirmSecurityVerifierAccess: true,
-            displaySecurityAdvancedSettings: true,
-            secureSecurityAuthenticationWithPinCode: true,
-            verifySecurityIssuerWebsiteIdentity: true,
-            trustedList: false,
-          ),
+  }) => ProfileModel(
+    enterpriseWalletName: enterpriseWalletName,
+    walletType: walletType,
+    walletProtectionType: walletProtectionType,
+    isDeveloperMode: isDeveloperMode,
+    profileType: ProfileType.defaultOne,
+    profileSetting: ProfileSetting(
+      blockchainOptions: BlockchainOptions.initial(),
+      generalOptions: GeneralOptions.empty(),
+      helpCenterOptions: HelpCenterOptions.initial(),
+      discoverCardsOptions: DiscoverCardsOptions.none(),
+      selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
+        displayManageDecentralizedId: true,
+        customOidc4vcProfile: CustomOidc4VcProfile(
+          clientAuthentication: ClientAuthentication.clientId,
+          credentialManifestSupport: false,
+          cryptoHolderBinding: true,
+          defaultDid: Parameters.didKeyTypeForDefault,
+          oidc4vciDraft: OIDC4VCIDraftType.draft13,
+          oidc4vpDraft: OIDC4VPDraftType.draft20,
+          scope: false,
+          securityLevel: false,
+          proofHeader: ProofHeaderType.kid, // N/A
+          siopv2Draft: SIOPV2DraftType.draft12,
+          clientType: ClientType.did,
+          clientId: clientId,
+          clientSecret: clientSecret,
+          vcFormatType: VCFormatType.auto,
+          proofType: ProofType.jwt,
+          formatsSupported: const [
+            VCFormatType.jwtVcJson,
+            VCFormatType.jwtVcJsonLd,
+            VCFormatType.vcSdJWT,
+            VCFormatType.ldpVc,
+          ],
+          displayMode: false,
         ),
-      );
+      ),
+      settingsMenu: SettingsMenu.initial(),
+      version: '',
+      walletSecurityOptions: const WalletSecurityOptions(
+        confirmSecurityVerifierAccess: true,
+        displaySecurityAdvancedSettings: true,
+        secureSecurityAuthenticationWithPinCode: true,
+        verifySecurityIssuerWebsiteIdentity: true,
+        trustedList: false,
+      ),
+    ),
+  );
 
   factory ProfileModel.diipv3({
     required WalletType walletType,
@@ -212,57 +209,56 @@ class ProfileModel extends Equatable {
     required String? clientId,
     required String? clientSecret,
     String? enterpriseWalletName,
-  }) =>
-      ProfileModel(
-        enterpriseWalletName: enterpriseWalletName,
-        walletType: walletType,
-        walletProtectionType: walletProtectionType,
-        isDeveloperMode: isDeveloperMode,
-        profileType: ProfileType.diipv3,
-        profileSetting: ProfileSetting(
-          blockchainOptions: BlockchainOptions.initial(),
-          generalOptions: GeneralOptions.empty(),
-          helpCenterOptions: HelpCenterOptions.initial(),
-          discoverCardsOptions: DiscoverCardsOptions.none(),
-          selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
-            displayManageDecentralizedId: true,
-            customOidc4vcProfile: CustomOidc4VcProfile(
-              clientAuthentication: ClientAuthentication.clientId,
-              credentialManifestSupport: true,
-              cryptoHolderBinding: true,
-              defaultDid: Parameters.didKeyTypeForOwfBaselineProfile,
-              oidc4vciDraft: OIDC4VCIDraftType.draft13,
-              oidc4vpDraft: OIDC4VPDraftType.draft20,
-              scope: true,
-              securityLevel: true,
-              proofHeader: ProofHeaderType.kid,
-              siopv2Draft: SIOPV2DraftType.draft12,
-              clientType: ClientType.did,
-              clientId: clientId,
-              clientSecret: clientSecret,
-              vcFormatType: VCFormatType.auto,
+  }) => ProfileModel(
+    enterpriseWalletName: enterpriseWalletName,
+    walletType: walletType,
+    walletProtectionType: walletProtectionType,
+    isDeveloperMode: isDeveloperMode,
+    profileType: ProfileType.diipv3,
+    profileSetting: ProfileSetting(
+      blockchainOptions: BlockchainOptions.initial(),
+      generalOptions: GeneralOptions.empty(),
+      helpCenterOptions: HelpCenterOptions.initial(),
+      discoverCardsOptions: DiscoverCardsOptions.none(),
+      selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
+        displayManageDecentralizedId: true,
+        customOidc4vcProfile: CustomOidc4VcProfile(
+          clientAuthentication: ClientAuthentication.clientId,
+          credentialManifestSupport: true,
+          cryptoHolderBinding: true,
+          defaultDid: Parameters.didKeyTypeForOwfBaselineProfile,
+          oidc4vciDraft: OIDC4VCIDraftType.draft13,
+          oidc4vpDraft: OIDC4VPDraftType.draft20,
+          scope: true,
+          securityLevel: true,
+          proofHeader: ProofHeaderType.kid,
+          siopv2Draft: SIOPV2DraftType.draft12,
+          clientType: ClientType.did,
+          clientId: clientId,
+          clientSecret: clientSecret,
+          vcFormatType: VCFormatType.auto,
 
-              /// pas ldp_vc
-              proofType: ProofType.jwt,
-              formatsSupported: const [
-                VCFormatType.jwtVcJson,
-                VCFormatType.jwtVcJsonLd,
-                VCFormatType.vcSdJWT,
-              ],
-              displayMode: false,
-            ),
-          ),
-          settingsMenu: SettingsMenu.initial(),
-          version: '',
-          walletSecurityOptions: const WalletSecurityOptions(
-            confirmSecurityVerifierAccess: true,
-            displaySecurityAdvancedSettings: true,
-            secureSecurityAuthenticationWithPinCode: true,
-            verifySecurityIssuerWebsiteIdentity: true,
-            trustedList: false,
-          ),
+          /// pas ldp_vc
+          proofType: ProofType.jwt,
+          formatsSupported: const [
+            VCFormatType.jwtVcJson,
+            VCFormatType.jwtVcJsonLd,
+            VCFormatType.vcSdJWT,
+          ],
+          displayMode: false,
         ),
-      );
+      ),
+      settingsMenu: SettingsMenu.initial(),
+      version: '',
+      walletSecurityOptions: const WalletSecurityOptions(
+        confirmSecurityVerifierAccess: true,
+        displaySecurityAdvancedSettings: true,
+        secureSecurityAuthenticationWithPinCode: true,
+        verifySecurityIssuerWebsiteIdentity: true,
+        trustedList: false,
+      ),
+    ),
+  );
 
   factory ProfileModel.diipv4({
     required WalletType walletType,
@@ -271,57 +267,56 @@ class ProfileModel extends Equatable {
     required String? clientId,
     required String? clientSecret,
     String? enterpriseWalletName,
-  }) =>
-      ProfileModel(
-        enterpriseWalletName: enterpriseWalletName,
-        walletType: walletType,
-        walletProtectionType: walletProtectionType,
-        isDeveloperMode: isDeveloperMode,
-        profileType: ProfileType.diipv4,
-        profileSetting: ProfileSetting(
-          blockchainOptions: BlockchainOptions.initial(),
-          generalOptions: GeneralOptions.empty(),
-          helpCenterOptions: HelpCenterOptions.initial(),
-          discoverCardsOptions: DiscoverCardsOptions.none(),
-          selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
-            displayManageDecentralizedId: true,
-            customOidc4vcProfile: CustomOidc4VcProfile(
-              clientAuthentication: ClientAuthentication.clientId,
-              credentialManifestSupport: true,
-              cryptoHolderBinding: true,
-              defaultDid: Parameters.didKeyTypeForOwfBaselineProfile,
-              oidc4vciDraft: OIDC4VCIDraftType.draft15,
-              oidc4vpDraft: OIDC4VPDraftType.draft28,
-              scope: true,
-              securityLevel: true,
-              proofHeader: ProofHeaderType.kid,
-              siopv2Draft: SIOPV2DraftType.draft12,
-              clientType: ClientType.did,
-              clientId: clientId,
-              clientSecret: clientSecret,
-              vcFormatType: VCFormatType.auto,
+  }) => ProfileModel(
+    enterpriseWalletName: enterpriseWalletName,
+    walletType: walletType,
+    walletProtectionType: walletProtectionType,
+    isDeveloperMode: isDeveloperMode,
+    profileType: ProfileType.diipv4,
+    profileSetting: ProfileSetting(
+      blockchainOptions: BlockchainOptions.initial(),
+      generalOptions: GeneralOptions.empty(),
+      helpCenterOptions: HelpCenterOptions.initial(),
+      discoverCardsOptions: DiscoverCardsOptions.none(),
+      selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
+        displayManageDecentralizedId: true,
+        customOidc4vcProfile: CustomOidc4VcProfile(
+          clientAuthentication: ClientAuthentication.clientId,
+          credentialManifestSupport: true,
+          cryptoHolderBinding: true,
+          defaultDid: Parameters.didKeyTypeForOwfBaselineProfile,
+          oidc4vciDraft: OIDC4VCIDraftType.draft15,
+          oidc4vpDraft: OIDC4VPDraftType.draft28,
+          scope: true,
+          securityLevel: true,
+          proofHeader: ProofHeaderType.kid,
+          siopv2Draft: SIOPV2DraftType.draft12,
+          clientType: ClientType.did,
+          clientId: clientId,
+          clientSecret: clientSecret,
+          vcFormatType: VCFormatType.auto,
 
-              /// pas ldp_vc
-              proofType: ProofType.jwt,
-              formatsSupported: const [
-                VCFormatType.jwtVcJson,
-                VCFormatType.jwtVcJsonLd,
-                VCFormatType.dcSdJWT,
-              ],
-              displayMode: false,
-            ),
-          ),
-          settingsMenu: SettingsMenu.initial(),
-          version: '',
-          walletSecurityOptions: const WalletSecurityOptions(
-            confirmSecurityVerifierAccess: true,
-            displaySecurityAdvancedSettings: true,
-            secureSecurityAuthenticationWithPinCode: true,
-            verifySecurityIssuerWebsiteIdentity: true,
-            trustedList: false,
-          ),
+          /// pas ldp_vc
+          proofType: ProofType.jwt,
+          formatsSupported: const [
+            VCFormatType.jwtVcJson,
+            VCFormatType.jwtVcJsonLd,
+            VCFormatType.dcSdJWT,
+          ],
+          displayMode: false,
         ),
-      );
+      ),
+      settingsMenu: SettingsMenu.initial(),
+      version: '',
+      walletSecurityOptions: const WalletSecurityOptions(
+        confirmSecurityVerifierAccess: true,
+        displaySecurityAdvancedSettings: true,
+        secureSecurityAuthenticationWithPinCode: true,
+        verifySecurityIssuerWebsiteIdentity: true,
+        trustedList: false,
+      ),
+    ),
+  );
 
   final WalletType walletType;
   final WalletProtectionType walletProtectionType;
@@ -334,15 +329,15 @@ class ProfileModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        walletType,
-        walletProtectionType,
-        isDeveloperMode,
-        profileType,
-        enterpriseWalletName,
-        profileSetting,
-        oidc4VCIStack,
-        trustedList,
-      ];
+    walletType,
+    walletProtectionType,
+    isDeveloperMode,
+    profileType,
+    enterpriseWalletName,
+    profileSetting,
+    oidc4VCIStack,
+    trustedList,
+  ];
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
 
