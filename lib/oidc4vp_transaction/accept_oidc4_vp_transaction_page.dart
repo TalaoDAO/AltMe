@@ -77,8 +77,8 @@ class AcceptOidc4VpTransactionPage extends StatelessWidget {
                 ),
 
                 // TransactionPresentation widget displays decoded transactions
-                Padding(
-                  padding: const EdgeInsets.all(8),
+                const Padding(
+                  padding: EdgeInsets.all(8),
                   child: TransactionPresentation(),
                 ),
 
