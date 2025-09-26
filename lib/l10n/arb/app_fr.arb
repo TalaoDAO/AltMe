@@ -1136,5 +1136,5 @@
   "recoveryPhraseIncorrectErrorMessage": "Veuillez recommencer dans le bon ordre.",
   "invalidCode": "Code invalide",
   "deleteDigit": "Effacer",
-  "aiPleaseWait": "Ce traitement peut prendre jusqu'à 30s"
+  "aiPleaseWait": "Ce traitement peut prendre jusqu'à 1 min"
 }

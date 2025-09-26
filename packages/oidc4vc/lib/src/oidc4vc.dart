@@ -924,6 +924,26 @@ class OIDC4VC {
         if (vct != null) {
           credentialData['vct'] = vct;
         }
+      case OIDC4VCIDraftType.draft15:
+      case OIDC4VCIDraftType.draft16:
+        if (vcFormatType != VCFormatType.dcSdJWT) {
+          throw Exception('Not a valid credential format');
+        }
+
+        /// Looking for credentialType in issuer openId configuration in
+        /// credentialConfigurationsSupported
+        final credentialConfigurationsSupported = oidc4vcParameters
+            .issuerOpenIdConfiguration.credentialConfigurationsSupported;
+        if (credentialConfigurationsSupported == null) {
+          throw Exception(
+            'credential_configuration_id not found in issuer configuration',
+          );
+        } else {
+          // working with SICPA. My understanding of specs is that we should
+          // use credentialConfigurationsSupported[credentialType]['scope']
+          // https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0-15.html#name-credential-request
+          credentialData['credential_configuration_id'] = credentialType;
+        }
     }
 
     return credentialData;

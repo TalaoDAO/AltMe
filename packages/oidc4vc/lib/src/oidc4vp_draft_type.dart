@@ -15,6 +15,8 @@ enum OIDC4VPDraftType {
   draft22,
   @JsonValue('23')
   draft23,
+  @JsonValue('25')
+  draft25,
   @JsonValue('28')
   draft28,
   @JsonValue('29')
@@ -38,6 +40,8 @@ extension OIDC4VPDraftTypeX on OIDC4VPDraftType {
         return 'Draft 22 (Partial)';
       case OIDC4VPDraftType.draft23:
         return 'Draft 23 (Partial)';
+      case OIDC4VPDraftType.draft25:
+        return 'Draft 25 (Partial)';
       case OIDC4VPDraftType.draft28:
         return 'Draft 28 (Partial)';
       case OIDC4VPDraftType.draft29:
@@ -61,6 +65,8 @@ extension OIDC4VPDraftTypeX on OIDC4VPDraftType {
         return '22';
       case OIDC4VPDraftType.draft23:
         return '23';
+      case OIDC4VPDraftType.draft25:
+        return '25';
       case OIDC4VPDraftType.draft28:
         return '28';
       case OIDC4VPDraftType.draft29:

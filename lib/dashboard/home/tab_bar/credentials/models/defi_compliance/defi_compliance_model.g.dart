@@ -18,15 +18,23 @@ DefiComplianceModel _$DefiComplianceModelFromJson(Map<String, dynamic> json) =>
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
     );
 
-Map<String, dynamic> _$DefiComplianceModelToJson(
-        DefiComplianceModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'type': instance.type,
-      'issuedBy': instance.issuedBy?.toJson(),
-      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
-      'expires': instance.expires,
-      'ageCheck': instance.ageCheck,
-      'amlComplianceCheck': instance.amlComplianceCheck,
-      'sanctionListCheck': instance.sanctionListCheck,
-    };
+Map<String, dynamic> _$DefiComplianceModelToJson(DefiComplianceModel instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'type': instance.type,
+    'issuedBy': instance.issuedBy?.toJson(),
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('offeredBy', instance.offeredBy?.toJson());
+  val['expires'] = instance.expires;
+  val['ageCheck'] = instance.ageCheck;
+  val['amlComplianceCheck'] = instance.amlComplianceCheck;
+  val['sanctionListCheck'] = instance.sanctionListCheck;
+  return val;
+}

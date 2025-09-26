@@ -27,7 +27,7 @@ extension ProfileTypeX on ProfileType {
       case ProfileType.diipv3:
         return 'Decentralized Identity Interop Profile (DIIP v3.0)';
       case ProfileType.diipv4:
-        return 'DIIP V4.0 (Experiemental)';
+        return 'DIIP V4.0 (Experimental)';
       case ProfileType.defaultOne:
         return 'Default';
       case ProfileType.europeanWallet:

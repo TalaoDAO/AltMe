@@ -12,7 +12,10 @@
     "back",
     "iaAnalyze",
     "iaAnalyzeTitle",
-    "aiPleaseWait"
+    "aiPleaseWait",
+    "trustedList",
+    "trustedListSubtitle",
+    "notTrustedEntity"
   ],
 
   "es": [
@@ -28,13 +31,19 @@
     "back",
     "iaAnalyze",
     "iaAnalyzeTitle",
-    "aiPleaseWait"
+    "aiPleaseWait",
+    "trustedList",
+    "trustedListSubtitle",
+    "notTrustedEntity"
   ],
 
   "fr": [
     "saveBackupPolygonCredentialSubtitle",
     "back",
     "iaAnalyze",
-    "iaAnalyzeTitle"
+    "iaAnalyzeTitle",
+    "trustedList",
+    "trustedListSubtitle",
+    "notTrustedEntity"
   ]
 }

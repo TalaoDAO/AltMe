@@ -334,6 +334,7 @@ const _$OIDC4VPDraftTypeEnumMap = {
   OIDC4VPDraftType.draft21: '21',
   OIDC4VPDraftType.draft22: '22',
   OIDC4VPDraftType.draft23: '23',
+  OIDC4VPDraftType.draft25: '25',
   OIDC4VPDraftType.draft28: '28',
   OIDC4VPDraftType.draft29: '29',
 };
@@ -387,6 +388,9 @@ WalletSecurityOptions _$WalletSecurityOptionsFromJson(
           json['secureSecurityAuthenticationWithPinCode'] as bool,
       verifySecurityIssuerWebsiteIdentity:
           json['verifySecurityIssuerWebsiteIdentity'] as bool,
+      trustedListUrl:
+          json['trustedListUrl'] as String? ?? Parameters.trustedListUrl,
+      trustedList: json['trustedList'] as bool,
     );
 
 Map<String, dynamic> _$WalletSecurityOptionsToJson(
@@ -399,4 +403,6 @@ Map<String, dynamic> _$WalletSecurityOptionsToJson(
           instance.secureSecurityAuthenticationWithPinCode,
       'verifySecurityIssuerWebsiteIdentity':
           instance.verifySecurityIssuerWebsiteIdentity,
+      'trustedListUrl': instance.trustedListUrl,
+      'trustedList': instance.trustedList,
     };

@@ -7,11 +7,7 @@ part of 'display_mapping_text.dart';
 // **************************************************************************
 
 DisplayMappingText _$DisplayMappingTextFromJson(Map<String, dynamic> json) =>
-    DisplayMappingText(
-      json['text'] as String,
-    );
+    DisplayMappingText(json['text'] as String);
 
 Map<String, dynamic> _$DisplayMappingTextToJson(DisplayMappingText instance) =>
-    <String, dynamic>{
-      'text': instance.text,
-    };
+    <String, dynamic>{'text': instance.text};

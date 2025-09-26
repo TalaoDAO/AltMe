@@ -42,7 +42,6 @@ class HomeCubit extends Cubit<HomeState> {
     required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
     required OIDC4VCIDraftType oidc4vciDraftType,
-    required BlockchainType blockchainType,
     required VCFormatType vcFormatType,
     required QRCodeScanCubit qrCodeScanCubit,
   }) async {
@@ -50,8 +49,13 @@ class HomeCubit extends Cubit<HomeState> {
     // AgeRange Credentials
     emit(state.loading());
 
-    final didKeyType = profileCubit.state.model.profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+    final didKeyType = profileCubit
+        .state
+        .model
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile
+        .defaultDid;
 
     final privateKey = await getPrivateKey(
       profileCubit: profileCubit,
@@ -66,8 +70,9 @@ class HomeCubit extends Cubit<HomeState> {
 
     final base64EncodedImage = base64Encode(imageBytes);
 
-    final challenge =
-        bytesToHex(sha256.convert(utf8.encode(base64EncodedImage)).bytes);
+    final challenge = bytesToHex(
+      sha256.convert(utf8.encode(base64EncodedImage)).bytes,
+    );
 
     final options = <String, dynamic>{
       'verificationMethod': kid,
@@ -103,7 +108,6 @@ class HomeCubit extends Cubit<HomeState> {
         credentialsCubit: credentialsCubit,
         cameraCubit: cameraCubit,
         oidc4vciDraftType: oidc4vciDraftType,
-        blockchainType: blockchainType,
         vcFormatType: vcFormatType,
         qrCodeScanCubit: qrCodeScanCubit,
       );
@@ -125,10 +129,11 @@ class HomeCubit extends Cubit<HomeState> {
           if (e.data['error_description'] != null) {
             if (e.data['error_description'] is String) {
               try {
-                final dynamic errorDescriptionJson =
-                    jsonDecode(e.data['error_description'] as String);
+                final dynamic errorDescriptionJson = jsonDecode(
+                  e.data['error_description'] as String,
+                );
                 message = errorDescriptionJson['error_message'] as String;
-              } catch (_, __) {
+              } catch (_) {
                 message = e.data['error_description'] as String;
               }
             } else if (e.data['error_description'] is Map<String, dynamic>) {
@@ -163,7 +168,6 @@ class HomeCubit extends Cubit<HomeState> {
     required CredentialsCubit credentialsCubit,
     required CameraCubit cameraCubit,
     required OIDC4VCIDraftType oidc4vciDraftType,
-    required BlockchainType blockchainType,
     required VCFormatType vcFormatType,
     required QRCodeScanCubit qrCodeScanCubit,
   }) async {
@@ -177,11 +181,9 @@ class HomeCubit extends Cubit<HomeState> {
 
       emit(state.copyWith(status: AppStatus.loading));
 
-      final newUrl = '${Uri.parse(url)}?vc_format=${vcFormatType.urlValue(
-        isEmailPassOrPhonePass:
-            credentialSubjectType == CredentialSubjectType.emailPass ||
-                credentialSubjectType == CredentialSubjectType.phonePass,
-      )}';
+      final newUrl =
+          // ignore: lines_longer_than_80_chars
+          '${Uri.parse(url)}?vc_format=${vcFormatType.urlValue(isEmailPassOrPhonePass: credentialSubjectType == CredentialSubjectType.emailPass || credentialSubjectType == CredentialSubjectType.phonePass)}';
 
       response = await client.post(
         newUrl,
@@ -214,16 +216,17 @@ class HomeCubit extends Cubit<HomeState> {
           throw Exception();
         }
 
-        final Map<String, dynamic> newCredential =
-            Map<String, dynamic>.from(credential);
+        final Map<String, dynamic> newCredential = Map<String, dynamic>.from(
+          credential,
+        );
 
         newCredential['format'] = vcFormatType.vcValue;
         newCredential['credentialPreview'] = credential;
         final CredentialManifest credentialManifest =
             await getCredentialManifestFromAltMe(
-          oidc4vc: oidc4vc,
-          oidc4vciDraftType: oidc4vciDraftType,
-        );
+              oidc4vc: oidc4vc,
+              oidc4vciDraftType: oidc4vciDraftType,
+            );
         credentialManifest.outputDescriptors?.removeWhere(
           (element) => element.id != credentialSubjectType.name,
         );
@@ -237,9 +240,7 @@ class HomeCubit extends Cubit<HomeState> {
         }
 
         final credentialModel = CredentialModel.copyWithData(
-          oldCredentialModel: CredentialModel.fromJson(
-            newCredential,
-          ),
+          oldCredentialModel: CredentialModel.fromJson(newCredential),
           newData: credential,
           activities: [Activity(acquisitionAt: DateTime.now())],
           profileType: qrCodeScanCubit.profileCubit.state.model.profileType,

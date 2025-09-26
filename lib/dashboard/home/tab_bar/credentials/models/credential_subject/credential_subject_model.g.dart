@@ -20,17 +20,26 @@ CredentialSubjectModel _$CredentialSubjectModelFromJson(
     );
 
 Map<String, dynamic> _$CredentialSubjectModelToJson(
-        CredentialSubjectModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'type': instance.type,
-      'issuedBy': instance.issuedBy?.toJson(),
-      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
-      'credentialSubjectType':
-          _$CredentialSubjectTypeEnumMap[instance.credentialSubjectType]!,
-      'credentialCategory':
-          _$CredentialCategoryEnumMap[instance.credentialCategory]!,
-    };
+    CredentialSubjectModel instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'type': instance.type,
+    'issuedBy': instance.issuedBy?.toJson(),
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('offeredBy', instance.offeredBy?.toJson());
+  val['credentialSubjectType'] =
+      _$CredentialSubjectTypeEnumMap[instance.credentialSubjectType]!;
+  val['credentialCategory'] =
+      _$CredentialCategoryEnumMap[instance.credentialCategory]!;
+  return val;
+}
 
 const _$CredentialSubjectTypeEnumMap = {
   CredentialSubjectType.ageRange: 'ageRange',

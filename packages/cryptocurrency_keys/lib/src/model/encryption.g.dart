@@ -7,9 +7,9 @@ part of 'encryption.dart';
 // **************************************************************************
 
 Encryption _$EncryptionFromJson(Map<String, dynamic> json) => Encryption(
-      cipherText: json['cipherText'] as String?,
-      authenticationTag: json['authenticationTag'] as String?,
-    );
+  cipherText: json['cipherText'] as String?,
+  authenticationTag: json['authenticationTag'] as String?,
+);
 
 Map<String, dynamic> _$EncryptionToJson(Encryption instance) =>
     <String, dynamic>{

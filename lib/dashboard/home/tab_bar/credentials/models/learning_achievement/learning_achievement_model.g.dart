@@ -24,16 +24,23 @@ LearningAchievementModel _$LearningAchievementModelFromJson(
     );
 
 Map<String, dynamic> _$LearningAchievementModelToJson(
-        LearningAchievementModel instance) =>
-    <String, dynamic>{
-      if (instance.id case final value?) 'id': value,
-      if (instance.type case final value?) 'type': value,
-      if (instance.issuedBy?.toJson() case final value?) 'issuedBy': value,
-      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
-      if (instance.familyName case final value?) 'familyName': value,
-      if (instance.givenName case final value?) 'givenName': value,
-      if (instance.email case final value?) 'email': value,
-      if (instance.birthDate case final value?) 'birthDate': value,
-      if (instance.hasCredential?.toJson() case final value?)
-        'hasCredential': value,
-    };
+    LearningAchievementModel instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('type', instance.type);
+  writeNotNull('issuedBy', instance.issuedBy?.toJson());
+  writeNotNull('offeredBy', instance.offeredBy?.toJson());
+  writeNotNull('familyName', instance.familyName);
+  writeNotNull('givenName', instance.givenName);
+  writeNotNull('email', instance.email);
+  writeNotNull('birthDate', instance.birthDate);
+  writeNotNull('hasCredential', instance.hasCredential?.toJson());
+  return val;
+}
