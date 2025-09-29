@@ -150,6 +150,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
         final String jwkKey = await keyGenerator.jwkFromSecretKey(
           secretKey: cryptoAccountData.secretKey,
           accountType: blockchainType.accountType,
+          alg: Alg.ES256K,
         );
 
         final cryptoAccountPrivateKey = jwkKey;

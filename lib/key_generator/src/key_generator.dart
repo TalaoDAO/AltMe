@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:altme/key_generator/src/enum.dart';
 import 'package:bip32/bip32.dart' as bip32;
@@ -23,6 +24,20 @@ import 'package:tezart/tezart.dart';
 
 /// SSI supports any asymetric key , all : RSA, secp256, P-256, P-512,
 /// everything is possible
+
+enum Alg {
+  ES256K,
+  ES256K_R;
+
+  String get name {
+    switch (this) {
+      case Alg.ES256K:
+        return 'ES256K';
+      case Alg.ES256K_R:
+        return 'ES256K-R';
+    }
+  }
+}
 
 class KeyGenerator {
   static const Prefixes _seedPrefix = Prefixes.edsk2;
@@ -76,6 +91,7 @@ class KeyGenerator {
   Map<String, String> jwkFromSeed({
     required Uint8List seedBytes,
     required AccountType accountType,
+    Alg alg = Alg.ES256K_R,
   }) {
     switch (accountType) {
       case AccountType.ssi:
@@ -116,7 +132,7 @@ class KeyGenerator {
           'd': d,
           'x': x,
           'y': y,
-          'alg': 'ES256K', // or 'alg': "ES256K" for did:key
+          'alg': alg.name, // or 'alg': "ES256K" for did:key
         };
         return jwk;
     }
@@ -245,6 +261,7 @@ class KeyGenerator {
   Future<String> jwkFromSecretKey({
     required String secretKey,
     required AccountType accountType,
+    Alg alg = Alg.ES256K_R,
   }) async {
     late Uint8List seedBytes;
     switch (accountType) {
@@ -261,7 +278,11 @@ class KeyGenerator {
       case AccountType.ssi:
         seedBytes = Uint8List.fromList(hexToBytes(secretKey));
     }
-    final jwk = jwkFromSeed(seedBytes: seedBytes, accountType: accountType);
+    final jwk = jwkFromSeed(
+      seedBytes: seedBytes,
+      accountType: accountType,
+      alg: alg,
+    );
     return jsonEncode(jwk);
   }
 
