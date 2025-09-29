@@ -1,4 +1,1 @@
-enum CredentialDetailTabStatus {
-  informations,
-  activity,
-}
+enum CredentialDetailTabStatus { informations, activity }

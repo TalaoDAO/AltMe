@@ -4,10 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class SelfIssuedWidget extends StatelessWidget {
-  const SelfIssuedWidget({
-    super.key,
-    required this.credentialModel,
-  });
+  const SelfIssuedWidget({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 
@@ -15,8 +12,9 @@ class SelfIssuedWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final selfIssuedModel = credentialModel
-        .credentialPreview.credentialSubjectModel as SelfIssuedModel;
+    final selfIssuedModel =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as SelfIssuedModel;
 
     return CredentialBackground(
       credentialModel: credentialModel,

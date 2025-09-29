@@ -7,23 +7,23 @@ part of 'activity.dart';
 // **************************************************************************
 
 Activity _$ActivityFromJson(Map<String, dynamic> json) => Activity(
-      acquisitionAt: json['acquisitionAt'] == null
-          ? null
-          : DateTime.parse(json['acquisitionAt'] as String),
-      presentation: json['presentation'] == null
-          ? null
-          : Presentation.fromJson(json['presentation'] as Map<String, dynamic>),
-    );
+  acquisitionAt: json['acquisitionAt'] == null
+      ? null
+      : DateTime.parse(json['acquisitionAt'] as String),
+  presentation: json['presentation'] == null
+      ? null
+      : Presentation.fromJson(json['presentation'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$ActivityToJson(Activity instance) => <String, dynamic>{
-      'acquisitionAt': instance.acquisitionAt?.toIso8601String(),
-      'presentation': instance.presentation,
-    };
+  'acquisitionAt': instance.acquisitionAt?.toIso8601String(),
+  'presentation': instance.presentation,
+};
 
 Presentation _$PresentationFromJson(Map<String, dynamic> json) => Presentation(
-      issuer: Issuer.fromJson(json['issuer'] as Map<String, dynamic>),
-      presentedAt: DateTime.parse(json['presentedAt'] as String),
-    );
+  issuer: Issuer.fromJson(json['issuer'] as Map<String, dynamic>),
+  presentedAt: DateTime.parse(json['presentedAt'] as String),
+);
 
 Map<String, dynamic> _$PresentationToJson(Presentation instance) =>
     <String, dynamic>{

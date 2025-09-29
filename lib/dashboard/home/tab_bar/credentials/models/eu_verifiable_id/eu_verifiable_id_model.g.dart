@@ -12,23 +12,27 @@ EUVerifiableIdModel _$EUVerifiableIdModelFromJson(Map<String, dynamic> json) =>
       awardingOpportunity: json['awardingOpportunity'] == null
           ? null
           : AwardingOpportunity.fromJson(
-              json['awardingOpportunity'] as Map<String, dynamic>),
+              json['awardingOpportunity'] as Map<String, dynamic>,
+            ),
       dateOfBirth: json['dateOfBirth'] as String? ?? '',
       familyName: json['familyName'] as String? ?? '',
       givenNames: json['givenNames'] as String? ?? '',
       gradingScheme: json['gradingScheme'] == null
           ? null
           : GradingScheme.fromJson(
-              json['gradingScheme'] as Map<String, dynamic>),
+              json['gradingScheme'] as Map<String, dynamic>,
+            ),
       identifier: json['identifier'] as String? ?? '',
       learningAchievement: json['learningAchievement'] == null
           ? null
           : LearningAchievement.fromJson(
-              json['learningAchievement'] as Map<String, dynamic>),
+              json['learningAchievement'] as Map<String, dynamic>,
+            ),
       learningSpecification: json['learningSpecification'] == null
           ? null
           : LearningSpecification.fromJson(
-              json['learningSpecification'] as Map<String, dynamic>),
+              json['learningSpecification'] as Map<String, dynamic>,
+            ),
       id: json['id'] as String?,
       type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),

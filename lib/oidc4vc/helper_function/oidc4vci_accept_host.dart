@@ -31,7 +31,8 @@ Future<void> oidc4vciAcceptHost({
     );
 
     LoadingView().hide();
-    final bool moveAhead = await showDialog<bool>(
+    final bool moveAhead =
+        await showDialog<bool>(
           context: context,
           builder: (_) {
             return DeveloperModeDialog(
@@ -88,9 +89,7 @@ Future<void> oidc4vciAcceptHost({
   if (trustedListEnabled) {
     try {
       if (trustedList == null) {
-        throw Exception(
-          'Missing trusted list.',
-        );
+        throw Exception('Missing trusted list.');
       }
       // issuer open id configuration from signed metadata is used instead of
       // unsigned open id configuration
@@ -121,9 +120,9 @@ Future<void> oidc4vciAcceptHost({
             credentialConfigurationIds is List) {
           for (final credentialConfigurationId in credentialConfigurationIds) {
             if (!trustedEntity.vcTypes!.contains(
-              oidc4vcParameters.issuerOpenIdConfiguration
-                      .credentialConfigurationsSupported[
-                  credentialConfigurationId]['vct'],
+              oidc4vcParameters
+                  .issuerOpenIdConfiguration
+                  .credentialConfigurationsSupported[credentialConfigurationId]['vct'],
             )) {
               throw Exception(
                 // ignore: lines_longer_than_80_chars
@@ -144,7 +143,8 @@ Future<void> oidc4vciAcceptHost({
         // check certificate is trusted
 
         LoadingView().hide();
-        acceptHost = await showDialog<bool>(
+        acceptHost =
+            await showDialog<bool>(
               context: context,
               builder: (BuildContext context) {
                 return SafeArea(
@@ -155,8 +155,9 @@ Future<void> oidc4vciAcceptHost({
                         maxHeight: MediaQuery.of(context).size.height * 0.6,
                       ),
                       child: SingleChildScrollView(
-                        child:
-                            TrustedEntityDetails(trustedEntity: trustedEntity),
+                        child: TrustedEntityDetails(
+                          trustedEntity: trustedEntity,
+                        ),
                       ),
                     ),
                     yes: l10n.communicationHostAllow,
@@ -168,7 +169,8 @@ Future<void> oidc4vciAcceptHost({
             false;
       } else {
         LoadingView().hide();
-        acceptHost = await showDialog<bool>(
+        acceptHost =
+            await showDialog<bool>(
               context: context,
               builder: (BuildContext context) {
                 return ConfirmDialog(
@@ -183,9 +185,7 @@ Future<void> oidc4vciAcceptHost({
             false;
       }
     } catch (e) {
-      context.read<QRCodeScanCubit>().emitError(
-            error: e,
-          );
+      context.read<QRCodeScanCubit>().emitError(error: e);
       return;
     }
   }
@@ -198,13 +198,11 @@ Future<void> oidc4vciAcceptHost({
         ? oidc4vcParameters.initialUri.host
         : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
 
-    subtitle = await getHost(
-      uri: oidc4vcParameters.initialUri,
-      client: client,
-    );
+    subtitle = await getHost(uri: oidc4vcParameters.initialUri, client: client);
 
     LoadingView().hide();
-    acceptHost = await showDialog<bool>(
+    acceptHost =
+        await showDialog<bool>(
           context: context,
           builder: (BuildContext context) {
             return ConfirmDialog(
@@ -221,16 +219,16 @@ Future<void> oidc4vciAcceptHost({
   LoadingView().hide();
   if (acceptHost) {
     await context.read<QRCodeScanCubit>().acceptOidc4vci(
-          approvedIssuer: approvedIssuer,
-          oidc4vcParameters: oidc4vcParameters,
-          qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-        );
+      approvedIssuer: approvedIssuer,
+      oidc4vcParameters: oidc4vcParameters,
+      qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+    );
   } else {
     context.read<QRCodeScanCubit>().emitError(
-          error: ResponseMessage(
-            message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
-          ),
-        );
+      error: ResponseMessage(
+        message: ResponseString.RESPONSE_STRING_SCAN_REFUSE_HOST,
+      ),
+    );
     return;
   }
 }

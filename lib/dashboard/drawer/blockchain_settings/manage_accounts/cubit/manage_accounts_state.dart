@@ -52,8 +52,5 @@ class ManageAccountsState extends Equatable {
   Map<String, dynamic> toJson() => _$ManageAccountsStateToJson(this);
 
   @override
-  List<Object?> get props => [
-        status,
-        message,
-      ];
+  List<Object?> get props => [status, message];
 }

@@ -48,7 +48,9 @@ class _HomeCredentialCategoryListState
         final profileModel = context.read<ProfileCubit>().state.model;
 
         final customOidc4vcProfile = profileModel
-            .profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile;
 
         return RefreshIndicator(
           onRefresh: widget.onRefresh,
@@ -62,115 +64,131 @@ class _HomeCredentialCategoryListState
                     final issuerDid = snapshot.data;
                     return ListView(
                       scrollDirection: Axis.vertical,
-                      children: getCredentialCategorySorted.where(
-                        (category) {
-                          return advanceSettingsState
-                                  .categoryIsEnabledMap[category] ??
-                              true;
-                        },
-                      ).map((category) {
-                        final categorizedCredentials = widget.credentials.where(
-                          (element) {
-                            /// id credential category does not match, do
-                            /// not show
-                            if (element.credentialPreview.credentialSubjectModel
-                                    .credentialCategory !=
-                                category) {
-                              return false;
-                            }
-
-                            /// wallet credential to be shown always
-                            if (element.credentialPreview.credentialSubjectModel
-                                    .credentialSubjectType ==
-                                CredentialSubjectType.walletCredential) {
-                              if (!profileModel.isDeveloperMode) {
-                                return false;
-                              }
-                            }
-
-                            /// crypto credential account to be shown always
-                            if (element.credentialPreview.credentialSubjectModel
-                                .credentialSubjectType.isBlockchainAccount) {
-                              /// only show crypto card with matches current
-                              /// account wallet address
-
-                              final currentAccount = context
-                                  .read<WalletCubit>()
-                                  .state
-                                  .currentAccount;
-
-                              if (currentAccount != null) {
-                                final currentWalletAddress =
-                                    currentAccount.walletAddress;
-
-                                final currentBlockchainType =
-                                    currentAccount.blockchainType;
-
-                                final (walletAddress, blockchainType) =
-                                    getWalletAddress(
-                                  element
-                                      .credentialPreview.credentialSubjectModel,
-                                );
-
-                                final matchesWalletAddress =
-                                    currentWalletAddress !=
-                                        walletAddress.toString();
-
-                                final matchesBlockchainType =
-                                    currentBlockchainType != blockchainType;
-
-                                if (matchesWalletAddress ||
-                                    matchesBlockchainType) {
+                      children: getCredentialCategorySorted
+                          .where((category) {
+                            return advanceSettingsState
+                                    .categoryIsEnabledMap[category] ??
+                                true;
+                          })
+                          .map((category) {
+                            final categorizedCredentials = widget.credentials.where(
+                              (element) {
+                                /// id credential category does not match, do
+                                /// not show
+                                if (element
+                                        .credentialPreview
+                                        .credentialSubjectModel
+                                        .credentialCategory !=
+                                    category) {
                                   return false;
                                 }
+
+                                /// wallet credential to be shown always
+                                if (element
+                                        .credentialPreview
+                                        .credentialSubjectModel
+                                        .credentialSubjectType ==
+                                    CredentialSubjectType.walletCredential) {
+                                  if (!profileModel.isDeveloperMode) {
+                                    return false;
+                                  }
+                                }
+
+                                /// crypto credential account to be shown always
+                                if (element
+                                    .credentialPreview
+                                    .credentialSubjectModel
+                                    .credentialSubjectType
+                                    .isBlockchainAccount) {
+                                  /// only show crypto card with matches current
+                                  /// account wallet address
+
+                                  final currentAccount = context
+                                      .read<WalletCubit>()
+                                      .state
+                                      .currentAccount;
+
+                                  if (currentAccount != null) {
+                                    final currentWalletAddress =
+                                        currentAccount.walletAddress;
+
+                                    final currentBlockchainType =
+                                        currentAccount.blockchainType;
+
+                                    final (
+                                      walletAddress,
+                                      blockchainType,
+                                    ) = getWalletAddress(
+                                      element
+                                          .credentialPreview
+                                          .credentialSubjectModel,
+                                    );
+
+                                    final matchesWalletAddress =
+                                        currentWalletAddress !=
+                                        walletAddress.toString();
+
+                                    final matchesBlockchainType =
+                                        currentBlockchainType != blockchainType;
+
+                                    if (matchesWalletAddress ||
+                                        matchesBlockchainType) {
+                                      return false;
+                                    }
+                                  }
+                                }
+
+                                /// if crypto did matches with vc.
+                                if (issuerDid ==
+                                    element
+                                        .credentialPreview
+                                        .credentialSubjectModel
+                                        .id) {
+                                  return true;
+                                }
+
+                                if (element
+                                        .credentialPreview
+                                        .credentialSubjectModel
+                                        .credentialSubjectType !=
+                                    CredentialSubjectType.walletCredential) {
+                                  /// do not load the credential if vc format is
+                                  /// different
+
+                                  final formatsSupported = customOidc4vcProfile
+                                      .formatsSupported!
+                                      .map((e) => e.vcValue)
+                                      .toList();
+
+                                  if (!formatsSupported.contains(
+                                        element.getFormat,
+                                      ) &&
+                                      element.getFormat != 'auto' &&
+                                      !formatsSupported.contains('auto')) {
+                                    return false;
+                                  }
+                                }
+
+                                return true;
+                              },
+                            ).toList();
+                            if (categorizedCredentials.isEmpty) {
+                              if (category.showInHomeIfListEmpty) {
+                                return HomeCredentialCategoryItem(
+                                  credentials: const [],
+                                  credentialCategory: category,
+                                );
+                              } else {
+                                return const SizedBox.shrink();
                               }
+                            } else {
+                              return HomeCredentialCategoryItem(
+                                credentials: categorizedCredentials,
+                                credentialCategory: category,
+                              );
                             }
-
-                            /// if crypto did matches with vc.
-                            if (issuerDid ==
-                                element.credentialPreview.credentialSubjectModel
-                                    .id) {
-                              return true;
-                            }
-
-                            if (element.credentialPreview.credentialSubjectModel
-                                    .credentialSubjectType !=
-                                CredentialSubjectType.walletCredential) {
-                              /// do not load the credential if vc format is
-                              /// different
-
-                              final formatsSupported = customOidc4vcProfile
-                                  .formatsSupported!
-                                  .map((e) => e.vcValue)
-                                  .toList();
-
-                              if (!formatsSupported
-                                      .contains(element.getFormat) &&
-                                  element.getFormat != 'auto' &&
-                                  !formatsSupported.contains('auto')) {
-                                return false;
-                              }
-                            }
-
-                            return true;
-                          },
-                        ).toList();
-                        if (categorizedCredentials.isEmpty) {
-                          if (category.showInHomeIfListEmpty) {
-                            return HomeCredentialCategoryItem(
-                              credentials: const [],
-                              credentialCategory: category,
-                            );
-                          } else {
-                            return const SizedBox.shrink();
-                          }
-                        } else {
-                          return HomeCredentialCategoryItem(
-                            credentials: categorizedCredentials,
-                            credentialCategory: category,
-                          );
-                        }
-                      }).toList(),
+                          })
+                          .toList(),
                     );
                   case ConnectionState.waiting:
                   case ConnectionState.none:

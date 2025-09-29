@@ -11,10 +11,9 @@ class EtherlinkAssociatedAddressModel extends CredentialSubjectModel {
     required String super.id,
     required String super.type,
   }) : super(
-          credentialSubjectType:
-              CredentialSubjectType.etherlinkAssociatedWallet,
-          credentialCategory: CredentialCategory.blockchainAccountsCards,
-        );
+         credentialSubjectType: CredentialSubjectType.etherlinkAssociatedWallet,
+         credentialCategory: CredentialCategory.blockchainAccountsCards,
+       );
 
   factory EtherlinkAssociatedAddressModel.fromJson(Map<String, dynamic> json) =>
       _$EtherlinkAssociatedAddressModelFromJson(json);

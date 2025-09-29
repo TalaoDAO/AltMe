@@ -8,9 +8,8 @@ part 'activity_log_cubit.g.dart';
 part 'activity_log_state.dart';
 
 class ActivityLogCubit extends Cubit<ActivityLogState> {
-  ActivityLogCubit({
-    required this.activityLogManager,
-  }) : super(ActivityLogState());
+  ActivityLogCubit({required this.activityLogManager})
+    : super(ActivityLogState());
 
   final ActivityLogManager activityLogManager;
 
@@ -18,11 +17,6 @@ class ActivityLogCubit extends Cubit<ActivityLogState> {
 
   Future<void> getAllLogs() async {
     final logs = await activityLogManager.readAllLogs();
-    emit(
-      state.copyWith(
-        logDatas: logs,
-        status: AppStatus.populate,
-      ),
-    );
+    emit(state.copyWith(logDatas: logs, status: AppStatus.populate));
   }
 }

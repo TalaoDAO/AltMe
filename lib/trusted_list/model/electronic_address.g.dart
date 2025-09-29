@@ -13,7 +13,4 @@ ElectronicAddress _$ElectronicAddressFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$ElectronicAddressToJson(ElectronicAddress instance) =>
-    <String, dynamic>{
-      'uri': instance.uri,
-      'lang': instance.lang,
-    };
+    <String, dynamic>{'uri': instance.uri, 'lang': instance.lang};

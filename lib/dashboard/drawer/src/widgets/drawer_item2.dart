@@ -30,9 +30,7 @@ class DrawerItem2 extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: const BorderRadius.all(
-            Radius.circular(
-              Sizes.normalRadius,
-            ),
+            Radius.circular(Sizes.normalRadius),
           ),
         ),
         child: SizedBox(
@@ -47,27 +45,24 @@ class DrawerItem2 extends StatelessWidget {
                     Text(
                       title,
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: isDisabled
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withValues(alpha: 0.6)
-                                : null,
-                          ),
+                        color: isDisabled
+                            ? Theme.of(
+                                context,
+                              ).colorScheme.onSurface.withValues(alpha: 0.6)
+                            : null,
+                      ),
                     ),
                     if (subtitle != null) ...[
                       const SizedBox(height: 10),
                       Text(
                         subtitle!,
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  color: isDisabled
-                                      ? Theme.of(context)
-                                          .colorScheme
-                                          .onSurface
-                                          .withValues(alpha: 0.6)
-                                      : null,
-                                ),
+                        style: Theme.of(context).textTheme.titleMedium!
+                            .copyWith(
+                              color: isDisabled
+                                  ? Theme.of(context).colorScheme.onSurface
+                                        .withValues(alpha: 0.6)
+                                  : null,
+                            ),
                       ),
                       const SizedBox(height: 20),
                     ],
@@ -82,14 +77,12 @@ class DrawerItem2 extends StatelessWidget {
                   Icons.chevron_right,
                   size: 26,
                   color: isDisabled
-                      ? Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withValues(alpha: 0.6)
-                      : Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withValues(alpha: 0.6),
+                      ? Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.6)
+                      : Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               ],
             ],

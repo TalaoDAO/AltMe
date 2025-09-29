@@ -4,8 +4,13 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Proof model', () {
     test('default constructor work correctly', () {
-      final proof =
-          Proof('type', 'proofPurpose', 'verificationMethod', 'created', 'jws');
+      final proof = Proof(
+        'type',
+        'proofPurpose',
+        'verificationMethod',
+        'created',
+        'jws',
+      );
       expect(proof.type, 'type');
       expect(proof.proofPurpose, 'proofPurpose');
       expect(proof.verificationMethod, 'verificationMethod');
@@ -14,15 +19,13 @@ void main() {
     });
 
     test('fromJson constructor work correctly', () {
-      final proof = Proof.fromJson(
-        <String, dynamic>{
-          'type': 'type',
-          'proofPurpose': 'proofPurpose',
-          'verificationMethod': 'verificationMethod',
-          'created': 'created',
-          'jws': 'jws',
-        },
-      );
+      final proof = Proof.fromJson(<String, dynamic>{
+        'type': 'type',
+        'proofPurpose': 'proofPurpose',
+        'verificationMethod': 'verificationMethod',
+        'created': 'created',
+        'jws': 'jws',
+      });
       expect(proof.type, 'type');
       expect(proof.proofPurpose, 'proofPurpose');
       expect(proof.verificationMethod, 'verificationMethod');

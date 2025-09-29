@@ -9,25 +9,27 @@ class AgeRangeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ageRangeModel = credentialModel
-        .credentialPreview.credentialSubjectModel as AgeRangeModel;
+    final ageRangeModel =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as AgeRangeModel;
 
     return CredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.ageRangeProof,
       issuerName: credentialModel
-          .credentialPreview.credentialSubjectModel.issuedBy?.name,
+          .credentialPreview
+          .credentialSubjectModel
+          .issuedBy
+          ?.name,
       value:
           (ageRangeModel.ageRange != null && ageRangeModel.ageRange!.isNotEmpty)
-              ? '${ageRangeModel.ageRange} ${context.l10n.yearsOld}'
-              : '--',
+          ? '${ageRangeModel.ageRange} ${context.l10n.yearsOld}'
+          : '--',
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),
       expirationDate: credentialModel.expirationDate == null
           ? '--'
-          : UiDate.formatDateForCredentialCard(
-              credentialModel.expirationDate!,
-            ),
+          : UiDate.formatDateForCredentialCard(credentialModel.expirationDate!),
     );
   }
 }

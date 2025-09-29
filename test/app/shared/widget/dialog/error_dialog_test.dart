@@ -7,29 +7,27 @@ import '../../../../helpers/helpers.dart';
 void main() {
   group('ErrorDialog Widget Tests', () {
     testWidgets(
-        'displays the ErrorDialog with the correct title and description',
-        (WidgetTester tester) async {
-      const title = 'Error Title';
-      const description = 'An error occurred';
+      'displays the ErrorDialog with the correct title and description',
+      (WidgetTester tester) async {
+        const title = 'Error Title';
+        const description = 'An error occurred';
 
-      await tester.pumpApp(
-        const Scaffold(
-          body: ErrorDialog(
-            title: title,
-            erroDescription: description,
+        await tester.pumpApp(
+          const Scaffold(
+            body: ErrorDialog(title: title, erroDescription: description),
           ),
-        ),
-      );
+        );
 
-      expect(find.text(title), findsOneWidget);
-      expect(find.text('More Details'.toUpperCase()), findsOneWidget);
+        expect(find.text(title), findsOneWidget);
+        expect(find.text('More Details'.toUpperCase()), findsOneWidget);
 
-      await tester.tap(find.text('More Details'.toUpperCase()));
-      await tester.pumpAndSettle();
+        await tester.tap(find.text('More Details'.toUpperCase()));
+        await tester.pumpAndSettle();
 
-      expect(find.byType(ErrorDetailsDialog), findsOneWidget);
-      expect(find.text(description), findsOneWidget);
-    });
+        expect(find.byType(ErrorDetailsDialog), findsOneWidget);
+        expect(find.text(description), findsOneWidget);
+      },
+    );
 
     testWidgets('Popup works correctly', (WidgetTester tester) async {
       const title = 'Error Title';
@@ -37,10 +35,7 @@ void main() {
 
       await tester.pumpApp(
         const Scaffold(
-          body: ErrorDialog(
-            title: title,
-            erroDescription: description,
-          ),
+          body: ErrorDialog(title: title, erroDescription: description),
         ),
       );
 

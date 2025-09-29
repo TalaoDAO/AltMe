@@ -14,7 +14,8 @@ class ClientAuthenticationWidget extends StatelessWidget {
       builder: (context, state) {
         return OptionContainer(
           title: 'Client Authentication Methods',
-          subtitle: 'Select to other authentication'
+          subtitle:
+              'Select to other authentication'
               ' methods if needed. Default: Client id as DID or JWK.',
           body: ListView.builder(
             itemCount: ClientAuthentication.values.length,
@@ -35,8 +36,8 @@ class ClientAuthenticationWidget extends StatelessWidget {
                   ListTile(
                     onTap: () {
                       context.read<ProfileCubit>().updateProfileSetting(
-                            clientAuthentication: clientAuthenticationType,
-                          );
+                        clientAuthentication: clientAuthenticationType,
+                      );
                     },
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
@@ -49,8 +50,12 @@ class ClientAuthenticationWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     trailing: Icon(
-                      state.model.profileSetting.selfSovereignIdentityOptions
-                                  .customOidc4vcProfile.clientAuthentication ==
+                      state
+                                  .model
+                                  .profileSetting
+                                  .selfSovereignIdentityOptions
+                                  .customOidc4vcProfile
+                                  .clientAuthentication ==
                               clientAuthenticationType
                           ? Icons.radio_button_checked
                           : Icons.radio_button_unchecked,

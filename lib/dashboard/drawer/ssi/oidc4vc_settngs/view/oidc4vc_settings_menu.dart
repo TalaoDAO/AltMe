@@ -54,9 +54,9 @@ class Oidc4vcSettingMenuView extends StatelessWidget {
           DrawerItem(
             title: 'Wallet metadata for issuers',
             onTap: () {
-              final value = const JsonEncoder.withIndent('  ').convert(
-                ConstantsJson.walletMetadataForIssuers,
-              );
+              final value = const JsonEncoder.withIndent(
+                '  ',
+              ).convert(ConstantsJson.walletMetadataForIssuers);
               Navigator.of(context).push<void>(
                 JsonViewerPage.route(
                   title: 'Wallet metadata for issuers',

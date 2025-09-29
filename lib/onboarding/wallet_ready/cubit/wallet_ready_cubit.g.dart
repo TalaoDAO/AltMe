@@ -12,6 +12,4 @@ WalletReadyState _$WalletReadyStateFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$WalletReadyStateToJson(WalletReadyState instance) =>
-    <String, dynamic>{
-      'isAgreeWithTerms': instance.isAgreeWithTerms,
-    };
+    <String, dynamic>{'isAgreeWithTerms': instance.isAgreeWithTerms};

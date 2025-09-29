@@ -87,17 +87,17 @@ class AdvanceSettingsState extends Equatable {
 
   @override
   List<Object?> get props => [
-        isGamingEnabled,
-        isIdentityEnabled,
-        isProfessionalEnabled,
-        isBlockchainAccountsEnabled,
-        isEducationEnabled,
-        isPassEnabled,
-        isSocialMediaEnabled,
-        isCommunityEnabled,
-        isOtherEnabled,
-        isFinanceEnabled,
-        isHumanityProofEnabled,
-        isWalletIntegrityEnabled,
-      ];
+    isGamingEnabled,
+    isIdentityEnabled,
+    isProfessionalEnabled,
+    isBlockchainAccountsEnabled,
+    isEducationEnabled,
+    isPassEnabled,
+    isSocialMediaEnabled,
+    isCommunityEnabled,
+    isOtherEnabled,
+    isFinanceEnabled,
+    isHumanityProofEnabled,
+    isWalletIntegrityEnabled,
+  ];
 }

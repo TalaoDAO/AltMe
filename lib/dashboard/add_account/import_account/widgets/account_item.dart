@@ -26,9 +26,7 @@ class AccountItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.all(
-          Radius.circular(
-            Sizes.smallRadius,
-          ),
+          Radius.circular(Sizes.smallRadius),
         ),
       ),
       child: InkWell(
@@ -37,10 +35,7 @@ class AccountItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
+            Text(title, style: Theme.of(context).textTheme.headlineSmall),
             Container(
               width: Sizes.icon3x,
               height: Sizes.icon3x,

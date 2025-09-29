@@ -12,9 +12,9 @@ class PassportFootprintModel extends CredentialSubjectModel {
     super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.passportFootprint,
-          credentialCategory: CredentialCategory.identityCards,
-        );
+         credentialSubjectType: CredentialSubjectType.passportFootprint,
+         credentialCategory: CredentialCategory.identityCards,
+       );
 
   factory PassportFootprintModel.fromJson(Map<String, dynamic> json) =>
       _$PassportFootprintModelFromJson(json);

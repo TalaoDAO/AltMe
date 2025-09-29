@@ -4,10 +4,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class SoftwareLicenseDetailsPage extends StatelessWidget {
-  const SoftwareLicenseDetailsPage({
-    super.key,
-    required this.licenseModel,
-  });
+  const SoftwareLicenseDetailsPage({super.key, required this.licenseModel});
 
   final LicenseModel licenseModel;
 
@@ -25,10 +22,7 @@ class SoftwareLicenseDetailsPage extends StatelessWidget {
 }
 
 class SoftwareLicenseDetailsView extends StatelessWidget {
-  const SoftwareLicenseDetailsView({
-    super.key,
-    required this.licenseModel,
-  });
+  const SoftwareLicenseDetailsView({super.key, required this.licenseModel});
 
   final LicenseModel licenseModel;
 

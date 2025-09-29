@@ -23,27 +23,25 @@ class CredentialBackground extends StatelessWidget {
     return CredentialContainer(
       child: DecoratedBox(
         decoration: BaseBoxDecoration(
-          color: backgroundColor ??
-              credentialModel.credentialPreview.credentialSubjectModel
+          color:
+              backgroundColor ??
+              credentialModel
+                  .credentialPreview
+                  .credentialSubjectModel
                   .credentialSubjectType
                   .backgroundColor(credentialModel),
-          shapeColor:
-              Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
+          shapeColor: Theme.of(
+            context,
+          ).colorScheme.primary.withValues(alpha: 0.05),
           value: 0,
           shapeSize: 256,
           anchors: showBgDecoration
-              ? const <Alignment>[
-                  Alignment.topRight,
-                  Alignment.bottomCenter,
-                ]
+              ? const <Alignment>[Alignment.topRight, Alignment.bottomCenter]
               : <Alignment>[],
           // value: animation.value,
           borderRadius: BorderRadius.circular(Sizes.credentialBorderRadius),
         ),
-        child: Padding(
-          padding: padding,
-          child: child,
-        ),
+        child: Padding(padding: padding, child: child),
       ),
     );
   }

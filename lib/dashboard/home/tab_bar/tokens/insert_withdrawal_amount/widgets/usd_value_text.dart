@@ -2,10 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 
 class UsdValueText extends StatelessWidget {
-  const UsdValueText({
-    super.key,
-    required this.usdValue,
-  });
+  const UsdValueText({super.key, required this.usdValue});
 
   final double usdValue;
 
@@ -16,13 +13,8 @@ class UsdValueText extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset(
-            IconStrings.exchangeArrow,
-            width: Sizes.icon,
-          ),
-          const SizedBox(
-            width: Sizes.spaceXSmall,
-          ),
+          Image.asset(IconStrings.exchangeArrow, width: Sizes.icon),
+          const SizedBox(width: Sizes.spaceXSmall),
           Text(
             r'$' + usdValue.decimalNumber(2).formatNumber,
             style: Theme.of(context).textTheme.bodySmall,

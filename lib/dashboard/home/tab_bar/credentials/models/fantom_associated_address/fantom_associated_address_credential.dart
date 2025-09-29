@@ -16,8 +16,7 @@ class FantomAssociatedAddressCredential {
 
   factory FantomAssociatedAddressCredential.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$FantomAssociatedAddressCredentialFromJson(json);
+  ) => _$FantomAssociatedAddressCredentialFromJson(json);
 
   @JsonKey(name: '@context', defaultValue: _context)
   final List<dynamic> context;
@@ -44,6 +43,6 @@ class FantomAssociatedAddressCredential {
       'associatedAddress': 'https://w3id.org/security#blockchainAccountId',
       'FantomAssociatedAddress':
           'https://doc.wallet-provider.io/vc_type/#FantomAssociatedAdress',
-    }
+    },
   ];
 }

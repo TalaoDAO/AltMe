@@ -7,18 +7,19 @@ part of 'wallet_credential_model.dart';
 // **************************************************************************
 
 WalletCredentialModel _$WalletCredentialModelFromJson(
-        Map<String, dynamic> json) =>
-    WalletCredentialModel(
-      publicKey: json['publicKey'] as String? ?? '',
-      walletInstanceKey: json['walletInstanceKey'] as String? ?? '',
-      id: json['id'] as String?,
-      type: json['type'],
-      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-    );
+  Map<String, dynamic> json,
+) => WalletCredentialModel(
+  publicKey: json['publicKey'] as String? ?? '',
+  walletInstanceKey: json['walletInstanceKey'] as String? ?? '',
+  id: json['id'] as String?,
+  type: json['type'],
+  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+);
 
 Map<String, dynamic> _$WalletCredentialModelToJson(
-    WalletCredentialModel instance) {
+  WalletCredentialModel instance,
+) {
   final val = <String, dynamic>{
     'id': instance.id,
     'type': instance.type,

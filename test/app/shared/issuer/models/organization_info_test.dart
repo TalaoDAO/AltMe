@@ -3,8 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('OrganizationInfo', () {
-    test(
-        'OrganizationInfo fromJson should '
+    test('OrganizationInfo fromJson should '
         'return a valid OrganizationInfo object', () {
       final json = {
         'id': 'org-123',
@@ -41,11 +40,11 @@ void main() {
       expect(json['issuerDomain'], equals(['example.com']));
     });
 
-    test(
-        'OrganizationInfo.emptyOrganizationInfo '
+    test('OrganizationInfo.emptyOrganizationInfo '
         'should return an OrganizationInfo with default values', () {
-      final organizationInfo =
-          OrganizationInfo.emptyOrganizationInfo('example.com');
+      final organizationInfo = OrganizationInfo.emptyOrganizationInfo(
+        'example.com',
+      );
 
       expect(organizationInfo.id, equals(''));
       expect(organizationInfo.legalName, equals(''));

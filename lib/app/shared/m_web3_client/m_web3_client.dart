@@ -51,11 +51,7 @@ class MWeb3Client {
       parameters: params,
     );
 
-    await client.signTransaction(
-      credentials,
-      transaction,
-      chainId: chainId,
-    );
+    await client.signTransaction(credentials, transaction, chainId: chainId);
 
     final result = await client.sendTransaction(
       credentials,
@@ -72,12 +68,10 @@ class MWeb3Client {
   }) {
     if (amount == BigInt.zero) return 0;
 
-    final String ethAmount = EtherAmount.fromBigInt(fromUnit, amount)
-        .getValueInUnit(toUnit)
-        .toStringAsFixed(6)
-        .characters
-        .take(7)
-        .toString();
+    final String ethAmount = EtherAmount.fromBigInt(
+      fromUnit,
+      amount,
+    ).getValueInUnit(toUnit).toStringAsFixed(6).characters.take(7).toString();
 
     return double.parse(ethAmount);
   }
@@ -95,8 +89,9 @@ class MWeb3Client {
       final gasPrice = await client.getGasPrice();
       final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
       final sender = credentials.address;
-      final EthereumAddress receiver =
-          EthereumAddress.fromHex(withdrawalAddress);
+      final EthereumAddress receiver = EthereumAddress.fromHex(
+        withdrawalAddress,
+      );
 
       // read the contract abi and tell web3dart where
       // it's deployed (contractAddr)
@@ -109,8 +104,9 @@ class MWeb3Client {
       late List<dynamic> sendTransactionFunctionParams;
 
       if (token.standard?.toLowerCase() == 'erc20') {
-        final abiCode =
-            await rootBundle.loadString('assets/abi/erc20.abi.json');
+        final abiCode = await rootBundle.loadString(
+          'assets/abi/erc20.abi.json',
+        );
         final contractAddress = EthereumAddress.fromHex(token.contractAddress);
         contract = DeployedContract(
           ContractAbi.fromJson(abiCode, 'ERC20'),
@@ -128,8 +124,9 @@ class MWeb3Client {
           BigInt.from(amountInWei),
         ];
       } else if (token.standard?.toLowerCase() == 'erc721') {
-        final abiCode =
-            await rootBundle.loadString('assets/abi/erc721.abi.json');
+        final abiCode = await rootBundle.loadString(
+          'assets/abi/erc721.abi.json',
+        );
         final contractAddress = EthereumAddress.fromHex(token.contractAddress);
         contract = DeployedContract(
           ContractAbi.fromJson(abiCode, 'ERC721'),
@@ -152,8 +149,9 @@ class MWeb3Client {
         ];
       } else {
         //ERC1155
-        final abiCode =
-            await rootBundle.loadString('assets/abi/erc1155.abi.json');
+        final abiCode = await rootBundle.loadString(
+          'assets/abi/erc1155.abi.json',
+        );
         final contractAddress = EthereumAddress.fromHex(token.contractAddress);
         contract = DeployedContract(
           ContractAbi.fromJson(abiCode, 'ERC1155'),
@@ -164,10 +162,7 @@ class MWeb3Client {
         //transferEvent = contract.event('TransferSingle');
         balanceFunction = contract.function('balanceOf');
         sendFunction = contract.function('safeTransferFrom');
-        balanceFunctionParams = <dynamic>[
-          sender,
-          BigInt.parse(token.tokenId!),
-        ];
+        balanceFunctionParams = <dynamic>[sender, BigInt.parse(token.tokenId!)];
 
         final bytes = Uint8List.fromList([]);
         sendTransactionFunctionParams = <dynamic>[

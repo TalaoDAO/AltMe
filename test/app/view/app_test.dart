@@ -23,9 +23,7 @@ void main() {
       );
 
       expect(
-        App(
-          themeRepository: themeRepository,
-        ).flavorMode,
+        App(themeRepository: themeRepository).flavorMode,
         FlavorMode.production,
       );
     });

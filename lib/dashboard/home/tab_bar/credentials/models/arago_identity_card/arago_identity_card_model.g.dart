@@ -7,21 +7,22 @@ part of 'arago_identity_card_model.dart';
 // **************************************************************************
 
 AragoIdentityCardModel _$AragoIdentityCardModelFromJson(
-        Map<String, dynamic> json) =>
-    AragoIdentityCardModel(
-      familyName: json['familyName'] as String? ?? '',
-      givenName: json['givenName'] as String? ?? '',
-      bithPlace: json['bithPlace'] as String? ?? '',
-      birthDate: json['birthDate'] as String? ?? '',
-      addressCountry: json['addressCountry'] as String? ?? '',
-      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-      id: json['id'] as String?,
-      type: json['type'],
-    );
+  Map<String, dynamic> json,
+) => AragoIdentityCardModel(
+  familyName: json['familyName'] as String? ?? '',
+  givenName: json['givenName'] as String? ?? '',
+  bithPlace: json['bithPlace'] as String? ?? '',
+  birthDate: json['birthDate'] as String? ?? '',
+  addressCountry: json['addressCountry'] as String? ?? '',
+  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+  id: json['id'] as String?,
+  type: json['type'],
+);
 
 Map<String, dynamic> _$AragoIdentityCardModelToJson(
-    AragoIdentityCardModel instance) {
+  AragoIdentityCardModel instance,
+) {
   final val = <String, dynamic>{
     'id': instance.id,
     'type': instance.type,

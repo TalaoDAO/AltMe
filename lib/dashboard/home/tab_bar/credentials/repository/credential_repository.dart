@@ -6,7 +6,7 @@ import 'package:secure_storage/secure_storage.dart';
 
 class CredentialsRepository {
   CredentialsRepository(SecureStorageProvider secureStorageProvider)
-      : _secureStorageProvider = secureStorageProvider;
+    : _secureStorageProvider = secureStorageProvider;
 
   final SecureStorageProvider _secureStorageProvider;
 
@@ -21,9 +21,7 @@ class CredentialsRepository {
       );
     }
     data.removeWhere(
-      (key, value) => !key.startsWith(
-        '${SecureStorageKeys.credentialKey}/',
-      ),
+      (key, value) => !key.startsWith('${SecureStorageKeys.credentialKey}/'),
     );
     final credentialList = <CredentialModel>[];
     data.forEach((key, value) {
@@ -35,8 +33,9 @@ class CredentialsRepository {
   }
 
   Future<CredentialModel?> findById(String id) async {
-    final String? data = await _secureStorageProvider
-        .get('${SecureStorageKeys.credentialKey}/$id');
+    final String? data = await _secureStorageProvider.get(
+      '${SecureStorageKeys.credentialKey}/$id',
+    );
     if (data == null) {
       return null;
     }
@@ -46,7 +45,6 @@ class CredentialsRepository {
   }
 
   Future<int> deleteAll() async {
-
     final data = await _secureStorageProvider.getAllValues();
 
     data.removeWhere(
@@ -61,8 +59,9 @@ class CredentialsRepository {
   }
 
   Future<bool> deleteById(String id) async {
-    await _secureStorageProvider
-        .delete('${SecureStorageKeys.credentialKey}/$id');
+    await _secureStorageProvider.delete(
+      '${SecureStorageKeys.credentialKey}/$id',
+    );
     return true;
   }
 

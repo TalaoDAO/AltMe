@@ -8,14 +8,13 @@ part of 'onboarding_cubit.dart';
 
 OnboardingState _$OnboardingStateFromJson(Map<String, dynamic> json) =>
     OnboardingState(
-      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+      status:
+          $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
           AppStatus.init,
     );
 
 Map<String, dynamic> _$OnboardingStateToJson(OnboardingState instance) =>
-    <String, dynamic>{
-      'status': _$AppStatusEnumMap[instance.status]!,
-    };
+    <String, dynamic>{'status': _$AppStatusEnumMap[instance.status]!};
 
 const _$AppStatusEnumMap = {
   AppStatus.init: 'init',

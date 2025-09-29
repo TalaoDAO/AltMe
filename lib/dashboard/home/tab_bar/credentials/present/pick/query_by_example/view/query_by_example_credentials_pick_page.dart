@@ -31,25 +31,25 @@ class QueryByExampleCredentialPickPage extends StatelessWidget {
     required Issuer issuer,
     required int credentialQueryIndex,
     required List<CredentialModel> credentialsToBePresented,
-  }) =>
-      MaterialPageRoute<void>(
-        builder: (context) => QueryByExampleCredentialPickPage(
-          uri: uri,
-          preview: preview,
-          issuer: issuer,
-          credentialQueryIndex: credentialQueryIndex,
-          credentialsToBePresented: credentialsToBePresented,
-        ),
-        settings:
-            const RouteSettings(name: '/QueryByExampleCredentialPickPage'),
-      );
+  }) => MaterialPageRoute<void>(
+    builder: (context) => QueryByExampleCredentialPickPage(
+      uri: uri,
+      preview: preview,
+      issuer: issuer,
+      credentialQueryIndex: credentialQueryIndex,
+      credentialsToBePresented: credentialsToBePresented,
+    ),
+    settings: const RouteSettings(name: '/QueryByExampleCredentialPickPage'),
+  );
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        final credentialQueryList =
-            context.read<QueryByExampleCubit>().state.credentialQuery;
+        final credentialQueryList = context
+            .read<QueryByExampleCubit>()
+            .state
+            .credentialQuery;
         return QueryByExampleCredentialPickCubit(
           credentialQuery: credentialQueryList.isNotEmpty
               ? credentialQueryList[credentialQueryIndex]
@@ -96,16 +96,20 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
           null) {
         reason =
             queryByExampleCubit.credentialQuery[credentialQueryIndex].reason ??
-                '';
+            '';
       }
     }
 
     return BlocBuilder<WalletCubit, WalletState>(
       builder: (context, walletState) {
-        final credentialQueryList =
-            context.read<QueryByExampleCubit>().state.credentialQuery;
-        return BlocBuilder<QueryByExampleCredentialPickCubit,
-            QueryByExampleCredentialPickState>(
+        final credentialQueryList = context
+            .read<QueryByExampleCubit>()
+            .state
+            .credentialQuery;
+        return BlocBuilder<
+          QueryByExampleCredentialPickCubit,
+          QueryByExampleCredentialPickState
+        >(
           builder: (context, queryState) {
             return BlocListener<ScanCubit, ScanState>(
               listener: (BuildContext context, ScanState scanState) async {
@@ -141,25 +145,28 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                       ? null
                                       : () async {
                                           final selectedCredential =
-                                              queryState.filteredCredentialList[
-                                                  queryState.selected!];
+                                              queryState
+                                                  .filteredCredentialList[queryState
+                                                  .selected!];
 
                                           final updatedCredentials = List.of(
                                             credentialsToBePresented,
                                           )..add(selectedCredential);
 
                                           if (queryByExampleCubit
-                                              .credentialQuery.isNotEmpty) {
+                                              .credentialQuery
+                                              .isNotEmpty) {
                                             /// Query by Example case
 
                                             if (credentialQueryIndex + 1 !=
                                                 queryByExampleCubit
-                                                    .credentialQuery.length) {
-                                              await Navigator.of(context)
-                                                  .pushReplacement<void, void>(
+                                                    .credentialQuery
+                                                    .length) {
+                                              await Navigator.of(
+                                                context,
+                                              ).pushReplacement<void, void>(
                                                 // ignore: lines_longer_than_80_chars
-                                                QueryByExampleCredentialPickPage
-                                                    .route(
+                                                QueryByExampleCredentialPickPage.route(
                                                   uri: uri,
                                                   preview: preview,
                                                   issuer: issuer,
@@ -178,7 +185,8 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                           bool authenticated = false;
                                           await securityCheck(
                                             context: context,
-                                            title: context.l10n
+                                            title: context
+                                                .l10n
                                                 .typeYourPINCodeToShareTheData,
                                             localAuthApi: LocalAuthApi(),
                                             onSuccess: () {
@@ -190,19 +198,17 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                                             return;
                                           }
 
-                                          await context
-                                              .read<ScanCubit>()
-                                              // ignore: lines_longer_than_80_chars
-                                              .verifiablePresentationRequest(
-                                                url: uri.toString(),
-                                                credentialsToBePresented:
-                                                    updatedCredentials,
-                                                challenge: preview['challenge']
-                                                    as String,
-                                                domain:
-                                                    preview['domain'] as String,
-                                                issuer: issuer,
-                                              );
+                                          await context.read<ScanCubit>()
+                                          // ignore: lines_longer_than_80_chars
+                                          .verifiablePresentationRequest(
+                                            url: uri.toString(),
+                                            credentialsToBePresented:
+                                                updatedCredentials,
+                                            challenge:
+                                                preview['challenge'] as String,
+                                            domain: preview['domain'] as String,
+                                            issuer: issuer,
+                                          );
                                         },
                                   text: l10n.credentialPickShare,
                                 );
@@ -243,9 +249,7 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                         padding: const EdgeInsets.all(8),
                         child: Text(
                           l10n.credentialSelectionListEmptyError,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
+                          style: Theme.of(context).textTheme.bodyLarge
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       )

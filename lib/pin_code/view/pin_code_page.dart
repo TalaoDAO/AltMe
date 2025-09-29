@@ -26,17 +26,16 @@ class PinCodePage extends StatelessWidget {
     required VoidCallback isValidCallback,
     required WalletProtectionType walletProtectionType,
     bool restrictToBack = true,
-  }) =>
-      MaterialPageRoute<void>(
-        builder: (_) => PinCodePage(
-          title: title,
-          isValidCallback: isValidCallback,
-          restrictToBack: restrictToBack,
-          localAuthApi: LocalAuthApi(),
-          walletProtectionType: walletProtectionType,
-        ),
-        settings: const RouteSettings(name: '/pinCodePage'),
-      );
+  }) => MaterialPageRoute<void>(
+    builder: (_) => PinCodePage(
+      title: title,
+      isValidCallback: isValidCallback,
+      restrictToBack: restrictToBack,
+      localAuthApi: LocalAuthApi(),
+      walletProtectionType: walletProtectionType,
+    ),
+    settings: const RouteSettings(name: '/pinCodePage'),
+  );
 
   @override
   Widget build(BuildContext context) {

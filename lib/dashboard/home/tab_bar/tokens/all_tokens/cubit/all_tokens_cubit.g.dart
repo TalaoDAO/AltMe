@@ -8,20 +8,24 @@ part of 'all_tokens_cubit.dart';
 
 AllTokensState _$AllTokensStateFromJson(Map<String, dynamic> json) =>
     AllTokensState(
-      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+      status:
+          $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
           AppStatus.init,
       message: json['message'] == null
           ? null
           : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-      contracts: (json['contracts'] as List<dynamic>?)
+      contracts:
+          (json['contracts'] as List<dynamic>?)
               ?.map((e) => ContractModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
-      filteredContracts: (json['filteredContracts'] as List<dynamic>?)
+      filteredContracts:
+          (json['filteredContracts'] as List<dynamic>?)
               ?.map((e) => ContractModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
-      selectedContracts: (json['selectedContracts'] as List<dynamic>?)
+      selectedContracts:
+          (json['selectedContracts'] as List<dynamic>?)
               ?.map((e) => ContractModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],

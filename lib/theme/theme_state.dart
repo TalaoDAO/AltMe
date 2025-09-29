@@ -8,9 +8,8 @@ class ThemeState extends Equatable {
   final ThemeMode themeMode;
 
   // `copyWith()` method allows us to emit brand new instance of ThemeState
-  ThemeState copyWith({ThemeMode? themeMode}) => ThemeState(
-        themeMode: themeMode ?? this.themeMode,
-      );
+  ThemeState copyWith({ThemeMode? themeMode}) =>
+      ThemeState(themeMode: themeMode ?? this.themeMode);
 
   @override
   List<Object?> get props => [themeMode];

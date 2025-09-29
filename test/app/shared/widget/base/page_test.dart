@@ -7,8 +7,7 @@ import '../../../../helpers/helpers.dart';
 void main() {
   group('BasePage', () {
     group('CustomAppBar', () {
-      testWidgets(
-          'does not renders CustomAppBar when title, titleTrailing and'
+      testWidgets('does not renders CustomAppBar when title, titleTrailing and'
           ' titleLeading are null', (tester) async {
         await tester.pumpApp(
           BasePage(
@@ -21,8 +20,7 @@ void main() {
         expect(find.byType(CustomAppBar), findsNothing);
       });
 
-      testWidgets(
-          'does not renders CustomAppBar when title, titleTrailing and'
+      testWidgets('does not renders CustomAppBar when title, titleTrailing and'
           ' titleLeading are null and secure screen is true', (tester) async {
         await tester.pumpApp(
           BasePage(
@@ -36,29 +34,26 @@ void main() {
         expect(find.byType(CustomAppBar), findsNothing);
       });
 
-      testWidgets(
-          'renders CustomAppBar when title is provided '
+      testWidgets('renders CustomAppBar when title is provided '
           'and secure screen is true', (tester) async {
         await tester.pumpApp(
-          BasePage(
-            body: Container(),
-            title: 'I am title',
-            secureScreen: true,
-          ),
+          BasePage(body: Container(), title: 'I am title', secureScreen: true),
         );
         expect(find.byType(CustomAppBar), findsOneWidget);
       });
 
-      testWidgets('renders CustomAppBar when title is provided',
-          (tester) async {
+      testWidgets('renders CustomAppBar when title is provided', (
+        tester,
+      ) async {
         await tester.pumpApp(BasePage(body: Container(), title: 'I am title'));
         expect(find.byType(CustomAppBar), findsOneWidget);
       });
     });
 
     group('scrollView', () {
-      testWidgets('renders SingleChildScrollView when scrollView is true',
-          (tester) async {
+      testWidgets('renders SingleChildScrollView when scrollView is true', (
+        tester,
+      ) async {
         await tester.pumpApp(BasePage(body: Container(), scrollView: true));
         expect(find.byType(SingleChildScrollView), findsOneWidget);
       });
@@ -90,27 +85,20 @@ void main() {
 
         testWidgets('scrollView is true', (tester) async {
           await tester.pumpApp(
-            BasePage(
-              body: Container(),
-              useSafeArea: true,
-              scrollView: true,
-            ),
+            BasePage(body: Container(), useSafeArea: true, scrollView: true),
           );
           expect(find.byType(SafeArea), findsOneWidget);
         });
 
         testWidgets('scrollView is false', (tester) async {
           await tester.pumpApp(
-            BasePage(
-              body: Container(),
-              useSafeArea: true,
-              scrollView: false,
-            ),
+            BasePage(body: Container(), useSafeArea: true, scrollView: false),
           );
           expect(find.byType(SafeArea), findsOneWidget);
         });
-        testWidgets('navigation is provided and secure screen is true',
-            (tester) async {
+        testWidgets('navigation is provided and secure screen is true', (
+          tester,
+        ) async {
           await tester.pumpApp(
             BasePage(
               body: Container(),
@@ -122,8 +110,9 @@ void main() {
           expect(find.byType(SafeArea), findsNWidgets(2));
         });
 
-        testWidgets('scrollView is true and secure screen is true',
-            (tester) async {
+        testWidgets('scrollView is true and secure screen is true', (
+          tester,
+        ) async {
           await tester.pumpApp(
             BasePage(
               body: Container(),
@@ -135,8 +124,9 @@ void main() {
           expect(find.byType(SafeArea), findsOneWidget);
         });
 
-        testWidgets('scrollView is false and secure screen is true',
-            (tester) async {
+        testWidgets('scrollView is false and secure screen is true', (
+          tester,
+        ) async {
           await tester.pumpApp(
             BasePage(
               body: Container(),
@@ -163,28 +153,21 @@ void main() {
 
         testWidgets('scrollView is true', (tester) async {
           await tester.pumpApp(
-            BasePage(
-              body: Container(),
-              useSafeArea: false,
-              scrollView: true,
-            ),
+            BasePage(body: Container(), useSafeArea: false, scrollView: true),
           );
           expect(find.byType(SafeArea), findsNothing);
         });
 
         testWidgets('scrollView is false', (tester) async {
           await tester.pumpApp(
-            BasePage(
-              body: Container(),
-              useSafeArea: false,
-              scrollView: false,
-            ),
+            BasePage(body: Container(), useSafeArea: false, scrollView: false),
           );
           expect(find.byType(SafeArea), findsNothing);
         });
 
-        testWidgets('navigation is provided and secure screen is true',
-            (tester) async {
+        testWidgets('navigation is provided and secure screen is true', (
+          tester,
+        ) async {
           await tester.pumpApp(
             BasePage(
               body: Container(),
@@ -196,8 +179,9 @@ void main() {
           expect(find.byType(SafeArea), findsNothing);
         });
 
-        testWidgets('scrollView is true and secure screen is true',
-            (tester) async {
+        testWidgets('scrollView is true and secure screen is true', (
+          tester,
+        ) async {
           await tester.pumpApp(
             BasePage(
               body: Container(),
@@ -209,8 +193,9 @@ void main() {
           expect(find.byType(SafeArea), findsNothing);
         });
 
-        testWidgets('scrollView is false and secure screen is true',
-            (tester) async {
+        testWidgets('scrollView is false and secure screen is true', (
+          tester,
+        ) async {
           await tester.pumpApp(
             BasePage(
               body: Container(),

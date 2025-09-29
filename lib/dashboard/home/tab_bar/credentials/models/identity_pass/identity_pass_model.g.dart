@@ -11,7 +11,8 @@ IdentityPassModel _$IdentityPassModelFromJson(Map<String, dynamic> json) =>
       recipient: json['recipient'] == null
           ? null
           : IdentityPassRecipient.fromJson(
-              json['recipient'] as Map<String, dynamic>),
+              json['recipient'] as Map<String, dynamic>,
+            ),
       expires: json['expires'] as String? ?? '',
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),

@@ -7,9 +7,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
-typedef OnNavigationRequest = Future<NavigationDecision> Function(
-  NavigationRequest request,
-);
+typedef OnNavigationRequest =
+    Future<NavigationDecision> Function(NavigationRequest request);
 
 class MWebViewPage extends StatelessWidget {
   const MWebViewPage({
@@ -118,9 +117,9 @@ class _MWebViewState extends State<MWebView>
       ..addJavaScriptChannel(
         'Toaster',
         onMessageReceived: (JavaScriptMessage message) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message.message)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message.message)));
         },
       );
 
@@ -155,9 +154,7 @@ class _MWebViewState extends State<MWebView>
           sizing: StackFit.expand,
           index: isLoading ? 0 : 1,
           children: [
-            const Center(
-              child: CircularProgressIndicator(),
-            ),
+            const Center(child: CircularProgressIndicator()),
             WebViewWidget(controller: _webViewController),
           ],
         );

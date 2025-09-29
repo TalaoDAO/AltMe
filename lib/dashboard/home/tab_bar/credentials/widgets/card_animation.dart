@@ -12,11 +12,7 @@ abstract class Verso extends StatelessWidget {
 }
 
 class CardAnimation extends StatefulWidget {
-  const CardAnimation({
-    super.key,
-    required this.recto,
-    required this.verso,
-  });
+  const CardAnimation({super.key, required this.recto, required this.verso});
 
   final Verso verso;
 
@@ -67,8 +63,9 @@ class _CardAnimationState extends State<CardAnimation>
         animation: _animationController,
         builder: (context, child) {
           return Transform(
-            transform:
-                Matrix4.rotationX((1 - _animationController.value) * pi / 2),
+            transform: Matrix4.rotationX(
+              (1 - _animationController.value) * pi / 2,
+            ),
             alignment: Alignment.center,
             child: CredentialContainer(
               child: Container(alignment: Alignment.center, child: _card),

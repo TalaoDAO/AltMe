@@ -5,17 +5,15 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class TezotopiaVoucherWidget extends StatelessWidget {
-  const TezotopiaVoucherWidget({
-    required this.credentialModel,
-    super.key,
-  });
+  const TezotopiaVoucherWidget({required this.credentialModel, super.key});
 
   final CredentialModel credentialModel;
 
   @override
   Widget build(BuildContext context) {
-    final tezotopiaVoucherModel = credentialModel
-        .credentialPreview.credentialSubjectModel as TezotopiaVoucherModel;
+    final tezotopiaVoucherModel =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as TezotopiaVoucherModel;
     final l10n = context.l10n;
 
     return CredentialImage(
@@ -45,8 +43,8 @@ class TezotopiaVoucherWidget extends StatelessWidget {
                 child: MyText(
                   l10n.tezotopia,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
               ),
             ),
@@ -73,10 +71,7 @@ class TezotopiaVoucherDelegate extends MultiChildLayoutDelegate {
     }
     if (hasChild('tozotopia')) {
       layoutChild('tozotopia', BoxConstraints.loose(size));
-      positionChild(
-        'tozotopia',
-        Offset(size.width * 0.1, size.height * 0.73),
-      );
+      positionChild('tozotopia', Offset(size.width * 0.1, size.height * 0.73));
     }
   }
 

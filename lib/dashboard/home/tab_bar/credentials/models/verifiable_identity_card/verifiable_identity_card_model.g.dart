@@ -7,22 +7,23 @@ part of 'verifiable_identity_card_model.dart';
 // **************************************************************************
 
 VerifiableIdCardModel _$VerifiableIdCardModelFromJson(
-        Map<String, dynamic> json) =>
-    VerifiableIdCardModel(
-      familyName: json['familyName'] as String? ?? '',
-      firstName: json['firstName'] as String? ?? '',
-      bithPlace: json['bithPlace'] as String? ?? '',
-      birthDate: json['birthDate'] as String? ?? '',
-      dateOfBirth: json['dateOfBirth'] as String? ?? '',
-      addressCountry: json['addressCountry'] as String? ?? '',
-      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-      id: json['id'] as String?,
-      type: json['type'],
-    );
+  Map<String, dynamic> json,
+) => VerifiableIdCardModel(
+  familyName: json['familyName'] as String? ?? '',
+  firstName: json['firstName'] as String? ?? '',
+  bithPlace: json['bithPlace'] as String? ?? '',
+  birthDate: json['birthDate'] as String? ?? '',
+  dateOfBirth: json['dateOfBirth'] as String? ?? '',
+  addressCountry: json['addressCountry'] as String? ?? '',
+  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+  id: json['id'] as String?,
+  type: json['type'],
+);
 
 Map<String, dynamic> _$VerifiableIdCardModelToJson(
-    VerifiableIdCardModel instance) {
+  VerifiableIdCardModel instance,
+) {
   final val = <String, dynamic>{
     'id': instance.id,
     'type': instance.type,

@@ -91,8 +91,11 @@ class BaseBoxDecoration extends Decoration {
     return BaseBoxDecoration(
       color: Color.lerp(a.color, b.color, t),
       shapeColor: Color.lerp(a.shapeColor, b.shapeColor, t),
-      borderRadius:
-          BorderRadiusGeometry.lerp(a.borderRadius, b.borderRadius, t),
+      borderRadius: BorderRadiusGeometry.lerp(
+        a.borderRadius,
+        b.borderRadius,
+        t,
+      ),
       boxShadow: BoxShadow.lerpList(a.boxShadow, b.boxShadow, t),
       gradient: Gradient.lerp(a.gradient, b.gradient, t),
     );
@@ -146,11 +149,7 @@ class BaseBoxDecoration extends Decoration {
       ),
     );
     properties.add(
-      DiagnosticsProperty<Gradient>(
-        'gradient',
-        gradient,
-        defaultValue: null,
-      ),
+      DiagnosticsProperty<Gradient>('gradient', gradient, defaultValue: null),
     );
   }
 
@@ -161,8 +160,9 @@ class BaseBoxDecoration extends Decoration {
       'size must contain position!',
     );
     if (borderRadius != null) {
-      final bounds =
-          borderRadius!.resolve(textDirection).toRRect(Offset.zero & size);
+      final bounds = borderRadius!
+          .resolve(textDirection)
+          .toRRect(Offset.zero & size);
       return bounds.contains(position);
     }
     return true;
@@ -176,7 +176,7 @@ class BaseBoxDecoration extends Decoration {
 
 class _BaseBoxDecorationPainter extends BoxPainter {
   _BaseBoxDecorationPainter(this._decoration, VoidCallback? onChanged)
-      : super(onChanged);
+    : super(onChanged);
 
   final BaseBoxDecoration _decoration;
 
@@ -225,16 +225,13 @@ class _BaseBoxDecorationPainter extends BoxPainter {
     }
   }
 
-  void _paintShadows(
-    Canvas canvas,
-    Rect rect,
-    TextDirection textDirection,
-  ) {
+  void _paintShadows(Canvas canvas, Rect rect, TextDirection textDirection) {
     if (_decoration.boxShadow == null) return;
     for (final boxShadow in _decoration.boxShadow!) {
       final paint = boxShadow.toPaint();
-      final bounds =
-          rect.shift(boxShadow.offset).inflate(boxShadow.spreadRadius);
+      final bounds = rect
+          .shift(boxShadow.offset)
+          .inflate(boxShadow.spreadRadius);
       _paintBox(canvas, bounds, paint, textDirection);
     }
   }
@@ -254,11 +251,7 @@ class _BaseBoxDecorationPainter extends BoxPainter {
     }
   }
 
-  void _paintTriangles(
-    Canvas canvas,
-    Rect rect,
-    TextDirection textDirection,
-  ) {
+  void _paintTriangles(Canvas canvas, Rect rect, TextDirection textDirection) {
     final trianglePaint = Paint();
     trianglePaint.color = _decoration.shapeColor!;
 

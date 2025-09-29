@@ -30,8 +30,9 @@ class ManageNetworkCubit extends Cubit<ManageNetworkState> {
 
     late BlockchainNetwork blockchainNetwork;
 
-    final blockchainNetworkJson = await secureStorageProvider
-        .get(SecureStorageKeys.blockChainNetworksIndexing);
+    final blockchainNetworkJson = await secureStorageProvider.get(
+      SecureStorageKeys.blockChainNetworksIndexing,
+    );
 
     if (blockchainNetworkJson != null) {
       final jsonData =
@@ -58,8 +59,9 @@ class ManageNetworkCubit extends Cubit<ManageNetworkState> {
   }
 
   Future<void> setNetwork(BlockchainNetwork network) async {
-    final blockchainNetworkJson = await secureStorageProvider
-        .get(SecureStorageKeys.blockChainNetworksIndexing);
+    final blockchainNetworkJson = await secureStorageProvider.get(
+      SecureStorageKeys.blockChainNetworksIndexing,
+    );
 
     late Map<String, dynamic> jsonData;
 

@@ -14,9 +14,9 @@ class WalletCredentialModel extends CredentialSubjectModel {
     required Author super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.walletCredential,
-          credentialCategory: CredentialCategory.othersCards,
-        );
+         credentialSubjectType: CredentialSubjectType.walletCredential,
+         credentialCategory: CredentialCategory.othersCards,
+       );
 
   factory WalletCredentialModel.fromJson(Map<String, dynamic> json) =>
       _$WalletCredentialModelFromJson(json);

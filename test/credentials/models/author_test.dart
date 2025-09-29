@@ -9,10 +9,7 @@ void main() {
     });
 
     test('initialize Author fromJson constructor', () {
-      const authorJson = <String, dynamic>{
-        'name': 'Test1',
-        'logo': 'logo',
-      };
+      const authorJson = <String, dynamic>{'name': 'Test1', 'logo': 'logo'};
       final author = Author.fromJson(authorJson);
       expect(author.name, 'Test1');
     });

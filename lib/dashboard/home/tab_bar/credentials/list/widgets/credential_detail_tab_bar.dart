@@ -34,9 +34,7 @@ class CredentialDetailTabbar extends StatelessWidget {
         position: badges.BadgePosition.topEnd(end: 5, top: 15),
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(
-            vertical: 15,
-          ),
+          padding: const EdgeInsets.symmetric(vertical: 15),
           decoration: isSelected
               ? BoxDecoration(
                   color: Theme.of(context).colorScheme.surfaceContainerHigh,
@@ -51,8 +49,9 @@ class CredentialDetailTabbar extends StatelessWidget {
               title,
               style: isSelected
                   ? textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold)
-                  : textTheme.bodyMedium!
-                      .copyWith(color: colorScheme.onSurface),
+                  : textTheme.bodyMedium!.copyWith(
+                      color: colorScheme.onSurface,
+                    ),
             ),
           ),
         ),

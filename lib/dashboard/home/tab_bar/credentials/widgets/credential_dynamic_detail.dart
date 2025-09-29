@@ -61,7 +61,8 @@ class CredentialDynamicDetial extends StatelessWidget {
               text: (format != null && format == AltMeStrings.uri)
                   ? context.l10n.link
                   : valueData,
-              style: (format != null &&
+              style:
+                  (format != null &&
                       (format == AltMeStrings.uri ||
                           format == AltMeStrings.email))
                   ? valueTheme!.copyWith(

@@ -7,20 +7,21 @@ part of 'tezotopia_voucher_model.dart';
 // **************************************************************************
 
 TezotopiaVoucherModel _$TezotopiaVoucherModelFromJson(
-        Map<String, dynamic> json) =>
-    TezotopiaVoucherModel(
-      id: json['id'] as String?,
-      type: json['type'],
-      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-      identifier: json['identifier'] as String? ?? '',
-      offers: json['offers'] == null
-          ? null
-          : Offers.fromJson(json['offers'] as Map<String, dynamic>),
-    );
+  Map<String, dynamic> json,
+) => TezotopiaVoucherModel(
+  id: json['id'] as String?,
+  type: json['type'],
+  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+  identifier: json['identifier'] as String? ?? '',
+  offers: json['offers'] == null
+      ? null
+      : Offers.fromJson(json['offers'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$TezotopiaVoucherModelToJson(
-    TezotopiaVoucherModel instance) {
+  TezotopiaVoucherModel instance,
+) {
   final val = <String, dynamic>{
     'id': instance.id,
     'type': instance.type,

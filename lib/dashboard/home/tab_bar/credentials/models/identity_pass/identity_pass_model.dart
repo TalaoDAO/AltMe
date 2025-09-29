@@ -15,9 +15,9 @@ class IdentityPassModel extends CredentialSubjectModel {
     super.id,
     super.type,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.identityPass,
-          credentialCategory: CredentialCategory.identityCards,
-        );
+         credentialSubjectType: CredentialSubjectType.identityPass,
+         credentialCategory: CredentialCategory.identityCards,
+       );
 
   factory IdentityPassModel.fromJson(Map<String, dynamic> json) =>
       _$IdentityPassModelFromJson(json);

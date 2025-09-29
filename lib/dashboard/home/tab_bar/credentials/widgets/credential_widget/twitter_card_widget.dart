@@ -10,9 +10,7 @@ class TwitterCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return const CredentialImage(
       image: ImageStrings.twitterCard,
-      child: AspectRatio(
-        aspectRatio: Sizes.credentialAspectRatio,
-      ),
+      child: AspectRatio(aspectRatio: Sizes.credentialAspectRatio),
     );
   }
 }

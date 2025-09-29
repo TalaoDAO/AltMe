@@ -7,13 +7,13 @@ part of 'gender_model.dart';
 // **************************************************************************
 
 GenderModel _$GenderModelFromJson(Map<String, dynamic> json) => GenderModel(
-      expires: json['expires'] as String? ?? '',
-      gender: json['gender'] as String? ?? '',
-      id: json['id'] as String?,
-      type: json['type'],
-      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-    );
+  expires: json['expires'] as String? ?? '',
+  gender: json['gender'] as String? ?? '',
+  id: json['id'] as String?,
+  type: json['type'],
+  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+);
 
 Map<String, dynamic> _$GenderModelToJson(GenderModel instance) {
   final val = <String, dynamic>{

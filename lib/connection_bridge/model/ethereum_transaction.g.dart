@@ -21,10 +21,7 @@ EthereumTransaction _$EthereumTransactionFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$EthereumTransactionToJson(EthereumTransaction instance) {
-  final val = <String, dynamic>{
-    'from': instance.from,
-    'to': instance.to,
-  };
+  final val = <String, dynamic>{'from': instance.from, 'to': instance.to};
 
   void writeNotNull(String key, dynamic value) {
     if (value != null) {

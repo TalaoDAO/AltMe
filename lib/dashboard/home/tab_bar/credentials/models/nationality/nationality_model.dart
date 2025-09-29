@@ -13,9 +13,9 @@ class NationalityModel extends CredentialSubjectModel {
     super.type,
     super.issuedBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.nationality,
-          credentialCategory: CredentialCategory.identityCards,
-        );
+         credentialSubjectType: CredentialSubjectType.nationality,
+         credentialCategory: CredentialCategory.identityCards,
+       );
 
   factory NationalityModel.fromJson(Map<String, dynamic> json) =>
       _$NationalityModelFromJson(json);

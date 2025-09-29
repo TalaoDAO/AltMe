@@ -11,9 +11,9 @@ class FantomAssociatedAddressModel extends CredentialSubjectModel {
     required String super.id,
     required String super.type,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.fantomAssociatedWallet,
-          credentialCategory: CredentialCategory.blockchainAccountsCards,
-        );
+         credentialSubjectType: CredentialSubjectType.fantomAssociatedWallet,
+         credentialCategory: CredentialCategory.blockchainAccountsCards,
+       );
 
   factory FantomAssociatedAddressModel.fromJson(Map<String, dynamic> json) =>
       _$FantomAssociatedAddressModelFromJson(json);

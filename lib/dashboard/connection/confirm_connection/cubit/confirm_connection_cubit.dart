@@ -51,16 +51,17 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
         // TODO(bibash): check if tezos or ethereum
 
         case ConnectionBridgeType.beacon:
-          final KeyStoreModel sourceKeystore =
-              getKeysFromSecretKey(secretKey: currentAccount.secretKey);
+          final KeyStoreModel sourceKeystore = getKeysFromSecretKey(
+            secretKey: currentAccount.secretKey,
+          );
 
           log.i('Start connecting to beacon');
-          final Map<dynamic, dynamic> response =
-              await beacon.permissionResponse(
-            id: beaconCubit.state.beaconRequest!.request!.id!,
-            publicKey: sourceKeystore.publicKey,
-            address: currentAccount.walletAddress,
-          );
+          final Map<dynamic, dynamic> response = await beacon
+              .permissionResponse(
+                id: beaconCubit.state.beaconRequest!.request!.id!,
+                publicKey: sourceKeystore.publicKey,
+                address: currentAccount.walletAddress,
+              );
 
           final bool success =
               json.decode(response['success'].toString()) as bool;
@@ -93,25 +94,29 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
 
           if (params.optionalNamespaces.isNotEmpty) {
             if (params.optionalNamespaces.containsKey('eip155')) {
-              allowedNamespaces
-                  .addAll(params.optionalNamespaces['eip155']!.chains!);
+              allowedNamespaces.addAll(
+                params.optionalNamespaces['eip155']!.chains!,
+              );
             }
 
             if (params.optionalNamespaces.containsKey('tezos')) {
-              allowedNamespaces
-                  .addAll(params.optionalNamespaces['tezos']!.chains!);
+              allowedNamespaces.addAll(
+                params.optionalNamespaces['tezos']!.chains!,
+              );
             }
           }
 
           if (params.requiredNamespaces.isNotEmpty) {
             if (params.requiredNamespaces.containsKey('eip155')) {
-              allowedNamespaces
-                  .addAll(params.requiredNamespaces['eip155']!.chains!);
+              allowedNamespaces.addAll(
+                params.requiredNamespaces['eip155']!.chains!,
+              );
             }
 
             if (params.requiredNamespaces.containsKey('tezos')) {
-              allowedNamespaces
-                  .addAll(params.requiredNamespaces['tezos']!.chains!);
+              allowedNamespaces.addAll(
+                params.requiredNamespaces['tezos']!.chains!,
+              );
             }
           }
 
@@ -122,9 +127,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           for (final account in cryptoAccounts) {
             if (account.blockchainType == BlockchainType.tezos) {
               final namespace = allowedNamespaces[0];
-              accounts.add(
-                '$namespace:${account.walletAddress}',
-              );
+              accounts.add('$namespace:${account.walletAddress}');
             } else {
               accounts.add(
                 '${account.blockchainType.chain}:${account.walletAddress}',
@@ -136,15 +139,17 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
 
           if (accounts.any((acc) => acc.startsWith('tezos'))) {
             walletNamespaces['tezos'] = Namespace(
-              accounts:
-                  accounts.where((acc) => acc.startsWith('tezos')).toList(),
+              accounts: accounts
+                  .where((acc) => acc.startsWith('tezos'))
+                  .toList(),
               methods: Parameters.tezosConnectMethods,
               events: Parameters.tezosEvents,
             );
           } else {
             walletNamespaces['eip155'] = Namespace(
-              accounts:
-                  accounts.where((acc) => acc.startsWith('eip155')).toList(),
+              accounts: accounts
+                  .where((acc) => acc.startsWith('eip155'))
+                  .toList(),
               methods: Parameters.evmConnectMethods,
               events: Parameters.allEvents,
             );
@@ -183,9 +188,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
     }
   }
 
-  void rejectConnection({
-    required ConnectionBridgeType connectionBridgeType,
-  }) {
+  void rejectConnection({required ConnectionBridgeType connectionBridgeType}) {
     if (isClosed) return;
     switch (connectionBridgeType) {
       case ConnectionBridgeType.beacon:
@@ -205,9 +208,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
 
         walletConnectCubit.reownWalletKit!.rejectSession(
           id: sessionProposalEvent!.id,
-          reason: Errors.getSdkError(
-            Errors.USER_REJECTED,
-          ).toSignError(),
+          reason: Errors.getSdkError(Errors.USER_REJECTED).toSignError(),
         );
     }
     emit(state.copyWith(appStatus: AppStatus.goBack));

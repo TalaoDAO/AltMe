@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeCredentialsListPage extends StatefulWidget {
-  const HomeCredentialsListPage({
-    super.key,
-  });
+  const HomeCredentialsListPage({super.key});
 
   @override
   State<HomeCredentialsListPage> createState() =>
@@ -45,10 +43,18 @@ class _HomeCredentialsListPageState extends State<HomeCredentialsListPage>
       backgroundColor: Colors.transparent,
       body: BlocListener<ProfileCubit, ProfileState>(
         listenWhen: (previous, current) {
-          if (current.model.profileSetting.selfSovereignIdentityOptions
-                  .customOidc4vcProfile.formatsSupported !=
-              previous.model.profileSetting.selfSovereignIdentityOptions
-                  .customOidc4vcProfile.formatsSupported) {
+          if (current
+                  .model
+                  .profileSetting
+                  .selfSovereignIdentityOptions
+                  .customOidc4vcProfile
+                  .formatsSupported !=
+              previous
+                  .model
+                  .profileSetting
+                  .selfSovereignIdentityOptions
+                  .customOidc4vcProfile
+                  .formatsSupported) {
             return true;
           }
 

@@ -62,12 +62,11 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       if (message.uri.startsWith('http')) {
         try {
-          final index =
-              state.messages.indexWhere((element) => element.id == message.id);
-          final updatedMessage =
-              (state.messages[index] as FileMessage).copyWith(
-            isLoading: true,
+          final index = state.messages.indexWhere(
+            (element) => element.id == message.id,
           );
+          final updatedMessage = (state.messages[index] as FileMessage)
+              .copyWith(isLoading: true);
 
           state.messages[index] = updatedMessage;
           emit(state.copyWith(messages: state.messages));
@@ -83,12 +82,11 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
             await file.writeAsBytes(bytes);
           }
         } finally {
-          final index =
-              state.messages.indexWhere((element) => element.id == message.id);
-          final updatedMessage =
-              (state.messages[index] as FileMessage).copyWith(
-            isLoading: null,
+          final index = state.messages.indexWhere(
+            (element) => element.id == message.id,
           );
+          final updatedMessage = (state.messages[index] as FileMessage)
+              .copyWith(isLoading: null);
 
           state.messages[index] = updatedMessage;
           emit(state.copyWith(messages: state.messages));
@@ -99,10 +97,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
     }
   }
 
-  void handlePreviewDataFetched(
-    TextMessage message,
-    PreviewData previewData,
-  ) {
+  void handlePreviewDataFetched(TextMessage message, PreviewData previewData) {
     final index = state.messages.indexWhere(
       (element) => element.id == message.id,
     );
@@ -152,15 +147,17 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
 
       List<Message> retrivedMessageFromDB = [];
       await _checkIfRoomNotExistThenCreateIt();
-      final savedRoomId =
-          await matrixChat.getRoomIdFromStorage(roomIdStoredKey);
+      final savedRoomId = await matrixChat.getRoomIdFromStorage(
+        roomIdStoredKey,
+      );
       if (savedRoomId != null) {
         _roomId = savedRoomId;
         await matrixChat.enableRoomEncyption(savedRoomId);
         _getUnreadMessageCount();
         await _subscribeToEventsOfRoom();
-        retrivedMessageFromDB =
-            await matrixChat.retriveMessagesFromDB(_roomId!);
+        retrivedMessageFromDB = await matrixChat.retriveMessagesFromDB(
+          _roomId!,
+        );
       }
       logger.i('roomId : $_roomId');
       emit(
@@ -176,9 +173,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
         emit(
           state.copyWith(
             status: AppStatus.error,
-            message: StateMessage.error(
-              stringMessage: e.errorMessage,
-            ),
+            message: StateMessage.error(stringMessage: e.errorMessage),
           ),
         );
       } else {
@@ -204,13 +199,12 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
   Future<void> _subscribeToEventsOfRoom() async {
     await _onEventSubscription?.cancel();
 
-    _onEventSubscription =
-        matrixChat.client!.onRoomState.stream.listen((Event event) async {
+    _onEventSubscription = matrixChat.client!.onRoomState.stream.listen((
+      Event event,
+    ) async {
       if (event.roomId == _roomId && event.type == 'm.room.message') {
         final txId = event.unsigned?['transaction_id'] as String?;
-        if (state.messages.any(
-          (element) => element.id == txId,
-        )) {
+        if (state.messages.any((element) => element.id == txId)) {
           final index = state.messages.indexWhere(
             (element) => element.id == txId,
           );
@@ -222,15 +216,12 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
           emit(state.copyWith(messages: newMessages));
         } else {
           final Message message = matrixChat.mapEventToMessage(event);
-          emit(
-            state.copyWith(
-              messages: [message, ...state.messages],
-            ),
-          );
+          emit(state.copyWith(messages: [message, ...state.messages]));
         }
 
-        await Future<void>.delayed(const Duration(seconds: 1))
-            .then((val) => _getUnreadMessageCount());
+        await Future<void>.delayed(
+          const Duration(seconds: 1),
+        ).then((val) => _getUnreadMessageCount());
       }
     });
   }
@@ -294,11 +285,16 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
       } else {
         //roomIdStoredKey == SecureStorageKeys.chatSupportRoomId
 
-        final p256KeyForWallet =
-            await getP256KeyToGetAndPresentVC(secureStorageProvider);
+        final p256KeyForWallet = await getP256KeyToGetAndPresentVC(
+          secureStorageProvider,
+        );
 
-        final customOidc4vcProfile = profileCubit.state.model.profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile;
+        final customOidc4vcProfile = profileCubit
+            .state
+            .model
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile;
 
         final tokenParameters = TokenParameters(
           privateKey: jsonDecode(p256KeyForWallet) as Map<String, dynamic>,

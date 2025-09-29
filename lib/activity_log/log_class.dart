@@ -6,11 +6,8 @@ part 'log_class.g.dart';
 
 @JsonSerializable()
 class LogData extends Equatable {
-  LogData({
-    required this.type,
-    DateTime? timestamp,
-    this.vcInfo,
-  }) : timestamp = timestamp ?? DateTime.now();
+  LogData({required this.type, DateTime? timestamp, this.vcInfo})
+    : timestamp = timestamp ?? DateTime.now();
 
   factory LogData.fromJson(Map<String, dynamic> json) =>
       _$LogDataFromJson(json);
@@ -22,20 +19,12 @@ class LogData extends Equatable {
   Map<String, dynamic> toJson() => _$LogDataToJson(this);
 
   @override
-  List<Object?> get props => [
-        type,
-        timestamp,
-        vcInfo,
-      ];
+  List<Object?> get props => [type, timestamp, vcInfo];
 }
 
 @JsonSerializable()
 class VCInfo extends Equatable {
-  const VCInfo({
-    required this.id,
-    required this.name,
-    this.domain,
-  });
+  const VCInfo({required this.id, required this.name, this.domain});
 
   factory VCInfo.fromJson(Map<String, dynamic> json) => _$VCInfoFromJson(json);
 
@@ -46,9 +35,5 @@ class VCInfo extends Equatable {
   Map<String, dynamic> toJson() => _$VCInfoToJson(this);
 
   @override
-  List<Object?> get props => [
-        id,
-        name,
-        domain,
-      ];
+  List<Object?> get props => [id, name, domain];
 }

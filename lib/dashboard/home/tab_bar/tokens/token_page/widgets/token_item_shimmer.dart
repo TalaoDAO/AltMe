@@ -18,18 +18,9 @@ class TokenItemShimmer extends StatelessWidget {
             height: Sizes.tokenLogoSize,
             width: Sizes.tokenLogoSize,
           ),
-          title: ShimmerWidget.rectangular(
-            height: 20,
-            width: 60,
-          ),
-          subtitle: ShimmerWidget.rectangular(
-            height: 16,
-            width: 40,
-          ),
-          trailing: ShimmerWidget.rectangular(
-            height: 18,
-            width: 50,
-          ),
+          title: ShimmerWidget.rectangular(height: 20, width: 60),
+          subtitle: ShimmerWidget.rectangular(height: 16, width: 40),
+          trailing: ShimmerWidget.rectangular(height: 18, width: 50),
         ),
       ),
     );

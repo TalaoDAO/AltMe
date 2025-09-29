@@ -8,11 +8,8 @@ void main() {
   final widgetKey = GlobalKey();
 
   Widget makeTestableWidget() => MaterialApp(
-        home: CachedImageFromNetwork(
-          networkImageUrl,
-          key: widgetKey,
-        ),
-      );
+    home: CachedImageFromNetwork(networkImageUrl, key: widgetKey),
+  );
 
   testWidgets('find Image Widget by key', (tester) async {
     await mockNetworkImagesFor(() async {
@@ -31,8 +28,9 @@ void main() {
   testWidgets('verify all property is correct', (tester) async {
     await mockNetworkImagesFor(() async {
       await tester.pumpWidget(makeTestableWidget());
-      final imageFromNetwork = tester
-          .widget<CachedImageFromNetwork>(find.byType(CachedImageFromNetwork));
+      final imageFromNetwork = tester.widget<CachedImageFromNetwork>(
+        find.byType(CachedImageFromNetwork),
+      );
       expect(imageFromNetwork.url, networkImageUrl);
       expect(imageFromNetwork.fit, BoxFit.cover);
       expect(imageFromNetwork.key, widgetKey);

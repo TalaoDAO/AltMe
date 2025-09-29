@@ -7,16 +7,17 @@ part of 'employee_credential_model.dart';
 // **************************************************************************
 
 EmployeeCredentialModel _$EmployeeCredentialModelFromJson(
-        Map<String, dynamic> json) =>
-    EmployeeCredentialModel(
-      id: json['id'] as String?,
-      type: json['type'],
-      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-    );
+  Map<String, dynamic> json,
+) => EmployeeCredentialModel(
+  id: json['id'] as String?,
+  type: json['type'],
+  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+);
 
 Map<String, dynamic> _$EmployeeCredentialModelToJson(
-    EmployeeCredentialModel instance) {
+  EmployeeCredentialModel instance,
+) {
   final val = <String, dynamic>{
     'id': instance.id,
     'type': instance.type,

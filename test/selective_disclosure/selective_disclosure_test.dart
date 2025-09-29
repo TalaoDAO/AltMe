@@ -15,11 +15,13 @@ class MockSelectiveDisclosure extends Mock implements SelectiveDisclosure {
   final CredentialModel credentialModel;
 
   @override
-  String? get getPicture => super.noSuchMethod(
-        Invocation.getter(#getPicture),
-        returnValue: null,
-        returnValueForMissingStub: null,
-      ) as String?;
+  String? get getPicture =>
+      super.noSuchMethod(
+            Invocation.getter(#getPicture),
+            returnValue: null,
+            returnValueForMissingStub: null,
+          )
+          as String?;
 
   @override
   (List<ClaimsData>, String?) getClaimsData({
@@ -27,14 +29,14 @@ class MockSelectiveDisclosure extends Mock implements SelectiveDisclosure {
     required String? parentKeyId,
   }) {
     return super.noSuchMethod(
-      Invocation.method(
-        #getClaimsData,
-        [],
-        {#key: key, #parentKeyId: parentKeyId},
-      ),
-      returnValue: (<ClaimsData>[], null),
-      returnValueForMissingStub: (<ClaimsData>[], null),
-    ) as (List<ClaimsData>, String?);
+          Invocation.method(#getClaimsData, [], {
+            #key: key,
+            #parentKeyId: parentKeyId,
+          }),
+          returnValue: (<ClaimsData>[], null),
+          returnValueForMissingStub: (<ClaimsData>[], null),
+        )
+        as (List<ClaimsData>, String?);
   }
 }
 
@@ -81,9 +83,9 @@ void main() {
     test('returns null when claims is not a Map', () {
       // Arrange
       when(mockCredentialModel.format).thenReturn(VCFormatType.vcSdJWT.vcValue);
-      when(mockCredentialModel.credentialSupported).thenReturn({
-        'claims': 'not a map',
-      });
+      when(
+        mockCredentialModel.credentialSupported,
+      ).thenReturn({'claims': 'not a map'});
 
       // Act
       final result = selectiveDisclosure.getPicture;
@@ -108,41 +110,34 @@ void main() {
       expect(result, isNull);
     });
 
-    test(
-      'finds picture key and returns data when value_type matches',
-      () {
-        // Arrange
-        const pictureData = 'base64img';
-        when(mockCredentialModel.format)
-            .thenReturn(VCFormatType.vcSdJWT.vcValue);
-        when(mockCredentialModel.credentialSupported).thenReturn({
-          'claims': {
-            'picture': {'value_type': 'image/jpeg'},
-          },
-        });
+    test('finds picture key and returns data when value_type matches', () {
+      // Arrange
+      const pictureData = 'base64img';
+      when(mockCredentialModel.format).thenReturn(VCFormatType.vcSdJWT.vcValue);
+      when(mockCredentialModel.credentialSupported).thenReturn({
+        'claims': {
+          'picture': {'value_type': 'image/jpeg'},
+        },
+      });
 
-        // Mock the getClaimsData method for a direct first-level key
-        final claimsData = [
-          ClaimsData(isfromDisclosureOfJWT: true, data: pictureData),
-        ];
-        when(
-          mockSelectiveDisclosure.getClaimsData(
-            key: 'picture',
-            parentKeyId: null,
-          ),
-        ).thenReturn((claimsData, null));
+      // Mock the getClaimsData method for a direct first-level key
+      final claimsData = [
+        ClaimsData(isfromDisclosureOfJWT: true, data: pictureData),
+      ];
+      when(
+        mockSelectiveDisclosure.getClaimsData(
+          key: 'picture',
+          parentKeyId: null,
+        ),
+      ).thenReturn((claimsData, null));
 
-        // Act & Assert - Test method runs without exceptions
-        expect(
-          () => mockSelectiveDisclosure.getPicture,
-          returnsNormally,
-        );
+      // Act & Assert - Test method runs without exceptions
+      expect(() => mockSelectiveDisclosure.getPicture, returnsNormally);
 
-        // Now test the returned value
-        when(mockSelectiveDisclosure.getPicture).thenReturn(pictureData);
-        expect(mockSelectiveDisclosure.getPicture, equals(pictureData));
-      },
-    );
+      // Now test the returned value
+      when(mockSelectiveDisclosure.getPicture).thenReturn(pictureData);
+      expect(mockSelectiveDisclosure.getPicture, equals(pictureData));
+    });
 
     test('finds picture key at second level with JsonPath', () {
       // Arrange
@@ -168,10 +163,7 @@ void main() {
       ).thenReturn((claimsData, null));
 
       // Act & Assert - Test method runs without exceptions
-      expect(
-        () => mockSelectiveDisclosure.getPicture,
-        returnsNormally,
-      );
+      expect(() => mockSelectiveDisclosure.getPicture, returnsNormally);
 
       // Now test the returned value
       when(mockSelectiveDisclosure.getPicture).thenReturn(pictureData);
@@ -208,10 +200,7 @@ void main() {
       ).thenReturn((claimsData, null));
 
       // Act & Assert - Test method runs without exceptions
-      expect(
-        () => mockSelectiveDisclosure.getPicture,
-        returnsNormally,
-      );
+      expect(() => mockSelectiveDisclosure.getPicture, returnsNormally);
 
       // Now test the returned value
       when(mockSelectiveDisclosure.getPicture).thenReturn(pictureData);
@@ -247,10 +236,7 @@ void main() {
       ).thenReturn((claimsData, null));
 
       // Act & Assert - Test method runs without exceptions
-      expect(
-        () => mockSelectiveDisclosure.getPicture,
-        returnsNormally,
-      );
+      expect(() => mockSelectiveDisclosure.getPicture, returnsNormally);
 
       // Now test the returned value
       when(mockSelectiveDisclosure.getPicture).thenReturn(pictureData);
@@ -265,8 +251,9 @@ void main() {
         const faceData = 'base64face';
         const portraitData = 'base64portrait';
 
-        when(mockCredentialModel.format)
-            .thenReturn(VCFormatType.vcSdJWT.vcValue);
+        when(
+          mockCredentialModel.format,
+        ).thenReturn(VCFormatType.vcSdJWT.vcValue);
         when(mockCredentialModel.credentialSupported).thenReturn({
           'claims': {
             'nested1': {
@@ -297,10 +284,7 @@ void main() {
           ClaimsData(isfromDisclosureOfJWT: true, data: faceData),
         ];
         when(
-          mockSelectiveDisclosure.getClaimsData(
-            key: 'face',
-            parentKeyId: null,
-          ),
+          mockSelectiveDisclosure.getClaimsData(key: 'face', parentKeyId: null),
         ).thenReturn((faceClaimsData, null));
 
         // Mock for the third key
@@ -315,10 +299,7 @@ void main() {
         ).thenReturn((portraitClaimsData, null));
 
         // Act & Assert - Test method runs without exceptions
-        expect(
-          () => mockSelectiveDisclosure.getPicture,
-          returnsNormally,
-        );
+        expect(() => mockSelectiveDisclosure.getPicture, returnsNormally);
 
         // Now test the returned value - should be picture since it's first
         when(mockSelectiveDisclosure.getPicture).thenReturn(pictureData);
@@ -350,17 +331,11 @@ void main() {
         ClaimsData(isfromDisclosureOfJWT: true, data: faceData),
       ];
       when(
-        mockSelectiveDisclosure.getClaimsData(
-          key: 'face',
-          parentKeyId: null,
-        ),
+        mockSelectiveDisclosure.getClaimsData(key: 'face', parentKeyId: null),
       ).thenReturn((faceClaimsData, null));
 
       // Act & Assert - Test method runs without exceptions
-      expect(
-        () => mockSelectiveDisclosure.getPicture,
-        returnsNormally,
-      );
+      expect(() => mockSelectiveDisclosure.getPicture, returnsNormally);
 
       // Now test the returned value - should fall back to face
       when(mockSelectiveDisclosure.getPicture).thenReturn(faceData);
@@ -387,10 +362,7 @@ void main() {
       ).thenReturn((<ClaimsData>[], null));
 
       when(
-        mockSelectiveDisclosure.getClaimsData(
-          key: 'face',
-          parentKeyId: null,
-        ),
+        mockSelectiveDisclosure.getClaimsData(key: 'face', parentKeyId: null),
       ).thenReturn((<ClaimsData>[], null));
 
       // Mock data for portrait
@@ -405,10 +377,7 @@ void main() {
       ).thenReturn((portraitClaimsData, null));
 
       // Act & Assert - Test method runs without exceptions
-      expect(
-        () => mockSelectiveDisclosure.getPicture,
-        returnsNormally,
-      );
+      expect(() => mockSelectiveDisclosure.getPicture, returnsNormally);
 
       // Now test value - should fall back to portrait
       when(mockSelectiveDisclosure.getPicture).thenReturn(portraitData);
@@ -438,10 +407,7 @@ void main() {
       ).thenReturn((claimsData, null));
 
       // Act & Assert - Test method runs without exceptions
-      expect(
-        () => mockSelectiveDisclosure.getPicture,
-        returnsNormally,
-      );
+      expect(() => mockSelectiveDisclosure.getPicture, returnsNormally);
 
       // Mock the actual return value
       when(mockSelectiveDisclosure.getPicture).thenReturn(pictureData);
@@ -491,8 +457,9 @@ void main() {
       };
 
       when(mockCredentialModel.format).thenReturn(VCFormatType.vcSdJWT.vcValue);
-      when(mockCredentialModel.credentialSupported)
-          .thenReturn(mockCredentialSupported);
+      when(
+        mockCredentialModel.credentialSupported,
+      ).thenReturn(mockCredentialSupported);
 
       // Mock getClaimsData for the picture key
       final claimsData = [
@@ -506,10 +473,7 @@ void main() {
       ).thenReturn((claimsData, null));
 
       // Act & Assert - Test method runs without exceptions
-      expect(
-        () => mockSelectiveDisclosure.getPicture,
-        returnsNormally,
-      );
+      expect(() => mockSelectiveDisclosure.getPicture, returnsNormally);
 
       // Now test the returned value
       when(mockSelectiveDisclosure.getPicture).thenReturn(pictureData);

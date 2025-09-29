@@ -18,9 +18,7 @@ class CertificateOfEmploymentWidget extends StatelessWidget {
       children: [
         CardAnimation(
           recto: CertificateOfEmploymentRecto(credentialModel: credentialModel),
-          verso: CertificateOfEmploymentVerso(
-            credentialModel: credentialModel,
-          ),
+          verso: CertificateOfEmploymentVerso(credentialModel: credentialModel),
         ),
       ],
     );
@@ -82,8 +80,9 @@ class CertificateOfEmploymentVerso extends Verso {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final certificateOfEmploymentModel = credentialModel.credentialPreview
-        .credentialSubjectModel as CertificateOfEmploymentModel;
+    final certificateOfEmploymentModel =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as CertificateOfEmploymentModel;
 
     return CredentialImage(
       image: ImageStrings.employmentCertificateBack,
@@ -110,10 +109,9 @@ class CertificateOfEmploymentVerso extends Verso {
                 children: [
                   ImageCardText(
                     text: '${l10n.personalLastName}: ',
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   ImageCardText(
                     text: certificateOfEmploymentModel.familyName!,
@@ -128,10 +126,9 @@ class CertificateOfEmploymentVerso extends Verso {
                 children: [
                   ImageCardText(
                     text: '${l10n.personalFirstName}: ',
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   ImageCardText(
                     text: certificateOfEmploymentModel.givenName!,
@@ -146,10 +143,9 @@ class CertificateOfEmploymentVerso extends Verso {
                 children: [
                   ImageCardText(
                     text: '${l10n.workFor}: ',
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   ImageCardText(
                     text: certificateOfEmploymentModel.workFor!.name,
@@ -174,10 +170,9 @@ class CertificateOfEmploymentVerso extends Verso {
                 children: [
                   ImageCardText(
                     text: '${l10n.startDate}: ',
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   ImageCardText(
                     text: UiDate.formatStringDate(
@@ -194,10 +189,9 @@ class CertificateOfEmploymentVerso extends Verso {
                 children: [
                   ImageCardText(
                     text: '${l10n.jobTitle}: ',
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   ImageCardText(
                     text: certificateOfEmploymentModel.jobTitle!,
@@ -212,10 +206,9 @@ class CertificateOfEmploymentVerso extends Verso {
                 children: [
                   ImageCardText(
                     text: '${l10n.employmentType}: ',
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   ImageCardText(
                     text: certificateOfEmploymentModel.employmentType!,
@@ -230,10 +223,9 @@ class CertificateOfEmploymentVerso extends Verso {
                 children: [
                   ImageCardText(
                     text: '${l10n.baseSalary}: ',
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   ImageCardText(
                     text: certificateOfEmploymentModel.baseSalary!,
@@ -248,10 +240,9 @@ class CertificateOfEmploymentVerso extends Verso {
                 children: [
                   ImageCardText(
                     text: '${l10n.issuanceDate}: ',
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   ImageCardText(
                     text: UiDate.formatStringDate(

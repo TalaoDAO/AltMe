@@ -5,28 +5,30 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../helpers/helpers.dart';
 
 void main() {
-  testWidgets('DialogCloseButton displays text and icon',
-      (WidgetTester tester) async {
-    await tester.pumpApp(
-      const Scaffold(body: DialogCloseButton()),
-    );
+  testWidgets('DialogCloseButton displays text and icon', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpApp(const Scaffold(body: DialogCloseButton()));
 
     expect(find.text('Close'), findsOneWidget);
     expect(find.byIcon(Icons.close), findsOneWidget);
   });
 
-  testWidgets('DialogCloseButton does not display text when showText is false',
-      (WidgetTester tester) async {
-    await tester.pumpApp(
-      const Scaffold(body: DialogCloseButton(showText: false)),
-    );
+  testWidgets(
+    'DialogCloseButton does not display text when showText is false',
+    (WidgetTester tester) async {
+      await tester.pumpApp(
+        const Scaffold(body: DialogCloseButton(showText: false)),
+      );
 
-    expect(find.text('Close'), findsNothing);
-    expect(find.byIcon(Icons.close), findsOneWidget);
-  });
+      expect(find.text('Close'), findsNothing);
+      expect(find.byIcon(Icons.close), findsOneWidget);
+    },
+  );
 
-  testWidgets('DialogCloseButton closes the dialog when tapped',
-      (WidgetTester tester) async {
+  testWidgets('DialogCloseButton closes the dialog when tapped', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpApp(
       Scaffold(
         body: Builder(

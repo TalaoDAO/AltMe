@@ -34,9 +34,5 @@ class TokenAmountCalculatorState extends Equatable {
   Map<String, dynamic> toJson() => _$TokenAmountCalculatorStateToJson(this);
 
   @override
-  List<Object?> get props => [
-        status,
-        validAmount,
-        insertedAmount,
-      ];
+  List<Object?> get props => [status, validAmount, insertedAmount];
 }

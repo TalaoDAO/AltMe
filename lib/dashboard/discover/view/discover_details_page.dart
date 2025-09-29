@@ -87,23 +87,15 @@ class DiscoverDetailsView extends StatelessWidget {
         ),
       ),
       navigation: Padding(
-        padding: const EdgeInsets.all(
-          Sizes.spaceSmall,
-        ),
-        child: MyElevatedButton(
-          onPressed: onCallBack,
-          text: buttonText,
-        ),
+        padding: const EdgeInsets.all(Sizes.spaceSmall),
+        child: MyElevatedButton(onPressed: onCallBack, text: buttonText),
       ),
     );
   }
 }
 
 class DetailFields extends StatelessWidget {
-  const DetailFields({
-    super.key,
-    required this.dummyCredential,
-  });
+  const DetailFields({super.key, required this.dummyCredential});
 
   final DiscoverDummyCredential dummyCredential;
 
@@ -118,18 +110,21 @@ class DetailFields extends StatelessWidget {
             dummyCredential.websiteLinkExtern != null)
           DiscoverDynamicDetial(
             title: l10n.website,
-            value: dummyCredential.websiteLinkExtern ??
+            value:
+                dummyCredential.websiteLinkExtern ??
                 dummyCredential.websiteLink!,
             format: AltMeStrings.uri,
           ),
         if (dummyCredential.longDescription != null ||
             dummyCredential.longDescriptionExtern != null)
           DiscoverDynamicDetial(
-            title: dummyCredential.credentialSubjectType ==
+            title:
+                dummyCredential.credentialSubjectType ==
                     CredentialSubjectType.defaultCredential
                 ? dummyCredential.display?.name
                 : dummyCredential.credentialSubjectType.title,
-            value: dummyCredential.longDescriptionExtern ??
+            value:
+                dummyCredential.longDescriptionExtern ??
                 dummyCredential.longDescription!.getMessage(
                   context,
                   dummyCredential.longDescription!,
@@ -139,7 +134,8 @@ class DetailFields extends StatelessWidget {
             dummyCredential.whyGetThisCardExtern != null)
           DiscoverDynamicDetial(
             title: l10n.whyGetThisCard,
-            value: dummyCredential.whyGetThisCardExtern ??
+            value:
+                dummyCredential.whyGetThisCardExtern ??
                 dummyCredential.whyGetThisCard!.getMessage(
                   context,
                   dummyCredential.whyGetThisCard!,
@@ -149,7 +145,8 @@ class DetailFields extends StatelessWidget {
             dummyCredential.expirationDateDetailsExtern != null)
           DiscoverDynamicDetial(
             title: l10n.expirationDate,
-            value: dummyCredential.expirationDateDetailsExtern ??
+            value:
+                dummyCredential.expirationDateDetailsExtern ??
                 dummyCredential.expirationDateDetails!.getMessage(
                   context,
                   dummyCredential.expirationDateDetails!,
@@ -159,7 +156,8 @@ class DetailFields extends StatelessWidget {
             dummyCredential.howToGetItExtern != null)
           DiscoverDynamicDetial(
             title: l10n.howToGetIt,
-            value: dummyCredential.howToGetItExtern ??
+            value:
+                dummyCredential.howToGetItExtern ??
                 dummyCredential.howToGetIt!.getMessage(
                   context,
                   dummyCredential.howToGetIt!,

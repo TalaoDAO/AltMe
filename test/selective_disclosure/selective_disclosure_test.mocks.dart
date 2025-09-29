@@ -28,24 +28,14 @@ import 'package:oidc4vc/oidc4vc.dart' as _i5;
 // ignore_for_file: subtype_of_sealed_class
 
 class _FakeCredential_0 extends _i1.SmartFake implements _i2.Credential {
-  _FakeCredential_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeCredential_0(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeCredentialModel_1 extends _i1.SmartFake
     implements _i2.CredentialModel {
-  _FakeCredentialModel_1(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeCredentialModel_1(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 /// A class which mocks [CredentialModel].
@@ -57,118 +47,131 @@ class MockCredentialModel extends _i1.Mock implements _i2.CredentialModel {
   }
 
   @override
-  String get id => (super.noSuchMethod(
-        Invocation.getter(#id),
-        returnValue: _i3.dummyValue<String>(
-          this,
-          Invocation.getter(#id),
-        ),
-      ) as String);
+  String get id =>
+      (super.noSuchMethod(
+            Invocation.getter(#id),
+            returnValue: _i3.dummyValue<String>(this, Invocation.getter(#id)),
+          )
+          as String);
 
   @override
   set receivedId(String? _receivedId) => super.noSuchMethod(
-        Invocation.setter(
-          #receivedId,
-          _receivedId,
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.setter(#receivedId, _receivedId),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  Map<String, dynamic> get data => (super.noSuchMethod(
-        Invocation.getter(#data),
-        returnValue: <String, dynamic>{},
-      ) as Map<String, dynamic>);
+  Map<String, dynamic> get data =>
+      (super.noSuchMethod(
+            Invocation.getter(#data),
+            returnValue: <String, dynamic>{},
+          )
+          as Map<String, dynamic>);
 
   @override
-  String get shareLink => (super.noSuchMethod(
-        Invocation.getter(#shareLink),
-        returnValue: _i3.dummyValue<String>(
-          this,
-          Invocation.getter(#shareLink),
-        ),
-      ) as String);
+  String get shareLink =>
+      (super.noSuchMethod(
+            Invocation.getter(#shareLink),
+            returnValue: _i3.dummyValue<String>(
+              this,
+              Invocation.getter(#shareLink),
+            ),
+          )
+          as String);
 
   @override
-  _i2.Credential get credentialPreview => (super.noSuchMethod(
-        Invocation.getter(#credentialPreview),
-        returnValue: _FakeCredential_0(
-          this,
-          Invocation.getter(#credentialPreview),
-        ),
-      ) as _i2.Credential);
+  _i2.Credential get credentialPreview =>
+      (super.noSuchMethod(
+            Invocation.getter(#credentialPreview),
+            returnValue: _FakeCredential_0(
+              this,
+              Invocation.getter(#credentialPreview),
+            ),
+          )
+          as _i2.Credential);
 
   @override
-  List<_i4.Activity> get activities => (super.noSuchMethod(
-        Invocation.getter(#activities),
-        returnValue: <_i4.Activity>[],
-      ) as List<_i4.Activity>);
+  List<_i4.Activity> get activities =>
+      (super.noSuchMethod(
+            Invocation.getter(#activities),
+            returnValue: <_i4.Activity>[],
+          )
+          as List<_i4.Activity>);
 
   @override
-  String get issuer => (super.noSuchMethod(
-        Invocation.getter(#issuer),
-        returnValue: _i3.dummyValue<String>(
-          this,
-          Invocation.getter(#issuer),
-        ),
-      ) as String);
+  String get issuer =>
+      (super.noSuchMethod(
+            Invocation.getter(#issuer),
+            returnValue: _i3.dummyValue<String>(
+              this,
+              Invocation.getter(#issuer),
+            ),
+          )
+          as String);
 
   @override
-  bool get isVerifiableDiplomaType => (super.noSuchMethod(
-        Invocation.getter(#isVerifiableDiplomaType),
-        returnValue: false,
-      ) as bool);
+  bool get isVerifiableDiplomaType =>
+      (super.noSuchMethod(
+            Invocation.getter(#isVerifiableDiplomaType),
+            returnValue: false,
+          )
+          as bool);
 
   @override
-  bool get isDefaultCredential => (super.noSuchMethod(
-        Invocation.getter(#isDefaultCredential),
-        returnValue: false,
-      ) as bool);
+  bool get isDefaultCredential =>
+      (super.noSuchMethod(
+            Invocation.getter(#isDefaultCredential),
+            returnValue: false,
+          )
+          as bool);
 
   @override
-  bool get isEbsiCard => (super.noSuchMethod(
-        Invocation.getter(#isEbsiCard),
-        returnValue: false,
-      ) as bool);
+  bool get isEbsiCard =>
+      (super.noSuchMethod(Invocation.getter(#isEbsiCard), returnValue: false)
+          as bool);
 
   @override
-  bool get disAllowDelete => (super.noSuchMethod(
-        Invocation.getter(#disAllowDelete),
-        returnValue: false,
-      ) as bool);
+  bool get disAllowDelete =>
+      (super.noSuchMethod(
+            Invocation.getter(#disAllowDelete),
+            returnValue: false,
+          )
+          as bool);
 
   @override
-  String get getFormat => (super.noSuchMethod(
-        Invocation.getter(#getFormat),
-        returnValue: _i3.dummyValue<String>(
-          this,
-          Invocation.getter(#getFormat),
-        ),
-      ) as String);
+  String get getFormat =>
+      (super.noSuchMethod(
+            Invocation.getter(#getFormat),
+            returnValue: _i3.dummyValue<String>(
+              this,
+              Invocation.getter(#getFormat),
+            ),
+          )
+          as String);
 
   @override
-  String get getName => (super.noSuchMethod(
-        Invocation.getter(#getName),
-        returnValue: _i3.dummyValue<String>(
-          this,
-          Invocation.getter(#getName),
-        ),
-      ) as String);
+  String get getName =>
+      (super.noSuchMethod(
+            Invocation.getter(#getName),
+            returnValue: _i3.dummyValue<String>(
+              this,
+              Invocation.getter(#getName),
+            ),
+          )
+          as String);
 
   @override
-  List<Object?> get props => (super.noSuchMethod(
-        Invocation.getter(#props),
-        returnValue: <Object?>[],
-      ) as List<Object?>);
+  List<Object?> get props =>
+      (super.noSuchMethod(Invocation.getter(#props), returnValue: <Object?>[])
+          as List<Object?>);
 
   @override
-  Map<String, dynamic> toJson() => (super.noSuchMethod(
-        Invocation.method(
-          #toJson,
-          [],
-        ),
-        returnValue: <String, dynamic>{},
-      ) as Map<String, dynamic>);
+  Map<String, dynamic> toJson() =>
+      (super.noSuchMethod(
+            Invocation.method(#toJson, []),
+            returnValue: <String, dynamic>{},
+          )
+          as Map<String, dynamic>);
 
   @override
   _i2.CredentialModel copyWith({
@@ -194,38 +197,7 @@ class MockCredentialModel extends _i1.Mock implements _i2.CredentialModel {
     String? aiCredentialAnalysis,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #copyWith,
-          [],
-          {
-            #id: id,
-            #image: image,
-            #data: data,
-            #shareLink: shareLink,
-            #credentialPreview: credentialPreview,
-            #display: display,
-            #expirationDate: expirationDate,
-            #credentialManifest: credentialManifest,
-            #receivedId: receivedId,
-            #challenge: challenge,
-            #domain: domain,
-            #activities: activities,
-            #jwt: jwt,
-            #selectiveDisclosureJwt: selectiveDisclosureJwt,
-            #pendingInfo: pendingInfo,
-            #format: format,
-            #claims: claims,
-            #credentialSupported: credentialSupported,
-            #profileLinkedId: profileLinkedId,
-            #aiCredentialAnalysis: aiCredentialAnalysis,
-          },
-        ),
-        returnValue: _FakeCredentialModel_1(
-          this,
-          Invocation.method(
-            #copyWith,
-            [],
-            {
+            Invocation.method(#copyWith, [], {
               #id: id,
               #image: image,
               #data: data,
@@ -246,29 +218,52 @@ class MockCredentialModel extends _i1.Mock implements _i2.CredentialModel {
               #credentialSupported: credentialSupported,
               #profileLinkedId: profileLinkedId,
               #aiCredentialAnalysis: aiCredentialAnalysis,
-            },
-          ),
-        ),
-      ) as _i2.CredentialModel);
+            }),
+            returnValue: _FakeCredentialModel_1(
+              this,
+              Invocation.method(#copyWith, [], {
+                #id: id,
+                #image: image,
+                #data: data,
+                #shareLink: shareLink,
+                #credentialPreview: credentialPreview,
+                #display: display,
+                #expirationDate: expirationDate,
+                #credentialManifest: credentialManifest,
+                #receivedId: receivedId,
+                #challenge: challenge,
+                #domain: domain,
+                #activities: activities,
+                #jwt: jwt,
+                #selectiveDisclosureJwt: selectiveDisclosureJwt,
+                #pendingInfo: pendingInfo,
+                #format: format,
+                #claims: claims,
+                #credentialSupported: credentialSupported,
+                #profileLinkedId: profileLinkedId,
+                #aiCredentialAnalysis: aiCredentialAnalysis,
+              }),
+            ),
+          )
+          as _i2.CredentialModel);
 
   @override
   _i7.Future<_i8.CredentialStatus> checkRevocationStatus() =>
       (super.noSuchMethod(
-        Invocation.method(
-          #checkRevocationStatus,
-          [],
-        ),
-        returnValue: _i7.Future<_i8.CredentialStatus>.value(
-            _i8.CredentialStatus.pending),
-      ) as _i7.Future<_i8.CredentialStatus>);
+            Invocation.method(#checkRevocationStatus, []),
+            returnValue: _i7.Future<_i8.CredentialStatus>.value(
+              _i8.CredentialStatus.pending,
+            ),
+          )
+          as _i7.Future<_i8.CredentialStatus>);
 
   @override
-  _i7.Future<_i8.RevocationStatus> getRevocationStatus() => (super.noSuchMethod(
-        Invocation.method(
-          #getRevocationStatus,
-          [],
-        ),
-        returnValue:
-            _i7.Future<_i8.RevocationStatus>.value(_i8.RevocationStatus.active),
-      ) as _i7.Future<_i8.RevocationStatus>);
+  _i7.Future<_i8.RevocationStatus> getRevocationStatus() =>
+      (super.noSuchMethod(
+            Invocation.method(#getRevocationStatus, []),
+            returnValue: _i7.Future<_i8.RevocationStatus>.value(
+              _i8.RevocationStatus.active,
+            ),
+          )
+          as _i7.Future<_i8.RevocationStatus>);
 }

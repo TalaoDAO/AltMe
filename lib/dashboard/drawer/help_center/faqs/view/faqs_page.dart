@@ -61,14 +61,14 @@ class FAQsView extends StatelessWidget {
                           child: Text(
                             faqElement.ans,
                             style: faqElement.href != null
-                                ? Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                      decoration: TextDecoration.underline,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    )
+                                ? Theme.of(
+                                    context,
+                                  ).textTheme.bodyMedium!.copyWith(
+                                    decoration: TextDecoration.underline,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                  )
                                 : Theme.of(context).textTheme.bodyMedium!,
                             textAlign: TextAlign.justify,
                           ),

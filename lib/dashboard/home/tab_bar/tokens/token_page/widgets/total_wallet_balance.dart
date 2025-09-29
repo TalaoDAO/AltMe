@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TotalWalletBalance extends StatelessWidget {
-  const TotalWalletBalance({
-    super.key,
-    required this.tokensCubit,
-  });
+  const TotalWalletBalance({super.key, required this.tokensCubit});
 
   final TokensCubit tokensCubit;
 

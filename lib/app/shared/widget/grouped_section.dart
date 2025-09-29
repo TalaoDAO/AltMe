@@ -2,10 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 
 class GroupedSection extends StatelessWidget {
-  const GroupedSection({
-    super.key,
-    required this.children,
-  });
+  const GroupedSection({super.key, required this.children});
 
   final List<Widget> children;
 
@@ -20,9 +17,7 @@ class GroupedSection extends StatelessWidget {
           Radius.circular(Sizes.largeRadius),
         ),
       ),
-      child: Column(
-        children: children,
-      ),
+      child: Column(children: children),
     );
   }
 }

@@ -23,10 +23,5 @@ class PostalAddress extends Equatable {
   Map<String, dynamic> toJson() => _$PostalAddressToJson(this);
 
   @override
-  List<Object?> get props => [
-        streetAddress,
-        locality,
-        postalCode,
-        countryName,
-      ];
+  List<Object?> get props => [streetAddress, locality, postalCode, countryName];
 }

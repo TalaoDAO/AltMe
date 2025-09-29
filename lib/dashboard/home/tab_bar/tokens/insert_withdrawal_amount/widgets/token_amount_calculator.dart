@@ -12,10 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 typedef SelectedTokenChangedCallback = TokenModel Function();
 
 class TokenAmountCalculatorView extends StatelessWidget {
-  const TokenAmountCalculatorView({
-    super.key,
-    required this.selectedToken,
-  });
+  const TokenAmountCalculatorView({super.key, required this.selectedToken});
 
   final TokenModel selectedToken;
 
@@ -31,10 +28,7 @@ class TokenAmountCalculatorView extends StatelessWidget {
 }
 
 class TokenAmountCalculatorPage extends StatefulWidget {
-  const TokenAmountCalculatorPage({
-    super.key,
-    required this.selectedToken,
-  });
+  const TokenAmountCalculatorPage({super.key, required this.selectedToken});
 
   final TokenModel selectedToken;
 
@@ -68,9 +62,9 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
       return;
     } else {
       context.read<TokenAmountCalculatorCubit>().setAmount(
-            amount: text,
-            selectedToken: widget.selectedToken,
-          );
+        amount: text,
+        selectedToken: widget.selectedToken,
+      );
     }
   }
 
@@ -85,9 +79,9 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
     if (key == '.' && amountController.text.contains('.')) return;
     final text = amountController.text;
     context.read<TokenAmountCalculatorCubit>().setAmount(
-          amount: text + key,
-          selectedToken: widget.selectedToken,
-        );
+      amount: text + key,
+      selectedToken: widget.selectedToken,
+    );
   }
 
   void _setAmountControllerText(String text) {
@@ -105,13 +99,12 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          const SizedBox(
-            height: Sizes.spaceSmall,
-          ),
+          const SizedBox(height: Sizes.spaceSmall),
           BlocBuilder<TokenAmountCalculatorCubit, TokenAmountCalculatorState>(
             builder: (context, state) {
-              getLogger('_setAmountControllerText')
-                  .i('amount builder: ${state.insertedAmount}');
+              getLogger(
+                '_setAmountControllerText',
+              ).i('amount builder: ${state.insertedAmount}');
               _setAmountControllerText(state.insertedAmount);
               return Column(
                 children: [
@@ -121,8 +114,8 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                       selectionControls: _selectionControls,
                       controller: amountController,
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                        fontWeight: FontWeight.w600,
+                      ),
                       maxLines: 1,
                       cursorWidth: 4,
                       autofocus: false,
@@ -147,9 +140,9 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                       onChanged: (value) {
                         if (value != amountController.text) {
                           context.read<TokenAmountCalculatorCubit>().setAmount(
-                                amount: value,
-                                selectedToken: widget.selectedToken,
-                              );
+                            amount: value,
+                            selectedToken: widget.selectedToken,
+                          );
                         }
                       },
                       textAlign: TextAlign.start,
@@ -165,10 +158,8 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                           horizontal: 10,
                         ),
                         suffixText: widget.selectedToken.symbol,
-                        suffixStyle:
-                            Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.w900,
-                                ),
+                        suffixStyle: Theme.of(context).textTheme.titleLarge
+                            ?.copyWith(fontWeight: FontWeight.w900),
                       ),
                     ),
                   ),
@@ -176,7 +167,7 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                     usdValue: state.insertedAmount.isEmpty
                         ? 0
                         : double.parse(state.insertedAmount) *
-                            widget.selectedToken.tokenUSDPrice,
+                              widget.selectedToken.tokenUSDPrice,
                   ),
                   MaxButton(
                     onTap: () {
@@ -185,9 +176,9 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                       );
 
                       context.read<TokenAmountCalculatorCubit>().setAmount(
-                            amount: amountController.text,
-                            selectedToken: widget.selectedToken,
-                          );
+                        amount: amountController.text,
+                        selectedToken: widget.selectedToken,
+                      );
                     },
                   ),
                 ],
@@ -211,8 +202,9 @@ class _TokenAmountCalculatorPageState extends State<TokenAmountCalculatorPage> {
                           digitInnerMargin: EdgeInsets.zero,
                           keyboardRowMargin: EdgeInsets.zero,
                           digitBorderWidth: 0,
-                          digitTextStyle:
-                              Theme.of(context).textTheme.headlineMedium,
+                          digitTextStyle: Theme.of(
+                            context,
+                          ).textTheme.headlineMedium,
                           keyboardSize: constraint.biggest,
                         ),
                         leadingButton: KeyboardButton(

@@ -4,18 +4,16 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class BinanceAssociatedAddressWidget extends StatelessWidget {
-  const BinanceAssociatedAddressWidget({
-    super.key,
-    this.credentialModel,
-  });
+  const BinanceAssociatedAddressWidget({super.key, this.credentialModel});
 
   final CredentialModel? credentialModel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final associatedAddress = credentialModel?.credentialPreview
-        .credentialSubjectModel as BinanceAssociatedAddressModel?;
+    final associatedAddress =
+        credentialModel?.credentialPreview.credentialSubjectModel
+            as BinanceAssociatedAddressModel?;
 
     return MyBlockchainAccountBaseWidget(
       background: ImageStrings.binanceOwnershipCard,

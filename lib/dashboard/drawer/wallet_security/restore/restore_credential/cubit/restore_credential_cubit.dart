@@ -43,8 +43,9 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
 
     late String stringForBackup;
 
-    final String? ssiMnemonic =
-        await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
+    final String? ssiMnemonic = await secureStorageProvider.get(
+      SecureStorageKeys.ssiMnemonic,
+    );
 
     if (ssiMnemonic == null) {
       throw ResponseMessage(
@@ -74,8 +75,10 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
         cipherText: json['cipherText'] as String,
         authenticationTag: json['authenticationTag'] as String,
       );
-      final decryptedText =
-          await cryptoKeys.decrypt(stringForBackup, encryption);
+      final decryptedText = await cryptoKeys.decrypt(
+        stringForBackup,
+        encryption,
+      );
       final decryptedJson = jsonDecode(decryptedText) as Map<String, dynamic>;
       if (!decryptedJson.containsKey('date') ||
           !decryptedJson.containsKey('credentials') ||
@@ -100,8 +103,9 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
       final profile = decryptedJson['profile'];
 
       if (profile != null) {
-        final profileType = ProfileType.values
-            .firstWhereOrNull((ele) => ele.profileId == profile);
+        final profileType = ProfileType.values.firstWhereOrNull(
+          (ele) => ele.profileId == profile,
+        );
 
         if (profileType == null) {
           throw ResponseMessage(
@@ -141,8 +145,10 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
             final walletProvider = enterprise['walletProvider'];
 
             if (email != null) {
-              await profileCubit.secureStorageProvider
-                  .set(SecureStorageKeys.enterpriseEmail, email.toString());
+              await profileCubit.secureStorageProvider.set(
+                SecureStorageKeys.enterpriseEmail,
+                email.toString(),
+              );
             }
 
             if (password != null) {

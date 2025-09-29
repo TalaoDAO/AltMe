@@ -19,21 +19,19 @@ class EnterNewPinCodePage extends StatelessWidget {
   static Route<dynamic> route({
     required VoidCallback isValidCallback,
     required bool isFromOnboarding,
-  }) =>
-      MaterialPageRoute<void>(
-        builder: (_) => EnterNewPinCodePage(
-          isValidCallback: isValidCallback,
-          isFromOnboarding: isFromOnboarding,
-        ),
-        settings: const RouteSettings(name: '/enterPinCodePage'),
-      );
+  }) => MaterialPageRoute<void>(
+    builder: (_) => EnterNewPinCodePage(
+      isValidCallback: isValidCallback,
+      isFromOnboarding: isFromOnboarding,
+    ),
+    settings: const RouteSettings(name: '/enterPinCodePage'),
+  );
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PinCodeViewCubit(
-        secureStorageProvider: getSecureStorage,
-      ),
+      create: (context) =>
+          PinCodeViewCubit(secureStorageProvider: getSecureStorage),
       child: EnterNewPinCodeView(
         isValidCallback: isValidCallback,
         isFromOnboarding: isFromOnboarding,
@@ -80,10 +78,7 @@ class _EnterNewPinCodeViewState extends State<EnterNewPinCodeView> {
       body: PinCodeWidget(
         title: l10n.enterNewPinCode,
         header: widget.isFromOnboarding
-            ? MStepper(
-                step: 1,
-                totalStep: byPassScreen ? 2 : 3,
-              )
+            ? MStepper(step: 1, totalStep: byPassScreen ? 2 : 3)
             : null,
         deleteButton: Text(
           l10n.deleteDigit,

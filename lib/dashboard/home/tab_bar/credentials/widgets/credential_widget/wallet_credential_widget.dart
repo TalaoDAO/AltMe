@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WalletCredentialWidget extends StatelessWidget {
-  const WalletCredentialWidget({
-    super.key,
-    required this.credentialModel,
-  });
+  const WalletCredentialWidget({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 
@@ -42,11 +39,15 @@ class WalletCredentialetailsWidget extends StatelessWidget {
     final titleColor = Theme.of(context).colorScheme.onSurface;
     final valueColor = Theme.of(context).colorScheme.onSurface;
 
-    final isDeveloperMode =
-        context.read<ProfileCubit>().state.model.isDeveloperMode;
+    final isDeveloperMode = context
+        .read<ProfileCubit>()
+        .state
+        .model
+        .isDeveloperMode;
 
-    final walletCredential = credentialModel
-        .credentialPreview.credentialSubjectModel as WalletCredentialModel;
+    final walletCredential =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as WalletCredentialModel;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

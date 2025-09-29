@@ -23,10 +23,7 @@ class StarterPage extends StatelessWidget {
 }
 
 class StarterView extends StatelessWidget {
-  const StarterView({
-    super.key,
-    required this.profileCubit,
-  });
+  const StarterView({super.key, required this.profileCubit});
 
   final ProfileCubit profileCubit;
 

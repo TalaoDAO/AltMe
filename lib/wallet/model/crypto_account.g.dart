@@ -8,14 +8,14 @@ part of 'crypto_account.dart';
 
 CryptoAccount _$CryptoAccountFromJson(Map<String, dynamic> json) =>
     CryptoAccount(
-      data: (json['data'] as List<dynamic>?)
+      data:
+          (json['data'] as List<dynamic>?)
               ?.map(
-                  (e) => CryptoAccountData.fromJson(e as Map<String, dynamic>))
+                (e) => CryptoAccountData.fromJson(e as Map<String, dynamic>),
+              )
               .toList() ??
           const [],
     );
 
 Map<String, dynamic> _$CryptoAccountToJson(CryptoAccount instance) =>
-    <String, dynamic>{
-      'data': instance.data,
-    };
+    <String, dynamic>{'data': instance.data};

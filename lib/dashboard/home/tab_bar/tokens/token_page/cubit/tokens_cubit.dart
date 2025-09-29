@@ -139,10 +139,12 @@ class TokensCubit extends Cubit<TokensState> {
     List<dynamic> tokensBalancesJsonArray = [];
 
     try {
-      tokensBalancesJsonArray = await client.get(
-        '$baseUrl/v2/addresses/$walletAddress/token-balances',
-        headers: <String, dynamic>{'Content-Type': 'application/json'},
-      ) as List<dynamic>;
+      tokensBalancesJsonArray =
+          await client.get(
+                '$baseUrl/v2/addresses/$walletAddress/token-balances',
+                headers: <String, dynamic>{'Content-Type': 'application/json'},
+              )
+              as List<dynamic>;
     } catch (e) {
       if (e is NetworkException &&
           e.message == NetworkError.NETWORK_ERROR_NOT_FOUND) {
@@ -155,31 +157,32 @@ class TokensCubit extends Cubit<TokensState> {
     List<TokenModel> newData = [];
 
     if (tokensBalancesJsonArray.isNotEmpty) {
-      newData = tokensBalancesJsonArray.map(
-        (dynamic json) {
-          final icon = (json['token_instance']
-              as Map<String, dynamic>)['metadata']['image_url'];
-          return TokenModel(
-            contractAddress: (json['token_instance']
-                as Map<String, dynamic>)['owner']['hash'] as String,
-            name:
-                ((json['token'] as Map<String, dynamic>)['name'] as String?) ??
-                    '',
-            symbol: ((json['token'] as Map<String, dynamic>)['symbol']
-                    as String?) ??
-                '',
-            balance: (json['value'] as String?) ?? '',
-            decimals: ((json['token_instance'] as Map<String, dynamic>)['token']
-                        ['decimals'] ??
-                    0)
-                .toString(),
-            thumbnailUri: '',
-            standard: 'erc20',
-            icon: icon.toString(),
-            decimalsToShow: 2,
-          );
-        },
-      ).toList();
+      newData = tokensBalancesJsonArray.map((dynamic json) {
+        final icon =
+            (json['token_instance']
+                as Map<String, dynamic>)['metadata']['image_url'];
+        return TokenModel(
+          contractAddress:
+              (json['token_instance'] as Map<String, dynamic>)['owner']['hash']
+                  as String,
+          name:
+              ((json['token'] as Map<String, dynamic>)['name'] as String?) ??
+              '',
+          symbol:
+              ((json['token'] as Map<String, dynamic>)['symbol'] as String?) ??
+              '',
+          balance: (json['value'] as String?) ?? '',
+          decimals:
+              ((json['token_instance']
+                          as Map<String, dynamic>)['token']['decimals'] ??
+                      0)
+                  .toString(),
+          thumbnailUri: '',
+          standard: 'erc20',
+          icon: icon.toString(),
+          decimalsToShow: 2,
+        );
+      }).toList();
     }
 
     if (offset == 0) {
@@ -215,9 +218,7 @@ class TokensCubit extends Cubit<TokensState> {
         totalBalanceInUSD: totalBalanceInUSD,
       ),
     );
-    await checkIfItNeedsToVerifyMnemonic(
-      totalBalanceInUSD: totalBalanceInUSD,
-    );
+    await checkIfItNeedsToVerifyMnemonic(totalBalanceInUSD: totalBalanceInUSD);
   }
 
   Future<void> getTokensOnEthereum({
@@ -233,35 +234,33 @@ class TokensCubit extends Cubit<TokensState> {
     await dotenv.load();
     final moralisApiKey = dotenv.get('MORALIS_API_KEY');
 
-    final List<dynamic> tokensBalancesJsonArray = await client.get(
-      '${Urls.moralisBaseUrl}/$walletAddress/erc20',
-      queryParameters: <String, dynamic>{
-        'chain': ethereumNetwork.chain,
-      },
-      headers: <String, dynamic>{
-        'X-API-KEY': moralisApiKey,
-      },
-    ) as List<dynamic>;
+    final List<dynamic> tokensBalancesJsonArray =
+        await client.get(
+              '${Urls.moralisBaseUrl}/$walletAddress/erc20',
+              queryParameters: <String, dynamic>{
+                'chain': ethereumNetwork.chain,
+              },
+              headers: <String, dynamic>{'X-API-KEY': moralisApiKey},
+            )
+            as List<dynamic>;
     List<TokenModel> newData = [];
     if (tokensBalancesJsonArray.isNotEmpty) {
-      newData = tokensBalancesJsonArray.map(
-        (dynamic json) {
-          final icon = (json['logo'] == null && json['symbol'] == 'TALAO')
-              ? IconStrings.talaoIcon
-              : json['logo'] as String?;
-          return TokenModel(
-            contractAddress: json['token_address'] as String,
-            name: (json['name'] as String?) ?? '',
-            symbol: (json['symbol'] as String?) ?? '',
-            balance: (json['balance'] as String?) ?? '',
-            decimals: ((json['decimals'] as int?) ?? 0).toString(),
-            thumbnailUri: json['thumbnail'] as String?,
-            standard: 'erc20',
-            icon: icon,
-            decimalsToShow: 2,
-          );
-        },
-      ).toList();
+      newData = tokensBalancesJsonArray.map((dynamic json) {
+        final icon = (json['logo'] == null && json['symbol'] == 'TALAO')
+            ? IconStrings.talaoIcon
+            : json['logo'] as String?;
+        return TokenModel(
+          contractAddress: json['token_address'] as String,
+          name: (json['name'] as String?) ?? '',
+          symbol: (json['symbol'] as String?) ?? '',
+          balance: (json['balance'] as String?) ?? '',
+          decimals: ((json['decimals'] as int?) ?? 0).toString(),
+          thumbnailUri: json['thumbnail'] as String?,
+          standard: 'erc20',
+          icon: icon,
+          decimalsToShow: 2,
+        );
+      }).toList();
     }
 
     if (offset == 0) {
@@ -297,9 +296,7 @@ class TokensCubit extends Cubit<TokensState> {
         totalBalanceInUSD: totalBalanceInUSD,
       ),
     );
-    await checkIfItNeedsToVerifyMnemonic(
-      totalBalanceInUSD: totalBalanceInUSD,
-    );
+    await checkIfItNeedsToVerifyMnemonic(totalBalanceInUSD: totalBalanceInUSD);
   }
 
   Future<List<TokenModel>> setUSDValues(List<TokenModel> tokens) async {
@@ -336,28 +333,28 @@ class TokensCubit extends Cubit<TokensState> {
   }) async {
     final baseUrl = tezosNetwork.apiUrl;
 
-    final List<dynamic> tokensBalancesJsonArray = await client.get(
-      '$baseUrl/v1/tokens/balances',
-      queryParameters: <String, dynamic>{
-        'account': walletAddress,
-        'token.metadata.decimals.ne': '0',
-        'token.metadata.artifactUri.null': true,
-        'select':
-            '''token.contract.address as contractAddress,token.tokenId as tokenId,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri,token.metadata.decimals as decimals,token.standard as standard''',
-        'offset': offset,
-        'limit': limit,
-      },
-    ) as List<dynamic>;
+    final List<dynamic> tokensBalancesJsonArray =
+        await client.get(
+              '$baseUrl/v1/tokens/balances',
+              queryParameters: <String, dynamic>{
+                'account': walletAddress,
+                'token.metadata.decimals.ne': '0',
+                'token.metadata.artifactUri.null': true,
+                'select':
+                    '''token.contract.address as contractAddress,token.tokenId as tokenId,token.metadata.symbol as symbol,token.metadata.name as name,balance,token.metadata.icon as icon,token.metadata.thumbnailUri as thumbnailUri,token.metadata.decimals as decimals,token.standard as standard''',
+                'offset': offset,
+                'limit': limit,
+              },
+            )
+            as List<dynamic>;
     List<TokenModel> newData = [];
     if (tokensBalancesJsonArray.isNotEmpty) {
-      newData = tokensBalancesJsonArray.map(
-        (dynamic json) {
-          final token = TokenModel.fromJson(json as Map<String, dynamic>);
-          return token.copyWith(
-            decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
-          );
-        },
-      ).toList();
+      newData = tokensBalancesJsonArray.map((dynamic json) {
+        final token = TokenModel.fromJson(json as Map<String, dynamic>);
+        return token.copyWith(
+          decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
+        );
+      }).toList();
     }
 
     if (offset == 0) {
@@ -385,9 +382,9 @@ class TokensCubit extends Cubit<TokensState> {
       final coinsList = await _getAllCoinsList();
       final filteredCoinList = coinsList
           .where(
-            (element) => tokenListSymbols.map((e) => e.toLowerCase()).contains(
-                  element['symbol'].toString().toLowerCase(),
-                ),
+            (element) => tokenListSymbols
+                .map((e) => e.toLowerCase())
+                .contains(element['symbol'].toString().toLowerCase()),
           )
           .toList();
 
@@ -430,30 +427,23 @@ class TokensCubit extends Cubit<TokensState> {
         totalBalanceInUSD: totalBalanceInUSD,
       ),
     );
-    await checkIfItNeedsToVerifyMnemonic(
-      totalBalanceInUSD: totalBalanceInUSD,
-    );
+    await checkIfItNeedsToVerifyMnemonic(totalBalanceInUSD: totalBalanceInUSD);
   }
 
   void updateTokenList() {
     if (state.blockchainType == BlockchainType.tezos) {
       data = _updateToSelectedTezosTokens(data);
-      emit(
-        state.copyWith(
-          data: data.toSet(),
-        ),
-      );
+      emit(state.copyWith(data: data.toSet()));
     }
   }
 
-  List<TokenModel> _updateToSelectedTezosTokens(
-    List<TokenModel> tokenList,
-  ) {
+  List<TokenModel> _updateToSelectedTezosTokens(List<TokenModel> tokenList) {
     if (allTokensCubit.state.contracts.isNotEmpty) {
       // Filter just selected tokens to show for user
       final selectedContracts = allTokensCubit.state.selectedContracts;
-      final loadedTokensSymbols =
-          tokenList.map((e) => e.symbol.toLowerCase()).toList();
+      final loadedTokensSymbols = tokenList
+          .map((e) => e.symbol.toLowerCase())
+          .toList();
       final contractsNotInserted = selectedContracts
           .where(
             (element) =>
@@ -461,8 +451,9 @@ class TokensCubit extends Cubit<TokensState> {
           )
           .toList();
 
-      final contractsNotInsertedSymbols =
-          contractsNotInserted.map((e) => e.symbol.toLowerCase());
+      final contractsNotInsertedSymbols = contractsNotInserted.map(
+        (e) => e.symbol.toLowerCase(),
+      );
 
       ///first remove old token which added before
       tokenList.removeWhere(
@@ -503,12 +494,12 @@ class TokensCubit extends Cubit<TokensState> {
       if (_coinList != null && _coinList!.isNotEmpty) return _coinList!;
       await dotenv.load();
       final apiKey = dotenv.get('COIN_GECKO_API_KEY');
-      _coinList = await client.get(
-        '${Urls.coinGeckoBase}coins/list',
-        queryParameters: {
-          'x_cg_demo_api_key': apiKey,
-        },
-      ) as List<dynamic>;
+      _coinList =
+          await client.get(
+                '${Urls.coinGeckoBase}coins/list',
+                queryParameters: {'x_cg_demo_api_key': apiKey},
+              )
+              as List<dynamic>;
       return _coinList!;
     } catch (_) {
       return [];
@@ -521,12 +512,12 @@ class TokensCubit extends Cubit<TokensState> {
     try {
       await dotenv.load();
       final apiKey = dotenv.get('COIN_GECKO_API_KEY');
-      final response = await client.get(
-        '${Urls.coinGeckoBase}simple/price?ids=${ids.join(',')}&vs_currencies=usd',
-        queryParameters: {
-          'x_cg_demo_api_key': apiKey,
-        },
-      ) as dynamic;
+      final response =
+          await client.get(
+                '${Urls.coinGeckoBase}simple/price?ids=${ids.join(',')}&vs_currencies=usd',
+                queryParameters: {'x_cg_demo_api_key': apiKey},
+              )
+              as dynamic;
       return response as Map<String, dynamic>;
     } catch (_) {
       return {};
@@ -538,10 +529,12 @@ class TokensCubit extends Cubit<TokensState> {
     EthereumNetwork ethereumNetwork,
   ) async {
     try {
-      final response = await client.get(
-        '${ethereumNetwork.apiUrl}/v2/addresses/$walletAddress',
-        headers: <String, dynamic>{'Content-Type': 'application/json'},
-      ) as Map<String, dynamic>;
+      final response =
+          await client.get(
+                '${ethereumNetwork.apiUrl}/v2/addresses/$walletAddress',
+                headers: <String, dynamic>{'Content-Type': 'application/json'},
+              )
+              as Map<String, dynamic>;
 
       final coinBalance = response['coin_balance'].toString().convertTo1e18;
 
@@ -583,15 +576,13 @@ class TokensCubit extends Cubit<TokensState> {
     try {
       await dotenv.load();
       final moralisApiKey = dotenv.get('MORALIS_API_KEY');
-      final response = await client.get(
-        '${Urls.moralisBaseUrl}/$walletAddress/balance',
-        queryParameters: <String, dynamic>{
-          'chain': chain,
-        },
-        headers: <String, dynamic>{
-          'X-API-KEY': moralisApiKey,
-        },
-      ) as Map<String, dynamic>;
+      final response =
+          await client.get(
+                '${Urls.moralisBaseUrl}/$walletAddress/balance',
+                queryParameters: <String, dynamic>{'chain': chain},
+                headers: <String, dynamic>{'X-API-KEY': moralisApiKey},
+              )
+              as Map<String, dynamic>;
 
       return TokenModel(
         contractAddress: '',
@@ -631,9 +622,7 @@ class TokensCubit extends Cubit<TokensState> {
         },
       );
       final contracts = (result as List<dynamic>)
-          .map(
-            (dynamic e) => ContractModel.fromJson(e as Map<String, dynamic>),
-          )
+          .map((dynamic e) => ContractModel.fromJson(e as Map<String, dynamic>))
           .toList();
 
       final tokens = <TokenModel>[];
@@ -657,15 +646,14 @@ class TokensCubit extends Cubit<TokensState> {
 
       return tokens;
     } catch (e, s) {
-      getLogger(runtimeType.toString())
-          .e('error in getAllContracts(), e: $e, s:$s');
+      getLogger(
+        runtimeType.toString(),
+      ).e('error in getAllContracts(), e: $e, s:$s');
       return [];
     }
   }
 
-  Future<TokenModel> _getXtzBalance(
-    String walletAddress,
-  ) async {
+  Future<TokenModel> _getXtzBalance(String walletAddress) async {
     final baseUrl = networkCubit.state.network.apiUrl;
     final int balance =
         await client.get('$baseUrl/v1/accounts/$walletAddress/balance') as int;
@@ -706,12 +694,12 @@ class TokensCubit extends Cubit<TokensState> {
       await dotenv.load();
       final apiKey = dotenv.get('COIN_GECKO_API_KEY');
 
-      final responseOfXTZUsdPrice = await client.get(
-        '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
-        queryParameters: {
-          'x_cg_demo_api_key': apiKey,
-        },
-      ) as Map<String, dynamic>;
+      final responseOfXTZUsdPrice =
+          await client.get(
+                '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
+                queryParameters: {'x_cg_demo_api_key': apiKey},
+              )
+              as Map<String, dynamic>;
       return responseOfXTZUsdPrice['tezos']['usd'] as double;
     } catch (_) {
       return null;

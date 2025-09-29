@@ -7,16 +7,17 @@ part of 'legal_person_credential_model.dart';
 // **************************************************************************
 
 LegalPersonCredentialModel _$LegalPersonCredentialModelFromJson(
-        Map<String, dynamic> json) =>
-    LegalPersonCredentialModel(
-      id: json['id'] as String?,
-      type: json['type'],
-      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-    );
+  Map<String, dynamic> json,
+) => LegalPersonCredentialModel(
+  id: json['id'] as String?,
+  type: json['type'],
+  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+);
 
 Map<String, dynamic> _$LegalPersonCredentialModelToJson(
-    LegalPersonCredentialModel instance) {
+  LegalPersonCredentialModel instance,
+) {
   final val = <String, dynamic>{
     'id': instance.id,
     'type': instance.type,

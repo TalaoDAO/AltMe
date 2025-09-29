@@ -44,263 +44,268 @@ abstract class ConstantsJson {
               'schema': {'type': 'string'},
               'fallback': 'My Wallet',
               'label': 'Verified by',
-            }
+            },
           ],
         },
-      }
+      },
     ],
     'presentation_definition': <String, dynamic>{},
   };
 
   static const ethereumAssociatedAddressCredentialManifestJson =
       <String, dynamic>{
-    'id': 'EthereumAssociatedAddress',
-    'issuer': {'id': '', 'name': 'Wallet issuer'},
-    'output_descriptors': [
-      {
-        'id': '',
-        'schema': 'EthereumAssociatedAddress',
-        'display': {
-          'title': {
-            'path': <dynamic>[],
-            'schema': {'type': 'string'},
-            'fallback': 'Ethereum address',
-          },
-          'subtitle': {
-            'path': <dynamic>[],
-            'schema': {'type': 'string'},
-            'fallback': '',
-          },
-          'description': {
-            'path': <dynamic>[],
-            'schema': {'type': 'string'},
-            'fallback': 'This is the proof that you own this crypto address',
-          },
-          'properties': [
-            {
-              'path': [r'$.expirationDate'],
-              'schema': {'type': 'string', 'format': 'date'},
-              'fallback': 'None',
-              'label': 'Expires',
+        'id': 'EthereumAssociatedAddress',
+        'issuer': {'id': '', 'name': 'Wallet issuer'},
+        'output_descriptors': [
+          {
+            'id': '',
+            'schema': 'EthereumAssociatedAddress',
+            'display': {
+              'title': {
+                'path': <dynamic>[],
+                'schema': {'type': 'string'},
+                'fallback': 'Ethereum address',
+              },
+              'subtitle': {
+                'path': <dynamic>[],
+                'schema': {'type': 'string'},
+                'fallback': '',
+              },
+              'description': {
+                'path': <dynamic>[],
+                'schema': {'type': 'string'},
+                'fallback':
+                    'This is the proof that you own this crypto address',
+              },
+              'properties': [
+                {
+                  'path': [r'$.expirationDate'],
+                  'schema': {'type': 'string', 'format': 'date'},
+                  'fallback': 'None',
+                  'label': 'Expires',
+                },
+                {
+                  'path': [r'$.credentialSubject.associatedAddress'],
+                  'schema': {'type': 'string'},
+                  'fallback': 'Unknown',
+                  'label': 'Address',
+                },
+                {
+                  'path': [r'$.credentialSubject.issuedBy.name'],
+                  'schema': {'type': 'string'},
+                  'fallback': 'My Wallet',
+                  'label': 'Verified by',
+                },
+              ],
             },
-            {
-              'path': [r'$.credentialSubject.associatedAddress'],
-              'schema': {'type': 'string'},
-              'fallback': 'Unknown',
-              'label': 'Address',
-            },
-            {
-              'path': [r'$.credentialSubject.issuedBy.name'],
-              'schema': {'type': 'string'},
-              'fallback': 'My Wallet',
-              'label': 'Verified by',
-            }
-          ],
-        },
-      }
-    ],
-    'presentation_definition': <String, dynamic>{},
-  };
+          },
+        ],
+        'presentation_definition': <String, dynamic>{},
+      };
 
   static const etherlinkAssociatedAddressCredentialManifestJson =
       <String, dynamic>{
-    'id': 'EtherlinkAssociatedAddress',
-    'issuer': {'id': '', 'name': 'Wallet issuer'},
-    'output_descriptors': [
-      {
-        'id': '',
-        'schema': 'EtherlinkAssociatedAddress',
-        'display': {
-          'title': {
-            'path': <dynamic>[],
-            'schema': {'type': 'string'},
-            'fallback': 'Etherlink address',
-          },
-          'subtitle': {
-            'path': <dynamic>[],
-            'schema': {'type': 'string'},
-            'fallback': '',
-          },
-          'description': {
-            'path': <dynamic>[],
-            'schema': {'type': 'string'},
-            'fallback': 'This is the proof that you own this crypto address',
-          },
-          'properties': [
-            {
-              'path': [r'$.expirationDate'],
-              'schema': {'type': 'string', 'format': 'date'},
-              'fallback': 'None',
-              'label': 'Expires',
+        'id': 'EtherlinkAssociatedAddress',
+        'issuer': {'id': '', 'name': 'Wallet issuer'},
+        'output_descriptors': [
+          {
+            'id': '',
+            'schema': 'EtherlinkAssociatedAddress',
+            'display': {
+              'title': {
+                'path': <dynamic>[],
+                'schema': {'type': 'string'},
+                'fallback': 'Etherlink address',
+              },
+              'subtitle': {
+                'path': <dynamic>[],
+                'schema': {'type': 'string'},
+                'fallback': '',
+              },
+              'description': {
+                'path': <dynamic>[],
+                'schema': {'type': 'string'},
+                'fallback':
+                    'This is the proof that you own this crypto address',
+              },
+              'properties': [
+                {
+                  'path': [r'$.expirationDate'],
+                  'schema': {'type': 'string', 'format': 'date'},
+                  'fallback': 'None',
+                  'label': 'Expires',
+                },
+                {
+                  'path': [r'$.credentialSubject.associatedAddress'],
+                  'schema': {'type': 'string'},
+                  'fallback': 'Unknown',
+                  'label': 'Address',
+                },
+                {
+                  'path': [r'$.credentialSubject.issuedBy.name'],
+                  'schema': {'type': 'string'},
+                  'fallback': 'My Wallet',
+                  'label': 'Verified by',
+                },
+              ],
             },
-            {
-              'path': [r'$.credentialSubject.associatedAddress'],
-              'schema': {'type': 'string'},
-              'fallback': 'Unknown',
-              'label': 'Address',
-            },
-            {
-              'path': [r'$.credentialSubject.issuedBy.name'],
-              'schema': {'type': 'string'},
-              'fallback': 'My Wallet',
-              'label': 'Verified by',
-            }
-          ],
-        },
-      }
-    ],
-    'presentation_definition': <String, dynamic>{},
-  };
+          },
+        ],
+        'presentation_definition': <String, dynamic>{},
+      };
 
   static const fantomAssociatedAddressCredentialManifestJson =
       <String, dynamic>{
-    'id': 'FantomAssociatedAddress',
-    'issuer': {'id': '', 'name': 'Wallet issuer'},
-    'output_descriptors': [
-      {
-        'id': '',
-        'schema': 'FantomAssociatedAddress',
-        'display': {
-          'title': {
-            'path': <dynamic>[],
-            'schema': {'type': 'string'},
-            'fallback': 'Fantom address',
-          },
-          'subtitle': {
-            'path': <dynamic>[],
-            'schema': {'type': 'string'},
-            'fallback': '',
-          },
-          'description': {
-            'path': <dynamic>[],
-            'schema': {'type': 'string'},
-            'fallback': 'This is the proof that you own this crypto address',
-          },
-          'properties': [
-            {
-              'path': [r'$.expirationDate'],
-              'schema': {'type': 'string', 'format': 'date'},
-              'fallback': 'None',
-              'label': 'Expires',
+        'id': 'FantomAssociatedAddress',
+        'issuer': {'id': '', 'name': 'Wallet issuer'},
+        'output_descriptors': [
+          {
+            'id': '',
+            'schema': 'FantomAssociatedAddress',
+            'display': {
+              'title': {
+                'path': <dynamic>[],
+                'schema': {'type': 'string'},
+                'fallback': 'Fantom address',
+              },
+              'subtitle': {
+                'path': <dynamic>[],
+                'schema': {'type': 'string'},
+                'fallback': '',
+              },
+              'description': {
+                'path': <dynamic>[],
+                'schema': {'type': 'string'},
+                'fallback':
+                    'This is the proof that you own this crypto address',
+              },
+              'properties': [
+                {
+                  'path': [r'$.expirationDate'],
+                  'schema': {'type': 'string', 'format': 'date'},
+                  'fallback': 'None',
+                  'label': 'Expires',
+                },
+                {
+                  'path': [r'$.credentialSubject.associatedAddress'],
+                  'schema': {'type': 'string'},
+                  'fallback': 'Unknown',
+                  'label': 'Address',
+                },
+                {
+                  'path': [r'$.credentialSubject.issuedBy.name'],
+                  'schema': {'type': 'string'},
+                  'fallback': 'My Wallet',
+                  'label': 'Verified by',
+                },
+              ],
             },
-            {
-              'path': [r'$.credentialSubject.associatedAddress'],
-              'schema': {'type': 'string'},
-              'fallback': 'Unknown',
-              'label': 'Address',
-            },
-            {
-              'path': [r'$.credentialSubject.issuedBy.name'],
-              'schema': {'type': 'string'},
-              'fallback': 'My Wallet',
-              'label': 'Verified by',
-            }
-          ],
-        },
-      }
-    ],
-    'presentation_definition': <String, dynamic>{},
-  };
+          },
+        ],
+        'presentation_definition': <String, dynamic>{},
+      };
 
   static const polygonAssociatedAddressCredentialManifestJson =
       <String, dynamic>{
-    'id': 'PolygonAssociatedAddress',
-    'issuer': {'id': '', 'name': 'Wallet issuer'},
-    'output_descriptors': [
-      {
-        'id': '',
-        'schema': 'PolygonAssociatedAddress',
-        'display': {
-          'title': {
-            'path': <dynamic>[],
-            'schema': {'type': 'string'},
-            'fallback': 'Polygon address',
-          },
-          'subtitle': {
-            'path': <dynamic>[],
-            'schema': {'type': 'string'},
-            'fallback': '',
-          },
-          'description': {
-            'path': <dynamic>[],
-            'schema': {'type': 'string'},
-            'fallback': 'This is the proof that you own this crypto address',
-          },
-          'properties': [
-            {
-              'path': [r'$.expirationDate'],
-              'schema': {'type': 'string', 'format': 'date'},
-              'fallback': 'None',
-              'label': 'Expires',
+        'id': 'PolygonAssociatedAddress',
+        'issuer': {'id': '', 'name': 'Wallet issuer'},
+        'output_descriptors': [
+          {
+            'id': '',
+            'schema': 'PolygonAssociatedAddress',
+            'display': {
+              'title': {
+                'path': <dynamic>[],
+                'schema': {'type': 'string'},
+                'fallback': 'Polygon address',
+              },
+              'subtitle': {
+                'path': <dynamic>[],
+                'schema': {'type': 'string'},
+                'fallback': '',
+              },
+              'description': {
+                'path': <dynamic>[],
+                'schema': {'type': 'string'},
+                'fallback':
+                    'This is the proof that you own this crypto address',
+              },
+              'properties': [
+                {
+                  'path': [r'$.expirationDate'],
+                  'schema': {'type': 'string', 'format': 'date'},
+                  'fallback': 'None',
+                  'label': 'Expires',
+                },
+                {
+                  'path': [r'$.credentialSubject.associatedAddress'],
+                  'schema': {'type': 'string'},
+                  'fallback': 'Unknown',
+                  'label': 'Address',
+                },
+                {
+                  'path': [r'$.credentialSubject.issuedBy.name'],
+                  'schema': {'type': 'string'},
+                  'fallback': 'My Wallet',
+                  'label': 'Verified by',
+                },
+              ],
             },
-            {
-              'path': [r'$.credentialSubject.associatedAddress'],
-              'schema': {'type': 'string'},
-              'fallback': 'Unknown',
-              'label': 'Address',
-            },
-            {
-              'path': [r'$.credentialSubject.issuedBy.name'],
-              'schema': {'type': 'string'},
-              'fallback': 'My Wallet',
-              'label': 'Verified by',
-            }
-          ],
-        },
-      }
-    ],
-    'presentation_definition': <String, dynamic>{},
-  };
+          },
+        ],
+        'presentation_definition': <String, dynamic>{},
+      };
 
   static const binanceAssociatedAddressCredentialManifestJson =
       <String, dynamic>{
-    'id': 'BinanceAssociatedAddress',
-    'issuer': {'id': '', 'name': 'Wallet issuer'},
-    'output_descriptors': [
-      {
-        'id': '',
-        'schema': 'BinanceAssociatedAddress',
-        'display': {
-          'title': {
-            'path': <dynamic>[],
-            'schema': {'type': 'string'},
-            'fallback': 'BNB Chain address',
-          },
-          'subtitle': {
-            'path': <dynamic>[],
-            'schema': {'type': 'string'},
-            'fallback': '',
-          },
-          'description': {
-            'path': <dynamic>[],
-            'schema': {'type': 'string'},
-            'fallback': 'This is the proof that you own this crypto address',
-          },
-          'properties': [
-            {
-              'path': [r'$.expirationDate'],
-              'schema': {'type': 'string', 'format': 'date'},
-              'fallback': 'None',
-              'label': 'Expires',
+        'id': 'BinanceAssociatedAddress',
+        'issuer': {'id': '', 'name': 'Wallet issuer'},
+        'output_descriptors': [
+          {
+            'id': '',
+            'schema': 'BinanceAssociatedAddress',
+            'display': {
+              'title': {
+                'path': <dynamic>[],
+                'schema': {'type': 'string'},
+                'fallback': 'BNB Chain address',
+              },
+              'subtitle': {
+                'path': <dynamic>[],
+                'schema': {'type': 'string'},
+                'fallback': '',
+              },
+              'description': {
+                'path': <dynamic>[],
+                'schema': {'type': 'string'},
+                'fallback':
+                    'This is the proof that you own this crypto address',
+              },
+              'properties': [
+                {
+                  'path': [r'$.expirationDate'],
+                  'schema': {'type': 'string', 'format': 'date'},
+                  'fallback': 'None',
+                  'label': 'Expires',
+                },
+                {
+                  'path': [r'$.credentialSubject.associatedAddress'],
+                  'schema': {'type': 'string'},
+                  'fallback': 'Unknown',
+                  'label': 'Address',
+                },
+                {
+                  'path': [r'$.credentialSubject.issuedBy.name'],
+                  'schema': {'type': 'string'},
+                  'fallback': 'My Wallet',
+                  'label': 'Verified by',
+                },
+              ],
             },
-            {
-              'path': [r'$.credentialSubject.associatedAddress'],
-              'schema': {'type': 'string'},
-              'fallback': 'Unknown',
-              'label': 'Address',
-            },
-            {
-              'path': [r'$.credentialSubject.issuedBy.name'],
-              'schema': {'type': 'string'},
-              'fallback': 'My Wallet',
-              'label': 'Verified by',
-            }
-          ],
-        },
-      }
-    ],
-    'presentation_definition': <String, dynamic>{},
-  };
+          },
+        ],
+        'presentation_definition': <String, dynamic>{},
+      };
 
   static const walletMetadataForIssuers = <String, dynamic>{
     'vp_formats_supported': {

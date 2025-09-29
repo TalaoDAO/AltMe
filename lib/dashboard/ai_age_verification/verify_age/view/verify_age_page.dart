@@ -61,9 +61,7 @@ class _VerifyAgeViewState extends State<VerifyAgeView> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: Sizes.spaceSmall,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
             child: Text(
               l10n.verifyYourAgeSubtitle,
               textAlign: TextAlign.center,

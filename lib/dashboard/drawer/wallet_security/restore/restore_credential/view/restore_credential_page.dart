@@ -16,18 +16,14 @@ import 'package:path_provider/path_provider.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class RestoreCredentialPage extends StatelessWidget {
-  const RestoreCredentialPage({
-    super.key,
-    required this.fromOnBoarding,
-  });
+  const RestoreCredentialPage({super.key, required this.fromOnBoarding});
 
   final bool fromOnBoarding;
 
   static Route<dynamic> route({required bool fromOnBoarding}) =>
       MaterialPageRoute<void>(
-        builder: (context) => RestoreCredentialPage(
-          fromOnBoarding: fromOnBoarding,
-        ),
+        builder: (context) =>
+            RestoreCredentialPage(fromOnBoarding: fromOnBoarding),
         settings: const RouteSettings(name: '/RestoreCredentialPage'),
       );
 
@@ -48,10 +44,7 @@ class RestoreCredentialPage extends StatelessWidget {
 }
 
 class RestoreCredentialView extends StatefulWidget {
-  const RestoreCredentialView({
-    super.key,
-    required this.fromOnBoarding,
-  });
+  const RestoreCredentialView({super.key, required this.fromOnBoarding});
 
   final bool fromOnBoarding;
 
@@ -133,21 +126,14 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                const MStepper(
-                  totalStep: 2,
-                  step: 2,
-                ),
-                const SizedBox(
-                  height: Sizes.spaceNormal,
-                ),
+                const MStepper(totalStep: 2, step: 2),
+                const SizedBox(height: Sizes.spaceNormal),
                 Text(
                   l10n.restoreCredentialStep2Title,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
-                const SizedBox(
-                  height: Sizes.spaceNormal,
-                ),
+                const SizedBox(height: Sizes.spaceNormal),
                 UploadFile(
                   filePath: state.backupFilePath,
                   onTap: () async {
@@ -174,8 +160,8 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
                     onPressed: state.backupFilePath == null
                         ? null
                         : () => context
-                            .read<RestoreCredentialCubit>()
-                            .recoverWallet(),
+                              .read<RestoreCredentialCubit>()
+                              .recoverWallet(),
                     text: l10n.loadFile,
                   );
                 },
@@ -200,8 +186,8 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
 
   Future<void> _pickRestoreFile() async {
     final pickedFile = await FilePicker.platform.pickFiles();
-    context
-        .read<RestoreCredentialCubit>()
-        .setFilePath(filePath: pickedFile?.files.first.path);
+    context.read<RestoreCredentialCubit>().setFilePath(
+      filePath: pickedFile?.files.first.path,
+    );
   }
 }

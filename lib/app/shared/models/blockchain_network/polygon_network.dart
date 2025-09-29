@@ -16,34 +16,35 @@ class PolygonNetwork extends EthereumNetwork {
     required super.type,
     super.apiKey,
   }) : super(
-          mainTokenName: 'Polygon',
-          mainTokenDecimal: '18',
-          mainTokenIcon: IconStrings.polygon,
-          mainTokenSymbol: 'MATIC',
-        );
+         mainTokenName: 'Polygon',
+         mainTokenDecimal: '18',
+         mainTokenIcon: IconStrings.polygon,
+         mainTokenSymbol: 'MATIC',
+       );
 
   factory PolygonNetwork.mainNet() => const PolygonNetwork(
-        type: BlockchainType.polygon,
-        networkname: 'Mainnet',
-        apiUrl: Urls.moralisBaseUrl,
-        chainId: 137,
-        chain: 'polygon',
-        rpcNodeUrl: 'https://polygon-rpc.com/',
-        title: 'Polygon Mainnet',
-        subTitle:
-            'This network is the official Polygon blockchain running Network.'
-            ' You should use this network by default.',
-      );
+    type: BlockchainType.polygon,
+    networkname: 'Mainnet',
+    apiUrl: Urls.moralisBaseUrl,
+    chainId: 137,
+    chain: 'polygon',
+    rpcNodeUrl: 'https://polygon-rpc.com/',
+    title: 'Polygon Mainnet',
+    subTitle:
+        'This network is the official Polygon blockchain running Network.'
+        ' You should use this network by default.',
+  );
 
   factory PolygonNetwork.testNet() => const PolygonNetwork(
-        type: BlockchainType.polygon,
-        networkname: 'Testnet',
-        apiUrl: Urls.moralisBaseUrl,
-        chainId: 80002,
-        chain: 'polygon amoy',
-        rpcNodeUrl: 'https://rpc-amoy.polygon.technology/',
-        title: 'Polygon Amoy Testnet',
-        subTitle: 'This network is used to test protocol upgrades'
-            ' (do not use it unless you are a developer).',
-      );
+    type: BlockchainType.polygon,
+    networkname: 'Testnet',
+    apiUrl: Urls.moralisBaseUrl,
+    chainId: 80002,
+    chain: 'polygon amoy',
+    rpcNodeUrl: 'https://rpc-amoy.polygon.technology/',
+    title: 'Polygon Amoy Testnet',
+    subTitle:
+        'This network is used to test protocol upgrades'
+        ' (do not use it unless you are a developer).',
+  );
 }

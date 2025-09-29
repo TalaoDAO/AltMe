@@ -21,9 +21,7 @@ class CredentialDetailsState extends Equatable {
     return copyWith(status: AppStatus.loading);
   }
 
-  CredentialDetailsState error({
-    required StateMessage message,
-  }) {
+  CredentialDetailsState error({required StateMessage message}) {
     return copyWith(status: AppStatus.error, message: message);
   }
 
@@ -46,9 +44,9 @@ class CredentialDetailsState extends Equatable {
 
   @override
   List<Object?> get props => [
-        credentialStatus,
-        message,
-        status,
-        credentialDetailTabStatus,
-      ];
+    credentialStatus,
+    message,
+    status,
+    credentialDetailTabStatus,
+  ];
 }

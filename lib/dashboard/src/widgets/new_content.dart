@@ -47,9 +47,9 @@ class NewContent extends StatelessWidget {
                     child: Text(
                       features[index],
                       textAlign: TextAlign.left,
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Colors.white,
-                          ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium!.copyWith(color: Colors.white),
                     ),
                   ),
                 ],

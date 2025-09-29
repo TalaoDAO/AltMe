@@ -27,8 +27,9 @@ void main() {
             .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER,
       );
 
-      final state = const OnBoardingGenPhraseState()
-          .error(messageHandler: messageHandler);
+      final state = const OnBoardingGenPhraseState().error(
+        messageHandler: messageHandler,
+      );
 
       expect(state.status, AppStatus.error);
       expect(state.message, StateMessage.error(messageHandler: messageHandler));
@@ -37,8 +38,9 @@ void main() {
 
     test('success returns correct state', () {
       final messageHandler = ResponseMessage();
-      final state = const OnBoardingGenPhraseState()
-          .success(messageHandler: messageHandler);
+      final state = const OnBoardingGenPhraseState().success(
+        messageHandler: messageHandler,
+      );
 
       expect(state.status, AppStatus.success);
       expect(

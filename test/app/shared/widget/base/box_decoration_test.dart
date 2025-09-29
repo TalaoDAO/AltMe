@@ -15,11 +15,7 @@ void main() {
         MaterialApp(
           home: Scaffold(
             body: Center(
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: decoration,
-              ),
+              child: Container(width: 100, height: 100, decoration: decoration),
             ),
           ),
         ),
@@ -29,8 +25,9 @@ void main() {
       expect(container.decoration, isA<BaseBoxDecoration>());
     });
 
-    testWidgets('find BaseBoxDecoration with non null property',
-        (WidgetTester tester) async {
+    testWidgets('find BaseBoxDecoration with non null property', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -43,10 +40,7 @@ void main() {
                   color: Colors.blueGrey,
                   shapeColor: Colors.white12,
                   gradient: LinearGradient(
-                    colors: [
-                      Colors.black26,
-                      Colors.black12,
-                    ],
+                    colors: [Colors.black26, Colors.black12],
                   ),
                   boxShadow: [BoxShadow(color: Colors.grey)],
                   anchors: [Alignment.topRight, Alignment.bottomLeft],
@@ -61,8 +55,9 @@ void main() {
       expect(container.decoration, isA<BaseBoxDecoration>());
     });
 
-    testWidgets('find BaseBoxDecoration with null borderRadius',
-        (WidgetTester tester) async {
+    testWidgets('find BaseBoxDecoration with null borderRadius', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -70,9 +65,7 @@ void main() {
               child: Container(
                 width: 100,
                 height: 100,
-                decoration: const BaseBoxDecoration(
-                  borderRadius: null,
-                ),
+                decoration: const BaseBoxDecoration(borderRadius: null),
               ),
             ),
           ),
@@ -130,9 +123,7 @@ void main() {
       );
       expect(path.fillType, PathFillType.nonZero);
       final decorationWithBorderRadius = decoration.copyWith(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(8),
-        ),
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
       );
 
       final pathWithBorderRadius = decorationWithBorderRadius.getClipPath(
@@ -154,9 +145,7 @@ void main() {
     testWidgets('scale function', (WidgetTester tester) async {
       const scaleFactor = 0.5;
       const gradient = LinearGradient(colors: [Colors.red, Colors.orange]);
-      final baseDecoration = decoration.copyWith(
-        gradient: gradient,
-      );
+      final baseDecoration = decoration.copyWith(gradient: gradient);
       final scaledDecoration = baseDecoration.scale(scaleFactor);
       expect(scaledDecoration.gradient, gradient.scale(scaleFactor));
     });

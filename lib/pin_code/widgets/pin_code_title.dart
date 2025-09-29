@@ -21,10 +21,9 @@ class PinCodeTitle extends StatelessWidget {
           textAlign: TextAlign.center,
           style: allowAction
               ? Theme.of(context).textTheme.headlineSmall
-              : Theme.of(context)
-                  .textTheme
-                  .titleLarge!
-                  .copyWith(color: Theme.of(context).colorScheme.error),
+              : Theme.of(context).textTheme.titleLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.error,
+                ),
         ),
         if (subTitle != null) ...[
           const SizedBox(height: 10),
@@ -32,10 +31,9 @@ class PinCodeTitle extends StatelessWidget {
             subTitle!,
             style: allowAction
                 ? Theme.of(context).textTheme.bodyLarge
-                : Theme.of(context)
-                    .textTheme
-                    .bodyLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.error),
+                : Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.error,
+                  ),
             textAlign: TextAlign.center,
           ),
         ],

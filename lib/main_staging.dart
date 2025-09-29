@@ -9,7 +9,5 @@ import 'package:altme/app/app.dart';
 import 'package:altme/bootstrap.dart';
 
 Future<void> main() async {
-  await bootstrap(
-    FlavorMode.staging,
-  );
+  await bootstrap(FlavorMode.staging);
 }

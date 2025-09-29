@@ -15,8 +15,8 @@ class QueryByExampleCredentialPickCubit
     List<CredentialModel> credentialList = const <CredentialModel>[],
     required CredentialQuery? credentialQuery,
   }) : super(
-          const QueryByExampleCredentialPickState(filteredCredentialList: []),
-        ) {
+         const QueryByExampleCredentialPickState(filteredCredentialList: []),
+       ) {
     if (credentialQuery == null) {
       /// Display your VP and VC case
       emit(state.copyWith(filteredCredentialList: credentialList));
@@ -44,15 +44,13 @@ class QueryByExampleCredentialPickCubit
           final searchList = getTextsFromCredential(r'$.type', credential.data);
           if (searchList.isNotEmpty) {
             /// I remove credential not
-            searchList.removeWhere(
-              (element) {
-                if (element == credentialQuery.example?.type) {
-                  return false;
-                } else {
-                  return true;
-                }
-              },
-            );
+            searchList.removeWhere((element) {
+              if (element == credentialQuery.example?.type) {
+                return false;
+              } else {
+                return true;
+              }
+            });
 
             /// if [searchList] is not empty we mark this credential
             /// as a valid candidate
@@ -74,19 +72,19 @@ class QueryByExampleCredentialPickCubit
           for (final issuer in issuerList) {
             /// A credential must satisfy one issuer value to be candidate
             /// for presentation
-            final searchList =
-                getTextsFromCredential(r'$.issuer', credential.data);
+            final searchList = getTextsFromCredential(
+              r'$.issuer',
+              credential.data,
+            );
             if (searchList.isNotEmpty) {
               /// I remove element not matching requested issuer
-              searchList.removeWhere(
-                (element) {
-                  if (element == issuer.issuer) {
-                    return false;
-                  } else {
-                    return true;
-                  }
-                },
-              );
+              searchList.removeWhere((element) {
+                if (element == issuer.issuer) {
+                  return false;
+                } else {
+                  return true;
+                }
+              });
 
               /// if [searchList] is not empty we mark this credential
               /// as a valid candidate

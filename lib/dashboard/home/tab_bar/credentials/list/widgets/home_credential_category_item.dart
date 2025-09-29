@@ -9,9 +9,7 @@ class HomeCredentialCategoryItem extends StatelessWidget {
     super.key,
     required this.credentials,
     required this.credentialCategory,
-    this.margin = const EdgeInsets.only(
-      bottom: Sizes.spaceNormal,
-    ),
+    this.margin = const EdgeInsets.only(bottom: Sizes.spaceNormal),
   });
 
   final List<CredentialModel> credentials;
@@ -23,9 +21,16 @@ class HomeCredentialCategoryItem extends StatelessWidget {
     //sort credentials by order
     final sortedCredentials = List.of(credentials)
       ..sort(
-        (a, b) => a.credentialPreview.credentialSubjectModel
-                    .credentialSubjectType.order <
-                b.credentialPreview.credentialSubjectModel.credentialSubjectType
+        (a, b) =>
+            a
+                    .credentialPreview
+                    .credentialSubjectModel
+                    .credentialSubjectType
+                    .order <
+                b
+                    .credentialPreview
+                    .credentialSubjectModel
+                    .credentialSubjectType
                     .order
             ? 1
             : 0,
@@ -41,9 +46,9 @@ class HomeCredentialCategoryItem extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
             child: Text(
               credentialCategoryConfig.homeTitle,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
           Padding(
@@ -51,17 +56,14 @@ class HomeCredentialCategoryItem extends StatelessWidget {
             child: Text(
               credentialCategoryConfig.homeSubTitle,
               maxLines: 3,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontWeight: FontWeight.w100,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w100),
             ),
           ),
           const SizedBox(height: 14),
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 4,
-              vertical: 0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
             child: GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,

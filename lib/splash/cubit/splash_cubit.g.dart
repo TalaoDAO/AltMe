@@ -7,13 +7,14 @@ part of 'splash_cubit.dart';
 // **************************************************************************
 
 SplashState _$SplashStateFromJson(Map<String, dynamic> json) => SplashState(
-      status: $enumDecodeNullable(_$SplashStatusEnumMap, json['status']) ??
-          SplashStatus.init,
-      versionNumber: json['versionNumber'] as String? ?? '',
-      buildNumber: json['buildNumber'] as String? ?? '',
-      isNewVersion: json['isNewVersion'] as bool? ?? false,
-      loadedValue: (json['loadedValue'] as num?)?.toDouble() ?? 0,
-    );
+  status:
+      $enumDecodeNullable(_$SplashStatusEnumMap, json['status']) ??
+      SplashStatus.init,
+  versionNumber: json['versionNumber'] as String? ?? '',
+  buildNumber: json['buildNumber'] as String? ?? '',
+  isNewVersion: json['isNewVersion'] as bool? ?? false,
+  loadedValue: (json['loadedValue'] as num?)?.toDouble() ?? 0,
+);
 
 Map<String, dynamic> _$SplashStateToJson(SplashState instance) =>
     <String, dynamic>{

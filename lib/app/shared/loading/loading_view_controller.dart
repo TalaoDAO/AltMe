@@ -5,10 +5,7 @@ typedef UpdateLoading = bool Function(String text);
 
 @immutable
 class LoadingViewController {
-  const LoadingViewController({
-    required this.close,
-    required this.update,
-  });
+  const LoadingViewController({required this.close, required this.update});
 
   final CloaseLoading close;
   final UpdateLoading update;

@@ -43,8 +43,9 @@ Future<void> discoverCredential({
     CredentialSubjectType.verifiableIdCard,
   ];
 
-  if (credentialSubjectTypeListForCheck
-      .contains(dummyCredential.credentialSubjectType)) {
+  if (credentialSubjectTypeListForCheck.contains(
+    dummyCredential.credentialSubjectType,
+  )) {
     getLogger('discoverCredential').i(dummyCredential.credentialSubjectType);
 
     if (dummyCredential.credentialSubjectType == CredentialSubjectType.over18) {
@@ -68,9 +69,9 @@ Future<void> discoverCredential({
           dummyCredential.credentialSubjectType ==
               CredentialSubjectType.livenessCard) {
         return context.read<KycVerificationCubit>().getVcByKycVerification(
-              vcType: dummyCredential.credentialSubjectType.getKycVcType,
-              link: dummyCredential.link!,
-            );
+          vcType: dummyCredential.credentialSubjectType.getKycVcType,
+          link: dummyCredential.link!,
+        );
       }
 
       if (profileCubit.state.model.profileType == ProfileType.enterprise) {
@@ -98,15 +99,15 @@ Future<void> discoverCredential({
           onSelectPassbase: () async {
             // start verification by KYC (ID360)
             await context.read<KycVerificationCubit>().getVcByKycVerification(
-                  vcType: dummyCredential.credentialSubjectType.getKycVcType,
-                  link: dummyCredential.link!,
-                  onKycApproved: () async {
-                    await launchUrlAfterDiscovery(
-                      dummyCredential: dummyCredential,
-                      context: context,
-                    );
-                  },
+              vcType: dummyCredential.credentialSubjectType.getKycVcType,
+              link: dummyCredential.link!,
+              onKycApproved: () async {
+                await launchUrlAfterDiscovery(
+                  dummyCredential: dummyCredential,
+                  context: context,
                 );
+              },
+            );
 
             Navigator.pop(context);
           },
@@ -123,15 +124,15 @@ Future<void> discoverCredential({
       );
     } else {
       await context.read<KycVerificationCubit>().getVcByKycVerification(
-            link: dummyCredential.link!,
-            vcType: dummyCredential.credentialSubjectType.getKycVcType,
-            onKycApproved: () async {
-              await launchUrlAfterDiscovery(
-                dummyCredential: dummyCredential,
-                context: context,
-              );
-            },
+        link: dummyCredential.link!,
+        vcType: dummyCredential.credentialSubjectType.getKycVcType,
+        onKycApproved: () async {
+          await launchUrlAfterDiscovery(
+            dummyCredential: dummyCredential,
+            context: context,
           );
+        },
+      );
     }
   } else {
     await launchUrlAfterDiscovery(

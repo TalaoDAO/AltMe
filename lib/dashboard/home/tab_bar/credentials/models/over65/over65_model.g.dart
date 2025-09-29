@@ -7,11 +7,11 @@ part of 'over65_model.dart';
 // **************************************************************************
 
 Over65Model _$Over65ModelFromJson(Map<String, dynamic> json) => Over65Model(
-      id: json['id'] as String?,
-      type: json['type'],
-      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-    );
+  id: json['id'] as String?,
+  type: json['type'],
+  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+);
 
 Map<String, dynamic> _$Over65ModelToJson(Over65Model instance) {
   final val = <String, dynamic>{

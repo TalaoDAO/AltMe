@@ -8,9 +8,11 @@ part of 'chat_room_cubit.dart';
 
 ChatRoomState _$ChatRoomStateFromJson(Map<String, dynamic> json) =>
     ChatRoomState(
-      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+      status:
+          $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
           AppStatus.idle,
-      messages: (json['messages'] as List<dynamic>?)
+      messages:
+          (json['messages'] as List<dynamic>?)
               ?.map((e) => Message.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const <Message>[],

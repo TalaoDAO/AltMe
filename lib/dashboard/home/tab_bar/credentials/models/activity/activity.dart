@@ -6,10 +6,7 @@ part 'activity.g.dart';
 
 @JsonSerializable()
 class Activity extends Equatable {
-  const Activity({
-    this.acquisitionAt,
-    this.presentation,
-  });
+  const Activity({this.acquisitionAt, this.presentation});
 
   factory Activity.fromJson(Map<String, dynamic> json) =>
       _$ActivityFromJson(json);
@@ -25,10 +22,7 @@ class Activity extends Equatable {
 
 @JsonSerializable()
 class Presentation extends Equatable {
-  const Presentation({
-    required this.issuer,
-    required this.presentedAt,
-  });
+  const Presentation({required this.issuer, required this.presentedAt});
 
   factory Presentation.fromJson(Map<String, dynamic> json) =>
       _$PresentationFromJson(json);

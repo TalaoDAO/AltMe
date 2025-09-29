@@ -21,9 +21,7 @@ class SignPayloadState extends Equatable {
     return copyWith(status: AppStatus.loading);
   }
 
-  SignPayloadState error({
-    required MessageHandler messageHandler,
-  }) {
+  SignPayloadState error({required MessageHandler messageHandler}) {
     return copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
@@ -47,10 +45,5 @@ class SignPayloadState extends Equatable {
   Map<String, dynamic> toJson() => _$SignPayloadStateToJson(this);
 
   @override
-  List<Object?> get props => [
-        status,
-        message,
-        payloadMessage,
-        dAppName,
-      ];
+  List<Object?> get props => [status, message, payloadMessage, dAppName];
 }

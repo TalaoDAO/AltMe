@@ -8,10 +8,7 @@ int getPositionOfGZipBit(int index) => 7 - (index % 8);
 
 int getByte(int index) => index ~/ 8;
 
-int getBit({
-  required int index,
-  required String encodedList,
-}) {
+int getBit({required int index, required String encodedList}) {
   final bytes = getByte(index);
   final decompressedBytes = decodeAndGzibDecompress(encodedList);
 

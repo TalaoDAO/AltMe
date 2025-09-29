@@ -14,10 +14,7 @@ class SoftwareLicenseState extends Equatable {
   final List<LicenseModel> licenses;
 
   SoftwareLicenseState loading() {
-    return copyWith(
-      status: AppStatus.loading,
-      licenses: licenses,
-    );
+    return copyWith(status: AppStatus.loading, licenses: licenses);
   }
 
   SoftwareLicenseState copyWith({
@@ -33,8 +30,5 @@ class SoftwareLicenseState extends Equatable {
   Map<String, dynamic> toJson() => _$SoftwareLicenseStateToJson(this);
 
   @override
-  List<Object?> get props => [
-        status,
-        licenses,
-      ];
+  List<Object?> get props => [status, licenses];
 }

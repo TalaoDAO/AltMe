@@ -30,9 +30,7 @@ class LocalAuthApi {
     }
   }
 
-  Future<bool> authenticate({
-    required String localizedReason,
-  }) async {
+  Future<bool> authenticate({required String localizedReason}) async {
     final isAvailable = await hasBiometrics();
     if (!isAvailable) return false;
 

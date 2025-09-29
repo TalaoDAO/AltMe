@@ -16,8 +16,7 @@ class PolygonAssociatedAddressCredential {
 
   factory PolygonAssociatedAddressCredential.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$PolygonAssociatedAddressCredentialFromJson(json);
+  ) => _$PolygonAssociatedAddressCredentialFromJson(json);
 
   @JsonKey(name: '@context', defaultValue: _context)
   final List<dynamic> context;
@@ -44,6 +43,6 @@ class PolygonAssociatedAddressCredential {
       'associatedAddress': 'https://w3id.org/security#blockchainAccountId',
       'PolygonAssociatedAddress':
           'https://doc.wallet-provider.io/vc_type/#PolygonAssociatedAdress',
-    }
+    },
   ];
 }

@@ -9,7 +9,8 @@ part of 'student_card_model.dart';
 StudentCardModel _$StudentCardModelFromJson(Map<String, dynamic> json) =>
     StudentCardModel(
       recipient: StudentCardModel._fromJsonProfessionalStudentCardRecipient(
-          json['recipient']),
+        json['recipient'],
+      ),
       expires: json['expires'] as String? ?? '',
       id: json['id'] as String?,
       type: json['type'],

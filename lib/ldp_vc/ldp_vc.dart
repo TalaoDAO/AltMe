@@ -10,8 +10,9 @@ class LdpVc {
   String? get getPicture {
     final credentialSubject =
         (credentialModel.credentialSupported?['credentialSubject'] ??
-            credentialModel.credentialSupported?['credential_definition']
-                ['credentialSubject']) as Map<String, dynamic>?;
+                credentialModel
+                    .credentialSupported?['credential_definition']['credentialSubject'])
+            as Map<String, dynamic>?;
 
     if (credentialSubject == null) return null;
 

@@ -161,9 +161,7 @@ class DisplayCredentialField extends StatelessWidget {
   TextSpan stringValue(TextTheme textTheme, BuildContext context) {
     return TextSpan(
       text: value,
-      style: textTheme.bodyMedium!.copyWith(
-        color: valueColor,
-      ),
+      style: textTheme.bodyMedium!.copyWith(color: valueColor),
     );
   }
 

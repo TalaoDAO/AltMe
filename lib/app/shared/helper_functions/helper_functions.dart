@@ -2301,8 +2301,6 @@ Map<String, dynamic> getCredentialDataFromJson({
     }
   }
 
-
-
   /// issuanceDate -> iat
   if (!credential.containsKey('issuanceDate')) {
     if (jsonContent.containsKey('iat')) {

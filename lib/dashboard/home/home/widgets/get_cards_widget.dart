@@ -22,15 +22,10 @@ class GetCardsWidget extends StatelessWidget {
           );
           return;
         }
-        Navigator.of(context).push<void>(
-          IssuerWebsitesPage.route(null),
-        );
+        Navigator.of(context).push<void>(IssuerWebsitesPage.route(null));
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: 5,
-          horizontal: 15,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.circular(10),
@@ -42,10 +37,7 @@ class GetCardsWidget extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(width: 8),
-            Image.asset(
-              IconStrings.walletAdd,
-              height: 20,
-            ),
+            Image.asset(IconStrings.walletAdd, height: 20),
           ],
         ),
       ),

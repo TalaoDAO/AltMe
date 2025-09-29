@@ -46,17 +46,15 @@ class MyTab extends StatelessWidget {
               )
             else
               Image.asset(icon, height: Sizes.icon),
-            const SizedBox(
-              width: Sizes.spaceXSmall,
-            ),
+            const SizedBox(width: Sizes.spaceXSmall),
             Text(
               text,
               maxLines: 1,
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.onPrimaryContainer
-                        : Theme.of(context).colorScheme.inverseSurface,
-                  ),
+                color: isSelected
+                    ? Theme.of(context).colorScheme.onPrimaryContainer
+                    : Theme.of(context).colorScheme.inverseSurface,
+              ),
               overflow: TextOverflow.fade,
             ),
           ],
