@@ -7,31 +7,29 @@ part of 'send_receive_home_cubit.dart';
 // **************************************************************************
 
 SendReceiveHomeState _$SendReceiveHomeStateFromJson(
-  Map<String, dynamic> json,
-) => SendReceiveHomeState(
-  operations:
-      (json['operations'] as List<dynamic>?)
-          ?.map((e) => OperationModel.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-      const [],
-  selectedToken: TokenModel.fromJson(
-    json['selectedToken'] as Map<String, dynamic>,
-  ),
-  status:
-      $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ?? AppStatus.init,
-  message: json['message'] == null
-      ? null
-      : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-);
+        Map<String, dynamic> json) =>
+    SendReceiveHomeState(
+      operations: (json['operations'] as List<dynamic>?)
+              ?.map((e) => OperationModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      selectedToken:
+          TokenModel.fromJson(json['selectedToken'] as Map<String, dynamic>),
+      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+          AppStatus.init,
+      message: json['message'] == null
+          ? null
+          : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$SendReceiveHomeStateToJson(
-  SendReceiveHomeState instance,
-) => <String, dynamic>{
-  'operations': instance.operations,
-  'selectedToken': instance.selectedToken,
-  'status': _$AppStatusEnumMap[instance.status]!,
-  'message': instance.message,
-};
+        SendReceiveHomeState instance) =>
+    <String, dynamic>{
+      'operations': instance.operations,
+      'selectedToken': instance.selectedToken,
+      'status': _$AppStatusEnumMap[instance.status]!,
+      'message': instance.message,
+    };
 
 const _$AppStatusEnumMap = {
   AppStatus.init: 'init',

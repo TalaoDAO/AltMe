@@ -8,40 +8,33 @@ part of 'credentials_cubit.dart';
 
 CredentialsState _$CredentialsStateFromJson(Map<String, dynamic> json) =>
     CredentialsState(
-      status:
-          $enumDecodeNullable(_$CredentialsStatusEnumMap, json['status']) ??
+      status: $enumDecodeNullable(_$CredentialsStatusEnumMap, json['status']) ??
           CredentialsStatus.init,
       message: json['message'] == null
           ? null
           : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-      credentials:
-          (json['credentials'] as List<dynamic>?)
+      credentials: (json['credentials'] as List<dynamic>?)
               ?.map((e) => CredentialModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
       dummyCredentials:
           (json['dummyCredentials'] as Map<String, dynamic>?)?.map(
-            (k, e) => MapEntry(
-              $enumDecode(_$CredentialCategoryEnumMap, k),
-              (e as List<dynamic>)
-                  .map(
-                    (e) => DiscoverDummyCredential.fromJson(
-                      e as Map<String, dynamic>,
-                    ),
-                  )
-                  .toList(),
-            ),
-          ) ??
-          const {},
+                (k, e) => MapEntry(
+                    $enumDecode(_$CredentialCategoryEnumMap, k),
+                    (e as List<dynamic>)
+                        .map((e) => DiscoverDummyCredential.fromJson(
+                            e as Map<String, dynamic>))
+                        .toList()),
+              ) ??
+              const {},
     );
 
 Map<String, dynamic> _$CredentialsStateToJson(CredentialsState instance) =>
     <String, dynamic>{
       'status': _$CredentialsStatusEnumMap[instance.status]!,
       'credentials': instance.credentials,
-      'dummyCredentials': instance.dummyCredentials.map(
-        (k, e) => MapEntry(_$CredentialCategoryEnumMap[k]!, e),
-      ),
+      'dummyCredentials': instance.dummyCredentials
+          .map((k, e) => MapEntry(_$CredentialCategoryEnumMap[k]!, e)),
       'message': instance.message,
     };
 

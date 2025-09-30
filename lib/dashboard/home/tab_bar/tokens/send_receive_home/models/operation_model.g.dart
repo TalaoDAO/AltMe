@@ -16,8 +16,7 @@ OperationModel _$OperationModelFromJson(Map<String, dynamic> json) =>
       hash: json['hash'] as String,
       counter: (json['counter'] as num).toInt(),
       sender: OperationAddressModel.fromJson(
-        json['sender'] as Map<String, dynamic>,
-      ),
+          json['sender'] as Map<String, dynamic>),
       gasLimit: (json['gasLimit'] as num).toInt(),
       gasUsed: (json['gasUsed'] as num).toInt(),
       storageLimit: (json['storageLimit'] as num).toInt(),
@@ -26,16 +25,14 @@ OperationModel _$OperationModelFromJson(Map<String, dynamic> json) =>
       storageFee: (json['storageFee'] as num).toInt(),
       allocationFee: (json['allocationFee'] as num).toInt(),
       target: OperationAddressModel.fromJson(
-        json['target'] as Map<String, dynamic>,
-      ),
+          json['target'] as Map<String, dynamic>),
       amount: json['amount'],
       status: json['status'] as String,
       hasInternals: json['hasInternals'] as bool,
       parameter: json['parameter'] == null
           ? null
           : OperationParameterModel.fromJson(
-              json['parameter'] as Map<String, dynamic>,
-            ),
+              json['parameter'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$OperationModelToJson(OperationModel instance) =>

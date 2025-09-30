@@ -8,8 +8,7 @@ part of 'enterprise_cubit.dart';
 
 EnterpriseState _$EnterpriseStateFromJson(Map<String, dynamic> json) =>
     EnterpriseState(
-      status:
-          $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
           AppStatus.init,
       message: json['message'] == null
           ? null

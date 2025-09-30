@@ -8,8 +8,7 @@ part of 'nft_details_cubit.dart';
 
 NftDetailsState _$NftDetailsStateFromJson(Map<String, dynamic> json) =>
     NftDetailsState(
-      status:
-          $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
           AppStatus.init,
       message: json['message'] == null
           ? null

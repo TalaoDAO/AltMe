@@ -7,18 +7,17 @@ part of 'ethereum_poo_address_model.dart';
 // **************************************************************************
 
 EthereumPooAddressModel _$EthereumPooAddressModelFromJson(
-  Map<String, dynamic> json,
-) => EthereumPooAddressModel(
-  associatedAddress: json['associatedAddress'] as String? ?? '',
-  id: json['id'] as String?,
-  type: json['type'],
-  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-);
+        Map<String, dynamic> json) =>
+    EthereumPooAddressModel(
+      associatedAddress: json['associatedAddress'] as String? ?? '',
+      id: json['id'] as String?,
+      type: json['type'],
+      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+    );
 
 Map<String, dynamic> _$EthereumPooAddressModelToJson(
-  EthereumPooAddressModel instance,
-) {
+    EthereumPooAddressModel instance) {
   final val = <String, dynamic>{
     'id': instance.id,
     'type': instance.type,

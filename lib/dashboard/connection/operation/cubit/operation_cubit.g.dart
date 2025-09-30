@@ -8,8 +8,7 @@ part of 'operation_cubit.dart';
 
 OperationState _$OperationStateFromJson(Map<String, dynamic> json) =>
     OperationState(
-      status:
-          $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
           AppStatus.init,
       message: json['message'] == null
           ? null
@@ -21,8 +20,7 @@ OperationState _$OperationStateFromJson(Map<String, dynamic> json) =>
       cryptoAccountData: json['cryptoAccountData'] == null
           ? null
           : CryptoAccountData.fromJson(
-              json['cryptoAccountData'] as Map<String, dynamic>,
-            ),
+              json['cryptoAccountData'] as Map<String, dynamic>),
       dAppName: json['dAppName'] as String? ?? '',
     );
 

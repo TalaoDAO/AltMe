@@ -7,19 +7,19 @@ part of 'token_model.dart';
 // **************************************************************************
 
 TokenModel _$TokenModelFromJson(Map<String, dynamic> json) => TokenModel(
-  contractAddress: json['contractAddress'] as String? ?? '',
-  name: json['name'] as String? ?? '',
-  symbol: json['symbol'] as String? ?? '',
-  decimalsToShow: (json['decimalsToShow'] as num?)?.toInt() ?? 2,
-  icon: json['icon'] as String?,
-  thumbnailUri: json['thumbnailUri'] as String?,
-  balance: json['balance'] as String,
-  decimals: json['decimals'] as String? ?? '0',
-  tokenUSDPrice: (json['tokenUSDPrice'] as num?)?.toDouble() ?? 0,
-  balanceInUSD: (json['balanceInUSD'] as num?)?.toDouble() ?? 0,
-  standard: json['standard'] as String?,
-  tokenId: json['tokenId'] as String? ?? '0',
-);
+      contractAddress: json['contractAddress'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      symbol: json['symbol'] as String? ?? '',
+      decimalsToShow: (json['decimalsToShow'] as num?)?.toInt() ?? 2,
+      icon: json['icon'] as String?,
+      thumbnailUri: json['thumbnailUri'] as String?,
+      balance: json['balance'] as String,
+      decimals: json['decimals'] as String? ?? '0',
+      tokenUSDPrice: (json['tokenUSDPrice'] as num?)?.toDouble() ?? 0,
+      balanceInUSD: (json['balanceInUSD'] as num?)?.toDouble() ?? 0,
+      standard: json['standard'] as String?,
+      tokenId: json['tokenId'] as String? ?? '0',
+    );
 
 Map<String, dynamic> _$TokenModelToJson(TokenModel instance) =>
     <String, dynamic>{

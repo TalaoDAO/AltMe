@@ -7,24 +7,24 @@ part of 'learning_achievement_model.dart';
 // **************************************************************************
 
 LearningAchievementModel _$LearningAchievementModelFromJson(
-  Map<String, dynamic> json,
-) => LearningAchievementModel(
-  id: json['id'] as String?,
-  type: json['type'],
-  familyName: json['familyName'] as String? ?? '',
-  givenName: json['givenName'] as String? ?? '',
-  email: json['email'] as String? ?? '',
-  birthDate: json['birthDate'] as String? ?? '',
-  hasCredential: json['hasCredential'] == null
-      ? null
-      : HasCredential.fromJson(json['hasCredential'] as Map<String, dynamic>),
-  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-);
+        Map<String, dynamic> json) =>
+    LearningAchievementModel(
+      id: json['id'] as String?,
+      type: json['type'],
+      familyName: json['familyName'] as String? ?? '',
+      givenName: json['givenName'] as String? ?? '',
+      email: json['email'] as String? ?? '',
+      birthDate: json['birthDate'] as String? ?? '',
+      hasCredential: json['hasCredential'] == null
+          ? null
+          : HasCredential.fromJson(
+              json['hasCredential'] as Map<String, dynamic>),
+      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+    );
 
 Map<String, dynamic> _$LearningAchievementModelToJson(
-  LearningAchievementModel instance,
-) {
+    LearningAchievementModel instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {

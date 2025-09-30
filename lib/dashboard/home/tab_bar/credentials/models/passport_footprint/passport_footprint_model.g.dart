@@ -7,17 +7,16 @@ part of 'passport_footprint_model.dart';
 // **************************************************************************
 
 PassportFootprintModel _$PassportFootprintModelFromJson(
-  Map<String, dynamic> json,
-) => PassportFootprintModel(
-  id: json['id'] as String?,
-  type: json['type'],
-  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-);
+        Map<String, dynamic> json) =>
+    PassportFootprintModel(
+      id: json['id'] as String?,
+      type: json['type'],
+      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+    );
 
 Map<String, dynamic> _$PassportFootprintModelToJson(
-  PassportFootprintModel instance,
-) {
+    PassportFootprintModel instance) {
   final val = <String, dynamic>{
     'id': instance.id,
     'type': instance.type,

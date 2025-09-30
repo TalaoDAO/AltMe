@@ -7,23 +7,23 @@ part of 'backup_credential_cubit.dart';
 // **************************************************************************
 
 BackupCredentialState _$BackupCredentialStateFromJson(
-  Map<String, dynamic> json,
-) => BackupCredentialState(
-  status:
-      $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ?? AppStatus.init,
-  message: json['message'] == null
-      ? null
-      : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-  filePath: json['filePath'] as String? ?? '',
-);
+        Map<String, dynamic> json) =>
+    BackupCredentialState(
+      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+          AppStatus.init,
+      message: json['message'] == null
+          ? null
+          : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
+      filePath: json['filePath'] as String? ?? '',
+    );
 
 Map<String, dynamic> _$BackupCredentialStateToJson(
-  BackupCredentialState instance,
-) => <String, dynamic>{
-  'status': _$AppStatusEnumMap[instance.status]!,
-  'message': instance.message,
-  'filePath': instance.filePath,
-};
+        BackupCredentialState instance) =>
+    <String, dynamic>{
+      'status': _$AppStatusEnumMap[instance.status]!,
+      'message': instance.message,
+      'filePath': instance.filePath,
+    };
 
 const _$AppStatusEnumMap = {
   AppStatus.init: 'init',

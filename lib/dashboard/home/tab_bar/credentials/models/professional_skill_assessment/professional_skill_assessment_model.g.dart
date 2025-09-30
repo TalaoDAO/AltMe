@@ -7,25 +7,23 @@ part of 'professional_skill_assessment_model.dart';
 // **************************************************************************
 
 ProfessionalSkillAssessmentModel _$ProfessionalSkillAssessmentModelFromJson(
-  Map<String, dynamic> json,
-) => ProfessionalSkillAssessmentModel(
-  id: json['id'] as String?,
-  type: json['type'],
-  skills: (json['skills'] as List<dynamic>?)
-      ?.map((e) => Skill.fromJson(e as Map<String, dynamic>))
-      .toList(),
-  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-  signatureLines: ProfessionalSkillAssessmentModel._signatureLinesFromJson(
-    json['signatureLines'],
-  ),
-  familyName: json['familyName'] as String? ?? '',
-  givenName: json['givenName'] as String? ?? '',
-);
+        Map<String, dynamic> json) =>
+    ProfessionalSkillAssessmentModel(
+      id: json['id'] as String?,
+      type: json['type'],
+      skills: (json['skills'] as List<dynamic>?)
+          ?.map((e) => Skill.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+      signatureLines: ProfessionalSkillAssessmentModel._signatureLinesFromJson(
+          json['signatureLines']),
+      familyName: json['familyName'] as String? ?? '',
+      givenName: json['givenName'] as String? ?? '',
+    );
 
 Map<String, dynamic> _$ProfessionalSkillAssessmentModelToJson(
-  ProfessionalSkillAssessmentModel instance,
-) {
+    ProfessionalSkillAssessmentModel instance) {
   final val = <String, dynamic>{
     'id': instance.id,
     'type': instance.type,
@@ -42,8 +40,7 @@ Map<String, dynamic> _$ProfessionalSkillAssessmentModelToJson(
   val['skills'] = instance.skills?.map((e) => e.toJson()).toList();
   val['familyName'] = instance.familyName;
   val['givenName'] = instance.givenName;
-  val['signatureLines'] = instance.signatureLines
-      ?.map((e) => e.toJson())
-      .toList();
+  val['signatureLines'] =
+      instance.signatureLines?.map((e) => e.toJson()).toList();
   return val;
 }

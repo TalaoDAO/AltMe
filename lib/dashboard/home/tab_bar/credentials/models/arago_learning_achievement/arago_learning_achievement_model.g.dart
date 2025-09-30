@@ -7,24 +7,24 @@ part of 'arago_learning_achievement_model.dart';
 // **************************************************************************
 
 AragoLearningAchievementModel _$AragoLearningAchievementModelFromJson(
-  Map<String, dynamic> json,
-) => AragoLearningAchievementModel(
-  id: json['id'] as String?,
-  type: json['type'],
-  familyName: json['familyName'] as String? ?? '',
-  givenName: json['givenName'] as String? ?? '',
-  email: json['email'] as String? ?? '',
-  birthDate: json['birthDate'] as String? ?? '',
-  hasCredential: json['hasCredential'] == null
-      ? null
-      : HasCredential.fromJson(json['hasCredential'] as Map<String, dynamic>),
-  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-);
+        Map<String, dynamic> json) =>
+    AragoLearningAchievementModel(
+      id: json['id'] as String?,
+      type: json['type'],
+      familyName: json['familyName'] as String? ?? '',
+      givenName: json['givenName'] as String? ?? '',
+      email: json['email'] as String? ?? '',
+      birthDate: json['birthDate'] as String? ?? '',
+      hasCredential: json['hasCredential'] == null
+          ? null
+          : HasCredential.fromJson(
+              json['hasCredential'] as Map<String, dynamic>),
+      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+    );
 
 Map<String, dynamic> _$AragoLearningAchievementModelToJson(
-  AragoLearningAchievementModel instance,
-) {
+    AragoLearningAchievementModel instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {

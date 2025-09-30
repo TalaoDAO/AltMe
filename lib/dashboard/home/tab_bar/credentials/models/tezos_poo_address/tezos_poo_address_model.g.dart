@@ -7,18 +7,17 @@ part of 'tezos_poo_address_model.dart';
 // **************************************************************************
 
 TezosPooAddressModel _$TezosPooAddressModelFromJson(
-  Map<String, dynamic> json,
-) => TezosPooAddressModel(
-  associatedAddress: json['associatedAddress'] as String? ?? '',
-  id: json['id'] as String?,
-  type: json['type'],
-  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-);
+        Map<String, dynamic> json) =>
+    TezosPooAddressModel(
+      associatedAddress: json['associatedAddress'] as String? ?? '',
+      id: json['id'] as String?,
+      type: json['type'],
+      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+    );
 
 Map<String, dynamic> _$TezosPooAddressModelToJson(
-  TezosPooAddressModel instance,
-) {
+    TezosPooAddressModel instance) {
   final val = <String, dynamic>{
     'id': instance.id,
     'type': instance.type,

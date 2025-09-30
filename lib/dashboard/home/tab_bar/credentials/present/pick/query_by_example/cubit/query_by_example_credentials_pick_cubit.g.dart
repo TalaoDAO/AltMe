@@ -7,17 +7,17 @@ part of 'query_by_example_credentials_pick_cubit.dart';
 // **************************************************************************
 
 QueryByExampleCredentialPickState _$QueryByExampleCredentialPickStateFromJson(
-  Map<String, dynamic> json,
-) => QueryByExampleCredentialPickState(
-  selected: (json['selected'] as num?)?.toInt(),
-  filteredCredentialList: (json['filteredCredentialList'] as List<dynamic>)
-      .map((e) => CredentialModel.fromJson(e as Map<String, dynamic>))
-      .toList(),
-);
+        Map<String, dynamic> json) =>
+    QueryByExampleCredentialPickState(
+      selected: (json['selected'] as num?)?.toInt(),
+      filteredCredentialList: (json['filteredCredentialList'] as List<dynamic>)
+          .map((e) => CredentialModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$QueryByExampleCredentialPickStateToJson(
-  QueryByExampleCredentialPickState instance,
-) => <String, dynamic>{
-  'selected': instance.selected,
-  'filteredCredentialList': instance.filteredCredentialList,
-};
+        QueryByExampleCredentialPickState instance) =>
+    <String, dynamic>{
+      'selected': instance.selected,
+      'filteredCredentialList': instance.filteredCredentialList,
+    };

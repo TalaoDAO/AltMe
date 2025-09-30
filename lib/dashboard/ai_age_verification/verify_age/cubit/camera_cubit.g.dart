@@ -7,16 +7,15 @@ part of 'camera_cubit.dart';
 // **************************************************************************
 
 CameraState _$CameraStateFromJson(Map<String, dynamic> json) => CameraState(
-  status:
-      $enumDecodeNullable(_$CameraStatusEnumMap, json['status']) ??
-      CameraStatus.initializing,
-  data: (json['data'] as List<dynamic>?)
-      ?.map((e) => (e as num).toInt())
-      .toList(),
-  acquiredCredentialsQuantity:
-      (json['acquiredCredentialsQuantity'] as num?)?.toInt() ?? 0,
-  ageEstimate: json['ageEstimate'] as String? ?? '',
-);
+      status: $enumDecodeNullable(_$CameraStatusEnumMap, json['status']) ??
+          CameraStatus.initializing,
+      data: (json['data'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
+      acquiredCredentialsQuantity:
+          (json['acquiredCredentialsQuantity'] as num?)?.toInt() ?? 0,
+      ageEstimate: json['ageEstimate'] as String? ?? '',
+    );
 
 Map<String, dynamic> _$CameraStateToJson(CameraState instance) =>
     <String, dynamic>{

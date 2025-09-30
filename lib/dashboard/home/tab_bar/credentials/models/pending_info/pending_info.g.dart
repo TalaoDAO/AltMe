@@ -7,17 +7,17 @@ part of 'pending_info.dart';
 // **************************************************************************
 
 PendingInfo _$PendingInfoFromJson(Map<String, dynamic> json) => PendingInfo(
-  encodedCredentialFromOIDC4VC:
-      json['encodedCredentialFromOIDC4VC'] as Map<String, dynamic>,
-  accessToken: json['accessToken'] as String,
-  deferredCredentialEndpoint: json['deferredCredentialEndpoint'] as String,
-  format: json['format'] as String,
-  url: json['url'] as String,
-  issuer: json['issuer'] as String?,
-  requestedAt: json['requestedAt'] == null
-      ? null
-      : DateTime.parse(json['requestedAt'] as String),
-);
+      encodedCredentialFromOIDC4VC:
+          json['encodedCredentialFromOIDC4VC'] as Map<String, dynamic>,
+      accessToken: json['accessToken'] as String,
+      deferredCredentialEndpoint: json['deferredCredentialEndpoint'] as String,
+      format: json['format'] as String,
+      url: json['url'] as String,
+      issuer: json['issuer'] as String?,
+      requestedAt: json['requestedAt'] == null
+          ? null
+          : DateTime.parse(json['requestedAt'] as String),
+    );
 
 Map<String, dynamic> _$PendingInfoToJson(PendingInfo instance) =>
     <String, dynamic>{

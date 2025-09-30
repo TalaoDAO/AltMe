@@ -7,26 +7,26 @@ part of 'restore_credential_cubit.dart';
 // **************************************************************************
 
 RestoreCredentialState _$RestoreCredentialStateFromJson(
-  Map<String, dynamic> json,
-) => RestoreCredentialState(
-  status:
-      $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ?? AppStatus.init,
-  message: json['message'] == null
-      ? null
-      : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-  recoveredCredentialLength: (json['recoveredCredentialLength'] as num?)
-      ?.toInt(),
-  backupFilePath: json['backupFilePath'] as String?,
-);
+        Map<String, dynamic> json) =>
+    RestoreCredentialState(
+      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+          AppStatus.init,
+      message: json['message'] == null
+          ? null
+          : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
+      recoveredCredentialLength:
+          (json['recoveredCredentialLength'] as num?)?.toInt(),
+      backupFilePath: json['backupFilePath'] as String?,
+    );
 
 Map<String, dynamic> _$RestoreCredentialStateToJson(
-  RestoreCredentialState instance,
-) => <String, dynamic>{
-  'status': _$AppStatusEnumMap[instance.status]!,
-  'message': instance.message,
-  'recoveredCredentialLength': instance.recoveredCredentialLength,
-  'backupFilePath': instance.backupFilePath,
-};
+        RestoreCredentialState instance) =>
+    <String, dynamic>{
+      'status': _$AppStatusEnumMap[instance.status]!,
+      'message': instance.message,
+      'recoveredCredentialLength': instance.recoveredCredentialLength,
+      'backupFilePath': instance.backupFilePath,
+    };
 
 const _$AppStatusEnumMap = {
   AppStatus.init: 'init',

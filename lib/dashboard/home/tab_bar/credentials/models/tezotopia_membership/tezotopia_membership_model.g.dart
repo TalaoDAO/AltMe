@@ -7,21 +7,20 @@ part of 'tezotopia_membership_model.dart';
 // **************************************************************************
 
 TezotopiaMembershipModel _$TezotopiaMembershipModelFromJson(
-  Map<String, dynamic> json,
-) => TezotopiaMembershipModel(
-  expires: json['expires'] as String? ?? '',
-  offers: json['offers'] == null
-      ? null
-      : Offers.fromJson(json['offers'] as Map<String, dynamic>),
-  id: json['id'] as String?,
-  type: json['type'],
-  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-);
+        Map<String, dynamic> json) =>
+    TezotopiaMembershipModel(
+      expires: json['expires'] as String? ?? '',
+      offers: json['offers'] == null
+          ? null
+          : Offers.fromJson(json['offers'] as Map<String, dynamic>),
+      id: json['id'] as String?,
+      type: json['type'],
+      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+    );
 
 Map<String, dynamic> _$TezotopiaMembershipModelToJson(
-  TezotopiaMembershipModel instance,
-) {
+    TezotopiaMembershipModel instance) {
   final val = <String, dynamic>{
     'id': instance.id,
     'type': instance.type,

@@ -7,25 +7,20 @@ part of 'credential_subject_model.dart';
 // **************************************************************************
 
 CredentialSubjectModel _$CredentialSubjectModelFromJson(
-  Map<String, dynamic> json,
-) => CredentialSubjectModel(
-  id: json['id'] as String?,
-  type: json['type'],
-  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-  credentialSubjectType: $enumDecode(
-    _$CredentialSubjectTypeEnumMap,
-    json['credentialSubjectType'],
-  ),
-  credentialCategory: $enumDecode(
-    _$CredentialCategoryEnumMap,
-    json['credentialCategory'],
-  ),
-);
+        Map<String, dynamic> json) =>
+    CredentialSubjectModel(
+      id: json['id'] as String?,
+      type: json['type'],
+      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+      credentialSubjectType: $enumDecode(
+          _$CredentialSubjectTypeEnumMap, json['credentialSubjectType']),
+      credentialCategory:
+          $enumDecode(_$CredentialCategoryEnumMap, json['credentialCategory']),
+    );
 
 Map<String, dynamic> _$CredentialSubjectModelToJson(
-  CredentialSubjectModel instance,
-) {
+    CredentialSubjectModel instance) {
   final val = <String, dynamic>{
     'id': instance.id,
     'type': instance.type,

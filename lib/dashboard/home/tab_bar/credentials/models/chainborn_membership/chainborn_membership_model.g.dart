@@ -7,17 +7,16 @@ part of 'chainborn_membership_model.dart';
 // **************************************************************************
 
 ChainbornMembershipModel _$ChainbornMembershipModelFromJson(
-  Map<String, dynamic> json,
-) => ChainbornMembershipModel(
-  id: json['id'] as String?,
-  type: json['type'],
-  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-);
+        Map<String, dynamic> json) =>
+    ChainbornMembershipModel(
+      id: json['id'] as String?,
+      type: json['type'],
+      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+    );
 
 Map<String, dynamic> _$ChainbornMembershipModelToJson(
-  ChainbornMembershipModel instance,
-) {
+    ChainbornMembershipModel instance) {
   final val = <String, dynamic>{
     'id': instance.id,
     'type': instance.type,

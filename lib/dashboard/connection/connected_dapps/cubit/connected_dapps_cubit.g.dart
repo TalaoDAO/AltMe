@@ -8,8 +8,7 @@ part of 'connected_dapps_cubit.dart';
 
 ConnectedDappsState _$ConnectedDappsStateFromJson(Map<String, dynamic> json) =>
     ConnectedDappsState(
-      status:
-          $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
           AppStatus.init,
       message: json['message'] == null
           ? null
@@ -23,13 +22,13 @@ ConnectedDappsState _$ConnectedDappsStateFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$ConnectedDappsStateToJson(
-  ConnectedDappsState instance,
-) => <String, dynamic>{
-  'status': _$AppStatusEnumMap[instance.status]!,
-  'message': instance.message,
-  'xtzModel': instance.xtzModel,
-  'savedDapps': instance.savedDapps,
-};
+        ConnectedDappsState instance) =>
+    <String, dynamic>{
+      'status': _$AppStatusEnumMap[instance.status]!,
+      'message': instance.message,
+      'xtzModel': instance.xtzModel,
+      'savedDapps': instance.savedDapps,
+    };
 
 const _$AppStatusEnumMap = {
   AppStatus.init: 'init',

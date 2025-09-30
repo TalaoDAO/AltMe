@@ -8,8 +8,7 @@ part of 'create_account_cubit.dart';
 
 CreateAccountState _$CreateAccountStateFromJson(Map<String, dynamic> json) =>
     CreateAccountState(
-      status:
-          $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
           AppStatus.init,
       message: json['message'] == null
           ? null

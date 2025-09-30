@@ -7,21 +7,22 @@ part of 'credential.dart';
 // **************************************************************************
 
 Credential _$CredentialFromJson(Map<String, dynamic> json) => Credential(
-  Credential.fromJsonId(json['id']),
-  json['@context'] as List<dynamic>?,
-  (json['type'] as List<dynamic>).map((e) => e as String).toList(),
-  json['issuer'],
-  json['expirationDate'] as String? ?? '',
-  json['issuanceDate'] as String? ?? '',
-  Credential._fromJsonProofs(json['proof']),
-  CredentialSubjectModel.fromJson(
-    json['credentialSubject'] as Map<String, dynamic>,
-  ),
-  Credential._fromJsonTranslations(json['description']),
-  json['name'] == null ? [] : Credential._fromJsonTranslations(json['name']),
-  json['credentialStatus'],
-  Credential._fromJsonEvidence(json['evidence']),
-);
+      Credential.fromJsonId(json['id']),
+      json['@context'] as List<dynamic>?,
+      (json['type'] as List<dynamic>).map((e) => e as String).toList(),
+      json['issuer'],
+      json['expirationDate'] as String? ?? '',
+      json['issuanceDate'] as String? ?? '',
+      Credential._fromJsonProofs(json['proof']),
+      CredentialSubjectModel.fromJson(
+          json['credentialSubject'] as Map<String, dynamic>),
+      Credential._fromJsonTranslations(json['description']),
+      json['name'] == null
+          ? []
+          : Credential._fromJsonTranslations(json['name']),
+      json['credentialStatus'],
+      Credential._fromJsonEvidence(json['evidence']),
+    );
 
 Map<String, dynamic> _$CredentialToJson(Credential instance) =>
     <String, dynamic>{

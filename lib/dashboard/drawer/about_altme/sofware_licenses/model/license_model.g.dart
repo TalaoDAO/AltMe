@@ -7,9 +7,9 @@ part of 'license_model.dart';
 // **************************************************************************
 
 LicenseModel _$LicenseModelFromJson(Map<String, dynamic> json) => LicenseModel(
-  json['title'] as String,
-  (json['description'] as List<dynamic>).map((e) => e as String).toList(),
-);
+      json['title'] as String,
+      (json['description'] as List<dynamic>).map((e) => e as String).toList(),
+    );
 
 Map<String, dynamic> _$LicenseModelToJson(LicenseModel instance) =>
     <String, dynamic>{

@@ -7,21 +7,21 @@ part of 'software_license_cubit.dart';
 // **************************************************************************
 
 SoftwareLicenseState _$SoftwareLicenseStateFromJson(
-  Map<String, dynamic> json,
-) => SoftwareLicenseState(
-  status:
-      $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ?? AppStatus.init,
-  licenses: (json['licenses'] as List<dynamic>?)
-      ?.map((e) => LicenseModel.fromJson(e as Map<String, dynamic>))
-      .toList(),
-);
+        Map<String, dynamic> json) =>
+    SoftwareLicenseState(
+      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+          AppStatus.init,
+      licenses: (json['licenses'] as List<dynamic>?)
+          ?.map((e) => LicenseModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$SoftwareLicenseStateToJson(
-  SoftwareLicenseState instance,
-) => <String, dynamic>{
-  'status': _$AppStatusEnumMap[instance.status]!,
-  'licenses': instance.licenses,
-};
+        SoftwareLicenseState instance) =>
+    <String, dynamic>{
+      'status': _$AppStatusEnumMap[instance.status]!,
+      'licenses': instance.licenses,
+    };
 
 const _$AppStatusEnumMap = {
   AppStatus.init: 'init',

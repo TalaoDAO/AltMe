@@ -11,29 +11,22 @@ ProfileSetting _$ProfileSettingFromJson(Map<String, dynamic> json) =>
       blockchainOptions: json['blockchainOptions'] == null
           ? null
           : BlockchainOptions.fromJson(
-              json['blockchainOptions'] as Map<String, dynamic>,
-            ),
+              json['blockchainOptions'] as Map<String, dynamic>),
       discoverCardsOptions: json['discoverCardsOptions'] == null
           ? null
           : DiscoverCardsOptions.fromJson(
-              json['discoverCardsOptions'] as Map<String, dynamic>,
-            ),
+              json['discoverCardsOptions'] as Map<String, dynamic>),
       generalOptions: GeneralOptions.fromJson(
-        json['generalOptions'] as Map<String, dynamic>,
-      ),
+          json['generalOptions'] as Map<String, dynamic>),
       helpCenterOptions: HelpCenterOptions.fromJson(
-        json['helpCenterOptions'] as Map<String, dynamic>,
-      ),
+          json['helpCenterOptions'] as Map<String, dynamic>),
       selfSovereignIdentityOptions: SelfSovereignIdentityOptions.fromJson(
-        json['selfSovereignIdentityOptions'] as Map<String, dynamic>,
-      ),
-      settingsMenu: SettingsMenu.fromJson(
-        json['settingsMenu'] as Map<String, dynamic>,
-      ),
+          json['selfSovereignIdentityOptions'] as Map<String, dynamic>),
+      settingsMenu:
+          SettingsMenu.fromJson(json['settingsMenu'] as Map<String, dynamic>),
       version: json['version'] as String,
       walletSecurityOptions: WalletSecurityOptions.fromJson(
-        json['walletSecurityOptions'] as Map<String, dynamic>,
-      ),
+          json['walletSecurityOptions'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ProfileSettingToJson(ProfileSetting instance) =>
@@ -62,11 +55,8 @@ BlockchainOptions _$BlockchainOptionsFromJson(Map<String, dynamic> json) =>
       infuraApiKey: json['infuraApiKey'] as String?,
       etherlinkSupport: json['etherlinkSupport'] as bool?,
       testnet: json['testnet'] as bool?,
-      associatedAddressFormat:
-          $enumDecodeNullable(
-            _$VCFormatTypeEnumMap,
-            json['associatedAddressFormat'],
-          ) ??
+      associatedAddressFormat: $enumDecodeNullable(
+              _$VCFormatTypeEnumMap, json['associatedAddressFormat']) ??
           VCFormatType.ldpVc,
     );
 
@@ -99,66 +89,67 @@ const _$VCFormatTypeEnumMap = {
 };
 
 DiscoverCardsOptions _$DiscoverCardsOptionsFromJson(
-  Map<String, dynamic> json,
-) => DiscoverCardsOptions(
-  displayOver21: json['displayOver21'] as bool,
-  displayOver65: json['displayOver65'] as bool,
-  displayAgeRange: json['displayAgeRange'] as bool,
-  displayGender: json['displayGender'] as bool,
-  displayDefi: json['displayDefi'] as bool,
-  displayHumanity: json['displayHumanity'] as bool,
-  displayOver13: json['displayOver13'] as bool,
-  displayOver15: json['displayOver15'] as bool,
-  displayOver18: json['displayOver18'] as bool,
-  displayOver50: json['displayOver50'] as bool,
-  displayVerifiableId: json['displayVerifiableId'] as bool,
-  displayExternalIssuer: (json['displayExternalIssuer'] as List<dynamic>)
-      .map((e) => DisplayExternalIssuer.fromJson(e as Map<String, dynamic>))
-      .toList(),
-  displayOver18Jwt: json['displayOver18Jwt'] as bool? ?? false,
-  displayOver18SdJwt: json['displayOver18SdJwt'] as bool? ?? false,
-  displayVerifiableIdJwt: json['displayVerifiableIdJwt'] as bool? ?? false,
-  displayVerifiableIdSdJwt: json['displayVerifiableIdSdJwt'] as bool? ?? false,
-  displayEmailPass: json['displayEmailPass'] as bool? ?? true,
-  displayEmailPassJwt: json['displayEmailPassJwt'] as bool? ?? true,
-  displayPhonePass: json['displayPhonePass'] as bool? ?? true,
-  displayPhonePassJwt: json['displayPhonePassJwt'] as bool? ?? true,
-  displayPhonePassSdJwt: json['displayPhonePassSdJwt'] as bool? ?? false,
-  displayChainborn: json['displayChainborn'] as bool? ?? false,
-  displayTezotopia: json['displayTezotopia'] as bool? ?? false,
-  displayHumanityJwt: json['displayHumanityJwt'] as bool? ?? false,
-  displayEmailPassSdJwt: json['displayEmailPassSdJwt'] as bool? ?? false,
-);
+        Map<String, dynamic> json) =>
+    DiscoverCardsOptions(
+      displayOver21: json['displayOver21'] as bool,
+      displayOver65: json['displayOver65'] as bool,
+      displayAgeRange: json['displayAgeRange'] as bool,
+      displayGender: json['displayGender'] as bool,
+      displayDefi: json['displayDefi'] as bool,
+      displayHumanity: json['displayHumanity'] as bool,
+      displayOver13: json['displayOver13'] as bool,
+      displayOver15: json['displayOver15'] as bool,
+      displayOver18: json['displayOver18'] as bool,
+      displayOver50: json['displayOver50'] as bool,
+      displayVerifiableId: json['displayVerifiableId'] as bool,
+      displayExternalIssuer: (json['displayExternalIssuer'] as List<dynamic>)
+          .map((e) => DisplayExternalIssuer.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      displayOver18Jwt: json['displayOver18Jwt'] as bool? ?? false,
+      displayOver18SdJwt: json['displayOver18SdJwt'] as bool? ?? false,
+      displayVerifiableIdJwt: json['displayVerifiableIdJwt'] as bool? ?? false,
+      displayVerifiableIdSdJwt:
+          json['displayVerifiableIdSdJwt'] as bool? ?? false,
+      displayEmailPass: json['displayEmailPass'] as bool? ?? true,
+      displayEmailPassJwt: json['displayEmailPassJwt'] as bool? ?? true,
+      displayPhonePass: json['displayPhonePass'] as bool? ?? true,
+      displayPhonePassJwt: json['displayPhonePassJwt'] as bool? ?? true,
+      displayPhonePassSdJwt: json['displayPhonePassSdJwt'] as bool? ?? false,
+      displayChainborn: json['displayChainborn'] as bool? ?? false,
+      displayTezotopia: json['displayTezotopia'] as bool? ?? false,
+      displayHumanityJwt: json['displayHumanityJwt'] as bool? ?? false,
+      displayEmailPassSdJwt: json['displayEmailPassSdJwt'] as bool? ?? false,
+    );
 
 Map<String, dynamic> _$DiscoverCardsOptionsToJson(
-  DiscoverCardsOptions instance,
-) => <String, dynamic>{
-  'displayDefi': instance.displayDefi,
-  'displayHumanity': instance.displayHumanity,
-  'displayHumanityJwt': instance.displayHumanityJwt,
-  'displayOver13': instance.displayOver13,
-  'displayOver15': instance.displayOver15,
-  'displayOver18': instance.displayOver18,
-  'displayOver18Jwt': instance.displayOver18Jwt,
-  'displayOver18SdJwt': instance.displayOver18SdJwt,
-  'displayOver21': instance.displayOver21,
-  'displayOver50': instance.displayOver50,
-  'displayOver65': instance.displayOver65,
-  'displayEmailPass': instance.displayEmailPass,
-  'displayEmailPassJwt': instance.displayEmailPassJwt,
-  'displayPhonePass': instance.displayPhonePass,
-  'displayPhonePassJwt': instance.displayPhonePassJwt,
-  'displayPhonePassSdJwt': instance.displayPhonePassSdJwt,
-  'displayAgeRange': instance.displayAgeRange,
-  'displayVerifiableId': instance.displayVerifiableId,
-  'displayVerifiableIdJwt': instance.displayVerifiableIdJwt,
-  'displayVerifiableIdSdJwt': instance.displayVerifiableIdSdJwt,
-  'displayGender': instance.displayGender,
-  'displayExternalIssuer': instance.displayExternalIssuer,
-  'displayChainborn': instance.displayChainborn,
-  'displayTezotopia': instance.displayTezotopia,
-  'displayEmailPassSdJwt': instance.displayEmailPassSdJwt,
-};
+        DiscoverCardsOptions instance) =>
+    <String, dynamic>{
+      'displayDefi': instance.displayDefi,
+      'displayHumanity': instance.displayHumanity,
+      'displayHumanityJwt': instance.displayHumanityJwt,
+      'displayOver13': instance.displayOver13,
+      'displayOver15': instance.displayOver15,
+      'displayOver18': instance.displayOver18,
+      'displayOver18Jwt': instance.displayOver18Jwt,
+      'displayOver18SdJwt': instance.displayOver18SdJwt,
+      'displayOver21': instance.displayOver21,
+      'displayOver50': instance.displayOver50,
+      'displayOver65': instance.displayOver65,
+      'displayEmailPass': instance.displayEmailPass,
+      'displayEmailPassJwt': instance.displayEmailPassJwt,
+      'displayPhonePass': instance.displayPhonePass,
+      'displayPhonePassJwt': instance.displayPhonePassJwt,
+      'displayPhonePassSdJwt': instance.displayPhonePassSdJwt,
+      'displayAgeRange': instance.displayAgeRange,
+      'displayVerifiableId': instance.displayVerifiableId,
+      'displayVerifiableIdJwt': instance.displayVerifiableIdJwt,
+      'displayVerifiableIdSdJwt': instance.displayVerifiableIdSdJwt,
+      'displayGender': instance.displayGender,
+      'displayExternalIssuer': instance.displayExternalIssuer,
+      'displayChainborn': instance.displayChainborn,
+      'displayTezotopia': instance.displayTezotopia,
+      'displayEmailPassSdJwt': instance.displayEmailPassSdJwt,
+    };
 
 GeneralOptions _$GeneralOptionsFromJson(Map<String, dynamic> json) =>
     GeneralOptions(
@@ -227,87 +218,86 @@ Map<String, dynamic> _$HelpCenterOptionsToJson(HelpCenterOptions instance) =>
     };
 
 SelfSovereignIdentityOptions _$SelfSovereignIdentityOptionsFromJson(
-  Map<String, dynamic> json,
-) => SelfSovereignIdentityOptions(
-  customOidc4vcProfile: CustomOidc4VcProfile.fromJson(
-    json['customOidc4vcProfile'] as Map<String, dynamic>,
-  ),
-  displayManageDecentralizedId: json['displayManageDecentralizedId'] as bool,
-);
+        Map<String, dynamic> json) =>
+    SelfSovereignIdentityOptions(
+      customOidc4vcProfile: CustomOidc4VcProfile.fromJson(
+          json['customOidc4vcProfile'] as Map<String, dynamic>),
+      displayManageDecentralizedId:
+          json['displayManageDecentralizedId'] as bool,
+    );
 
 Map<String, dynamic> _$SelfSovereignIdentityOptionsToJson(
-  SelfSovereignIdentityOptions instance,
-) => <String, dynamic>{
-  'customOidc4vcProfile': instance.customOidc4vcProfile,
-  'displayManageDecentralizedId': instance.displayManageDecentralizedId,
-};
+        SelfSovereignIdentityOptions instance) =>
+    <String, dynamic>{
+      'customOidc4vcProfile': instance.customOidc4vcProfile,
+      'displayManageDecentralizedId': instance.displayManageDecentralizedId,
+    };
 
 CustomOidc4VcProfile _$CustomOidc4VcProfileFromJson(
-  Map<String, dynamic> json,
-) => CustomOidc4VcProfile(
-  clientAuthentication: $enumDecode(
-    _$ClientAuthenticationEnumMap,
-    json['clientAuthentication'],
-  ),
-  credentialManifestSupport:
-      json['credentialManifestSupport'] as bool? ?? false,
-  cryptoHolderBinding: json['cryptoHolderBinding'] as bool,
-  defaultDid: $enumDecode(_$DidKeyTypeEnumMap, json['defaultDid']),
-  oidc4vciDraft: $enumDecode(_$OIDC4VCIDraftTypeEnumMap, json['oidc4vciDraft']),
-  oidc4vpDraft: $enumDecode(_$OIDC4VPDraftTypeEnumMap, json['oidc4vpDraft']),
-  scope: json['scope'] as bool,
-  securityLevel: json['securityLevel'] as bool,
-  siopv2Draft: $enumDecode(_$SIOPV2DraftTypeEnumMap, json['siopv2Draft']),
-  clientType: $enumDecode(_$ClientTypeEnumMap, json['subjectSyntaxeType']),
-  clientId: json['client_id'] as String? ?? Parameters.clientId,
-  clientSecret: json['client_secret'] as String? ?? 'FGbzMrvUpeFr',
-  vcFormatType:
-      $enumDecodeNullable(_$VCFormatTypeEnumMap, json['vcFormat']) ??
-      VCFormatType.jwtVcJson,
-  proofHeader:
-      $enumDecodeNullable(_$ProofHeaderTypeEnumMap, json['proofHeader']) ??
-      ProofHeaderType.kid,
-  proofType:
-      $enumDecodeNullable(_$ProofTypeEnumMap, json['proofType']) ??
-      ProofType.jwt,
-  pushAuthorizationRequest: json['pushAuthorizationRequest'] as bool? ?? false,
-  statusListCache: json['statusListCache'] as bool? ?? true,
-  dpopSupport: json['dpopSupport'] as bool? ?? false,
-  formatsSupported:
-      (json['formatsSupported'] as List<dynamic>?)
-          ?.map((e) => $enumDecode(_$VCFormatTypeEnumMap, e))
-          .toList() ??
-      const [],
-  displayMode: json['displayMode'] as bool? ?? true,
-);
+        Map<String, dynamic> json) =>
+    CustomOidc4VcProfile(
+      clientAuthentication: $enumDecode(
+          _$ClientAuthenticationEnumMap, json['clientAuthentication']),
+      credentialManifestSupport:
+          json['credentialManifestSupport'] as bool? ?? false,
+      cryptoHolderBinding: json['cryptoHolderBinding'] as bool,
+      defaultDid: $enumDecode(_$DidKeyTypeEnumMap, json['defaultDid']),
+      oidc4vciDraft:
+          $enumDecode(_$OIDC4VCIDraftTypeEnumMap, json['oidc4vciDraft']),
+      oidc4vpDraft:
+          $enumDecode(_$OIDC4VPDraftTypeEnumMap, json['oidc4vpDraft']),
+      scope: json['scope'] as bool,
+      securityLevel: json['securityLevel'] as bool,
+      siopv2Draft: $enumDecode(_$SIOPV2DraftTypeEnumMap, json['siopv2Draft']),
+      clientType: $enumDecode(_$ClientTypeEnumMap, json['subjectSyntaxeType']),
+      clientId: json['client_id'] as String? ?? Parameters.clientId,
+      clientSecret: json['client_secret'] as String? ?? 'FGbzMrvUpeFr',
+      vcFormatType:
+          $enumDecodeNullable(_$VCFormatTypeEnumMap, json['vcFormat']) ??
+              VCFormatType.jwtVcJson,
+      proofHeader:
+          $enumDecodeNullable(_$ProofHeaderTypeEnumMap, json['proofHeader']) ??
+              ProofHeaderType.kid,
+      proofType: $enumDecodeNullable(_$ProofTypeEnumMap, json['proofType']) ??
+          ProofType.jwt,
+      pushAuthorizationRequest:
+          json['pushAuthorizationRequest'] as bool? ?? false,
+      statusListCache: json['statusListCache'] as bool? ?? true,
+      dpopSupport: json['dpopSupport'] as bool? ?? false,
+      formatsSupported: (json['formatsSupported'] as List<dynamic>?)
+              ?.map((e) => $enumDecode(_$VCFormatTypeEnumMap, e))
+              .toList() ??
+          const [],
+      displayMode: json['displayMode'] as bool? ?? true,
+    );
 
 Map<String, dynamic> _$CustomOidc4VcProfileToJson(
-  CustomOidc4VcProfile instance,
-) => <String, dynamic>{
-  'clientAuthentication':
-      _$ClientAuthenticationEnumMap[instance.clientAuthentication]!,
-  'credentialManifestSupport': instance.credentialManifestSupport,
-  'client_id': instance.clientId,
-  'client_secret': instance.clientSecret,
-  'cryptoHolderBinding': instance.cryptoHolderBinding,
-  'defaultDid': _$DidKeyTypeEnumMap[instance.defaultDid]!,
-  'oidc4vciDraft': _$OIDC4VCIDraftTypeEnumMap[instance.oidc4vciDraft]!,
-  'oidc4vpDraft': _$OIDC4VPDraftTypeEnumMap[instance.oidc4vpDraft]!,
-  'scope': instance.scope,
-  'proofHeader': _$ProofHeaderTypeEnumMap[instance.proofHeader]!,
-  'securityLevel': instance.securityLevel,
-  'statusListCache': instance.statusListCache,
-  'pushAuthorizationRequest': instance.pushAuthorizationRequest,
-  'siopv2Draft': _$SIOPV2DraftTypeEnumMap[instance.siopv2Draft]!,
-  'subjectSyntaxeType': _$ClientTypeEnumMap[instance.clientType]!,
-  'vcFormat': _$VCFormatTypeEnumMap[instance.vcFormatType]!,
-  'formatsSupported': instance.formatsSupported
-      ?.map((e) => _$VCFormatTypeEnumMap[e]!)
-      .toList(),
-  'proofType': _$ProofTypeEnumMap[instance.proofType]!,
-  'dpopSupport': instance.dpopSupport,
-  'displayMode': instance.displayMode,
-};
+        CustomOidc4VcProfile instance) =>
+    <String, dynamic>{
+      'clientAuthentication':
+          _$ClientAuthenticationEnumMap[instance.clientAuthentication]!,
+      'credentialManifestSupport': instance.credentialManifestSupport,
+      'client_id': instance.clientId,
+      'client_secret': instance.clientSecret,
+      'cryptoHolderBinding': instance.cryptoHolderBinding,
+      'defaultDid': _$DidKeyTypeEnumMap[instance.defaultDid]!,
+      'oidc4vciDraft': _$OIDC4VCIDraftTypeEnumMap[instance.oidc4vciDraft]!,
+      'oidc4vpDraft': _$OIDC4VPDraftTypeEnumMap[instance.oidc4vpDraft]!,
+      'scope': instance.scope,
+      'proofHeader': _$ProofHeaderTypeEnumMap[instance.proofHeader]!,
+      'securityLevel': instance.securityLevel,
+      'statusListCache': instance.statusListCache,
+      'pushAuthorizationRequest': instance.pushAuthorizationRequest,
+      'siopv2Draft': _$SIOPV2DraftTypeEnumMap[instance.siopv2Draft]!,
+      'subjectSyntaxeType': _$ClientTypeEnumMap[instance.clientType]!,
+      'vcFormat': _$VCFormatTypeEnumMap[instance.vcFormatType]!,
+      'formatsSupported': instance.formatsSupported
+          ?.map((e) => _$VCFormatTypeEnumMap[e]!)
+          .toList(),
+      'proofType': _$ProofTypeEnumMap[instance.proofType]!,
+      'dpopSupport': instance.dpopSupport,
+      'displayMode': instance.displayMode,
+    };
 
 const _$ClientAuthenticationEnumMap = {
   ClientAuthentication.none: 'none',
@@ -349,7 +339,9 @@ const _$OIDC4VPDraftTypeEnumMap = {
   OIDC4VPDraftType.draft29: '29',
 };
 
-const _$SIOPV2DraftTypeEnumMap = {SIOPV2DraftType.draft12: '12'};
+const _$SIOPV2DraftTypeEnumMap = {
+  SIOPV2DraftType.draft12: '12',
+};
 
 const _$ClientTypeEnumMap = {
   ClientType.p256JWKThumprint: 'urn:ietf:params:oauth:jwk-thumbprint',
@@ -362,16 +354,19 @@ const _$ProofHeaderTypeEnumMap = {
   ProofHeaderType.jwk: 'jwk',
 };
 
-const _$ProofTypeEnumMap = {ProofType.ldpVp: 'ldp_vp', ProofType.jwt: 'jwt'};
+const _$ProofTypeEnumMap = {
+  ProofType.ldpVp: 'ldp_vp',
+  ProofType.jwt: 'jwt',
+};
 
 SettingsMenu _$SettingsMenuFromJson(Map<String, dynamic> json) => SettingsMenu(
-  displayDeveloperMode: json['displayDeveloperMode'] as bool,
-  displayHelpCenter: json['displayHelpCenter'] as bool,
-  displayProfile: json['displayProfile'] as bool,
-  displaySelfSovereignIdentity:
-      json['displaySelfSovereignIdentity'] as bool? ?? true,
-  displayActivityLog: json['displayActivityLog'] as bool? ?? true,
-);
+      displayDeveloperMode: json['displayDeveloperMode'] as bool,
+      displayHelpCenter: json['displayHelpCenter'] as bool,
+      displayProfile: json['displayProfile'] as bool,
+      displaySelfSovereignIdentity:
+          json['displaySelfSovereignIdentity'] as bool? ?? true,
+      displayActivityLog: json['displayActivityLog'] as bool? ?? true,
+    );
 
 Map<String, dynamic> _$SettingsMenuToJson(SettingsMenu instance) =>
     <String, dynamic>{
@@ -383,29 +378,31 @@ Map<String, dynamic> _$SettingsMenuToJson(SettingsMenu instance) =>
     };
 
 WalletSecurityOptions _$WalletSecurityOptionsFromJson(
-  Map<String, dynamic> json,
-) => WalletSecurityOptions(
-  confirmSecurityVerifierAccess: json['confirmSecurityVerifierAccess'] as bool,
-  displaySecurityAdvancedSettings:
-      json['displaySecurityAdvancedSettings'] as bool,
-  secureSecurityAuthenticationWithPinCode:
-      json['secureSecurityAuthenticationWithPinCode'] as bool,
-  verifySecurityIssuerWebsiteIdentity:
-      json['verifySecurityIssuerWebsiteIdentity'] as bool,
-  trustedListUrl:
-      json['trustedListUrl'] as String? ?? Parameters.trustedListUrl,
-  trustedList: json['trustedList'] as bool,
-);
+        Map<String, dynamic> json) =>
+    WalletSecurityOptions(
+      confirmSecurityVerifierAccess:
+          json['confirmSecurityVerifierAccess'] as bool,
+      displaySecurityAdvancedSettings:
+          json['displaySecurityAdvancedSettings'] as bool,
+      secureSecurityAuthenticationWithPinCode:
+          json['secureSecurityAuthenticationWithPinCode'] as bool,
+      verifySecurityIssuerWebsiteIdentity:
+          json['verifySecurityIssuerWebsiteIdentity'] as bool,
+      trustedListUrl:
+          json['trustedListUrl'] as String? ?? Parameters.trustedListUrl,
+      trustedList: json['trustedList'] as bool,
+    );
 
 Map<String, dynamic> _$WalletSecurityOptionsToJson(
-  WalletSecurityOptions instance,
-) => <String, dynamic>{
-  'confirmSecurityVerifierAccess': instance.confirmSecurityVerifierAccess,
-  'displaySecurityAdvancedSettings': instance.displaySecurityAdvancedSettings,
-  'secureSecurityAuthenticationWithPinCode':
-      instance.secureSecurityAuthenticationWithPinCode,
-  'verifySecurityIssuerWebsiteIdentity':
-      instance.verifySecurityIssuerWebsiteIdentity,
-  'trustedListUrl': instance.trustedListUrl,
-  'trustedList': instance.trustedList,
-};
+        WalletSecurityOptions instance) =>
+    <String, dynamic>{
+      'confirmSecurityVerifierAccess': instance.confirmSecurityVerifierAccess,
+      'displaySecurityAdvancedSettings':
+          instance.displaySecurityAdvancedSettings,
+      'secureSecurityAuthenticationWithPinCode':
+          instance.secureSecurityAuthenticationWithPinCode,
+      'verifySecurityIssuerWebsiteIdentity':
+          instance.verifySecurityIssuerWebsiteIdentity,
+      'trustedListUrl': instance.trustedListUrl,
+      'trustedList': instance.trustedList,
+    };

@@ -7,24 +7,22 @@ part of 'profile.dart';
 // **************************************************************************
 
 ProfileModel _$ProfileModelFromJson(Map<String, dynamic> json) => ProfileModel(
-  walletType: $enumDecode(_$WalletTypeEnumMap, json['walletType']),
-  walletProtectionType: $enumDecode(
-    _$WalletProtectionTypeEnumMap,
-    json['walletProtectionType'],
-  ),
-  isDeveloperMode: json['isDeveloperMode'] as bool,
-  profileType: $enumDecode(_$ProfileTypeEnumMap, json['profileType']),
-  profileSetting: ProfileSetting.fromJson(
-    json['profileSetting'] as Map<String, dynamic>,
-  ),
-  enterpriseWalletName: json['enterpriseWalletName'] as String?,
-  oidc4VCIStack: json['oidc4VCIStack'] == null
-      ? null
-      : Oidc4VCIStack.fromJson(json['oidc4VCIStack'] as Map<String, dynamic>),
-  trustedList: json['trustedList'] == null
-      ? null
-      : TrustedList.fromJson(json['trustedList'] as Map<String, dynamic>),
-);
+      walletType: $enumDecode(_$WalletTypeEnumMap, json['walletType']),
+      walletProtectionType: $enumDecode(
+          _$WalletProtectionTypeEnumMap, json['walletProtectionType']),
+      isDeveloperMode: json['isDeveloperMode'] as bool,
+      profileType: $enumDecode(_$ProfileTypeEnumMap, json['profileType']),
+      profileSetting: ProfileSetting.fromJson(
+          json['profileSetting'] as Map<String, dynamic>),
+      enterpriseWalletName: json['enterpriseWalletName'] as String?,
+      oidc4VCIStack: json['oidc4VCIStack'] == null
+          ? null
+          : Oidc4VCIStack.fromJson(
+              json['oidc4VCIStack'] as Map<String, dynamic>),
+      trustedList: json['trustedList'] == null
+          ? null
+          : TrustedList.fromJson(json['trustedList'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$ProfileModelToJson(ProfileModel instance) =>
     <String, dynamic>{

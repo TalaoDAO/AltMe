@@ -7,11 +7,11 @@ part of 'review_rating.dart';
 // **************************************************************************
 
 ReviewRating _$ReviewRatingFromJson(Map<String, dynamic> json) => ReviewRating(
-  json['bestRating'] as String? ?? '',
-  json['ratingValue'] as String? ?? '',
-  json['type'] as String? ?? '',
-  json['worstRating'] as String? ?? '',
-);
+      json['bestRating'] as String? ?? '',
+      json['ratingValue'] as String? ?? '',
+      json['type'] as String? ?? '',
+      json['worstRating'] as String? ?? '',
+    );
 
 Map<String, dynamic> _$ReviewRatingToJson(ReviewRating instance) =>
     <String, dynamic>{

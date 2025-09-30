@@ -11,8 +11,7 @@ CredentialModel _$CredentialModelFromJson(Map<String, dynamic> json) =>
       id: CredentialModel.fromJsonId(json['id']),
       image: json['image'] as String?,
       credentialPreview: Credential.fromJson(
-        json['credentialPreview'] as Map<String, dynamic>,
-      ),
+          json['credentialPreview'] as Map<String, dynamic>),
       shareLink: json['shareLink'] as String? ?? '',
       data: json['data'] as Map<String, dynamic>,
       profileLinkedId: json['profileLinkedId'] as String?,
@@ -20,14 +19,12 @@ CredentialModel _$CredentialModelFromJson(Map<String, dynamic> json) =>
       display: CredentialModel.fromJsonDisplay(json['display']),
       expirationDate: json['expirationDate'] as String?,
       credentialManifest: CredentialModel.credentialManifestFromJson(
-        json['credential_manifest'] as Map<String, dynamic>?,
-      ),
+          json['credential_manifest'] as Map<String, dynamic>?),
       receivedId:
           CredentialModel.readValueReceivedId(json, 'receivedId') as String?,
       challenge: json['challenge'] as String?,
       domain: json['domain'] as String?,
-      activities:
-          (json['activities'] as List<dynamic>?)
+      activities: (json['activities'] as List<dynamic>?)
               ?.map((e) => Activity.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],

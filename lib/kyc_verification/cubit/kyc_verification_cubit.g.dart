@@ -7,18 +7,18 @@ part of 'kyc_verification_cubit.dart';
 // **************************************************************************
 
 KycVerificationState _$KycVerificationStateFromJson(
-  Map<String, dynamic> json,
-) => KycVerificationState(
-  status:
-      $enumDecodeNullable(_$KycVerificationStatusEnumMap, json['status']) ??
-      KycVerificationStatus.unverified,
-);
+        Map<String, dynamic> json) =>
+    KycVerificationState(
+      status:
+          $enumDecodeNullable(_$KycVerificationStatusEnumMap, json['status']) ??
+              KycVerificationStatus.unverified,
+    );
 
 Map<String, dynamic> _$KycVerificationStateToJson(
-  KycVerificationState instance,
-) => <String, dynamic>{
-  'status': _$KycVerificationStatusEnumMap[instance.status]!,
-};
+        KycVerificationState instance) =>
+    <String, dynamic>{
+      'status': _$KycVerificationStatusEnumMap[instance.status]!,
+    };
 
 const _$KycVerificationStatusEnumMap = {
   KycVerificationStatus.unverified: 'unverified',

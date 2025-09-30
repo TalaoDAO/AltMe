@@ -12,11 +12,8 @@ CryptoAccountData _$CryptoAccountDataFromJson(Map<String, dynamic> json) =>
       secretKey: json['secretKey'] as String,
       walletAddress: json['walletAddress'] as String,
       isImported: json['isImported'] as bool? ?? false,
-      blockchainType:
-          $enumDecodeNullable(
-            _$BlockchainTypeEnumMap,
-            json['blockchainType'],
-          ) ??
+      blockchainType: $enumDecodeNullable(
+              _$BlockchainTypeEnumMap, json['blockchainType']) ??
           BlockchainType.tezos,
     );
 

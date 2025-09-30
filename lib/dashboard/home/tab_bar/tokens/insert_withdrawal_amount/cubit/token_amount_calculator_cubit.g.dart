@@ -7,21 +7,21 @@ part of 'token_amount_calculator_cubit.dart';
 // **************************************************************************
 
 TokenAmountCalculatorState _$TokenAmountCalculatorStateFromJson(
-  Map<String, dynamic> json,
-) => TokenAmountCalculatorState(
-  validAmount: json['validAmount'] as String? ?? '0',
-  insertedAmount: json['insertedAmount'] as String? ?? '',
-  status:
-      $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ?? AppStatus.idle,
-);
+        Map<String, dynamic> json) =>
+    TokenAmountCalculatorState(
+      validAmount: json['validAmount'] as String? ?? '0',
+      insertedAmount: json['insertedAmount'] as String? ?? '',
+      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+          AppStatus.idle,
+    );
 
 Map<String, dynamic> _$TokenAmountCalculatorStateToJson(
-  TokenAmountCalculatorState instance,
-) => <String, dynamic>{
-  'validAmount': instance.validAmount,
-  'insertedAmount': instance.insertedAmount,
-  'status': _$AppStatusEnumMap[instance.status]!,
-};
+        TokenAmountCalculatorState instance) =>
+    <String, dynamic>{
+      'validAmount': instance.validAmount,
+      'insertedAmount': instance.insertedAmount,
+      'status': _$AppStatusEnumMap[instance.status]!,
+    };
 
 const _$AppStatusEnumMap = {
   AppStatus.init: 'init',

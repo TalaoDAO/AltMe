@@ -7,15 +7,15 @@ part of 'voucher_model.dart';
 // **************************************************************************
 
 VoucherModel _$VoucherModelFromJson(Map<String, dynamic> json) => VoucherModel(
-  id: json['id'] as String?,
-  type: json['type'],
-  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-  identifier: json['identifier'] as String? ?? '',
-  offer: json['offer'] == null
-      ? null
-      : Offer.fromJson(json['offer'] as Map<String, dynamic>),
-);
+      id: json['id'] as String?,
+      type: json['type'],
+      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+      identifier: json['identifier'] as String? ?? '',
+      offer: json['offer'] == null
+          ? null
+          : Offer.fromJson(json['offer'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$VoucherModelToJson(VoucherModel instance) {
   final val = <String, dynamic>{

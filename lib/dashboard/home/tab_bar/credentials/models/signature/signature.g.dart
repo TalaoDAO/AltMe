@@ -7,13 +7,13 @@ part of 'signature.dart';
 // **************************************************************************
 
 Signature _$SignatureFromJson(Map<String, dynamic> json) => Signature(
-  json['image'] as String? ?? '',
-  json['jobTitle'] as String? ?? '',
-  json['name'] as String? ?? '',
-);
+      json['image'] as String? ?? '',
+      json['jobTitle'] as String? ?? '',
+      json['name'] as String? ?? '',
+    );
 
 Map<String, dynamic> _$SignatureToJson(Signature instance) => <String, dynamic>{
-  'image': instance.image,
-  'jobTitle': instance.jobTitle,
-  'name': instance.name,
-};
+      'image': instance.image,
+      'jobTitle': instance.jobTitle,
+      'name': instance.name,
+    };
