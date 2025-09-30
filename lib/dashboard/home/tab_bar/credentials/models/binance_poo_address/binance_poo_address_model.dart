@@ -13,9 +13,9 @@ class BinancePooAddressModel extends CredentialSubjectModel {
     super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.binancePooAddress,
-          credentialCategory: CredentialCategory.blockchainAccountsCards,
-        );
+         credentialSubjectType: CredentialSubjectType.binancePooAddress,
+         credentialCategory: CredentialCategory.blockchainAccountsCards,
+       );
 
   factory BinancePooAddressModel.fromJson(Map<String, dynamic> json) =>
       _$BinancePooAddressModelFromJson(json);

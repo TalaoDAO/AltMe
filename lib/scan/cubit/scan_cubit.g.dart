@@ -16,6 +16,7 @@ ScanState _$ScanStateFromJson(Map<String, dynamic> json) => ScanState(
       keyId: json['keyId'] as String?,
       challenge: json['challenge'] as String?,
       domain: json['domain'] as String?,
+      transactionData: json['transactionData'] as List<dynamic>?,
     );
 
 Map<String, dynamic> _$ScanStateToJson(ScanState instance) => <String, dynamic>{
@@ -25,6 +26,7 @@ Map<String, dynamic> _$ScanStateToJson(ScanState instance) => <String, dynamic>{
       'keyId': instance.keyId,
       'challenge': instance.challenge,
       'domain': instance.domain,
+      'transactionData': instance.transactionData,
     };
 
 const _$ScanStatusEnumMap = {

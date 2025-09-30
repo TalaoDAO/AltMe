@@ -12,8 +12,8 @@ Future<bool> isConnectedToInternet() async {
     }
   }
 
-  final List<ConnectivityResult> connectivityResult =
-      await Connectivity().checkConnectivity();
+  final List<ConnectivityResult> connectivityResult = await Connectivity()
+      .checkConnectivity();
 
   if (connectivityResult.contains(ConnectivityResult.mobile)) {
     // Mobile network available.

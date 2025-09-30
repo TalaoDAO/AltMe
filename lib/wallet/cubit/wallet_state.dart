@@ -60,9 +60,9 @@ class WalletState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        message,
-        currentCryptoIndex,
-        cryptoAccount,
-      ];
+    status,
+    message,
+    currentCryptoIndex,
+    cryptoAccount,
+  ];
 }

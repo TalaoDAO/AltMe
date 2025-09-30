@@ -534,14 +534,14 @@ Future<(String, String)> getDidAndKid({
       final List<int> prefixByteList = [0xd1, 0xd6, 0x03];
       final List<int> prefix = prefixByteList.map((byte) => byte).toList();
 
-      final encodedData = utf8.encode(sortedPublcJwk(privateKey));
+      final encodedData = utf8.encode(sortedPublicJwk(privateKey));
       final encodedAddress = Base58Encode([...prefix, ...encodedData]);
 
       did = 'did:key:z$encodedAddress';
       final String lastPart = did.split(':')[2];
       kid = '$did#$lastPart';
     case DidKeyType.jwkP256:
-      final encodedData = utf8.encode(sortedPublcJwk(privateKey));
+      final encodedData = utf8.encode(sortedPublicJwk(privateKey));
 
       final base64EncodedJWK = base64UrlEncode(encodedData).replaceAll('=', '');
       did = 'did:jwk:$base64EncodedJWK';
@@ -605,7 +605,7 @@ Future<(String, String)> fetchDidAndKid({
   return (did, kid);
 }
 
-String sortedPublcJwk(String privateKey) {
+String sortedPublicJwk(String privateKey) {
   final private = jsonDecode(privateKey) as Map<String, dynamic>;
   final publicJWK = Map.of(private)..removeWhere((key, value) => key == 'd');
 
@@ -2298,20 +2298,6 @@ Map<String, dynamic> getCredentialDataFromJson({
       credential['id'] = jsonContent['jti'];
     } else {
       credential['id'] = 'urn:uuid:${const Uuid().v4()}';
-    }
-  }
-
-  /// issuer -> iss
-  if (!credential.containsKey('issuer')) {
-    if (jsonContent.containsKey('iss')) {
-      credential['issuer'] = jsonContent['iss'];
-    } else {
-      throw ResponseMessage(
-        data: {
-          'error': 'unsupported_format',
-          'error_description': 'Issuer is missing',
-        },
-      );
     }
   }
 

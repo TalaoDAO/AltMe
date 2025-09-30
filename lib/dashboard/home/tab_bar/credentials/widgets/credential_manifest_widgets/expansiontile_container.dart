@@ -2,10 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 
 class ExpansionTileContainer extends StatelessWidget {
-  const ExpansionTileContainer({
-    super.key,
-    required this.child,
-  });
+  const ExpansionTileContainer({super.key, required this.child});
 
   final Widget child;
 
@@ -18,8 +15,9 @@ class ExpansionTileContainer extends StatelessWidget {
       child: Theme(
         data: Theme.of(context).copyWith(
           unselectedWidgetColor: Theme.of(context).colorScheme.onPrimary,
-          dividerColor:
-              Theme.of(context).colorScheme.surface.withValues(alpha: 0.07),
+          dividerColor: Theme.of(
+            context,
+          ).colorScheme.surface.withValues(alpha: 0.07),
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           colorScheme: ColorScheme.dark(

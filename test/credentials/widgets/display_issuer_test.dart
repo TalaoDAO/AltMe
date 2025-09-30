@@ -11,18 +11,14 @@ void main() {
 
     testWidgets('find issuer name', (WidgetTester tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: DisplayIssuer(issuer: author),
-        ),
+        const MaterialApp(home: DisplayIssuer(issuer: author)),
       );
       expect(find.text(authorName), findsOneWidget);
     });
 
     testWidgets('find issuer model', (WidgetTester tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: DisplayIssuer(issuer: author),
-        ),
+        const MaterialApp(home: DisplayIssuer(issuer: author)),
       );
       final displayIssuer =
           tester.widget(find.byType(DisplayIssuer)) as DisplayIssuer;
@@ -31,9 +27,7 @@ void main() {
 
     testWidgets('find all widget', (WidgetTester tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: DisplayIssuer(issuer: author),
-        ),
+        const MaterialApp(home: DisplayIssuer(issuer: author)),
       );
       expect(find.byType(Row), findsOneWidget);
       expect(find.byType(Expanded), findsOneWidget);

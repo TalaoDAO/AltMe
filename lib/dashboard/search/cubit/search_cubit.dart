@@ -11,10 +11,8 @@ part 'search_cubit.g.dart';
 part 'search_state.dart';
 
 class SearchCubit extends Cubit<SearchState> {
-  SearchCubit({
-    required this.repository,
-    required this.secureStorageProvider,
-  }) : super(SearchState()) {
+  SearchCubit({required this.repository, required this.secureStorageProvider})
+    : super(SearchState()) {
     initialize();
   }
 
@@ -57,9 +55,9 @@ class SearchCubit extends Cubit<SearchState> {
       final searchList = state.credentials.where((element) {
         var isMatch = false;
         for (final keyword in searchKeywords) {
-          if (removeDiacritics(jsonEncode(element))
-              .toLowerCase()
-              .contains(removeDiacritics(keyword.toLowerCase()))) {
+          if (removeDiacritics(
+            jsonEncode(element),
+          ).toLowerCase().contains(removeDiacritics(keyword.toLowerCase()))) {
             isMatch = true;
           }
         }
@@ -82,16 +80,15 @@ class SearchCubit extends Cubit<SearchState> {
       }
     }
 
-    return str.replaceAllMapped(
-      RegExp('[^\u0000-\u007E]', multiLine: true),
-      (a) {
-        if (diacriticsMap[a.group(0)] != null) {
-          return diacriticsMap[a.group(0)] as String;
-        } else {
-          // ignore: cast_nullable_to_non_nullable
-          return a.group(0) as String;
-        }
-      },
-    );
+    return str.replaceAllMapped(RegExp('[^\u0000-\u007E]', multiLine: true), (
+      a,
+    ) {
+      if (diacriticsMap[a.group(0)] != null) {
+        return diacriticsMap[a.group(0)] as String;
+      } else {
+        // ignore: cast_nullable_to_non_nullable
+        return a.group(0) as String;
+      }
+    });
   }
 }

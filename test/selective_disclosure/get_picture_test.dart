@@ -44,9 +44,9 @@ void main() {
     test('returns null when claims is not a Map', () {
       // Arrange
       when(mockCredentialModel.format).thenReturn(VCFormatType.vcSdJWT.vcValue);
-      when(mockCredentialModel.credentialSupported).thenReturn({
-        'claims': 'not a map',
-      });
+      when(
+        mockCredentialModel.credentialSupported,
+      ).thenReturn({'claims': 'not a map'});
 
       // Act
       final result = selectiveDisclosure.getPicture;
@@ -56,29 +56,36 @@ void main() {
     });
 
     test(
-        // ignore: lines_longer_than_80_chars
-        'returns null when picture key exists but getClaimsData is an empty list',
-        () {
-      // Arrange
-      when(mockCredentialModel.format).thenReturn(VCFormatType.vcSdJWT.vcValue);
-      when(mockCredentialModel.credentialSupported).thenReturn({
-        'claims': {
-          'picture': {'value_type': 'image/jpeg'},
-        },
-      });
+      // ignore: lines_longer_than_80_chars
+      'returns null when picture key exists but getClaimsData is an empty list',
+      () {
+        // Arrange
+        when(
+          mockCredentialModel.format,
+        ).thenReturn(VCFormatType.vcSdJWT.vcValue);
+        when(mockCredentialModel.credentialSupported).thenReturn({
+          'claims': {
+            'picture': {'value_type': 'image/jpeg'},
+          },
+        });
 
-      // Mock the real SelectiveDisclosure to intercept getClaimsData calls
-      final realSelectiveDisclosure =
-          _MockRealSelectiveDisclosure(mockCredentialModel);
-      // Mock empty claims data result
-      realSelectiveDisclosure.mockGetClaimsDataResult = (<ClaimsData>[], null);
+        // Mock the real SelectiveDisclosure to intercept getClaimsData calls
+        final realSelectiveDisclosure = _MockRealSelectiveDisclosure(
+          mockCredentialModel,
+        );
+        // Mock empty claims data result
+        realSelectiveDisclosure.mockGetClaimsDataResult = (
+          <ClaimsData>[],
+          null,
+        );
 
-      // Act
-      final result = realSelectiveDisclosure.getPicture;
+        // Act
+        final result = realSelectiveDisclosure.getPicture;
 
-      // Assert
-      expect(result, isNull);
-    });
+        // Assert
+        expect(result, isNull);
+      },
+    );
 
     test('returns picture data for simple picture field', () {
       // Arrange
@@ -91,8 +98,9 @@ void main() {
       });
 
       // Mock the real SelectiveDisclosure with actual claims data
-      final realSelectiveDisclosure =
-          _MockRealSelectiveDisclosure(mockCredentialModel);
+      final realSelectiveDisclosure = _MockRealSelectiveDisclosure(
+        mockCredentialModel,
+      );
       final claimsData = [
         ClaimsData(isfromDisclosureOfJWT: true, data: pictureData),
       ];
@@ -116,22 +124,23 @@ void main() {
       });
 
       // Mock the real SelectiveDisclosure with conditional claims data results
-      final realSelectiveDisclosure =
-          _MockRealSelectiveDisclosure(mockCredentialModel);
+      final realSelectiveDisclosure = _MockRealSelectiveDisclosure(
+        mockCredentialModel,
+      );
 
       // Set up mock to return different results based on which key is requested
       realSelectiveDisclosure.mockGetClaimsDataCallback =
           (String key, String? parentKeyId) {
-        if (key == 'picture') {
-          return (<ClaimsData>[], null);
-        } else if (key == 'face') {
-          return (
-            [ClaimsData(isfromDisclosureOfJWT: true, data: faceData)],
-            null
-          );
-        }
-        return (<ClaimsData>[], null);
-      };
+            if (key == 'picture') {
+              return (<ClaimsData>[], null);
+            } else if (key == 'face') {
+              return (
+                [ClaimsData(isfromDisclosureOfJWT: true, data: faceData)],
+                null,
+              );
+            }
+            return (<ClaimsData>[], null);
+          };
 
       // Act
       final result = realSelectiveDisclosure.getPicture;
@@ -140,8 +149,7 @@ void main() {
       expect(result, equals(faceData));
     });
 
-    test('returns portrait data when picture and face fields are not found',
-        () {
+    test('returns portrait data when picture and face fields are not found', () {
       // Arrange
       const portraitData = 'base64encodedportraitdata';
       when(mockCredentialModel.format).thenReturn(VCFormatType.vcSdJWT.vcValue);
@@ -152,22 +160,23 @@ void main() {
       });
 
       // Mock the real SelectiveDisclosure with conditional claims data results
-      final realSelectiveDisclosure =
-          _MockRealSelectiveDisclosure(mockCredentialModel);
+      final realSelectiveDisclosure = _MockRealSelectiveDisclosure(
+        mockCredentialModel,
+      );
 
       // Set up mock to return different results based on which key is requested
       realSelectiveDisclosure.mockGetClaimsDataCallback =
           (String key, String? parentKeyId) {
-        if (key == 'picture' || key == 'face') {
-          return (<ClaimsData>[], null);
-        } else if (key == 'portrait') {
-          return (
-            [ClaimsData(isfromDisclosureOfJWT: true, data: portraitData)],
-            null
-          );
-        }
-        return (<ClaimsData>[], null);
-      };
+            if (key == 'picture' || key == 'face') {
+              return (<ClaimsData>[], null);
+            } else if (key == 'portrait') {
+              return (
+                [ClaimsData(isfromDisclosureOfJWT: true, data: portraitData)],
+                null,
+              );
+            }
+            return (<ClaimsData>[], null);
+          };
 
       // Act
       final result = realSelectiveDisclosure.getPicture;
@@ -189,8 +198,9 @@ void main() {
       });
 
       // Mock the real SelectiveDisclosure
-      final realSelectiveDisclosure =
-          _MockRealSelectiveDisclosure(mockCredentialModel);
+      final realSelectiveDisclosure = _MockRealSelectiveDisclosure(
+        mockCredentialModel,
+      );
       final claimsData = [
         ClaimsData(isfromDisclosureOfJWT: true, data: pictureData),
       ];
@@ -222,8 +232,9 @@ void main() {
       });
 
       // Mock the real SelectiveDisclosure
-      final realSelectiveDisclosure =
-          _MockRealSelectiveDisclosure(mockCredentialModel);
+      final realSelectiveDisclosure = _MockRealSelectiveDisclosure(
+        mockCredentialModel,
+      );
       final claimsData = [
         ClaimsData(isfromDisclosureOfJWT: true, data: pictureData),
       ];
@@ -236,8 +247,7 @@ void main() {
       expect(result, equals(pictureData));
     });
 
-    test('finds multiple picture fields but returns the first one (picture)',
-        () {
+    test('finds multiple picture fields but returns the first one (picture)', () {
       // Arrange
       const pictureData = 'base64encodedpicturedata';
       const faceData = 'base64encodedfacedata';
@@ -253,39 +263,37 @@ void main() {
       });
 
       // Mock the real SelectiveDisclosure
-      final realSelectiveDisclosure =
-          _MockRealSelectiveDisclosure(mockCredentialModel);
+      final realSelectiveDisclosure = _MockRealSelectiveDisclosure(
+        mockCredentialModel,
+      );
 
       // Set up mock to return different results based on which key is requested
       realSelectiveDisclosure.mockGetClaimsDataCallback =
           (String key, String? parentKeyId) {
-        if (key == 'picture') {
-          return (
-            [ClaimsData(isfromDisclosureOfJWT: true, data: pictureData)],
-            null
-          );
-        } else if (key == 'face') {
-          return (
-            [ClaimsData(isfromDisclosureOfJWT: true, data: faceData)],
-            null
-          );
-        } else if (key == 'portrait') {
-          return (
-            [ClaimsData(isfromDisclosureOfJWT: true, data: portraitData)],
-            null
-          );
-        }
-        return (<ClaimsData>[], null);
-      };
+            if (key == 'picture') {
+              return (
+                [ClaimsData(isfromDisclosureOfJWT: true, data: pictureData)],
+                null,
+              );
+            } else if (key == 'face') {
+              return (
+                [ClaimsData(isfromDisclosureOfJWT: true, data: faceData)],
+                null,
+              );
+            } else if (key == 'portrait') {
+              return (
+                [ClaimsData(isfromDisclosureOfJWT: true, data: portraitData)],
+                null,
+              );
+            }
+            return (<ClaimsData>[], null);
+          };
 
       // Act
       final result = realSelectiveDisclosure.getPicture;
 
       // Assert
-      expect(
-        result,
-        equals(pictureData),
-      ); // Should return the first one,
+      expect(result, equals(pictureData)); // Should return the first one,
     });
 
     test('uses valueTypeIfNull when value_type is missing', () {
@@ -300,8 +308,9 @@ void main() {
       });
 
       // Mock the real SelectiveDisclosure
-      final realSelectiveDisclosure =
-          _MockRealSelectiveDisclosure(mockCredentialModel);
+      final realSelectiveDisclosure = _MockRealSelectiveDisclosure(
+        mockCredentialModel,
+      );
       final claimsData = [
         ClaimsData(isfromDisclosureOfJWT: true, data: pictureData),
       ];
@@ -332,8 +341,9 @@ void main() {
       when(mockCredentialModel.credentialSupported).thenReturn(mockData);
 
       // Mock the real SelectiveDisclosure
-      final realSelectiveDisclosure =
-          _MockRealSelectiveDisclosure(mockCredentialModel);
+      final realSelectiveDisclosure = _MockRealSelectiveDisclosure(
+        mockCredentialModel,
+      );
       final claimsData = [
         ClaimsData(isfromDisclosureOfJWT: true, data: pictureBase64),
       ];
@@ -360,7 +370,7 @@ class _MockRealSelectiveDisclosure extends SelectiveDisclosure {
   // For more complex scenarios where different inputs should
   // get different outputs
   (List<ClaimsData>, String?) Function(String key, String? parentKeyId)?
-      mockGetClaimsDataCallback;
+  mockGetClaimsDataCallback;
 
   @override
   (List<ClaimsData>, String?) getClaimsData({

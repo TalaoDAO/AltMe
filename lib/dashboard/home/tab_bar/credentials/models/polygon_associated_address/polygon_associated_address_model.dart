@@ -11,9 +11,9 @@ class PolygonAssociatedAddressModel extends CredentialSubjectModel {
     required String super.id,
     required String super.type,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.polygonAssociatedWallet,
-          credentialCategory: CredentialCategory.blockchainAccountsCards,
-        );
+         credentialSubjectType: CredentialSubjectType.polygonAssociatedWallet,
+         credentialCategory: CredentialCategory.blockchainAccountsCards,
+       );
 
   factory PolygonAssociatedAddressModel.fromJson(Map<String, dynamic> json) =>
       _$PolygonAssociatedAddressModelFromJson(json);

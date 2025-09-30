@@ -23,10 +23,9 @@ class CredentialSubjectData extends StatelessWidget {
   Widget build(BuildContext context) {
     final credentialSupported = credentialModel.credentialSupported;
 
-    var credentialSubjectReference = JsonPath(r'$..credentialSubject')
-        .read(credentialSupported)
-        .firstOrNull
-        ?.value;
+    var credentialSubjectReference = JsonPath(
+      r'$..credentialSubject',
+    ).read(credentialSupported).firstOrNull?.value;
 
     if (credentialSubjectReference == null) return Container();
     if (credentialSubjectReference is! Map<String, dynamic>) return Container();
@@ -85,8 +84,9 @@ class CredentialSubjectData extends StatelessWidget {
   ) {
     final Widget column = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children:
-          displayInstructions.entries.map((MapEntry<String, dynamic> map) {
+      children: displayInstructions.entries.map((
+        MapEntry<String, dynamic> map,
+      ) {
         String? title;
         String? data;
 
@@ -103,7 +103,8 @@ class CredentialSubjectData extends StatelessWidget {
 
           if (credentialSubjectData.containsKey(displayInstructionKey)) {
             title = display['name'].toString();
-            data = credentialSubjectData[displayInstructionKey] is Map ||
+            data =
+                credentialSubjectData[displayInstructionKey] is Map ||
                     credentialSubjectData[displayInstructionKey] is List
                 ? jsonEncode(credentialSubjectData[displayInstructionKey])
                 : credentialSubjectData[displayInstructionKey].toString();
@@ -111,7 +112,8 @@ class CredentialSubjectData extends StatelessWidget {
         } else {
           if (credentialSubjectData[displayInstructionKey] != null) {
             title = null;
-            data = credentialSubjectData[displayInstructionKey] is Map ||
+            data =
+                credentialSubjectData[displayInstructionKey] is Map ||
                     credentialSubjectData[displayInstructionKey] is List
                 ? jsonEncode(credentialSubjectData[displayInstructionKey])
                 : credentialSubjectData[displayInstructionKey].toString();
@@ -119,7 +121,7 @@ class CredentialSubjectData extends StatelessWidget {
             return const SizedBox.shrink();
           }
         }
-// check if that's a picture which is displayed on the card.
+        // check if that's a picture which is displayed on the card.
         final valueType = displayInstructionValue['value_type'];
         if (Parameters.pictureOnCardValueTypeList.contains(valueType) &&
             Parameters.pictureOnCardKeyList.contains(displayInstructionKey)) {
@@ -127,8 +129,9 @@ class CredentialSubjectData extends StatelessWidget {
         }
         if (data == null) return const SizedBox.shrink();
         late Widget widget;
-        final nestedFieldsFromDisplayInstruction =
-            Map<String, dynamic>.from(displayInstructionValue);
+        final nestedFieldsFromDisplayInstruction = Map<String, dynamic>.from(
+          displayInstructionValue,
+        );
         nestedFieldsFromDisplayInstruction.remove('display');
         nestedFieldsFromDisplayInstruction.remove('value_type');
         nestedFieldsFromDisplayInstruction.remove('mandatory');
@@ -167,10 +170,7 @@ class CredentialSubjectData extends StatelessWidget {
 
             /// for each element in Map toto, call displayWidget
 
-            widget = IndentedCredentialFields(
-              title: title,
-              children: column,
-            );
+            widget = IndentedCredentialFields(title: title, children: column);
           } catch (e) {
             return const SizedBox.shrink();
           }
@@ -219,11 +219,7 @@ class CredentialSubjectData extends StatelessWidget {
           );
         } else {
           column.add(
-            displayWidget(
-              {element.key: elementValue},
-              languageCode,
-              json,
-            ),
+            displayWidget({element.key: elementValue}, languageCode, json),
           );
         }
       }
@@ -356,9 +352,9 @@ class IndentedCredentialFields extends StatelessWidget {
             child: Text(
               title!,
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.bold,
-                  ),
+                color: Theme.of(context).colorScheme.onSurface,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           )
         else

@@ -81,9 +81,9 @@ class RestoreCredentialMnemonicState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        isMnemonicValid,
-        isTextFieldEdited,
-        message,
-      ];
+    status,
+    isMnemonicValid,
+    isTextFieldEdited,
+    message,
+  ];
 }

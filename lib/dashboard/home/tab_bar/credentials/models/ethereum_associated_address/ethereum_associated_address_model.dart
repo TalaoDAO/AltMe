@@ -11,9 +11,9 @@ class EthereumAssociatedAddressModel extends CredentialSubjectModel {
     required String super.id,
     required String super.type,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.ethereumAssociatedWallet,
-          credentialCategory: CredentialCategory.blockchainAccountsCards,
-        );
+         credentialSubjectType: CredentialSubjectType.ethereumAssociatedWallet,
+         credentialCategory: CredentialCategory.blockchainAccountsCards,
+       );
 
   factory EthereumAssociatedAddressModel.fromJson(Map<String, dynamic> json) =>
       _$EthereumAssociatedAddressModelFromJson(json);

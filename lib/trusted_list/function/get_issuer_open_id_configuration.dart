@@ -12,7 +12,7 @@ OpenIdConfiguration getIssuerOpenIdConfiguration({
     if (signedMetadata == null) {
       throw Exception('Signed metadata is null');
     }
-// check jwt signature
+    // check jwt signature
 
     try {
       final jwt = JWT.decode(signedMetadata);

@@ -3,10 +3,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AddTokenButton extends StatelessWidget {
-  const AddTokenButton({
-    super.key,
-    this.onTap,
-  });
+  const AddTokenButton({super.key, this.onTap});
 
   final VoidCallback? onTap;
 
@@ -24,13 +21,8 @@ class AddTokenButton extends StatelessWidget {
               width: Sizes.icon,
               height: Sizes.icon,
             ),
-            const SizedBox(
-              width: Sizes.spaceXSmall,
-            ),
-            Text(
-              l10n.addTokens,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            const SizedBox(width: Sizes.spaceXSmall),
+            Text(l10n.addTokens, style: Theme.of(context).textTheme.titleLarge),
           ],
         ),
       ),

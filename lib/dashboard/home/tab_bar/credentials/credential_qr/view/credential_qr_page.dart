@@ -9,10 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class CredentialQrPage extends StatelessWidget {
-  const CredentialQrPage({
-    super.key,
-    required this.credentialModel,
-  });
+  const CredentialQrPage({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 
@@ -33,7 +30,10 @@ class CredentialQrPage extends StatelessWidget {
 
     return BasePage(
       title: credentialModel
-          .credentialPreview.credentialSubjectModel.credentialSubjectType.name,
+          .credentialPreview
+          .credentialSubjectModel
+          .credentialSubjectType
+          .name,
       titleLeading: const BackLeadingButton(),
       scrollView: true,
       body: BackgroundCard(

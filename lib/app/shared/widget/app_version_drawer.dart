@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class AppVersionDrawer extends StatelessWidget {
-  const AppVersionDrawer({
-    super.key,
-    this.isShortForm = false,
-  });
+  const AppVersionDrawer({super.key, this.isShortForm = false});
 
   final bool isShortForm;
 

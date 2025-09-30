@@ -12,18 +12,16 @@ void main() {
     final navigatorKey = GlobalKey<NavigatorState>();
 
     await tester.pumpWidget(
-      MaterialApp(
-        navigatorKey: navigatorKey,
-        home: fromWidget,
-      ),
+      MaterialApp(navigatorKey: navigatorKey, home: fromWidget),
     );
 
     expect(find.text('From Screen'), findsOneWidget);
     expect(find.text('To Screen'), findsNothing);
 
     unawaited(
-      navigatorKey.currentState!
-          .push(RightToLeftRoute(builder: (context) => toWidget)),
+      navigatorKey.currentState!.push(
+        RightToLeftRoute(builder: (context) => toWidget),
+      ),
     );
 
     await tester.pumpAndSettle();

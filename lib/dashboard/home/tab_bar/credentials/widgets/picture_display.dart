@@ -2,10 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 
 class PictureDisplay extends StatelessWidget {
-  const PictureDisplay({
-    super.key,
-    required this.credentialImage,
-  });
+  const PictureDisplay({super.key, required this.credentialImage});
 
   final String credentialImage;
 
@@ -14,9 +11,7 @@ class PictureDisplay extends StatelessWidget {
     return AspectRatio(
       aspectRatio: Sizes.credentialAspectRatio,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(
-          Sizes.credentialBorderRadius,
-        ),
+        borderRadius: BorderRadius.circular(Sizes.credentialBorderRadius),
         child: CachedImageFromNetwork(
           credentialImage,
           fit: BoxFit.contain,

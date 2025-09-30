@@ -17,8 +17,9 @@ void main() {
     setUp(() {
       mockProfileCubit = MockProfileCubit();
 
-      activeBiometricsCubit =
-          ActiveBiometricsCubit(profileCubit: mockProfileCubit);
+      activeBiometricsCubit = ActiveBiometricsCubit(
+        profileCubit: mockProfileCubit,
+      );
     });
 
     test('initial state is false', () {

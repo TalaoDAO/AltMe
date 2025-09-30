@@ -5,20 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ManageDidPage extends StatefulWidget {
-  const ManageDidPage({
-    super.key,
-    required this.didKeyType,
-  });
+  const ManageDidPage({super.key, required this.didKeyType});
 
   final DidKeyType didKeyType;
 
-  static Route<dynamic> route({
-    required DidKeyType didKeyType,
-  }) {
+  static Route<dynamic> route({required DidKeyType didKeyType}) {
     return MaterialPageRoute<void>(
-      builder: (_) => ManageDidPage(
-        didKeyType: didKeyType,
-      ),
+      builder: (_) => ManageDidPage(didKeyType: didKeyType),
       settings: const RouteSettings(name: '/ManageDidPage'),
     );
   }
@@ -83,9 +76,7 @@ class _ManageDidEbsiPageState extends State<ManageDidPage> {
                 child: Divider(),
               ),
               DidPrivateKey(
-                route: DidPrivateKeyPage.route(
-                  didKeyType: widget.didKeyType,
-                ),
+                route: DidPrivateKeyPage.route(didKeyType: widget.didKeyType),
               ),
             ],
           ),

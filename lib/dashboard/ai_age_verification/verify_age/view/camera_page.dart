@@ -4,7 +4,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -39,9 +38,7 @@ class CameraPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CameraCubit>(
-      create: (_) => CameraCubit(
-        defaultConfig: defaultconfig,
-      ),
+      create: (_) => CameraCubit(defaultConfig: defaultconfig),
       child: CameraView(
         credentialSubjectType: credentialSubjectType,
         vcFormatType: vcFormatType,
@@ -93,9 +90,7 @@ class _CameraViewState extends State<CameraView> {
       body: BlocConsumer<CameraCubit, CameraState>(
         builder: (_, state) {
           if (state.status == CameraStatus.initializing) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           } else if (state.status == CameraStatus.initializeFailed) {
             return Center(
               child: Text(
@@ -124,14 +119,14 @@ class _CameraViewState extends State<CameraView> {
                 .selfSovereignIdentityOptions
                 .customOidc4vcProfile;
             await context.read<HomeCubit>().aiSelfiValidation(
-                  credentialType: widget.credentialSubjectType,
-                  imageBytes: state.data!,
-                  credentialsCubit: context.read<CredentialsCubit>(),
-                  cameraCubit: context.read<CameraCubit>(),
-                  oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
-                  vcFormatType: widget.vcFormatType,
-                  qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-                );
+              credentialType: widget.credentialSubjectType,
+              imageBytes: state.data!,
+              credentialsCubit: context.read<CredentialsCubit>(),
+              cameraCubit: context.read<CameraCubit>(),
+              oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
+              vcFormatType: widget.vcFormatType,
+              qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+            );
             LoadingView().hide();
             await Navigator.pushReplacement<void, void>(
               context,

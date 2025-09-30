@@ -39,13 +39,13 @@ class AlertMessage {
 
     if (data != null && data is Map) {
       if (data.containsKey('error')) {
-        final ResponseString responseString =
-            getErrorResponseString(data['error'].toString());
-        message =
-            ResponseMessage(message: responseString, data: data).getMessage(
-          context,
-          ResponseMessage(message: responseString),
+        final ResponseString responseString = getErrorResponseString(
+          data['error'].toString(),
         );
+        message = ResponseMessage(
+          message: responseString,
+          data: data,
+        ).getMessage(context, ResponseMessage(message: responseString));
       }
 
       if (context.read<ProfileCubit>().state.model.isDeveloperMode) {
@@ -124,27 +124,21 @@ class SnackBarContent extends StatelessWidget {
       ),
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(Sizes.smallRadius),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(Sizes.smallRadius)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceSmall),
-            child: Image.asset(
-              iconPath,
-              width: Sizes.icon,
-              height: Sizes.icon,
-            ),
+            child: Image.asset(iconPath, width: Sizes.icon, height: Sizes.icon),
           ),
           Expanded(
             child: MyText(
               message,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.black,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: Colors.black),
               maxLines: 2,
             ),
           ),
@@ -160,9 +154,9 @@ class SnackBarContent extends StatelessWidget {
             child: Text(
               l10n.close.toUpperCase(),
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ],

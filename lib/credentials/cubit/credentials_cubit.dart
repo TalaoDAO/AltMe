@@ -56,8 +56,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   Future<void> loadAllCredentials() async {
     final log = getLogger('loadAllCredentials');
-    final String? ssiKey =
-        await secureStorageProvider.get(SecureStorageKeys.ssiKey);
+    final String? ssiKey = await secureStorageProvider.get(
+      SecureStorageKeys.ssiKey,
+    );
     if (ssiKey == null || ssiKey.isEmpty) {
       log.i('can not load all credentials beacuse there is no ssi key');
       return;
@@ -79,10 +80,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           credential.isVerifiableDiplomaType) {
         final updatedCredential = credential.copyWith(
           credentialPreview: credential.credentialPreview.copyWith(
-            credentialSubjectModel:
-                credential.credentialPreview.credentialSubjectModel.copyWith(
-              credentialCategory: CredentialCategory.educationCards,
-            ),
+            credentialSubjectModel: credential
+                .credentialPreview
+                .credentialSubjectModel
+                .copyWith(
+                  credentialCategory: CredentialCategory.educationCards,
+                ),
           ),
         );
 
@@ -116,8 +119,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   }) async {
     final log = getLogger('addRequiredCredentials');
 
-    final walletAttestationData = await secureStorageProvider
-        .get(SecureStorageKeys.walletAttestationData);
+    final walletAttestationData = await secureStorageProvider.get(
+      SecureStorageKeys.walletAttestationData,
+    );
 
     if (walletAttestationData == null) {
       return;
@@ -144,9 +148,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           payload['iss'].toString(), // issuer
           payload['exp'].toString(),
           payload['iat'].toString(),
-          [
-            Proof.dummy(),
-          ],
+          [Proof.dummy()],
           WalletCredentialModel(
             id: id,
             type: 'WalletCredential',
@@ -175,29 +177,20 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   }
 
   void reset() {
-    emit(
-      state.copyWith(
-        status: CredentialsStatus.reset,
-        credentials: [],
-      ),
-    );
+    emit(state.copyWith(status: CredentialsStatus.reset, credentials: []));
   }
 
-  Future<void> deleteById({
-    required String id,
-    bool showMessage = true,
-  }) async {
+  Future<void> deleteById({required String id, bool showMessage = true}) async {
     emit(state.loading());
 
-    final credential =
-        state.credentials.where((element) => element.id == id).first;
+    final credential = state.credentials
+        .where((element) => element.id == id)
+        .first;
 
     await credentialsRepository.deleteById(id);
     final credentials = List.of(state.credentials)
       ..removeWhere((element) => element.id == id);
-    final dummies = _getAvalaibleDummyCredentials(
-      credentials: credentials,
-    );
+    final dummies = _getAvalaibleDummyCredentials(credentials: credentials);
 
     await activityLogManager.saveLog(
       LogData(
@@ -225,8 +218,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     bool showMessage = true,
   }) async {
     await credentialsRepository.update(credential);
-    final index =
-        state.credentials.indexWhere((element) => element.id == credential.id);
+    final index = state.credentials.indexWhere(
+      (element) => element.id == credential.id,
+    );
 
     final credentials = List.of(state.credentials);
     credentials[index] = credential;
@@ -247,8 +241,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   Future<void> handleUnknownRevocationStatus(CredentialModel credential) async {
     await credentialsRepository.update(credential);
-    final index =
-        state.credentials.indexWhere((element) => element.id == credential.id);
+    final index = state.credentials.indexWhere(
+      (element) => element.id == credential.id,
+    );
     if (index != -1) {
       final credentials = List.of(state.credentials)
         ..removeWhere((element) => element.id == credential.id)
@@ -274,24 +269,20 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     if (credential.isDefaultCredential && credential.isVerifiableDiplomaType) {
       final updatedCredential = credential.copyWith(
         credentialPreview: credential.credentialPreview.copyWith(
-          credentialSubjectModel:
-              credential.credentialPreview.credentialSubjectModel.copyWith(
-            credentialCategory: CredentialCategory.educationCards,
-          ),
+          credentialSubjectModel: credential
+              .credentialPreview
+              .credentialSubjectModel
+              .copyWith(credentialCategory: CredentialCategory.educationCards),
         ),
       );
       if (!isPendingCredential) {
-        await modifyCredential(
-          credential: updatedCredential,
-        );
+        await modifyCredential(credential: updatedCredential);
       }
       await credentialsRepository.insert(updatedCredential);
       credentials = List.of(state.credentials)..add(updatedCredential);
     } else {
       if (!isPendingCredential) {
-        await modifyCredential(
-          credential: credential,
-        );
+        await modifyCredential(credential: credential);
       }
       await credentialsRepository.insert(credential);
       credentials = List.of(state.credentials)..add(credential);
@@ -302,9 +293,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
     enableCredentialCategory(category: credentialCategory);
 
-    final dummies = _getAvalaibleDummyCredentials(
-      credentials: credentials,
-    );
+    final dummies = _getAvalaibleDummyCredentials(credentials: credentials);
 
     await activityLogManager.saveLog(
       LogData(
@@ -389,8 +378,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     final credentialSubjectModel =
         credential.credentialPreview.credentialSubjectModel;
 
-    final List<CredentialModel> allCredentials =
-        await credentialsRepository.findAll();
+    final List<CredentialModel> allCredentials = await credentialsRepository
+        .findAll();
 
     for (final storedCredential in allCredentials) {
       final iteratedCredentialSubjectModel =
@@ -399,11 +388,12 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
       final isCredentialSubjectTypeMatched =
           credentialSubjectModel.credentialSubjectType ==
-              iteratedCredentialSubjectModel.credentialSubjectType;
+          iteratedCredentialSubjectModel.credentialSubjectType;
 
       final isFormatMatched = iteratedCredentialFormat == credential.format;
 
-      final isOnSameProfile = storedCredential.profileLinkedId ==
+      final isOnSameProfile =
+          storedCredential.profileLinkedId ==
           profileCubit.state.model.profileType.getVCId;
 
       final isCredentialMatched =
@@ -431,30 +421,23 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           if (oldEmail != null && oldEmail == newEmail) {
             /// check if email is same
 
-            await deleteById(
-              id: storedCredential.id,
-              showMessage: false,
-            );
+            await deleteById(id: storedCredential.id, showMessage: false);
             break;
           } else {
             /// other cards
             if (credentialSubjectModel
-                .credentialSubjectType.supportSingleOnly) {
-              await deleteById(
-                id: storedCredential.id,
-                showMessage: false,
-              );
+                .credentialSubjectType
+                .supportSingleOnly) {
+              await deleteById(id: storedCredential.id, showMessage: false);
               break;
             } else {
               // don not remove if support multiple
             }
           }
         } else if (credentialSubjectModel
-            .credentialSubjectType.supportSingleOnly) {
-          await deleteById(
-            id: storedCredential.id,
-            showMessage: false,
-          );
+            .credentialSubjectType
+            .supportSingleOnly) {
+          await deleteById(id: storedCredential.id, showMessage: false);
         }
       }
     }
@@ -468,8 +451,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     for (final credential in credentials) {
       await credentialsRepository.insert(credential);
     }
-    final updatedCredentials =
-        await credentialsRepository.findAll(/* filters */);
+    final updatedCredentials = await credentialsRepository.findAll(
+      /* filters */
+    );
     emit(
       state.copyWith(
         status: CredentialsStatus.init,
@@ -499,8 +483,13 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   Future<void> insertAssociatedWalletCredential({
     required CryptoAccountData cryptoAccountData,
   }) async {
-    final didKeyType = profileCubit.state.model.profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+    final didKeyType = profileCubit
+        .state
+        .model
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile
+        .defaultDid;
 
     final privateKey = await getPrivateKey(
       didKeyType: didKeyType,
@@ -515,26 +504,57 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
     final private = jsonDecode(privateKey) as Map<String, dynamic>;
 
+    /// generate the ldp_vc credential
     final credential = await generateAssociatedWalletCredential(
       cryptoAccountData: cryptoAccountData,
       didKitProvider: didKitProvider,
-      blockchainType: cryptoAccountData.blockchainType,
       keyGenerator: keyGenerator,
       did: did,
-      customOidc4vcProfile: profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile,
+      customOidc4vcProfile: profileCubit
+          .state
+          .model
+          .profileSetting
+          .selfSovereignIdentityOptions
+          .customOidc4vcProfile,
       oidc4vc: oidc4vc,
       privateKey: private,
       profileType: profileCubit.state.model.profileType,
+      vcFormatType: VCFormatType.ldpVc,
     );
 
     if (credential != null) {
-      await modifyCredential(
-        credential: credential,
-      );
+      await modifyCredential(credential: credential);
 
       await insertCredential(
         credential: credential,
+        showMessage: false,
+        uri: Uri.parse(Parameters.walletIssuer),
+      );
+    }
+
+    /// generate the cd+SD-JWT credential
+    final dcSdJwtCredential = await generateAssociatedWalletCredential(
+      cryptoAccountData: cryptoAccountData,
+      didKitProvider: didKitProvider,
+      keyGenerator: keyGenerator,
+      did: did,
+      customOidc4vcProfile: profileCubit
+          .state
+          .model
+          .profileSetting
+          .selfSovereignIdentityOptions
+          .customOidc4vcProfile,
+      oidc4vc: oidc4vc,
+      privateKey: private,
+      profileType: profileCubit.state.model.profileType,
+      vcFormatType: VCFormatType.dcSdJWT,
+    );
+
+    if (dcSdJwtCredential != null) {
+      await modifyCredential(credential: dcSdJwtCredential);
+
+      await insertCredential(
+        credential: dcSdJwtCredential,
         showMessage: false,
         uri: Uri.parse(Parameters.walletIssuer),
       );
@@ -543,15 +563,14 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
   ///get dummy cards
   Map<CredentialCategory, List<DiscoverDummyCredential>>
-      _getAvalaibleDummyCredentials({
-    required List<CredentialModel> credentials,
-  }) {
+  _getAvalaibleDummyCredentials({required List<CredentialModel> credentials}) {
     final dummies = <CredentialCategory, List<DiscoverDummyCredential>>{};
     // entreprise user may have options to display some dummies (true/false)
 
     final profileModel = profileCubit.state.model;
     final profileSetting = profileModel.profileSetting;
-    final formatsSupported = profileModel
+    final formatsSupported =
+        profileModel
             .profileSetting
             .selfSovereignIdentityOptions
             .customOidc4vcProfile
@@ -938,7 +957,9 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         final credentialsOfSameType = credentials
             .where(
               (element) =>
-                  element.credentialPreview.credentialSubjectModel
+                  element
+                      .credentialPreview
+                      .credentialSubjectModel
                       .credentialSubjectType ==
                   credInfo.credentialType,
             )
@@ -962,8 +983,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       }
 
       /// Generate list of external issuer from the profile
-      dummies[category] =
-          getDummiesFromExternalIssuerList(category, externalIssuers ?? []);
+      dummies[category] = getDummiesFromExternalIssuerList(
+        category,
+        externalIssuers ?? [],
+      );
 
       /// add dummies from the category
       dummies[category]?.addAll(
@@ -1016,8 +1039,9 @@ List<DiscoverDummyCredential> getDummiesFromExternalIssuerList(
           image: e.background_url,
           display: Display(
             backgroundColor: e.background_color,
-            backgroundImage:
-                DisplayDetails(url: e.background_image ?? e.background_url),
+            backgroundImage: DisplayDetails(
+              url: e.background_image ?? e.background_url,
+            ),
             name: e.title,
             textColor: e.text_color,
             logo: DisplayDetails(url: e.logo),

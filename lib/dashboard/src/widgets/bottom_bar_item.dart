@@ -48,10 +48,9 @@ class BottomBarItem extends StatelessWidget {
               softWrap: false,
               overflow: TextOverflow.fade,
               style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    fontWeight:
-                        isSelected ? FontWeight.bold : FontWeight.normal,
-                    color: bottomBarItemColor(context),
-                  ),
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                color: bottomBarItemColor(context),
+              ),
             ),
           ],
         ),

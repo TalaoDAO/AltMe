@@ -36,9 +36,7 @@ class BlockchainSettingsView extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const BackLeadingButton(
-            padding: EdgeInsets.zero,
-          ),
+          const BackLeadingButton(padding: EdgeInsets.zero),
           const DrawerLogo(),
           DrawerItem(
             title: l10n.manageAccounts,

@@ -5,10 +5,7 @@ part 'electronic_address.g.dart';
 
 @JsonSerializable()
 class ElectronicAddress extends Equatable {
-  const ElectronicAddress({
-    required this.uri,
-    this.lang,
-  });
+  const ElectronicAddress({required this.uri, this.lang});
 
   factory ElectronicAddress.fromJson(Map<String, dynamic> json) =>
       _$ElectronicAddressFromJson(json);
@@ -18,8 +15,5 @@ class ElectronicAddress extends Equatable {
   Map<String, dynamic> toJson() => _$ElectronicAddressToJson(this);
 
   @override
-  List<Object?> get props => [
-        uri,
-        lang,
-      ];
+  List<Object?> get props => [uri, lang];
 }

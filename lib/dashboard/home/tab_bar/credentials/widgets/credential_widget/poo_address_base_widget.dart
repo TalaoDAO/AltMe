@@ -36,8 +36,8 @@ class PooAddressBaseWidget extends StatelessWidget {
                 child: MyText(
                   name,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
               ),
             ),
@@ -70,8 +70,8 @@ class PooAddressBaseWidget extends StatelessWidget {
                   child: MyText(
                     walletAddress,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                     minFontSize: 8,
                     maxLines: 2,
                   ),
@@ -124,18 +124,12 @@ class PooAddressBaseWidgetDelegate extends MultiChildLayoutDelegate {
   void performLayout(Size size) {
     if (hasChild('name')) {
       layoutChild('name', BoxConstraints.loose(size));
-      positionChild(
-        'name',
-        Offset(size.width * 0.06, size.height * 0.27),
-      );
+      positionChild('name', Offset(size.width * 0.06, size.height * 0.27));
     }
 
     if (hasChild('image')) {
       layoutChild('image', BoxConstraints.loose(size));
-      positionChild(
-        'image',
-        Offset(size.width * 0.8, size.height * 0.05),
-      );
+      positionChild('image', Offset(size.width * 0.8, size.height * 0.05));
     }
 
     // if (hasChild('accountName')) {
@@ -164,10 +158,7 @@ class PooAddressBaseWidgetDelegate extends MultiChildLayoutDelegate {
 
     if (hasChild('issuedOn')) {
       layoutChild('issuedOn', BoxConstraints.loose(size));
-      positionChild(
-        'issuedOn',
-        Offset(size.width * 0.46, size.height * 0.82),
-      );
+      positionChild('issuedOn', Offset(size.width * 0.46, size.height * 0.82));
     }
   }
 

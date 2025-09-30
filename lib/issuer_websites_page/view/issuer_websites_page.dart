@@ -4,17 +4,14 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class IssuerWebsitesPage extends StatelessWidget {
-  const IssuerWebsitesPage(
-    this.issuerFilter, {
-    super.key,
-  });
+  const IssuerWebsitesPage(this.issuerFilter, {super.key});
 
   final String? issuerFilter;
 
   static Route<dynamic> route(String? issuerType) => MaterialPageRoute<void>(
-        builder: (context) => IssuerWebsitesPage(issuerType),
-        settings: const RouteSettings(name: '/issuerWebsitesPage'),
-      );
+    builder: (context) => IssuerWebsitesPage(issuerType),
+    settings: const RouteSettings(name: '/issuerWebsitesPage'),
+  );
 
   @override
   Widget build(BuildContext context) {

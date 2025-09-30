@@ -59,9 +59,9 @@ class App extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => ThemeCubit(
-              themeRepository: context.read<ThemeRepository>(),
-            )..getCurrentTheme(),
+            create: (context) =>
+                ThemeCubit(themeRepository: context.read<ThemeRepository>())
+                  ..getCurrentTheme(),
           ),
           BlocProvider<FlavorCubit>(
             create: (context) => FlavorCubit(flavorMode),
@@ -116,9 +116,7 @@ class App extends StatelessWidget {
               profileCubit: context.read<ProfileCubit>(),
             ),
           ),
-          BlocProvider<OnboardingCubit>(
-            create: (context) => OnboardingCubit(),
-          ),
+          BlocProvider<OnboardingCubit>(create: (context) => OnboardingCubit()),
           BlocProvider<WalletCubit>(
             lazy: false,
             create: (context) => WalletCubit(
@@ -130,8 +128,9 @@ class App extends StatelessWidget {
           BlocProvider<WalletConnectCubit>(
             create: (context) => WalletConnectCubit(
               secureStorageProvider: secureStorageProvider,
-              connectedDappRepository:
-                  ConnectedDappRepository(secureStorageProvider),
+              connectedDappRepository: ConnectedDappRepository(
+                secureStorageProvider,
+              ),
               routeCubit: context.read<RouteCubit>(),
               walletCubit: context.read<WalletCubit>(),
             ),
@@ -139,8 +138,9 @@ class App extends StatelessWidget {
           BlocProvider<CredentialsCubit>(
             lazy: false,
             create: (context) => CredentialsCubit(
-              credentialsRepository:
-                  CredentialsRepository(secureStorageProvider),
+              credentialsRepository: CredentialsRepository(
+                secureStorageProvider,
+              ),
               secureStorageProvider: secureStorageProvider,
               keyGenerator: KeyGenerator(),
               didKitProvider: DIDKitProvider(),
@@ -238,19 +238,20 @@ class App extends StatelessWidget {
               ),
             ),
           ),
-          BlocProvider(
-            create: (_) => MnemonicNeedVerificationCubit(),
-          ),
+          BlocProvider(create: (_) => MnemonicNeedVerificationCubit()),
           BlocProvider<TokensCubit>(
             create: (context) => TokensCubit(
               allTokensCubit: context.read<AllTokensCubit>(),
               networkCubit: context.read<ManageNetworkCubit>(),
-              mnemonicNeedVerificationCubit:
-                  context.read<MnemonicNeedVerificationCubit>(),
+              mnemonicNeedVerificationCubit: context
+                  .read<MnemonicNeedVerificationCubit>(),
               secureStorageProvider: secureStorageProvider,
               client: DioClient(
-                baseUrl:
-                    context.read<ManageNetworkCubit>().state.network.apiUrl,
+                baseUrl: context
+                    .read<ManageNetworkCubit>()
+                    .state
+                    .network
+                    .apiUrl,
                 secureStorageProvider: secureStorageProvider,
                 dio: Dio(),
               ),
@@ -260,8 +261,11 @@ class App extends StatelessWidget {
           BlocProvider<NftCubit>(
             create: (context) => NftCubit(
               client: DioClient(
-                baseUrl:
-                    context.read<ManageNetworkCubit>().state.network.apiUrl,
+                baseUrl: context
+                    .read<ManageNetworkCubit>()
+                    .state
+                    .network
+                    .apiUrl,
                 secureStorageProvider: secureStorageProvider,
                 dio: Dio(),
               ),
@@ -316,12 +320,18 @@ class MaterialAppDefinition extends StatelessWidget {
                   theme: AppTheme.seedThemeData(
                     Brightness.light,
                     profileState
-                        .model.profileSetting.generalOptions.primaryColor,
+                        .model
+                        .profileSetting
+                        .generalOptions
+                        .primaryColor,
                   ),
                   darkTheme: AppTheme.seedThemeData(
                     Brightness.dark,
                     profileState
-                        .model.profileSetting.generalOptions.primaryColor,
+                        .model
+                        .profileSetting
+                        .generalOptions
+                        .primaryColor,
                   ),
                   navigatorObservers: [MyRouteObserver(context)],
                   themeMode: themeState.themeMode,

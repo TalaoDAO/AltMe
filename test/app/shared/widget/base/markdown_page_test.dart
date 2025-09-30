@@ -14,8 +14,9 @@ void main() {
     );
   }
 
-  testWidgets('MarkdownPage should load and display markdown content',
-      (WidgetTester tester) async {
+  testWidgets('MarkdownPage should load and display markdown content', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(makeTestableWidget());
 
     expect(find.byType(Spinner), findsOneWidget);
@@ -30,8 +31,9 @@ void main() {
     );
   });
 
-  testWidgets('MarkdownPage should handle loading errors',
-      (WidgetTester tester) async {
+  testWidgets('MarkdownPage should handle loading errors', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         home: MarkdownPage(title: 'Test', file: 'invalid_file.md'),

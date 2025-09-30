@@ -17,8 +17,7 @@ class EtherlinkAssociatedAddressCredential {
 
   factory EtherlinkAssociatedAddressCredential.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$EtherlinkAssociatedAddressCredentialFromJson(json);
+  ) => _$EtherlinkAssociatedAddressCredentialFromJson(json);
 
   @JsonKey(name: '@context', defaultValue: _context)
   final List<dynamic> context;
@@ -45,6 +44,6 @@ class EtherlinkAssociatedAddressCredential {
       'associatedAddress': 'https://w3id.org/security#blockchainAccountId',
       'EtherlinkAssociatedAddress':
           'https://doc.wallet-provider.io/vc_type/#EtherlinkAssociatedAdress',
-    }
+    },
   ];
 }

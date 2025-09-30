@@ -10,6 +10,7 @@ class ScanState extends Equatable {
     this.challenge,
     this.domain,
     this.done,
+    this.transactionData,
   });
 
   factory ScanState.fromJson(Map<String, dynamic> json) =>
@@ -21,11 +22,12 @@ class ScanState extends Equatable {
   final String? keyId;
   final String? challenge;
   final String? domain;
+  final List<dynamic>? transactionData;
   @JsonKey(includeFromJson: false, includeToJson: false)
   final dynamic Function(String)? done;
 
   ScanState loading() {
-    return ScanState(
+    return copyWith(
       status: ScanStatus.loading,
       uri: uri,
       keyId: keyId,
@@ -42,7 +44,7 @@ class ScanState extends Equatable {
     String? domain,
     required dynamic Function(String) done,
   }) {
-    return ScanState(
+    return copyWith(
       status: ScanStatus.askPermissionDidAuth,
       uri: uri,
       keyId: keyId,
@@ -53,32 +55,48 @@ class ScanState extends Equatable {
   }
 
   ScanState warning({required MessageHandler messageHandler}) {
-    return ScanState(
+    return copyWith(
       status: ScanStatus.warning,
       message: StateMessage.warning(messageHandler: messageHandler),
     );
   }
 
   ScanState error({required StateMessage message}) {
-    return ScanState(
-      status: ScanStatus.error,
-      message: message,
-    );
+    return copyWith(status: ScanStatus.error, message: message);
   }
 
   ScanState copyWith({
-    required ScanStatus status,
+    ScanStatus? status,
     StateMessage? message,
+    Uri? uri,
+    String? keyId,
+    String? challenge,
+    String? domain,
+    dynamic Function(String)? done,
+    List<dynamic>? transactionData,
   }) {
     return ScanState(
-      status: status,
-      message: message,
+      status: status ?? this.status,
+      message: message ?? this.message,
+      uri: uri ?? this.uri,
+      keyId: keyId ?? this.keyId,
+      challenge: challenge ?? this.challenge,
+      domain: domain ?? this.domain,
+      done: done ?? this.done,
+      transactionData: transactionData ?? this.transactionData,
     );
   }
 
   Map<String, dynamic> toJson() => _$ScanStateToJson(this);
 
   @override
-  List<Object?> get props =>
-      [status, message, uri, keyId, challenge, domain, done];
+  List<Object?> get props => [
+    status,
+    message,
+    uri,
+    keyId,
+    challenge,
+    domain,
+    done,
+  ];
 }

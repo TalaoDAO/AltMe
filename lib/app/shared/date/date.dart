@@ -51,8 +51,9 @@ class UiDate {
 
   static String? formatTime(String formattedString) {
     try {
-      final DateTime dt =
-          DateFormat('hh:mm:ss').parse(formattedString, true).toLocal();
+      final DateTime dt = DateFormat(
+        'hh:mm:ss',
+      ).parse(formattedString, true).toLocal();
       return DateFormat.jm().format(dt);
     } on FormatException {
       return null;
@@ -64,17 +65,13 @@ class UiDate {
       if (isTimestampString(date)) {
         final double doubleValue = double.parse(date);
         final int intValue = doubleValue.toInt();
-        final DateTime dt =
-            DateTime.fromMillisecondsSinceEpoch(intValue * 1000);
+        final DateTime dt = DateTime.fromMillisecondsSinceEpoch(
+          intValue * 1000,
+        );
         return formatDate(dt);
       } else {
         return outputFormat.format(
-          DateFormat('y-M-dThh:mm:ssZ')
-              .parse(
-                date,
-                true,
-              )
-              .toLocal(),
+          DateFormat('y-M-dThh:mm:ssZ').parse(date, true).toLocal(),
         );
       }
     } catch (e) {
@@ -98,14 +95,9 @@ class UiDate {
       if (date?.isEmpty ?? true) {
         return null;
       }
-      return DateFormat('dd-MM-yyyy HH:mm').format(
-        DateFormat('y-M-dThh:mm:ssZ')
-            .parse(
-              date!,
-              true,
-            )
-            .toLocal(),
-      );
+      return DateFormat(
+        'dd-MM-yyyy HH:mm',
+      ).format(DateFormat('y-M-dThh:mm:ssZ').parse(date!, true).toLocal());
     } catch (e, s) {
       getLogger('date').e('e: $e, s: $s');
       return null;

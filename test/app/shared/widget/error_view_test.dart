@@ -4,8 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../helpers/helpers.dart';
 
 void main() {
-  testWidgets('ErrorView displays message and try again button',
-      (WidgetTester tester) async {
+  testWidgets('ErrorView displays message and try again button', (
+    WidgetTester tester,
+  ) async {
     const testMessage = 'An error occurred';
     bool wasButtonTapped = false;
 

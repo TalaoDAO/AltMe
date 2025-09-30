@@ -13,10 +13,7 @@ class BasePage extends StatefulWidget {
     this.titleTag,
     this.titleLeading,
     this.titleTrailing,
-    this.padding = const EdgeInsets.symmetric(
-      horizontal: 10,
-      vertical: 20,
-    ),
+    this.padding = const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
     this.scrollView = true,
     this.navigation,
     this.drawer,
@@ -56,9 +53,7 @@ class BasePage extends StatefulWidget {
 
 class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
   final SecureApplicationController secureApplicationController =
-      SecureApplicationController(
-    SecureApplicationState(secured: true),
-  );
+      SecureApplicationController(SecureApplicationState(secured: true));
 
   final noScreenShot = NoScreenshot.instance;
 
@@ -130,9 +125,11 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
                     floatingActionButtonLocation:
                         widget.floatingActionButtonLocation,
                     extendBody: widget.extendBelow ?? false,
-                    backgroundColor: widget.backgroundColor ??
+                    backgroundColor:
+                        widget.backgroundColor ??
                         Theme.of(context).colorScheme.surface,
-                    appBar: (widget.title == null &&
+                    appBar:
+                        (widget.title == null &&
                             widget.titleLeading == null &&
                             widget.titleTrailing == null)
                         ? null
@@ -146,8 +143,8 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
                           ),
                     bottomNavigationBar: widget.navigation != null
                         ? (widget.useSafeArea
-                            ? SafeArea(child: widget.navigation!)
-                            : widget.navigation)
+                              ? SafeArea(child: widget.navigation!)
+                              : widget.navigation)
                         : null,
                     drawer: widget.drawer,
                     body: widget.scrollView
@@ -176,7 +173,8 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
             extendBody: widget.extendBelow ?? false,
             backgroundColor:
                 widget.backgroundColor ?? Theme.of(context).colorScheme.surface,
-            appBar: (widget.title == null &&
+            appBar:
+                (widget.title == null &&
                     widget.titleLeading == null &&
                     widget.titleTrailing == null)
                 ? null
@@ -190,8 +188,8 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
                   ),
             bottomNavigationBar: widget.navigation != null
                 ? (widget.useSafeArea
-                    ? SafeArea(child: widget.navigation!)
-                    : widget.navigation)
+                      ? SafeArea(child: widget.navigation!)
+                      : widget.navigation)
                 : null,
             drawer: widget.drawer,
             body: widget.scrollView

@@ -5,6 +5,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
+import 'package:altme/oidc4vp_transaction/oidc4vp_transaction.dart';
 import 'package:altme/wallet/wallet.dart';
 
 import 'package:bloc/bloc.dart';
@@ -12,6 +13,7 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -67,8 +69,13 @@ class ScanCubit extends Cubit<ScanState> {
     final log = getLogger('ScanCubit - credentialOffer');
 
     try {
-      final didKeyType = profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+      final didKeyType = profileCubit
+          .state
+          .model
+          .profileSetting
+          .selfSovereignIdentityOptions
+          .customOidc4vcProfile
+          .defaultDid;
 
       final privateKey = await fetchPrivateKey(
         profileCubit: profileCubit,
@@ -131,8 +138,13 @@ class ScanCubit extends Cubit<ScanState> {
         /// If id was in preview we send it in the post
         ///  https://github.com/TalaoDAO/wallet-interaction/blob/main/README.md#credential-offer-protocol
         ///
-        final didKeyType = profileCubit.state.model.profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+        final didKeyType = profileCubit
+            .state
+            .model
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile
+            .defaultDid;
 
         final privateKey = await getPrivateKey(
           profileCubit: profileCubit,
@@ -218,8 +230,9 @@ class ScanCubit extends Cubit<ScanState> {
           data: data,
         );
 
-        final dynamic jsonCredential =
-            credential is String ? jsonDecode(credential) : credential;
+        final dynamic jsonCredential = credential is String
+            ? jsonDecode(credential)
+            : credential;
 
         if (credentialModel.jwt == null) {
           /// not verifying credential for did:ebsi and did:web issuer
@@ -229,8 +242,10 @@ class ScanCubit extends Cubit<ScanState> {
           final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
 
           await Future<void>.delayed(const Duration(milliseconds: 500));
-          final verification =
-              await didKitProvider.verifyCredential(vcStr, optStr);
+          final verification = await didKitProvider.verifyCredential(
+            vcStr,
+            optStr,
+          );
 
           log.i('[wallet/credential-offer/verify/vc] $vcStr');
           log.i('[wallet/credential-offer/verify/options] $optStr');
@@ -269,9 +284,9 @@ class ScanCubit extends Cubit<ScanState> {
           }
         }
 
-        final List<Activity> activities =
-            List<Activity>.of(credentialModel.activities)
-              ..add(Activity(acquisitionAt: DateTime.now()));
+        final List<Activity> activities = List<Activity>.of(
+          credentialModel.activities,
+        )..add(Activity(acquisitionAt: DateTime.now()));
 
         CredentialManifest? credentialManifest;
 
@@ -323,8 +338,13 @@ class ScanCubit extends Cubit<ScanState> {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
-      final didKeyType = profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+      final didKeyType = profileCubit
+          .state
+          .model
+          .profileSetting
+          .selfSovereignIdentityOptions
+          .customOidc4vcProfile
+          .defaultDid;
 
       final privateKey = await fetchPrivateKey(
         profileCubit: profileCubit,
@@ -427,8 +447,13 @@ class ScanCubit extends Cubit<ScanState> {
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
-      final didKeyType = profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+      final didKeyType = profileCubit
+          .state
+          .model
+          .profileSetting
+          .selfSovereignIdentityOptions
+          .customOidc4vcProfile
+          .defaultDid;
 
       final privateKey = await fetchPrivateKey(
         profileCubit: profileCubit,
@@ -453,9 +478,7 @@ class ScanCubit extends Cubit<ScanState> {
       );
       final dynamic credential = await client.post(
         uri.toString(),
-        data: FormData.fromMap(<String, dynamic>{
-          'presentation': presentation,
-        }),
+        data: FormData.fromMap(<String, dynamic>{'presentation': presentation}),
       );
       if (credential == 'ok') {
         done(presentation);
@@ -496,15 +519,16 @@ class ScanCubit extends Cubit<ScanState> {
     required bool idTokenNeeded,
     required QRCodeScanCubit qrCodeScanCubit,
   }) async {
-    final log =
-        getLogger('ScanCubit - presentCredentialToOIDC4VPAndSIOPV2Request');
+    final log = getLogger(
+      'ScanCubit - presentCredentialToOIDC4VPAndSIOPV2Request',
+    );
     emit(state.loading());
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
     try {
       final String responseOrRedirectUri =
           uri.queryParameters['redirect_uri'] ??
-              uri.queryParameters['response_uri']!;
+          uri.queryParameters['response_uri']!;
 
       String? idToken;
 
@@ -525,8 +549,10 @@ class ScanCubit extends Cubit<ScanState> {
         clientMetaData = await getClientMetada(client: client, uri: uri);
       }
 
-      final (presentationSubmission, formatFromPresentationSubmission) =
-          await getPresentationSubmission(
+      final (
+        presentationSubmission,
+        formatFromPresentationSubmission,
+      ) = await getPresentationSubmission(
         credentialsToBePresented: credentialsToBePresented,
         presentationDefinition: presentationDefinition,
         clientMetaData: clientMetaData,
@@ -553,8 +579,12 @@ class ScanCubit extends Cubit<ScanState> {
       if (responseMode == 'direct_post.jwt') {
         final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
 
-        final customOidc4vcProfile = profileCubit.state.model.profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile;
+        final customOidc4vcProfile = profileCubit
+            .state
+            .model
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile;
 
         final clientId = uri.queryParameters['client_id'];
 
@@ -662,6 +692,20 @@ class ScanCubit extends Cubit<ScanState> {
             ),
           ),
         );
+        if (state.transactionData != null) {
+          final dotenv = DotEnv();
+          final rpcUrl = await fetchRpcUrl(
+            blockchainNetwork: EthereumNetwork.mainNet(),
+            dotEnv: dotenv,
+          );
+
+          await Oidc4vpTransaction(
+            transactionData: state.transactionData!,
+          ).sendToken(
+            CryptoAccountSecretKey: walletCubit.state.currentAccount!.secretKey,
+            rpcUrl: rpcUrl,
+          );
+        }
         final data = response.data;
         if (data is Map) {
           String url = '';
@@ -722,7 +766,8 @@ class ScanCubit extends Cubit<ScanState> {
     required Uri uri,
     required Map<String, dynamic> data,
   }) async {
-    final String responseOrRedirectUri = uri.queryParameters['redirect_uri'] ??
+    final String responseOrRedirectUri =
+        uri.queryParameters['redirect_uri'] ??
         uri.queryParameters['response_uri']!;
 
     await client.dio.post<dynamic>(
@@ -753,9 +798,13 @@ class ScanCubit extends Cubit<ScanState> {
     //     .selfSovereignIdentityOptions.customOidc4vcProfile.vcFormatType;
 
     final inputDescriptors = <Map<String, dynamic>>[];
-    VCFormatType formatFromPresentationSubmission = int.parse(
-              profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile
-                  .oidc4vciDraft.numbering,
+    VCFormatType formatFromPresentationSubmission =
+        int.parse(
+              profileSetting
+                  .selfSovereignIdentityOptions
+                  .customOidc4vcProfile
+                  .oidc4vciDraft
+                  .numbering,
             ) <
             15
         ? VCFormatType.vcSdJWT
@@ -790,10 +839,7 @@ class ScanCubit extends Cubit<ScanState> {
             }
           } else {
             descriptor['path'] = r'$';
-            pathNested = {
-              'id': inputDescriptor.id,
-              'format': format.vpValue,
-            };
+            pathNested = {'id': inputDescriptor.id, 'format': format.vpValue};
             if (credentialsToBePresented.length == 1) {
               if (format == VCFormatType.ldpVc) {
                 pathNested['path'] = r'$.verifiableCredential';
@@ -858,12 +904,16 @@ class ScanCubit extends Cubit<ScanState> {
   }) async {
     final nonce = uri.queryParameters['nonce'] ?? '';
 
-    final customOidc4vcProfile = profileCubit.state.model.profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile;
+    final customOidc4vcProfile = profileCubit
+        .state
+        .model
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile;
 
     final clientId = uri.queryParameters['client_id'];
 
-    if (formatFromPresentationSubmission == VCFormatType.vcSdJWT || 
+    if (formatFromPresentationSubmission == VCFormatType.vcSdJWT ||
         formatFromPresentationSubmission == VCFormatType.dcSdJWT) {
       final credentialListJwt = getStringCredentialsForToken(
         credentialsToBePresented: credentialsToBePresented,
@@ -915,8 +965,9 @@ class ScanCubit extends Cubit<ScanState> {
           'type': ['VerifiablePresentation'],
           'holder': did,
           'id': presentationId,
-          'verifiableCredential':
-              credentialsToBePresented.map((c) => c.data).toList(),
+          'verifiableCredential': credentialsToBePresented
+              .map((c) => c.data)
+              .toList(),
         }),
         options,
         privateKey,
@@ -947,8 +998,12 @@ class ScanCubit extends Cubit<ScanState> {
       profileCubit: profileCubit,
     );
 
-    final customOidc4vcProfile = profileCubit.state.model.profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile;
+    final customOidc4vcProfile = profileCubit
+        .state
+        .model
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile;
 
     final clientId = getClientIdForPresentation(
       uri.queryParameters['client_id'],
@@ -987,8 +1042,8 @@ class ScanCubit extends Cubit<ScanState> {
 
       final String responseOrRedirectUri =
           uri.queryParameters['redirect_uri'] ??
-              uri.queryParameters['response_uri'] ??
-              uri.origin;
+          uri.queryParameters['response_uri'] ??
+          uri.origin;
 
       await activityLogManager.saveLog(
         LogData(
@@ -1008,5 +1063,11 @@ class ScanCubit extends Cubit<ScanState> {
         showMessage: false,
       );
     }
+  }
+
+  Future<void> addTransactionData(List<dynamic> transactionData) async {
+    emit(
+      state.copyWith(transactionData: transactionData, status: ScanStatus.init),
+    );
   }
 }

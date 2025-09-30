@@ -19,25 +19,26 @@ class TezosNetwork extends BlockchainNetwork {
       _$TezosNetworkFromJson(json);
 
   factory TezosNetwork.mainNet() => const TezosNetwork(
-        type: BlockchainType.tezos,
-        networkname: 'Mainnet',
-        apiUrl: Urls.tzktMainnetUrl,
-        rpcNodeUrl: Urls.mainnetRPC,
-        title: 'Tezos Mainnet',
-        subTitle:
-            'This network is the official Tezos blockchain running Network.'
-            ' You should use this network by default.',
-      );
+    type: BlockchainType.tezos,
+    networkname: 'Mainnet',
+    apiUrl: Urls.tzktMainnetUrl,
+    rpcNodeUrl: Urls.mainnetRPC,
+    title: 'Tezos Mainnet',
+    subTitle:
+        'This network is the official Tezos blockchain running Network.'
+        ' You should use this network by default.',
+  );
 
   factory TezosNetwork.ghostnet() => const TezosNetwork(
-        type: BlockchainType.tezos,
-        networkname: 'Ghostnet',
-        apiUrl: Urls.tzktGhostnetUrl,
-        rpcNodeUrl: Urls.ghostnetRPC,
-        title: 'Tezos Ghostnet',
-        subTitle: 'This network is used to test protocol upgrades'
-            ' (do not use it unless you are a developer).',
-      );
+    type: BlockchainType.tezos,
+    networkname: 'Ghostnet',
+    apiUrl: Urls.tzktGhostnetUrl,
+    rpcNodeUrl: Urls.ghostnetRPC,
+    title: 'Tezos Ghostnet',
+    subTitle:
+        'This network is used to test protocol upgrades'
+        ' (do not use it unless you are a developer).',
+  );
 
   @override
   Map<String, dynamic> toJson() => _$TezosNetworkToJson(this);

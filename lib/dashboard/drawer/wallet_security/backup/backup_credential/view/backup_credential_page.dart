@@ -11,9 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class BackupCredentialPage extends StatelessWidget {
-  const BackupCredentialPage({
-    super.key,
-  });
+  const BackupCredentialPage({super.key});
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
@@ -88,10 +86,7 @@ class BackupCredentialView extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const MStepper(
-                totalStep: 2,
-                step: 2,
-              ),
+              const MStepper(totalStep: 2, step: 2),
               const SizedBox(height: Sizes.spaceNormal),
               Text(
                 l10n.saveBackupCredentialTitle,

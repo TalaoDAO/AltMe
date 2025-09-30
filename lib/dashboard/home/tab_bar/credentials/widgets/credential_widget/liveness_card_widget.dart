@@ -15,9 +15,7 @@ class LivenessCardWidget extends StatelessWidget {
 
     return const CredentialImage(
       image: ImageStrings.livenessCard,
-      child: AspectRatio(
-        aspectRatio: Sizes.credentialAspectRatio,
-      ),
+      child: AspectRatio(aspectRatio: Sizes.credentialAspectRatio),
     );
   }
 }

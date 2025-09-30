@@ -55,7 +55,8 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
           credential: credential,
           credentialList: context.read<CredentialsCubit>().state.credentials,
           inputDescriptorIndex: inputDescriptorIndex,
-          formatsSupported: profileModel
+          formatsSupported:
+              profileModel
                   .profileSetting
                   .selfSovereignIdentityOptions
                   .customOidc4vcProfile
@@ -102,7 +103,8 @@ class _CredentialManifestOfferPickViewState
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final isVcSdJWT = context
+      final isVcSdJWT =
+          context
                   .read<CredentialManifestPickCubit>()
                   .state
                   .filteredCredentialList
@@ -129,14 +131,15 @@ class _CredentialManifestOfferPickViewState
               .presentationDefinition;
           if (presentationDefinition != null) {
             context.read<CredentialManifestPickCubit>().toggle(
-                  index: 0,
-                  inputDescriptor: presentationDefinition
-                      .inputDescriptors[widget.inputDescriptorIndex],
-                  isVcSdJWT: isVcSdJWT,
-                );
+              index: 0,
+              inputDescriptor: presentationDefinition
+                  .inputDescriptors[widget.inputDescriptorIndex],
+              isVcSdJWT: isVcSdJWT,
+            );
 
-            final credentialManifestState =
-                context.read<CredentialManifestPickCubit>().state;
+            final credentialManifestState = context
+                .read<CredentialManifestPickCubit>()
+                .state;
             final firstOne = credentialManifestState
                 .filteredCredentialList[credentialManifestState.selected.first];
 
@@ -161,8 +164,10 @@ class _CredentialManifestOfferPickViewState
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return BlocConsumer<CredentialManifestPickCubit,
-        CredentialManifestPickState>(
+    return BlocConsumer<
+      CredentialManifestPickCubit,
+      CredentialManifestPickState
+    >(
       listener: (context, state) {
         if (state.message != null) {
           AlertMessage.showStateMessage(
@@ -175,11 +180,17 @@ class _CredentialManifestOfferPickViewState
         final PresentationDefinition? presentationDefinition =
             credentialManifestState.presentationDefinition;
 
-        final isVcSdJWT = credentialManifestState
-                .filteredCredentialList.firstOrNull?.getFormat ==
-            VCFormatType.vcSdJWT.vcValue || credentialManifestState
-                .filteredCredentialList.firstOrNull?.getFormat ==
-            VCFormatType.dcSdJWT.vcValue;
+        final isVcSdJWT =
+            credentialManifestState
+                    .filteredCredentialList
+                    .firstOrNull
+                    ?.getFormat ==
+                VCFormatType.vcSdJWT.vcValue ||
+            credentialManifestState
+                    .filteredCredentialList
+                    .firstOrNull
+                    ?.getFormat ==
+                VCFormatType.dcSdJWT.vcValue;
 
         return BlocListener<ScanCubit, ScanState>(
           listener: (context, scanState) {
@@ -218,8 +229,8 @@ class _CredentialManifestOfferPickViewState
                               padding: const EdgeInsets.all(8),
                               child: Text(
                                 presentationDefinition
-                                        .inputDescriptors[
-                                            widget.inputDescriptorIndex]
+                                        .inputDescriptors[widget
+                                            .inputDescriptorIndex]
                                         .purpose ??
                                     l10n.credentialPickSelect,
                                 style: Theme.of(context).textTheme.titleMedium,
@@ -228,7 +239,8 @@ class _CredentialManifestOfferPickViewState
                             const SizedBox(height: 12),
                             ...List.generate(
                               credentialManifestState
-                                  .filteredCredentialList.length,
+                                  .filteredCredentialList
+                                  .length,
                               (index) {
                                 final credentialModel = credentialManifestState
                                     .filteredCredentialList[index];
@@ -245,8 +257,8 @@ class _CredentialManifestOfferPickViewState
                                           index: index,
                                           inputDescriptor:
                                               presentationDefinition
-                                                      .inputDescriptors[
-                                                  widget.inputDescriptorIndex],
+                                                  .inputDescriptors[widget
+                                                  .inputDescriptorIndex],
                                           isVcSdJWT: isVcSdJWT,
                                         );
                                   },
@@ -255,8 +267,8 @@ class _CredentialManifestOfferPickViewState
                             ),
                           ],
                         ),
-                  navigation: credentialManifestState
-                          .filteredCredentialList.isNotEmpty
+                  navigation:
+                      credentialManifestState.filteredCredentialList.isNotEmpty
                       ? SafeArea(
                           child: Container(
                             padding: const EdgeInsets.all(16),
@@ -267,10 +279,11 @@ class _CredentialManifestOfferPickViewState
                                   builder: (context) {
                                     final inputDescriptor =
                                         presentationDefinition!
-                                                .inputDescriptors[
-                                            widget.inputDescriptorIndex];
+                                            .inputDescriptors[widget
+                                            .inputDescriptorIndex];
 
-                                    final bool isOptional = inputDescriptor
+                                    final bool isOptional =
+                                        inputDescriptor
                                             .constraints
                                             ?.fields
                                             ?.first
@@ -279,8 +292,9 @@ class _CredentialManifestOfferPickViewState
 
                                     final bool isOngoingStep =
                                         widget.inputDescriptorIndex + 1 !=
-                                            presentationDefinition
-                                                .inputDescriptors.length;
+                                        presentationDefinition
+                                            .inputDescriptors
+                                            .length;
 
                                     var buttonText = l10n.credentialPickShare;
 
@@ -288,7 +302,8 @@ class _CredentialManifestOfferPickViewState
 
                                     if (isOptional) {
                                       if (credentialManifestState
-                                          .selected.isEmpty) {
+                                          .selected
+                                          .isEmpty) {
                                         buttonText = l10n.skip;
                                       }
 
@@ -305,7 +320,8 @@ class _CredentialManifestOfferPickViewState
                                           presentationDefinition:
                                               presentationDefinition,
                                           skip: credentialManifestState
-                                              .selected.isEmpty,
+                                              .selected
+                                              .isEmpty,
                                           isVcSdJWT: isVcSdJWT,
                                         ),
                                         text: buttonText,
@@ -318,18 +334,19 @@ class _CredentialManifestOfferPickViewState
                                       if (isVcSdJWT) buttonText = l10n.next;
 
                                       return MyElevatedButton(
-                                        onPressed: !credentialManifestState
+                                        onPressed:
+                                            !credentialManifestState
                                                 .isButtonEnabled
                                             ? null
                                             : () => present(
-                                                  context: context,
-                                                  credentialManifestState:
-                                                      credentialManifestState,
-                                                  presentationDefinition:
-                                                      presentationDefinition,
-                                                  skip: skip,
-                                                  isVcSdJWT: isVcSdJWT,
-                                                ),
+                                                context: context,
+                                                credentialManifestState:
+                                                    credentialManifestState,
+                                                presentationDefinition:
+                                                    presentationDefinition,
+                                                skip: skip,
+                                                isVcSdJWT: isVcSdJWT,
+                                              ),
                                         text: buttonText,
                                       );
                                     }
@@ -343,9 +360,9 @@ class _CredentialManifestOfferPickViewState
                                       context
                                           .read<ScanCubit>()
                                           .sendErrorToServer(
-                                        uri: widget.uri,
-                                        data: {'error': 'access_denied'},
-                                      ),
+                                            uri: widget.uri,
+                                            data: {'error': 'access_denied'},
+                                          ),
                                     );
                                     Navigator.of(context).pop();
                                   },
@@ -405,8 +422,9 @@ class _CredentialManifestOfferPickViewState
         ..addAll(selectedCredentials);
     }
 
-    getLogger('present')
-        .i('credential to presented - ${updatedCredentials.length}');
+    getLogger(
+      'present',
+    ).i('credential to presented - ${updatedCredentials.length}');
 
     if (widget.inputDescriptorIndex + 1 !=
         presentationDefinition.inputDescriptors.length) {
@@ -451,13 +469,13 @@ class _CredentialManifestOfferPickViewState
         }
       }
       await context.read<ScanCubit>().credentialOfferOrPresent(
-            uri: widget.uri,
-            credentialModel: widget.credential,
-            keyId: SecureStorageKeys.ssiKey,
-            credentialsToBePresented: updatedCredentials,
-            issuer: widget.issuer,
-            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-          );
+        uri: widget.uri,
+        credentialModel: widget.credential,
+        keyId: SecureStorageKeys.ssiKey,
+        credentialsToBePresented: updatedCredentials,
+        issuer: widget.issuer,
+        qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+      );
     }
   }
 }

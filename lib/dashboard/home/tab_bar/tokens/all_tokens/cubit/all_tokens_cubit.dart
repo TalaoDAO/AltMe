@@ -11,10 +11,8 @@ part 'all_tokens_cubit.g.dart';
 part 'all_tokens_state.dart';
 
 class AllTokensCubit extends Cubit<AllTokensState> {
-  AllTokensCubit({
-    required this.client,
-    required this.secureStorageProvider,
-  }) : super(const AllTokensState());
+  AllTokensCubit({required this.client, required this.secureStorageProvider})
+    : super(const AllTokensState());
 
   final DioClient client;
   final SecureStorageProvider secureStorageProvider;
@@ -44,9 +42,7 @@ class AllTokensCubit extends Cubit<AllTokensState> {
         },
       );
       final contracts = (result as List<dynamic>)
-          .map(
-            (dynamic e) => ContractModel.fromJson(e as Map<String, dynamic>),
-          )
+          .map((dynamic e) => ContractModel.fromJson(e as Map<String, dynamic>))
           .toList();
       emit(
         state.copyWith(
@@ -63,8 +59,9 @@ class AllTokensCubit extends Cubit<AllTokensState> {
           message: const StateMessage.error(),
         ),
       );
-      getLogger(runtimeType.toString())
-          .e('error in getAllContracts(), e: $e, s:$s');
+      getLogger(
+        runtimeType.toString(),
+      ).e('error in getAllContracts(), e: $e, s:$s');
       return null;
     }
   }
@@ -87,8 +84,9 @@ class AllTokensCubit extends Cubit<AllTokensState> {
 
   Future<List<ContractModel>> getSelectedContracts() async {
     try {
-      final result =
-          await secureStorageProvider.get(SecureStorageKeys.selectedContracts);
+      final result = await secureStorageProvider.get(
+        SecureStorageKeys.selectedContracts,
+      );
       if (result == null) {
         final data = await setDefaultSelectedContractIfFirstTime([]);
         emit(state.copyWith(selectedContracts: data));
@@ -100,12 +98,11 @@ class AllTokensCubit extends Cubit<AllTokensState> {
               (dynamic e) => ContractModel.fromJson(e as Map<String, dynamic>),
             )
             .toList();
-        final data =
-            await setDefaultSelectedContractIfFirstTime(selectedContracts);
+        final data = await setDefaultSelectedContractIfFirstTime(
+          selectedContracts,
+        );
         emit(state.copyWith(selectedContracts: data));
-        getLogger(
-          'Tokens cubit',
-        ).i(
+        getLogger('Tokens cubit').i(
           'returned selectedContracts from storage'
           ' lenght: ${selectedContracts.length}',
         );
@@ -123,8 +120,10 @@ class AllTokensCubit extends Cubit<AllTokensState> {
   Future<List<ContractModel>> setDefaultSelectedContractIfFirstTime(
     List<ContractModel> selectedContracs,
   ) async {
-    final isFirstSelectedTokenContracts = (await secureStorageProvider
-            .get(SecureStorageKeys.isFirstSelectedTokenContracts)) ??
+    final isFirstSelectedTokenContracts =
+        (await secureStorageProvider.get(
+          SecureStorageKeys.isFirstSelectedTokenContracts,
+        )) ??
         true.toString();
     if (isFirstSelectedTokenContracts == 'true') {
       await secureStorageProvider.set(
@@ -165,10 +164,7 @@ class AllTokensCubit extends Cubit<AllTokensState> {
     }
     emit(
       state.copyWith(
-        selectedContracts: [
-          ...state.selectedContracts,
-          contractModel,
-        ],
+        selectedContracts: [...state.selectedContracts, contractModel],
       ),
     );
   }
@@ -194,11 +190,13 @@ class AllTokensCubit extends Cubit<AllTokensState> {
         jsonEncode(state.selectedContracts.map((e) => e.toJson()).toList()),
       );
       emit(state.copyWith(status: AppStatus.success));
-      getLogger('Tokens cubit')
-          .i('saved selected contracts: ${state.selectedContracts}');
+      getLogger(
+        'Tokens cubit',
+      ).i('saved selected contracts: ${state.selectedContracts}');
     } catch (e, s) {
-      getLogger(runtimeType.toString())
-          .e('error in save contracts, e: $e, s: $s');
+      getLogger(
+        runtimeType.toString(),
+      ).e('error in save contracts, e: $e, s: $s');
     }
   }
 }

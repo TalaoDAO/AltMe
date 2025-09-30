@@ -21,9 +21,7 @@ class CustomListTileCard extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(Sizes.normalRadius),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(Sizes.normalRadius)),
       ),
       contentPadding: const EdgeInsets.all(Sizes.spaceSmall),
       tileColor: Theme.of(context).colorScheme.surfaceContainer,
@@ -32,18 +30,15 @@ class CustomListTileCard extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(width: 10),
         ],
       ),
-      subtitle: Text(
-        subTitle,
-        style: Theme.of(context).textTheme.bodyMedium,
-      ),
+      subtitle: Text(subTitle, style: Theme.of(context).textTheme.bodyMedium),
       minVerticalPadding: 0,
       trailing: Image.asset(
         imageAssetPath,

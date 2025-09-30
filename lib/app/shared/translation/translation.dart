@@ -7,12 +7,14 @@ class GetTranslation {
     AppLocalizations l10n,
   ) {
     String translation;
-    final translated =
-        translations.where((element) => element.language == l10n.localeName);
+    final translated = translations.where(
+      (element) => element.language == l10n.localeName,
+    );
 
     if (translated.isEmpty) {
-      final List<Translation> translationList =
-          translations.where((element) => element.language == 'en').toList();
+      final List<Translation> translationList = translations
+          .where((element) => element.language == 'en')
+          .toList();
       if (translationList.isEmpty) {
         translation = '';
       } else {

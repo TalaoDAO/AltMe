@@ -3,9 +3,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class PageNotFound extends StatelessWidget {
-  const PageNotFound({
-    super.key,
-  });
+  const PageNotFound({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +12,7 @@ class PageNotFound extends StatelessWidget {
 }
 
 class ContactUsView extends StatefulWidget {
-  const ContactUsView({
-    super.key,
-  });
+  const ContactUsView({super.key});
 
   @override
   State<ContactUsView> createState() => _ContactUsViewState();

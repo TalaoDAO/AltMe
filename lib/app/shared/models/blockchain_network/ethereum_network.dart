@@ -22,29 +22,30 @@ class EthereumNetwork extends BlockchainNetwork {
   });
 
   factory EthereumNetwork.mainNet() => const EthereumNetwork(
-        type: BlockchainType.ethereum,
-        networkname: 'Mainnet',
-        apiUrl: Urls.moralisBaseUrl,
-        chainId: 1,
-        chain: 'eth',
-        rpcNodeUrl: 'https://ethereum.publicnode.com',
-        title: 'Ethereum Mainnet',
-        subTitle:
-            'This network is the official Ethereum blockchain running Network.'
-            ' You should use this network by default.',
-      );
+    type: BlockchainType.ethereum,
+    networkname: 'Mainnet',
+    apiUrl: Urls.moralisBaseUrl,
+    chainId: 1,
+    chain: 'eth',
+    rpcNodeUrl: 'https://ethereum.publicnode.com',
+    title: 'Ethereum Mainnet',
+    subTitle:
+        'This network is the official Ethereum blockchain running Network.'
+        ' You should use this network by default.',
+  );
 
   factory EthereumNetwork.testNet() => const EthereumNetwork(
-        type: BlockchainType.ethereum,
-        networkname: 'Testnet',
-        apiUrl: Urls.moralisBaseUrl,
-        chain: 'sepolia',
-        chainId: 11155111, // Sepolia testnet chainId
-        rpcNodeUrl: 'https://rpc.sepolia.dev',
-        title: 'Ethereum Testnet (Sepolia)',
-        subTitle: 'This network is used to test protocol upgrades'
-            ' (do not use it unless you are a developer).',
-      );
+    type: BlockchainType.ethereum,
+    networkname: 'Testnet',
+    apiUrl: Urls.moralisBaseUrl,
+    chain: 'sepolia',
+    chainId: 11155111, // Sepolia testnet chainId
+    rpcNodeUrl: 'https://rpc.sepolia.dev',
+    title: 'Ethereum Testnet (Sepolia)',
+    subTitle:
+        'This network is used to test protocol upgrades'
+        ' (do not use it unless you are a developer).',
+  );
 
   factory EthereumNetwork.fromJson(Map<String, dynamic> json) =>
       _$EthereumNetworkFromJson(json);
@@ -61,12 +62,12 @@ class EthereumNetwork extends BlockchainNetwork {
 
   @override
   List<Object?> get props => [
-        super.props,
-        chainId,
-        chain,
-        mainTokenName,
-        mainTokenIcon,
-        mainTokenSymbol,
-        mainTokenDecimal,
-      ];
+    super.props,
+    chainId,
+    chain,
+    mainTokenName,
+    mainTokenIcon,
+    mainTokenSymbol,
+    mainTokenDecimal,
+  ];
 }

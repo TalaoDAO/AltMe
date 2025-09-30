@@ -12,14 +12,14 @@ class CryptoAccountItem extends StatelessWidget {
     required this.isSelected,
     required this.listIndex,
     required this.onPressed,
-    required this.onEditButtonPressed,
+    this.onEditButtonPressed,
   });
 
   final CryptoAccountData cryptoAccountData;
   final bool isSelected;
   final int listIndex;
   final VoidCallback onPressed;
-  final VoidCallback onEditButtonPressed;
+  final VoidCallback? onEditButtonPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +44,7 @@ class CryptoAccountItem extends StatelessWidget {
       ),
       title: Row(
         children: [
-          Image.asset(
-            cryptoAccountData.blockchainType.icon,
-            width: Sizes.icon,
-          ),
+          Image.asset(cryptoAccountData.blockchainType.icon, width: Sizes.icon),
           const SizedBox(width: Sizes.spaceXSmall),
           Flexible(
             child: Text(
@@ -60,14 +57,15 @@ class CryptoAccountItem extends StatelessWidget {
             ),
           ),
           const SizedBox(width: Sizes.spaceXSmall),
-          InkWell(
-            onTap: onEditButtonPressed,
-            child: Icon(
-              Icons.edit,
-              size: 20,
-              color: Theme.of(context).colorScheme.onSurface,
+          if (onEditButtonPressed != null)
+            InkWell(
+              onTap: onEditButtonPressed,
+              child: Icon(
+                Icons.edit,
+                size: 20,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
-          ),
           const SizedBox(width: Sizes.spaceXSmall),
           if (cryptoAccountData.isImported) const ImportedTag(),
         ],

@@ -60,28 +60,23 @@ class ConfirmDialog extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               title,
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineMedium!
-                  .copyWith(color: textColor),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium!.copyWith(color: textColor),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Sizes.spaceSmall),
             if (subtitle != null) ...[
               Text(
                 subtitle!,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: textColor),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge!.copyWith(color: textColor),
                 textAlign: TextAlign.center,
               ),
             ],
             if (content != null) ...[
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: content,
-              ),
+              Padding(padding: const EdgeInsets.all(8), child: content),
             ],
             const SizedBox(height: 24),
             Row(

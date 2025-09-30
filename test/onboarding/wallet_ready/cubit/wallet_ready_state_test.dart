@@ -5,18 +5,11 @@ void main() {
   group('WalletReadyState', () {
     test('can be serialized to JSON', () {
       const state = WalletReadyState(isAgreeWithTerms: true);
-      expect(
-        state.toJson(),
-        {
-          'isAgreeWithTerms': true,
-        },
-      );
+      expect(state.toJson(), {'isAgreeWithTerms': true});
     });
 
     test('can be deserialized from JSON', () {
-      final json = {
-        'isAgreeWithTerms': true,
-      };
+      final json = {'isAgreeWithTerms': true};
       expect(
         WalletReadyState.fromJson(json),
         const WalletReadyState(isAgreeWithTerms: true),

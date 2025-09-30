@@ -41,14 +41,12 @@ class CredentialManifestCard extends StatelessWidget {
                 ? const LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xff0B67C5),
-                      Color(0xff200072),
-                    ],
+                    colors: [Color(0xff0B67C5), Color(0xff200072)],
                   )
                 : null,
-            shapeColor:
-                Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
+            shapeColor: Theme.of(
+              context,
+            ).colorScheme.primary.withValues(alpha: 0.05),
             value: 1,
             anchors: showBgDecoration
                 ? const <Alignment>[Alignment.bottomRight]
@@ -70,19 +68,24 @@ class CredentialManifestCard extends StatelessWidget {
                         credentialModel: credentialModel,
                         textStyle: textColor == null
                             ? Theme.of(context).textTheme.displayLarge!
-                            : Theme.of(context)
-                                .textTheme
-                                .displayLarge!
-                                .copyWith(color: textColor),
+                            : Theme.of(context).textTheme.displayLarge!
+                                  .copyWith(color: textColor),
                       ),
                     ),
                   ),
                 ),
-              if (credentialModel.credentialPreview.credentialSubjectModel
-                          .issuedBy?.name !=
+              if (credentialModel
+                          .credentialPreview
+                          .credentialSubjectModel
+                          .issuedBy
+                          ?.name !=
                       null &&
-                  credentialModel.credentialPreview.credentialSubjectModel
-                      .issuedBy!.name.isNotEmpty)
+                  credentialModel
+                      .credentialPreview
+                      .credentialSubjectModel
+                      .issuedBy!
+                      .name
+                      .isNotEmpty)
                 LayoutId(
                   id: 'provided-by',
                   child: FractionallySizedBox(
@@ -96,8 +99,11 @@ class CredentialManifestCard extends StatelessWidget {
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                           TextSpan(
-                            text: credentialModel.credentialPreview
-                                .credentialSubjectModel.issuedBy?.name,
+                            text: credentialModel
+                                .credentialPreview
+                                .credentialSubjectModel
+                                .issuedBy
+                                ?.name,
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
@@ -118,10 +124,9 @@ class CredentialManifestCard extends StatelessWidget {
                         credentialModel: credentialModel,
                         textStyle: textColor == null
                             ? Theme.of(context).textTheme.bodyMedium!
-                            : Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(color: textColor),
+                            : Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                color: textColor,
+                              ),
                       ),
                     ),
                   ),

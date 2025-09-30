@@ -9,22 +9,24 @@ class PhonePassWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final phonePassModel = credentialModel
-        .credentialPreview.credentialSubjectModel as PhonePassModel;
+    final phonePassModel =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as PhonePassModel;
 
     return CredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.phoneProof,
       issuerName: credentialModel
-          .credentialPreview.credentialSubjectModel.issuedBy?.name,
+          .credentialPreview
+          .credentialSubjectModel
+          .issuedBy
+          ?.name,
       value: phonePassModel.phone,
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),
       expirationDate: credentialModel.expirationDate == null
           ? '--'
-          : UiDate.formatDateForCredentialCard(
-              credentialModel.expirationDate!,
-            ),
+          : UiDate.formatDateForCredentialCard(credentialModel.expirationDate!),
     );
   }
 }

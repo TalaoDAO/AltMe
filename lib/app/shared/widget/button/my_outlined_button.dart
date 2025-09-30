@@ -59,15 +59,14 @@ class MyOutlinedButton extends StatelessWidget {
               child: Text(
                 text.toUpperCase(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: onPressed == null
-                          ? Theme.of(context)
-                              .colorScheme
-                              .inverseSurface
-                              .withValues(alpha: 0.12)
-                          : textColor ??
-                              Theme.of(context).colorScheme.inverseSurface,
-                    ),
+                  fontWeight: FontWeight.bold,
+                  color: onPressed == null
+                      ? Theme.of(
+                          context,
+                        ).colorScheme.inverseSurface.withValues(alpha: 0.12)
+                      : textColor ??
+                            Theme.of(context).colorScheme.inverseSurface,
+                ),
               ),
             )
           : OutlinedButton.icon(
@@ -91,15 +90,14 @@ class MyOutlinedButton extends StatelessWidget {
               label: Text(
                 text.toUpperCase(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: onPressed == null
-                          ? Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.12)
-                          : textColor ??
-                              Theme.of(context).colorScheme.secondaryContainer,
-                    ),
+                  fontWeight: FontWeight.bold,
+                  color: onPressed == null
+                      ? Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.12)
+                      : textColor ??
+                            Theme.of(context).colorScheme.secondaryContainer,
+                ),
               ),
             ),
     );

@@ -134,12 +134,16 @@ class _NftViewState extends State<NftView> {
                   if (state.message != null) {
                     final MessageHandler messageHandler =
                         state.message!.messageHandler!;
-                    message =
-                        messageHandler.getMessage(context, messageHandler);
+                    message = messageHandler.getMessage(
+                      context,
+                      messageHandler,
+                    );
                   }
 
-                  final index =
-                      context.read<WalletCubit>().state.currentCryptoIndex;
+                  final index = context
+                      .read<WalletCubit>()
+                      .state
+                      .currentCryptoIndex;
 
                   final blockchain = context
                       .read<WalletCubit>()
@@ -174,10 +178,7 @@ class _NftViewState extends State<NftView> {
                   } else if (state.status == AppStatus.errorWhileFetching) {
                     return ErrorView(message: message, onTap: onRefresh);
                   } else {
-                    return NftList(
-                      nftList: state.data,
-                      onRefresh: onRefresh,
-                    );
+                    return NftList(nftList: state.data, onRefresh: onRefresh);
                   }
                 },
               ),

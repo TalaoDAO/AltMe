@@ -66,7 +66,8 @@ class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {
     void Function({
       required CryptoAccount cryptoAccount,
       required MessageHandler messageHandler,
-    })? onComplete,
+    })?
+    onComplete,
   }) async {}
 }
 
@@ -107,14 +108,18 @@ void main() {
     profileCubit = MockProfileCubit();
     qrCodeScanCubit = MockQRCodeScanCubit();
     walletConnectCubit = MockWalletConnectCubit();
-    when(() => mockSecureStorage.get(SecureStorageKeys.version))
-        .thenAnswer((_) async => '1.0.0');
-    when(() => mockSecureStorage.get(SecureStorageKeys.buildNumber))
-        .thenAnswer((_) async => '1');
-    when(() => mockSecureStorage.set(SecureStorageKeys.version, '1.0.0'))
-        .thenAnswer((_) async => {});
-    when(() => mockSecureStorage.set(SecureStorageKeys.buildNumber, '1'))
-        .thenAnswer((_) async => {});
+    when(
+      () => mockSecureStorage.get(SecureStorageKeys.version),
+    ).thenAnswer((_) async => '1.0.0');
+    when(
+      () => mockSecureStorage.get(SecureStorageKeys.buildNumber),
+    ).thenAnswer((_) async => '1');
+    when(
+      () => mockSecureStorage.set(SecureStorageKeys.version, '1.0.0'),
+    ).thenAnswer((_) async => {});
+    when(
+      () => mockSecureStorage.set(SecureStorageKeys.buildNumber, '1'),
+    ).thenAnswer((_) async => {});
   });
 
   group('Splash Cubit', () {
@@ -194,10 +199,12 @@ void main() {
           when(
             () => mockSecureStorage.get(any()),
           ).thenAnswer((_) => Future.value(null));
-          when(() => mockSecureStorage.get(SecureStorageKeys.ssiMnemonic))
-              .thenAnswer((_) => Future.value('xyz'));
-          when(() => mockSecureStorage.get(SecureStorageKeys.ssiKey))
-              .thenAnswer((_) => Future.value('xyz'));
+          when(
+            () => mockSecureStorage.get(SecureStorageKeys.ssiMnemonic),
+          ).thenAnswer((_) => Future.value('xyz'));
+          when(
+            () => mockSecureStorage.get(SecureStorageKeys.ssiKey),
+          ).thenAnswer((_) => Future.value('xyz'));
 
           final SplashCubit splashCubit = SplashCubit(
             credentialsCubit: credentialsCubit,
@@ -229,8 +236,9 @@ void main() {
 
       group('Route to onboarding', () {
         test('when ssiMnemonic is null', () async {
-          when(() => mockSecureStorage.get(SecureStorageKeys.ssiMnemonic))
-              .thenAnswer((_) => Future.value(null));
+          when(
+            () => mockSecureStorage.get(SecureStorageKeys.ssiMnemonic),
+          ).thenAnswer((_) => Future.value(null));
           final SplashCubit splashCubit = SplashCubit(
             credentialsCubit: credentialsCubit,
             secureStorageProvider: mockSecureStorage,
@@ -259,10 +267,12 @@ void main() {
           expect(splashCubit.state.status, SplashStatus.routeToOnboarding);
         });
         test('when ssiKey is null', () async {
-          when(() => mockSecureStorage.get(SecureStorageKeys.ssiMnemonic))
-              .thenAnswer((_) => Future.value('xyz'));
-          when(() => mockSecureStorage.get(SecureStorageKeys.ssiKey))
-              .thenAnswer((_) => Future.value(null));
+          when(
+            () => mockSecureStorage.get(SecureStorageKeys.ssiMnemonic),
+          ).thenAnswer((_) => Future.value('xyz'));
+          when(
+            () => mockSecureStorage.get(SecureStorageKeys.ssiKey),
+          ).thenAnswer((_) => Future.value(null));
           final SplashCubit splashCubit = SplashCubit(
             credentialsCubit: credentialsCubit,
             secureStorageProvider: mockSecureStorage,

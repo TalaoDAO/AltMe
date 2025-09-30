@@ -5,10 +5,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ResidentCardWidget extends StatelessWidget {
-  const ResidentCardWidget({
-    super.key,
-    required this.credentialModel,
-  });
+  const ResidentCardWidget({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 
@@ -16,8 +13,9 @@ class ResidentCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final residentCardModel = credentialModel
-        .credentialPreview.credentialSubjectModel as ResidentCardModel;
+    final residentCardModel =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as ResidentCardModel;
 
     return CredentialBackground(
       credentialModel: credentialModel,
@@ -46,8 +44,9 @@ class ResidentCardWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     Flexible(
-                      child:
-                          GenderDisplay(residentCardModel: residentCardModel),
+                      child: GenderDisplay(
+                        residentCardModel: residentCardModel,
+                      ),
                     ),
                   ],
                 ),
@@ -91,10 +90,7 @@ class ResidentCardWidget extends StatelessWidget {
 }
 
 class GenderDisplay extends StatelessWidget {
-  const GenderDisplay({
-    super.key,
-    required this.residentCardModel,
-  });
+  const GenderDisplay({super.key, required this.residentCardModel});
 
   final ResidentCardModel residentCardModel;
 
@@ -103,11 +99,15 @@ class GenderDisplay extends StatelessWidget {
     Widget genderIcon;
     switch (residentCardModel.gender) {
       case 'male':
-        genderIcon =
-            Icon(Icons.male, color: Theme.of(context).colorScheme.onSurface);
+        genderIcon = Icon(
+          Icons.male,
+          color: Theme.of(context).colorScheme.onSurface,
+        );
       case 'female':
-        genderIcon =
-            Icon(Icons.female, color: Theme.of(context).colorScheme.onSurface);
+        genderIcon = Icon(
+          Icons.female,
+          color: Theme.of(context).colorScheme.onSurface,
+        );
       default:
         genderIcon = Icon(
           Icons.transgender,

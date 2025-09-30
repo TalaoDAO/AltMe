@@ -31,14 +31,14 @@ class BlockchainNetwork extends Equatable {
 
   @override
   List<Object?> get props => [
-        networkname,
-        apiUrl,
-        apiKey,
-        rpcNodeUrl,
-        title,
-        subTitle,
-        type,
-      ];
+    networkname,
+    apiUrl,
+    apiKey,
+    rpcNodeUrl,
+    title,
+    subTitle,
+    type,
+  ];
 
   @override
   String toString() {
@@ -49,25 +49,15 @@ class BlockchainNetwork extends Equatable {
 
   Future<void> openBlockchainExplorer(String txHash) async {
     if (this is TezosNetwork) {
-      await LaunchUrl.launch(
-        'https://tzkt.io/$txHash',
-      );
+      await LaunchUrl.launch('https://tzkt.io/$txHash');
     } else if (this is PolygonNetwork) {
-      await LaunchUrl.launch(
-        'https://polygonscan.com/tx/$txHash',
-      );
+      await LaunchUrl.launch('https://polygonscan.com/tx/$txHash');
     } else if (this is BinanceNetwork) {
-      await LaunchUrl.launch(
-        'https://www.bscscan.com/tx/$txHash',
-      );
+      await LaunchUrl.launch('https://www.bscscan.com/tx/$txHash');
     } else if (this is FantomNetwork) {
-      await LaunchUrl.launch(
-        'https://ftmscan.com/tx/$txHash',
-      );
+      await LaunchUrl.launch('https://ftmscan.com/tx/$txHash');
     } else if (this is EthereumNetwork) {
-      await LaunchUrl.launch(
-        'https://etherscan.io/tx/$txHash',
-      );
+      await LaunchUrl.launch('https://etherscan.io/tx/$txHash');
     } else {
       UnimplementedError();
     }
@@ -75,25 +65,15 @@ class BlockchainNetwork extends Equatable {
 
   Future<void> openAddressBlockchainExplorer(String address) async {
     if (this is TezosNetwork) {
-      await LaunchUrl.launch(
-        'https://tzkt.io/$address/operations',
-      );
+      await LaunchUrl.launch('https://tzkt.io/$address/operations');
     } else if (this is PolygonNetwork) {
-      await LaunchUrl.launch(
-        'https://polygonscan.com/address/$address',
-      );
+      await LaunchUrl.launch('https://polygonscan.com/address/$address');
     } else if (this is BinanceNetwork) {
-      await LaunchUrl.launch(
-        'https://www.bscscan.com/address/$address',
-      );
+      await LaunchUrl.launch('https://www.bscscan.com/address/$address');
     } else if (this is FantomNetwork) {
-      await LaunchUrl.launch(
-        'https://ftmscan.com/address/$address',
-      );
+      await LaunchUrl.launch('https://ftmscan.com/address/$address');
     } else if (this is EthereumNetwork) {
-      await LaunchUrl.launch(
-        'https://etherscan.io/address/$address',
-      );
+      await LaunchUrl.launch('https://etherscan.io/address/$address');
     } else {
       UnimplementedError();
     }

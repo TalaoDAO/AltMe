@@ -60,9 +60,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
         clientSecret: clientSecret,
       );
     case ClientAuthentication.clientId:
-      oidc4VCIState = initialOidc4VCIState.copyWith(
-        clientId: clientId,
-      );
+      oidc4VCIState = initialOidc4VCIState.copyWith(clientId: clientId);
     case ClientAuthentication.clientSecretJwt:
       oidc4VCIState = initialOidc4VCIState.copyWith(
         clientId: clientId,
@@ -71,37 +69,36 @@ Future<Uri?> getAuthorizationUriForIssuer({
       );
   }
 
-// save the state and give the id for the jwt
-  profileCubit.addOidc4VCI(
-    oidc4VCIState,
-  );
+  // save the state and give the id for the jwt
+  profileCubit.addOidc4VCI(oidc4VCIState);
   final jwt = JWT({'challenge': pkcePair.codeChallenge});
 
   await dotenv.load();
-  final String authorizationUriSecretKey =
-      dotenv.get('AUTHORIZATION_URI_SECRET_KEY');
+  final String authorizationUriSecretKey = dotenv.get(
+    'AUTHORIZATION_URI_SECRET_KEY',
+  );
 
   final jwtToken = jwt.sign(SecretKey(authorizationUriSecretKey));
 
   late Uri authorizationUri;
 
-  final authorizationRequestParemeters =
-      OIDC4VC().getAuthorizationRequestParemeters(
-    selectedCredentials: selectedCredentials,
-    clientId: clientId,
-    clientSecret: clientSecret,
-    redirectUri: Parameters.redirectUri,
-    nonce: nonce,
-    pkcePair: pkcePair,
-    state: jwtToken,
-    scope: scope,
-    clientAuthentication: clientAuthentication,
-    formatsSuported: formatsSupported,
-    secureAuthorizedFlow: secureAuthorizedFlow,
-    isEBSIProfile: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
-    walletIssuer: walletIssuer,
-    oidc4vcParameters: oidc4vcParameters,
-  );
+  final authorizationRequestParemeters = OIDC4VC()
+      .getAuthorizationRequestParemeters(
+        selectedCredentials: selectedCredentials,
+        clientId: clientId,
+        clientSecret: clientSecret,
+        redirectUri: Parameters.redirectUri,
+        nonce: nonce,
+        pkcePair: pkcePair,
+        state: jwtToken,
+        scope: scope,
+        clientAuthentication: clientAuthentication,
+        formatsSuported: formatsSupported,
+        secureAuthorizedFlow: secureAuthorizedFlow,
+        isEBSIProfile: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
+        walletIssuer: walletIssuer,
+        oidc4vcParameters: oidc4vcParameters,
+      );
 
   final requirePushedAuthorizationRequests = oidc4vcParameters
       .authorizationServerOpenIdConfiguration
@@ -128,13 +125,19 @@ Future<Uri?> getAuthorizationUriForIssuer({
   if (isSecure) {
     String? dPop;
 
-    final customOidc4vcProfile = profileCubit.state.model.profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile;
+    final customOidc4vcProfile = profileCubit
+        .state
+        .model
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile;
 
     // TODO(hawkbee): return an error message if
     // openIdConfiguration.pushedAuthorizationRequestEndpoint is null
-    final parUrl = oidc4vcParameters
-            .issuerOpenIdConfiguration.pushedAuthorizationRequestEndpoint ??
+    final parUrl =
+        oidc4vcParameters
+            .issuerOpenIdConfiguration
+            .pushedAuthorizationRequestEndpoint ??
         '${oidc4vcParameters.authorizationEndpoint}/par';
 
     if (customOidc4vcProfile.dpopSupport) {
@@ -164,7 +167,8 @@ Future<Uri?> getAuthorizationUriForIssuer({
     );
 
     if (profileCubit.state.model.isDeveloperMode) {
-      final formattedData = '''
+      final formattedData =
+          '''
 <b>REQUEST RESPONSE :</b>
 ${const JsonEncoder.withIndent('  ').convert(response)}\n
 ''';
@@ -197,8 +201,11 @@ ${const JsonEncoder.withIndent('  ').convert(response)}\n
     authorizationUri = Uri.https(uri.authority, uri.path, parameters);
   } else {
     final uri = Uri.parse(oidc4vcParameters.authorizationEndpoint);
-    authorizationUri =
-        Uri.https(uri.authority, uri.path, authorizationRequestParemeters);
+    authorizationUri = Uri.https(
+      uri.authority,
+      uri.path,
+      authorizationRequestParemeters,
+    );
   }
 
   return authorizationUri;

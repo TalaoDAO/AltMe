@@ -28,10 +28,7 @@ class PhraseWord extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: Colors.transparent,
-          border: Border.all(
-            width: 1.5,
-            color: color,
-          ),
+          border: Border.all(width: 1.5, color: color),
           borderRadius: BorderRadius.circular(128),
         ),
         child: SizedBox(

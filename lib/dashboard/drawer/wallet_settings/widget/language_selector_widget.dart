@@ -57,9 +57,9 @@ class LanguageSelectorWidget extends StatelessWidget {
                         children: [
                           ListTile(
                             onTap: () async {
-                              await context
-                                  .read<LangCubit>()
-                                  .setLocale(Locale(languageType.name));
+                              await context.read<LangCubit>().setLocale(
+                                Locale(languageType.name),
+                              );
                             },
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
@@ -86,10 +86,9 @@ class LanguageSelectorWidget extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: Divider(
                               height: 0,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withValues(alpha: 0.12),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurface.withValues(alpha: 0.12),
                             ),
                           ),
                         ],

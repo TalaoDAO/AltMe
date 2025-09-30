@@ -12,8 +12,10 @@ class BaseTextField extends StatelessWidget {
     this.prefixIcon,
     this.validator,
     this.focusNode,
-    this.contentPadding =
-        const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+    this.contentPadding = const EdgeInsets.symmetric(
+      vertical: 16,
+      horizontal: 20,
+    ),
     this.borderColor,
     this.fillColor,
     this.borderRadius = 50,
@@ -65,24 +67,15 @@ class BaseTextField extends StatelessWidget {
           hintStyle: hintStyle,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(borderRadius),
-            borderSide: BorderSide(
-              color: border,
-              width: 1,
-            ),
+            borderSide: BorderSide(color: border, width: 1),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(borderRadius),
-            borderSide: BorderSide(
-              color: border,
-              width: 1,
-            ),
+            borderSide: BorderSide(color: border, width: 1),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(borderRadius),
-            borderSide: BorderSide(
-              color: border,
-              width: 1.5,
-            ),
+            borderSide: BorderSide(color: border, width: 1.5),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(borderRadius),

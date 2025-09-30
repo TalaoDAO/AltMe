@@ -26,12 +26,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
   final CredentialModel credentialModel;
   final bool showVertically;
   final Map<String, dynamic>? claims;
-  final void Function(
-    String?,
-    String,
-    String?,
-    String?,
-  )? onPressed;
+  final void Function(String?, String, String?, String?)? onPressed;
   final SelectiveDisclosureState? selectiveDisclosureState;
   final String? parentKeyId;
 
@@ -62,14 +57,13 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
           .displayMode,
     ).buildMap;
 
-    final List<Widget> listOfClaims =
-        mapToDisplay.entries.map((MapEntry<String, dynamic> map) {
+    final List<Widget> listOfClaims = mapToDisplay.entries.map((
+      MapEntry<String, dynamic> map,
+    ) {
       return DisplaySelectiveDisclosureValue(
         onPressed: onPressed,
         showVertically: showVertically,
-        disclosure: {
-          map.key: map.value,
-        },
+        disclosure: {map.key: map.value},
       );
     }).toList();
     return Column(
@@ -88,12 +82,7 @@ class DisplaySelectiveDisclosureValue extends StatelessWidget {
   });
   final Map<String, dynamic> disclosure;
   final bool showVertically;
-  final void Function(
-    String?,
-    String,
-    String?,
-    String?,
-  )? onPressed;
+  final void Function(String?, String, String?, String?)? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -105,10 +94,7 @@ class DisplaySelectiveDisclosureValue extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                DisclosureTitle(
-                  element: element,
-                  onPressed: onPressed,
-                ),
+                DisclosureTitle(element: element, onPressed: onPressed),
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: DisplaySelectiveDisclosureValue(
@@ -138,16 +124,14 @@ class DisplaySelectiveDisclosureValue extends StatelessWidget {
         if (element.value['value'] == null) {
           widgetList.add(
             Padding(
-              padding: (element.key.startsWith(Parameters.doNotDisplayMe) &&
+              padding:
+                  (element.key.startsWith(Parameters.doNotDisplayMe) &&
                       element.value['hasCheckbox'] != true)
                   ? EdgeInsets.zero
                   : const EdgeInsets.only(top: 8),
               child: Column(
                 children: [
-                  DisclosureTitle(
-                    element: element,
-                    onPressed: onPressed,
-                  ),
+                  DisclosureTitle(element: element, onPressed: onPressed),
                   Padding(
                     padding: const EdgeInsets.only(left: 8),
                     child: DisplaySelectiveDisclosureValue(
@@ -178,10 +162,7 @@ class DisplaySelectiveDisclosureValue extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                DisclosureTitle(
-                  element: element,
-                  onPressed: onPressed,
-                ),
+                DisclosureTitle(element: element, onPressed: onPressed),
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Column(
@@ -219,11 +200,7 @@ class DisplaySelectiveDisclosureValue extends StatelessWidget {
 }
 
 class DisclosureTitle extends StatelessWidget {
-  const DisclosureTitle({
-    super.key,
-    required this.element,
-    this.onPressed,
-  });
+  const DisclosureTitle({super.key, required this.element, this.onPressed});
   final void Function(String?, String, String?, String?)? onPressed;
   final MapEntry<String, dynamic> element;
 
@@ -265,9 +242,9 @@ class DisclosureTitle extends StatelessWidget {
           Text(
             displayKeyValueFromMap(element.key),
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontWeight: FontWeight.bold,
-                ),
+              color: Theme.of(context).colorScheme.onSurface,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const Spacer(),
           if (element.value['hasCheckbox'] == true &&
@@ -275,28 +252,31 @@ class DisclosureTitle extends StatelessWidget {
             const Spacer(),
             Padding(
               padding: const EdgeInsets.only(top: 8),
-              child: BlocBuilder<SelectiveDisclosureCubit,
-                  SelectiveDisclosureState>(
-                builder: (context, state) {
-                  final selectedKeyId =
-                      state.selectedClaimsKeyIds.firstWhereOrNull(
-                    (ele) =>
-                        ele.keyId ==
-                        // ignore: lines_longer_than_80_chars
-                        '${element.value["claimKey"]}#${element.value["sd"]}',
-                  );
+              child:
+                  BlocBuilder<
+                    SelectiveDisclosureCubit,
+                    SelectiveDisclosureState
+                  >(
+                    builder: (context, state) {
+                      final selectedKeyId = state.selectedClaimsKeyIds
+                          .firstWhereOrNull(
+                            (ele) =>
+                                ele.keyId ==
+                                // ignore: lines_longer_than_80_chars
+                                '${element.value["claimKey"]}#${element.value["sd"]}',
+                          );
 
-                  return Center(
-                    child: Icon(
-                      (selectedKeyId != null && selectedKeyId.isSelected)
-                          ? Icons.check_box
-                          : Icons.check_box_outline_blank,
-                      size: 25,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  );
-                },
-              ),
+                      return Center(
+                        child: Icon(
+                          (selectedKeyId != null && selectedKeyId.isSelected)
+                              ? Icons.check_box
+                              : Icons.check_box_outline_blank,
+                          size: 25,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      );
+                    },
+                  ),
             ),
           ],
         ],
@@ -349,12 +329,7 @@ class DisclosureLine extends StatelessWidget {
     required this.elementValue,
   });
 
-  final void Function(
-    String?,
-    String,
-    String?,
-    String?,
-  )? onPressed;
+  final void Function(String?, String, String?, String?)? onPressed;
   final bool showVertically;
   final String? elementKey;
   final dynamic elementValue;
@@ -411,27 +386,30 @@ class DisclosureLine extends StatelessWidget {
             const Spacer(),
             Padding(
               padding: const EdgeInsets.only(top: 8),
-              child: BlocBuilder<SelectiveDisclosureCubit,
-                  SelectiveDisclosureState>(
-                builder: (context, state) {
-                  final selectedKeyId =
-                      state.selectedClaimsKeyIds.firstWhereOrNull(
-                    (ele) =>
-                        ele.keyId ==
-                        '${elementValue["claimKey"]}#${elementValue["sd"]}',
-                  );
+              child:
+                  BlocBuilder<
+                    SelectiveDisclosureCubit,
+                    SelectiveDisclosureState
+                  >(
+                    builder: (context, state) {
+                      final selectedKeyId = state.selectedClaimsKeyIds
+                          .firstWhereOrNull(
+                            (ele) =>
+                                ele.keyId ==
+                                '${elementValue["claimKey"]}#${elementValue["sd"]}',
+                          );
 
-                  return Center(
-                    child: Icon(
-                      (selectedKeyId != null && selectedKeyId.isSelected)
-                          ? Icons.check_box
-                          : Icons.check_box_outline_blank,
-                      size: 25,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  );
-                },
-              ),
+                      return Center(
+                        child: Icon(
+                          (selectedKeyId != null && selectedKeyId.isSelected)
+                              ? Icons.check_box
+                              : Icons.check_box_outline_blank,
+                          size: 25,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      );
+                    },
+                  ),
             ),
           ],
         ],

@@ -94,9 +94,9 @@ class _WertViewState extends State<WertView> {
       ..addJavaScriptChannel(
         'Toaster',
         onMessageReceived: (JavaScriptMessage message) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message.message)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message.message)));
         },
       );
 
@@ -132,17 +132,17 @@ class _WertViewState extends State<WertView> {
             scrollView: false,
             body:
                 state.currentAccount!.blockchainType == BlockchainType.fantom ||
-                        state.currentAccount!.blockchainType ==
-                            BlockchainType.etherlink
-                    ? Center(
-                        child: Text(
-                          state.currentAccount!.blockchainType ==
-                                  BlockchainType.fantom
-                              ? l10n.thisFeatureIsNotSupportedYetForFantom
-                              : l10n.thisFeatureIsNotSupportedYetForEtherlink,
-                        ),
-                      )
-                    : WebViewWidget(controller: _controller),
+                    state.currentAccount!.blockchainType ==
+                        BlockchainType.etherlink
+                ? Center(
+                    child: Text(
+                      state.currentAccount!.blockchainType ==
+                              BlockchainType.fantom
+                          ? l10n.thisFeatureIsNotSupportedYetForFantom
+                          : l10n.thisFeatureIsNotSupportedYetForEtherlink,
+                    ),
+                  )
+                : WebViewWidget(controller: _controller),
             padding: EdgeInsets.zero,
           );
         },

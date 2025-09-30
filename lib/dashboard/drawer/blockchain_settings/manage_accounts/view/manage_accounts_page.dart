@@ -30,8 +30,11 @@ class ManageAccountsPage extends StatefulWidget {
 class _ManageAccountsPageState extends State<ManageAccountsPage> {
   Future<void> _edit(int index) async {
     final l10n = context.l10n;
-    final List<CryptoAccountData> cryptoAccount =
-        context.read<ManageAccountsCubit>().state.cryptoAccount.data;
+    final List<CryptoAccountData> cryptoAccount = context
+        .read<ManageAccountsCubit>()
+        .state
+        .cryptoAccount
+        .data;
 
     final accountNameList = cryptoAccount.map((e) => e.name).toList();
 
@@ -61,10 +64,10 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
         return;
       } else {
         await context.read<ManageAccountsCubit>().editCryptoAccount(
-              newAccountName: newCryptoAccountName,
-              index: index,
-              blockchainType: cryptoAccountData.blockchainType,
-            );
+          newAccountName: newCryptoAccountName,
+          index: index,
+          blockchainType: cryptoAccountData.blockchainType,
+        );
       }
     }
   }
@@ -86,8 +89,10 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
 
         if (state.message != null) {
           final MessageHandler messageHandler = state.message!.messageHandler!;
-          final String message =
-              messageHandler.getMessage(context, messageHandler);
+          final String message = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
           showDialog<bool>(
             context: context,
             builder: (context) => ConfirmDialog(
@@ -137,8 +142,9 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
                               children: [
                                 SlidableAction(
                                   backgroundColor: Colors.transparent,
-                                  foregroundColor:
-                                      Theme.of(context).colorScheme.onSurface,
+                                  foregroundColor: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
                                   icon: Icons.delete,
                                   label: l10n.delete,
                                   onPressed: (_) async {
@@ -162,8 +168,9 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
                                     final value = await showDialog<bool>(
                                       context: context,
                                       builder: (context) => ConfirmDialog(
-                                        title: l10n
-                                            .deleteAccountMessage(data.name),
+                                        title: l10n.deleteAccountMessage(
+                                          data.name,
+                                        ),
                                         yes: l10n.ok,
                                         showNoButton: false,
                                       ),
@@ -197,9 +204,7 @@ class _ManageAccountsPageState extends State<ManageAccountsPage> {
                     );
                   },
                 ),
-                AddAccountButton(
-                  onPressed: onAddAccountPressed,
-                ),
+                AddAccountButton(onPressed: onAddAccountPressed),
               ],
             ),
           ),

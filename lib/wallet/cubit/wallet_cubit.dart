@@ -35,10 +35,7 @@ class WalletCubit extends Cubit<WalletState> {
       index.toString(),
     );
     emit(
-      state.copyWith(
-        status: WalletStatus.populate,
-        currentCryptoIndex: index,
-      ),
+      state.copyWith(status: WalletStatus.populate, currentCryptoIndex: index),
     );
   }
 
@@ -55,9 +52,10 @@ class WalletCubit extends Cubit<WalletState> {
     void Function({
       required CryptoAccount cryptoAccount,
       required MessageHandler messageHandler,
-    })? onComplete,
+    })?
+    onComplete,
   }) async {
-// if wallet has no crypto do nothing and return
+    // if wallet has no crypto do nothing and return
     if (!Parameters.walletHandlesCrypto) {
       return;
     }
@@ -70,7 +68,8 @@ class WalletCubit extends Cubit<WalletState> {
     // }
 
     /// tracking added accounts
-    final String totalAccountsYet = await secureStorageProvider.get(
+    final String totalAccountsYet =
+        await secureStorageProvider.get(
           SecureStorageKeys.cryptoAccounTrackingIndex,
         ) ??
         '0';
@@ -125,7 +124,8 @@ class WalletCubit extends Cubit<WalletState> {
       );
     } else {
       if (isSecretKey) {
-        final isTezosSecretKey = mnemonicOrKey.startsWith('edsk') ||
+        final isTezosSecretKey =
+            mnemonicOrKey.startsWith('edsk') ||
             mnemonicOrKey.startsWith('spsk') ||
             mnemonicOrKey.startsWith('p2sk');
 
@@ -246,8 +246,9 @@ class WalletCubit extends Cubit<WalletState> {
     int derivePathIndex = 0;
     final bool isCreated = !isImported;
 
-    final String? savedDerivePathIndex =
-        await secureStorageProvider.get(blockchainType.derivePathIndexKey);
+    final String? savedDerivePathIndex = await secureStorageProvider.get(
+      blockchainType.derivePathIndexKey,
+    );
 
     log.i('isImported - $isImported');
     if (isCreated) {
@@ -370,8 +371,9 @@ class WalletCubit extends Cubit<WalletState> {
     log.i('isImported - $isImported');
     if (isCreated) {
       /// Note: while adding derivePathIndex is always increased
-      final String? savedDerivePathIndex =
-          await secureStorageProvider.get(blockchainType.derivePathIndexKey);
+      final String? savedDerivePathIndex = await secureStorageProvider.get(
+        blockchainType.derivePathIndexKey,
+      );
 
       if (savedDerivePathIndex != null && savedDerivePathIndex.isNotEmpty) {
         derivePathIndex = int.parse(savedDerivePathIndex) + 1;
@@ -500,11 +502,9 @@ class WalletCubit extends Cubit<WalletState> {
   }
 
   Future<void> resetWallet(CredentialsCubit credentialsCubit) async {
-    await secureStorageProvider.deleteAllExceptsSomeKeys(
-      [
-        SecureStorageKeys.version,
-      ],
-    );
+    await secureStorageProvider.deleteAllExceptsSomeKeys([
+      SecureStorageKeys.version,
+    ]);
 
     // await credentialsRepository.deleteAll();
     // await profileCubit.resetProfile();
@@ -524,11 +524,11 @@ class WalletCubit extends Cubit<WalletState> {
   }
 
   CryptoAccountData? getCryptoAccountData(String publicKey) {
-    final CryptoAccountData? currentAccount =
-        state.cryptoAccount.data.firstWhereOrNull(
-      (element) =>
-          element.walletAddress.toUpperCase() == publicKey.toUpperCase(),
-    );
+    final CryptoAccountData? currentAccount = state.cryptoAccount.data
+        .firstWhereOrNull(
+          (element) =>
+              element.walletAddress.toUpperCase() == publicKey.toUpperCase(),
+        );
     return currentAccount;
   }
 }

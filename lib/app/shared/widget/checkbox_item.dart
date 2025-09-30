@@ -34,10 +34,7 @@ class CheckboxItem extends StatelessWidget {
             ),
             onChanged: (newValue) => onChange.call(newValue ?? value),
           ),
-          Text(
-            text,
-            style: textStyle ?? Theme.of(context).textTheme.bodyLarge,
-          ),
+          Text(text, style: textStyle ?? Theme.of(context).textTheme.bodyLarge),
         ],
       ),
     );

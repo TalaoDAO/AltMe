@@ -8,17 +8,18 @@ class QrScannerPage extends StatefulWidget {
   const QrScannerPage({super.key});
 
   static Route<String?> route() => MaterialPageRoute<String?>(
-        builder: (context) => const QrScannerPage(),
-        settings: const RouteSettings(name: '/qrScannerPage'),
-      );
+    builder: (context) => const QrScannerPage(),
+    settings: const RouteSettings(name: '/qrScannerPage'),
+  );
 
   @override
   _QrScannerPageState createState() => _QrScannerPageState();
 }
 
 class _QrScannerPageState extends State<QrScannerPage> {
-  final BarcodeScanner _barcodeScannerController =
-      BarcodeScanner(formats: [BarcodeFormat.qrCode]);
+  final BarcodeScanner _barcodeScannerController = BarcodeScanner(
+    formats: [BarcodeFormat.qrCode],
+  );
 
   @override
   void dispose() {
@@ -36,8 +37,9 @@ class _QrScannerPageState extends State<QrScannerPage> {
       title: l10n.scanTitle,
       onImage: (InputImage inputImage) async {
         if (!isScanned) {
-          final barcodes =
-              await _barcodeScannerController.processImage(inputImage);
+          final barcodes = await _barcodeScannerController.processImage(
+            inputImage,
+          );
           if (barcodes.isEmpty) {
             return;
           }

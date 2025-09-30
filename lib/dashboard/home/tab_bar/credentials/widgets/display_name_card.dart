@@ -15,11 +15,7 @@ class DisplayNameCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final nameValue = getName(context);
-    return MyText(
-      nameValue,
-      maxLines: 1,
-      style: style,
-    );
+    return MyText(nameValue, maxLines: 1, style: style);
   }
 
   String getName(BuildContext context) {

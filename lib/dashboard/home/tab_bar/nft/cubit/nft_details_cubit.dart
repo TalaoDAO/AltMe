@@ -11,10 +11,8 @@ part 'nft_details_cubit.g.dart';
 part 'nft_details_state.dart';
 
 class NftDetailsCubit extends Cubit<NftDetailsState> {
-  NftDetailsCubit({
-    required this.manageNetworkCubit,
-    required this.walletCubit,
-  }) : super(const NftDetailsState(status: AppStatus.init));
+  NftDetailsCubit({required this.manageNetworkCubit, required this.walletCubit})
+    : super(const NftDetailsState(status: AppStatus.init));
 
   final ManageNetworkCubit manageNetworkCubit;
   final WalletCubit walletCubit;

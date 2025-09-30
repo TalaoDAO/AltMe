@@ -19,19 +19,14 @@ class HelpCenterMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        return HelpCenterView(
-          profileCubit: context.read<ProfileCubit>(),
-        );
+        return HelpCenterView(profileCubit: context.read<ProfileCubit>());
       },
     );
   }
 }
 
 class HelpCenterView extends StatelessWidget {
-  const HelpCenterView({
-    super.key,
-    required this.profileCubit,
-  });
+  const HelpCenterView({super.key, required this.profileCubit});
 
   final ProfileCubit profileCubit;
 
@@ -58,7 +53,8 @@ class HelpCenterView extends StatelessWidget {
       customChatSupportName = helpCenterOptions.customChatSupportName!;
     }
 
-    final isEnterprise = context.read<ProfileCubit>().state.model.walletType ==
+    final isEnterprise =
+        context.read<ProfileCubit>().state.model.walletType ==
         WalletType.enterprise;
 
     return BasePage(
@@ -70,9 +66,7 @@ class HelpCenterView extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const BackLeadingButton(
-            padding: EdgeInsets.zero,
-          ),
+          const BackLeadingButton(padding: EdgeInsets.zero),
           const DrawerLogo(),
           if (helpCenterOptions.displayChatSupport && isEnterprise) ...[
             DrawerItem(
@@ -98,8 +92,9 @@ class HelpCenterView extends StatelessWidget {
             DrawerItem(
               title: l10n.sendAnEmail,
               onTap: () {
-                Navigator.of(context)
-                    .push<void>(ContactUsPage.route(email: email));
+                Navigator.of(
+                  context,
+                ).push<void>(ContactUsPage.route(email: email));
               },
             ),
           ],

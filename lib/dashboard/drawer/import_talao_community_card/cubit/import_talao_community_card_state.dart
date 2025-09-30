@@ -66,9 +66,9 @@ class ImportTalaoCommunityCardState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        isPrivateKeyValid,
-        isTextFieldEdited,
-        message,
-      ];
+    status,
+    isPrivateKeyValid,
+    isTextFieldEdited,
+    message,
+  ];
 }

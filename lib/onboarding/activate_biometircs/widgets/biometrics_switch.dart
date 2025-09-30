@@ -5,11 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BiometricsSwitch extends StatelessWidget {
-  const BiometricsSwitch({
-    super.key,
-    this.onChange,
-    required this.value,
-  });
+  const BiometricsSwitch({super.key, this.onChange, required this.value});
   final dynamic Function(bool)? onChange;
   final bool value;
 
@@ -26,9 +22,7 @@ class BiometricsSwitch extends StatelessWidget {
             width: Sizes.icon2x,
             height: Sizes.icon2x,
           ),
-          const SizedBox(
-            width: Sizes.spaceSmall,
-          ),
+          const SizedBox(width: Sizes.spaceSmall),
           MyText(
             l10n.loginWithBiometricsOnBoarding,
             maxLines: 1,

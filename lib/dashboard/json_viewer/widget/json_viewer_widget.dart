@@ -25,10 +25,9 @@ class JsonViewWidget extends StatelessWidget {
       textSpans.add(
         TextSpan(
           text: boldText,
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium!
-              .copyWith(fontWeight: FontWeight.w700),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w700),
         ),
       );
       currentIndex = match.end;

@@ -3,16 +3,11 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ContactUsPage extends StatelessWidget {
-  const ContactUsPage({
-    super.key,
-    required this.email,
-  });
+  const ContactUsPage({super.key, required this.email});
 
   final String email;
 
-  static Route<dynamic> route({
-    required String email,
-  }) {
+  static Route<dynamic> route({required String email}) {
     return MaterialPageRoute<void>(
       builder: (_) => ContactUsPage(email: email),
       settings: const RouteSettings(name: '/ContactUsPage'),
@@ -26,10 +21,7 @@ class ContactUsPage extends StatelessWidget {
 }
 
 class ContactUsView extends StatefulWidget {
-  const ContactUsView({
-    super.key,
-    required this.email,
-  });
+  const ContactUsView({super.key, required this.email});
 
   final String email;
 
@@ -60,9 +52,7 @@ class _ContactUsViewState extends State<ContactUsView> {
               '${l10n.subject} :',
               style: Theme.of(context).textTheme.titleSmall,
             ),
-            const SizedBox(
-              height: Sizes.spaceXSmall,
-            ),
+            const SizedBox(height: Sizes.spaceXSmall),
             TextFormField(
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.text,
@@ -82,23 +72,17 @@ class _ContactUsViewState extends State<ContactUsView> {
                 hintText: l10n.subject,
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(
-                    Radius.circular(
-                      Sizes.smallRadius,
-                    ),
+                    Radius.circular(Sizes.smallRadius),
                   ),
                 ),
               ),
             ),
-            const SizedBox(
-              height: Sizes.spaceLarge,
-            ),
+            const SizedBox(height: Sizes.spaceLarge),
             Text(
               '${l10n.message} :',
               style: Theme.of(context).textTheme.titleSmall,
             ),
-            const SizedBox(
-              height: Sizes.spaceXSmall,
-            ),
+            const SizedBox(height: Sizes.spaceXSmall),
             TextFormField(
               textInputAction: TextInputAction.done,
               keyboardType: TextInputType.text,
@@ -118,9 +102,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                 hintText: l10n.yourMessage,
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(
-                    Radius.circular(
-                      Sizes.smallRadius,
-                    ),
+                    Radius.circular(Sizes.smallRadius),
                   ),
                 ),
               ),

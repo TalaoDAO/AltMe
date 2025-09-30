@@ -5,9 +5,7 @@ import 'package:altme/onboarding/onboarding.dart';
 import 'package:flutter/material.dart';
 
 class WalletDialog extends StatelessWidget {
-  const WalletDialog({
-    super.key,
-  });
+  const WalletDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,18 +35,17 @@ class WalletDialog extends StatelessWidget {
               Text(
                 l10n.createTitle,
                 style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                      fontSize: 18,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
+                  fontSize: 18,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 5),
               Text(
                 l10n.createSubtitle,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.onSurface),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 30),
@@ -79,10 +76,9 @@ class WalletDialog extends StatelessWidget {
                       fontSize: 13,
                       borderRadius: 8,
                       textColor: Theme.of(context).colorScheme.secondary,
-                      borderColor: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withValues(alpha: 0.2),
+                      borderColor: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.2),
                       backgroundColor: Theme.of(context).colorScheme.surface,
                       onPressed: () {
                         Navigator.pop(context);

@@ -48,15 +48,18 @@ void main() {
 
       when(() => secureStorageProvider.get(any())).thenAnswer((_) async => '');
 
-      when(() => secureStorageProvider.set(any(), any()))
-          .thenAnswer((_) async => Future<void>.value());
+      when(
+        () => secureStorageProvider.set(any(), any()),
+      ).thenAnswer((_) async => Future<void>.value());
 
       when(navigator.canPop).thenReturn(true);
       when(() => navigator.push<void>(any())).thenAnswer((_) async {});
-      when(() => navigator.pushAndRemoveUntil<void>(any(), any()))
-          .thenAnswer((_) async {});
-      when(() => navigator.pushReplacement<void, void>(any()))
-          .thenAnswer((_) async {});
+      when(
+        () => navigator.pushAndRemoveUntil<void>(any(), any()),
+      ).thenAnswer((_) async {});
+      when(
+        () => navigator.pushReplacement<void, void>(any()),
+      ).thenAnswer((_) async {});
     });
 
     testWidgets('is routable', (tester) async {
@@ -85,11 +88,7 @@ void main() {
 
       verify(
         () => navigator.push<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals('/pinCodePage'),
-            ),
-          ),
+          any(that: isRoute<void>(whereName: equals('/pinCodePage'))),
         ),
       ).called(1);
     });

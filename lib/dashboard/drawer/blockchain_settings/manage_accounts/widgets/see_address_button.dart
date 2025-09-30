@@ -27,8 +27,9 @@ class SeeAddressButton extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: Sizes.space2XSmall),
+              padding: const EdgeInsets.symmetric(
+                horizontal: Sizes.space2XSmall,
+              ),
               child: Icon(
                 Icons.remove_red_eye,
                 size: Sizes.iconXSmall,
@@ -39,8 +40,8 @@ class SeeAddressButton extends StatelessWidget {
               child: MyText(
                 l10n.seeAddress.toUpperCase(),
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    ),
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
               ),
             ),
           ],

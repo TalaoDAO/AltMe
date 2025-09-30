@@ -10,10 +10,7 @@ class MyAssetsText extends StatelessWidget {
     final l10n = context.l10n;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Text(
-        l10n.myAssets,
-        style: Theme.of(context).textTheme.titleLarge,
-      ),
+      child: Text(l10n.myAssets, style: Theme.of(context).textTheme.titleLarge),
     );
   }
 }

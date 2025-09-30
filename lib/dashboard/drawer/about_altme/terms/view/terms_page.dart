@@ -6,9 +6,9 @@ class TermsPage extends StatelessWidget {
   const TermsPage({super.key});
 
   static Route<dynamic> route() => MaterialPageRoute<void>(
-        builder: (_) => const TermsPage(),
-        settings: const RouteSettings(name: '/termsPage'),
-      );
+    builder: (_) => const TermsPage(),
+    settings: const RouteSettings(name: '/termsPage'),
+  );
 
   @override
   Widget build(BuildContext context) {

@@ -7,9 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class JWKThumbprintP256KeyPage extends StatefulWidget {
-  const JWKThumbprintP256KeyPage({
-    super.key,
-  });
+  const JWKThumbprintP256KeyPage({super.key});
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
@@ -76,13 +74,8 @@ class _JWKThumbprintP256KeyPageState extends State<JWKThumbprintP256KeyPage>
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              l10n.jwk,
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(
-              height: Sizes.spaceNormal,
-            ),
+            Text(l10n.jwk, style: Theme.of(context).textTheme.headlineSmall),
+            const SizedBox(height: Sizes.spaceNormal),
             FutureBuilder<String>(
               future: getKey(),
               builder: (context, snapshot) {

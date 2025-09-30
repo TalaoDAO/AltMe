@@ -8,10 +8,7 @@ import 'package:flutter_chat_types/flutter_chat_types.dart';
 import 'package:matrix/matrix.dart';
 
 class NotificationDetailsPage extends StatelessWidget {
-  const NotificationDetailsPage({
-    super.key,
-    required this.message,
-  });
+  const NotificationDetailsPage({super.key, required this.message});
 
   final Message message;
 
@@ -43,8 +40,9 @@ class NotificationDetailsPage extends StatelessWidget {
     } else if (message is TextMessage) {
       final sentence = (message as TextMessage).text;
 
-      final emailRegExp =
-          RegExp(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b');
+      final emailRegExp = RegExp(
+        r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b',
+      );
       final urlRegExp = RegExp(r'(https?:\/\/[^\s]+)');
 
       final style = TextStyle(
@@ -60,9 +58,7 @@ class NotificationDetailsPage extends StatelessWidget {
       final matches = [
         ...emailRegExp.allMatches(sentence),
         ...urlRegExp.allMatches(sentence),
-      ]..sort(
-          (a, b) => a.start.compareTo(b.start),
-        );
+      ]..sort((a, b) => a.start.compareTo(b.start));
 
       // Add non-matching parts of the sentence
       for (final match in matches) {
@@ -103,10 +99,7 @@ class NotificationDetailsPage extends StatelessWidget {
       // Add remaining text after the last match
       if (lastMatchEnd < sentence.length) {
         textSpans.add(
-          TextSpan(
-            text: sentence.substring(lastMatchEnd),
-            style: style,
-          ),
+          TextSpan(text: sentence.substring(lastMatchEnd), style: style),
         );
       }
 

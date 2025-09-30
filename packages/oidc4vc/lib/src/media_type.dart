@@ -4,6 +4,7 @@ enum MediaType {
   walletAttestation,
   selectiveDisclosure,
   dPop,
+  dcSdJWT,
 }
 
 extension MediaTypeX on MediaType {
@@ -19,6 +20,8 @@ extension MediaTypeX on MediaType {
         return 'kb+jwt';
       case MediaType.dPop:
         return 'dpop+jwt';
+      case MediaType.dcSdJWT:
+        return 'dc+sd-jwt';
     }
   }
 }

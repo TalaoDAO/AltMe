@@ -39,19 +39,19 @@ class DiscoverCredentialCategoryItem extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
             child: Text(
               credentialCategoryConfig.discoverTitle,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
             ),
-          ), 
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
             child: Text(
               credentialCategoryConfig.discoverSubTitle,
               maxLines: 3,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontWeight: FontWeight.w100,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w100),
             ),
           ),
           const SizedBox(height: 14),
@@ -68,9 +68,7 @@ class DiscoverCredentialCategoryItem extends StatelessWidget {
             itemBuilder: (_, index) {
               final dummyCredential = dummyCredentials[index];
 
-              return DiscoverCredentialItem(
-                dummyCredential: dummyCredential,
-              );
+              return DiscoverCredentialItem(dummyCredential: dummyCredential);
             },
           ),
         ],

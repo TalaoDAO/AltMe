@@ -37,10 +37,8 @@ class RightsCubit extends Cubit<RightsState> {
       }
 
       if (savedDappData.walletAddress != null) {
-        final Map<dynamic, dynamic> response =
-            await beacon.removePeerUsingPublicKey(
-          publicKey: savedDappData.peer!.publicKey,
-        );
+        final Map<dynamic, dynamic> response = await beacon
+            .removePeerUsingPublicKey(publicKey: savedDappData.peer!.publicKey);
 
         final bool success =
             json.decode(response['success'].toString()) as bool;
@@ -63,8 +61,9 @@ class RightsCubit extends Cubit<RightsState> {
           );
         }
       } else {
-        await walletConnectCubit
-            .disconnectSession(savedDappData.sessionData!.pairingTopic);
+        await walletConnectCubit.disconnectSession(
+          savedDappData.sessionData!.pairingTopic,
+        );
 
         await connectedDappRepository.delete(savedDappData);
         emit(
