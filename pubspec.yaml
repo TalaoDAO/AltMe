@@ -121,11 +121,7 @@ dependencies:
 
 dependency_overrides:
   ffi: 2.1.0 #didkit from path which depends on ffi ^1.0.0
-  flutter_secure_storage:
-    git:
-      url: git@github.com:juliansteenbakker/flutter_secure_storage.git
-      ref: v10.0.0-beta.4
-      path: flutter_secure_storage
+  flutter_secure_storage: 10.0.0-beta.4
 
 dev_dependencies:
   bloc_test: ^9.1.2
