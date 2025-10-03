@@ -191,7 +191,10 @@ Future<CredentialModel?> generateCryptoAccountOwnershipProof({
               ? MediaType.dcSdJWT
               : MediaType.vcSdJWT,
           clientType: customOidc4vcProfile.clientType,
-          proofHeaderType: customOidc4vcProfile.proofHeader,
+          // Mismatch between the cnf of the crypto card and the wallet
+          // identity identifier #3392
+          // proofHeaderType: customOidc4vcProfile.proofHeader,
+          proofHeaderType: ProofHeaderType.jwk,
           clientId: customOidc4vcProfile.clientId ?? '',
         );
 
