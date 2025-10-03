@@ -283,14 +283,16 @@ class _SelectiveDisclosurePickViewState
         'iat': iat,
         'sd_hash': sdHash,
       };
-      // In case of OIDC4VP transaction we need to add the hash of transaction
-      // data into the payload
+      // In case of OIDC4VP transaction we need to add the hash of each element
+      // of transactiondata into the payload
       final transactionData = context.read<ScanCubit>().state.transactionData;
 
       if (transactionData != null) {
-        payload['transaction_data_hashes'] = sh256Hash(
-          jsonEncode(transactionData),
-        );
+        final List<String> transactionDataHashes = [];
+        for (final element in transactionData) {
+          transactionDataHashes.add(sh256Hash(jsonEncode(element)));
+        }
+        payload['transaction_data_hashes'] = transactionDataHashes;
       }
 
       // If there no cnf in the payload, then no need to add signature
