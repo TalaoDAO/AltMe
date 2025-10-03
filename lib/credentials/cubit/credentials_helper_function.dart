@@ -196,10 +196,9 @@ Future<CredentialModel?> generateCryptoAccountOwnershipProof({
         );
 
         /// sign and get token
-        final jwt = generateToken(
-          payload: payload,
-          tokenParameters: cryptoAccountTokenParameters,
-        );
+        final jwt =
+            // ignore: lines_longer_than_80_chars
+            '${generateToken(payload: payload, tokenParameters: cryptoAccountTokenParameters)}~';
         log.i('jwt - $jwt');
         final data = getCredentialDataFromJson(
           data: jwt,
