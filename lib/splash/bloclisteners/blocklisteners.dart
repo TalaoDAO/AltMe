@@ -676,27 +676,16 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
       );
     }
     if (state.status == AppStatus.successAdd) {
-      // TODO(hawkbee): when we create vc+sd-jwt associated address cards
-      // we need to check also for vc+sd-jwt
-      if (context
-              .read<ProfileCubit>()
-              .state
-              .model
-              .profileSetting
-              .blockchainOptions
-              ?.associatedAddressFormat ==
-          VCFormatType.ldpVc) {
-        // get list of crypto accounts from profile cubit
-        final manageAccountsCubit = ManageAccountsCubit(
-          credentialsCubit: context.read<CredentialsCubit>(),
-          manageNetworkCubit: context.read<ManageNetworkCubit>(),
-        );
-        final cryptoAccounts = manageAccountsCubit.state.cryptoAccount.data;
-        // generate crypto accounts cards
-        await context.read<CredentialsCubit>().generateCryptoAccountsCards(
-          cryptoAccounts,
-        );
-      }
+      // get list of crypto accounts from profile cubit
+      final manageAccountsCubit = ManageAccountsCubit(
+        credentialsCubit: context.read<CredentialsCubit>(),
+        manageNetworkCubit: context.read<ManageNetworkCubit>(),
+      );
+      final cryptoAccounts = manageAccountsCubit.state.cryptoAccount.data;
+      // generate crypto accounts cards
+      await context.read<CredentialsCubit>().generateCryptoAccountsCards(
+        cryptoAccounts,
+      );
     }
     if (state.status == AppStatus.addEnterpriseAccount ||
         state.status == AppStatus.updateEnterpriseAccount ||
