@@ -1,7 +1,7 @@
 part of 'credentials_cubit.dart';
 
 ///helper function to generate Tezos/Ethereum AssociatedAddressCredential
-Future<CredentialModel?> generateAssociatedWalletCredential({
+Future<CredentialModel?> generateCryptoAccountOwnershipProof({
   required CryptoAccountData cryptoAccountData,
   required DIDKitProvider didKitProvider,
   required KeyGenerator keyGenerator,
@@ -32,11 +32,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
 
     log.i('jwkKey - $jwkKey');
     log.i('didKitProvider.keyToDID - $issuer');
-
-    //Issue: https://github.com/spruceid/didkit/issues/329
-    // final verificationMethod =
-    //     await didKitProvider.keyToVerificationMethod(didMethod, jwkKey);
-    //log.i('didKitProvider.keyToVerificationMethod - $verificationMethod');
 
     late String verificationMethod;
 
@@ -146,6 +141,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
     log.i(jsonEncode(associatedAddressCredential.toJson()));
     late String vc;
     switch (vcFormatType) {
+      case VCFormatType.vcSdJWT:
       case VCFormatType.dcSdJWT:
         final String jwkKey = await keyGenerator.jwkFromSecretKey(
           secretKey: cryptoAccountData.secretKey,
@@ -191,7 +187,9 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           privateKey: jsonDecode(jwkKey) as Map<String, dynamic>,
           did: cryptoAccountDid,
           kid: cryptoAccountKid,
-          mediaType: MediaType.dcSdJWT,
+          mediaType: vcFormatType == VCFormatType.dcSdJWT
+              ? MediaType.dcSdJWT
+              : MediaType.vcSdJWT,
           clientType: customOidc4vcProfile.clientType,
           proofHeaderType: customOidc4vcProfile.proofHeader,
           clientId: customOidc4vcProfile.clientId ?? '',
@@ -205,7 +203,7 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
         log.i('jwt - $jwt');
         final data = getCredentialDataFromJson(
           data: jwt,
-          format: VCFormatType.dcSdJWT.vcValue,
+          format: vcFormatType.vcValue,
           jwtDecode: JWTDecode(),
           credentialType:
               'https://vc-registry.com/vct/registry/publish/2ab5fa6078eb308aedae7ee438c5bd1807bea3f8a77c014f69f4143da91f077e',
@@ -218,9 +216,12 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           jwt: jwt,
           format: vcFormatType.vcValue,
           activities: [Activity(acquisitionAt: dateTime)],
-          profileLinkedId: null,
+          profileLinkedId: profileType.getVCId,
           data: data,
-          credentialPreview: Credential.dummy(),
+          // Just metadata to get correct card and category
+          credentialPreview: Credential.fromJson(
+            associatedAddressCredential.toJson() as Map<String, dynamic>,
+          ),
         );
         return credential;
       case VCFormatType.ldpVc:
@@ -254,34 +255,20 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
               message: ResponseString
                   .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL,
             );
-          } else {
-            return _createCredential(
-              vc: vc,
-              oldId: oldId,
-              credentialManifest: credentialManifest,
-              customOidc4vcProfile: customOidc4vcProfile,
-              oidc4vc: oidc4vc,
-              privateKey: privateKey,
-              kid: verificationMethod,
-              did: did,
-              profileType: profileType,
-              vcFormatType: vcFormatType,
-            );
           }
-        } else {
-          return _createCredential(
-            vc: vc,
-            oldId: oldId,
-            credentialManifest: credentialManifest,
-            customOidc4vcProfile: customOidc4vcProfile,
-            oidc4vc: oidc4vc,
-            privateKey: privateKey,
-            kid: verificationMethod,
-            did: did,
-            profileType: profileType,
-            vcFormatType: vcFormatType,
-          );
         }
+        return _createCredential(
+          vc: vc,
+          oldId: oldId,
+          credentialManifest: credentialManifest,
+          customOidc4vcProfile: customOidc4vcProfile,
+          oidc4vc: oidc4vc,
+          privateKey: privateKey,
+          kid: verificationMethod,
+          did: did,
+          profileType: profileType,
+          vcFormatType: vcFormatType,
+        );
       case VCFormatType.jwtVc:
         // TODO: Handle this case.
         throw UnimplementedError();
@@ -290,8 +277,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
         throw UnimplementedError();
       case VCFormatType.jwtVcJsonLd:
         // TODO: Handle this case.
-        throw UnimplementedError();
-      case VCFormatType.vcSdJWT:
         throw UnimplementedError();
       case VCFormatType.auto:
         // TODO: Handle this case.

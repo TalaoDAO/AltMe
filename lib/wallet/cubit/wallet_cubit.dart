@@ -325,19 +325,9 @@ class WalletCubit extends Cubit<WalletState> {
     if (Parameters.walletHandlesCrypto) {
       // only for default profile at wallet creation
       // get crurrent current profile type from profileCubit
-      final ProfileType currentProfileType =
-          credentialsCubit.profileCubit.state.model.profileType;
-      if (currentProfileType != ProfileType.enterprise) {
-        await credentialsCubit.profileCubit.setProfile(ProfileType.defaultOne);
-        await credentialsCubit.insertAssociatedWalletCredential(
-          cryptoAccountData: cryptoAccountData,
-        );
-        await credentialsCubit.profileCubit.setProfile(currentProfileType);
-      } else {
-        await credentialsCubit.insertAssociatedWalletCredential(
-          cryptoAccountData: cryptoAccountData,
-        );
-      }
+      await credentialsCubit.insertCryptoAccountOwnershipProof(
+        cryptoAccountData: cryptoAccountData,
+      );
     }
 
     return cryptoAccountData;

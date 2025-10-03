@@ -480,85 +480,93 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     return resultList;
   }
 
-  Future<void> insertAssociatedWalletCredential({
+  Future<void> insertCryptoAccountOwnershipProof({
     required CryptoAccountData cryptoAccountData,
   }) async {
-    final didKeyType = profileCubit
-        .state
-        .model
-        .profileSetting
-        .selfSovereignIdentityOptions
-        .customOidc4vcProfile
-        .defaultDid;
+    final walletContainsEnterpriseProfile =
+        profileCubit.state.model.walletType == WalletType.enterprise;
 
-    final privateKey = await getPrivateKey(
-      didKeyType: didKeyType,
-      profileCubit: profileCubit,
-    );
+    final ProfileType currentProfileType = profileCubit.state.model.profileType;
+    // for each profileType create the crypto ownership proofs
 
-    final (did, _) = await getDidAndKid(
-      didKeyType: didKeyType,
-      privateKey: privateKey,
-      profileCubit: profileCubit,
-    );
+    for (final profileType in ProfileType.values) {
+      // skip enterprise profile if wallet is not enterprise
+      if (!walletContainsEnterpriseProfile &&
+          profileType == ProfileType.enterprise) {
+        continue;
+      }
+      final doNotGenerateProfileType = [
+        ProfileType.ebsiV3,
+        ProfileType.europeanWallet,
+        ProfileType.inji,
+      ];
 
-    final private = jsonDecode(privateKey) as Map<String, dynamic>;
+      if (doNotGenerateProfileType.contains(profileType)) {
+        continue;
+      }
 
-    /// generate the ldp_vc credential
-    final credential = await generateAssociatedWalletCredential(
-      cryptoAccountData: cryptoAccountData,
-      didKitProvider: didKitProvider,
-      keyGenerator: keyGenerator,
-      did: did,
-      customOidc4vcProfile: profileCubit
+      await profileCubit.setProfile(profileType);
+      final didKeyType = profileCubit
           .state
           .model
           .profileSetting
           .selfSovereignIdentityOptions
-          .customOidc4vcProfile,
-      oidc4vc: oidc4vc,
-      privateKey: private,
-      profileType: profileCubit.state.model.profileType,
-      vcFormatType: VCFormatType.ldpVc,
-    );
+          .customOidc4vcProfile
+          .defaultDid;
 
-    if (credential != null) {
-      await modifyCredential(credential: credential);
-
-      await insertCredential(
-        credential: credential,
-        showMessage: false,
-        uri: Uri.parse(Parameters.walletIssuer),
+      final privateKey = await getPrivateKey(
+        didKeyType: didKeyType,
+        profileCubit: profileCubit,
       );
-    }
 
-    /// generate the cd+SD-JWT credential
-    final dcSdJwtCredential = await generateAssociatedWalletCredential(
-      cryptoAccountData: cryptoAccountData,
-      didKitProvider: didKitProvider,
-      keyGenerator: keyGenerator,
-      did: did,
-      customOidc4vcProfile: profileCubit
-          .state
-          .model
-          .profileSetting
-          .selfSovereignIdentityOptions
-          .customOidc4vcProfile,
-      oidc4vc: oidc4vc,
-      privateKey: private,
-      profileType: profileCubit.state.model.profileType,
-      vcFormatType: VCFormatType.dcSdJWT,
-    );
-
-    if (dcSdJwtCredential != null) {
-      await modifyCredential(credential: dcSdJwtCredential);
-
-      await insertCredential(
-        credential: dcSdJwtCredential,
-        showMessage: false,
-        uri: Uri.parse(Parameters.walletIssuer),
+      final (did, _) = await getDidAndKid(
+        didKeyType: didKeyType,
+        privateKey: privateKey,
+        profileCubit: profileCubit,
       );
+
+      final private = jsonDecode(privateKey) as Map<String, dynamic>;
+      // get list of supported formats for current profile
+      final formatsSupported =
+          profileCubit
+              .state
+              .model
+              .profileSetting
+              .selfSovereignIdentityOptions
+              .customOidc4vcProfile
+              .formatsSupported ??
+          [];
+      // generate Crypto proof of ownership for each supported formats
+      for (final format in formatsSupported) {
+        final credential = await generateCryptoAccountOwnershipProof(
+          cryptoAccountData: cryptoAccountData,
+          didKitProvider: didKitProvider,
+          keyGenerator: keyGenerator,
+          did: did,
+          customOidc4vcProfile: profileCubit
+              .state
+              .model
+              .profileSetting
+              .selfSovereignIdentityOptions
+              .customOidc4vcProfile,
+          oidc4vc: oidc4vc,
+          privateKey: private,
+          profileType: profileCubit.state.model.profileType,
+          vcFormatType: format,
+        );
+
+        if (credential != null) {
+          await modifyCredential(credential: credential);
+
+          await insertCredential(
+            credential: credential,
+            showMessage: false,
+            uri: Uri.parse(Parameters.walletIssuer),
+          );
+        }
+      }
     }
+    await profileCubit.setProfile(currentProfileType);
   }
 
   ///get dummy cards
@@ -1017,7 +1025,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         blockchainType: cryptoAccount.blockchainType,
       );
 
-      await insertAssociatedWalletCredential(
+      await insertCryptoAccountOwnershipProof(
         cryptoAccountData: cryptoAccountData,
       );
     }

@@ -703,11 +703,11 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
           ) as _i16.Future<List<_i5.CredentialModel>>);
 
   @override
-  _i16.Future<void> insertAssociatedWalletCredential(
+  _i16.Future<void> insertCryptoAccountOwnershipProof(
           {required _i10.CryptoAccountData? cryptoAccountData}) =>
       (super.noSuchMethod(
         Invocation.method(
-          #insertAssociatedWalletCredential,
+          #insertCryptoAccountOwnershipProof,
           [],
           {#cryptoAccountData: cryptoAccountData},
         ),

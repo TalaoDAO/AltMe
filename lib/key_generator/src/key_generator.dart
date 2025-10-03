@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:typed_data';
 import 'package:altme/key_generator/src/enum.dart';
 import 'package:bip32/bip32.dart' as bip32;

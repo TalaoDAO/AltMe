@@ -5,6 +5,7 @@ enum MediaType {
   selectiveDisclosure,
   dPop,
   dcSdJWT,
+  vcSdJWT,
 }
 
 extension MediaTypeX on MediaType {
@@ -22,6 +23,8 @@ extension MediaTypeX on MediaType {
         return 'dpop+jwt';
       case MediaType.dcSdJWT:
         return 'dc+sd-jwt';
+      case MediaType.vcSdJWT:
+        return 'vc+sd-jwt';
     }
   }
 }
