@@ -1300,11 +1300,15 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
       ) as _i16.Future<_i5.ProfileModel>);
 
   @override
-  _i16.Future<void> update(_i5.ProfileModel? profileModel) =>
+  _i16.Future<void> update(
+    _i5.ProfileModel? profileModel, {
+    _i15.AppStatus? status,
+  }) =>
       (super.noSuchMethod(
         Invocation.method(
           #update,
           [profileModel],
+          {#status: status},
         ),
         returnValue: _i16.Future<void>.value(),
         returnValueForMissingStub: _i16.Future<void>.value(),
@@ -1440,11 +1444,15 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
       ) as _i16.Future<void>);
 
   @override
-  _i16.Future<void> setProfile(_i15.ProfileType? profileType) =>
+  _i16.Future<void> setProfile(
+    _i15.ProfileType? profileType, {
+    _i15.AppStatus? status,
+  }) =>
       (super.noSuchMethod(
         Invocation.method(
           #setProfile,
           [profileType],
+          {#status: status},
         ),
         returnValue: _i16.Future<void>.value(),
         returnValueForMissingStub: _i16.Future<void>.value(),
