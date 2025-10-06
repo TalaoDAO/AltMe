@@ -505,7 +505,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         continue;
       }
 
-      await profileCubit.setProfile(profileType);
+      await profileCubit.setProfile(profileType, status: AppStatus.idle);
       final didKeyType = profileCubit
           .state
           .model

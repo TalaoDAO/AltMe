@@ -429,7 +429,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  Future<void> update(ProfileModel profileModel) async {
+  Future<void> update(ProfileModel profileModel, {AppStatus? status}) async {
     emit(state.loading());
     final log = getLogger('ProfileCubit - update');
 
@@ -459,7 +459,12 @@ class ProfileCubit extends Cubit<ProfileState> {
         profileModel.profileType.toString(),
       );
 
-      emit(state.copyWith(model: profileModel, status: AppStatus.success));
+      emit(
+        state.copyWith(
+          model: profileModel,
+          status: status ?? AppStatus.success,
+        ),
+      );
     } catch (e, s) {
       log.e('something went wrong', error: e, stackTrace: s);
 
@@ -715,7 +720,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     return super.close();
   }
 
-  Future<void> setProfile(ProfileType profileType) async {
+  Future<void> setProfile(ProfileType profileType, {AppStatus? status}) async {
     final previousProfileType = state.model.profileType;
     if (previousProfileType == ProfileType.custom) {
       await secureStorageProvider.set(
@@ -745,6 +750,7 @@ class ProfileCubit extends Cubit<ProfileState> {
                 .customOidc4vcProfile
                 .clientSecret,
           ),
+          status: status,
         );
       // case ProfileType.ebsiV4:
       //   await update(
@@ -780,6 +786,7 @@ class ProfileCubit extends Cubit<ProfileState> {
                 .customOidc4vcProfile
                 .clientSecret,
           ),
+          status: status,
         );
 
       case ProfileType.diipv3:
@@ -802,6 +809,7 @@ class ProfileCubit extends Cubit<ProfileState> {
                 .customOidc4vcProfile
                 .clientSecret,
           ),
+          status: status,
         );
       case ProfileType.diipv4:
         await update(
@@ -823,6 +831,7 @@ class ProfileCubit extends Cubit<ProfileState> {
                 .customOidc4vcProfile
                 .clientSecret,
           ),
+          status: status,
         );
       case ProfileType.custom:
         final String? customProfileSettingBackup = await secureStorageProvider
@@ -844,6 +853,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             profileType: profileType,
             profileSetting: customProfileSetting,
           ),
+          status: status,
         );
       case ProfileType.enterprise:
         final String enterpriseProfileSettingData =
@@ -865,6 +875,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             enterpriseWalletName:
                 enterpriseProfileSetting.generalOptions.profileName,
           ),
+          status: status,
         );
       case ProfileType.europeanWallet:
         final profileSetting = await _setupWalletProfile(
@@ -878,6 +889,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             profileType: profileType,
             profileSetting: profileSetting,
           ),
+          status: status,
         );
         emit(state.copyWith(status: AppStatus.addEuropeanProfile));
 
@@ -893,6 +905,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             profileType: profileType,
             profileSetting: profileSetting,
           ),
+          status: status,
         );
         emit(state.copyWith(status: AppStatus.addInjiProfile));
     }

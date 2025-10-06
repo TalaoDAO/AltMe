@@ -313,6 +313,8 @@ class MaterialAppDefinition extends StatelessWidget {
         return BlocBuilder<ThemeCubit, ThemeState>(
           builder: (themeContext, themeState) {
             return BlocBuilder<ProfileCubit, ProfileState>(
+              buildWhen: (previousState, currentState) =>
+                  currentState.status == AppStatus.success,
               builder: (profileContext, profileState) {
                 return MaterialApp(
                   locale: state.locale,
