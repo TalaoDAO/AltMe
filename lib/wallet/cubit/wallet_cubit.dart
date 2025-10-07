@@ -214,7 +214,6 @@ class WalletCubit extends Cubit<WalletState> {
     final updatedCryptoAccount = CryptoAccount(data: cryptoAccountDataList);
     await _saveCryptoAccountDataInStorage(updatedCryptoAccount);
 
-    await Future<void>.delayed(const Duration(milliseconds: 500));
     await walletConnectCubit.initialise();
 
     /// set new account as current

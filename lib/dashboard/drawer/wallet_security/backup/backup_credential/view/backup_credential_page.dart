@@ -73,8 +73,6 @@ class BackupCredentialView extends StatelessWidget {
               context: context,
               stateMessage: state.message!,
             );
-            //set a delay to sure about showing message
-            await Future<void>.delayed(const Duration(milliseconds: 800));
           }
 
           if (state.status == AppStatus.success) {

@@ -38,7 +38,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   Future<void> verifyCredential(CredentialModel item) async {
     try {
       emit(state.copyWith(status: AppStatus.loading));
-      await Future<void>.delayed(const Duration(milliseconds: 500));
 
       final customOidc4vcProfile = profileCubit
           .state

@@ -65,7 +65,6 @@ class ScanCubit extends Cubit<ScanState> {
     required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
     final log = getLogger('ScanCubit - credentialOffer');
 
     try {
@@ -241,7 +240,6 @@ class ScanCubit extends Cubit<ScanState> {
           final vcStr = jsonEncode(jsonCredential);
           final optStr = jsonEncode({'proofPurpose': 'assertionMethod'});
 
-          await Future<void>.delayed(const Duration(milliseconds: 500));
           final verification = await didKitProvider.verifyCredential(
             vcStr,
             optStr,
@@ -336,7 +334,6 @@ class ScanCubit extends Cubit<ScanState> {
     final log = getLogger('ScanCubit - verifiablePresentationRequest');
 
     emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
       final didKeyType = profileCubit
           .state
@@ -445,7 +442,6 @@ class ScanCubit extends Cubit<ScanState> {
     final log = getLogger('ScanCubit - getDIDAuthCHAPI');
 
     emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
     try {
       final didKeyType = profileCubit
           .state
@@ -523,7 +519,6 @@ class ScanCubit extends Cubit<ScanState> {
       'ScanCubit - presentCredentialToOIDC4VPAndSIOPV2Request',
     );
     emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
 
     try {
       final String responseOrRedirectUri =
@@ -660,7 +655,7 @@ class ScanCubit extends Cubit<ScanState> {
         }
       }
 
-      await Future<void>.delayed(const Duration(seconds: 2));
+      await Future<void>.delayed(const Duration(seconds: 1));
       final response = await client.dio.post<dynamic>(
         responseOrRedirectUri,
         data: body,

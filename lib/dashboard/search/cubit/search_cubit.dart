@@ -21,7 +21,6 @@ class SearchCubit extends Cubit<SearchState> {
 
   Future<void> initialize() async {
     emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
     final key = await secureStorageProvider.get(SecureStorageKeys.ssiKey);
     if (key != null) {
       if (key.isNotEmpty) {

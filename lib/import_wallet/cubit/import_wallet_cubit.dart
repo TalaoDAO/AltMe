@@ -62,7 +62,6 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
   }) async {
     final log = getLogger('ImportWalletCubit - import');
     emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
 
     final isFromOnboarding = restoreType != null;
 

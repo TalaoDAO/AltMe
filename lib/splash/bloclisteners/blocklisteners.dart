@@ -10,7 +10,6 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vc/helper_function/get_issuance_data.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vci_accept_host.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vp_siopv2_accept_host.dart';
-import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';

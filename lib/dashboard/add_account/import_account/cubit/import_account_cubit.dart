@@ -57,8 +57,6 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
   Future<void> import({String? accountName}) async {
     final log = getLogger('ImportAccountCubit - import');
     emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
-
     try {
       /// crypto wallet
       final BlockchainType blockchainType = getBlockchainType(

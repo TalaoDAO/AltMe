@@ -101,7 +101,6 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
                   ),
                 ),
               );
-              await Future<void>.delayed(const Duration(milliseconds: 800));
               Navigator.of(context).pop();
               Navigator.of(context).pop();
             }

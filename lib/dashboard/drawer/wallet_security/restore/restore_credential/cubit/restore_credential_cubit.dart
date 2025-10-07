@@ -38,7 +38,6 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
 
   Future<void> recoverWallet() async {
     if (state.backupFilePath == null) return;
-    await Future<void>.delayed(const Duration(milliseconds: 500));
     emit(state.loading());
 
     late String stringForBackup;

@@ -35,7 +35,6 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
 
   Future<void> encryptAndDownloadFile() async {
     emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
     final isPermissionStatusGranted = await getStoragePermission();
 
     try {
