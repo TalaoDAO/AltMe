@@ -556,8 +556,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         );
 
         if (credential != null) {
-          await modifyCredential(credential: credential);
-
           await insertCredential(
             credential: credential,
             showMessage: false,

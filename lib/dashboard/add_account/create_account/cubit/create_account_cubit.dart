@@ -29,7 +29,6 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
     required BlockchainType blockChaintype,
   }) async {
     emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
     final String? ssiMnemonic = await getSecureStorage.get(
       SecureStorageKeys.ssiMnemonic,
     );

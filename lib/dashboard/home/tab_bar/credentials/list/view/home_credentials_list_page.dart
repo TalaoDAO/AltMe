@@ -65,7 +65,9 @@ class _HomeCredentialsListPageState extends State<HomeCredentialsListPage>
           return false;
         },
         listener: (context, state) {
-          onRefresh();
+          if (state.status != AppStatus.idle) {
+            onRefresh();
+          }
         },
         child: BlocBuilder<CredentialsCubit, CredentialsState>(
           builder: (context, state) {

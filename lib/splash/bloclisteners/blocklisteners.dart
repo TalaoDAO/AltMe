@@ -102,12 +102,9 @@ final credentialsBlocListener =
 
         if (state.status == CredentialsStatus.loading) {
           LoadingView().show(context: context);
-        } else {
-          /// during onBoarding
-          final onboardingState = context.read<OnboardingCubit>();
-          if (onboardingState.state.status != AppStatus.loading) {
-            LoadingView().hide();
-          }
+        }
+        if (state.status == CredentialsStatus.populate) {
+          LoadingView().hide();
         }
 
         if (state.message != null &&
