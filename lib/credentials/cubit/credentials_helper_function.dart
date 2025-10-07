@@ -272,16 +272,10 @@ Future<CredentialModel?> generateCryptoAccountOwnershipProof({
           vcFormatType: vcFormatType,
         );
       case VCFormatType.jwtVc:
-        // TODO: Handle this case.
-        throw UnimplementedError();
       case VCFormatType.jwtVcJson:
-        // TODO: Handle this case.
-        throw UnimplementedError();
       case VCFormatType.jwtVcJsonLd:
-        // TODO: Handle this case.
-        throw UnimplementedError();
       case VCFormatType.auto:
-        // TODO: Handle this case.
+        // TODO(all): Handle this case.
         throw UnimplementedError();
     }
   } catch (e, s) {

@@ -140,77 +140,11 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
                             message: l10n.credentialPickShare,
                             child: Builder(
                               builder: (context) {
-                                return MyElevatedButton(
-                                  onPressed: queryState.selected == null
-                                      ? null
-                                      : () async {
-                                          final selectedCredential =
-                                              queryState
-                                                  .filteredCredentialList[queryState
-                                                  .selected!];
-
-                                          final updatedCredentials = List.of(
-                                            credentialsToBePresented,
-                                          )..add(selectedCredential);
-
-                                          if (queryByExampleCubit
-                                              .credentialQuery
-                                              .isNotEmpty) {
-                                            /// Query by Example case
-
-                                            if (credentialQueryIndex + 1 !=
-                                                queryByExampleCubit
-                                                    .credentialQuery
-                                                    .length) {
-                                              await Navigator.of(
-                                                context,
-                                              ).pushReplacement<void, void>(
-                                                // ignore: lines_longer_than_80_chars
-                                                QueryByExampleCredentialPickPage.route(
-                                                  uri: uri,
-                                                  preview: preview,
-                                                  issuer: issuer,
-                                                  credentialQueryIndex:
-                                                      credentialQueryIndex + 1,
-                                                  credentialsToBePresented:
-                                                      updatedCredentials,
-                                                ),
-                                              );
-
-                                              return;
-                                            }
-                                          }
-
-                                          /// Authenticate
-                                          bool authenticated = false;
-                                          await securityCheck(
-                                            context: context,
-                                            title: context
-                                                .l10n
-                                                .typeYourPINCodeToShareTheData,
-                                            localAuthApi: LocalAuthApi(),
-                                            onSuccess: () {
-                                              authenticated = true;
-                                            },
-                                          );
-
-                                          if (!authenticated) {
-                                            return;
-                                          }
-
-                                          await context.read<ScanCubit>()
-                                          // ignore: lines_longer_than_80_chars
-                                          .verifiablePresentationRequest(
-                                            url: uri.toString(),
-                                            credentialsToBePresented:
-                                                updatedCredentials,
-                                            challenge:
-                                                preview['challenge'] as String,
-                                            domain: preview['domain'] as String,
-                                            issuer: issuer,
-                                          );
-                                        },
-                                  text: l10n.credentialPickShare,
+                                return shareButton(
+                                  queryState,
+                                  queryByExampleCubit,
+                                  context,
+                                  l10n,
                                 );
                               },
                             ),
@@ -262,6 +196,71 @@ class QueryByExampleCredentialPickView extends StatelessWidget {
           },
         );
       },
+    );
+  }
+
+  MyElevatedButton shareButton(
+    QueryByExampleCredentialPickState queryState,
+    Query queryByExampleCubit,
+    BuildContext context,
+    AppLocalizations l10n,
+  ) {
+    return MyElevatedButton(
+      onPressed: queryState.selected == null
+          ? null
+          : () async {
+              final selectedCredential =
+                  queryState.filteredCredentialList[queryState.selected!];
+
+              final updatedCredentials = List.of(credentialsToBePresented)
+                ..add(selectedCredential);
+
+              if (queryByExampleCubit.credentialQuery.isNotEmpty) {
+                /// Query by Example case
+
+                if (credentialQueryIndex + 1 !=
+                    queryByExampleCubit.credentialQuery.length) {
+                  await Navigator.of(context).pushReplacement<void, void>(
+                    // ignore: lines_longer_than_80_chars
+                    QueryByExampleCredentialPickPage.route(
+                      uri: uri,
+                      preview: preview,
+                      issuer: issuer,
+                      credentialQueryIndex: credentialQueryIndex + 1,
+                      credentialsToBePresented: updatedCredentials,
+                    ),
+                  );
+
+                  return;
+                }
+              }
+
+              /// Authenticate
+              bool authenticated = false;
+              await securityCheck(
+                context: context,
+                title: context.l10n.typeYourPINCodeToShareTheData,
+                localAuthApi: LocalAuthApi(),
+                onSuccess: () {
+                  authenticated = true;
+                },
+              );
+
+              if (!authenticated) {
+                return;
+              }
+
+              await context.read<ScanCubit>()
+              // ignore: lines_longer_than_80_chars
+              .verifiablePresentationRequest(
+                url: uri.toString(),
+                credentialsToBePresented: updatedCredentials,
+                challenge: preview['challenge'] as String,
+                domain: preview['domain'] as String,
+                issuer: issuer,
+              );
+            },
+      text: l10n.credentialPickShare,
     );
   }
 }

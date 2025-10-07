@@ -8,10 +8,11 @@ class LdpVc {
   final CredentialModel credentialModel;
 
   String? get getPicture {
+    final credentialModelFromCredentialDefinition = credentialModel
+        .credentialSupported?['credential_definition']['credentialSubject'];
     final credentialSubject =
         (credentialModel.credentialSupported?['credentialSubject'] ??
-                credentialModel
-                    .credentialSupported?['credential_definition']['credentialSubject'])
+                credentialModelFromCredentialDefinition)
             as Map<String, dynamic>?;
 
     if (credentialSubject == null) return null;

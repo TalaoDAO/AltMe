@@ -159,65 +159,12 @@ class _CryptoAccountSwitcherState extends State<CryptoAccountSwitcher> {
 
                                     return Slidable(
                                       key: ValueKey(i),
-                                      endActionPane: ActionPane(
-                                        motion: const ScrollMotion(),
-                                        dragDismissible: false,
-                                        children: [
-                                          SlidableAction(
-                                            backgroundColor: Colors.transparent,
-                                            foregroundColor: Theme.of(
-                                              context,
-                                            ).colorScheme.onSurface,
-                                            icon: Icons.delete,
-                                            label: l10n.delete,
-                                            onPressed: (_) async {
-                                              // cannot delete current
-                                              // account
-                                              final currentIndex =
-                                                  state.currentCryptoIndex;
-
-                                              if (currentIndex == i) {
-                                                await showDialog<bool>(
-                                                  context: context,
-                                                  builder: (context) => ConfirmDialog(
-                                                    title: l10n
-                                                        // ignore: lines_longer_than_80_chars
-                                                        .cannotDeleteCurrentAccount,
-                                                    yes: l10n.ok,
-                                                    showNoButton: false,
-                                                  ),
-                                                );
-                                                return;
-                                              }
-
-                                              final value = await showDialog<bool>(
-                                                context: context,
-                                                builder: (context) =>
-                                                    ConfirmDialog(
-                                                      title: l10n
-                                                          .deleteAccountMessage(
-                                                            data.name,
-                                                          ),
-                                                      yes: l10n.ok,
-                                                      showNoButton: false,
-                                                    ),
-                                              );
-
-                                              if (value != null && value) {
-                                                await context
-                                                    .read<
-                                                      // ignore: lines_longer_than_80_chars
-                                                      ManageAccountsCubit
-                                                    >()
-                                                    .deleteCryptoAccount(
-                                                      index: i,
-                                                      blockchainType:
-                                                          data.blockchainType,
-                                                    );
-                                              }
-                                            },
-                                          ),
-                                        ],
+                                      endActionPane: endActionPane(
+                                        context,
+                                        l10n,
+                                        state,
+                                        i,
+                                        data,
                                       ),
                                       child: CryptoAccountItem(
                                         cryptoAccountData: data,
@@ -266,6 +213,67 @@ class _CryptoAccountSwitcherState extends State<CryptoAccountSwitcher> {
           ),
         );
       },
+    );
+  }
+
+  ActionPane endActionPane(
+    BuildContext context,
+    AppLocalizations l10n,
+    ManageAccountsState state,
+    int i,
+    CryptoAccountData data,
+  ) {
+    return ActionPane(
+      motion: const ScrollMotion(),
+      dragDismissible: false,
+      children: [
+        SlidableAction(
+          backgroundColor: Colors.transparent,
+          foregroundColor: Theme.of(context).colorScheme.onSurface,
+          icon: Icons.delete,
+          label: l10n.delete,
+          onPressed: (_) async {
+            // cannot delete current
+            // account
+            final currentIndex = state.currentCryptoIndex;
+
+            if (currentIndex == i) {
+              await showDialog<bool>(
+                context: context,
+                builder: (context) => ConfirmDialog(
+                  title: l10n
+                      // ignore: lines_longer_than_80_chars
+                      .cannotDeleteCurrentAccount,
+                  yes: l10n.ok,
+                  showNoButton: false,
+                ),
+              );
+              return;
+            }
+
+            final value = await showDialog<bool>(
+              context: context,
+              builder: (context) => ConfirmDialog(
+                title: l10n.deleteAccountMessage(data.name),
+                yes: l10n.ok,
+                showNoButton: false,
+              ),
+            );
+
+            if (value != null && value) {
+              await context
+                  .read<
+                    // ignore: lines_longer_than_80_chars
+                    ManageAccountsCubit
+                  >()
+                  .deleteCryptoAccount(
+                    index: i,
+                    blockchainType: data.blockchainType,
+                  );
+            }
+          },
+        ),
+      ],
     );
   }
 }

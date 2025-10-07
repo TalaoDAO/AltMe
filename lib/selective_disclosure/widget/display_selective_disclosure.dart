@@ -396,6 +396,7 @@ class DisclosureLine extends StatelessWidget {
                           .firstWhereOrNull(
                             (ele) =>
                                 ele.keyId ==
+                                // ignore: lines_longer_than_80_chars
                                 '${elementValue["claimKey"]}#${elementValue["sd"]}',
                           );
 

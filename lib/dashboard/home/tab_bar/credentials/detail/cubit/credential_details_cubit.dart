@@ -346,9 +346,9 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         .selfSovereignIdentityOptions
         .customOidc4vcProfile;
 
-    // TODO(hawkbee): Using Dio directly is solving the issue but it probably
-    /// means an issue.
-    /// in the paramaers of DioClient
+    // TODO(hawkbee): Using Dio directly is solving the issue but
+    /// it probably means an issue.
+    /// in the parameters of DioClient
     /// Status invalid of an emailpass in a jwt_vc_json format #3283
     final response = await Dio().get<String>(
       statusListUri,

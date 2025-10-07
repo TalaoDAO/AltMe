@@ -149,7 +149,7 @@ void main() {
       expect(result, equals(faceData));
     });
 
-    test('returns portrait data when picture and face fields are not found', () {
+    test('returns portrait data when picture & face fields are not found', () {
       // Arrange
       const portraitData = 'base64encodedportraitdata';
       when(mockCredentialModel.format).thenReturn(VCFormatType.vcSdJWT.vcValue);
@@ -247,7 +247,7 @@ void main() {
       expect(result, equals(pictureData));
     });
 
-    test('finds multiple picture fields but returns the first one (picture)', () {
+    test('finds multiple picture fields but returns the first one', () {
       // Arrange
       const pictureData = 'base64encodedpicturedata';
       const faceData = 'base64encodedfacedata';

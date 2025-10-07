@@ -48,7 +48,6 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           walletCubit.state.currentAccount!;
 
       switch (connectionBridgeType) {
-        // TODO(bibash): check if tezos or ethereum
 
         case ConnectionBridgeType.beacon:
           final KeyStoreModel sourceKeystore = getKeysFromSecretKey(

@@ -57,7 +57,6 @@ Future<void> blockchainInitialize({
   required String ssiMnemonic,
   required SecureStorageProvider secureStorageProvider,
 }) async {
-  // TODO(bibash): currentCryptoIndex => currentTezosIndex & currentEthIndex
   final String? currentCryptoIndex = await secureStorageProvider.get(
     SecureStorageKeys.currentCryptoIndex,
   );

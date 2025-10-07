@@ -94,19 +94,20 @@ Future<void> oidc4vciAcceptHost({
       // issuer open id configuration from signed metadata is used instead of
       // unsigned open id configuration
 
-      final signedMetadata =
-          oidc4vcParameters.issuerOpenIdConfiguration.signedMetadata;
+      final issuerOpenIdConfiguration =
+          oidc4vcParameters.issuerOpenIdConfiguration;
+
+      final signedMetadata = issuerOpenIdConfiguration.signedMetadata;
 
       oidc4vcParameters = oidc4vcParameters.copyWith(
         issuerOpenIdConfiguration: getIssuerOpenIdConfiguration(
-          issuerOpenIdConfiguration:
-              oidc4vcParameters.issuerOpenIdConfiguration,
+          issuerOpenIdConfiguration: issuerOpenIdConfiguration,
         ),
       );
 
       // get new issuer open id configuration from signed metadata
       final trustedEntity = getIssuerFromTrustedList(
-        issuerOpenIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
+        issuerOpenIdConfiguration: issuerOpenIdConfiguration,
         trustedList: trustedList,
       );
       if (trustedEntity != null) {
@@ -119,11 +120,10 @@ Future<void> oidc4vciAcceptHost({
         if (credentialConfigurationIds != null &&
             credentialConfigurationIds is List) {
           for (final credentialConfigurationId in credentialConfigurationIds) {
-            if (!trustedEntity.vcTypes!.contains(
-              oidc4vcParameters
-                  .issuerOpenIdConfiguration
-                  .credentialConfigurationsSupported[credentialConfigurationId]['vct'],
-            )) {
+            final vct = issuerOpenIdConfiguration
+                // ignore: lines_longer_than_80_chars
+                .credentialConfigurationsSupported[credentialConfigurationId]['vct'];
+            if (!trustedEntity.vcTypes!.contains(vct)) {
               throw Exception(
                 // ignore: lines_longer_than_80_chars
                 "$credentialConfigurationId is not in the trusted entity's vcTypes",

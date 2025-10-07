@@ -159,8 +159,8 @@ class Parameters {
 
   static const String doNotDisplayMe = 'doNotDisplayMeMggK5GvU7';
 
-  // Used to display picture on the card. This picture is found in the credential
-  // data
+  // Used to display picture on the card. This picture is found in the 
+  // credential data
   static const pictureOnCardKeyList = ['picture', 'face', 'portrait'];
   static const pictureOnCardValueTypeList = ['image/jpeg', 'image/png'];
 }

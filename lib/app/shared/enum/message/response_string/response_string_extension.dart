@@ -498,6 +498,7 @@ extension ResponseStringX on ResponseString {
         return globalMessage.RESPONSE_STRING_theWalletIsSuspended;
 
       case ResponseString.RESPONSE_STRING_couldNotFindTheAccountWithThisAddress:
+        // ignore: lines_longer_than_80_chars
         return globalMessage.RESPONSE_STRING_couldNotFindTheAccountWithThisAddress(
           injectedMessage ?? '',
         );
