@@ -319,10 +319,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             : null,
       ),
     );
-
-    // if (qrCodeScanCubit.missingCredentialCompleter != null) {
-    //   qrCodeScanCubit.missingCredentialCompleter!.complete(true);
-    // }
   }
 
   void enableCredentialCategory({required CredentialCategory category}) {

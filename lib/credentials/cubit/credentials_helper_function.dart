@@ -175,6 +175,7 @@ Future<CredentialModel?> generateCryptoAccountOwnershipProof({
         final payload = {
           'iat': iat,
           'vct': vct,
+          'iss': cryptoAccountData.walletAddress,
           'vct#integrity': vctIntegrity,
           'blockchain_network': cryptoAccountData.blockchainType.name,
           'wallet_address': cryptoAccountData.walletAddress,
