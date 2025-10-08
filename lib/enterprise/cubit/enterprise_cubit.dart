@@ -160,6 +160,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       await profileCubit.setProfileSetting(
         profileSetting: profileSetting,
         profileType: ProfileType.enterprise,
+        walletType: WalletType.enterprise,
       );
       final helpCenterOptions = profileSetting.helpCenterOptions;
 
@@ -175,9 +176,6 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       }
 
       // chat is not initiatied at start
-
-      /// uprade wallet to enterprise
-      await profileCubit.setWalletType(walletType: WalletType.enterprise);
 
       final blockchainOptions = profileSetting.blockchainOptions;
       if (blockchainOptions != null && Parameters.walletHandlesCrypto) {
@@ -345,6 +343,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       await profileCubit.setProfileSetting(
         profileSetting: profileSetting,
         profileType: ProfileType.enterprise,
+        walletType: WalletType.enterprise,
       );
       // if (isVerified == VerificationType.verified) {
       //   emit(

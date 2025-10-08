@@ -381,7 +381,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         if (trustedListUrl != null &&
             trustedListUrl.isNotEmpty &&
             needsUpdate) {
-          profileModel = await getTrustedList(trustedListUrl, profileModel);
+          profileModel = await addTrustedList(trustedListUrl, profileModel);
         }
       }
       profileModel = profileModel.copyWith(oidc4VCIStack: oidc4VCIStack);
@@ -399,7 +399,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  Future<ProfileModel> getTrustedList(
+  Future<ProfileModel> addTrustedList(
     String trustedListUrl,
     ProfileModel profileModel,
   ) async {
@@ -487,11 +487,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     await update(profileModel);
   }
 
-  Future<void> setWalletType({required WalletType walletType}) async {
-    final profileModel = state.model.copyWith(walletType: walletType);
-    await update(profileModel);
-  }
-
   Future<void> updateProfileSetting({
     DidKeyType? didKeyType,
     bool? securityLevel,
@@ -528,7 +523,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             'Trusted list URL is not set in the profile settings.',
           );
         }
-        trustedListContent = (await getTrustedList(
+        trustedListContent = (await addTrustedList(
           trustedListUrl,
           state.model,
         )).trustedList;
@@ -603,6 +598,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> setProfileSetting({
     required ProfileSetting profileSetting,
     required ProfileType profileType,
+    required WalletType? walletType,
   }) async {
     final externalIssuers =
         profileSetting.discoverCardsOptions?.displayExternalIssuer;
@@ -679,17 +675,15 @@ class ProfileCubit extends Cubit<ProfileState> {
       }
     }
     late TrustedList? trustedListContent;
-    final trustedList = profileSetting.walletSecurityOptions.trustedList;
-    if (trustedList) {
+    final hasTrustedList = profileSetting.walletSecurityOptions.trustedList;
+    if (hasTrustedList) {
       final trustedListUrl =
           state.model.profileSetting.walletSecurityOptions.trustedListUrl;
       if (trustedListUrl == null || trustedListUrl.isEmpty) {
         throw Exception('Trusted list URL is not set in the profile settings.');
       }
-      trustedListContent = (await getTrustedList(
-        trustedListUrl,
-        state.model,
-      )).trustedList;
+      final trustedList = await addTrustedList(trustedListUrl, state.model);
+      trustedListContent = trustedList.trustedList;
     } else {
       trustedListContent = null;
     }
@@ -710,6 +704,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       profileType: profileType,
       enterpriseWalletName: profileSetting.generalOptions.profileName,
       trustedList: trustedListContent,
+      walletType: walletType,
     );
     await update(profileModel);
   }

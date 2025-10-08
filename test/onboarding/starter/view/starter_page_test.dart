@@ -15,6 +15,7 @@ class MockProfileCubit extends MockCubit<ProfileState> implements ProfileCubit {
   Future<void> setProfileSetting({
     required ProfileSetting profileSetting,
     required ProfileType profileType,
+    WalletType? walletType,
   }) async {}
 }
 
@@ -41,10 +42,6 @@ void main() {
         () => profileCubit.state,
       ).thenReturn(ProfileState(model: ProfileModel.empty()));
 
-      when(
-        () => profileCubit.setWalletType(walletType: WalletType.personal),
-      ).thenAnswer((_) async {});
-
       // when(
       //   () => profileCubit.setProfileSetting(
       //     profileSetting: profileSetting,
@@ -70,10 +67,6 @@ void main() {
         );
 
         await tester.tap(find.text('Create account'.toUpperCase()));
-
-        verify(
-          () => profileCubit.setWalletType(walletType: WalletType.personal),
-        ).called(1);
 
         // verify(
         //   () => profileCubit.setProfileSetting(
@@ -107,10 +100,6 @@ void main() {
         );
 
         await tester.tap(find.text('Import account'.toUpperCase()));
-
-        verify(
-          () => profileCubit.setWalletType(walletType: WalletType.personal),
-        ).called(1);
 
         // verify(
         //   () => profileCubit.setProfileSetting(

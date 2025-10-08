@@ -40,243 +40,128 @@ import 'package:secure_storage/secure_storage.dart' as _i3;
 // ignore_for_file: subtype_of_sealed_class
 
 class _FakeLogger_0 extends _i1.SmartFake implements _i2.Logger {
-  _FakeLogger_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeLogger_0(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeSecureStorageProvider_1 extends _i1.SmartFake
     implements _i3.SecureStorageProvider {
-  _FakeSecureStorageProvider_1(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeSecureStorageProvider_1(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeDio_2 extends _i1.SmartFake implements _i4.Dio {
-  _FakeDio_2(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeDio_2(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeCredentialsRepository_3 extends _i1.SmartFake
     implements _i5.CredentialsRepository {
-  _FakeCredentialsRepository_3(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeCredentialsRepository_3(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeDIDKitProvider_4 extends _i1.SmartFake
     implements _i6.DIDKitProvider {
-  _FakeDIDKitProvider_4(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeDIDKitProvider_4(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeKeyGenerator_5 extends _i1.SmartFake implements _i7.KeyGenerator {
-  _FakeKeyGenerator_5(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeKeyGenerator_5(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeAdvanceSettingsCubit_6 extends _i1.SmartFake
     implements _i5.AdvanceSettingsCubit {
-  _FakeAdvanceSettingsCubit_6(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeAdvanceSettingsCubit_6(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeJWTDecode_7 extends _i1.SmartFake implements _i8.JWTDecode {
-  _FakeJWTDecode_7(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeJWTDecode_7(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeProfileCubit_8 extends _i1.SmartFake implements _i5.ProfileCubit {
-  _FakeProfileCubit_8(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeProfileCubit_8(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeOIDC4VC_9 extends _i1.SmartFake implements _i9.OIDC4VC {
-  _FakeOIDC4VC_9(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeOIDC4VC_9(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeWalletCubit_10 extends _i1.SmartFake implements _i10.WalletCubit {
-  _FakeWalletCubit_10(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeWalletCubit_10(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeActivityLogManager_11 extends _i1.SmartFake
     implements _i11.ActivityLogManager {
-  _FakeActivityLogManager_11(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeActivityLogManager_11(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeCredentialsState_12 extends _i1.SmartFake
     implements _i12.CredentialsState {
-  _FakeCredentialsState_12(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeCredentialsState_12(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeDIDKitInterface_13 extends _i1.SmartFake
     implements _i13.DIDKitInterface {
-  _FakeDIDKitInterface_13(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeDIDKitInterface_13(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeLangCubit_14 extends _i1.SmartFake implements _i14.LangCubit {
-  _FakeLangCubit_14(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeLangCubit_14(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeProfileState_15 extends _i1.SmartFake implements _i5.ProfileState {
-  _FakeProfileState_15(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeProfileState_15(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeProfileModel_16 extends _i1.SmartFake implements _i5.ProfileModel {
-  _FakeProfileModel_16(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeProfileModel_16(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeHomeCubit_17 extends _i1.SmartFake implements _i5.HomeCubit {
-  _FakeHomeCubit_17(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeHomeCubit_17(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeWalletState_18 extends _i1.SmartFake implements _i10.WalletState {
-  _FakeWalletState_18(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeWalletState_18(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeCryptoAccountData_19 extends _i1.SmartFake
     implements _i10.CryptoAccountData {
-  _FakeCryptoAccountData_19(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeCryptoAccountData_19(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeOidc4vcParameters_20 extends _i1.SmartFake
     implements _i9.Oidc4vcParameters {
-  _FakeOidc4vcParameters_20(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeOidc4vcParameters_20(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeResponse_21<T> extends _i1.SmartFake implements _i4.Response<T> {
-  _FakeResponse_21(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeResponse_21(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 class _FakeOpenIdConfiguration_22 extends _i1.SmartFake
     implements _i9.OpenIdConfiguration {
-  _FakeOpenIdConfiguration_22(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeOpenIdConfiguration_22(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 /// A class which mocks [DioClient].
@@ -288,40 +173,37 @@ class MockDioClient extends _i1.Mock implements _i15.DioClient {
   }
 
   @override
-  _i2.Logger get log => (super.noSuchMethod(
-        Invocation.getter(#log),
-        returnValue: _FakeLogger_0(
-          this,
-          Invocation.getter(#log),
-        ),
-      ) as _i2.Logger);
+  _i2.Logger get log =>
+      (super.noSuchMethod(
+            Invocation.getter(#log),
+            returnValue: _FakeLogger_0(this, Invocation.getter(#log)),
+          )
+          as _i2.Logger);
 
   @override
-  _i3.SecureStorageProvider get secureStorageProvider => (super.noSuchMethod(
-        Invocation.getter(#secureStorageProvider),
-        returnValue: _FakeSecureStorageProvider_1(
-          this,
-          Invocation.getter(#secureStorageProvider),
-        ),
-      ) as _i3.SecureStorageProvider);
+  _i3.SecureStorageProvider get secureStorageProvider =>
+      (super.noSuchMethod(
+            Invocation.getter(#secureStorageProvider),
+            returnValue: _FakeSecureStorageProvider_1(
+              this,
+              Invocation.getter(#secureStorageProvider),
+            ),
+          )
+          as _i3.SecureStorageProvider);
 
   @override
-  _i4.Dio get dio => (super.noSuchMethod(
-        Invocation.getter(#dio),
-        returnValue: _FakeDio_2(
-          this,
-          Invocation.getter(#dio),
-        ),
-      ) as _i4.Dio);
+  _i4.Dio get dio =>
+      (super.noSuchMethod(
+            Invocation.getter(#dio),
+            returnValue: _FakeDio_2(this, Invocation.getter(#dio)),
+          )
+          as _i4.Dio);
 
   @override
   set baseUrl(String? _baseUrl) => super.noSuchMethod(
-        Invocation.setter(
-          #baseUrl,
-          _baseUrl,
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.setter(#baseUrl, _baseUrl),
+    returnValueForMissingStub: null,
+  );
 
   @override
   _i16.Future<dynamic> get(
@@ -331,25 +213,26 @@ class MockDioClient extends _i1.Mock implements _i15.DioClient {
     _i4.CancelToken? cancelToken,
     _i4.ProgressCallback? onReceiveProgress,
     Map<String, dynamic>? headers = const {
-      r'Content-Type': r'application/json; charset=UTF-8'
+      r'Content-Type': r'application/json; charset=UTF-8',
     },
     bool? isCachingEnabled = false,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #get,
-          [uri],
-          {
-            #queryParameters: queryParameters,
-            #options: options,
-            #cancelToken: cancelToken,
-            #onReceiveProgress: onReceiveProgress,
-            #headers: headers,
-            #isCachingEnabled: isCachingEnabled,
-          },
-        ),
-        returnValue: _i16.Future<dynamic>.value(),
-      ) as _i16.Future<dynamic>);
+            Invocation.method(
+              #get,
+              [uri],
+              {
+                #queryParameters: queryParameters,
+                #options: options,
+                #cancelToken: cancelToken,
+                #onReceiveProgress: onReceiveProgress,
+                #headers: headers,
+                #isCachingEnabled: isCachingEnabled,
+              },
+            ),
+            returnValue: _i16.Future<dynamic>.value(),
+          )
+          as _i16.Future<dynamic>);
 
   @override
   _i16.Future<void> getSpecificHeader(
@@ -357,16 +240,11 @@ class MockDioClient extends _i1.Mock implements _i15.DioClient {
     Map<String, dynamic>? headers,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getSpecificHeader,
-          [
-            uri,
-            headers,
-          ],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#getSpecificHeader, [uri, headers]),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i16.Future<dynamic> post(
@@ -378,36 +256,34 @@ class MockDioClient extends _i1.Mock implements _i15.DioClient {
     _i4.ProgressCallback? onSendProgress,
     _i4.ProgressCallback? onReceiveProgress,
     Map<String, dynamic>? headers = const {
-      r'Content-Type': r'application/json; charset=UTF-8'
+      r'Content-Type': r'application/json; charset=UTF-8',
     },
     int? timeout,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #post,
-          [uri],
-          {
-            #data: data,
-            #queryParameters: queryParameters,
-            #options: options,
-            #cancelToken: cancelToken,
-            #onSendProgress: onSendProgress,
-            #onReceiveProgress: onReceiveProgress,
-            #headers: headers,
-            #timeout: timeout,
-          },
-        ),
-        returnValue: _i16.Future<dynamic>.value(),
-      ) as _i16.Future<dynamic>);
+            Invocation.method(
+              #post,
+              [uri],
+              {
+                #data: data,
+                #queryParameters: queryParameters,
+                #options: options,
+                #cancelToken: cancelToken,
+                #onSendProgress: onSendProgress,
+                #onReceiveProgress: onReceiveProgress,
+                #headers: headers,
+                #timeout: timeout,
+              },
+            ),
+            returnValue: _i16.Future<dynamic>.value(),
+          )
+          as _i16.Future<dynamic>);
 
   @override
   void resetTimeout(int? timeout) => super.noSuchMethod(
-        Invocation.method(
-          #resetTimeout,
-          [timeout],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#resetTimeout, [timeout]),
+    returnValueForMissingStub: null,
+  );
 }
 
 /// A class which mocks [CredentialsCubit].
@@ -419,134 +295,149 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
   }
 
   @override
-  _i5.CredentialsRepository get credentialsRepository => (super.noSuchMethod(
-        Invocation.getter(#credentialsRepository),
-        returnValue: _FakeCredentialsRepository_3(
-          this,
-          Invocation.getter(#credentialsRepository),
-        ),
-      ) as _i5.CredentialsRepository);
+  _i5.CredentialsRepository get credentialsRepository =>
+      (super.noSuchMethod(
+            Invocation.getter(#credentialsRepository),
+            returnValue: _FakeCredentialsRepository_3(
+              this,
+              Invocation.getter(#credentialsRepository),
+            ),
+          )
+          as _i5.CredentialsRepository);
 
   @override
-  _i3.SecureStorageProvider get secureStorageProvider => (super.noSuchMethod(
-        Invocation.getter(#secureStorageProvider),
-        returnValue: _FakeSecureStorageProvider_1(
-          this,
-          Invocation.getter(#secureStorageProvider),
-        ),
-      ) as _i3.SecureStorageProvider);
+  _i3.SecureStorageProvider get secureStorageProvider =>
+      (super.noSuchMethod(
+            Invocation.getter(#secureStorageProvider),
+            returnValue: _FakeSecureStorageProvider_1(
+              this,
+              Invocation.getter(#secureStorageProvider),
+            ),
+          )
+          as _i3.SecureStorageProvider);
 
   @override
-  _i6.DIDKitProvider get didKitProvider => (super.noSuchMethod(
-        Invocation.getter(#didKitProvider),
-        returnValue: _FakeDIDKitProvider_4(
-          this,
-          Invocation.getter(#didKitProvider),
-        ),
-      ) as _i6.DIDKitProvider);
+  _i6.DIDKitProvider get didKitProvider =>
+      (super.noSuchMethod(
+            Invocation.getter(#didKitProvider),
+            returnValue: _FakeDIDKitProvider_4(
+              this,
+              Invocation.getter(#didKitProvider),
+            ),
+          )
+          as _i6.DIDKitProvider);
 
   @override
-  _i7.KeyGenerator get keyGenerator => (super.noSuchMethod(
-        Invocation.getter(#keyGenerator),
-        returnValue: _FakeKeyGenerator_5(
-          this,
-          Invocation.getter(#keyGenerator),
-        ),
-      ) as _i7.KeyGenerator);
+  _i7.KeyGenerator get keyGenerator =>
+      (super.noSuchMethod(
+            Invocation.getter(#keyGenerator),
+            returnValue: _FakeKeyGenerator_5(
+              this,
+              Invocation.getter(#keyGenerator),
+            ),
+          )
+          as _i7.KeyGenerator);
 
   @override
-  _i5.AdvanceSettingsCubit get advanceSettingsCubit => (super.noSuchMethod(
-        Invocation.getter(#advanceSettingsCubit),
-        returnValue: _FakeAdvanceSettingsCubit_6(
-          this,
-          Invocation.getter(#advanceSettingsCubit),
-        ),
-      ) as _i5.AdvanceSettingsCubit);
+  _i5.AdvanceSettingsCubit get advanceSettingsCubit =>
+      (super.noSuchMethod(
+            Invocation.getter(#advanceSettingsCubit),
+            returnValue: _FakeAdvanceSettingsCubit_6(
+              this,
+              Invocation.getter(#advanceSettingsCubit),
+            ),
+          )
+          as _i5.AdvanceSettingsCubit);
 
   @override
-  _i8.JWTDecode get jwtDecode => (super.noSuchMethod(
-        Invocation.getter(#jwtDecode),
-        returnValue: _FakeJWTDecode_7(
-          this,
-          Invocation.getter(#jwtDecode),
-        ),
-      ) as _i8.JWTDecode);
+  _i8.JWTDecode get jwtDecode =>
+      (super.noSuchMethod(
+            Invocation.getter(#jwtDecode),
+            returnValue: _FakeJWTDecode_7(this, Invocation.getter(#jwtDecode)),
+          )
+          as _i8.JWTDecode);
 
   @override
-  _i5.ProfileCubit get profileCubit => (super.noSuchMethod(
-        Invocation.getter(#profileCubit),
-        returnValue: _FakeProfileCubit_8(
-          this,
-          Invocation.getter(#profileCubit),
-        ),
-      ) as _i5.ProfileCubit);
+  _i5.ProfileCubit get profileCubit =>
+      (super.noSuchMethod(
+            Invocation.getter(#profileCubit),
+            returnValue: _FakeProfileCubit_8(
+              this,
+              Invocation.getter(#profileCubit),
+            ),
+          )
+          as _i5.ProfileCubit);
 
   @override
-  _i9.OIDC4VC get oidc4vc => (super.noSuchMethod(
-        Invocation.getter(#oidc4vc),
-        returnValue: _FakeOIDC4VC_9(
-          this,
-          Invocation.getter(#oidc4vc),
-        ),
-      ) as _i9.OIDC4VC);
+  _i9.OIDC4VC get oidc4vc =>
+      (super.noSuchMethod(
+            Invocation.getter(#oidc4vc),
+            returnValue: _FakeOIDC4VC_9(this, Invocation.getter(#oidc4vc)),
+          )
+          as _i9.OIDC4VC);
 
   @override
-  _i10.WalletCubit get walletCubit => (super.noSuchMethod(
-        Invocation.getter(#walletCubit),
-        returnValue: _FakeWalletCubit_10(
-          this,
-          Invocation.getter(#walletCubit),
-        ),
-      ) as _i10.WalletCubit);
+  _i10.WalletCubit get walletCubit =>
+      (super.noSuchMethod(
+            Invocation.getter(#walletCubit),
+            returnValue: _FakeWalletCubit_10(
+              this,
+              Invocation.getter(#walletCubit),
+            ),
+          )
+          as _i10.WalletCubit);
 
   @override
-  _i11.ActivityLogManager get activityLogManager => (super.noSuchMethod(
-        Invocation.getter(#activityLogManager),
-        returnValue: _FakeActivityLogManager_11(
-          this,
-          Invocation.getter(#activityLogManager),
-        ),
-      ) as _i11.ActivityLogManager);
+  _i11.ActivityLogManager get activityLogManager =>
+      (super.noSuchMethod(
+            Invocation.getter(#activityLogManager),
+            returnValue: _FakeActivityLogManager_11(
+              this,
+              Invocation.getter(#activityLogManager),
+            ),
+          )
+          as _i11.ActivityLogManager);
 
   @override
-  _i2.Logger get log => (super.noSuchMethod(
-        Invocation.getter(#log),
-        returnValue: _FakeLogger_0(
-          this,
-          Invocation.getter(#log),
-        ),
-      ) as _i2.Logger);
+  _i2.Logger get log =>
+      (super.noSuchMethod(
+            Invocation.getter(#log),
+            returnValue: _FakeLogger_0(this, Invocation.getter(#log)),
+          )
+          as _i2.Logger);
 
   @override
-  _i12.CredentialsState get state => (super.noSuchMethod(
-        Invocation.getter(#state),
-        returnValue: _FakeCredentialsState_12(
-          this,
-          Invocation.getter(#state),
-        ),
-      ) as _i12.CredentialsState);
+  _i12.CredentialsState get state =>
+      (super.noSuchMethod(
+            Invocation.getter(#state),
+            returnValue: _FakeCredentialsState_12(
+              this,
+              Invocation.getter(#state),
+            ),
+          )
+          as _i12.CredentialsState);
 
   @override
-  _i16.Stream<_i12.CredentialsState> get stream => (super.noSuchMethod(
-        Invocation.getter(#stream),
-        returnValue: _i16.Stream<_i12.CredentialsState>.empty(),
-      ) as _i16.Stream<_i12.CredentialsState>);
+  _i16.Stream<_i12.CredentialsState> get stream =>
+      (super.noSuchMethod(
+            Invocation.getter(#stream),
+            returnValue: _i16.Stream<_i12.CredentialsState>.empty(),
+          )
+          as _i16.Stream<_i12.CredentialsState>);
 
   @override
-  bool get isClosed => (super.noSuchMethod(
-        Invocation.getter(#isClosed),
-        returnValue: false,
-      ) as bool);
+  bool get isClosed =>
+      (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
+          as bool);
 
   @override
-  _i16.Future<void> loadAllCredentials() => (super.noSuchMethod(
-        Invocation.method(
-          #loadAllCredentials,
-          [],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+  _i16.Future<void> loadAllCredentials() =>
+      (super.noSuchMethod(
+            Invocation.method(#loadAllCredentials, []),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i16.Future<void> addWalletCredential({
@@ -554,26 +445,20 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
     required String? profileLinkedId,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #addWalletCredential,
-          [],
-          {
-            #qrCodeScanCubit: qrCodeScanCubit,
-            #profileLinkedId: profileLinkedId,
-          },
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#addWalletCredential, [], {
+              #qrCodeScanCubit: qrCodeScanCubit,
+              #profileLinkedId: profileLinkedId,
+            }),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   void reset() => super.noSuchMethod(
-        Invocation.method(
-          #reset,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#reset, []),
+    returnValueForMissingStub: null,
+  );
 
   @override
   _i16.Future<void> deleteById({
@@ -581,17 +466,14 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
     bool? showMessage = true,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #deleteById,
-          [],
-          {
-            #id: id,
-            #showMessage: showMessage,
-          },
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#deleteById, [], {
+              #id: id,
+              #showMessage: showMessage,
+            }),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i16.Future<void> updateCredential({
@@ -599,29 +481,25 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
     bool? showMessage = true,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #updateCredential,
-          [],
-          {
-            #credential: credential,
-            #showMessage: showMessage,
-          },
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#updateCredential, [], {
+              #credential: credential,
+              #showMessage: showMessage,
+            }),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i16.Future<void> handleUnknownRevocationStatus(
-          _i5.CredentialModel? credential) =>
+    _i5.CredentialModel? credential,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #handleUnknownRevocationStatus,
-          [credential],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#handleUnknownRevocationStatus, [credential]),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i16.Future<void> insertCredential({
@@ -632,29 +510,22 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
     bool? isPendingCredential = false,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #insertCredential,
-          [],
-          {
-            #credential: credential,
-            #uri: uri,
-            #showMessage: showMessage,
-            #showStatus: showStatus,
-            #isPendingCredential: isPendingCredential,
-          },
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#insertCredential, [], {
+              #credential: credential,
+              #uri: uri,
+              #showMessage: showMessage,
+              #showStatus: showStatus,
+              #isPendingCredential: isPendingCredential,
+            }),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   void enableCredentialCategory({required _i15.CredentialCategory? category}) =>
       super.noSuchMethod(
-        Invocation.method(
-          #enableCredentialCategory,
-          [],
-          {#category: category},
-        ),
+        Invocation.method(#enableCredentialCategory, [], {#category: category}),
         returnValueForMissingStub: null,
       );
 
@@ -664,129 +535,98 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
     bool? showMessage = true,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #modifyCredential,
-          [],
-          {
-            #credential: credential,
-            #showMessage: showMessage,
-          },
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#modifyCredential, [], {
+              #credential: credential,
+              #showMessage: showMessage,
+            }),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
-  _i16.Future<void> recoverWallet(
-          {required List<_i5.CredentialModel>? credentials}) =>
+  _i16.Future<void> recoverWallet({
+    required List<_i5.CredentialModel>? credentials,
+  }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #recoverWallet,
-          [],
-          {#credentials: credentials},
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#recoverWallet, [], {#credentials: credentials}),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i16.Future<List<_i5.CredentialModel>>
-      credentialListFromCredentialSubjectType(
-              _i15.CredentialSubjectType? credentialSubjectType) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #credentialListFromCredentialSubjectType,
-              [credentialSubjectType],
-            ),
+  credentialListFromCredentialSubjectType(
+    _i15.CredentialSubjectType? credentialSubjectType,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#credentialListFromCredentialSubjectType, [
+              credentialSubjectType,
+            ]),
             returnValue: _i16.Future<List<_i5.CredentialModel>>.value(
-                <_i5.CredentialModel>[]),
-          ) as _i16.Future<List<_i5.CredentialModel>>);
+              <_i5.CredentialModel>[],
+            ),
+          )
+          as _i16.Future<List<_i5.CredentialModel>>);
 
   @override
-  _i16.Future<void> insertCryptoAccountOwnershipProof(
-          {required _i10.CryptoAccountData? cryptoAccountData}) =>
+  _i16.Future<void> insertCryptoAccountOwnershipProof({
+    required _i10.CryptoAccountData? cryptoAccountData,
+  }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #insertCryptoAccountOwnershipProof,
-          [],
-          {#cryptoAccountData: cryptoAccountData},
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#insertCryptoAccountOwnershipProof, [], {
+              #cryptoAccountData: cryptoAccountData,
+            }),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i16.Future<void> generateCryptoAccountsCards(
-          List<_i10.CryptoAccountData>? cryptoAccounts) =>
+    List<_i10.CryptoAccountData>? cryptoAccounts,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #generateCryptoAccountsCards,
-          [cryptoAccounts],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#generateCryptoAccountsCards, [cryptoAccounts]),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   void emit(_i12.CredentialsState? state) => super.noSuchMethod(
-        Invocation.method(
-          #emit,
-          [state],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#emit, [state]),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void onChange(_i17.Change<_i12.CredentialsState>? change) =>
       super.noSuchMethod(
-        Invocation.method(
-          #onChange,
-          [change],
-        ),
+        Invocation.method(#onChange, [change]),
         returnValueForMissingStub: null,
       );
 
   @override
-  void addError(
-    Object? error, [
-    StackTrace? stackTrace,
-  ]) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #addError,
-          [
-            error,
-            stackTrace,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
+  void addError(Object? error, [StackTrace? stackTrace]) => super.noSuchMethod(
+    Invocation.method(#addError, [error, stackTrace]),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  void onError(
-    Object? error,
-    StackTrace? stackTrace,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #onError,
-          [
-            error,
-            stackTrace,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
+  void onError(Object? error, StackTrace? stackTrace) => super.noSuchMethod(
+    Invocation.method(#onError, [error, stackTrace]),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  _i16.Future<void> close() => (super.noSuchMethod(
-        Invocation.method(
-          #close,
-          [],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+  _i16.Future<void> close() =>
+      (super.noSuchMethod(
+            Invocation.method(#close, []),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 }
 
 /// A class which mocks [DIDKitProvider].
@@ -798,68 +638,48 @@ class MockDIDKitProvider extends _i1.Mock implements _i6.DIDKitProvider {
   }
 
   @override
-  _i13.DIDKitInterface get didKit => (super.noSuchMethod(
-        Invocation.getter(#didKit),
-        returnValue: _FakeDIDKitInterface_13(
-          this,
-          Invocation.getter(#didKit),
-        ),
-      ) as _i13.DIDKitInterface);
-
-  @override
-  String getVersion() => (super.noSuchMethod(
-        Invocation.method(
-          #getVersion,
-          [],
-        ),
-        returnValue: _i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #getVersion,
-            [],
-          ),
-        ),
-      ) as String);
-
-  @override
-  String generateEd25519Key() => (super.noSuchMethod(
-        Invocation.method(
-          #generateEd25519Key,
-          [],
-        ),
-        returnValue: _i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #generateEd25519Key,
-            [],
-          ),
-        ),
-      ) as String);
-
-  @override
-  String keyToDID(
-    String? methodName,
-    String? key,
-  ) =>
+  _i13.DIDKitInterface get didKit =>
       (super.noSuchMethod(
-        Invocation.method(
-          #keyToDID,
-          [
-            methodName,
-            key,
-          ],
-        ),
-        returnValue: _i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #keyToDID,
-            [
-              methodName,
-              key,
-            ],
-          ),
-        ),
-      ) as String);
+            Invocation.getter(#didKit),
+            returnValue: _FakeDIDKitInterface_13(
+              this,
+              Invocation.getter(#didKit),
+            ),
+          )
+          as _i13.DIDKitInterface);
+
+  @override
+  String getVersion() =>
+      (super.noSuchMethod(
+            Invocation.method(#getVersion, []),
+            returnValue: _i18.dummyValue<String>(
+              this,
+              Invocation.method(#getVersion, []),
+            ),
+          )
+          as String);
+
+  @override
+  String generateEd25519Key() =>
+      (super.noSuchMethod(
+            Invocation.method(#generateEd25519Key, []),
+            returnValue: _i18.dummyValue<String>(
+              this,
+              Invocation.method(#generateEd25519Key, []),
+            ),
+          )
+          as String);
+
+  @override
+  String keyToDID(String? methodName, String? key) =>
+      (super.noSuchMethod(
+            Invocation.method(#keyToDID, [methodName, key]),
+            returnValue: _i18.dummyValue<String>(
+              this,
+              Invocation.method(#keyToDID, [methodName, key]),
+            ),
+          )
+          as String);
 
   @override
   _i16.Future<String> keyToVerificationMethod(
@@ -867,24 +687,15 @@ class MockDIDKitProvider extends _i1.Mock implements _i6.DIDKitProvider {
     String? key,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #keyToVerificationMethod,
-          [
-            methodName,
-            key,
-          ],
-        ),
-        returnValue: _i16.Future<String>.value(_i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #keyToVerificationMethod,
-            [
-              methodName,
-              key,
-            ],
-          ),
-        )),
-      ) as _i16.Future<String>);
+            Invocation.method(#keyToVerificationMethod, [methodName, key]),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#keyToVerificationMethod, [methodName, key]),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 
   @override
   _i16.Future<String> issueCredential(
@@ -893,51 +704,28 @@ class MockDIDKitProvider extends _i1.Mock implements _i6.DIDKitProvider {
     String? key,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #issueCredential,
-          [
-            credential,
-            options,
-            key,
-          ],
-        ),
-        returnValue: _i16.Future<String>.value(_i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #issueCredential,
-            [
-              credential,
-              options,
-              key,
-            ],
-          ),
-        )),
-      ) as _i16.Future<String>);
+            Invocation.method(#issueCredential, [credential, options, key]),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#issueCredential, [credential, options, key]),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 
   @override
-  _i16.Future<String> verifyCredential(
-    String? credential,
-    String? options,
-  ) =>
+  _i16.Future<String> verifyCredential(String? credential, String? options) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #verifyCredential,
-          [
-            credential,
-            options,
-          ],
-        ),
-        returnValue: _i16.Future<String>.value(_i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #verifyCredential,
-            [
-              credential,
-              options,
-            ],
-          ),
-        )),
-      ) as _i16.Future<String>);
+            Invocation.method(#verifyCredential, [credential, options]),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#verifyCredential, [credential, options]),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 
   @override
   _i16.Future<String> issuePresentation(
@@ -946,26 +734,19 @@ class MockDIDKitProvider extends _i1.Mock implements _i6.DIDKitProvider {
     String? key,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #issuePresentation,
-          [
-            presentation,
-            options,
-            key,
-          ],
-        ),
-        returnValue: _i16.Future<String>.value(_i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #issuePresentation,
-            [
-              presentation,
-              options,
-              key,
-            ],
-          ),
-        )),
-      ) as _i16.Future<String>);
+            Invocation.method(#issuePresentation, [presentation, options, key]),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#issuePresentation, [
+                  presentation,
+                  options,
+                  key,
+                ]),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 
   @override
   _i16.Future<String> verifyPresentation(
@@ -973,49 +754,28 @@ class MockDIDKitProvider extends _i1.Mock implements _i6.DIDKitProvider {
     String? options,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #verifyPresentation,
-          [
-            presentation,
-            options,
-          ],
-        ),
-        returnValue: _i16.Future<String>.value(_i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #verifyPresentation,
-            [
-              presentation,
-              options,
-            ],
-          ),
-        )),
-      ) as _i16.Future<String>);
+            Invocation.method(#verifyPresentation, [presentation, options]),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#verifyPresentation, [presentation, options]),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 
   @override
-  _i16.Future<String> resolveDID(
-    String? did,
-    String? inputMetadata,
-  ) =>
+  _i16.Future<String> resolveDID(String? did, String? inputMetadata) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #resolveDID,
-          [
-            did,
-            inputMetadata,
-          ],
-        ),
-        returnValue: _i16.Future<String>.value(_i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #resolveDID,
-            [
-              did,
-              inputMetadata,
-            ],
-          ),
-        )),
-      ) as _i16.Future<String>);
+            Invocation.method(#resolveDID, [did, inputMetadata]),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#resolveDID, [did, inputMetadata]),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 
   @override
   _i16.Future<String> dereferenceDIDURL(
@@ -1023,52 +783,28 @@ class MockDIDKitProvider extends _i1.Mock implements _i6.DIDKitProvider {
     String? inputMetadata,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #dereferenceDIDURL,
-          [
-            didUrl,
-            inputMetadata,
-          ],
-        ),
-        returnValue: _i16.Future<String>.value(_i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #dereferenceDIDURL,
-            [
-              didUrl,
-              inputMetadata,
-            ],
-          ),
-        )),
-      ) as _i16.Future<String>);
+            Invocation.method(#dereferenceDIDURL, [didUrl, inputMetadata]),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#dereferenceDIDURL, [didUrl, inputMetadata]),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 
   @override
-  _i16.Future<String> didAuth(
-    String? did,
-    String? options,
-    String? key,
-  ) =>
+  _i16.Future<String> didAuth(String? did, String? options, String? key) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #didAuth,
-          [
-            did,
-            options,
-            key,
-          ],
-        ),
-        returnValue: _i16.Future<String>.value(_i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #didAuth,
-            [
-              did,
-              options,
-              key,
-            ],
-          ),
-        )),
-      ) as _i16.Future<String>);
+            Invocation.method(#didAuth, [did, options, key]),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#didAuth, [did, options, key]),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 }
 
 /// A class which mocks [SecureStorageProvider].
@@ -1081,70 +817,58 @@ class MockSecureStorageProvider extends _i1.Mock
   }
 
   @override
-  _i16.Future<String?> get(String? key) => (super.noSuchMethod(
-        Invocation.method(
-          #get,
-          [key],
-        ),
-        returnValue: _i16.Future<String?>.value(),
-      ) as _i16.Future<String?>);
-
-  @override
-  _i16.Future<void> set(
-    String? key,
-    String? val,
-  ) =>
+  _i16.Future<String?> get(String? key) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #set,
-          [
-            key,
-            val,
-          ],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#get, [key]),
+            returnValue: _i16.Future<String?>.value(),
+          )
+          as _i16.Future<String?>);
 
   @override
-  _i16.Future<void> delete(String? key) => (super.noSuchMethod(
-        Invocation.method(
-          #delete,
-          [key],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+  _i16.Future<void> set(String? key, String? val) =>
+      (super.noSuchMethod(
+            Invocation.method(#set, [key, val]),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
-  _i16.Future<Map<String, String>> getAllValues() => (super.noSuchMethod(
-        Invocation.method(
-          #getAllValues,
-          [],
-        ),
-        returnValue: _i16.Future<Map<String, String>>.value(<String, String>{}),
-      ) as _i16.Future<Map<String, String>>);
+  _i16.Future<void> delete(String? key) =>
+      (super.noSuchMethod(
+            Invocation.method(#delete, [key]),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
-  _i16.Future<void> deleteAll() => (super.noSuchMethod(
-        Invocation.method(
-          #deleteAll,
-          [],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+  _i16.Future<Map<String, String>> getAllValues() =>
+      (super.noSuchMethod(
+            Invocation.method(#getAllValues, []),
+            returnValue: _i16.Future<Map<String, String>>.value(
+              <String, String>{},
+            ),
+          )
+          as _i16.Future<Map<String, String>>);
+
+  @override
+  _i16.Future<void> deleteAll() =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteAll, []),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i16.Future<void> deleteAllExceptsSomeKeys(List<String>? exceptKeys) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #deleteAllExceptsSomeKeys,
-          [exceptKeys],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#deleteAllExceptsSomeKeys, [exceptKeys]),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 }
 
 /// A class which mocks [ProfileCubit].
@@ -1156,148 +880,128 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
   }
 
   @override
-  _i3.SecureStorageProvider get secureStorageProvider => (super.noSuchMethod(
-        Invocation.getter(#secureStorageProvider),
-        returnValue: _FakeSecureStorageProvider_1(
-          this,
-          Invocation.getter(#secureStorageProvider),
-        ),
-      ) as _i3.SecureStorageProvider);
+  _i3.SecureStorageProvider get secureStorageProvider =>
+      (super.noSuchMethod(
+            Invocation.getter(#secureStorageProvider),
+            returnValue: _FakeSecureStorageProvider_1(
+              this,
+              Invocation.getter(#secureStorageProvider),
+            ),
+          )
+          as _i3.SecureStorageProvider);
 
   @override
-  _i9.OIDC4VC get oidc4vc => (super.noSuchMethod(
-        Invocation.getter(#oidc4vc),
-        returnValue: _FakeOIDC4VC_9(
-          this,
-          Invocation.getter(#oidc4vc),
-        ),
-      ) as _i9.OIDC4VC);
+  _i9.OIDC4VC get oidc4vc =>
+      (super.noSuchMethod(
+            Invocation.getter(#oidc4vc),
+            returnValue: _FakeOIDC4VC_9(this, Invocation.getter(#oidc4vc)),
+          )
+          as _i9.OIDC4VC);
 
   @override
-  _i6.DIDKitProvider get didKitProvider => (super.noSuchMethod(
-        Invocation.getter(#didKitProvider),
-        returnValue: _FakeDIDKitProvider_4(
-          this,
-          Invocation.getter(#didKitProvider),
-        ),
-      ) as _i6.DIDKitProvider);
+  _i6.DIDKitProvider get didKitProvider =>
+      (super.noSuchMethod(
+            Invocation.getter(#didKitProvider),
+            returnValue: _FakeDIDKitProvider_4(
+              this,
+              Invocation.getter(#didKitProvider),
+            ),
+          )
+          as _i6.DIDKitProvider);
 
   @override
-  _i14.LangCubit get langCubit => (super.noSuchMethod(
-        Invocation.getter(#langCubit),
-        returnValue: _FakeLangCubit_14(
-          this,
-          Invocation.getter(#langCubit),
-        ),
-      ) as _i14.LangCubit);
+  _i14.LangCubit get langCubit =>
+      (super.noSuchMethod(
+            Invocation.getter(#langCubit),
+            returnValue: _FakeLangCubit_14(this, Invocation.getter(#langCubit)),
+          )
+          as _i14.LangCubit);
 
   @override
-  _i8.JWTDecode get jwtDecode => (super.noSuchMethod(
-        Invocation.getter(#jwtDecode),
-        returnValue: _FakeJWTDecode_7(
-          this,
-          Invocation.getter(#jwtDecode),
-        ),
-      ) as _i8.JWTDecode);
+  _i8.JWTDecode get jwtDecode =>
+      (super.noSuchMethod(
+            Invocation.getter(#jwtDecode),
+            returnValue: _FakeJWTDecode_7(this, Invocation.getter(#jwtDecode)),
+          )
+          as _i8.JWTDecode);
 
   @override
-  int get loginAttemptCount => (super.noSuchMethod(
-        Invocation.getter(#loginAttemptCount),
-        returnValue: 0,
-      ) as int);
+  int get loginAttemptCount =>
+      (super.noSuchMethod(Invocation.getter(#loginAttemptCount), returnValue: 0)
+          as int);
 
   @override
   set loginAttemptCount(int? _loginAttemptCount) => super.noSuchMethod(
-        Invocation.setter(
-          #loginAttemptCount,
-          _loginAttemptCount,
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.setter(#loginAttemptCount, _loginAttemptCount),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  _i5.ProfileState get state => (super.noSuchMethod(
-        Invocation.getter(#state),
-        returnValue: _FakeProfileState_15(
-          this,
-          Invocation.getter(#state),
-        ),
-      ) as _i5.ProfileState);
+  _i5.ProfileState get state =>
+      (super.noSuchMethod(
+            Invocation.getter(#state),
+            returnValue: _FakeProfileState_15(this, Invocation.getter(#state)),
+          )
+          as _i5.ProfileState);
 
   @override
-  _i16.Stream<_i5.ProfileState> get stream => (super.noSuchMethod(
-        Invocation.getter(#stream),
-        returnValue: _i16.Stream<_i5.ProfileState>.empty(),
-      ) as _i16.Stream<_i5.ProfileState>);
+  _i16.Stream<_i5.ProfileState> get stream =>
+      (super.noSuchMethod(
+            Invocation.getter(#stream),
+            returnValue: _i16.Stream<_i5.ProfileState>.empty(),
+          )
+          as _i16.Stream<_i5.ProfileState>);
 
   @override
-  bool get isClosed => (super.noSuchMethod(
-        Invocation.getter(#isClosed),
-        returnValue: false,
-      ) as bool);
+  bool get isClosed =>
+      (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
+          as bool);
 
   @override
   void passcodeEntered() => super.noSuchMethod(
-        Invocation.method(
-          #passcodeEntered,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#passcodeEntered, []),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void resetloginAttemptCount() => super.noSuchMethod(
-        Invocation.method(
-          #resetloginAttemptCount,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#resetloginAttemptCount, []),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void setActionAllowValue({required bool? value}) => super.noSuchMethod(
-        Invocation.method(
-          #setActionAllowValue,
-          [],
-          {#value: value},
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#setActionAllowValue, [], {#value: value}),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  _i16.Future<void> load() => (super.noSuchMethod(
-        Invocation.method(
-          #load,
-          [],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+  _i16.Future<void> load() =>
+      (super.noSuchMethod(
+            Invocation.method(#load, []),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
-  _i16.Future<_i5.ProfileModel> getTrustedList(
+  _i16.Future<_i5.ProfileModel> addTrustedList(
     String? trustedListUrl,
     _i5.ProfileModel? profileModel,
   ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getTrustedList,
-          [
-            trustedListUrl,
-            profileModel,
-          ],
-        ),
-        returnValue: _i16.Future<_i5.ProfileModel>.value(_FakeProfileModel_16(
-          this,
-          Invocation.method(
-            #getTrustedList,
-            [
-              trustedListUrl,
-              profileModel,
-            ],
-          ),
-        )),
-      ) as _i16.Future<_i5.ProfileModel>);
+            Invocation.method(#getTrustedList, [trustedListUrl, profileModel]),
+            returnValue: _i16.Future<_i5.ProfileModel>.value(
+              _FakeProfileModel_16(
+                this,
+                Invocation.method(#getTrustedList, [
+                  trustedListUrl,
+                  profileModel,
+                ]),
+              ),
+            ),
+          )
+          as _i16.Future<_i5.ProfileModel>);
 
   @override
   _i16.Future<void> update(
@@ -1305,39 +1009,33 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
     _i15.AppStatus? status,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #update,
-          [profileModel],
-          {#status: status},
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#update, [profileModel], {#status: status}),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
-  _i16.Future<void> setWalletProtectionType(
-          {required _i15.WalletProtectionType? walletProtectionType}) =>
+  _i16.Future<void> setWalletProtectionType({
+    required _i15.WalletProtectionType? walletProtectionType,
+  }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #setWalletProtectionType,
-          [],
-          {#walletProtectionType: walletProtectionType},
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#setWalletProtectionType, [], {
+              #walletProtectionType: walletProtectionType,
+            }),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i16.Future<void> setWalletType({required _i15.WalletType? walletType}) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #setWalletType,
-          [],
-          {#walletType: walletType},
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#setWalletType, [], {#walletType: walletType}),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i16.Future<void> updateProfileSetting({
@@ -1367,81 +1065,73 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
     bool? displayMode,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #updateProfileSetting,
-          [],
-          {
-            #didKeyType: didKeyType,
-            #securityLevel: securityLevel,
-            #scope: scope,
-            #cryptoHolderBinding: cryptoHolderBinding,
-            #credentialManifestSupport: credentialManifestSupport,
-            #clientAuthentication: clientAuthentication,
-            #clientId: clientId,
-            #clientSecret: clientSecret,
-            #confirmSecurityVerifierAccess: confirmSecurityVerifierAccess,
-            #secureSecurityAuthenticationWithPinCode:
-                secureSecurityAuthenticationWithPinCode,
-            #trustedList: trustedList,
-            #verifySecurityIssuerWebsiteIdentity:
-                verifySecurityIssuerWebsiteIdentity,
-            #oidc4vciDraftType: oidc4vciDraftType,
-            #oidc4vpDraftType: oidc4vpDraftType,
-            #clientType: clientType,
-            #vcFormatType: vcFormatType,
-            #formatsSupported: formatsSupported,
-            #proofHeaderType: proofHeaderType,
-            #proofType: proofType,
-            #pushAuthorizationRequest: pushAuthorizationRequest,
-            #statusListCaching: statusListCaching,
-            #displayNotification: displayNotification,
-            #dpopSupport: dpopSupport,
-            #displayMode: displayMode,
-          },
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#updateProfileSetting, [], {
+              #didKeyType: didKeyType,
+              #securityLevel: securityLevel,
+              #scope: scope,
+              #cryptoHolderBinding: cryptoHolderBinding,
+              #credentialManifestSupport: credentialManifestSupport,
+              #clientAuthentication: clientAuthentication,
+              #clientId: clientId,
+              #clientSecret: clientSecret,
+              #confirmSecurityVerifierAccess: confirmSecurityVerifierAccess,
+              #secureSecurityAuthenticationWithPinCode:
+                  secureSecurityAuthenticationWithPinCode,
+              #trustedList: trustedList,
+              #verifySecurityIssuerWebsiteIdentity:
+                  verifySecurityIssuerWebsiteIdentity,
+              #oidc4vciDraftType: oidc4vciDraftType,
+              #oidc4vpDraftType: oidc4vpDraftType,
+              #clientType: clientType,
+              #vcFormatType: vcFormatType,
+              #formatsSupported: formatsSupported,
+              #proofHeaderType: proofHeaderType,
+              #proofType: proofType,
+              #pushAuthorizationRequest: pushAuthorizationRequest,
+              #statusListCaching: statusListCaching,
+              #displayNotification: displayNotification,
+              #dpopSupport: dpopSupport,
+              #displayMode: displayMode,
+            }),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i16.Future<void> setDeveloperModeStatus({bool? enabled = false}) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #setDeveloperModeStatus,
-          [],
-          {#enabled: enabled},
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#setDeveloperModeStatus, [], {#enabled: enabled}),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i16.Future<void> setProfileSetting({
     required _i5.ProfileSetting? profileSetting,
     required _i15.ProfileType? profileType,
+    required _i15.WalletType? walletType,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #setProfileSetting,
-          [],
-          {
-            #profileSetting: profileSetting,
-            #profileType: profileType,
-          },
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#setProfileSetting, [], {
+              #profileSetting: profileSetting,
+              #profileType: profileType,
+              #walletType: walletType,
+            }),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
-  _i16.Future<void> close() => (super.noSuchMethod(
-        Invocation.method(
-          #close,
-          [],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+  _i16.Future<void> close() =>
+      (super.noSuchMethod(
+            Invocation.method(#close, []),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i16.Future<void> setProfile(
@@ -1449,93 +1139,59 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
     _i15.AppStatus? status,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #setProfile,
-          [profileType],
-          {#status: status},
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#setProfile, [profileType], {#status: status}),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
-  _i16.Future<void> resetProfile() => (super.noSuchMethod(
-        Invocation.method(
-          #resetProfile,
-          [],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+  _i16.Future<void> resetProfile() =>
+      (super.noSuchMethod(
+            Invocation.method(#resetProfile, []),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   void addOidc4VCI(_i19.Oidc4VCIState? data) => super.noSuchMethod(
-        Invocation.method(
-          #addOidc4VCI,
-          [data],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#addOidc4VCI, [data]),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  _i16.Future<void> deleteOidc4VCIState(String? key) => (super.noSuchMethod(
-        Invocation.method(
-          #deleteOidc4VCIState,
-          [key],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+  _i16.Future<void> deleteOidc4VCIState(String? key) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteOidc4VCIState, [key]),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   void emit(_i5.ProfileState? state) => super.noSuchMethod(
-        Invocation.method(
-          #emit,
-          [state],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#emit, [state]),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void onChange(_i17.Change<_i5.ProfileState>? change) => super.noSuchMethod(
-        Invocation.method(
-          #onChange,
-          [change],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#onChange, [change]),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  void addError(
-    Object? error, [
-    StackTrace? stackTrace,
-  ]) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #addError,
-          [
-            error,
-            stackTrace,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
+  void addError(Object? error, [StackTrace? stackTrace]) => super.noSuchMethod(
+    Invocation.method(#addError, [error, stackTrace]),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  void onError(
-    Object? error,
-    StackTrace? stackTrace,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #onError,
-          [
-            error,
-            stackTrace,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
+  void onError(Object? error, StackTrace? stackTrace) => super.noSuchMethod(
+    Invocation.method(#onError, [error, stackTrace]),
+    returnValueForMissingStub: null,
+  );
 }
 
 /// A class which mocks [WalletCubit].
@@ -1547,71 +1203,72 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
   }
 
   @override
-  _i3.SecureStorageProvider get secureStorageProvider => (super.noSuchMethod(
-        Invocation.getter(#secureStorageProvider),
-        returnValue: _FakeSecureStorageProvider_1(
-          this,
-          Invocation.getter(#secureStorageProvider),
-        ),
-      ) as _i3.SecureStorageProvider);
+  _i3.SecureStorageProvider get secureStorageProvider =>
+      (super.noSuchMethod(
+            Invocation.getter(#secureStorageProvider),
+            returnValue: _FakeSecureStorageProvider_1(
+              this,
+              Invocation.getter(#secureStorageProvider),
+            ),
+          )
+          as _i3.SecureStorageProvider);
 
   @override
-  _i5.HomeCubit get homeCubit => (super.noSuchMethod(
-        Invocation.getter(#homeCubit),
-        returnValue: _FakeHomeCubit_17(
-          this,
-          Invocation.getter(#homeCubit),
-        ),
-      ) as _i5.HomeCubit);
+  _i5.HomeCubit get homeCubit =>
+      (super.noSuchMethod(
+            Invocation.getter(#homeCubit),
+            returnValue: _FakeHomeCubit_17(this, Invocation.getter(#homeCubit)),
+          )
+          as _i5.HomeCubit);
 
   @override
-  _i7.KeyGenerator get keyGenerator => (super.noSuchMethod(
-        Invocation.getter(#keyGenerator),
-        returnValue: _FakeKeyGenerator_5(
-          this,
-          Invocation.getter(#keyGenerator),
-        ),
-      ) as _i7.KeyGenerator);
+  _i7.KeyGenerator get keyGenerator =>
+      (super.noSuchMethod(
+            Invocation.getter(#keyGenerator),
+            returnValue: _FakeKeyGenerator_5(
+              this,
+              Invocation.getter(#keyGenerator),
+            ),
+          )
+          as _i7.KeyGenerator);
 
   @override
-  _i2.Logger get log => (super.noSuchMethod(
-        Invocation.getter(#log),
-        returnValue: _FakeLogger_0(
-          this,
-          Invocation.getter(#log),
-        ),
-      ) as _i2.Logger);
+  _i2.Logger get log =>
+      (super.noSuchMethod(
+            Invocation.getter(#log),
+            returnValue: _FakeLogger_0(this, Invocation.getter(#log)),
+          )
+          as _i2.Logger);
 
   @override
-  _i10.WalletState get state => (super.noSuchMethod(
-        Invocation.getter(#state),
-        returnValue: _FakeWalletState_18(
-          this,
-          Invocation.getter(#state),
-        ),
-      ) as _i10.WalletState);
+  _i10.WalletState get state =>
+      (super.noSuchMethod(
+            Invocation.getter(#state),
+            returnValue: _FakeWalletState_18(this, Invocation.getter(#state)),
+          )
+          as _i10.WalletState);
 
   @override
-  _i16.Stream<_i10.WalletState> get stream => (super.noSuchMethod(
-        Invocation.getter(#stream),
-        returnValue: _i16.Stream<_i10.WalletState>.empty(),
-      ) as _i16.Stream<_i10.WalletState>);
+  _i16.Stream<_i10.WalletState> get stream =>
+      (super.noSuchMethod(
+            Invocation.getter(#stream),
+            returnValue: _i16.Stream<_i10.WalletState>.empty(),
+          )
+          as _i16.Stream<_i10.WalletState>);
 
   @override
-  bool get isClosed => (super.noSuchMethod(
-        Invocation.getter(#isClosed),
-        returnValue: false,
-      ) as bool);
+  bool get isClosed =>
+      (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
+          as bool);
 
   @override
-  _i16.Future<void> setCurrentWalletAccount(int? index) => (super.noSuchMethod(
-        Invocation.method(
-          #setCurrentWalletAccount,
-          [index],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+  _i16.Future<void> setCurrentWalletAccount(int? index) =>
+      (super.noSuchMethod(
+            Invocation.method(#setCurrentWalletAccount, [index]),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i16.Future<void> createCryptoWallet({
@@ -1627,28 +1284,26 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
     void Function({
       required _i10.CryptoAccount cryptoAccount,
       required _i15.MessageHandler messageHandler,
-    })? onComplete,
+    })?
+    onComplete,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #createCryptoWallet,
-          [],
-          {
-            #accountName: accountName,
-            #mnemonicOrKey: mnemonicOrKey,
-            #isImported: isImported,
-            #isFromOnboarding: isFromOnboarding,
-            #qrCodeScanCubit: qrCodeScanCubit,
-            #credentialsCubit: credentialsCubit,
-            #walletConnectCubit: walletConnectCubit,
-            #blockchainType: blockchainType,
-            #showStatus: showStatus,
-            #onComplete: onComplete,
-          },
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#createCryptoWallet, [], {
+              #accountName: accountName,
+              #mnemonicOrKey: mnemonicOrKey,
+              #isImported: isImported,
+              #isFromOnboarding: isFromOnboarding,
+              #qrCodeScanCubit: qrCodeScanCubit,
+              #credentialsCubit: credentialsCubit,
+              #walletConnectCubit: walletConnectCubit,
+              #blockchainType: blockchainType,
+              #showStatus: showStatus,
+              #onComplete: onComplete,
+            }),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i16.Future<_i10.CryptoAccountData> generateAccount({
@@ -1660,35 +1315,29 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
     required int? totalAccountsYet,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #generateAccount,
-          [],
-          {
-            #accountName: accountName,
-            #mnemonicOrKey: mnemonicOrKey,
-            #isImported: isImported,
-            #isSecretKey: isSecretKey,
-            #blockchainType: blockchainType,
-            #totalAccountsYet: totalAccountsYet,
-          },
-        ),
-        returnValue:
-            _i16.Future<_i10.CryptoAccountData>.value(_FakeCryptoAccountData_19(
-          this,
-          Invocation.method(
-            #generateAccount,
-            [],
-            {
+            Invocation.method(#generateAccount, [], {
               #accountName: accountName,
               #mnemonicOrKey: mnemonicOrKey,
               #isImported: isImported,
               #isSecretKey: isSecretKey,
               #blockchainType: blockchainType,
               #totalAccountsYet: totalAccountsYet,
-            },
-          ),
-        )),
-      ) as _i16.Future<_i10.CryptoAccountData>);
+            }),
+            returnValue: _i16.Future<_i10.CryptoAccountData>.value(
+              _FakeCryptoAccountData_19(
+                this,
+                Invocation.method(#generateAccount, [], {
+                  #accountName: accountName,
+                  #mnemonicOrKey: mnemonicOrKey,
+                  #isImported: isImported,
+                  #isSecretKey: isSecretKey,
+                  #blockchainType: blockchainType,
+                  #totalAccountsYet: totalAccountsYet,
+                }),
+              ),
+            ),
+          )
+          as _i16.Future<_i10.CryptoAccountData>);
 
   @override
   _i16.Future<void> editCryptoAccountName({
@@ -1699,133 +1348,90 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
     required _i12.CredentialsCubit? credentialsCubit,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #editCryptoAccountName,
-          [],
-          {
-            #newAccountName: newAccountName,
-            #index: index,
-            #onComplete: onComplete,
-            #blockchainType: blockchainType,
-            #credentialsCubit: credentialsCubit,
-          },
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#editCryptoAccountName, [], {
+              #newAccountName: newAccountName,
+              #index: index,
+              #onComplete: onComplete,
+              #blockchainType: blockchainType,
+              #credentialsCubit: credentialsCubit,
+            }),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i16.Future<void> deleteCryptoAccount({
     required int? index,
-    dynamic Function(
-      _i10.CryptoAccount,
-      int,
-    )? onComplete,
+    dynamic Function(_i10.CryptoAccount, int)? onComplete,
     required _i15.BlockchainType? blockchainType,
     required _i12.CredentialsCubit? credentialsCubit,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #deleteCryptoAccount,
-          [],
-          {
-            #index: index,
-            #onComplete: onComplete,
-            #blockchainType: blockchainType,
-            #credentialsCubit: credentialsCubit,
-          },
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#deleteCryptoAccount, [], {
+              #index: index,
+              #onComplete: onComplete,
+              #blockchainType: blockchainType,
+              #credentialsCubit: credentialsCubit,
+            }),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   void emitCryptoAccount(_i10.CryptoAccount? cryptoAccount) =>
       super.noSuchMethod(
-        Invocation.method(
-          #emitCryptoAccount,
-          [cryptoAccount],
-        ),
+        Invocation.method(#emitCryptoAccount, [cryptoAccount]),
         returnValueForMissingStub: null,
       );
 
   @override
   _i16.Future<void> resetWallet(_i12.CredentialsCubit? credentialsCubit) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #resetWallet,
-          [credentialsCubit],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+            Invocation.method(#resetWallet, [credentialsCubit]),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
   _i10.CryptoAccountData? getCryptoAccountData(String? publicKey) =>
-      (super.noSuchMethod(Invocation.method(
-        #getCryptoAccountData,
-        [publicKey],
-      )) as _i10.CryptoAccountData?);
+      (super.noSuchMethod(Invocation.method(#getCryptoAccountData, [publicKey]))
+          as _i10.CryptoAccountData?);
 
   @override
   void emit(_i10.WalletState? state) => super.noSuchMethod(
-        Invocation.method(
-          #emit,
-          [state],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#emit, [state]),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void onChange(_i17.Change<_i10.WalletState>? change) => super.noSuchMethod(
-        Invocation.method(
-          #onChange,
-          [change],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#onChange, [change]),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  void addError(
-    Object? error, [
-    StackTrace? stackTrace,
-  ]) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #addError,
-          [
-            error,
-            stackTrace,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
+  void addError(Object? error, [StackTrace? stackTrace]) => super.noSuchMethod(
+    Invocation.method(#addError, [error, stackTrace]),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  void onError(
-    Object? error,
-    StackTrace? stackTrace,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #onError,
-          [
-            error,
-            stackTrace,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
+  void onError(Object? error, StackTrace? stackTrace) => super.noSuchMethod(
+    Invocation.method(#onError, [error, stackTrace]),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  _i16.Future<void> close() => (super.noSuchMethod(
-        Invocation.method(
-          #close,
-          [],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+  _i16.Future<void> close() =>
+      (super.noSuchMethod(
+            Invocation.method(#close, []),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 }
 
 /// A class which mocks [OIDC4VC].
@@ -1837,19 +1443,14 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
   }
 
   @override
-  int get count => (super.noSuchMethod(
-        Invocation.getter(#count),
-        returnValue: 0,
-      ) as int);
+  int get count =>
+      (super.noSuchMethod(Invocation.getter(#count), returnValue: 0) as int);
 
   @override
   set count(int? _count) => super.noSuchMethod(
-        Invocation.setter(
-          #count,
-          _count,
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.setter(#count, _count),
+    returnValueForMissingStub: null,
+  );
 
   @override
   Map<String, dynamic> getAuthorizationRequestParemeters({
@@ -1869,36 +1470,36 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     required String? walletIssuer,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getAuthorizationRequestParemeters,
-          [],
-          {
-            #oidc4vcParameters: oidc4vcParameters,
-            #selectedCredentials: selectedCredentials,
-            #clientId: clientId,
-            #clientSecret: clientSecret,
-            #nonce: nonce,
-            #redirectUri: redirectUri,
-            #pkcePair: pkcePair,
-            #state: state,
-            #scope: scope,
-            #clientAuthentication: clientAuthentication,
-            #formatsSuported: formatsSuported,
-            #secureAuthorizedFlow: secureAuthorizedFlow,
-            #isEBSIProfile: isEBSIProfile,
-            #walletIssuer: walletIssuer,
-          },
-        ),
-        returnValue: <String, dynamic>{},
-      ) as Map<String, dynamic>);
+            Invocation.method(#getAuthorizationRequestParemeters, [], {
+              #oidc4vcParameters: oidc4vcParameters,
+              #selectedCredentials: selectedCredentials,
+              #clientId: clientId,
+              #clientSecret: clientSecret,
+              #nonce: nonce,
+              #redirectUri: redirectUri,
+              #pkcePair: pkcePair,
+              #state: state,
+              #scope: scope,
+              #clientAuthentication: clientAuthentication,
+              #formatsSuported: formatsSuported,
+              #secureAuthorizedFlow: secureAuthorizedFlow,
+              #isEBSIProfile: isEBSIProfile,
+              #walletIssuer: walletIssuer,
+            }),
+            returnValue: <String, dynamic>{},
+          )
+          as Map<String, dynamic>);
 
   @override
   String? getDeferredCredentialEndpoint(
-          _i9.OpenIdConfiguration? openIdConfiguration) =>
-      (super.noSuchMethod(Invocation.method(
-        #getDeferredCredentialEndpoint,
-        [openIdConfiguration],
-      )) as String?);
+    _i9.OpenIdConfiguration? openIdConfiguration,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#getDeferredCredentialEndpoint, [
+              openIdConfiguration,
+            ]),
+          )
+          as String?);
 
   @override
   _i16.Future<String> getTokenEndPoint({
@@ -1909,36 +1510,32 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     required bool? useOAuthAuthorizationServerLink,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getTokenEndPoint,
-          [],
-          {
-            #issuer: issuer,
-            #oidc4vciDraftType: oidc4vciDraftType,
-            #openIdConfiguration: openIdConfiguration,
-            #dio: dio,
-            #useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
-          },
-        ),
-        returnValue: _i16.Future<String>.value(_i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #getTokenEndPoint,
-            [],
-            {
+            Invocation.method(#getTokenEndPoint, [], {
               #issuer: issuer,
               #oidc4vciDraftType: oidc4vciDraftType,
               #openIdConfiguration: openIdConfiguration,
               #dio: dio,
               #useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
-            },
-          ),
-        )),
-      ) as _i16.Future<String>);
+            }),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#getTokenEndPoint, [], {
+                  #issuer: issuer,
+                  #oidc4vciDraftType: oidc4vciDraftType,
+                  #openIdConfiguration: openIdConfiguration,
+                  #dio: dio,
+                  #useOAuthAuthorizationServerLink:
+                      useOAuthAuthorizationServerLink,
+                }),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 
   @override
   _i16.Future<(Map<String, dynamic>?, String?, String?, List<dynamic>?)>
-      getTokenResponse({
+  getTokenResponse({
     required _i4.Dio? dio,
     required String? tokenEndPoint,
     required Map<String, dynamic>? tokenData,
@@ -1948,30 +1545,25 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     required String? dPop,
     required String? issuer,
   }) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #getTokenResponse,
-              [],
-              {
-                #dio: dio,
-                #tokenEndPoint: tokenEndPoint,
-                #tokenData: tokenData,
-                #authorization: authorization,
-                #oAuthClientAttestation: oAuthClientAttestation,
-                #oAuthClientAttestationPop: oAuthClientAttestationPop,
-                #dPop: dPop,
-                #issuer: issuer,
-              },
-            ),
-            returnValue: _i16.Future<
-                (
-                  Map<String, dynamic>?,
-                  String?,
-                  String?,
-                  List<dynamic>?
-                )>.value((null, null, null, null)),
-          ) as _i16.Future<
-              (Map<String, dynamic>?, String?, String?, List<dynamic>?)>);
+      (super.noSuchMethod(
+            Invocation.method(#getTokenResponse, [], {
+              #dio: dio,
+              #tokenEndPoint: tokenEndPoint,
+              #tokenData: tokenData,
+              #authorization: authorization,
+              #oAuthClientAttestation: oAuthClientAttestation,
+              #oAuthClientAttestationPop: oAuthClientAttestationPop,
+              #dPop: dPop,
+              #issuer: issuer,
+            }),
+            returnValue:
+                _i16.Future<
+                  (Map<String, dynamic>?, String?, String?, List<dynamic>?)
+                >.value((null, null, null, null)),
+          )
+          as _i16.Future<
+            (Map<String, dynamic>?, String?, String?, List<dynamic>?)
+          >);
 
   @override
   _i16.Future<String?> getNonceReponse({
@@ -1979,16 +1571,13 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     required String? nonceEndpoint,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getNonceReponse,
-          [],
-          {
-            #dio: dio,
-            #nonceEndpoint: nonceEndpoint,
-          },
-        ),
-        returnValue: _i16.Future<String?>.value(),
-      ) as _i16.Future<String?>);
+            Invocation.method(#getNonceReponse, [], {
+              #dio: dio,
+              #nonceEndpoint: nonceEndpoint,
+            }),
+            returnValue: _i16.Future<String?>.value(),
+          )
+          as _i16.Future<String?>);
 
   @override
   _i16.Future<dynamic> getSingleCredential({
@@ -1999,19 +1588,16 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     required String? dPop,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getSingleCredential,
-          [],
-          {
-            #accessToken: accessToken,
-            #dio: dio,
-            #credentialData: credentialData,
-            #credentialEndpoint: credentialEndpoint,
-            #dPop: dPop,
-          },
-        ),
-        returnValue: _i16.Future<dynamic>.value(),
-      ) as _i16.Future<dynamic>);
+            Invocation.method(#getSingleCredential, [], {
+              #accessToken: accessToken,
+              #dio: dio,
+              #credentialData: credentialData,
+              #credentialEndpoint: credentialEndpoint,
+              #dPop: dPop,
+            }),
+            returnValue: _i16.Future<dynamic>.value(),
+          )
+          as _i16.Future<dynamic>);
 
   @override
   _i16.Future<dynamic> getDeferredCredential({
@@ -2021,18 +1607,15 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     required _i4.Dio? dio,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getDeferredCredential,
-          [],
-          {
-            #credentialHeaders: credentialHeaders,
-            #body: body,
-            #deferredCredentialEndpoint: deferredCredentialEndpoint,
-            #dio: dio,
-          },
-        ),
-        returnValue: _i16.Future<dynamic>.value(),
-      ) as _i16.Future<dynamic>);
+            Invocation.method(#getDeferredCredential, [], {
+              #credentialHeaders: credentialHeaders,
+              #body: body,
+              #deferredCredentialEndpoint: deferredCredentialEndpoint,
+              #dio: dio,
+            }),
+            returnValue: _i16.Future<dynamic>.value(),
+          )
+          as _i16.Future<dynamic>);
 
   @override
   Map<String, dynamic> buildTokenData({
@@ -2049,25 +1632,22 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     String? oAuthClientAttestationPop,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #buildTokenData,
-          [],
-          {
-            #redirectUri: redirectUri,
-            #preAuthorizedCode: preAuthorizedCode,
-            #userPin: userPin,
-            #txCode: txCode,
-            #code: code,
-            #codeVerifier: codeVerifier,
-            #clientId: clientId,
-            #clientSecret: clientSecret,
-            #authorization: authorization,
-            #oAuthClientAttestation: oAuthClientAttestation,
-            #oAuthClientAttestationPop: oAuthClientAttestationPop,
-          },
-        ),
-        returnValue: <String, dynamic>{},
-      ) as Map<String, dynamic>);
+            Invocation.method(#buildTokenData, [], {
+              #redirectUri: redirectUri,
+              #preAuthorizedCode: preAuthorizedCode,
+              #userPin: userPin,
+              #txCode: txCode,
+              #code: code,
+              #codeVerifier: codeVerifier,
+              #clientId: clientId,
+              #clientSecret: clientSecret,
+              #authorization: authorization,
+              #oAuthClientAttestation: oAuthClientAttestation,
+              #oAuthClientAttestationPop: oAuthClientAttestationPop,
+            }),
+            returnValue: <String, dynamic>{},
+          )
+          as Map<String, dynamic>);
 
   @override
   _i16.Future<Map<String, dynamic>> getOpenIdConfiguration({
@@ -2080,31 +1660,28 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     _i3.SecureStorageProvider? secureStorage,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getOpenIdConfiguration,
-          [],
-          {
-            #didKey: didKey,
-            #fromStatusList: fromStatusList,
-            #isCachingEnabled: isCachingEnabled,
-            #dio: dio,
-            #useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
-            #isSdJwtVc: isSdJwtVc,
-            #secureStorage: secureStorage,
-          },
-        ),
-        returnValue:
-            _i16.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
-      ) as _i16.Future<Map<String, dynamic>>);
+            Invocation.method(#getOpenIdConfiguration, [], {
+              #didKey: didKey,
+              #fromStatusList: fromStatusList,
+              #isCachingEnabled: isCachingEnabled,
+              #dio: dio,
+              #useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+              #isSdJwtVc: isSdJwtVc,
+              #secureStorage: secureStorage,
+            }),
+            returnValue: _i16.Future<Map<String, dynamic>>.value(
+              <String, dynamic>{},
+            ),
+          )
+          as _i16.Future<Map<String, dynamic>>);
 
   @override
-  bool isURL(String? input) => (super.noSuchMethod(
-        Invocation.method(
-          #isURL,
-          [input],
-        ),
-        returnValue: false,
-      ) as bool);
+  bool isURL(String? input) =>
+      (super.noSuchMethod(
+            Invocation.method(#isURL, [input]),
+            returnValue: false,
+          )
+          as bool);
 
   @override
   _i16.Future<String> readTokenEndPoint({
@@ -2116,34 +1693,30 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     _i3.SecureStorageProvider? secureStorage,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #readTokenEndPoint,
-          [],
-          {
-            #openIdConfiguration: openIdConfiguration,
-            #issuer: issuer,
-            #oidc4vciDraftType: oidc4vciDraftType,
-            #dio: dio,
-            #useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
-            #secureStorage: secureStorage,
-          },
-        ),
-        returnValue: _i16.Future<String>.value(_i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #readTokenEndPoint,
-            [],
-            {
+            Invocation.method(#readTokenEndPoint, [], {
               #openIdConfiguration: openIdConfiguration,
               #issuer: issuer,
               #oidc4vciDraftType: oidc4vciDraftType,
               #dio: dio,
               #useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
               #secureStorage: secureStorage,
-            },
-          ),
-        )),
-      ) as _i16.Future<String>);
+            }),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#readTokenEndPoint, [], {
+                  #openIdConfiguration: openIdConfiguration,
+                  #issuer: issuer,
+                  #oidc4vciDraftType: oidc4vciDraftType,
+                  #dio: dio,
+                  #useOAuthAuthorizationServerLink:
+                      useOAuthAuthorizationServerLink,
+                  #secureStorage: secureStorage,
+                }),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 
   @override
   _i16.Future<_i9.Oidc4vcParameters> authorizationParameters({
@@ -2151,44 +1724,34 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     required _i4.Dio? dio,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #authorizationParameters,
-          [],
-          {
-            #oidc4vcParameters: oidc4vcParameters,
-            #dio: dio,
-          },
-        ),
-        returnValue:
-            _i16.Future<_i9.Oidc4vcParameters>.value(_FakeOidc4vcParameters_20(
-          this,
-          Invocation.method(
-            #authorizationParameters,
-            [],
-            {
+            Invocation.method(#authorizationParameters, [], {
               #oidc4vcParameters: oidc4vcParameters,
               #dio: dio,
-            },
-          ),
-        )),
-      ) as _i16.Future<_i9.Oidc4vcParameters>);
+            }),
+            returnValue: _i16.Future<_i9.Oidc4vcParameters>.value(
+              _FakeOidc4vcParameters_20(
+                this,
+                Invocation.method(#authorizationParameters, [], {
+                  #oidc4vcParameters: oidc4vcParameters,
+                  #dio: dio,
+                }),
+              ),
+            ),
+          )
+          as _i16.Future<_i9.Oidc4vcParameters>);
 
   @override
   String readIssuerDid(
-          _i4.Response<Map<String, dynamic>>? openidConfigurationResponse) =>
+    _i4.Response<Map<String, dynamic>>? openidConfigurationResponse,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #readIssuerDid,
-          [openidConfigurationResponse],
-        ),
-        returnValue: _i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #readIssuerDid,
-            [openidConfigurationResponse],
-          ),
-        ),
-      ) as String);
+            Invocation.method(#readIssuerDid, [openidConfigurationResponse]),
+            returnValue: _i18.dummyValue<String>(
+              this,
+              Invocation.method(#readIssuerDid, [openidConfigurationResponse]),
+            ),
+          )
+          as String);
 
   @override
   Map<String, dynamic> readPublicKeyJwk({
@@ -2197,17 +1760,14 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     required Map<String, dynamic>? didDocument,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #readPublicKeyJwk,
-          [],
-          {
-            #issuer: issuer,
-            #holderKid: holderKid,
-            #didDocument: didDocument,
-          },
-        ),
-        returnValue: <String, dynamic>{},
-      ) as Map<String, dynamic>);
+            Invocation.method(#readPublicKeyJwk, [], {
+              #issuer: issuer,
+              #holderKid: holderKid,
+              #didDocument: didDocument,
+            }),
+            returnValue: <String, dynamic>{},
+          )
+          as Map<String, dynamic>);
 
   @override
   _i16.Future<Map<String, dynamic>> buildCredentialData({
@@ -2230,84 +1790,74 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     required String? clientId,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #buildCredentialData,
-          [],
-          {
-            #oidc4vcParameters: oidc4vcParameters,
-            #issuerTokenParameters: issuerTokenParameters,
-            #credentialType: credentialType,
-            #types: types,
-            #format: format,
-            #cryptoHolderBinding: cryptoHolderBinding,
-            #clientAuthentication: clientAuthentication,
-            #credentialIdentifier: credentialIdentifier,
-            #nonce: nonce,
-            #vct: vct,
-            #credentialDefinition: credentialDefinition,
-            #proofType: proofType,
-            #did: did,
-            #kid: kid,
-            #privateKey: privateKey,
-            #formatsSupported: formatsSupported,
-            #clientId: clientId,
-          },
-        ),
-        returnValue:
-            _i16.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
-      ) as _i16.Future<Map<String, dynamic>>);
+            Invocation.method(#buildCredentialData, [], {
+              #oidc4vcParameters: oidc4vcParameters,
+              #issuerTokenParameters: issuerTokenParameters,
+              #credentialType: credentialType,
+              #types: types,
+              #format: format,
+              #cryptoHolderBinding: cryptoHolderBinding,
+              #clientAuthentication: clientAuthentication,
+              #credentialIdentifier: credentialIdentifier,
+              #nonce: nonce,
+              #vct: vct,
+              #credentialDefinition: credentialDefinition,
+              #proofType: proofType,
+              #did: did,
+              #kid: kid,
+              #privateKey: privateKey,
+              #formatsSupported: formatsSupported,
+              #clientId: clientId,
+            }),
+            returnValue: _i16.Future<Map<String, dynamic>>.value(
+              <String, dynamic>{},
+            ),
+          )
+          as _i16.Future<Map<String, dynamic>>);
 
   @override
   _i16.Future<(String, List<String>?, Map<String, dynamic>?, String?, String)>
-      getCredentialData({
+  getCredentialData({
     required _i9.OpenIdConfiguration? openIdConfiguration,
     required dynamic credential,
   }) =>
-          (super.noSuchMethod(
-            Invocation.method(
-              #getCredentialData,
-              [],
-              {
-                #openIdConfiguration: openIdConfiguration,
-                #credential: credential,
-              },
-            ),
-            returnValue: _i16.Future<
-                (
-                  String,
-                  List<String>?,
-                  Map<String, dynamic>?,
-                  String?,
-                  String
-                )>.value((
-              _i18.dummyValue<String>(
-                this,
-                Invocation.method(
-                  #getCredentialData,
-                  [],
-                  {
-                    #openIdConfiguration: openIdConfiguration,
-                    #credential: credential,
-                  },
-                ),
-              ),
-              null,
-              null,
-              null,
-              _i18.dummyValue<String>(
-                this,
-                Invocation.method(
-                  #getCredentialData,
-                  [],
-                  {
-                    #openIdConfiguration: openIdConfiguration,
-                    #credential: credential,
-                  },
-                ),
-              )
-            )),
-          ) as _i16.Future<
-              (String, List<String>?, Map<String, dynamic>?, String?, String)>);
+      (super.noSuchMethod(
+            Invocation.method(#getCredentialData, [], {
+              #openIdConfiguration: openIdConfiguration,
+              #credential: credential,
+            }),
+            returnValue:
+                _i16.Future<
+                  (
+                    String,
+                    List<String>?,
+                    Map<String, dynamic>?,
+                    String?,
+                    String,
+                  )
+                >.value((
+                  _i18.dummyValue<String>(
+                    this,
+                    Invocation.method(#getCredentialData, [], {
+                      #openIdConfiguration: openIdConfiguration,
+                      #credential: credential,
+                    }),
+                  ),
+                  null,
+                  null,
+                  null,
+                  _i18.dummyValue<String>(
+                    this,
+                    Invocation.method(#getCredentialData, [], {
+                      #openIdConfiguration: openIdConfiguration,
+                      #credential: credential,
+                    }),
+                  ),
+                )),
+          )
+          as _i16.Future<
+            (String, List<String>?, Map<String, dynamic>?, String?, String)
+          >);
 
   @override
   _i16.Future<_i9.VerificationType> verifyEncodedData({
@@ -2322,24 +1872,22 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     bool? isSdJwtVc = false,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #verifyEncodedData,
-          [],
-          {
-            #issuer: issuer,
-            #issuerKid: issuerKid,
-            #jwt: jwt,
-            #publicJwk: publicJwk,
-            #fromStatusList: fromStatusList,
-            #isCachingEnabled: isCachingEnabled,
-            #dio: dio,
-            #useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
-            #isSdJwtVc: isSdJwtVc,
-          },
-        ),
-        returnValue: _i16.Future<_i9.VerificationType>.value(
-            _i9.VerificationType.verified),
-      ) as _i16.Future<_i9.VerificationType>);
+            Invocation.method(#verifyEncodedData, [], {
+              #issuer: issuer,
+              #issuerKid: issuerKid,
+              #jwt: jwt,
+              #publicJwk: publicJwk,
+              #fromStatusList: fromStatusList,
+              #isCachingEnabled: isCachingEnabled,
+              #dio: dio,
+              #useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+              #isSdJwtVc: isSdJwtVc,
+            }),
+            returnValue: _i16.Future<_i9.VerificationType>.value(
+              _i9.VerificationType.verified,
+            ),
+          )
+          as _i16.Future<_i9.VerificationType>);
 
   @override
   bool verifyTokenEdDSA({
@@ -2347,32 +1895,24 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     required Map<String, dynamic>? publicKey,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #verifyTokenEdDSA,
-          [],
-          {
-            #token: token,
-            #publicKey: publicKey,
-          },
-        ),
-        returnValue: false,
-      ) as bool);
+            Invocation.method(#verifyTokenEdDSA, [], {
+              #token: token,
+              #publicKey: publicKey,
+            }),
+            returnValue: false,
+          )
+          as bool);
 
   @override
   String readCredentialEndpoint(_i9.OpenIdConfiguration? openIdConfiguration) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #readCredentialEndpoint,
-          [openIdConfiguration],
-        ),
-        returnValue: _i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #readCredentialEndpoint,
-            [openIdConfiguration],
-          ),
-        ),
-      ) as String);
+            Invocation.method(#readCredentialEndpoint, [openIdConfiguration]),
+            returnValue: _i18.dummyValue<String>(
+              this,
+              Invocation.method(#readCredentialEndpoint, [openIdConfiguration]),
+            ),
+          )
+          as String);
 
   @override
   _i16.Future<String> getIssuerJwt({
@@ -2382,30 +1922,25 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     String? cnonce,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getIssuerJwt,
-          [],
-          {
-            #tokenParameters: tokenParameters,
-            #clientAuthentication: clientAuthentication,
-            #iss: iss,
-            #cnonce: cnonce,
-          },
-        ),
-        returnValue: _i16.Future<String>.value(_i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #getIssuerJwt,
-            [],
-            {
+            Invocation.method(#getIssuerJwt, [], {
               #tokenParameters: tokenParameters,
               #clientAuthentication: clientAuthentication,
               #iss: iss,
               #cnonce: cnonce,
-            },
-          ),
-        )),
-      ) as _i16.Future<String>);
+            }),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#getIssuerJwt, [], {
+                  #tokenParameters: tokenParameters,
+                  #clientAuthentication: clientAuthentication,
+                  #iss: iss,
+                  #cnonce: cnonce,
+                }),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 
   @override
   _i16.Future<Map<String, dynamic>> getToken({
@@ -2418,22 +1953,20 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     required String? dPop,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getToken,
-          [],
-          {
-            #tokenEndPoint: tokenEndPoint,
-            #tokenData: tokenData,
-            #authorization: authorization,
-            #dio: dio,
-            #oAuthClientAttestation: oAuthClientAttestation,
-            #oAuthClientAttestationPop: oAuthClientAttestationPop,
-            #dPop: dPop,
-          },
-        ),
-        returnValue:
-            _i16.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
-      ) as _i16.Future<Map<String, dynamic>>);
+            Invocation.method(#getToken, [], {
+              #tokenEndPoint: tokenEndPoint,
+              #tokenData: tokenData,
+              #authorization: authorization,
+              #dio: dio,
+              #oAuthClientAttestation: oAuthClientAttestation,
+              #oAuthClientAttestationPop: oAuthClientAttestationPop,
+              #dPop: dPop,
+            }),
+            returnValue: _i16.Future<Map<String, dynamic>>.value(
+              <String, dynamic>{},
+            ),
+          )
+          as _i16.Future<Map<String, dynamic>>);
 
   @override
   _i16.Future<String> extractVpToken({
@@ -2446,25 +1979,7 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     required _i9.ProofHeaderType? proofHeaderType,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #extractVpToken,
-          [],
-          {
-            #clientId: clientId,
-            #nonce: nonce,
-            #credentialsToBePresented: credentialsToBePresented,
-            #did: did,
-            #kid: kid,
-            #privateKey: privateKey,
-            #proofHeaderType: proofHeaderType,
-          },
-        ),
-        returnValue: _i16.Future<String>.value(_i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #extractVpToken,
-            [],
-            {
+            Invocation.method(#extractVpToken, [], {
               #clientId: clientId,
               #nonce: nonce,
               #credentialsToBePresented: credentialsToBePresented,
@@ -2472,10 +1987,23 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
               #kid: kid,
               #privateKey: privateKey,
               #proofHeaderType: proofHeaderType,
-            },
-          ),
-        )),
-      ) as _i16.Future<String>);
+            }),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#extractVpToken, [], {
+                  #clientId: clientId,
+                  #nonce: nonce,
+                  #credentialsToBePresented: credentialsToBePresented,
+                  #did: did,
+                  #kid: kid,
+                  #privateKey: privateKey,
+                  #proofHeaderType: proofHeaderType,
+                }),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 
   @override
   _i16.Future<String> extractIdToken({
@@ -2489,26 +2017,7 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     required _i9.ProofHeaderType? proofHeaderType,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #extractIdToken,
-          [],
-          {
-            #clientId: clientId,
-            #credentialsToBePresented: credentialsToBePresented,
-            #did: did,
-            #kid: kid,
-            #nonce: nonce,
-            #clientType: clientType,
-            #privateKey: privateKey,
-            #proofHeaderType: proofHeaderType,
-          },
-        ),
-        returnValue: _i16.Future<String>.value(_i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #extractIdToken,
-            [],
-            {
+            Invocation.method(#extractIdToken, [], {
               #clientId: clientId,
               #credentialsToBePresented: credentialsToBePresented,
               #did: did,
@@ -2517,10 +2026,24 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
               #clientType: clientType,
               #privateKey: privateKey,
               #proofHeaderType: proofHeaderType,
-            },
-          ),
-        )),
-      ) as _i16.Future<String>);
+            }),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#extractIdToken, [], {
+                  #clientId: clientId,
+                  #credentialsToBePresented: credentialsToBePresented,
+                  #did: did,
+                  #kid: kid,
+                  #nonce: nonce,
+                  #clientType: clientType,
+                  #privateKey: privateKey,
+                  #proofHeaderType: proofHeaderType,
+                }),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 
   @override
   _i16.Future<Map<String, dynamic>> getDataForSiopV2Flow({
@@ -2535,24 +2058,22 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     required _i9.ProofHeaderType? proofHeader,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getDataForSiopV2Flow,
-          [],
-          {
-            #clientId: clientId,
-            #did: did,
-            #kid: kid,
-            #redirectUri: redirectUri,
-            #nonce: nonce,
-            #privateKey: privateKey,
-            #stateValue: stateValue,
-            #clientType: clientType,
-            #proofHeader: proofHeader,
-          },
-        ),
-        returnValue:
-            _i16.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
-      ) as _i16.Future<Map<String, dynamic>>);
+            Invocation.method(#getDataForSiopV2Flow, [], {
+              #clientId: clientId,
+              #did: did,
+              #kid: kid,
+              #redirectUri: redirectUri,
+              #nonce: nonce,
+              #privateKey: privateKey,
+              #stateValue: stateValue,
+              #clientType: clientType,
+              #proofHeader: proofHeader,
+            }),
+            returnValue: _i16.Future<Map<String, dynamic>>.value(
+              <String, dynamic>{},
+            ),
+          )
+          as _i16.Future<Map<String, dynamic>>);
 
   @override
   _i16.Future<_i4.Response<dynamic>> siopv2Flow({
@@ -2561,63 +2082,53 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     required Map<String, dynamic>? responseData,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #siopv2Flow,
-          [],
-          {
-            #redirectUri: redirectUri,
-            #dio: dio,
-            #responseData: responseData,
-          },
-        ),
-        returnValue:
-            _i16.Future<_i4.Response<dynamic>>.value(_FakeResponse_21<dynamic>(
-          this,
-          Invocation.method(
-            #siopv2Flow,
-            [],
-            {
+            Invocation.method(#siopv2Flow, [], {
               #redirectUri: redirectUri,
               #dio: dio,
               #responseData: responseData,
-            },
-          ),
-        )),
-      ) as _i16.Future<_i4.Response<dynamic>>);
+            }),
+            returnValue: _i16.Future<_i4.Response<dynamic>>.value(
+              _FakeResponse_21<dynamic>(
+                this,
+                Invocation.method(#siopv2Flow, [], {
+                  #redirectUri: redirectUri,
+                  #dio: dio,
+                  #responseData: responseData,
+                }),
+              ),
+            ),
+          )
+          as _i16.Future<_i4.Response<dynamic>>);
 
   @override
   _i16.Future<String> getVpToken(
-          _i9.VerifierTokenParameters? tokenParameters) =>
+    _i9.VerifierTokenParameters? tokenParameters,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getVpToken,
-          [tokenParameters],
-        ),
-        returnValue: _i16.Future<String>.value(_i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #getVpToken,
-            [tokenParameters],
-          ),
-        )),
-      ) as _i16.Future<String>);
+            Invocation.method(#getVpToken, [tokenParameters]),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#getVpToken, [tokenParameters]),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 
   @override
   _i16.Future<String> getIdToken(
-          _i9.VerifierTokenParameters? tokenParameters) =>
+    _i9.VerifierTokenParameters? tokenParameters,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getIdToken,
-          [tokenParameters],
-        ),
-        returnValue: _i16.Future<String>.value(_i18.dummyValue<String>(
-          this,
-          Invocation.method(
-            #getIdToken,
-            [tokenParameters],
-          ),
-        )),
-      ) as _i16.Future<String>);
+            Invocation.method(#getIdToken, [tokenParameters]),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#getIdToken, [tokenParameters]),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 
   @override
   _i16.Future<_i9.OpenIdConfiguration> getAuthorizationServerMetaData({
@@ -2628,33 +2139,28 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     _i3.SecureStorageProvider? secureStorage,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getAuthorizationServerMetaData,
-          [],
-          {
-            #baseUrl: baseUrl,
-            #useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
-            #dio: dio,
-            #isCachingEnabled: isCachingEnabled,
-            #secureStorage: secureStorage,
-          },
-        ),
-        returnValue: _i16.Future<_i9.OpenIdConfiguration>.value(
-            _FakeOpenIdConfiguration_22(
-          this,
-          Invocation.method(
-            #getAuthorizationServerMetaData,
-            [],
-            {
+            Invocation.method(#getAuthorizationServerMetaData, [], {
               #baseUrl: baseUrl,
               #useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
               #dio: dio,
               #isCachingEnabled: isCachingEnabled,
               #secureStorage: secureStorage,
-            },
-          ),
-        )),
-      ) as _i16.Future<_i9.OpenIdConfiguration>);
+            }),
+            returnValue: _i16.Future<_i9.OpenIdConfiguration>.value(
+              _FakeOpenIdConfiguration_22(
+                this,
+                Invocation.method(#getAuthorizationServerMetaData, [], {
+                  #baseUrl: baseUrl,
+                  #useOAuthAuthorizationServerLink:
+                      useOAuthAuthorizationServerLink,
+                  #dio: dio,
+                  #isCachingEnabled: isCachingEnabled,
+                  #secureStorage: secureStorage,
+                }),
+              ),
+            ),
+          )
+          as _i16.Future<_i9.OpenIdConfiguration>);
 
   @override
   _i16.Future<_i9.OpenIdConfiguration> getIssuerMetaData({
@@ -2665,33 +2171,27 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
     _i3.SecureStorageProvider? secureStorage,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getIssuerMetaData,
-          [],
-          {
-            #baseUrl: baseUrl,
-            #dio: dio,
-            #isCachingEnabled: isCachingEnabled,
-            #isSdJwtVc: isSdJwtVc,
-            #secureStorage: secureStorage,
-          },
-        ),
-        returnValue: _i16.Future<_i9.OpenIdConfiguration>.value(
-            _FakeOpenIdConfiguration_22(
-          this,
-          Invocation.method(
-            #getIssuerMetaData,
-            [],
-            {
+            Invocation.method(#getIssuerMetaData, [], {
               #baseUrl: baseUrl,
               #dio: dio,
               #isCachingEnabled: isCachingEnabled,
               #isSdJwtVc: isSdJwtVc,
               #secureStorage: secureStorage,
-            },
-          ),
-        )),
-      ) as _i16.Future<_i9.OpenIdConfiguration>);
+            }),
+            returnValue: _i16.Future<_i9.OpenIdConfiguration>.value(
+              _FakeOpenIdConfiguration_22(
+                this,
+                Invocation.method(#getIssuerMetaData, [], {
+                  #baseUrl: baseUrl,
+                  #dio: dio,
+                  #isCachingEnabled: isCachingEnabled,
+                  #isSdJwtVc: isSdJwtVc,
+                  #secureStorage: secureStorage,
+                }),
+              ),
+            ),
+          )
+          as _i16.Future<_i9.OpenIdConfiguration>);
 }
 
 /// A class which mocks [JWTDecode].
@@ -2703,22 +2203,20 @@ class MockJWTDecode extends _i1.Mock implements _i8.JWTDecode {
   }
 
   @override
-  Map<String, dynamic> parseJwt(String? token) => (super.noSuchMethod(
-        Invocation.method(
-          #parseJwt,
-          [token],
-        ),
-        returnValue: <String, dynamic>{},
-      ) as Map<String, dynamic>);
+  Map<String, dynamic> parseJwt(String? token) =>
+      (super.noSuchMethod(
+            Invocation.method(#parseJwt, [token]),
+            returnValue: <String, dynamic>{},
+          )
+          as Map<String, dynamic>);
 
   @override
-  Map<String, dynamic> parseJwtHeader(String? token) => (super.noSuchMethod(
-        Invocation.method(
-          #parseJwtHeader,
-          [token],
-        ),
-        returnValue: <String, dynamic>{},
-      ) as Map<String, dynamic>);
+  Map<String, dynamic> parseJwtHeader(String? token) =>
+      (super.noSuchMethod(
+            Invocation.method(#parseJwtHeader, [token]),
+            returnValue: <String, dynamic>{},
+          )
+          as Map<String, dynamic>);
 }
 
 /// A class which mocks [ActivityLogManager].
@@ -2731,31 +2229,30 @@ class MockActivityLogManager extends _i1.Mock
   }
 
   @override
-  _i16.Future<void> saveLog(_i11.LogData? log) => (super.noSuchMethod(
-        Invocation.method(
-          #saveLog,
-          [log],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+  _i16.Future<void> saveLog(_i11.LogData? log) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveLog, [log]),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 
   @override
-  _i16.Future<List<_i11.LogData>> readAllLogs() => (super.noSuchMethod(
-        Invocation.method(
-          #readAllLogs,
-          [],
-        ),
-        returnValue: _i16.Future<List<_i11.LogData>>.value(<_i11.LogData>[]),
-      ) as _i16.Future<List<_i11.LogData>>);
+  _i16.Future<List<_i11.LogData>> readAllLogs() =>
+      (super.noSuchMethod(
+            Invocation.method(#readAllLogs, []),
+            returnValue: _i16.Future<List<_i11.LogData>>.value(
+              <_i11.LogData>[],
+            ),
+          )
+          as _i16.Future<List<_i11.LogData>>);
 
   @override
-  _i16.Future<void> clearLogs() => (super.noSuchMethod(
-        Invocation.method(
-          #clearLogs,
-          [],
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
+  _i16.Future<void> clearLogs() =>
+      (super.noSuchMethod(
+            Invocation.method(#clearLogs, []),
+            returnValue: _i16.Future<void>.value(),
+            returnValueForMissingStub: _i16.Future<void>.value(),
+          )
+          as _i16.Future<void>);
 }
