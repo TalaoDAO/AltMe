@@ -1652,7 +1652,6 @@ Display? extractDisplay(
 
 List<String> getStringCredentialsForToken({
   required List<CredentialModel> credentialsToBePresented,
-  required ProfileCubit profileCubit,
 }) {
   final credentialList = credentialsToBePresented.map((item) {
     final isVcSdJWT =
@@ -1660,13 +1659,51 @@ List<String> getStringCredentialsForToken({
         item.getFormat == VCFormatType.dcSdJWT.vcValue;
 
     if (isVcSdJWT) {
-      return item.selectiveDisclosureJwt ?? jsonEncode(item.toJson());
+      // if item.selectiveDisclosureJwt is null throw an error
+      if (item.selectiveDisclosureJwt == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description':
+                'Selective disclosure JWT is required for sd-jwt format.',
+          },
+        );
+      }
+      return item.selectiveDisclosureJwt!;
     }
 
     return jsonEncode(item.toJson());
   }).toList();
 
   return credentialList;
+}
+
+List<String> getCredentialMapForToken({
+  required List<CredentialModel> credentialsToBePresented,
+}) {
+  final List<String> credentialMap = [];
+
+  for (final credential in credentialsToBePresented) {
+    final isVcSdJWT =
+        credential.getFormat == VCFormatType.vcSdJWT.vcValue ||
+        credential.getFormat == VCFormatType.dcSdJWT.vcValue;
+
+    if (isVcSdJWT) {
+      // if credential.selectiveDisclosureJwt is null throw an error
+      if (credential.selectiveDisclosureJwt == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_presentation',
+            'error_description':
+                'Selective disclosure JWT is required for sd-jwt format.',
+          },
+        );
+      }
+      credentialMap.add(credential.selectiveDisclosureJwt!);
+    }
+  }
+
+  return credentialMap;
 }
 
 //(presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt)

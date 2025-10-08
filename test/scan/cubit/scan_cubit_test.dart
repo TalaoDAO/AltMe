@@ -212,6 +212,9 @@ void main() {
           // Assert
           expect(result, isNotNull);
           try {
+            if (result is! String) {
+              fail('Result is not a String: $result');
+            }
             final decodedResult = jsonDecode(result) as List<dynamic>;
             expect(decodedResult, isA<List<dynamic>>());
           } catch (e) {

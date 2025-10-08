@@ -272,7 +272,7 @@ class MWeb3Client {
     required int chainId,
     required String privateKey,
     required EthereumAddress sender,
-    required EthereumAddress reciever,
+    required EthereumAddress receiver,
     required EtherAmount amount,
     BigInt? gas,
     EtherAmount? gasPrice,
@@ -286,7 +286,7 @@ class MWeb3Client {
 
     gas ??= await web3Client.estimateGas(
       sender: sender,
-      to: reciever,
+      to: receiver,
       gasPrice: gasPrice,
       value: amount,
       data: data != null ? hexToBytes(data) : null,
@@ -296,7 +296,7 @@ class MWeb3Client {
 
     final transaction = Transaction(
       from: sender,
-      to: reciever,
+      to: receiver,
       gasPrice: gasPrice,
       value: amount,
       data: data != null ? hexToBytes(data) : null,

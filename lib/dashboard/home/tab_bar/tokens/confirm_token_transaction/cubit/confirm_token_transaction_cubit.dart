@@ -439,7 +439,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       chainId: selectedEthereumNetwork.chainId,
       privateKey: selectedAccountSecretKey,
       sender: sender,
-      reciever: EthereumAddress.fromHex(state.withdrawalAddress),
+      receiver: EthereumAddress.fromHex(state.withdrawalAddress),
       amount: EtherAmount.inWei(amount),
       gas: gas,
       gasPrice: gasPrice,

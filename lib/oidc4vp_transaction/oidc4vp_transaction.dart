@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:altme/app/shared/m_web3_client/m_web3_client.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/verify_credential.dart';
-import 'package:altme/dashboard/home/tab_bar/tokens/token_page/models/token_model.dart';
+import 'package:altme/wallet/wallet.dart';
+import 'package:reown_walletkit/reown_walletkit.dart';
 
 /// Represents a list of blockchain transactions encoded as base64 strings.
 class Oidc4vpTransaction {
@@ -12,7 +13,7 @@ class Oidc4vpTransaction {
   final List<dynamic> transactionData;
 
   Future<void> sendToken({
-    required String CryptoAccountSecretKey,
+    required CryptoAccountData cryptoAccountData,
     required String rpcUrl,
   }) async {
     // Decode all transactions
@@ -20,26 +21,31 @@ class Oidc4vpTransaction {
 
     for (final tx in decodedTransactions) {
       // Map tx to TokenModel and extract required fields
-      final token = TokenModel(
-        contractAddress: tx['asset']['address']?.toString() ?? '',
-        name: tx['asset']['symbol']?.toString() ?? '',
-        symbol: tx['asset']['symbol']?.toString() ?? '',
-        balance: '0',
-        decimals: tx['asset']['decimals']?.toString() ?? '',
-        standard: 'erc20',
-      );
-      final withdrawalAddress = tx['recipient']?.toString() ?? '';
-      final amountInWei = double.tryParse(tx['amount']?.toString() ?? '0') ?? 0;
       final chainId = int.tryParse(tx['chain_id']?.toString() ?? '1') ?? 1;
+      final params = tx['rpc']['params'] as List<dynamic>;
 
-      await MWeb3Client.sendToken(
-        selectedAccountSecretKey: CryptoAccountSecretKey,
-        rpcUrl: rpcUrl,
-        token: token,
-        withdrawalAddress: withdrawalAddress,
-        amountInWei: amountInWei,
-        chainId: chainId,
-      );
+      for (var i = 0; i < params.length; i++) {
+        final param = params[i];
+        final amount = param['value']?.toString() ?? '';
+        final data = param['data']?.toString() ?? '';
+        final receiver = param['to']?.toString() ?? '';
+        final transaction = Transaction(
+          from: EthereumAddress.fromHex(cryptoAccountData.walletAddress),
+          to: EthereumAddress.fromHex(receiver),
+          value: EtherAmount.inWei(BigInt.parse(amount)),
+          data: data.isNotEmpty ? hexToBytes(data) : null,
+        );
+
+        await MWeb3Client.sendEVMTransaction(
+          privateKey: cryptoAccountData.secretKey,
+          web3RpcURL: rpcUrl,
+          sender: transaction.from!,
+          receiver: transaction.to!,
+          amount: transaction.value!,
+          chainId: chainId,
+          data: data,
+        );
+      }
     }
     return;
   }

@@ -513,7 +513,7 @@ class OperationCubit extends Cubit<OperationState> {
           web3RpcURL: rpcUrl,
           privateKey: transactionAccountData.secretKey,
           sender: transaction.from!,
-          reciever: transaction.to!,
+          receiver: transaction.to!,
           amount: ethAmount,
           data: transaction.data == null
               ? null

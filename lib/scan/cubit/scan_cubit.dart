@@ -605,7 +605,7 @@ class ScanCubit extends Cubit<ScanState> {
 
         final tokenParameters = TokenParameters(
           privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
-          did: '', // just added as it is required field
+          did: did, // just added as it is required field
           mediaType: MediaType.basic, // just added as it is required field
           clientType:
               ClientType.p256JWKThumprint, // just added as it is required field
@@ -697,7 +697,7 @@ class ScanCubit extends Cubit<ScanState> {
           await Oidc4vpTransaction(
             transactionData: state.transactionData!,
           ).sendToken(
-            CryptoAccountSecretKey: walletCubit.state.currentAccount!.secretKey,
+            cryptoAccountData: walletCubit.state.currentAccount!,
             rpcUrl: rpcUrl,
           );
         }
@@ -885,7 +885,7 @@ class ScanCubit extends Cubit<ScanState> {
     );
   }
 
-  Future<String> createVpToken({
+  Future<dynamic> createVpToken({
     required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
     required OIDC4VC oidc4vc,
@@ -910,9 +910,17 @@ class ScanCubit extends Cubit<ScanState> {
 
     if (formatFromPresentationSubmission == VCFormatType.vcSdJWT ||
         formatFromPresentationSubmission == VCFormatType.dcSdJWT) {
+      // check if response mode is direct_post.jwt or direct_post (default)
+      // if direct_post.jwt we send a json else we send list of jwts
+      final String? responseMode = uri.queryParameters['response_mode'];
+      if (responseMode == 'direct_post.jwt') {
+        final credentialJwtList = getCredentialMapForToken(
+          credentialsToBePresented: credentialsToBePresented,
+        );
+        return credentialJwtList;
+      }
       final credentialListJwt = getStringCredentialsForToken(
         credentialsToBePresented: credentialsToBePresented,
-        profileCubit: profileCubit,
       );
 
       if (credentialListJwt.length == 1) {
@@ -925,7 +933,6 @@ class ScanCubit extends Cubit<ScanState> {
         formatFromPresentationSubmission == VCFormatType.jwtVcJsonLd) {
       final credentialList = getStringCredentialsForToken(
         credentialsToBePresented: credentialsToBePresented,
-        profileCubit: profileCubit,
       );
 
       final vpToken = await oidc4vc.extractVpToken(
@@ -990,7 +997,6 @@ class ScanCubit extends Cubit<ScanState> {
   }) async {
     final credentialList = getStringCredentialsForToken(
       credentialsToBePresented: credentialsToBePresented,
-      profileCubit: profileCubit,
     );
 
     final customOidc4vcProfile = profileCubit
