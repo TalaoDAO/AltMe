@@ -170,7 +170,7 @@ Future<void> addOIDC4VCCredential({
   // insert the credential in the wallet
   await credentialsCubit.insertCredential(
     credential: credentialModel,
-    showStatus: false,
+    showStatus: true,
     showMessage: isLastCall,
     uri: Uri.parse(issuer ?? ''),
   );
