@@ -324,7 +324,7 @@ class WalletCubit extends Cubit<WalletState> {
     if (Parameters.walletHandlesCrypto) {
       // only for default profile at wallet creation
       // get crurrent current profile type from profileCubit
-      await credentialsCubit.insertCryptoAccountOwnershipProof(
+      await credentialsCubit.addCryptoProofsPerProfile(
         cryptoAccountData: cryptoAccountData,
       );
     }

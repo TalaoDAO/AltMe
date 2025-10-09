@@ -673,15 +673,65 @@ final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
     }
     if (state.status == AppStatus.successAdd) {
       // get list of crypto accounts from profile cubit
+      final profileCubit = context.read<ProfileCubit>();
       final manageAccountsCubit = ManageAccountsCubit(
         credentialsCubit: context.read<CredentialsCubit>(),
         manageNetworkCubit: context.read<ManageNetworkCubit>(),
       );
       final cryptoAccounts = manageAccountsCubit.state.cryptoAccount.data;
       // generate crypto accounts cards
-      await context.read<CredentialsCubit>().generateCryptoAccountsCards(
-        cryptoAccounts,
-      );
+      final credentialsCubit = context.read<CredentialsCubit>();
+      int index = 1;
+      for (final cryptoAccount in cryptoAccounts) {
+        final cryptoAccountData = CryptoAccountData(
+          name: cryptoAccount.name,
+          secretKey: cryptoAccount.secretKey,
+          walletAddress: cryptoAccount.walletAddress,
+          isImported: cryptoAccount.isImported,
+          blockchainType: cryptoAccount.blockchainType,
+        );
+        final didKeyType = profileCubit
+            .state
+            .model
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile
+            .defaultDid;
+
+        final privateKey = await getPrivateKey(
+          didKeyType: didKeyType,
+          profileCubit: profileCubit,
+        );
+
+        final (did, _) = await getDidAndKid(
+          didKeyType: didKeyType,
+          privateKey: privateKey,
+          profileCubit: profileCubit,
+        );
+
+        final private = jsonDecode(privateKey) as Map<String, dynamic>;
+        // get list of supported formats for current profile
+        final formatsSupported =
+            profileCubit
+                .state
+                .model
+                .profileSetting
+                .selfSovereignIdentityOptions
+                .customOidc4vcProfile
+                .formatsSupported ??
+            [];
+
+        await credentialsCubit.addCryptoProofsPerFormat(
+          formatsSupported: formatsSupported,
+          cryptoAccountData: cryptoAccountData,
+          did: did,
+          private: private,
+          showStatus:
+              index ==
+              cryptoAccounts.length, // show status only for last account
+        );
+        index++;
+      }
     }
     if (state.status == AppStatus.addEnterpriseAccount ||
         state.status == AppStatus.updateEnterpriseAccount ||

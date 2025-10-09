@@ -305,7 +305,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         ),
       ),
     );
-
     emit(
       state.copyWith(
         status: showStatus ? CredentialsStatus.insert : CredentialsStatus.idle,
@@ -476,7 +475,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     return resultList;
   }
 
-  Future<void> insertCryptoAccountOwnershipProof({
+  Future<void> addCryptoProofsPerProfile({
     required CryptoAccountData cryptoAccountData,
   }) async {
     final walletContainsEnterpriseProfile =
@@ -484,7 +483,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
 
     final ProfileType currentProfileType = profileCubit.state.model.profileType;
     // for each profileType create the crypto ownership proofs
-
+    final profilesLength = ProfileType.values.length;
+    int index = 1;
     for (final profileType in ProfileType.values) {
       // skip enterprise profile if wallet is not enterprise
       if (!walletContainsEnterpriseProfile &&
@@ -533,34 +533,57 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               .formatsSupported ??
           [];
       // generate Crypto proof of ownership for each supported formats
-      for (final format in formatsSupported) {
-        final credential = await generateCryptoAccountOwnershipProof(
-          cryptoAccountData: cryptoAccountData,
-          didKitProvider: didKitProvider,
-          keyGenerator: keyGenerator,
-          did: did,
-          customOidc4vcProfile: profileCubit
-              .state
-              .model
-              .profileSetting
-              .selfSovereignIdentityOptions
-              .customOidc4vcProfile,
-          oidc4vc: oidc4vc,
-          privateKey: private,
-          profileType: profileCubit.state.model.profileType,
-          vcFormatType: format,
-        );
-
-        if (credential != null) {
-          await insertCredential(
-            credential: credential,
-            showMessage: false,
-            uri: Uri.parse(Parameters.walletIssuer),
-          );
-        }
-      }
+      await addCryptoProofsPerFormat(
+        formatsSupported: formatsSupported,
+        cryptoAccountData: cryptoAccountData,
+        did: did,
+        private: private,
+        showStatus: index == profilesLength,
+      );
+      index++;
     }
     await profileCubit.setProfile(currentProfileType);
+  }
+
+  Future<void> addCryptoProofsPerFormat({
+    required List<VCFormatType> formatsSupported,
+    required CryptoAccountData cryptoAccountData,
+    required String did,
+    required Map<String, dynamic> private,
+    required bool showStatus,
+  }) async {
+    // generate Crypto proof of ownership for each supported formats
+    final formatsSupportedLength = formatsSupported.length;
+    int index = 1;
+    for (final format in formatsSupported) {
+      final credential = await generateCryptoAccountOwnershipProof(
+        cryptoAccountData: cryptoAccountData,
+        didKitProvider: didKitProvider,
+        keyGenerator: keyGenerator,
+        did: did,
+        customOidc4vcProfile: profileCubit
+            .state
+            .model
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile,
+        oidc4vc: oidc4vc,
+        privateKey: private,
+        profileType: profileCubit.state.model.profileType,
+        vcFormatType: format,
+      );
+
+      if (credential != null) {
+        await insertCredential(
+          credential: credential,
+          showMessage: false,
+          uri: Uri.parse(Parameters.walletIssuer),
+          // in order to prevent to many screen refresh when adding proofs
+          showStatus: index == formatsSupportedLength && showStatus,
+        );
+      }
+      index++;
+    }
   }
 
   ///get dummy cards
@@ -1019,9 +1042,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         blockchainType: cryptoAccount.blockchainType,
       );
 
-      await insertCryptoAccountOwnershipProof(
-        cryptoAccountData: cryptoAccountData,
-      );
+      await addCryptoProofsPerProfile(cryptoAccountData: cryptoAccountData);
     }
   }
 }
