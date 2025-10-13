@@ -51,7 +51,7 @@ Future<void> bootstrap(FlavorMode flavor) async {
     await initSecureStorage;
 
     /// Disable Http google font
-    GoogleFonts.config.allowRuntimeFetching = false;
+    GoogleFonts.config.allowRuntimeFetching = true;
 
     await Dartez().init();
     Bloc.observer = AppBlocObserver();
