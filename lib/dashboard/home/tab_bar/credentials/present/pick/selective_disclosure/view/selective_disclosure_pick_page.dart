@@ -1,15 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/oidc4vp_transaction/oidc4vp_signature.dart';
+import 'package:altme/oidc4vp_transaction/oidc4vp_transaction.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/inject_selective_disclosure_state.dart';
+import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 class SelectiveDisclosurePickPage extends StatelessWidget {
@@ -285,9 +290,38 @@ class _SelectiveDisclosurePickViewState
       };
       // In case of OIDC4VP transaction we need to add the hash of each element
       // of transactiondata into the payload
-      final transactionData = context.read<ScanCubit>().state.transactionData;
+      final scanCubit = context.read<ScanCubit>();
+      final transactionData = scanCubit.state.transactionData;
 
       if (transactionData != null) {
+        final dotenv = DotEnv();
+        final rpcUrl = await fetchRpcUrl(
+          blockchainNetwork: EthereumNetwork.mainNet(),
+          dotEnv: dotenv,
+        );
+        final currentBlockchainAccount = context
+            .read<WalletCubit>()
+            .state
+            .currentAccount!;
+        final List<Uint8List> blockchainSignedTransaction =
+            await Oidc4vpTransaction(
+              transactionData: transactionData,
+            ).getBlockchainSignedTransaction(
+              cryptoAccountData: currentBlockchainAccount,
+              rpcUrl: rpcUrl,
+            );
+
+        await scanCubit.addBlockchainSignedTransaction(
+          blockchainSignedTransaction,
+        );
+        final Oidc4vpSignedTransaction oidc4vpSignedTransaction =
+            Oidc4vpSignedTransaction(
+              signedTransaction: blockchainSignedTransaction,
+            );
+
+        payload['blockchain_transaction_hash'] = oidc4vpSignedTransaction
+            .getSignedTransactionHashes();
+
         final List<String> transactionDataHashes = [];
         for (final element in transactionData) {
           transactionDataHashes.add(sh256Hash(jsonEncode(element)));

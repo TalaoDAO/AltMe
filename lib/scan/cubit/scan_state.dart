@@ -11,6 +11,7 @@ class ScanState extends Equatable {
     this.domain,
     this.done,
     this.transactionData,
+    this.blockchainTransactionsSignatures,
   });
 
   factory ScanState.fromJson(Map<String, dynamic> json) =>
@@ -23,6 +24,7 @@ class ScanState extends Equatable {
   final String? challenge;
   final String? domain;
   final List<dynamic>? transactionData;
+  final List<Uint8List>? blockchainTransactionsSignatures;
   @JsonKey(includeFromJson: false, includeToJson: false)
   final dynamic Function(String)? done;
 
@@ -74,6 +76,7 @@ class ScanState extends Equatable {
     String? domain,
     dynamic Function(String)? done,
     List<dynamic>? transactionData,
+    List<Uint8List>? blockchainTransactionsSignatures,
   }) {
     return ScanState(
       status: status ?? this.status,
@@ -84,6 +87,9 @@ class ScanState extends Equatable {
       domain: domain ?? this.domain,
       done: done ?? this.done,
       transactionData: transactionData ?? this.transactionData,
+      blockchainTransactionsSignatures:
+          blockchainTransactionsSignatures ??
+          this.blockchainTransactionsSignatures,
     );
   }
 
@@ -98,5 +104,7 @@ class ScanState extends Equatable {
     challenge,
     domain,
     done,
+    transactionData,
+    blockchainTransactionsSignatures,
   ];
 }

@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
-import 'package:altme/oidc4vp_transaction/oidc4vp_transaction.dart';
+import 'package:altme/oidc4vp_transaction/oidc4vp_signature.dart';
 import 'package:altme/wallet/wallet.dart';
 
 import 'package:bloc/bloc.dart';
@@ -687,19 +688,16 @@ class ScanCubit extends Cubit<ScanState> {
             ),
           ),
         );
-        if (state.transactionData != null) {
+        if (state.blockchainTransactionsSignatures != null) {
           final dotenv = DotEnv();
           final rpcUrl = await fetchRpcUrl(
             blockchainNetwork: EthereumNetwork.mainNet(),
             dotEnv: dotenv,
           );
 
-          await Oidc4vpTransaction(
-            transactionData: state.transactionData!,
-          ).sendToken(
-            cryptoAccountData: walletCubit.state.currentAccount!,
-            rpcUrl: rpcUrl,
-          );
+          await Oidc4vpSignedTransaction(
+            signedTransaction: state.blockchainTransactionsSignatures!,
+          ).sendToken(rpcUrl);
         }
         final data = response.data;
         if (data is Map) {
@@ -1064,6 +1062,17 @@ class ScanCubit extends Cubit<ScanState> {
         showMessage: false,
       );
     }
+  }
+
+  Future<void> addBlockchainSignedTransaction(
+    List<Uint8List> signatures,
+  ) async {
+    emit(
+      state.copyWith(
+        blockchainTransactionsSignatures: signatures,
+        status: ScanStatus.init,
+      ),
+    );
   }
 
   Future<void> addTransactionData(List<dynamic> transactionData) async {

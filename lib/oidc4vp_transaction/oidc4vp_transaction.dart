@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:altme/app/shared/m_web3_client/m_web3_client.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/verify_credential.dart';
@@ -12,12 +13,13 @@ class Oidc4vpTransaction {
   /// List of base64-encoded transaction data strings.
   final List<dynamic> transactionData;
 
-  Future<void> sendToken({
+  Future<List<Uint8List>> getBlockchainSignedTransaction({
     required CryptoAccountData cryptoAccountData,
     required String rpcUrl,
   }) async {
     // Decode all transactions
     final decodedTransactions = decodeTransactions();
+    final List<Uint8List> signedTransactions = [];
 
     for (final tx in decodedTransactions) {
       // Map tx to TokenModel and extract required fields
@@ -36,18 +38,20 @@ class Oidc4vpTransaction {
           data: data.isNotEmpty ? hexToBytes(data) : null,
         );
 
-        await MWeb3Client.sendEVMTransaction(
-          privateKey: cryptoAccountData.secretKey,
-          web3RpcURL: rpcUrl,
-          sender: transaction.from!,
-          receiver: transaction.to!,
-          amount: transaction.value!,
-          chainId: chainId,
-          data: data,
+        signedTransactions.add(
+          await MWeb3Client.getEvmTransactionSignature(
+            privateKey: cryptoAccountData.secretKey,
+            web3RpcURL: rpcUrl,
+            sender: transaction.from!,
+            receiver: transaction.to!,
+            amount: transaction.value!,
+            chainId: chainId,
+            data: data,
+          ),
         );
       }
     }
-    return;
+    return signedTransactions;
   }
 
   /// Decodes the base64 transaction data back to a list of Maps.

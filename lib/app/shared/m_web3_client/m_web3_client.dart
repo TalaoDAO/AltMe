@@ -280,6 +280,38 @@ class MWeb3Client {
   }) async {
     log.i('sendEthereumTransaction');
     final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
+    final Credentials credentials = EthPrivateKey.fromHex(privateKey);
+
+    final transaction = await getTransactionForEvmTransaction(
+      web3Client: web3Client,
+      sender: sender,
+      receiver: receiver,
+      amount: amount,
+      gas: gas,
+      gasPrice: gasPrice,
+      data: data,
+    );
+
+    final transactionHash = await web3Client.sendTransaction(
+      credentials,
+      transaction,
+      chainId: chainId,
+    );
+
+    log.i('chainId: $chainId');
+    log.i('transactionHash - $transactionHash');
+    return transactionHash;
+  }
+
+  static Future<Transaction> getTransactionForEvmTransaction({
+    required Web3Client web3Client,
+    required EthereumAddress sender,
+    required EthereumAddress receiver,
+    required EtherAmount amount,
+    BigInt? gas,
+    EtherAmount? gasPrice,
+    String? data,
+  }) async {
     final int nonce = await web3Client.getTransactionCount(sender);
 
     gasPrice ??= await web3Client.getGasPrice();
@@ -291,8 +323,6 @@ class MWeb3Client {
       value: amount,
       data: data != null ? hexToBytes(data) : null,
     );
-
-    final Credentials credentials = EthPrivateKey.fromHex(privateKey);
 
     final transaction = Transaction(
       from: sender,
@@ -306,18 +336,81 @@ class MWeb3Client {
 
     log.i('nonce: $nonce');
     log.i('maxGas: ${gas.toInt()}');
-    log.i('chainId: $chainId');
     log.i('gasPrice: $gasPrice');
     final fee = gas * gasPrice.getInWei;
     log.i('$gas * gasPrice.getInWei = $fee');
 
-    final transactionHash = await web3Client.sendTransaction(
+    return transaction;
+  }
+
+  static Future<Uint8List> getEvmTransactionSignature({
+    required String web3RpcURL,
+    required int chainId,
+    required String privateKey,
+    required EthereumAddress sender,
+    required EthereumAddress receiver,
+    required EtherAmount amount,
+    BigInt? gas,
+    EtherAmount? gasPrice,
+    String? data,
+  }) async {
+    log.i('getEvmTransactionSignature');
+    final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
+    final Credentials credentials = EthPrivateKey.fromHex(privateKey);
+
+    final transaction = await getTransactionForEvmTransaction(
+      web3Client: web3Client,
+      sender: sender,
+      receiver: receiver,
+      amount: amount,
+      gas: gas,
+      gasPrice: gasPrice,
+      data: data,
+    );
+
+    // TODO(hawkbee): Ensure the account balance is big enough
+    // final ethBalance = await MWeb3Client.getEVMBalance(
+    //   rpcUrl: web3RpcURL,
+    //   secretKey: privateKey,
+    // );
+
+    var signed = await web3Client.signTransaction(
       credentials,
       transaction,
       chainId: chainId,
+      fetchChainIdFromNetworkId: false,
     );
 
-    log.i('transactionHash - $transactionHash');
+    if (transaction.isEIP1559) {
+      signed = prependTransactionType(0x02, signed);
+    }
+
+    return signed;
+  }
+
+  /// Currently used by OIDC4VP transaction flow because we need to get
+  /// the hash sooner. We send the hash to the verifier to facilitate
+  /// the payment validation.
+  /// ATTENTION: This process won't work if a transaction is done on the account
+  /// in the meanwhile because the signature may depends on the transaction
+  /// count of the block.
+  static Future<String> sendEVMTransactionWithSignature({
+    required Uint8List signed,
+    required String web3RpcURL,
+  }) async {
+    log.i('sendEVMTransactionWithSignature');
+    final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
+
+    return web3Client.sendRawTransaction(signed);
+  }
+
+  static String convertSignatureToStringHash(Uint8List signature) {
+    // Hash the signed transaction using Keccak-256
+    final Uint8List hash = keccak256(signature);
+
+    // Convert to hexadecimal with 0x prefix
+    final String transactionHash = bytesToHex(hash, include0x: true);
+
     return transactionHash;
   }
 }

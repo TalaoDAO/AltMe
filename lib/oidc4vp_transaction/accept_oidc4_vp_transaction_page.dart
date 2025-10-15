@@ -271,6 +271,8 @@ class SelectCryptoAccount extends StatelessWidget {
                   context.read<ManageAccountsCubit>().setCurrentWalletAccount(
                     index,
                   );
+                  // todo(hawkbee): Check the balance of the selected account
+                  // for each transaction
                 },
               );
             },
