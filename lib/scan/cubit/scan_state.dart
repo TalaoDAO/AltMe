@@ -1,6 +1,5 @@
 part of 'scan_cubit.dart';
 
-@JsonSerializable()
 class ScanState extends Equatable {
   const ScanState({
     this.status = ScanStatus.init,
@@ -13,9 +12,6 @@ class ScanState extends Equatable {
     this.transactionData,
     this.blockchainTransactionsSignatures,
   });
-
-  factory ScanState.fromJson(Map<String, dynamic> json) =>
-      _$ScanStateFromJson(json);
 
   final ScanStatus status;
   final StateMessage? message;
@@ -92,8 +88,6 @@ class ScanState extends Equatable {
           this.blockchainTransactionsSignatures,
     );
   }
-
-  Map<String, dynamic> toJson() => _$ScanStateToJson(this);
 
   @override
   List<Object?> get props => [

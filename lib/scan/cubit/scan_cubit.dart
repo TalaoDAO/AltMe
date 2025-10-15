@@ -23,7 +23,6 @@ import 'package:secure_storage/secure_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
-part 'scan_cubit.g.dart';
 part 'scan_state.dart';
 
 /// VC = Verifibale Credential : signed and issued by issuer
