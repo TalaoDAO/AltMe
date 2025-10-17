@@ -294,29 +294,10 @@ class _SelectiveDisclosurePickViewState
       final transactionData = scanCubit.state.transactionData;
 
       if (transactionData != null) {
-        final dotenv = DotEnv();
-        final rpcUrl = await fetchRpcUrl(
-          blockchainNetwork: EthereumNetwork.mainNet(),
-          dotEnv: dotenv,
-        );
-        final currentBlockchainAccount = context
-            .read<WalletCubit>()
-            .state
-            .currentAccount!;
-        final List<Uint8List> blockchainSignedTransaction =
-            await Oidc4vpTransaction(
-              transactionData: transactionData,
-            ).getBlockchainSignedTransaction(
-              cryptoAccountData: currentBlockchainAccount,
-              rpcUrl: rpcUrl,
-            );
-
-        await scanCubit.addBlockchainSignedTransaction(
-          blockchainSignedTransaction,
-        );
         final Oidc4vpSignedTransaction oidc4vpSignedTransaction =
             Oidc4vpSignedTransaction(
-              signedTransaction: blockchainSignedTransaction,
+              signedTransaction:
+                  scanCubit.state.blockchainTransactionsSignatures!,
             );
 
         payload['blockchain_transaction_hash'] = oidc4vpSignedTransaction
