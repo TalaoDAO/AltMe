@@ -49,6 +49,17 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       String? statusListUri;
       int? statusListIndex;
 
+      /// if credential has no status there is no point in verifying it
+      if (item.data['status'] == null) {
+        emit(
+          state.copyWith(
+            credentialStatus: CredentialStatus.noStatus,
+            status: AppStatus.idle,
+          ),
+        );
+        return;
+      }
+
       if (!customOidc4vcProfile.securityLevel) {
         emit(
           state.copyWith(
