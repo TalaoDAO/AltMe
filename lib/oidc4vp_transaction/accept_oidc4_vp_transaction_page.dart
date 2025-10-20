@@ -217,9 +217,37 @@ class AcceptButton extends StatelessWidget {
     return MyElevatedButton(
       text: l10n.communicationHostAllow,
       onPressed: () async {
-        Navigator.of(context).pop();
+        // todo(hawkbee): Check the balance of the selected account
+        // for each transaction
+
+        /// prepare the transactions with the selected account
+        final scanCubit = context.read<ScanCubit>();
+        final transactionData = scanCubit.state.transactionData;
+
+        final dotenv = DotEnv();
+        final rpcUrl = await fetchRpcUrl(
+          blockchainNetwork: EthereumNetwork.mainNet(),
+          dotEnv: dotenv,
+        );
+        final currentBlockchainAccount = context
+            .read<WalletCubit>()
+            .state
+            .currentAccount!;
+        final List<Uint8List> blockchainSignedTransaction =
+            await Oidc4vpTransaction(
+              transactionData: transactionData!,
+            ).getBlockchainSignedTransaction(
+              cryptoAccountData: currentBlockchainAccount,
+              rpcUrl: rpcUrl,
+            );
+
+        await scanCubit.addBlockchainSignedTransaction(
+          blockchainSignedTransaction,
+        );
         final qrCodeScanCubit = context.read<QRCodeScanCubit>();
+
         await qrCodeScanCubit.startSIOPV2OIDC4VPProcess(uri);
+        Navigator.of(context).pop();
       },
     );
   }
@@ -273,36 +301,9 @@ class SelectCryptoAccount extends StatelessWidget {
                 isSelected: state.currentCryptoIndex == index,
                 listIndex: index,
                 onPressed: () async {
-                  context.read<ManageAccountsCubit>().setCurrentWalletAccount(
-                    index,
-                  );
-                  // todo(hawkbee): Check the balance of the selected account
-                  // for each transaction
-
-                  /// prepare the transactions with the selected account
-                  final scanCubit = context.read<ScanCubit>();
-                  final transactionData = scanCubit.state.transactionData;
-
-                  final dotenv = DotEnv();
-                  final rpcUrl = await fetchRpcUrl(
-                    blockchainNetwork: EthereumNetwork.mainNet(),
-                    dotEnv: dotenv,
-                  );
-                  final currentBlockchainAccount = context
-                      .read<WalletCubit>()
-                      .state
-                      .currentAccount!;
-                  final List<Uint8List> blockchainSignedTransaction =
-                      await Oidc4vpTransaction(
-                        transactionData: transactionData!,
-                      ).getBlockchainSignedTransaction(
-                        cryptoAccountData: currentBlockchainAccount,
-                        rpcUrl: rpcUrl,
-                      );
-
-                  await scanCubit.addBlockchainSignedTransaction(
-                    blockchainSignedTransaction,
-                  );
+                  await context
+                      .read<ManageAccountsCubit>()
+                      .setCurrentWalletAccount(index);
                 },
               );
             },
