@@ -112,7 +112,7 @@ class Oidc4VpPrompt {
             ) ??
             false;
       } else {
-        promptResult = false;
+        promptResult = true;
       }
     }
     final qrCodeScanCubit = context.read<QRCodeScanCubit>();
