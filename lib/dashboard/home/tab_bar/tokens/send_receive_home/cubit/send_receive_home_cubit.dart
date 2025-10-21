@@ -272,7 +272,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
             level: 0,
             timestamp: e['block_timestamp'] as String,
             block: e['block_hash'] as String,
-            hash: e['transaction_hash'] as String,
+            hash: e['transaction_hashes'] as String,
             counter: 0,
             sender: OperationAddressModel(address: e['from_address'] as String),
             gasLimit: 0,

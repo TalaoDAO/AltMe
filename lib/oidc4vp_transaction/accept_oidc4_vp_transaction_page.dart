@@ -8,7 +8,7 @@ import 'package:altme/app/shared/enum/type/blockchain_type.dart';
 import 'package:altme/app/shared/helper_functions/helper_functions.dart';
 import 'package:altme/app/shared/loading/loading_view.dart';
 import 'package:altme/app/shared/message_handler/response_message.dart';
-import 'package:altme/app/shared/models/blockchain_network/ethereum_network.dart';
+import 'package:altme/app/shared/models/model.dart';
 import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/crypto_account_switcher/crypto_bottom_sheet/widgets/crypto_accont_item.dart';
@@ -233,21 +233,27 @@ class AcceptButton extends StatelessWidget {
             .read<WalletCubit>()
             .state
             .currentAccount!;
-        final List<Uint8List> blockchainSignedTransaction =
-            await Oidc4vpTransaction(
-              transactionData: transactionData!,
-            ).getBlockchainSignedTransaction(
-              cryptoAccountData: currentBlockchainAccount,
-              rpcUrl: rpcUrl,
-            );
+        try {
+          final List<Uint8List> blockchainSignedTransaction =
+              await Oidc4vpTransaction(
+                transactionData: transactionData!,
+              ).getBlockchainSignedTransaction(
+                cryptoAccountData: currentBlockchainAccount,
+                rpcUrl: rpcUrl,
+              );
+          await scanCubit.addBlockchainSignedTransaction(
+            blockchainSignedTransaction,
+          );
+          final qrCodeScanCubit = context.read<QRCodeScanCubit>();
 
-        await scanCubit.addBlockchainSignedTransaction(
-          blockchainSignedTransaction,
-        );
-        final qrCodeScanCubit = context.read<QRCodeScanCubit>();
-
-        await qrCodeScanCubit.startSIOPV2OIDC4VPProcess(uri);
-        Navigator.of(context).pop();
+          await qrCodeScanCubit.startSIOPV2OIDC4VPProcess(uri);
+          Navigator.of(context).pop();
+        } catch (e) {
+          AlertMessage.showStateMessage(
+            context: context,
+            stateMessage: StateMessage(stringMessage: e.toString()),
+          );
+        }
       },
     );
   }

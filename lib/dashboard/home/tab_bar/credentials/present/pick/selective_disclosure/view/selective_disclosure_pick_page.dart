@@ -1,20 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vp_transaction/oidc4vp_signature.dart';
-import 'package:altme/oidc4vp_transaction/oidc4vp_transaction.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/inject_selective_disclosure_state.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 class SelectiveDisclosurePickPage extends StatelessWidget {
@@ -300,7 +296,7 @@ class _SelectiveDisclosurePickViewState
                   scanCubit.state.blockchainTransactionsSignatures!,
             );
 
-        payload['blockchain_transaction_hash'] = oidc4vpSignedTransaction
+        payload['blockchain_transaction_hashes'] = oidc4vpSignedTransaction
             .getSignedTransactionHashes();
 
         final List<String> transactionDataHashes = [];

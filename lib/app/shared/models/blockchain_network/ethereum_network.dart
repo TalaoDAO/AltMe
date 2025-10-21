@@ -40,7 +40,7 @@ class EthereumNetwork extends BlockchainNetwork {
     apiUrl: Urls.moralisBaseUrl,
     chain: 'sepolia',
     chainId: 11155111, // Sepolia testnet chainId
-    rpcNodeUrl: 'https://rpc.sepolia.dev',
+    rpcNodeUrl: 'https://ethereum-sepolia-rpc.publicnode.com',
     title: 'Ethereum Testnet (Sepolia)',
     subTitle:
         'This network is used to test protocol upgrades'
