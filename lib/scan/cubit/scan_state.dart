@@ -74,6 +74,18 @@ class ScanState extends Equatable {
     List<dynamic>? transactionData,
     List<Uint8List>? blockchainTransactionsSignatures,
   }) {
+    // when status is successfull we need to reset transactionData and
+    // blockchainTransactionsSignatures to null if they are not provided
+    var newTransactionData = transactionData ?? this.transactionData;
+    var newBlockchainTransactionsSignatures =
+        blockchainTransactionsSignatures ??
+        this.blockchainTransactionsSignatures;
+
+    if (status == ScanStatus.success || status == ScanStatus.error) {
+      newTransactionData = null;
+      newBlockchainTransactionsSignatures = null;
+    }
+
     return ScanState(
       status: status ?? this.status,
       message: message ?? this.message,
@@ -82,10 +94,8 @@ class ScanState extends Equatable {
       challenge: challenge ?? this.challenge,
       domain: domain ?? this.domain,
       done: done ?? this.done,
-      transactionData: transactionData ?? this.transactionData,
-      blockchainTransactionsSignatures:
-          blockchainTransactionsSignatures ??
-          this.blockchainTransactionsSignatures,
+      transactionData: newTransactionData,
+      blockchainTransactionsSignatures: newBlockchainTransactionsSignatures,
     );
   }
 
