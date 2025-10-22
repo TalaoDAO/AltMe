@@ -5,6 +5,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vp_transaction/oidc4vp_signature.dart';
+import 'package:altme/oidc4vp_transaction/oidc4vp_transaction.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/inject_selective_disclosure_state.dart';
@@ -290,10 +291,25 @@ class _SelectiveDisclosurePickViewState
       final transactionData = scanCubit.state.transactionData;
 
       if (transactionData != null) {
+        /// create list of chain ids from transaction data
+        final List<int> chainIds = [];
+        final oidc4vpTransaction = Oidc4vpTransaction(
+          transactionData: transactionData,
+        );
+        final decodedTransactions = oidc4vpTransaction.decodeTransactions();
+
+        for (final tx in decodedTransactions) {
+          final decodedMap = tx as Map<String, dynamic>;
+          final chainId =
+              int.tryParse(decodedMap['chain_id']?.toString() ?? '1') ?? 1;
+          chainIds.add(chainId);
+        }
+
         final Oidc4vpSignedTransaction oidc4vpSignedTransaction =
             Oidc4vpSignedTransaction(
               signedTransaction:
                   scanCubit.state.blockchainTransactionsSignatures!,
+              signedTransactionChainIds: chainIds,
             );
 
         payload['blockchain_transaction_hashes'] = oidc4vpSignedTransaction

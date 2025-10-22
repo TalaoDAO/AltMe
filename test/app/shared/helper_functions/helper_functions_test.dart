@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/models/blockchain_network/blockchain_network_helpers.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/key_generator/key_generator.dart';
 import 'package:credential_manifest/credential_manifest.dart';

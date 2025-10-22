@@ -399,9 +399,14 @@ class MWeb3Client {
     required String web3RpcURL,
   }) async {
     log.i('sendEVMTransactionWithSignature');
-    final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
+    try {
+      final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
 
-    return web3Client.sendRawTransaction(signed);
+      return web3Client.sendRawTransaction(signed);
+    } catch (e, s) {
+      log.e('sendEVMTransactionWithSignature error: $e, stack: $s');
+      rethrow;
+    }
   }
 
   static String convertSignatureToStringHash(Uint8List signature) {

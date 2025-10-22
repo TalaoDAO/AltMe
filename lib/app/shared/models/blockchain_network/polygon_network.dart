@@ -5,7 +5,7 @@ part 'polygon_network.g.dart';
 
 @JsonSerializable()
 class PolygonNetwork extends EthereumNetwork {
-  const PolygonNetwork({
+  PolygonNetwork({
     required super.networkname,
     required super.apiUrl,
     required super.rpcNodeUrl,
@@ -23,7 +23,7 @@ class PolygonNetwork extends EthereumNetwork {
          mainTokenSymbol: 'MATIC',
        );
 
-  factory PolygonNetwork.mainNet() => const PolygonNetwork(
+  factory PolygonNetwork.mainNet() => PolygonNetwork(
     type: BlockchainType.polygon,
     networkname: 'Mainnet',
     apiUrl: Urls.moralisBaseUrl,
@@ -37,7 +37,7 @@ class PolygonNetwork extends EthereumNetwork {
     isMainNet: true,
   );
 
-  factory PolygonNetwork.testNet() => const PolygonNetwork(
+  factory PolygonNetwork.testNet() => PolygonNetwork(
     type: BlockchainType.polygon,
     networkname: 'Testnet',
     apiUrl: Urls.moralisBaseUrl,

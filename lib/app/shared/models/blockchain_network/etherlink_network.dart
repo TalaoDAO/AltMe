@@ -5,7 +5,7 @@ part 'etherlink_network.g.dart';
 
 @JsonSerializable()
 class EtherlinkNetwork extends EthereumNetwork {
-  const EtherlinkNetwork({
+  EtherlinkNetwork({
     required super.networkname,
     required super.apiUrl,
     required super.rpcNodeUrl,
@@ -23,7 +23,7 @@ class EtherlinkNetwork extends EthereumNetwork {
          mainTokenSymbol: 'XTZ',
        );
 
-  factory EtherlinkNetwork.mainNet() => const EtherlinkNetwork(
+  factory EtherlinkNetwork.mainNet() => EtherlinkNetwork(
     type: BlockchainType.etherlink,
     networkname: 'Mainnet',
     apiUrl: 'https://explorer.etherlink.com/api',
@@ -37,7 +37,7 @@ class EtherlinkNetwork extends EthereumNetwork {
     isMainNet: true,
   );
 
-  factory EtherlinkNetwork.testNet() => const EtherlinkNetwork(
+  factory EtherlinkNetwork.testNet() => EtherlinkNetwork(
     type: BlockchainType.etherlink,
     networkname: 'Ghostnet',
     apiUrl: 'https://testnet.explorer.etherlink.com/api',

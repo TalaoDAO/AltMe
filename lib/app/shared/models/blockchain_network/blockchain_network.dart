@@ -14,6 +14,7 @@ class BlockchainNetwork extends Equatable {
     required this.subTitle,
     required this.type,
     required this.isMainNet,
+    required this.chainId,
     this.apiKey = '',
   });
 
@@ -30,16 +31,19 @@ class BlockchainNetwork extends Equatable {
   final String? subTitle;
   final BlockchainType type;
   final bool isMainNet;
+  final int chainId;
 
   @override
   List<Object?> get props => [
     networkname,
     apiUrl,
-    apiKey,
     rpcNodeUrl,
     title,
     subTitle,
     type,
+    isMainNet,
+    chainId,
+    apiKey,
   ];
 
   @override

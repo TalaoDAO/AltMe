@@ -11,7 +11,6 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:dartez/dartez.dart';
 import 'package:dio/dio.dart';
 import 'package:fast_base58/fast_base58.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:jose_plus/jose.dart';
 import 'package:json_path/json_path.dart';
@@ -2175,37 +2174,8 @@ Future<Map<String, dynamic>?> checkVerifierAttestation({
   return (null, null);
 }
 
-Future<String> fetchRpcUrl({
-  required BlockchainNetwork blockchainNetwork,
-  required DotEnv dotEnv,
-}) async {
-  String rpcUrl = '';
 
-  if (blockchainNetwork is BinanceNetwork ||
-      blockchainNetwork is FantomNetwork ||
-      blockchainNetwork is EtherlinkNetwork) {
-    rpcUrl = blockchainNetwork.rpcNodeUrl as String;
-  } else {
-    if (blockchainNetwork.networkname == 'Mainnet') {
-      await dotEnv.load();
-      final String infuraApiKey = dotEnv.get('INFURA_API_KEY');
 
-      late String prefixUrl;
-
-      if (blockchainNetwork is PolygonNetwork) {
-        prefixUrl = Parameters.POLYGON_INFURA_URL;
-      } else {
-        prefixUrl = Parameters.web3RpcMainnetUrl;
-      }
-
-      return '$prefixUrl$infuraApiKey';
-    } else {
-      rpcUrl = blockchainNetwork.rpcNodeUrl as String;
-    }
-  }
-
-  return rpcUrl;
-}
 
 String getDidMethod(BlockchainType blockchainType) {
   late String didMethod;

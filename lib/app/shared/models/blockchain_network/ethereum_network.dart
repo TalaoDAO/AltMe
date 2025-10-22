@@ -5,13 +5,13 @@ part 'ethereum_network.g.dart';
 
 @JsonSerializable()
 class EthereumNetwork extends BlockchainNetwork {
-  const EthereumNetwork({
+  EthereumNetwork({
     required super.networkname,
     required super.apiUrl,
     required super.rpcNodeUrl,
     required String super.title,
     required String super.subTitle,
-    required this.chainId,
+    required super.chainId,
     required this.chain,
     this.mainTokenName = 'Ethereum',
     this.mainTokenDecimal = '18',
@@ -22,7 +22,7 @@ class EthereumNetwork extends BlockchainNetwork {
     required super.isMainNet,
   });
 
-  factory EthereumNetwork.mainNet() => const EthereumNetwork(
+  factory EthereumNetwork.mainNet() => EthereumNetwork(
     type: BlockchainType.ethereum,
     networkname: 'Mainnet',
     apiUrl: Urls.moralisBaseUrl,
@@ -36,7 +36,7 @@ class EthereumNetwork extends BlockchainNetwork {
     isMainNet: true,
   );
 
-  factory EthereumNetwork.testNet() => const EthereumNetwork(
+  factory EthereumNetwork.testNet() => EthereumNetwork(
     type: BlockchainType.ethereum,
     networkname: 'Testnet',
     apiUrl: Urls.moralisBaseUrl,
@@ -53,7 +53,6 @@ class EthereumNetwork extends BlockchainNetwork {
   factory EthereumNetwork.fromJson(Map<String, dynamic> json) =>
       _$EthereumNetworkFromJson(json);
 
-  final int chainId;
   final String chain;
   final String mainTokenName;
   final String mainTokenSymbol;
@@ -66,7 +65,6 @@ class EthereumNetwork extends BlockchainNetwork {
   @override
   List<Object?> get props => [
     super.props,
-    chainId,
     chain,
     mainTokenName,
     mainTokenIcon,

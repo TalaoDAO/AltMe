@@ -7,6 +7,7 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/oidc4vp_transaction/oidc4vp_signature.dart';
+import 'package:altme/oidc4vp_transaction/oidc4vp_transaction.dart';
 import 'package:altme/wallet/wallet.dart';
 
 import 'package:bloc/bloc.dart';
@@ -14,7 +15,6 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -676,16 +676,26 @@ class ScanCubit extends Cubit<ScanState> {
           issuer: issuer,
           uri: uri,
         );
-        if (state.blockchainTransactionsSignatures != null) {
-          final dotenv = DotEnv();
-          final rpcUrl = await fetchRpcUrl(
-            blockchainNetwork: EthereumNetwork.mainNet(),
-            dotEnv: dotenv,
+        if (state.blockchainTransactionsSignatures != null &&
+            state.transactionData != null) {
+          /// create list of chain ids from transaction data
+          final List<int> chainIds = [];
+          final oidc4vpTransaction = Oidc4vpTransaction(
+            transactionData: state.transactionData!,
           );
+          final decodedTransactions = oidc4vpTransaction.decodeTransactions();
 
+          for (final tx in decodedTransactions) {
+            final decodedMap = tx as Map<String, dynamic>;
+            final chainId =
+                int.tryParse(decodedMap['chain_id']?.toString() ?? '1') ?? 1;
+            chainIds.add(chainId);
+          }
+          final signedTransaction = state.blockchainTransactionsSignatures;
           await Oidc4vpSignedTransaction(
-            signedTransaction: state.blockchainTransactionsSignatures!,
-          ).sendToken(rpcUrl);
+            signedTransaction: signedTransaction!,
+            signedTransactionChainIds: chainIds,
+          ).sendToken();
         }
         emit(
           state.copyWith(
@@ -1063,12 +1073,12 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
-  Future<void> addBlockchainSignedTransaction(
-    List<Uint8List> signatures,
+  Future<void> addBlockchainTransaction(
+    List<Uint8List> oidc4VpTransaction,
   ) async {
     emit(
       state.copyWith(
-        blockchainTransactionsSignatures: signatures,
+        blockchainTransactionsSignatures: oidc4VpTransaction,
         status: ScanStatus.init,
       ),
     );

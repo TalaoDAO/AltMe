@@ -15,6 +15,7 @@ BlockchainNetwork _$BlockchainNetworkFromJson(Map<String, dynamic> json) =>
       subTitle: json['subTitle'] as String?,
       type: $enumDecode(_$BlockchainTypeEnumMap, json['type']),
       isMainNet: json['isMainNet'] as bool,
+      chainId: (json['chainId'] as num).toInt(),
       apiKey: json['apiKey'] as String? ?? '',
     );
 
@@ -28,6 +29,7 @@ Map<String, dynamic> _$BlockchainNetworkToJson(BlockchainNetwork instance) =>
       'subTitle': instance.subTitle,
       'type': _$BlockchainTypeEnumMap[instance.type]!,
       'isMainNet': instance.isMainNet,
+      'chainId': instance.chainId,
     };
 
 const _$BlockchainTypeEnumMap = {

@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:altme/app/shared/m_web3_client/m_web3_client.dart';
+import 'package:altme/app/shared/models/blockchain_network/blockchain_network_helpers.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/verify_credential.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
 
 /// Represents a list of blockchain transactions encoded as base64 strings.
@@ -15,15 +17,19 @@ class Oidc4vpTransaction {
 
   Future<List<Uint8List>> getBlockchainSignedTransaction({
     required CryptoAccountData cryptoAccountData,
-    required String rpcUrl,
   }) async {
     // Decode all transactions
     final decodedTransactions = decodeTransactions();
     final List<Uint8List> signedTransactions = [];
+    final dotenv = DotEnv();
 
     for (final tx in decodedTransactions) {
       // Map tx to TokenModel and extract required fields
       final chainId = int.tryParse(tx['chain_id']?.toString() ?? '1') ?? 1;
+      final rpcUrl = await fetchRpcUrl(
+        blockchainNetwork: blockchainNetworkFromChainId(chainId)!,
+        dotEnv: dotenv,
+      );
       final params = tx['rpc']['params'] as List<dynamic>;
 
       for (var i = 0; i < params.length; i++) {

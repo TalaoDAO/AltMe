@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:altme/app/shared/alert_message/alert_message.dart';
 import 'package:altme/app/shared/dio_client/dio_client.dart';
 import 'package:altme/app/shared/enum/message/response_string/response_string.dart';
@@ -19,11 +17,10 @@ import 'package:altme/oidc4vp_transaction/oidc4vp_transaction.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/trusted_list/model/trusted_entity.dart';
 import 'package:altme/trusted_list/widget/trusted_entity_details.dart';
-import 'package:altme/wallet/cubit/wallet_cubit.dart';
+import 'package:altme/wallet/wallet.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AcceptOidc4VpTransactionPage extends StatelessWidget {
   const AcceptOidc4VpTransactionPage({
@@ -224,25 +221,18 @@ class AcceptButton extends StatelessWidget {
         final scanCubit = context.read<ScanCubit>();
         final transactionData = scanCubit.state.transactionData;
 
-        final dotenv = DotEnv();
-        final rpcUrl = await fetchRpcUrl(
-          blockchainNetwork: EthereumNetwork.mainNet(),
-          dotEnv: dotenv,
-        );
-        final currentBlockchainAccount = context
-            .read<WalletCubit>()
-            .state
-            .currentAccount!;
         try {
-          final List<Uint8List> blockchainSignedTransaction =
-              await Oidc4vpTransaction(
-                transactionData: transactionData!,
-              ).getBlockchainSignedTransaction(
-                cryptoAccountData: currentBlockchainAccount,
-                rpcUrl: rpcUrl,
-              );
-          await scanCubit.addBlockchainSignedTransaction(
-            blockchainSignedTransaction,
+          final cryptoAccountData = context
+              .read<WalletCubit>()
+              .state
+              .currentAccount!;
+          final oidc4vpTransaction = Oidc4vpTransaction(
+            transactionData: transactionData!,
+          );
+          await scanCubit.addBlockchainTransaction(
+            await oidc4vpTransaction.getBlockchainSignedTransaction(
+              cryptoAccountData: cryptoAccountData,
+            ),
           );
           final qrCodeScanCubit = context.read<QRCodeScanCubit>();
 

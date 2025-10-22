@@ -12,6 +12,7 @@ part 'manage_network_cubit.g.dart';
 
 part 'manage_network_state.dart';
 
+
 class ManageNetworkCubit extends Cubit<ManageNetworkState> {
   ManageNetworkCubit({
     required this.secureStorageProvider,

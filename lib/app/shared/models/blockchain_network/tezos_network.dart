@@ -13,6 +13,7 @@ class TezosNetwork extends BlockchainNetwork {
     required String super.subTitle,
     required super.type,
     required super.isMainNet,
+    required super.chainId,
     super.apiKey,
   });
 
@@ -28,7 +29,8 @@ class TezosNetwork extends BlockchainNetwork {
     subTitle:
         'This network is the official Tezos blockchain running Network.'
         ' You should use this network by default.',
-        isMainNet: true,
+    isMainNet: true,
+    chainId: 0, // Or use a specific numeric ID for Tezos mainnet
   );
 
   factory TezosNetwork.ghostnet() => const TezosNetwork(
@@ -41,6 +43,7 @@ class TezosNetwork extends BlockchainNetwork {
         'This network is used to test protocol upgrades'
         ' (do not use it unless you are a developer).',
     isMainNet: false,
+    chainId: 0, // Or use a specific numeric ID for Tezos ghostnet
   );
 
   @override
