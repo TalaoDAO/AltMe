@@ -13,6 +13,7 @@ TezosNetwork _$TezosNetworkFromJson(Map<String, dynamic> json) => TezosNetwork(
       title: json['title'] as String,
       subTitle: json['subTitle'] as String,
       type: $enumDecode(_$BlockchainTypeEnumMap, json['type']),
+      isMainNet: json['isMainNet'] as bool,
       apiKey: json['apiKey'] as String? ?? '',
     );
 
@@ -25,6 +26,7 @@ Map<String, dynamic> _$TezosNetworkToJson(TezosNetwork instance) =>
       'title': instance.title,
       'subTitle': instance.subTitle,
       'type': _$BlockchainTypeEnumMap[instance.type]!,
+      'isMainNet': instance.isMainNet,
     };
 
 const _$BlockchainTypeEnumMap = {

@@ -19,6 +19,7 @@ class EthereumNetwork extends BlockchainNetwork {
     this.mainTokenSymbol = 'ETH',
     required super.type,
     super.apiKey,
+    required super.isMainNet,
   });
 
   factory EthereumNetwork.mainNet() => const EthereumNetwork(
@@ -32,6 +33,7 @@ class EthereumNetwork extends BlockchainNetwork {
     subTitle:
         'This network is the official Ethereum blockchain running Network.'
         ' You should use this network by default.',
+    isMainNet: true,
   );
 
   factory EthereumNetwork.testNet() => const EthereumNetwork(
@@ -45,6 +47,7 @@ class EthereumNetwork extends BlockchainNetwork {
     subTitle:
         'This network is used to test protocol upgrades'
         ' (do not use it unless you are a developer).',
+    isMainNet: false,
   );
 
   factory EthereumNetwork.fromJson(Map<String, dynamic> json) =>

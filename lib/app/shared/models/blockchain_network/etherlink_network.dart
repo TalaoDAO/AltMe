@@ -14,6 +14,7 @@ class EtherlinkNetwork extends EthereumNetwork {
     required super.chainId,
     required super.chain,
     required super.type,
+    required super.isMainNet,
     super.apiKey,
   }) : super(
          mainTokenName: 'Etherlink',
@@ -33,6 +34,7 @@ class EtherlinkNetwork extends EthereumNetwork {
     subTitle:
         'This network is the official Etherlink blockchain running Network.'
         ' You should use this network by default.',
+    isMainNet: true,
   );
 
   factory EtherlinkNetwork.testNet() => const EtherlinkNetwork(
@@ -46,5 +48,6 @@ class EtherlinkNetwork extends EthereumNetwork {
     subTitle:
         'This network is used to test protocol upgrades'
         ' (do not use it unless you are a developer).',
+    isMainNet: false,
   );
 }

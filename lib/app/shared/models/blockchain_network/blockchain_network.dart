@@ -13,6 +13,7 @@ class BlockchainNetwork extends Equatable {
     required this.title,
     required this.subTitle,
     required this.type,
+    required this.isMainNet,
     this.apiKey = '',
   });
 
@@ -28,6 +29,7 @@ class BlockchainNetwork extends Equatable {
   final String? title;
   final String? subTitle;
   final BlockchainType type;
+  final bool isMainNet;
 
   @override
   List<Object?> get props => [
@@ -57,7 +59,11 @@ class BlockchainNetwork extends Equatable {
     } else if (this is FantomNetwork) {
       await LaunchUrl.launch('https://ftmscan.com/tx/$txHash');
     } else if (this is EthereumNetwork) {
-      await LaunchUrl.launch('https://etherscan.io/tx/$txHash');
+      if (isMainNet) {
+        await LaunchUrl.launch('https://etherscan.io/tx/$txHash');
+        return;
+      }
+      await LaunchUrl.launch('https://sepolia.etherscan.io/tx/$txHash');
     } else {
       UnimplementedError();
     }

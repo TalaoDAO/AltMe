@@ -262,10 +262,10 @@ packages:
     dependency: transitive
     description:
       name: build_daemon
-      sha256: "8e928697a82be082206edb0b9c99c5a4ad6bc31c9e9b8b2f291ae65cd4a25daa"
+      sha256: "409002f1adeea601018715d613115cfaf0e31f512cb80ae4534c79867ae2363d"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.4"
+    version: "4.1.0"
   build_resolvers:
     dependency: transitive
     description:
@@ -350,10 +350,10 @@ packages:
     dependency: transitive
     description:
       name: camera_avfoundation
-      sha256: "397f44f8a63c8c0a474668d500f9739d4f2bc45ac2b21801194b7d29260f03ee"
+      sha256: "49aad562a16ab0db386086ab79545abf8659afe9570cdde94d899679a4dc0009"
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.22+1"
+    version: "0.9.22+2"
   camera_platform_interface:
     dependency: transitive
     description:
@@ -1998,18 +1998,18 @@ packages:
     dependency: transitive
     description:
       name: reown_sign
-      sha256: d89e2e8c51d992e145c3db7727d522955d084c13c9bb72ab94cee209982e162d
+      sha256: "21b9e4e49498f35cd1b3a020b49f38c00b44cb7febc62f9b8df420f9686bdccf"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.3"
+    version: "1.3.4"
   reown_walletkit:
     dependency: "direct main"
     description:
       name: reown_walletkit
-      sha256: f73debb1fea67ea5d08ce7fde9316bb519676a11bd50b788e9cf83d60b9b8870
+      sha256: "68a146b445eab2acddfb9da51683c05ce2256c23997d1e1fe43e113a708dec75"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.4"
+    version: "1.3.5"
   retry:
     dependency: transitive
     description:

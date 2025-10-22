@@ -34,6 +34,7 @@ void main() {
         subTitle: 'Subtitle',
         type: BlockchainType.ethereum,
         apiKey: 'apikey',
+        isMainNet: false,
       );
 
       final json = blockchainNetwork.toJson();
