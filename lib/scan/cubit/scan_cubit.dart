@@ -625,7 +625,7 @@ class ScanCubit extends Cubit<ScanState> {
         ///it is required because of bad async handling with didKit presentation
         await Future<void>.delayed(const Duration(seconds: 1));
         final responseData = <String, dynamic>{
-          'vp_token': vpToken,
+          'vp_token': Uri.encodeComponent(vpToken.toString()),
           'presentation_submission': presentationSubmissionString,
         };
 
