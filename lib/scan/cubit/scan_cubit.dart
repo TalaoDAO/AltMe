@@ -625,7 +625,7 @@ class ScanCubit extends Cubit<ScanState> {
         ///it is required because of bad async handling with didKit presentation
         await Future<void>.delayed(const Duration(seconds: 1));
         final responseData = <String, dynamic>{
-          'vp_token': Uri.encodeComponent(vpToken.toString()),
+          'vp_token': vpToken,
           'presentation_submission': presentationSubmissionString,
         };
 
@@ -676,17 +676,6 @@ class ScanCubit extends Cubit<ScanState> {
           issuer: issuer,
           uri: uri,
         );
-        emit(
-          state.copyWith(
-            status: ScanStatus.success,
-            message: StateMessage.success(
-              messageHandler: ResponseMessage(
-                message: ResponseString
-                    .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
-              ),
-            ),
-          ),
-        );
         if (state.blockchainTransactionsSignatures != null) {
           final dotenv = DotEnv();
           final rpcUrl = await fetchRpcUrl(
@@ -698,6 +687,17 @@ class ScanCubit extends Cubit<ScanState> {
             signedTransaction: state.blockchainTransactionsSignatures!,
           ).sendToken(rpcUrl);
         }
+        emit(
+          state.copyWith(
+            status: ScanStatus.success,
+            message: StateMessage.success(
+              messageHandler: ResponseMessage(
+                message: ResponseString
+                    .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
+              ),
+            ),
+          ),
+        );
         final data = response.data;
         if (data is Map) {
           String url = '';
