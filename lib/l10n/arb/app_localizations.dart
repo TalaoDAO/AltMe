@@ -6078,6 +6078,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This entity is not in the trusted list. You should be very cautious with untrusted entities.'**
   String get notTrustedEntity;
+
+  /// No description provided for @acceptanceRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Acceptance request'**
+  String get acceptanceRequest;
 }
 
 class _AppLocalizationsDelegate

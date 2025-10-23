@@ -15,7 +15,8 @@
     "aiPleaseWait",
     "trustedList",
     "trustedListSubtitle",
-    "notTrustedEntity"
+    "notTrustedEntity",
+    "acceptanceRequest"
   ],
 
   "es": [
@@ -34,7 +35,8 @@
     "aiPleaseWait",
     "trustedList",
     "trustedListSubtitle",
-    "notTrustedEntity"
+    "notTrustedEntity",
+    "acceptanceRequest"
   ],
 
   "fr": [
@@ -44,6 +46,7 @@
     "iaAnalyzeTitle",
     "trustedList",
     "trustedListSubtitle",
-    "notTrustedEntity"
+    "notTrustedEntity",
+    "acceptanceRequest"
   ]
 }

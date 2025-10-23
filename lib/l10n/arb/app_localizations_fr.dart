@@ -3386,4 +3386,7 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get notTrustedEntity =>
       'This entity is not in the trusted list. You should be very cautious with untrusted entities.';
+
+  @override
+  String get acceptanceRequest => 'Acceptance request';
 }

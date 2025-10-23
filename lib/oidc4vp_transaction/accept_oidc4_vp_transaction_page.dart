@@ -61,7 +61,7 @@ class AcceptOidc4VpTransactionPage extends StatelessWidget {
     final l10n = context.l10n;
 
     return BasePage(
-      title: l10n.scanPromptHost,
+      title: l10n.acceptanceRequest,
       titleLeading: const BackLeadingButton(),
       scrollView: true,
       navigation: NavigationButtons(uri: uri),
@@ -70,19 +70,19 @@ class AcceptOidc4VpTransactionPage extends StatelessWidget {
           return SingleChildScrollView(
             child: Column(
               children: [
-                DisplayEntity(
-                  trustedListEnabled: trustedListEnabled,
-                  trustedEntity: trustedEntity,
-                  notTrustedText: l10n.notTrustedEntity,
-                  uri: uri,
-                  client: client,
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: DisplayEntity(
+                    trustedListEnabled: trustedListEnabled,
+                    trustedEntity: trustedEntity,
+                    notTrustedText: l10n.notTrustedEntity,
+                    uri: uri,
+                    client: client,
+                  ),
                 ),
 
                 // TransactionPresentation widget displays decoded transactions
-                const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: TransactionPresentation(),
-                ),
+                const TransactionPresentation(),
 
                 Padding(
                   padding: const EdgeInsets.all(8),
@@ -94,6 +94,10 @@ class AcceptOidc4VpTransactionPage extends StatelessWidget {
                     child: const SelectCryptoAccount(),
                   ),
                 ),
+                const Padding(
+                  padding: EdgeInsets.all(8),
+                  child: AttestationList(),
+                ),
 
                 // Add space for the navigation buttons
                 const SizedBox(height: 143),
@@ -102,6 +106,20 @@ class AcceptOidc4VpTransactionPage extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+class AttestationList extends StatelessWidget {
+  const AttestationList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      children: [
+        Text('this is the attestation list established from the vp request'),
+        // Add your attestation list items here
+      ],
     );
   }
 }
@@ -324,24 +342,15 @@ class TransactionPresentation extends StatelessWidget {
       separatorBuilder: (context, index) => const Divider(),
       itemBuilder: (context, index) {
         final tx = decodedTransactions[index];
-        final credentialIds = tx['credential_ids'] as List;
         final uiHints = tx['ui_hints'] ?? <String, dynamic>{};
         final title = uiHints['title'] as String? ?? '';
         final subtitle = uiHints['subtitle'] as String? ?? '';
         final purpose = uiHints['purpose'] as String? ?? '';
-        final sanitizedCredentialIds = credentialIds
-            .map((e) => e.toString())
-            .toList();
         return ListTile(
           title: Text(title),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Credential IDs: ${sanitizedCredentialIds.join(", ")}'),
-              Text(title),
-              Text(subtitle),
-              Text('Purpose: $purpose'),
-            ],
+            children: [Text(title), Text(subtitle), Text('Purpose: $purpose')],
           ),
         );
       },
