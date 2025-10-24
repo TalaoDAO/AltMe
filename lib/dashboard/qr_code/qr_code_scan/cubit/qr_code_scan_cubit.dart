@@ -661,7 +661,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     );
   }
 
-  Future<void> startSIOPV2OIDC4VPProcess(Uri oldUri) async {
+  Future<void> checkUri(Uri oldUri) async {
     final String? requestUri = oldUri.queryParameters['request_uri'];
     final String? request = oldUri.queryParameters['request'];
     final String? clientId = oldUri.queryParameters['client_id'];
@@ -700,13 +700,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
       log.i('uri - $newUrl');
     }
+  }
 
-    final responseType = state.uri?.queryParameters['response_type'] ?? '';
-
-    /// check required keys available or not
-    final keys = <String>[];
-    state.uri?.queryParameters.forEach((key, value) => keys.add(key));
-
+  void checkQueryParameters(
+    List<String> keys,
+    String responseType, [
+    String? clientId,
+  ]) {
     if (!keys.contains('response_type')) {
       final error = {
         'error': 'invalid_request',
@@ -869,6 +869,17 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         throw ResponseMessage(data: error);
       }
     }
+  }
+
+  Future<void> startSIOPV2OIDC4VPProcess(Uri oldUri) async {
+    final String? clientId = oldUri.queryParameters['client_id'];
+    await checkUri(oldUri);
+    final responseType = state.uri?.queryParameters['response_type'] ?? '';
+
+    /// check required keys available or not
+    final keys = <String>[];
+    state.uri?.queryParameters.forEach((key, value) => keys.add(key));
+    checkQueryParameters(keys, responseType, clientId);
 
     log.i('responseType - $responseType');
     if (isIDTokenOnly(responseType)) {
