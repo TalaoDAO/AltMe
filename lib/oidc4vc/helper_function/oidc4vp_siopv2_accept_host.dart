@@ -8,7 +8,7 @@ import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vc/helper_function/get_payload.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vp_prompt.dart';
-import 'package:altme/oidc4vp_transaction/accept_oidc4_vp_transaction_page.dart';
+import 'package:altme/oidc4vp_transaction/widget/accept_oidc4_vp_transaction_page.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
 import 'package:altme/trusted_list/function/check_presentation_is_trusted.dart';

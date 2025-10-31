@@ -5,7 +5,7 @@ part 'fantom_network.g.dart';
 
 @JsonSerializable()
 class FantomNetwork extends EthereumNetwork {
-  FantomNetwork({
+  const FantomNetwork({
     required super.networkname,
     required super.apiUrl,
     required super.rpcNodeUrl,
@@ -23,7 +23,7 @@ class FantomNetwork extends EthereumNetwork {
          mainTokenSymbol: 'FTM',
        );
 
-  factory FantomNetwork.mainNet() => FantomNetwork(
+  factory FantomNetwork.mainNet() => const FantomNetwork(
     type: BlockchainType.fantom,
     networkname: 'Mainnet',
     apiUrl: Urls.moralisBaseUrl,
@@ -37,7 +37,7 @@ class FantomNetwork extends EthereumNetwork {
     isMainNet: true,
   );
 
-  factory FantomNetwork.testNet() => FantomNetwork(
+  factory FantomNetwork.testNet() => const FantomNetwork(
     type: BlockchainType.fantom,
     networkname: 'Testnet',
     apiUrl: Urls.moralisBaseUrl,

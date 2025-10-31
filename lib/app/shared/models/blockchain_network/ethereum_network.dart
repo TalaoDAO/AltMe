@@ -5,7 +5,7 @@ part 'ethereum_network.g.dart';
 
 @JsonSerializable()
 class EthereumNetwork extends BlockchainNetwork {
-  EthereumNetwork({
+  const EthereumNetwork({
     required super.networkname,
     required super.apiUrl,
     required super.rpcNodeUrl,
@@ -22,7 +22,7 @@ class EthereumNetwork extends BlockchainNetwork {
     required super.isMainNet,
   });
 
-  factory EthereumNetwork.mainNet() => EthereumNetwork(
+  factory EthereumNetwork.mainNet() => const EthereumNetwork(
     type: BlockchainType.ethereum,
     networkname: 'Mainnet',
     apiUrl: Urls.moralisBaseUrl,
@@ -36,7 +36,7 @@ class EthereumNetwork extends BlockchainNetwork {
     isMainNet: true,
   );
 
-  factory EthereumNetwork.testNet() => EthereumNetwork(
+  factory EthereumNetwork.testNet() => const EthereumNetwork(
     type: BlockchainType.ethereum,
     networkname: 'Testnet',
     apiUrl: Urls.moralisBaseUrl,

@@ -871,8 +871,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
-  Future<void> startSIOPV2OIDC4VPProcess(Uri oldUri) async {
+  Future<(String, List<String>)> preparePresentationProcess(Uri oldUri) async {
     final String? clientId = oldUri.queryParameters['client_id'];
+
+    /// check and update uri if needed
     await checkUri(oldUri);
     final responseType = state.uri?.queryParameters['response_type'] ?? '';
 
@@ -880,7 +882,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     final keys = <String>[];
     state.uri?.queryParameters.forEach((key, value) => keys.add(key));
     checkQueryParameters(keys, responseType, clientId);
+    return (responseType, keys);
+  }
 
+  Future<void> startSIOPV2OIDC4VPProcess(Uri oldUri) async {
+    final (responseType, keys) = await preparePresentationProcess(oldUri);
     log.i('responseType - $responseType');
     if (isIDTokenOnly(responseType)) {
       /// verifier side (siopv2)
@@ -892,7 +898,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       /// responseType == 'id_token vp_token' => verifier side (oidc4vp)
       /// or (oidc4vp and siopv2)
 
-      await launchOIDC4VPAndSIOPV2Flow(keys: keys, uri: state.uri!);
+      await launchOIDC4VPFlow(keys: keys, uri: state.uri!);
     } else {
       final error = {
         'error': 'invalid_request',
@@ -1018,106 +1024,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   //Completer<bool>? missingCredentialCompleter;
 
-  Future<void> launchOIDC4VPAndSIOPV2Flow({
+  Future<void> launchOIDC4VPFlow({
     required List<String> keys,
     required Uri uri,
   }) async {
-    if (!keys.contains('presentation_definition') &&
-        !keys.contains('presentation_definition_uri')) {
-      final error = {
-        'error': 'invalid_request',
-        'error_description':
-            'The presentation_definition or presentation_definition_uri is '
-            'required, only one but one is required.',
-      };
-      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
-      throw ResponseMessage(data: error);
-    }
-
-    final Map<String, dynamic>? presentationDefinitionData =
-        await getPresentationDefinition(client: client, uri: uri);
-
-    if (presentationDefinitionData == null) {
-      final error = {
-        'error': 'invalid_request',
-        'error_description': 'Presentation definition is invalid',
-      };
-      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
-      throw ResponseMessage(data: error);
-    }
-
-    final PresentationDefinition presentationDefinition =
-        PresentationDefinition.fromJson(presentationDefinitionData);
-
-    if (presentationDefinition.inputDescriptors.isEmpty) {
-      final error = {
-        'error': 'invalid_request',
-        'error_description':
-            'The input_descriptors is required in the presentation_definition'
-            ' object',
-      };
-      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
-      throw ResponseMessage(data: error);
-    }
-
-    if (presentationDefinition.inputDescriptors.isEmpty) {
-      final error = {
-        'error': 'invalid_request',
-        'error_description':
-            'The input_descriptors is required in the presentation_definition'
-            ' object',
-      };
-      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
-      throw ResponseMessage(data: error);
-    }
-
-    Map<String, dynamic>? clientMetaData;
-
-    if (presentationDefinition.format == null) {
-      clientMetaData = await getClientMetada(client: client, uri: uri);
-
-      if (clientMetaData != null) {
-        if (!clientMetaData.containsKey('vp_formats')) {
-          final error = {
-            'error': 'invalid_request',
-            'error_description': 'Format is missing.',
-          };
-          unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
-          throw ResponseMessage(data: error);
-        }
-      }
-    }
-
-    for (final descriptor in presentationDefinition.inputDescriptors) {
-      if (descriptor.constraints == null) {
-        final error = {
-          'error': 'invalid_request',
-          'error_description': 'Presentation definition is invalid',
-        };
-        unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
-        throw ResponseMessage(data: error);
-      }
-    }
-
-    final CredentialManifest credentialManifest = CredentialManifest(
-      'id',
-      IssuedBy('', ''),
-      null,
-      presentationDefinition,
-    );
-
-    final CredentialModel credentialPreview = CredentialModel(
-      id: 'id',
-      image: 'image',
-      credentialPreview: Credential.dummy(),
-      shareLink: 'shareLink',
-      data: const {},
-      jwt: null,
-      credentialManifest: credentialManifest,
-      profileLinkedId: profileCubit.state.model.profileType.getVCId,
-    );
-
-    final host = await getHost(uri: uri, client: client);
+    final (CredentialModel credentialPreview, String host) =
+        await prepareOIDC4VPFlow(keys: keys, uri: uri);
 
     emit(
       state.copyWith(
@@ -1958,5 +1870,109 @@ ${state.uri}
     } catch (e) {
       emitError(error: e);
     }
+  }
+/// check the validity of the request and prepare for OIDC4VP flow
+  Future<(CredentialModel credentialPreview, String host)> prepareOIDC4VPFlow({
+    required List<String> keys,
+    required Uri uri,
+  }) async {
+    if (!keys.contains('presentation_definition') &&
+        !keys.contains('presentation_definition_uri')) {
+      final error = {
+        'error': 'invalid_request',
+        'error_description':
+            'The presentation_definition or presentation_definition_uri is '
+            'required, only one but one is required.',
+      };
+      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      throw ResponseMessage(data: error);
+    }
+
+    final Map<String, dynamic>? presentationDefinitionData =
+        await getPresentationDefinition(client: client, uri: uri);
+
+    if (presentationDefinitionData == null) {
+      final error = {
+        'error': 'invalid_request',
+        'error_description': 'Presentation definition is invalid',
+      };
+      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      throw ResponseMessage(data: error);
+    }
+
+    final PresentationDefinition presentationDefinition =
+        PresentationDefinition.fromJson(presentationDefinitionData);
+
+    if (presentationDefinition.inputDescriptors.isEmpty) {
+      final error = {
+        'error': 'invalid_request',
+        'error_description':
+            'The input_descriptors is required in the presentation_definition'
+            ' object',
+      };
+      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      throw ResponseMessage(data: error);
+    }
+
+    if (presentationDefinition.inputDescriptors.isEmpty) {
+      final error = {
+        'error': 'invalid_request',
+        'error_description':
+            'The input_descriptors is required in the presentation_definition'
+            ' object',
+      };
+      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      throw ResponseMessage(data: error);
+    }
+
+    Map<String, dynamic>? clientMetaData;
+
+    if (presentationDefinition.format == null) {
+      clientMetaData = await getClientMetada(client: client, uri: uri);
+
+      if (clientMetaData != null) {
+        if (!clientMetaData.containsKey('vp_formats')) {
+          final error = {
+            'error': 'invalid_request',
+            'error_description': 'Format is missing.',
+          };
+          unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+          throw ResponseMessage(data: error);
+        }
+      }
+    }
+
+    for (final descriptor in presentationDefinition.inputDescriptors) {
+      if (descriptor.constraints == null) {
+        final error = {
+          'error': 'invalid_request',
+          'error_description': 'Presentation definition is invalid',
+        };
+        unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+        throw ResponseMessage(data: error);
+      }
+    }
+
+    final CredentialManifest credentialManifest = CredentialManifest(
+      'id',
+      IssuedBy('', ''),
+      null,
+      presentationDefinition,
+    );
+
+    final CredentialModel credentialPreview = CredentialModel(
+      id: 'id',
+      image: 'image',
+      credentialPreview: Credential.dummy(),
+      shareLink: 'shareLink',
+      data: const {},
+      jwt: null,
+      credentialManifest: credentialManifest,
+      profileLinkedId: profileCubit.state.model.profileType.getVCId,
+    );
+
+    final host = await getHost(uri: uri, client: client);
+
+    return (credentialPreview, host);
   }
 }

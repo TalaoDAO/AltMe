@@ -2174,9 +2174,6 @@ Future<Map<String, dynamic>?> checkVerifierAttestation({
   return (null, null);
 }
 
-
-
-
 String getDidMethod(BlockchainType blockchainType) {
   late String didMethod;
 

@@ -5,7 +5,7 @@ part 'binance_network.g.dart';
 
 @JsonSerializable()
 class BinanceNetwork extends EthereumNetwork {
-  BinanceNetwork({
+  const BinanceNetwork({
     required super.networkname,
     required super.apiUrl,
     required super.rpcNodeUrl,
@@ -23,7 +23,7 @@ class BinanceNetwork extends EthereumNetwork {
          mainTokenSymbol: 'BNB',
        );
 
-  factory BinanceNetwork.mainNet() => BinanceNetwork(
+  factory BinanceNetwork.mainNet() => const BinanceNetwork(
     type: BlockchainType.binance,
     networkname: 'Mainnet',
     apiUrl: Urls.moralisBaseUrl,
@@ -37,7 +37,7 @@ class BinanceNetwork extends EthereumNetwork {
     isMainNet: true,
   );
 
-  factory BinanceNetwork.testNet() => BinanceNetwork(
+  factory BinanceNetwork.testNet() => const BinanceNetwork(
     type: BlockchainType.binance,
     networkname: 'Testnet',
     apiUrl: Urls.moralisBaseUrl,
