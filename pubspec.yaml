@@ -65,8 +65,6 @@ dependencies:
   flutter_image_compress: ^2.0.3
   flutter_localizations:
     sdk: flutter
-  # flutter_olm: ^1.4.1
-  flutter_openssl_crypto: ^0.5.0
   flutter_slidable: ^3.1.1
   flutter_svg: ^2.0.6
   google_fonts: ^6.2.1
