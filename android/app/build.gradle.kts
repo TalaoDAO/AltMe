@@ -83,6 +83,9 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")
+            ndk {
+                abiFilters "x86_64"
+                }
         }
         debug {
             signingConfig = signingConfigs.getByName("debug")
