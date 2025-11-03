@@ -16,15 +16,13 @@ class TransactionPresentation extends StatelessWidget {
       itemBuilder: (context, index) {
         final tx = decodedTransactions[index];
         final uiHints = tx['ui_hints'] ?? <String, dynamic>{};
-        final title = uiHints['title'] as String? ?? '';
-        final subtitle = uiHints['subtitle'] as String? ?? '';
         final purpose = uiHints['purpose'] as String? ?? '';
-        return ListTile(
-          title: Text(title),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [Text(subtitle), Text('Purpose: $purpose')],
-          ),
+        final image = uiHints['icon_uri'] as String? ?? '';
+        return Column(
+          children: [
+            Image.network(image, height: 50, width: 50),
+            ListTile(title: Text(purpose)),
+          ],
         );
       },
     );
