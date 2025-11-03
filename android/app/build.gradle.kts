@@ -83,9 +83,10 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")
-            ndk {
-                abiFilters "x86_64"
-                }
+            // Clear the automatically set filters.
+            ndk.abiFilters.clear()
+            // Set your custom filters.
+            ndk.abiFilters.addAll(listOf("arm64-v8a", "armeabi-v7a"))
         }
         debug {
             signingConfig = signingConfigs.getByName("debug")
