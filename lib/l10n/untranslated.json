@@ -16,7 +16,8 @@
     "trustedList",
     "trustedListSubtitle",
     "notTrustedEntity",
-    "acceptanceRequest"
+    "acceptanceRequest",
+    "pay"
   ],
 
   "es": [
@@ -36,7 +37,8 @@
     "trustedList",
     "trustedListSubtitle",
     "notTrustedEntity",
-    "acceptanceRequest"
+    "acceptanceRequest",
+    "pay"
   ],
 
   "fr": [
@@ -47,6 +49,7 @@
     "trustedList",
     "trustedListSubtitle",
     "notTrustedEntity",
-    "acceptanceRequest"
+    "acceptanceRequest",
+    "pay"
   ]
 }

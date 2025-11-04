@@ -3370,5 +3370,8 @@ class AppLocalizationsEs extends AppLocalizations {
       'This entity is not in the trusted list. You should be very cautious with untrusted entities.';
 
   @override
-  String get acceptanceRequest => 'Acceptance request';
+  String get acceptanceRequest => 'Payment request';
+
+  @override
+  String get pay => 'pay';
 }

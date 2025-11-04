@@ -6082,8 +6082,14 @@ abstract class AppLocalizations {
   /// No description provided for @acceptanceRequest.
   ///
   /// In en, this message translates to:
-  /// **'Acceptance request'**
+  /// **'Payment request'**
   String get acceptanceRequest;
+
+  /// No description provided for @pay.
+  ///
+  /// In en, this message translates to:
+  /// **'pay'**
+  String get pay;
 }
 
 class _AppLocalizationsDelegate
