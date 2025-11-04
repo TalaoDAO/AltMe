@@ -65,31 +65,40 @@ class AcceptOidc4VpTransactionPage extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8),
-                  child: DisplayEntity(
-                    trustedListEnabled: trustedListEnabled,
-                    trustedEntity: trustedEntity,
-                    notTrustedText: l10n.notTrustedEntity,
-                    uri: uri,
-                    client: client,
+                  child: BackgroundCard(
+                    child: DisplayEntity(
+                      trustedListEnabled: trustedListEnabled,
+                      trustedEntity: trustedEntity,
+                      notTrustedText: l10n.notTrustedEntity,
+                      uri: uri,
+                      client: client,
+                    ),
                   ),
                 ),
 
                 // TransactionPresentation widget displays decoded transactions
-                const TransactionPresentation(),
-
                 Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: BlocProvider(
-                    create: (context) => ManageAccountsCubit(
-                      credentialsCubit: context.read<CredentialsCubit>(),
-                      manageNetworkCubit: context.read<ManageNetworkCubit>(),
-                    ),
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxHeight: 300),
-                      child: const SelectCryptoAccount(),
+                  padding: const EdgeInsets.all(8),
+                  child: BackgroundCard(
+                    child: Column(
+                      children: [
+                        const TransactionPresentation(),
+                        BlocProvider(
+                          create: (context) => ManageAccountsCubit(
+                            credentialsCubit: context.read<CredentialsCubit>(),
+                            manageNetworkCubit: context
+                                .read<ManageNetworkCubit>(),
+                          ),
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxHeight: 300),
+                            child: const SelectCryptoAccount(),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
+
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: BlocProvider(

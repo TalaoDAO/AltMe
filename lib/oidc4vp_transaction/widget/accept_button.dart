@@ -28,7 +28,7 @@ class AcceptButton extends StatelessWidget {
     final l10n = context.l10n;
 
     return MyElevatedButton(
-      text: l10n.communicationHostAllow,
+      text: l10n.pay,
       onPressed: () async {
         // todo(hawkbee): Check the balance of the selected account
         // for each transaction
