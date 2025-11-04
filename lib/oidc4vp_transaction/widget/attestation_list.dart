@@ -3,6 +3,7 @@ import 'package:altme/app/shared/loading/loading_view.dart';
 import 'package:altme/app/shared/message_handler/response_message.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/oidc4vp_transaction/widget/disclosure_detail.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +29,12 @@ class AttestationList extends StatelessWidget {
               final credential = snapshot.data![index];
               return Padding(
                 padding: const EdgeInsets.all(8),
-                child: HomeCredentialItem(credentialModel: credential),
+                child: Column(
+                  children: [
+                    HomeCredentialItem(credentialModel: credential),
+                    DisclosureDetail(credentialModel: credential),
+                  ],
+                ),
               );
             },
           );
@@ -76,6 +82,39 @@ class AttestationList extends StatelessWidget {
         credentialModel: firstOne,
         presentationDefinition: presentationDefinition,
       );
+
+      // final toto = SelectiveDisclosureDisplayMap(
+      //   credentialModel: firstOne,
+      //   claims: null,
+      //   isPresentation: true,
+      //   languageCode: 'en',
+      // ignore: lines_longer_than_80_chars
+      //   limitDisclosure: selectiveDisclosureCubit.state.limitDisclosure ?? '',
+      //   filters: selectiveDisclosureCubit.state.filters ?? {},
+      //   isDeveloperMode: context
+      //       .read<ProfileCubit>()
+      //       .state
+      //       .model
+      //       .isDeveloperMode,
+      //   selectedClaimsKeyIds: [],
+      //   onPressed: (claimKey, claimKeyId, threeDotValue, sd) {
+      //     selectiveDisclosureCubit.disclosureAction(
+      //       claimsKey: claimKey,
+      //       credentialModel: firstOne,
+      //       threeDotValue: threeDotValue,
+      //       claimKeyId: claimKeyId,
+      //       sd: sd,
+      //     );
+      //   },
+      //   displayMode: context
+      //       .read<ProfileCubit>()
+      //       .state
+      //       .model
+      //       .profileSetting
+      //       .selfSovereignIdentityOptions
+      //       .customOidc4vcProfile
+      //       .displayMode,
+      // ).buildMap;
 
       /// create the new jwt with selected disclosure
       final encryptedValues = firstOne.jwt
