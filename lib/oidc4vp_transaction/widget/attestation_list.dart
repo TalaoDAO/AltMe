@@ -102,8 +102,7 @@ class AttestationList extends StatelessWidget {
               (credential) {
                 final CredentialSubjectModel credentialSubjectModel =
                     credential.credentialPreview.credentialSubjectModel;
-                if (credentialSubjectModel
-                    is BlockchainCredentialSubjectModel) {
+                if (credentialSubjectModel is EthereumAssociatedAddressModel) {
                   return credentialSubjectModel.associatedAddress ==
                       currentAccount.walletAddress;
                 }
