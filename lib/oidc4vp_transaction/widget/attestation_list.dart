@@ -3,9 +3,11 @@ import 'package:altme/app/shared/loading/loading_view.dart';
 import 'package:altme/app/shared/message_handler/response_message.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/blockchain/blockchain_credential_subject_model/blockchain_credential_subject_model.dart';
 import 'package:altme/oidc4vp_transaction/widget/disclosure_detail.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/helper_functions/selective_disclosure_display_map.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,8 +19,9 @@ class AttestationList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ManageAccountsCubit, ManageAccountsState>(
       builder: (context, state) {
+        final account = state.cryptoAccount.data[state.currentCryptoIndex];
         return FutureBuilder<List<CredentialModel>>(
-          future: _initialize(context),
+          future: _initialize(context, account),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -48,7 +51,10 @@ class AttestationList extends StatelessWidget {
     );
   }
 
-  Future<List<CredentialModel>> _initialize(BuildContext context) async {
+  Future<List<CredentialModel>> _initialize(
+    BuildContext context,
+    CryptoAccountData currentAccount,
+  ) async {
     final qRCodeScanCubit = context.read<QRCodeScanCubit>();
     final (responseType, keys) = await qRCodeScanCubit
         .preparePresentationProcess(uri);
@@ -80,23 +86,35 @@ class AttestationList extends StatelessWidget {
       /// for sd-jwt we only support single credentials right now
       /// skip is not considered for sd-jwt right now
       late CredentialModel firstOne;
-      // if all credentials in credentialManifestPickCubit.state.filteredCredentialList 
-      // have credentialPreview.credentialsSubjectModel.credentialCategory equal to "blockchainAccountsCards"
-      // firstOne is the first credential having credentialPreview.credentialsSubjectModel.associatedAddress equal to "0x03817255659dc455079df516c5271b4046b2065b"
-      // if (credentialManifestPickCubit
-      //     .state.filteredCredentialList
-      //     .every((credential) =>
-      //         credential.credentialPreview.credentialSubjectModel.credentialCategory ==
-      //         'blockchainAccountsCards')) {
-      //   firstOne = credentialManifestPickCubit.state.filteredCredentialList.firstWhere(
-      //       (credential) =>
-      //           credential.credentialPreview.credentialSubjectModel.associatedAddress ==
-      //           '0x03817255659dc455079df516c5271b4046b2065b',
-      //       orElse: () =>
-      //           credentialManifestPickCubit.state.filteredCredentialList[0]);
-      // } else {
+      // if all credentials in
+      // credentialManifestPickCubit.state.filteredCredentialList
+      // have credentialPreview.credentialsSubjectModel.credentialCategory
+      // equal to "blockchainAccountsCards" then firstOne is the first
+      // credential with credentialPreview.credentialsSubjectModel.associatedAdd
+      // equal to selected crypto account.
+      if (credentialManifestPickCubit.state.filteredCredentialList.every(
+        (credential) =>
+            credential.credentialPreview.credentialSubjectModel
+                is BlockchainCredentialSubjectModel,
+      )) {
+        firstOne = credentialManifestPickCubit.state.filteredCredentialList
+            .firstWhere(
+              (credential) {
+                final CredentialSubjectModel credentialSubjectModel =
+                    credential.credentialPreview.credentialSubjectModel;
+                if (credentialSubjectModel
+                    is BlockchainCredentialSubjectModel) {
+                  return credentialSubjectModel.associatedAddress ==
+                      currentAccount.walletAddress;
+                }
+                return false;
+              },
+              orElse: () =>
+                  credentialManifestPickCubit.state.filteredCredentialList[0],
+            );
+      } else {
         firstOne = credentialManifestPickCubit.state.filteredCredentialList[0];
-      // }
+      }
 
       final selectiveDisclosureCubit = context.read<SelectiveDisclosureCubit>();
       selectiveDisclosureCubit.dataFromPresentation(

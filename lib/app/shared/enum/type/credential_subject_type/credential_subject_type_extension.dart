@@ -229,17 +229,17 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.walletCredential:
         return WalletCredentialModel.fromJson(json);
       case CredentialSubjectType.tezosAssociatedWallet:
-        return TezosAssociatedAddressModel.fromJson(json);
+        return BlockchainCredentialSubjectModel.fromJson(json);
       case CredentialSubjectType.ethereumAssociatedWallet:
-        return EthereumAssociatedAddressModel.fromJson(json);
+        return BlockchainCredentialSubjectModel.fromJson(json);
       case CredentialSubjectType.fantomAssociatedWallet:
-        return FantomAssociatedAddressModel.fromJson(json);
+        return BlockchainCredentialSubjectModel.fromJson(json);
       case CredentialSubjectType.polygonAssociatedWallet:
-        return PolygonAssociatedAddressModel.fromJson(json);
+        return BlockchainCredentialSubjectModel.fromJson(json);
       case CredentialSubjectType.binanceAssociatedWallet:
-        return BinanceAssociatedAddressModel.fromJson(json);
+        return BlockchainCredentialSubjectModel.fromJson(json);
       case CredentialSubjectType.etherlinkAssociatedWallet:
-        return EtherlinkAssociatedAddressModel.fromJson(json);
+        return BlockchainCredentialSubjectModel.fromJson(json);
       case CredentialSubjectType.certificateOfEmployment:
         return CertificateOfEmploymentModel.fromJson(json);
       case CredentialSubjectType.emailPass:

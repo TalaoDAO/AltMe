@@ -55,8 +55,6 @@ class _HomeCredentialsListPageState extends State<HomeCredentialsListPage>
                   .selfSovereignIdentityOptions
                   .customOidc4vcProfile
                   .formatsSupported) {
-            print('profileCubit listener: ${current.status}');
-
             return true;
           }
 
@@ -75,7 +73,6 @@ class _HomeCredentialsListPageState extends State<HomeCredentialsListPage>
           buildWhen: (previous, current) =>
               current.status != CredentialsStatus.idle,
           builder: (context, state) {
-            print(state.status);
             String message = '';
             if (state.message != null) {
               final MessageHandler messageHandler =
