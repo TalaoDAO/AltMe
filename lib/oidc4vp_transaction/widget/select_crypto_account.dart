@@ -65,9 +65,10 @@ class SelectCryptoAccount extends StatelessWidget {
             if (networks.isEmpty) {
               return const SizedBox.shrink();
             }
+            final isSelected = state.currentCryptoIndex == index;
             return CryptoAccountItem(
               cryptoAccountData: cryptoAccount,
-              isSelected: state.currentCryptoIndex == index,
+              isSelected: isSelected,
               listIndex: index,
               onPressed: () async {
                 await context

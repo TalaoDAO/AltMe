@@ -5,6 +5,7 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vp_transaction/widget/disclosure_detail.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
+import 'package:altme/selective_disclosure/helper_functions/selective_disclosure_display_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,31 +15,35 @@ class AttestationList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<CredentialModel>>(
-      future: _initialize(context),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else {
-          return ListView.builder(
-            shrinkWrap: true,
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              final credential = snapshot.data![index];
-              return Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  children: [
-                    HomeCredentialItem(credentialModel: credential),
-                    DisclosureDetail(credentialModel: credential),
-                  ],
-                ),
+    return BlocBuilder<ManageAccountsCubit, ManageAccountsState>(
+      builder: (context, state) {
+        return FutureBuilder<List<CredentialModel>>(
+          future: _initialize(context),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else {
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  final credential = snapshot.data![index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      children: [
+                        HomeCredentialItem(credentialModel: credential),
+                        DisclosureDetail(credentialModel: credential),
+                      ],
+                    ),
+                  );
+                },
               );
-            },
-          );
-        }
+            }
+          },
+        );
       },
     );
   }
@@ -74,8 +79,24 @@ class AttestationList extends StatelessWidget {
 
       /// for sd-jwt we only support single credentials right now
       /// skip is not considered for sd-jwt right now
-      final firstOne =
-          credentialManifestPickCubit.state.filteredCredentialList[0];
+      late CredentialModel firstOne;
+      // if all credentials in credentialManifestPickCubit.state.filteredCredentialList 
+      // have credentialPreview.credentialsSubjectModel.credentialCategory equal to "blockchainAccountsCards"
+      // firstOne is the first credential having credentialPreview.credentialsSubjectModel.associatedAddress equal to "0x03817255659dc455079df516c5271b4046b2065b"
+      if (credentialManifestPickCubit
+          .state.filteredCredentialList
+          .every((credential) =>
+              credential.credentialPreview.credentialSubjectModel.credentialCategory ==
+              'blockchainAccountsCards')) {
+        firstOne = credentialManifestPickCubit.state.filteredCredentialList.firstWhere(
+            (credential) =>
+                credential.credentialPreview.credentialSubjectModel.associatedAddress ==
+                '0x03817255659dc455079df516c5271b4046b2065b',
+            orElse: () =>
+                credentialManifestPickCubit.state.filteredCredentialList[0]);
+      } else {
+        firstOne = credentialManifestPickCubit.state.filteredCredentialList[0];
+      }
 
       final selectiveDisclosureCubit = context.read<SelectiveDisclosureCubit>();
       selectiveDisclosureCubit.dataFromPresentation(
@@ -83,38 +104,36 @@ class AttestationList extends StatelessWidget {
         presentationDefinition: presentationDefinition,
       );
 
-      // final toto = SelectiveDisclosureDisplayMap(
-      //   credentialModel: firstOne,
-      //   claims: null,
-      //   isPresentation: true,
-      //   languageCode: 'en',
-      // ignore: lines_longer_than_80_chars
-      //   limitDisclosure: selectiveDisclosureCubit.state.limitDisclosure ?? '',
-      //   filters: selectiveDisclosureCubit.state.filters ?? {},
-      //   isDeveloperMode: context
-      //       .read<ProfileCubit>()
-      //       .state
-      //       .model
-      //       .isDeveloperMode,
-      //   selectedClaimsKeyIds: [],
-      //   onPressed: (claimKey, claimKeyId, threeDotValue, sd) {
-      //     selectiveDisclosureCubit.disclosureAction(
-      //       claimsKey: claimKey,
-      //       credentialModel: firstOne,
-      //       threeDotValue: threeDotValue,
-      //       claimKeyId: claimKeyId,
-      //       sd: sd,
-      //     );
-      //   },
-      //   displayMode: context
-      //       .read<ProfileCubit>()
-      //       .state
-      //       .model
-      //       .profileSetting
-      //       .selfSovereignIdentityOptions
-      //       .customOidc4vcProfile
-      //       .displayMode,
-      // ).buildMap;
+      SelectiveDisclosureDisplayMap(
+        credentialModel: firstOne,
+        isPresentation: true,
+        languageCode: 'en',
+        limitDisclosure: selectiveDisclosureCubit.state.limitDisclosure ?? '',
+        filters: selectiveDisclosureCubit.state.filters ?? {},
+        isDeveloperMode: context
+            .read<ProfileCubit>()
+            .state
+            .model
+            .isDeveloperMode,
+        selectedClaimsKeyIds: [],
+        onPressed: (claimKey, claimKeyId, threeDotValue, sd) {
+          selectiveDisclosureCubit.disclosureAction(
+            claimsKey: claimKey,
+            credentialModel: firstOne,
+            threeDotValue: threeDotValue,
+            claimKeyId: claimKeyId,
+            sd: sd,
+          );
+        },
+        displayMode: context
+            .read<ProfileCubit>()
+            .state
+            .model
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile
+            .displayMode,
+      ).buildMap;
 
       /// create the new jwt with selected disclosure
       final encryptedValues = firstOne.jwt
@@ -132,6 +151,7 @@ class AttestationList extends StatelessWidget {
 
         final CredentialModel newModel = firstOne.copyWith(
           selectiveDisclosureJwt: newJwt,
+          jwt: newJwt,
         );
 
         final credToBePresented = [newModel];

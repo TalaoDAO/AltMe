@@ -61,58 +61,59 @@ class AcceptOidc4VpTransactionPage extends StatelessWidget {
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: BackgroundCard(
-                    child: DisplayEntity(
-                      trustedListEnabled: trustedListEnabled,
-                      trustedEntity: trustedEntity,
-                      notTrustedText: l10n.notTrustedEntity,
-                      uri: uri,
-                      client: client,
+            child: BlocProvider(
+              create: (context) => ManageAccountsCubit(
+                credentialsCubit: context.read<CredentialsCubit>(),
+                manageNetworkCubit: context.read<ManageNetworkCubit>(),
+              ),
+
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: BackgroundCard(
+                      child: DisplayEntity(
+                        trustedListEnabled: trustedListEnabled,
+                        trustedEntity: trustedEntity,
+                        notTrustedText: l10n.notTrustedEntity,
+                        uri: uri,
+                        client: client,
+                      ),
                     ),
                   ),
-                ),
 
-                // TransactionPresentation widget displays decoded transactions
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: BackgroundCard(
-                    child: Column(
-                      children: [
-                        const TransactionPresentation(),
-                        BlocProvider(
-                          create: (context) => ManageAccountsCubit(
-                            credentialsCubit: context.read<CredentialsCubit>(),
-                            manageNetworkCubit: context
-                                .read<ManageNetworkCubit>(),
-                          ),
-                          child: ConstrainedBox(
+                  // TransactionPresentation widget displays decoded
+                  // transactions
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: BackgroundCard(
+                      child: Column(
+                        children: [
+                          const TransactionPresentation(),
+                          ConstrainedBox(
                             constraints: const BoxConstraints(maxHeight: 300),
                             child: const SelectCryptoAccount(),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
 
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: BlocProvider(
-                    create: (context) => SelectiveDisclosureCubit(),
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxHeight: 600),
-                      child: AttestationList(uri: uri),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: BlocProvider(
+                      create: (context) => SelectiveDisclosureCubit(),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxHeight: 600),
+                        child: AttestationList(uri: uri),
+                      ),
                     ),
                   ),
-                ),
 
-                // Add space for the navigation buttons
-                const SizedBox(height: 143),
-              ],
+                  // Add space for the navigation buttons
+                  const SizedBox(height: 143),
+                ],
+              ),
             ),
           );
         },

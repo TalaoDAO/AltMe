@@ -45,7 +45,12 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
         }
       }
 
-      emit(state.copyWith(limitDisclosure: limitDisclosure, filters: json));
+      emit(
+        SelectiveDisclosureCubit().state.copyWith(
+          limitDisclosure: limitDisclosure,
+          filters: json,
+        ),
+      );
     }
   }
 
