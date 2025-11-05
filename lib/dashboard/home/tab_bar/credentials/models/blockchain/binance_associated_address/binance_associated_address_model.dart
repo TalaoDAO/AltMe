@@ -1,15 +1,15 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/models/blockchain/blockchain_credential_subject_model/blockchain_credential_subject_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'binance_associated_address_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class BinanceAssociatedAddressModel extends CredentialSubjectModel {
+class BinanceAssociatedAddressModel extends BlockchainCredentialSubjectModel {
   BinanceAssociatedAddressModel({
-    this.associatedAddress,
-    required String super.id,
-    required String super.type,
+    super.associatedAddress,
+    required super.id,
+    required super.type,
   }) : super(
          credentialSubjectType: CredentialSubjectType.binanceAssociatedWallet,
          credentialCategory: CredentialCategory.blockchainAccountsCards,
@@ -17,9 +17,6 @@ class BinanceAssociatedAddressModel extends CredentialSubjectModel {
 
   factory BinanceAssociatedAddressModel.fromJson(Map<String, dynamic> json) =>
       _$BinanceAssociatedAddressModelFromJson(json);
-
-  @JsonKey(defaultValue: '')
-  final String? associatedAddress;
 
   @override
   Map<String, dynamic> toJson() => _$BinanceAssociatedAddressModelToJson(this);

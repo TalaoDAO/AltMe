@@ -83,20 +83,20 @@ class AttestationList extends StatelessWidget {
       // if all credentials in credentialManifestPickCubit.state.filteredCredentialList 
       // have credentialPreview.credentialsSubjectModel.credentialCategory equal to "blockchainAccountsCards"
       // firstOne is the first credential having credentialPreview.credentialsSubjectModel.associatedAddress equal to "0x03817255659dc455079df516c5271b4046b2065b"
-      if (credentialManifestPickCubit
-          .state.filteredCredentialList
-          .every((credential) =>
-              credential.credentialPreview.credentialSubjectModel.credentialCategory ==
-              'blockchainAccountsCards')) {
-        firstOne = credentialManifestPickCubit.state.filteredCredentialList.firstWhere(
-            (credential) =>
-                credential.credentialPreview.credentialSubjectModel.associatedAddress ==
-                '0x03817255659dc455079df516c5271b4046b2065b',
-            orElse: () =>
-                credentialManifestPickCubit.state.filteredCredentialList[0]);
-      } else {
+      // if (credentialManifestPickCubit
+      //     .state.filteredCredentialList
+      //     .every((credential) =>
+      //         credential.credentialPreview.credentialSubjectModel.credentialCategory ==
+      //         'blockchainAccountsCards')) {
+      //   firstOne = credentialManifestPickCubit.state.filteredCredentialList.firstWhere(
+      //       (credential) =>
+      //           credential.credentialPreview.credentialSubjectModel.associatedAddress ==
+      //           '0x03817255659dc455079df516c5271b4046b2065b',
+      //       orElse: () =>
+      //           credentialManifestPickCubit.state.filteredCredentialList[0]);
+      // } else {
         firstOne = credentialManifestPickCubit.state.filteredCredentialList[0];
-      }
+      // }
 
       final selectiveDisclosureCubit = context.read<SelectiveDisclosureCubit>();
       selectiveDisclosureCubit.dataFromPresentation(
