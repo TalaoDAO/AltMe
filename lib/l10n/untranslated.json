@@ -19,6 +19,32 @@
     "notTrustedEntity"
   ],
 
+  "el": [
+    "networkErrorCreated",
+    "networkErrorOk",
+    "tezosProofMessage",
+    "ethereumProofMessage",
+    "fantomProofMessage",
+    "polygonProofMessage",
+    "binanceProofMessage",
+    "socialMediaCredentialsHomeSubtitle",
+    "userPinTitle",
+    "subjectSyntaxTypeNotSupported",
+    "french",
+    "spanish",
+    "catalan",
+    "english",
+    "etherlinkProofMessage",
+    "greek",
+    "iaAnalyze",
+    "iaAnalyzeTitle",
+    "deleteDigit",
+    "aiPleaseWait",
+    "trustedList",
+    "trustedListSubtitle",
+    "notTrustedEntity"
+  ],
+
   "es": [
     "payload",
     "keyBindingHeader",
