@@ -1117,6 +1117,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             if (parts.length == 2) {
               clientIdScheme = parts[0];
               clientId = parts[1];
+            } else if (parts[0].startsWith('did') && parts.length == 3) {
             } else {
               final error = {
                 'error': 'invalid_request',
@@ -1871,7 +1872,8 @@ ${state.uri}
       emitError(error: e);
     }
   }
-/// check the validity of the request and prepare for OIDC4VP flow
+
+  /// check the validity of the request and prepare for OIDC4VP flow
   Future<(CredentialModel credentialPreview, String host)> prepareOIDC4VPFlow({
     required List<String> keys,
     required Uri uri,
