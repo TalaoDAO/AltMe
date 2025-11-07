@@ -54,7 +54,6 @@ class AcceptOidc4VpTransactionPage extends StatelessWidget {
     final l10n = context.l10n;
 
     return BasePage(
-      title: l10n.acceptanceRequest,
       titleLeading: const BackLeadingButton(),
       scrollView: true,
       navigation: const NavigationButtons(),
