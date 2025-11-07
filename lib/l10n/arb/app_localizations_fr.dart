@@ -3391,5 +3391,5 @@ class AppLocalizationsFr extends AppLocalizations {
   String get acceptanceRequest => 'Payment request';
 
   @override
-  String get pay => 'pay';
+  String get pay => 'share and pay';
 }

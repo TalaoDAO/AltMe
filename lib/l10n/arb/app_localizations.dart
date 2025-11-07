@@ -6088,7 +6088,7 @@ abstract class AppLocalizations {
   /// No description provided for @pay.
   ///
   /// In en, this message translates to:
-  /// **'pay'**
+  /// **'share and pay'**
   String get pay;
 }
 

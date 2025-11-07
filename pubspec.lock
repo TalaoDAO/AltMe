@@ -2210,10 +2210,10 @@ packages:
     dependency: transitive
     description:
       name: sodium_libs
-      sha256: "76f1124348b9b40e2a43dbe314fbc7ac0edad4a9c6ff75841c7690b8f6ec95dc"
+      sha256: f3f9c516b4183226b7a08ca43a765ebc9e02cfd92e46e8a6cc490f98ffe73052
       url: "https://pub.dev"
     source: hosted
-    version: "3.4.6+3"
+    version: "3.4.6+4"
   source_gen:
     dependency: transitive
     description:
