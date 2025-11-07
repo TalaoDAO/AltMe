@@ -30,8 +30,8 @@ class TransactionPresentation extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               child: Image.network(
                 image,
-                height: 50,
-                width: 50,
+                height: 80,
+                width: 80,
                 errorBuilder: (context, error, stackTrace) {
                   return const SizedBox.shrink();
                 },
@@ -41,6 +41,7 @@ class TransactionPresentation extends StatelessWidget {
               child: Text(
                 purpose,
                 style: Theme.of(context).textTheme.headlineSmall!.copyWith(),
+                textAlign: TextAlign.center,
               ),
             ),
             Padding(
