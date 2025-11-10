@@ -219,7 +219,6 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
 
       if (item.jwt != null) {
         final jwt = item.jwt!;
-        final Map<String, dynamic> payload = jwtDecode.parseJwt(jwt);
         final Map<String, dynamic> header = decodeHeader(
           jwtDecode: jwtDecode,
           token: jwt,
@@ -229,10 +228,11 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
 
         final x5c = header['x5c'];
         if (x5c != null && x5c is List) {
+          // clientId = '' because the iss which was used is not mandatory
           publicKeyJwk = await checkX509(
             encodedData: jwt,
             header: header,
-            clientId: payload['iss'].toString(),
+            clientId: '',
           );
         }
 

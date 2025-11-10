@@ -2067,28 +2067,29 @@ Future<Map<String, dynamic>?> checkX509({
 
     /// clientId is an url. string domain is the domain from this url
     final domain = clientId;
+    if (domain != '') {
+      /// valid domains is the list from the extnValue in which DNS: prefix
+      /// is removed. scheme like http:// or https:// is also removed
+      final validDomains = extnValue
+          .replaceAll('DNS:', '')
+          .replaceAll('URI:', '')
+          .replaceAll(' ', '')
+          .split(',')
+          .map(
+            (String extnValueDomain) =>
+                extnValueDomain.replaceAll(RegExp('^(http|https)://'), ''),
+          )
+          .toList();
 
-    /// valid domains is the list from the extnValue in which DNS: prefix
-    /// is removed. scheme like http:// or https:// is also removed
-    final validDomains = extnValue
-        .replaceAll('DNS:', '')
-        .replaceAll('URI:', '')
-        .replaceAll(' ', '')
-        .split(',')
-        .map(
-          (String extnValueDomain) =>
-              extnValueDomain.replaceAll(RegExp('^(http|https)://'), ''),
-        )
-        .toList();
-
-    /// check if the domain is in the validDomains list
-    if (!validDomains.contains(domain)) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_format',
-          'error_description': 'x509_san_dns scheme error',
-        },
-      );
+      /// check if the domain is in the validDomains list
+      if (!validDomains.contains(domain)) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_format',
+            'error_description': 'x509_san_dns scheme error',
+          },
+        );
+      }
     }
 
     final publicKey = cert.publicKey;
