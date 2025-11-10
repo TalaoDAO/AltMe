@@ -39,17 +39,5 @@
     "notTrustedEntity",
     "acceptanceRequest",
     "pay"
-  ],
-
-  "fr": [
-    "saveBackupPolygonCredentialSubtitle",
-    "back",
-    "iaAnalyze",
-    "iaAnalyzeTitle",
-    "trustedList",
-    "trustedListSubtitle",
-    "notTrustedEntity",
-    "acceptanceRequest",
-    "pay"
   ]
 }
