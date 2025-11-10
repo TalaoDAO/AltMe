@@ -7,6 +7,7 @@
 
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/alert_message/message_cubit.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
@@ -292,6 +293,7 @@ class App extends StatelessWidget {
             ),
           ),
           BlocProvider(create: (context) => HomeTabbarCubit()),
+          BlocProvider(create: (context) => MessageCubit()),
         ],
         child: const MaterialAppDefinition(),
       ),

@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/alert_message/exception_message.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
@@ -101,6 +102,19 @@ class AlertMessage {
         ),
       );
     }
+  }
+
+  static void displayMessage({
+    required BuildContext context,
+    required ExceptionMessage exception,
+  }) {
+    showDialog<bool>(
+      context: context,
+      builder: (context) => ErrorDialog(
+        title: exception.error,
+        erroDescription: exception.errorDescription,
+      ),
+    );
   }
 }
 

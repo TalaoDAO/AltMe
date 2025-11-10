@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/alert_message/exception_message.dart';
+import 'package:altme/app/shared/alert_message/message_cubit.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -46,6 +48,12 @@ final splashBlocListener = BlocListener<SplashCubit, SplashState>(
     context.read<AdvanceSettingsCubit>().setState(
       Parameters.defaultAdvanceSettingsState,
     );
+  },
+);
+
+final messageCubitListener = BlocListener<MessageCubit, ExceptionMessage>(
+  listener: (BuildContext context, exceptionMessage) {
+    AlertMessage.displayMessage(context: context, exception: exceptionMessage);
   },
 );
 

@@ -775,3 +775,7 @@ class ResponseMessage with MessageHandler {
     return '';
   }
 }
+
+class ErrorMessage extends ResponseMessage {
+  ErrorMessage({required super.message, super.data});
+}

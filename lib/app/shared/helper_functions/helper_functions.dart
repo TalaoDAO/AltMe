@@ -989,6 +989,8 @@ MessageHandler getMessageHandler(dynamic e) {
     final error = NetworkException.getDioException(error: e);
 
     return NetworkException(data: error.data);
+  } else if (e is ResponseMessage) {
+    return e;
   } else if (e is FormatException) {
     return ResponseMessage(
       data: {

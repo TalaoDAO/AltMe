@@ -1045,6 +1045,10 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       await addCryptoProofsPerProfile(cryptoAccountData: cryptoAccountData);
     }
   }
+
+  void emitError(MessageHandler error) {
+    emit(state.error(messageHandler: error));
+  }
 }
 
 List<DiscoverDummyCredential> getDummiesFromExternalIssuerList(

@@ -752,6 +752,15 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
       ) as _i16.Future<void>);
 
   @override
+  void emitError(_i15.MessageHandler? error) => super.noSuchMethod(
+        Invocation.method(
+          #emitError,
+          [error],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
   void emit(_i12.CredentialsState? state) => super.noSuchMethod(
         Invocation.method(
           #emit,

@@ -1,6 +1,6 @@
-import 'package:altme/app/shared/issuer/models/issuer.dart';
-import 'package:altme/app/shared/loading/loading_view.dart';
-import 'package:altme/app/shared/message_handler/response_message.dart';
+import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/alert_message/exception_message.dart';
+import 'package:altme/app/shared/alert_message/message_cubit.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/blockchain/blockchain_credential_subject_model/blockchain_credential_subject_model.dart';
@@ -26,7 +26,10 @@ class AttestationList extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
+              LoadingView().hide();
+              final error = snapshot.error! as ExceptionMessage;
+              context.read<MessageCubit>().error(error);
+              return Center(child: Text(error.error));
             } else {
               return ListView.builder(
                 shrinkWrap: true,
@@ -82,6 +85,12 @@ class AttestationList extends StatelessWidget {
             [],
         profileType: profileModel.profileType,
       );
+      if (credentialManifestPickCubit.state.filteredCredentialList.isEmpty) {
+        throw ExceptionMessage(
+          error: 'Credential not found',
+          errorDescription: 'No suitable credential found in the wallet.',
+        );
+      }
 
       /// for sd-jwt we only support single credentials right now
       /// skip is not considered for sd-jwt right now
@@ -108,8 +117,13 @@ class AttestationList extends StatelessWidget {
                 }
                 return false;
               },
-              orElse: () =>
-                  credentialManifestPickCubit.state.filteredCredentialList[0],
+              orElse: () {
+                throw ExceptionMessage(
+                  error: 'No valid crypto account found',
+                  errorDescription:
+                      'No suitable crypto account found in the wallet.',
+                );
+              },
             );
       } else {
         firstOne = credentialManifestPickCubit.state.filteredCredentialList[0];
@@ -175,11 +189,9 @@ class AttestationList extends StatelessWidget {
 
         credentialsToBePresented.addAll(credToBePresented);
       } else {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'Issue with the disclosure encryption of jwt.',
-          },
+        throw ExceptionMessage(
+          error: 'invalid_request',
+          errorDescription: 'Issue with the disclosure encryption of jwt.',
         );
       }
 

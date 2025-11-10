@@ -156,6 +156,7 @@ class _SplashViewState extends State<SplashView> {
         walletConnectBlocListener,
         enterpriseBlocListener,
         ProfileCubitListener,
+        messageCubitListener,
       ],
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
