@@ -123,6 +123,7 @@ final credentialsBlocListener =
             context: context,
             stateMessage: state.message!,
           );
+          LoadingView().hide();
         }
         if (state.status == CredentialsStatus.delete) {
           if (state.message != null) {
