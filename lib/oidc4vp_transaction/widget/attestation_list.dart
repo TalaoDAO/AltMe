@@ -36,12 +36,15 @@ class AttestationList extends StatelessWidget {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   final credential = snapshot.data![index];
+                  final filteredCredential = credential.copyWith(
+                    jwt: credential.selectiveDisclosureJwt,
+                  );
                   return Padding(
                     padding: const EdgeInsets.all(8),
                     child: Column(
                       children: [
                         HomeCredentialItem(credentialModel: credential),
-                        DisclosureDetail(credentialModel: credential),
+                        DisclosureDetail(credentialModel: filteredCredential),
                       ],
                     ),
                   );
@@ -182,7 +185,6 @@ class AttestationList extends StatelessWidget {
 
         final CredentialModel newModel = firstOne.copyWith(
           selectiveDisclosureJwt: newJwt,
-          jwt: newJwt,
         );
 
         final credToBePresented = [newModel];
