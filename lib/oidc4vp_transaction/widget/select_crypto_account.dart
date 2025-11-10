@@ -1,7 +1,4 @@
-import 'package:altme/app/shared/alert_message/alert_message.dart';
-import 'package:altme/app/shared/enum/status/app_status.dart';
-import 'package:altme/app/shared/enum/type/blockchain_type.dart';
-import 'package:altme/app/shared/loading/loading_view.dart';
+import 'package:altme/app/shared/shared.dart';
 import 'package:altme/dashboard/crypto_account_switcher/crypto_bottom_sheet/widgets/crypto_accont_item.dart';
 import 'package:altme/dashboard/drawer/blockchain_settings/manage_accounts/cubit/manage_accounts_cubit.dart';
 import 'package:altme/oidc4vp_transaction/helper/get_decoded_transaction.dart';
@@ -38,16 +35,7 @@ class SelectCryptoAccount extends StatelessWidget {
             .map((tx) => tx['chain_id'])
             .toList();
 
-        // TODO(hawkbee): should throw an error if no chainId found.
-        // bool containsChainId = false;
-
         return ListView.builder(
-          // prototypeItem: CryptoAccountItem(
-          //   cryptoAccountData: state.cryptoAccount.data[0],
-          //   isSelected: false,
-          //   listIndex: 0,
-          //   onPressed: () async {},
-          // ),
           shrinkWrap: true,
           itemCount: state.cryptoAccount.data.length,
           itemBuilder: (BuildContext listViewContext, int index) {

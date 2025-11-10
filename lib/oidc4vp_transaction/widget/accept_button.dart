@@ -2,16 +2,22 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/shared/alert_message/alert_message.dart';
+import 'package:altme/app/shared/alert_message/exception_message.dart';
 import 'package:altme/app/shared/constants/secure_storage_keys.dart';
 import 'package:altme/app/shared/helper_functions/helper_functions.dart';
 import 'package:altme/app/shared/local_auth/local_auth_api.dart';
+import 'package:altme/app/shared/models/blockchain_network/ethereum_network.dart';
 import 'package:altme/app/shared/models/state_message/state_message.dart';
 import 'package:altme/app/shared/widget/button/my_elevated_button.dart';
+import 'package:altme/dashboard/drawer/blockchain_settings/manage_network/cubit/manage_network_cubit.dart';
 import 'package:altme/dashboard/drawer/wallet_security/helper_function/security_check.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
+import 'package:altme/dashboard/home/tab_bar/tokens/token_page/cubit/tokens_cubit.dart';
 import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
 import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/oidc4vp_transaction/helper/decode_erc20_transfert.dart';
+import 'package:altme/oidc4vp_transaction/helper/get_decoded_transaction.dart';
 import 'package:altme/oidc4vp_transaction/oidc4vp_signature.dart';
 import 'package:altme/oidc4vp_transaction/oidc4vp_transaction.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
@@ -37,6 +43,59 @@ class AcceptButton extends StatelessWidget {
         final uri = context.read<QRCodeScanCubit>().state.uri!;
         final scanCubit = context.read<ScanCubit>();
         final transactionData = scanCubit.state.transactionData;
+        // check balance of the selected account
+        final List<dynamic> decodedTransactions = getDecodedTransactions(
+          context,
+        );
+        final transaction = decodedTransactions[0] as Map<String, dynamic>;
+        final contractAddress =
+            transaction['rpc']['params'][0]['to'] as String? ?? '';
+        final amount = decodeErc20Transfer(
+          txData: transaction['rpc']['params'][0]['data']?.toString() ?? '',
+        );
+        if (transaction['chain_id'] == 11155111) {
+          await context.read<ManageNetworkCubit>().setNetwork(
+            EthereumNetwork.testNet(),
+          );
+        } else {
+          await context.read<ManageNetworkCubit>().setNetwork(
+            EthereumNetwork.mainNet(),
+          );
+        }
+        final tokensCubit = context.read<TokensCubit>();
+        await tokensCubit.getTokens();
+        if (tokensCubit.state.data.isNotEmpty) {
+          final tokens = tokensCubit.state.data;
+          try {
+            final transactionToken = tokens.firstWhere(
+              (token) =>
+                  token.contractAddress.toLowerCase() ==
+                  contractAddress.toLowerCase(),
+            );
+            if (BigInt.parse(transactionToken.balance) < amount) {
+              AlertMessage.displayMessage(
+                context: context,
+                exception: ExceptionMessage(
+                  error: 'Not enough balance',
+                  errorDescription:
+                      // ignore: lines_longer_than_80_chars
+                      'The selected account balance is insufficient for this transaction',
+                ),
+              );
+              return;
+            }
+          } catch (e) {
+            AlertMessage.displayMessage(
+              context: context,
+              exception: ExceptionMessage(
+                error: 'No suitable tokens',
+                errorDescription:
+                    "The selected account don't have suitable crypto",
+              ),
+            );
+            return;
+          }
+        }
 
         try {
           final cryptoAccountData = context
