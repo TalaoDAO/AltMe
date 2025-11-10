@@ -108,9 +108,6 @@ class AcceptOidc4VpTransactionPage extends StatelessWidget {
                       ),
                     ),
                   ),
-
-                  // Add space for the navigation buttons
-                  const SizedBox(height: 143),
                 ],
               ),
             ),
