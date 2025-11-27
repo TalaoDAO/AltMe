@@ -878,7 +878,14 @@ class OIDC4VC {
             iss: clientId,
           );
 
-          credentialData['proof'] = {'proof_type': 'jwt', 'jwt': vcJwt};
+          /// https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html#section-8.2-15
+          if (int.parse(oidc4vcParameters.oidc4vciDraftType.numbering) > 15) {
+            credentialData['proofs'] = {
+              'jwt': [vcJwt],
+            };
+          } else {
+            credentialData['proof'] = {'proof_type': 'jwt', 'jwt': vcJwt};
+          }
       }
     }
 
