@@ -6,18 +6,18 @@ import '../../../helpers/helpers.dart';
 
 void main() {
   group('ShimmerWidget', () {
-    testWidgets('ShimmerWidget.rectangular displays correctly',
-        (WidgetTester tester) async {
+    testWidgets('ShimmerWidget.rectangular displays correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpApp(
-        const Scaffold(
-          body: ShimmerWidget.rectangular(height: 100),
-        ),
+        const Scaffold(body: ShimmerWidget.rectangular(height: 100)),
       );
 
       expect(find.byType(Shimmer), findsOneWidget);
 
-      final constraints =
-          tester.firstWidget<Container>(find.byType(Container)).constraints;
+      final constraints = tester
+          .firstWidget<Container>(find.byType(Container))
+          .constraints;
       expect(constraints!.minWidth, double.infinity);
       expect(constraints.maxWidth, double.infinity);
       expect(constraints.minHeight, 100.0);
@@ -34,16 +34,18 @@ void main() {
       );
     });
 
-    testWidgets('ShimmerWidget.circular displays correctly',
-        (WidgetTester tester) async {
+    testWidgets('ShimmerWidget.circular displays correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpApp(
         const Scaffold(body: ShimmerWidget.circular(height: 100)),
       );
 
       expect(find.byType(Shimmer), findsOneWidget);
 
-      final constraints =
-          tester.firstWidget<Container>(find.byType(Container)).constraints;
+      final constraints = tester
+          .firstWidget<Container>(find.byType(Container))
+          .constraints;
       expect(constraints!.minWidth, double.infinity);
       expect(constraints.maxWidth, double.infinity);
       expect(constraints.minHeight, 100.0);

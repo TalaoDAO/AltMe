@@ -4,10 +4,7 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/author/author.da
 import 'package:flutter/material.dart';
 
 class DisplayIssuer extends StatelessWidget {
-  const DisplayIssuer({
-    super.key,
-    required this.issuer,
-  });
+  const DisplayIssuer({super.key, required this.issuer});
 
   final Author issuer;
 

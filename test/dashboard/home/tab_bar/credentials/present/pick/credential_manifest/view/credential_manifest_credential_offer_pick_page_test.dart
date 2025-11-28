@@ -84,26 +84,26 @@ class MockProfileState extends Fake implements ProfileState {
 void main() {
   // Enable mocking of named constructors
   setUpAll(() {
-    registerFallbackValue(const CredentialManifestPickState(
-      filteredCredentialList: [],
-    ),);
-    registerFallbackValue(const CredentialsState(
-      status: CredentialsStatus.idle,
-      credentials: [],
-    ),);
+    registerFallbackValue(
+      const CredentialManifestPickState(filteredCredentialList: []),
+    );
+    registerFallbackValue(
+      const CredentialsState(status: CredentialsStatus.idle, credentials: []),
+    );
     registerFallbackValue(const ScanState());
     registerFallbackValue(MockProfileState(model: MockProfileModel()));
     registerFallbackValue(Uri());
     registerFallbackValue(MockIssuer());
     registerFallbackValue(MockCredentialModel());
-    registerFallbackValue(InputDescriptor(
-      id: '1',
-      constraints: Constraints(fields: []),
-    ),);
-    registerFallbackValue(PresentationDefinition(
-      id: 'test',
-      inputDescriptors: [],
-    ),);
+    registerFallbackValue(
+      InputDescriptor(
+        id: '1',
+        constraints: Constraints(fields: []),
+      ),
+    );
+    registerFallbackValue(
+      PresentationDefinition(id: 'test', inputDescriptors: []),
+    );
     registerFallbackValue(MockQRCodeScanCubit());
   });
 
@@ -137,9 +137,11 @@ void main() {
       localAuthApi = MockLocalAuthApi();
 
       // Mock LocalAuthApi authenticate to return true for security checks
-      when(() => localAuthApi.authenticate(
-              localizedReason: any(named: 'localizedReason'),),)
-          .thenAnswer((_) async => true);
+      when(
+        () => localAuthApi.authenticate(
+          localizedReason: any(named: 'localizedReason'),
+        ),
+      ).thenAnswer((_) async => true);
 
       // Setup profile and state
       profileModel = MockProfileModel();
@@ -175,12 +177,11 @@ void main() {
         id: '1',
         name: 'Test Descriptor',
         purpose: 'For testing purposes',
-        constraints: Constraints(fields: [
-          const Field(
-            path: [r'$.credentialSubject.id'],
-            optional: false,
-          ),
-        ],),
+        constraints: Constraints(
+          fields: [
+            const Field(path: [r'$.credentialSubject.id'], optional: false),
+          ],
+        ),
       );
 
       // Create presentation definition
@@ -191,8 +192,9 @@ void main() {
 
       // Create credential manifest
       credentialManifest = MockCredentialManifest();
-      when(() => credentialManifest.presentationDefinition)
-          .thenReturn(presentationDefinition);
+      when(
+        () => credentialManifest.presentationDefinition,
+      ).thenReturn(presentationDefinition);
 
       // Create mock credential with credential manifest
       credential = MockCredentialModel();
@@ -209,16 +211,21 @@ void main() {
       // Create mock credential preview for the credential
       final mockCredentialPreview = MockCredential();
       final mockSubjectModel = MockCredentialSubjectModel();
-      when(() => mockSubjectModel.credentialSubjectType)
-          .thenReturn(CredentialSubjectType.defaultCredential);
-      when(() => mockCredentialPreview.credentialSubjectModel)
-          .thenReturn(mockSubjectModel);
-      when(() => mockCredentialPreview.type)
-          .thenReturn(['VerifiableCredential']);
-      when(() => credential.credentialPreview)
-          .thenReturn(mockCredentialPreview);
-      when(() => testCredential.credentialPreview)
-          .thenReturn(mockCredentialPreview);
+      when(
+        () => mockSubjectModel.credentialSubjectType,
+      ).thenReturn(CredentialSubjectType.defaultCredential);
+      when(
+        () => mockCredentialPreview.credentialSubjectModel,
+      ).thenReturn(mockSubjectModel);
+      when(
+        () => mockCredentialPreview.type,
+      ).thenReturn(['VerifiableCredential']);
+      when(
+        () => credential.credentialPreview,
+      ).thenReturn(mockCredentialPreview);
+      when(
+        () => testCredential.credentialPreview,
+      ).thenReturn(mockCredentialPreview);
 
       // Initialize empty list of credentials
       credentialsToBePresented = [];
@@ -234,24 +241,17 @@ void main() {
       );
 
       when(() => credentialsCubit.state).thenReturn(
-        const CredentialsState(
-          status: CredentialsStatus.idle,
-          credentials: [],
-        ),
+        const CredentialsState(status: CredentialsStatus.idle, credentials: []),
       );
 
-      when(() => scanCubit.state).thenReturn(
-        const ScanState(
-          status: ScanStatus.success,
-        ),
-      );
+      when(
+        () => scanCubit.state,
+      ).thenReturn(const ScanState(status: ScanStatus.success));
 
       // Setup QR code scan cubit
-      when(() => qrCodeScanCubit.state).thenReturn(
-        const QRCodeScanState(
-          status: QrScanStatus.idle,
-        ),
-      );
+      when(
+        () => qrCodeScanCubit.state,
+      ).thenReturn(const QRCodeScanState(status: QrScanStatus.idle));
     });
 
     Widget buildSubject() {
@@ -265,12 +265,8 @@ void main() {
         supportedLocales: AppLocalizations.supportedLocales,
         home: MultiRepositoryProvider(
           providers: [
-            RepositoryProvider<LocalAuthApi>(
-              create: (_) => localAuthApi,
-            ),
-            RepositoryProvider<OIDC4VC>(
-              create: (_) => MockOIDC4VC(),
-            ),
+            RepositoryProvider<LocalAuthApi>(create: (_) => localAuthApi),
+            RepositoryProvider<OIDC4VC>(create: (_) => MockOIDC4VC()),
           ],
           child: MultiBlocProvider(
             providers: [
@@ -279,7 +275,8 @@ void main() {
               BlocProvider<ScanCubit>.value(value: scanCubit),
               BlocProvider<QRCodeScanCubit>.value(value: qrCodeScanCubit),
               BlocProvider<CredentialManifestPickCubit>.value(
-                  value: credentialManifestPickCubit,),
+                value: credentialManifestPickCubit,
+              ),
             ],
             child: Material(
               child: CredentialManifestOfferPickPage(
@@ -304,8 +301,9 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
     });
 
-    testWidgets('displays purpose text from input descriptor',
-        (WidgetTester tester) async {
+    testWidgets('displays purpose text from input descriptor', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
@@ -325,8 +323,9 @@ void main() {
       expect(find.byType(CredentialsListPageItem), findsOneWidget);
     });
 
-    testWidgets('tapping credential item calls toggle on cubit',
-        (WidgetTester tester) async {
+    testWidgets('tapping credential item calls toggle on cubit', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
@@ -335,15 +334,18 @@ void main() {
       await tester.pump();
 
       // Verify toggle was called with the correct parameters
-      verify(() => credentialManifestPickCubit.toggle(
-            index: 0,
-            inputDescriptor: any(named: 'inputDescriptor'),
-            isVcSdJWT: any(named: 'isVcSdJWT'),
-          ),).called(1);
+      verify(
+        () => credentialManifestPickCubit.toggle(
+          index: 0,
+          inputDescriptor: any(named: 'inputDescriptor'),
+          isVcSdJWT: any(named: 'isVcSdJWT'),
+        ),
+      ).called(1);
     });
 
-    testWidgets('continue button is initially disabled when no selection',
-        (WidgetTester tester) async {
+    testWidgets('continue button is initially disabled when no selection', (
+      WidgetTester tester,
+    ) async {
       // Setup state with no selected credential and button disabled
       when(() => credentialManifestPickCubit.state).thenReturn(
         CredentialManifestPickState(
@@ -366,8 +368,9 @@ void main() {
       expect(button.onPressed, isNull);
     });
 
-    testWidgets('continue button is enabled when credential is selected',
-        (WidgetTester tester) async {
+    testWidgets('continue button is enabled when credential is selected', (
+      WidgetTester tester,
+    ) async {
       // Setup state with a selected credential and button enabled
       when(() => credentialManifestPickCubit.state).thenReturn(
         CredentialManifestPickState(
@@ -390,8 +393,9 @@ void main() {
       expect(button.onPressed, isNotNull);
     });
 
-    testWidgets('tapping continue button calls credentialOfferOrPresent',
-        (WidgetTester tester) async {
+    testWidgets('tapping continue button calls credentialOfferOrPresent', (
+      WidgetTester tester,
+    ) async {
       // Setup state with a selected credential and button enabled
       when(() => credentialManifestPickCubit.state).thenReturn(
         CredentialManifestPickState(
@@ -403,8 +407,12 @@ void main() {
       );
 
       // Set security check to false to skip pin code authentication
-      when(() => profileModel.profileSetting.walletSecurityOptions
-          .secureSecurityAuthenticationWithPinCode,).thenReturn(false);
+      when(
+        () => profileModel
+            .profileSetting
+            .walletSecurityOptions
+            .secureSecurityAuthenticationWithPinCode,
+      ).thenReturn(false);
 
       await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
@@ -414,14 +422,16 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify credential offer/present method was called
-      verify(() => scanCubit.credentialOfferOrPresent(
-            uri: any(named: 'uri'),
-            credentialModel: any(named: 'credentialModel'),
-            keyId: any(named: 'keyId'),
-            credentialsToBePresented: any(named: 'credentialsToBePresented'),
-            issuer: any(named: 'issuer'),
-            qrCodeScanCubit: any(named: 'qrCodeScanCubit'),
-          ),).called(1);
+      verify(
+        () => scanCubit.credentialOfferOrPresent(
+          uri: any(named: 'uri'),
+          credentialModel: any(named: 'credentialModel'),
+          keyId: any(named: 'keyId'),
+          credentialsToBePresented: any(named: 'credentialsToBePresented'),
+          issuer: any(named: 'issuer'),
+          qrCodeScanCubit: any(named: 'qrCodeScanCubit'),
+        ),
+      ).called(1);
     });
   });
 }

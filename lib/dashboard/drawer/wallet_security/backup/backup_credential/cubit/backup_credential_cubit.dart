@@ -35,7 +35,6 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
 
   Future<void> encryptAndDownloadFile() async {
     emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
     final isPermissionStatusGranted = await getStoragePermission();
 
     try {
@@ -51,10 +50,7 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
       final credentialModels = credentialsCubit.state.credentials;
 
       final date = UiDate.formatDate(DateTime.now());
-      final message = {
-        'date': date,
-        'credentials': credentialModels,
-      };
+      final message = {'date': date, 'credentials': credentialModels};
 
       final profileModel = profileCubit.state.model;
 
@@ -67,14 +63,17 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
       }
 
       if (profileModel.profileType == ProfileType.enterprise) {
-        final email = await profileCubit.secureStorageProvider
-            .get(SecureStorageKeys.enterpriseEmail);
+        final email = await profileCubit.secureStorageProvider.get(
+          SecureStorageKeys.enterpriseEmail,
+        );
 
-        final password = await profileCubit.secureStorageProvider
-            .get(SecureStorageKeys.enterprisePassword);
+        final password = await profileCubit.secureStorageProvider.get(
+          SecureStorageKeys.enterprisePassword,
+        );
 
-        final walletProvider = await profileCubit.secureStorageProvider
-            .get(SecureStorageKeys.enterpriseWalletProvider);
+        final walletProvider = await profileCubit.secureStorageProvider.get(
+          SecureStorageKeys.enterpriseWalletProvider,
+        );
 
         final enterprise = {
           'email': email,
@@ -85,11 +84,14 @@ class BackupCredentialCubit extends Cubit<BackupCredentialState> {
         message['enterprise'] = enterprise;
       }
 
-      final mnemonic =
-          await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
+      final mnemonic = await secureStorageProvider.get(
+        SecureStorageKeys.ssiMnemonic,
+      );
 
-      final encrypted =
-          await cryptoKeys.encrypt(jsonEncode(message), mnemonic!);
+      final encrypted = await cryptoKeys.encrypt(
+        jsonEncode(message),
+        mnemonic!,
+      );
       final encryptedString = jsonEncode(encrypted);
 
       final fileBytes = Uint8List.fromList(utf8.encode(encryptedString));

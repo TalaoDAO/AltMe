@@ -39,10 +39,7 @@ class TooltipText extends StatelessWidget {
 
     if (tag != null) {
       if (tag!.isNotEmpty) {
-        return HeroFix(
-          tag: tag!,
-          child: child,
-        );
+        return HeroFix(tag: tag!, child: child);
       }
     }
 

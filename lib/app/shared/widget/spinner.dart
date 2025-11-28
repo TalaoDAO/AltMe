@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Spinner extends StatelessWidget {
-  const Spinner({
-    super.key,
-    this.color,
-    this.strokeWidth = 3,
-  });
+  const Spinner({super.key, this.color, this.strokeWidth = 3});
 
   final Color? color;
   final double strokeWidth;

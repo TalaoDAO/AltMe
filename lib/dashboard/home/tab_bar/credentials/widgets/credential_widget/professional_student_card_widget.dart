@@ -12,8 +12,9 @@ class ProfessionalStudentCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final professionalStudentCardModel = credentialModel.credentialPreview
-        .credentialSubjectModel as ProfessionalStudentCardModel;
+    final professionalStudentCardModel =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as ProfessionalStudentCardModel;
     return Column(
       children: [
         CardAnimation(

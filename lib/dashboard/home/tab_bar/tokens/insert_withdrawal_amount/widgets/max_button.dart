@@ -19,14 +19,9 @@ class MaxButton extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primaryContainer,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(5),
-          ),
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
         ),
-        child: Text(
-          l10n.max,
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
+        child: Text(l10n.max, style: Theme.of(context).textTheme.labelLarge),
       ),
     );
   }

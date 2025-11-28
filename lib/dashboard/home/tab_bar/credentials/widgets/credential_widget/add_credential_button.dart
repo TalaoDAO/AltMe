@@ -6,10 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddCredentialButton extends StatelessWidget {
-  const AddCredentialButton({
-    super.key,
-    required this.credentialCategory,
-  });
+  const AddCredentialButton({super.key, required this.credentialCategory});
 
   final CredentialCategory credentialCategory;
 
@@ -38,8 +35,8 @@ class AddCredentialButton extends StatelessWidget {
             Text(
               l10n.addCards,
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           ],
         ),

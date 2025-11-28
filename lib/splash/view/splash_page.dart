@@ -33,12 +33,10 @@ class _SplashViewState extends State<SplashView> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        await context.read<SplashCubit>().initialiseApp();
-        await initDeepLinks();
-      },
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await context.read<SplashCubit>().initialiseApp();
+      await initDeepLinks();
+    });
     super.initState();
   }
 
@@ -73,9 +71,9 @@ class _SplashViewState extends State<SplashView> {
     if (uri.toString().startsWith('${Parameters.universalLink}/oidc4vc?uri=')) {
       newUri = Uri.parse(
         Uri.decodeFull(
-          uri
-              .toString()
-              .substring('${Parameters.universalLink}/oidc4vc?uri='.length),
+          uri.toString().substring(
+            '${Parameters.universalLink}/oidc4vc?uri='.length,
+          ),
         ),
       );
     } else {
@@ -108,17 +106,18 @@ class _SplashViewState extends State<SplashView> {
 
     if (newUri.toString().startsWith('configuration://?')) {
       await context.read<EnterpriseCubit>().requestTheConfiguration(
-            uri: newUri!,
-            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-          );
+        uri: newUri!,
+        qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+      );
       return;
     }
 
     newUri!.queryParameters.forEach((key, value) async {
       if (key == 'uri') {
         final url = value.replaceAll(RegExp(r'ß^\"|\"$'), '');
-        final ssiKey =
-            await secure_storage.getSecureStorage.get(SecureStorageKeys.ssiKey);
+        final ssiKey = await secure_storage.getSecureStorage.get(
+          SecureStorageKeys.ssiKey,
+        );
         if (ssiKey != null) {
           context.read<DeepLinkCubit>().addDeepLink(url);
           return;
@@ -133,9 +132,7 @@ class _SplashViewState extends State<SplashView> {
     });
 
     if (isBeaconRequest && beaconData != '') {
-      unawaited(
-        context.read<BeaconCubit>().peerFromDeepLink(beaconData),
-      );
+      unawaited(context.read<BeaconCubit>().peerFromDeepLink(beaconData));
     }
     if (isOIDC4VCIUrl(newUri) ||
         isSiopV2OrOidc4VpUrl(newUri) ||
@@ -159,6 +156,7 @@ class _SplashViewState extends State<SplashView> {
         walletConnectBlocListener,
         enterpriseBlocListener,
         ProfileCubitListener,
+        messageCubitListener,
       ],
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
@@ -189,8 +187,10 @@ class _SplashViewState extends State<SplashView> {
                       BlocBuilder<SplashCubit, SplashState>(
                         builder: (context, state) {
                           return TweenAnimationBuilder(
-                            tween:
-                                Tween<double>(begin: 0, end: state.loadedValue),
+                            tween: Tween<double>(
+                              begin: 0,
+                              end: state.loadedValue,
+                            ),
                             duration: const Duration(milliseconds: 500),
                             builder: (context, value, child) {
                               return LoadingProgress(value: value);

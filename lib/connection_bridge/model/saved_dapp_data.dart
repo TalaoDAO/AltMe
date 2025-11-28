@@ -7,11 +7,7 @@ part 'saved_dapp_data.g.dart';
 
 @JsonSerializable()
 class SavedDappData extends Equatable {
-  const SavedDappData({
-    this.peer,
-    this.walletAddress,
-    this.sessionData,
-  });
+  const SavedDappData({this.peer, this.walletAddress, this.sessionData});
 
   factory SavedDappData.fromJson(Map<String, dynamic> json) =>
       _$SavedDappDataFromJson(json);
@@ -23,9 +19,5 @@ class SavedDappData extends Equatable {
   Map<String, dynamic> toJson() => _$SavedDappDataToJson(this);
 
   @override
-  List<Object?> get props => [
-        peer,
-        walletAddress,
-        sessionData,
-      ];
+  List<Object?> get props => [peer, walletAddress, sessionData];
 }

@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/oidc4vp_transaction/oidc4vp_signature.dart';
+import 'package:altme/oidc4vp_transaction/oidc4vp_transaction.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/inject_selective_disclosure_state.dart';
@@ -104,9 +106,9 @@ class _SelectiveDisclosurePickViewState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       context.read<SelectiveDisclosureCubit>().dataFromPresentation(
-            credentialModel: widget.selectedCredential,
-            presentationDefinition: widget.presentationDefinition,
-          );
+        credentialModel: widget.selectedCredential,
+        presentationDefinition: widget.presentationDefinition,
+      );
     });
   }
 
@@ -130,23 +132,25 @@ class _SelectiveDisclosurePickViewState
       },
       child: Builder(
         builder: (BuildContext context) {
-          final profileSetting =
-              context.read<ProfileCubit>().state.model.profileSetting;
+          final profileSetting = context
+              .read<ProfileCubit>()
+              .state
+              .model
+              .profileSetting;
 
-          final credentialImage =
-              SelectiveDisclosure(widget.selectedCredential).getPicture;
+          final credentialImage = SelectiveDisclosure(
+            widget.selectedCredential,
+          ).getPicture;
 
-          final bool isOngoingStep = widget.inputDescriptorIndex + 1 !=
+          final bool isOngoingStep =
+              widget.inputDescriptorIndex + 1 !=
               widget.presentationDefinition!.inputDescriptors.length;
 
           return BasePage(
             title: l10n.thisOrganisationRequestsThisInformation,
             titleAlignment: Alignment.topCenter,
             titleTrailing: const WhiteCloseButton(),
-            padding: const EdgeInsets.symmetric(
-              vertical: 24,
-              horizontal: 16,
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
             body: Column(
               children: [
                 if (credentialImage != null)
@@ -163,12 +167,12 @@ class _SelectiveDisclosurePickViewState
                   credentialModel: widget.selectedCredential,
                   onPressed: (claimKey, claimKeyId, threeDotValue, sd) {
                     context.read<SelectiveDisclosureCubit>().disclosureAction(
-                          claimsKey: claimKey,
-                          credentialModel: widget.selectedCredential,
-                          threeDotValue: threeDotValue,
-                          claimKeyId: claimKeyId,
-                          sd: sd,
-                        );
+                      claimsKey: claimKey,
+                      credentialModel: widget.selectedCredential,
+                      threeDotValue: threeDotValue,
+                      claimKeyId: claimKeyId,
+                      sd: sd,
+                    );
                   },
                   showVertically: true,
                 ),
@@ -180,8 +184,10 @@ class _SelectiveDisclosurePickViewState
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    BlocBuilder<SelectiveDisclosureCubit,
-                        SelectiveDisclosureState>(
+                    BlocBuilder<
+                      SelectiveDisclosureCubit,
+                      SelectiveDisclosureState
+                    >(
                       builder: (context, state) {
                         return MyElevatedButton(
                           onPressed: () => present(
@@ -223,7 +229,8 @@ class _SelectiveDisclosurePickViewState
     required List<int> selectedSDIndexInJWT,
     required Uri uri,
   }) async {
-    final bool isOngoingStep = widget.inputDescriptorIndex + 1 !=
+    final bool isOngoingStep =
+        widget.inputDescriptorIndex + 1 !=
         widget.presentationDefinition!.inputDescriptors.length;
 
     final encryptedValues = widget.selectedCredential.jwt
@@ -242,8 +249,12 @@ class _SelectiveDisclosurePickViewState
 
       final profileCubit = context.read<ProfileCubit>();
 
-      final customOidc4vcProfile = profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile;
+      final customOidc4vcProfile = profileCubit
+          .state
+          .model
+          .profileSetting
+          .selfSovereignIdentityOptions
+          .customOidc4vcProfile;
 
       final didKeyType = customOidc4vcProfile.defaultDid;
 
@@ -274,8 +285,44 @@ class _SelectiveDisclosurePickViewState
         'iat': iat,
         'sd_hash': sdHash,
       };
+      // In case of OIDC4VP transaction we need to add the hash of each element
+      // of transactiondata into the payload
+      final scanCubit = context.read<ScanCubit>();
+      final transactionData = scanCubit.state.transactionData;
 
-// If there no cnf in the payload, then no need to add signature
+      if (transactionData != null) {
+        /// create list of chain ids from transaction data
+        final List<int> chainIds = [];
+        final oidc4vpTransaction = Oidc4vpTransaction(
+          transactionData: transactionData,
+        );
+        final decodedTransactions = oidc4vpTransaction.decodeTransactions();
+
+        for (final tx in decodedTransactions) {
+          final decodedMap = tx as Map<String, dynamic>;
+          final chainId =
+              int.tryParse(decodedMap['chain_id']?.toString() ?? '1') ?? 1;
+          chainIds.add(chainId);
+        }
+
+        final Oidc4vpSignedTransaction oidc4vpSignedTransaction =
+            Oidc4vpSignedTransaction(
+              signedTransaction:
+                  scanCubit.state.blockchainTransactionsSignatures!,
+              signedTransactionChainIds: chainIds,
+            );
+
+        payload['blockchain_transaction_hashes'] = oidc4vpSignedTransaction
+            .getSignedTransactionHashes();
+
+        final List<String> transactionDataHashes = [];
+        for (final element in transactionData) {
+          transactionDataHashes.add(sh256Hash(jsonEncode(element)));
+        }
+        payload['transaction_data_hashes'] = transactionDataHashes;
+      }
+
+      // If there no cnf in the payload, then no need to add signature
       if (widget.selectedCredential.data['cnf'] != null) {
         /// sign and get token
         final jwtToken = generateToken(
@@ -287,8 +334,9 @@ class _SelectiveDisclosurePickViewState
         newJwt = '$newJwt$jwtToken';
       }
 
-      final CredentialModel newModel =
-          widget.selectedCredential.copyWith(selectiveDisclosureJwt: newJwt);
+      final CredentialModel newModel = widget.selectedCredential.copyWith(
+        selectiveDisclosureJwt: newJwt,
+      );
 
       final credToBePresented = [newModel];
 
@@ -337,13 +385,13 @@ class _SelectiveDisclosurePickViewState
           }
         }
         await context.read<ScanCubit>().credentialOfferOrPresent(
-              uri: uri,
-              credentialModel: widget.credential,
-              keyId: SecureStorageKeys.ssiKey,
-              credentialsToBePresented: updatedCredentials,
-              issuer: widget.issuer,
-              qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-            );
+          uri: uri,
+          credentialModel: widget.credential,
+          keyId: SecureStorageKeys.ssiKey,
+          credentialsToBePresented: updatedCredentials,
+          issuer: widget.issuer,
+          qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+        );
       }
     } else {
       throw ResponseMessage(

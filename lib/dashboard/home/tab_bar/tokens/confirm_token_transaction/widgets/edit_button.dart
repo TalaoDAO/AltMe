@@ -19,15 +19,13 @@ class EditButton extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primaryContainer,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(5),
-          ),
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
         ),
         child: Text(
           l10n.edit,
           style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-              ),
+            color: Theme.of(context).colorScheme.onPrimaryContainer,
+          ),
         ),
       ),
     );

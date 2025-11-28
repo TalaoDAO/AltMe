@@ -38,13 +38,27 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
   Future<void> verifyCredential(CredentialModel item) async {
     try {
       emit(state.copyWith(status: AppStatus.loading));
-      await Future<void>.delayed(const Duration(milliseconds: 500));
 
-      final customOidc4vcProfile = profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile;
+      final customOidc4vcProfile = profileCubit
+          .state
+          .model
+          .profileSetting
+          .selfSovereignIdentityOptions
+          .customOidc4vcProfile;
 
       String? statusListUri;
       int? statusListIndex;
+
+      /// if credential has no status there is no point in verifying it
+      if (item.data['status'] == null) {
+        emit(
+          state.copyWith(
+            credentialStatus: CredentialStatus.noStatus,
+            status: AppStatus.idle,
+          ),
+        );
+        return;
+      }
 
       if (!customOidc4vcProfile.securityLevel) {
         emit(
@@ -82,8 +96,9 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       }
 
       if (item.expirationDate != null) {
-        final DateTime dateTimeExpirationDate =
-            UiDate.parseExpirationDate(item.expirationDate!);
+        final DateTime dateTimeExpirationDate = UiDate.parseExpirationDate(
+          item.expirationDate!,
+        );
         if (!dateTimeExpirationDate.isAfter(DateTime.now())) {
           emit(
             state.copyWith(
@@ -138,8 +153,9 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
                 jwt: response.toString(),
                 fromStatusList: true,
                 isCachingEnabled: customOidc4vcProfile.statusListCache,
-                useOAuthAuthorizationServerLink:
-                    useOauthServerAuthEndPoint(profileCubit.state.model),
+                useOAuthAuthorizationServerLink: useOauthServerAuthEndPoint(
+                  profileCubit.state.model,
+                ),
               );
 
               if (isVerified != VerificationType.verified) {
@@ -203,18 +219,20 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
 
       if (item.jwt != null) {
         final jwt = item.jwt!;
-        final Map<String, dynamic> payload = jwtDecode.parseJwt(jwt);
-        final Map<String, dynamic> header =
-            decodeHeader(jwtDecode: jwtDecode, token: jwt);
+        final Map<String, dynamic> header = decodeHeader(
+          jwtDecode: jwtDecode,
+          token: jwt,
+        );
 
         Map<String, dynamic>? publicKeyJwk;
 
         final x5c = header['x5c'];
         if (x5c != null && x5c is List) {
+          // clientId = '' because the iss which was used is not mandatory
           publicKeyJwk = await checkX509(
             encodedData: jwt,
             header: header,
-            clientId: payload['iss'].toString(),
+            clientId: '',
           );
         }
 
@@ -223,9 +241,11 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           jwtDecode: jwtDecode,
           jwt: jwt,
           publicKeyJwk: publicKeyJwk,
-          useOAuthAuthorizationServerLink:
-              useOauthServerAuthEndPoint(profileCubit.state.model),
-          isSdJwtVc: item.getFormat == VCFormatType.vcSdJWT.vcValue ||
+          useOAuthAuthorizationServerLink: useOauthServerAuthEndPoint(
+            profileCubit.state.model,
+          ),
+          isSdJwtVc:
+              item.getFormat == VCFormatType.vcSdJWT.vcValue ||
               item.getFormat == VCFormatType.dcSdJWT.vcValue,
         );
 
@@ -246,8 +266,8 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
         }
       } else {
         if (item.credentialPreview.credentialStatus != null) {
-          final CredentialStatus credentialStatus =
-              await item.checkRevocationStatus();
+          final CredentialStatus credentialStatus = await item
+              .checkRevocationStatus();
           if (credentialStatus == CredentialStatus.active) {
             await verifyProofOfPurpose(item);
           } else {
@@ -330,12 +350,16 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       'Content-Type': 'application/json; charset=UTF-8',
       // 'accept': 'application/statuslist+jwt',
     };
-    final customOidc4vcProfile = profileCubit.state.model.profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile;
+    final customOidc4vcProfile = profileCubit
+        .state
+        .model
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile;
 
-    // TODO(hawkbee): Using Dio directly is solving the issue but it probably
-    /// means an issue.
-    /// in the paramaers of DioClient
+    // TODO(hawkbee): Using Dio directly is solving the issue but
+    /// it probably means an issue.
+    /// in the parameters of DioClient
     /// Status invalid of an emailpass in a jwt_vc_json format #3283
     final response = await Dio().get<String>(
       statusListUri,
@@ -355,8 +379,9 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
       jwt: response.toString(),
       fromStatusList: true,
       isCachingEnabled: customOidc4vcProfile.statusListCache,
-      useOAuthAuthorizationServerLink:
-          useOauthServerAuthEndPoint(profileCubit.state.model),
+      useOAuthAuthorizationServerLink: useOauthServerAuthEndPoint(
+        profileCubit.state.model,
+      ),
     );
 
     if (isVerified != VerificationType.verified) {
@@ -381,10 +406,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
           if (statusListIndex == null) {
             throw Exception('statusListIndex is not a numeric value');
           }
-          final bit = getBit(
-            index: statusListIndex,
-            encodedList: encodedList,
-          );
+          final bit = getBit(index: statusListIndex, encodedList: encodedList);
 
           if (bit == 0) {
             // active

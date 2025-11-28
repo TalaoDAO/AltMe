@@ -13,8 +13,9 @@ class EmailPassWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final emailPassModel = credentialModel
-        .credentialPreview.credentialSubjectModel as EmailPassModel;
+    final emailPassModel =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as EmailPassModel;
 
     var emailAddress = emailPassModel.email;
 
@@ -29,8 +30,11 @@ class EmailPassWidget extends StatelessWidget {
         languageCode: languageCode,
         limitDisclosure: '',
         filters: <String, dynamic>{},
-        isDeveloperMode:
-            context.read<ProfileCubit>().state.model.isDeveloperMode,
+        isDeveloperMode: context
+            .read<ProfileCubit>()
+            .state
+            .model
+            .isDeveloperMode,
         selectedClaimsKeyIds: <SelectedClaimsKeyIds>[],
         onPressed: null,
         displayMode: context
@@ -54,16 +58,17 @@ class EmailPassWidget extends StatelessWidget {
     return CredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.emailProof,
       issuerName: credentialModel
-          .credentialPreview.credentialSubjectModel.issuedBy?.name,
+          .credentialPreview
+          .credentialSubjectModel
+          .issuedBy
+          ?.name,
       value: emailAddress,
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),
       expirationDate: credentialModel.expirationDate == null
           ? '--'
-          : UiDate.formatDateForCredentialCard(
-              credentialModel.expirationDate!,
-            ),
+          : UiDate.formatDateForCredentialCard(credentialModel.expirationDate!),
     );
   }
 }

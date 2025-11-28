@@ -13,9 +13,9 @@ class TezosPooAddressModel extends CredentialSubjectModel {
     super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.tezosPooAddress,
-          credentialCategory: CredentialCategory.blockchainAccountsCards,
-        );
+         credentialSubjectType: CredentialSubjectType.tezosPooAddress,
+         credentialCategory: CredentialCategory.blockchainAccountsCards,
+       );
 
   factory TezosPooAddressModel.fromJson(Map<String, dynamic> json) =>
       _$TezosPooAddressModelFromJson(json);

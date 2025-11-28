@@ -70,7 +70,8 @@ class CredentialModel extends Equatable {
       shareLink: oldCredentialModel.shareLink,
       display: display ?? oldCredentialModel.display,
       credentialPreview: Credential.fromJson(newData),
-      expirationDate: newData['expirationDate'] as String? ??
+      expirationDate:
+          newData['expirationDate'] as String? ??
           oldCredentialModel.expirationDate,
       credentialManifest:
           credentialManifest ?? oldCredentialModel.credentialManifest,
@@ -257,7 +258,9 @@ class CredentialModel extends Equatable {
       credentialPreview.credentialSubjectModel.credentialSubjectType ==
           CredentialSubjectType.walletCredential ||
       credentialPreview
-          .credentialSubjectModel.credentialSubjectType.isBlockchainAccount;
+          .credentialSubjectModel
+          .credentialSubjectType
+          .isBlockchainAccount;
 
   String get getFormat => format != null ? format! : 'ldp_vc';
 
@@ -284,21 +287,21 @@ class CredentialModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        image,
-        data,
-        shareLink,
-        credentialPreview,
-        display,
-        expirationDate,
-        credentialManifest,
-        receivedId,
-        challenge,
-        domain,
-        activities,
-        jwt,
-        pendingInfo,
-        format,
-        credentialSupported,
-      ];
+    id,
+    image,
+    data,
+    shareLink,
+    credentialPreview,
+    display,
+    expirationDate,
+    credentialManifest,
+    receivedId,
+    challenge,
+    domain,
+    activities,
+    jwt,
+    pendingInfo,
+    format,
+    credentialSupported,
+  ];
 }

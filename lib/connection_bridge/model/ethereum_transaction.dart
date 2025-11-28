@@ -35,8 +35,8 @@ class EthereumTransaction {
   @override
   String toString() {
     return 'WCEthereumTransaction(from: $from, to: $to, nonce: $nonce,'
-    ' gasPrice: $gasPrice, maxFeePerGas: $maxFeePerGas, maxPriorityFeePerGas: '
-    '$maxPriorityFeePerGas, gas: $gas, gasLimit: $gasLimit,'
-    ' value: $value, data: $data)';
+        ' gasPrice: $gasPrice, maxFeePerGas: $maxFeePerGas'
+        ', maxPriorityFeePerGas: $maxPriorityFeePerGas, gas: $gas, '
+        'gasLimit: $gasLimit, value: $value, data: $data)';
   }
 }

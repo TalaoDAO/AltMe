@@ -23,10 +23,5 @@ class TrustedList extends Equatable {
   Map<String, dynamic> toJson() => _$TrustedListToJson(this);
 
   @override
-  List<Object?> get props => [
-        ecosystem,
-        lastUpdated,
-        entities,
-        uploadDateTime,
-      ];
+  List<Object?> get props => [ecosystem, lastUpdated, entities, uploadDateTime];
 }

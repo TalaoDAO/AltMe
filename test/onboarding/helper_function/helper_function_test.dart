@@ -53,7 +53,8 @@ class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {
     void Function({
       required CryptoAccount cryptoAccount,
       required MessageHandler messageHandler,
-    })? onComplete,
+    })?
+    onComplete,
   }) async {}
 }
 
@@ -122,8 +123,9 @@ void main() {
 
       when(() => secureStorageProvider.get(any())).thenAnswer((_) async => '');
 
-      when(() => secureStorageProvider.set(any(), any()))
-          .thenAnswer((_) async => Future<void>.value());
+      when(
+        () => secureStorageProvider.set(any(), any()),
+      ).thenAnswer((_) async => Future<void>.value());
 
       profileCubit = ProfileCubit(
         didKitProvider: didKitProvider,
@@ -134,7 +136,8 @@ void main() {
       );
     });
 
-    const mnemonicString = 'notice photo opera keen climb'
+    const mnemonicString =
+        'notice photo opera keen climb'
         ' agent soft parrot best joke field devote';
 
     test('should generate account correctly', () async {

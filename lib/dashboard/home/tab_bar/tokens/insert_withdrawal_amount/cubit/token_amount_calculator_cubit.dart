@@ -10,16 +10,12 @@ part 'token_amount_calculator_state.dart';
 part 'token_amount_calculator_cubit.g.dart';
 
 class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
-  TokenAmountCalculatorCubit({
-    required this.insertWithdrawalPageCubit,
-  }) : super(const TokenAmountCalculatorState());
+  TokenAmountCalculatorCubit({required this.insertWithdrawalPageCubit})
+    : super(const TokenAmountCalculatorState());
 
   final InsertWithdrawalPageCubit insertWithdrawalPageCubit;
 
-  void setAmount({
-    required String amount,
-    required TokenModel selectedToken,
-  }) {
+  void setAmount({required String amount, required TokenModel selectedToken}) {
     Decimal validAmount = Decimal.parse('0');
     String insertedAmount = '';
     try {
@@ -52,8 +48,9 @@ class TokenAmountCalculatorCubit extends Cubit<TokenAmountCalculatorState> {
       }
     } catch (e, s) {
       emit(state.copyWith(status: AppStatus.idle));
-      getLogger(runtimeType.toString())
-          .e('error in calculate amount,e: $e, s: $s');
+      getLogger(
+        runtimeType.toString(),
+      ).e('error in calculate amount,e: $e, s: $s');
     }
 
     emit(

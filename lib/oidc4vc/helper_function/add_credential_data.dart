@@ -88,7 +88,6 @@ Future<void> addCredentialData({
       // insert the credential in the wallet
       await credentialsCubit.insertCredential(
         credential: credentialModel,
-        showStatus: false,
         showMessage:
             isLastCall && i + 1 == encodedCredentialOrFutureTokens.length,
         isPendingCredential: true,

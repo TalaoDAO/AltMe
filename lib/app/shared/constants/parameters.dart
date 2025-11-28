@@ -84,10 +84,7 @@ class Parameters {
   static const chainChanged = 'chainChanged';
   static const accountsChanged = 'accountsChanged';
 
-  static const requiredEvents = [
-    chainChanged,
-    accountsChanged,
-  ];
+  static const requiredEvents = [chainChanged, accountsChanged];
 
   static const optionalEvents = ['message', 'disconnect', 'connect'];
 
@@ -143,7 +140,8 @@ class Parameters {
   static const DidKeyType didKeyTypeForDutch = DidKeyType.jwkP256;
   static const DidKeyType didKeyTypeForOwfBaselineProfile = DidKeyType.jwkP256;
 
-static const String trustedListUrl = 'https://talao.co/.well-known/trusted-list.json';
+  static const String trustedListUrl =
+      'https://talao.co/.well-known/trusted-list.json';
   // seed color for the app Theme
   // Altme
   // static const Color seedColor = Color(0xff6600FF);
@@ -153,17 +151,14 @@ static const String trustedListUrl = 'https://talao.co/.well-known/trusted-list.
   // ThemeMode.light for talao
   static const ThemeMode defaultTheme = ThemeMode.light;
 
-// Used to prevent display
-// This key tells the app to not display the field and it allows use of maps
-// with display of key value. See displayKeyValueFromMap
+  // Used to prevent display
+  // This key tells the app to not display the field and it allows use of maps
+  // with display of key value. See displayKeyValueFromMap
 
   static const String doNotDisplayMe = 'doNotDisplayMeMggK5GvU7';
 
-// Used to display picture on the card. This picture is found in the credential
-// data
+  // Used to display picture on the card. This picture is found in the 
+  // credential data
   static const pictureOnCardKeyList = ['picture', 'face', 'portrait'];
-  static const pictureOnCardValueTypeList = [
-    'image/jpeg',
-    'image/png',
-  ];
+  static const pictureOnCardValueTypeList = ['image/jpeg', 'image/png'];
 }

@@ -14,6 +14,7 @@ import 'package:altme/theme/theme_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartez/dartez.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,30 +37,24 @@ Future<void> bootstrap(FlavorMode flavor) async {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
-  await runZonedGuarded(
-    () async {
-      // required when using any plugin. In our case, it's shared_preferences
-      WidgetsFlutterBinding.ensureInitialized();
+  await runZonedGuarded(() async {
+    // required when using any plugin. In our case, it's shared_preferences
+    WidgetsFlutterBinding.ensureInitialized();
 
-      // Creating an instance of ThemeRepository that will invoke the _init()
-      // method
-      // and populate the stream controller in the repository.
-      final themeRepository = ThemeRepository(
-        sharedPreferences: await SharedPreferences.getInstance(),
-      );
+    // Creating an instance of ThemeRepository that will invoke the _init()
+    // method
+    // and populate the stream controller in the repository.
+    final themeRepository = ThemeRepository(
+      sharedPreferences: await SharedPreferences.getInstance(),
+    );
 
-      await initSecureStorage;
+    await initSecureStorage;
 
-      /// Disable Http google font
-      // GoogleFonts.config.allowRuntimeFetching = false;
+    /// Disable Http google font
+    GoogleFonts.config.allowRuntimeFetching = true;
 
-      await Dartez().init();
-      Bloc.observer = AppBlocObserver();
-      runApp(App(
-        flavorMode: flavor,
-        themeRepository: themeRepository,
-      ),);
-    },
-    (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
-  );
+    await Dartez().init();
+    Bloc.observer = AppBlocObserver();
+    runApp(App(flavorMode: flavor, themeRepository: themeRepository));
+  }, (error, stackTrace) => log(error.toString(), stackTrace: stackTrace));
 }

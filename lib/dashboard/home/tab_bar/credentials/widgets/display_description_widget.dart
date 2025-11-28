@@ -19,10 +19,7 @@ class DisplayDescriptionWidget extends StatelessWidget {
 
     final style = textColor == null
         ? Theme.of(context).textTheme.bodyMedium
-        : Theme.of(context)
-            .textTheme
-            .bodyMedium!
-            .copyWith(color: textColor);
+        : Theme.of(context).textTheme.bodyMedium!.copyWith(color: textColor);
 
     if (object is DisplayMappingText) {
       return ManifestText(text: object.text, style: style!);
@@ -46,11 +43,7 @@ class DisplayDescriptionWidget extends StatelessWidget {
 }
 
 class ManifestText extends StatelessWidget {
-  const ManifestText({
-    super.key,
-    required this.text,
-    required this.style,
-  });
+  const ManifestText({super.key, required this.text, required this.style});
 
   final String text;
   final TextStyle style;

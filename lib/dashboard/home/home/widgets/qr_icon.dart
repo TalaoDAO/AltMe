@@ -54,10 +54,9 @@ class QRIcon extends StatelessWidget {
                     offset: Offset.zero,
                   ),
                   BoxShadow(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .shadow
-                        .withValues(alpha: 0.2),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.shadow.withValues(alpha: 0.2),
                     blurRadius: 12,
                     spreadRadius: -12,
                     offset: Offset.zero,

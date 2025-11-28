@@ -68,17 +68,15 @@ class _TabControllerViewState extends State<TabControllerView>
                 indicator: BoxDecoration(
                   color: Colors.transparent,
                   borderRadius: BorderRadius.zero,
-                  border: Border.all(
-                    color: Colors.transparent,
-                    width: 0,
-                  ),
+                  border: Border.all(color: Colors.transparent, width: 0),
                 ),
                 indicatorSize: TabBarIndicatorSize.label,
                 tabs: [
                   MyTab(
                     text: l10n.cards,
-                    icon:
-                        state == 0 ? IconStrings.cards : IconStrings.cardsBlur,
+                    icon: state == 0
+                        ? IconStrings.cards
+                        : IconStrings.cardsBlur,
                     isSelected: state == 0,
                     onPressed: () {
                       if (context.read<HomeCubit>().state.homeStatus ==
@@ -95,8 +93,9 @@ class _TabControllerViewState extends State<TabControllerView>
                   ),
                   MyTab(
                     text: l10n.nfts,
-                    icon:
-                        state == 1 ? IconStrings.ghost : IconStrings.ghostBlur,
+                    icon: state == 1
+                        ? IconStrings.ghost
+                        : IconStrings.ghostBlur,
                     isSelected: state == 1,
                     onPressed: () {
                       if (context.read<HomeCubit>().state.homeStatus ==

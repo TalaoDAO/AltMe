@@ -3,3 +3,4 @@ linter:
   rules:
     public_member_api_docs: false
     constant_identifier_names: false
+    use_super_parameters: true

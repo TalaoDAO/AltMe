@@ -6,21 +6,21 @@ import '../../../../helpers/helpers.dart';
 
 void main() {
   group('ErrorDetailsDialog Widget Tests', () {
-    testWidgets('renders ErrorDetailsDialog with error description',
-        (WidgetTester tester) async {
+    testWidgets('renders ErrorDetailsDialog with error description', (
+      WidgetTester tester,
+    ) async {
       const errorDescription = 'An error occurred';
 
       await tester.pumpApp(
-        const ErrorDetailsDialog(
-          erroDescription: errorDescription,
-        ),
+        const ErrorDetailsDialog(erroDescription: errorDescription),
       );
 
       expect(find.text(errorDescription), findsOneWidget);
     });
 
-    testWidgets('renders ErrorDetailsDialog with more details link',
-        (WidgetTester tester) async {
+    testWidgets('renders ErrorDetailsDialog with more details link', (
+      WidgetTester tester,
+    ) async {
       const errorDescription = 'An error occurred';
       const errorUrl = 'https://example.com';
 
@@ -35,8 +35,9 @@ void main() {
       expect(find.text('More Details'), findsOneWidget);
     });
 
-    testWidgets('clicking OK button closes the dialog',
-        (WidgetTester tester) async {
+    testWidgets('clicking OK button closes the dialog', (
+      WidgetTester tester,
+    ) async {
       const errorDescription = 'An error occurred';
 
       await tester.pumpApp(

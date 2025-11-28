@@ -1,7 +1,1 @@
-enum WalletStatus {
-  init,
-  populate,
-  loading,
-  reset,
-  error,
-}
+enum WalletStatus { init, populate, loading, reset, error }

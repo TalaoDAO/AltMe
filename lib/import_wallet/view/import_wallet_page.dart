@@ -25,14 +25,11 @@ class ImportWalletPage extends StatelessWidget {
   static Route<dynamic> route({
     String? accountName,
     required RestoreType? restoreType,
-  }) =>
-      MaterialPageRoute<void>(
-        builder: (context) => ImportWalletPage(
-          accountName: accountName,
-          restoreType: restoreType,
-        ),
-        settings: const RouteSettings(name: '/ImportWalletPage'),
-      );
+  }) => MaterialPageRoute<void>(
+    builder: (context) =>
+        ImportWalletPage(accountName: accountName, restoreType: restoreType),
+    settings: const RouteSettings(name: '/ImportWalletPage'),
+  );
 
   final String? accountName;
   final RestoreType? restoreType;
@@ -83,9 +80,9 @@ class _ImportWalletViewState extends State<ImportWalletView> {
 
     mnemonicController = TextEditingController();
     mnemonicController.addListener(() {
-      context
-          .read<ImportWalletCubit>()
-          .isMnemonicsOrKeyValid(mnemonicController.text);
+      context.read<ImportWalletCubit>().isMnemonicsOrKeyValid(
+        mnemonicController.text,
+      );
     });
   }
 
@@ -161,11 +158,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                if (isFromOnboarding)
-                  const MStepper(
-                    step: 3,
-                    totalStep: 3,
-                  ),
+                if (isFromOnboarding) const MStepper(step: 3, totalStep: 3),
                 const SizedBox(height: Sizes.spaceLarge),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -176,9 +169,9 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                         ? l10n.importWalletText
                         : l10n.importWalletTextRecoveryPhraseOnly,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          letterSpacing: 1.2,
-                        ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleLarge?.copyWith(letterSpacing: 1.2),
                   ),
                 ),
                 if (isFromOnboarding)
@@ -199,7 +192,8 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                             maxLines: 10,
                             borderRadius: Sizes.normalRadius,
                             controller: mnemonicController,
-                            error: state.isTextFieldEdited &&
+                            error:
+                                state.isTextFieldEdited &&
                                     !state.isMnemonicOrKeyValid
                                 ? l10n.recoveryMnemonicError
                                 : null,
@@ -227,9 +221,7 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                   )
                 else
                   const SizedBox(height: Sizes.space2XLarge),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
-                ),
+                const SizedBox(height: Sizes.spaceSmall),
                 Text(
                   l10n.importEasilyFrom,
                   style: Theme.of(context).textTheme.titleMedium,
@@ -251,17 +243,17 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                 const SizedBox(height: Sizes.spaceLarge),
                 Text(
                   l10n.recoveryPhraseDescriptions,
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        fontSize: 12,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium!.copyWith(fontSize: 12),
                 ),
                 if (Parameters.walletHandlesCrypto) ...[
                   const SizedBox(height: Sizes.spaceLarge),
                   Text(
                     l10n.privateKeyDescriptions,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontSize: 12,
-                        ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleMedium!.copyWith(fontSize: 12),
                   ),
                 ],
                 const SizedBox(height: Sizes.spaceNormal),
@@ -278,10 +270,10 @@ class _ImportWalletViewState extends State<ImportWalletView> {
                           ? null
                           : () async {
                               await context.read<ImportWalletCubit>().import(
-                                    mnemonicOrKey: mnemonicController.text,
-                                    accountName: widget.accountName,
-                                    restoreType: widget.restoreType,
-                                  );
+                                mnemonicOrKey: mnemonicController.text,
+                                accountName: widget.accountName,
+                                restoreType: widget.restoreType,
+                              );
                             },
                     ),
                   ),

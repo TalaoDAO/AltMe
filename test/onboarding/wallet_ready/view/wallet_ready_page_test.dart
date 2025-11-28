@@ -53,8 +53,9 @@ void main() {
     setUpAll(() {
       when(navigator.canPop).thenReturn(true);
       when(() => navigator.push<void>(any())).thenAnswer((_) async {});
-      when(() => navigator.pushAndRemoveUntil<void>(any(), any()))
-          .thenAnswer((_) async {});
+      when(
+        () => navigator.pushAndRemoveUntil<void>(any(), any()),
+      ).thenAnswer((_) async {});
     });
 
     testWidgets('is routable', (tester) async {
@@ -65,9 +66,7 @@ void main() {
             builder: (context) => Scaffold(
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
-                  Navigator.of(context).push<void>(
-                    WalletReadyPage.route(),
-                  );
+                  Navigator.of(context).push<void>(WalletReadyPage.route());
                 },
               ),
             ),
@@ -79,11 +78,7 @@ void main() {
 
       verify(
         () => navigator.push<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals('/walletReadyPage'),
-            ),
-          ),
+          any(that: isRoute<void>(whereName: equals('/walletReadyPage'))),
         ),
       ).called(1);
     });
@@ -92,16 +87,12 @@ void main() {
       await tester.pumpApp(
         MultiBlocProvider(
           providers: [
-            BlocProvider<WalletReadyCubit>.value(
-              value: walletReadyCubit,
-            ),
+            BlocProvider<WalletReadyCubit>.value(value: walletReadyCubit),
             BlocProvider<ProfileCubit>.value(value: profileCubit),
             BlocProvider<FlavorCubit>.value(
               value: FlavorCubit(FlavorMode.development),
             ),
-            BlocProvider<OnboardingCubit>.value(
-              value: OnboardingCubit(),
-            ),
+            BlocProvider<OnboardingCubit>.value(value: OnboardingCubit()),
             BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
           ],
           child: const WalletReadyPage(),
@@ -115,16 +106,12 @@ void main() {
       await tester.pumpApp(
         MultiBlocProvider(
           providers: [
-            BlocProvider<WalletReadyCubit>.value(
-              value: walletReadyCubit,
-            ),
+            BlocProvider<WalletReadyCubit>.value(value: walletReadyCubit),
             BlocProvider<ProfileCubit>.value(value: profileCubit),
             BlocProvider<FlavorCubit>.value(
               value: FlavorCubit(FlavorMode.development),
             ),
-            BlocProvider<OnboardingCubit>.value(
-              value: OnboardingCubit(),
-            ),
+            BlocProvider<OnboardingCubit>.value(value: OnboardingCubit()),
             BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
           ],
           child: WalletReadyView(
@@ -139,21 +126,18 @@ void main() {
       expect(find.byType(ConfettiWidget), findsOneWidget);
     });
 
-    testWidgets('toggles agreement value when checkbox is pressed',
-        (tester) async {
+    testWidgets('toggles agreement value when checkbox is pressed', (
+      tester,
+    ) async {
       await tester.pumpApp(
         MultiBlocProvider(
           providers: [
-            BlocProvider<WalletReadyCubit>.value(
-              value: walletReadyCubit,
-            ),
+            BlocProvider<WalletReadyCubit>.value(value: walletReadyCubit),
             BlocProvider<ProfileCubit>.value(value: profileCubit),
             BlocProvider<FlavorCubit>.value(
               value: FlavorCubit(FlavorMode.development),
             ),
-            BlocProvider<OnboardingCubit>.value(
-              value: OnboardingCubit(),
-            ),
+            BlocProvider<OnboardingCubit>.value(value: OnboardingCubit()),
             BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
           ],
           child: WalletReadyView(
@@ -172,57 +156,17 @@ void main() {
     });
 
     testWidgets(
-        'toggles agreement value when text "I agree to the " is pressed',
-        (tester) async {
-      await tester.pumpApp(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<WalletReadyCubit>.value(
-              value: walletReadyCubit,
-            ),
-            BlocProvider<ProfileCubit>.value(value: profileCubit),
-            BlocProvider<FlavorCubit>.value(
-              value: FlavorCubit(FlavorMode.development),
-            ),
-            BlocProvider<OnboardingCubit>.value(
-              value: OnboardingCubit(),
-            ),
-            BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
-          ],
-          child: WalletReadyView(
-            profileCubit: profileCubit,
-            walletReadyCubit: walletReadyCubit,
-            confettiController: confettiController,
-          ),
-        ),
-      );
-
-      final isAgreeWithTerms = walletReadyCubit.state.isAgreeWithTerms;
-
-      await tester.tap(find.text('I agree to the '));
-
-      expect(walletReadyCubit.state.isAgreeWithTerms, !isAgreeWithTerms);
-    });
-
-    testWidgets(
-        'navigatest to onboardingTosPage when text "termsAndConditions " is'
-        ' pressed', (tester) async {
-      await tester.pumpApp(
-        MockNavigatorProvider(
-          navigator: navigator,
-          child: MultiBlocProvider(
+      'toggles agreement value when text "I agree to the " is pressed',
+      (tester) async {
+        await tester.pumpApp(
+          MultiBlocProvider(
             providers: [
-              BlocProvider<WalletReadyCubit>.value(
-                value: walletReadyCubit,
-              ),
+              BlocProvider<WalletReadyCubit>.value(value: walletReadyCubit),
               BlocProvider<ProfileCubit>.value(value: profileCubit),
               BlocProvider<FlavorCubit>.value(
                 value: FlavorCubit(FlavorMode.development),
               ),
-              BlocProvider<OnboardingCubit>.value(
-                value: OnboardingCubit(),
-              ),
-              BlocProvider<EnterpriseCubit>.value(value: mockEnterpriseCubit),
+              BlocProvider<OnboardingCubit>.value(value: OnboardingCubit()),
               BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
             ],
             child: WalletReadyView(
@@ -231,43 +175,71 @@ void main() {
               confettiController: confettiController,
             ),
           ),
-        ),
-      );
+        );
 
-      await tester.tap(find.text('terms and conditions'));
-      await tester.pumpAndSettle();
+        final isAgreeWithTerms = walletReadyCubit.state.isAgreeWithTerms;
 
-      verify(
-        () => navigator.pushAndRemoveUntil<void>(
-          any(
-            named: 'that',
-            that: isRoute<void>(
-              whereName: equals('/onBoardingTermsPage'),
-            ),
-          ),
-          any(named: 'that', that: isA<RoutePredicate>()),
-        ),
-      ).called(1);
-    });
+        await tester.tap(find.text('I agree to the '));
+
+        expect(walletReadyCubit.state.isAgreeWithTerms, !isAgreeWithTerms);
+      },
+    );
 
     testWidgets(
-        'navigatest to dashboardPage when text "start " is'
+      'navigatest to onboardingTosPage when text "termsAndConditions " is'
+      ' pressed',
+      (tester) async {
+        await tester.pumpApp(
+          MockNavigatorProvider(
+            navigator: navigator,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<WalletReadyCubit>.value(value: walletReadyCubit),
+                BlocProvider<ProfileCubit>.value(value: profileCubit),
+                BlocProvider<FlavorCubit>.value(
+                  value: FlavorCubit(FlavorMode.development),
+                ),
+                BlocProvider<OnboardingCubit>.value(value: OnboardingCubit()),
+                BlocProvider<EnterpriseCubit>.value(value: mockEnterpriseCubit),
+                BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
+              ],
+              child: WalletReadyView(
+                profileCubit: profileCubit,
+                walletReadyCubit: walletReadyCubit,
+                confettiController: confettiController,
+              ),
+            ),
+          ),
+        );
+
+        await tester.tap(find.text('terms and conditions'));
+        await tester.pumpAndSettle();
+
+        verify(
+          () => navigator.pushAndRemoveUntil<void>(
+            any(
+              named: 'that',
+              that: isRoute<void>(whereName: equals('/onBoardingTermsPage')),
+            ),
+            any(named: 'that', that: isA<RoutePredicate>()),
+          ),
+        ).called(1);
+      },
+    );
+
+    testWidgets('navigatest to dashboardPage when text "start " is'
         ' pressed', (tester) async {
       await tester.pumpApp(
         MockNavigatorProvider(
           navigator: navigator,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider<WalletReadyCubit>.value(
-                value: walletReadyCubit,
-              ),
+              BlocProvider<WalletReadyCubit>.value(value: walletReadyCubit),
               BlocProvider<ProfileCubit>.value(value: profileCubit),
               BlocProvider<FlavorCubit>.value(
                 value: FlavorCubit(FlavorMode.development),
               ),
-              BlocProvider<OnboardingCubit>.value(
-                value: OnboardingCubit(),
-              ),
+              BlocProvider<OnboardingCubit>.value(value: OnboardingCubit()),
               BlocProvider<EnterpriseCubit>.value(value: mockEnterpriseCubit),
               BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
             ],
@@ -291,245 +263,221 @@ void main() {
       verify(
         () => navigator.pushAndRemoveUntil<void>(
           any(
-            that: isRoute<void>(
-              whereName: equals(AltMeStrings.dashBoardPage),
-            ),
+            that: isRoute<void>(whereName: equals(AltMeStrings.dashBoardPage)),
           ),
-          any(
-            that: isA<RoutePredicate>(),
-          ),
+          any(that: isA<RoutePredicate>()),
         ),
       ).called(1);
     });
 
-    testWidgets('navigatest to dashboardPage when MyElevatedButton is pressed',
-        (tester) async {
-      await tester.pumpApp(
-        MockNavigatorProvider(
-          navigator: navigator,
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<WalletReadyCubit>.value(
-                value: walletReadyCubit,
+    testWidgets(
+      'navigatest to dashboardPage when MyElevatedButton is pressed',
+      (tester) async {
+        await tester.pumpApp(
+          MockNavigatorProvider(
+            navigator: navigator,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<WalletReadyCubit>.value(value: walletReadyCubit),
+                BlocProvider<ProfileCubit>.value(value: profileCubit),
+                BlocProvider<FlavorCubit>.value(
+                  value: FlavorCubit(FlavorMode.development),
+                ),
+                BlocProvider<OnboardingCubit>.value(value: OnboardingCubit()),
+                BlocProvider<EnterpriseCubit>.value(value: mockEnterpriseCubit),
+                BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
+              ],
+              child: WalletReadyView(
+                profileCubit: profileCubit,
+                walletReadyCubit: walletReadyCubit,
+                confettiController: confettiController,
               ),
-              BlocProvider<ProfileCubit>.value(value: profileCubit),
-              BlocProvider<FlavorCubit>.value(
-                value: FlavorCubit(FlavorMode.development),
-              ),
-              BlocProvider<OnboardingCubit>.value(
-                value: OnboardingCubit(),
-              ),
-              BlocProvider<EnterpriseCubit>.value(value: mockEnterpriseCubit),
-              BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
-            ],
-            child: WalletReadyView(
-              profileCubit: profileCubit,
-              walletReadyCubit: walletReadyCubit,
-              confettiController: confettiController,
             ),
           ),
-        ),
-      );
+        );
 
-      await tester.tap(find.byType(MyElevatedButton));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byType(MyElevatedButton));
+        await tester.pumpAndSettle();
 
-      verify(
-        () => navigator.pushAndRemoveUntil<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals(AltMeStrings.dashBoardPage),
+        verify(
+          () => navigator.pushAndRemoveUntil<void>(
+            any(
+              that: isRoute<void>(
+                whereName: equals(AltMeStrings.dashBoardPage),
+              ),
+            ),
+            any(that: isA<RoutePredicate>()),
+          ),
+        ).called(1);
+      },
+    );
+
+    testWidgets(
+      'navigatest to dashboardPage when MyElevatedButton is pressed',
+      (tester) async {
+        await tester.pumpApp(
+          MockNavigatorProvider(
+            navigator: navigator,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<WalletReadyCubit>.value(value: walletReadyCubit),
+                BlocProvider<ProfileCubit>.value(value: profileCubit),
+                BlocProvider<FlavorCubit>.value(
+                  value: FlavorCubit(FlavorMode.development),
+                ),
+                BlocProvider<OnboardingCubit>.value(value: OnboardingCubit()),
+                BlocProvider<EnterpriseCubit>.value(value: mockEnterpriseCubit),
+                BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
+              ],
+              child: WalletReadyView(
+                profileCubit: profileCubit,
+                walletReadyCubit: walletReadyCubit,
+                confettiController: confettiController,
+              ),
             ),
           ),
-          any(
-            that: isA<RoutePredicate>(),
-          ),
-        ),
-      ).called(1);
-    });
+        );
 
-    testWidgets('navigatest to dashboardPage when MyElevatedButton is pressed',
-        (tester) async {
-      await tester.pumpApp(
-        MockNavigatorProvider(
-          navigator: navigator,
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<WalletReadyCubit>.value(
-                value: walletReadyCubit,
+        await tester.tap(find.byType(MyElevatedButton));
+        await tester.pumpAndSettle();
+
+        verify(
+          () => navigator.pushAndRemoveUntil<void>(
+            any(
+              that: isRoute<void>(
+                whereName: equals(AltMeStrings.dashBoardPage),
               ),
-              BlocProvider<ProfileCubit>.value(value: profileCubit),
-              BlocProvider<FlavorCubit>.value(
-                value: FlavorCubit(FlavorMode.development),
+            ),
+            any(that: isA<RoutePredicate>()),
+          ),
+        ).called(1);
+      },
+    );
+
+    testWidgets(
+      'navigatest to dashboardPage when MyElevatedButton is pressed',
+      (tester) async {
+        await tester.pumpApp(
+          MockNavigatorProvider(
+            navigator: navigator,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<WalletReadyCubit>.value(value: walletReadyCubit),
+                BlocProvider<ProfileCubit>.value(value: profileCubit),
+                BlocProvider<FlavorCubit>.value(
+                  value: FlavorCubit(FlavorMode.development),
+                ),
+                BlocProvider<OnboardingCubit>.value(value: OnboardingCubit()),
+                BlocProvider<EnterpriseCubit>.value(value: mockEnterpriseCubit),
+                BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
+              ],
+              child: WalletReadyView(
+                profileCubit: profileCubit,
+                walletReadyCubit: walletReadyCubit,
+                confettiController: confettiController,
               ),
-              BlocProvider<OnboardingCubit>.value(
-                value: OnboardingCubit(),
-              ),
-              BlocProvider<EnterpriseCubit>.value(value: mockEnterpriseCubit),
-              BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
-            ],
-            child: WalletReadyView(
-              profileCubit: profileCubit,
-              walletReadyCubit: walletReadyCubit,
-              confettiController: confettiController,
             ),
           ),
-        ),
-      );
+        );
 
-      await tester.tap(find.byType(MyElevatedButton));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byType(MyElevatedButton));
+        await tester.pumpAndSettle();
 
-      verify(
-        () => navigator.pushAndRemoveUntil<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals(AltMeStrings.dashBoardPage),
+        verify(
+          () => navigator.pushAndRemoveUntil<void>(
+            any(
+              that: isRoute<void>(
+                whereName: equals(AltMeStrings.dashBoardPage),
+              ),
+            ),
+            any(that: isA<RoutePredicate>()),
+          ),
+        ).called(1);
+      },
+    );
+
+    testWidgets(
+      'navigatest to dashboardPage when MyElevatedButton is pressed',
+      (tester) async {
+        await tester.pumpApp(
+          MockNavigatorProvider(
+            navigator: navigator,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<WalletReadyCubit>.value(value: walletReadyCubit),
+                BlocProvider<ProfileCubit>.value(value: profileCubit),
+                BlocProvider<FlavorCubit>.value(
+                  value: FlavorCubit(FlavorMode.development),
+                ),
+                BlocProvider<OnboardingCubit>.value(value: OnboardingCubit()),
+                BlocProvider<EnterpriseCubit>.value(value: mockEnterpriseCubit),
+                BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
+              ],
+              child: WalletReadyView(
+                profileCubit: profileCubit,
+                walletReadyCubit: walletReadyCubit,
+                confettiController: confettiController,
+              ),
             ),
           ),
-          any(
-            that: isA<RoutePredicate>(),
-          ),
-        ),
-      ).called(1);
-    });
+        );
 
-    testWidgets('navigatest to dashboardPage when MyElevatedButton is pressed',
-        (tester) async {
-      await tester.pumpApp(
-        MockNavigatorProvider(
-          navigator: navigator,
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<WalletReadyCubit>.value(
-                value: walletReadyCubit,
+        await tester.tap(find.byType(MyElevatedButton));
+        await tester.pumpAndSettle();
+
+        verify(
+          () => navigator.pushAndRemoveUntil<void>(
+            any(
+              that: isRoute<void>(
+                whereName: equals(AltMeStrings.dashBoardPage),
               ),
-              BlocProvider<ProfileCubit>.value(value: profileCubit),
-              BlocProvider<FlavorCubit>.value(
-                value: FlavorCubit(FlavorMode.development),
+            ),
+            any(that: isA<RoutePredicate>()),
+          ),
+        ).called(1);
+      },
+    );
+
+    testWidgets(
+      'navigatest to dashboardPage when MyElevatedButton is pressed',
+      (tester) async {
+        await tester.pumpApp(
+          MockNavigatorProvider(
+            navigator: navigator,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<WalletReadyCubit>.value(value: walletReadyCubit),
+                BlocProvider<ProfileCubit>.value(value: profileCubit),
+                BlocProvider<FlavorCubit>.value(
+                  value: FlavorCubit(FlavorMode.development),
+                ),
+                BlocProvider<OnboardingCubit>.value(value: OnboardingCubit()),
+                BlocProvider<EnterpriseCubit>.value(value: mockEnterpriseCubit),
+                BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
+              ],
+              child: WalletReadyView(
+                profileCubit: profileCubit,
+                walletReadyCubit: walletReadyCubit,
+                confettiController: confettiController,
               ),
-              BlocProvider<OnboardingCubit>.value(
-                value: OnboardingCubit(),
-              ),
-              BlocProvider<EnterpriseCubit>.value(value: mockEnterpriseCubit),
-              BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
-            ],
-            child: WalletReadyView(
-              profileCubit: profileCubit,
-              walletReadyCubit: walletReadyCubit,
-              confettiController: confettiController,
             ),
           ),
-        ),
-      );
+        );
 
-      await tester.tap(find.byType(MyElevatedButton));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byType(MyElevatedButton));
+        await tester.pumpAndSettle();
 
-      verify(
-        () => navigator.pushAndRemoveUntil<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals(AltMeStrings.dashBoardPage),
+        verify(
+          () => navigator.pushAndRemoveUntil<void>(
+            any(
+              that: isRoute<void>(
+                whereName: equals(AltMeStrings.dashBoardPage),
+              ),
             ),
+            any(that: isA<RoutePredicate>()),
           ),
-          any(
-            that: isA<RoutePredicate>(),
-          ),
-        ),
-      ).called(1);
-    });
-
-    testWidgets('navigatest to dashboardPage when MyElevatedButton is pressed',
-        (tester) async {
-      await tester.pumpApp(
-        MockNavigatorProvider(
-          navigator: navigator,
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<WalletReadyCubit>.value(
-                value: walletReadyCubit,
-              ),
-              BlocProvider<ProfileCubit>.value(value: profileCubit),
-              BlocProvider<FlavorCubit>.value(
-                value: FlavorCubit(FlavorMode.development),
-              ),
-              BlocProvider<OnboardingCubit>.value(
-                value: OnboardingCubit(),
-              ),
-              BlocProvider<EnterpriseCubit>.value(value: mockEnterpriseCubit),
-              BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
-            ],
-            child: WalletReadyView(
-              profileCubit: profileCubit,
-              walletReadyCubit: walletReadyCubit,
-              confettiController: confettiController,
-            ),
-          ),
-        ),
-      );
-
-      await tester.tap(find.byType(MyElevatedButton));
-      await tester.pumpAndSettle();
-
-      verify(
-        () => navigator.pushAndRemoveUntil<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals(AltMeStrings.dashBoardPage),
-            ),
-          ),
-          any(
-            that: isA<RoutePredicate>(),
-          ),
-        ),
-      ).called(1);
-    });
-
-    testWidgets('navigatest to dashboardPage when MyElevatedButton is pressed',
-        (tester) async {
-      await tester.pumpApp(
-        MockNavigatorProvider(
-          navigator: navigator,
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<WalletReadyCubit>.value(
-                value: walletReadyCubit,
-              ),
-              BlocProvider<ProfileCubit>.value(value: profileCubit),
-              BlocProvider<FlavorCubit>.value(
-                value: FlavorCubit(FlavorMode.development),
-              ),
-              BlocProvider<OnboardingCubit>.value(
-                value: OnboardingCubit(),
-              ),
-              BlocProvider<EnterpriseCubit>.value(value: mockEnterpriseCubit),
-              BlocProvider<QRCodeScanCubit>.value(value: mockQRCodeScanCubit),
-            ],
-            child: WalletReadyView(
-              profileCubit: profileCubit,
-              walletReadyCubit: walletReadyCubit,
-              confettiController: confettiController,
-            ),
-          ),
-        ),
-      );
-
-      await tester.tap(find.byType(MyElevatedButton));
-      await tester.pumpAndSettle();
-
-      verify(
-        () => navigator.pushAndRemoveUntil<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals(AltMeStrings.dashBoardPage),
-            ),
-          ),
-          any(
-            that: isA<RoutePredicate>(),
-          ),
-        ),
-      ).called(1);
-    });
+        ).called(1);
+      },
+    );
   });
 }

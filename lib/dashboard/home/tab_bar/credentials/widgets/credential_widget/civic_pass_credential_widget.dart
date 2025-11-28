@@ -4,10 +4,7 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 
 class CivicPassCredentialWidget extends StatelessWidget {
-  const CivicPassCredentialWidget({
-    super.key,
-    required this.credentialModel,
-  });
+  const CivicPassCredentialWidget({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 
@@ -17,7 +14,11 @@ class CivicPassCredentialWidget extends StatelessWidget {
     //    .credentialPreview.credentialSubjectModel as CivicPassCredentialModel;
 
     final DisplayMapping? titleDisplayMapping = credentialModel
-        .credentialManifest!.outputDescriptors?.first.display?.title;
+        .credentialManifest!
+        .outputDescriptors
+        ?.first
+        .display
+        ?.title;
 
     var title = '';
 
@@ -30,7 +31,11 @@ class CivicPassCredentialWidget extends StatelessWidget {
     }
 
     final DisplayMapping? subTitleDisplayMapping = credentialModel
-        .credentialManifest?.outputDescriptors?.first.display?.subtitle;
+        .credentialManifest
+        ?.outputDescriptors
+        ?.first
+        .display
+        ?.subtitle;
 
     var subTitle = '';
 

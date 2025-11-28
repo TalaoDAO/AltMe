@@ -27,10 +27,7 @@ class MatrixChatImpl extends MatrixChatInterface {
   factory MatrixChatImpl() {
     _instance ??= MatrixChatImpl._(
       didKitProvider: DIDKitProvider(),
-      dioClient: DioClient(
-        secureStorageProvider: getSecureStorage,
-        dio: Dio(),
-      ),
+      dioClient: DioClient(secureStorageProvider: getSecureStorage, dio: Dio()),
       secureStorageProvider: getSecureStorage,
       oidc4vc: OIDC4VC(),
     );
@@ -75,15 +72,12 @@ class MatrixChatImpl extends MatrixChatInterface {
     final username = did.replaceAll(':', '-');
 
     await _initClient();
-    final isUserRegisteredMatrix = await secureStorageProvider
-        .get(SecureStorageKeys.isUserRegisteredMatrix);
+    final isUserRegisteredMatrix = await secureStorageProvider.get(
+      SecureStorageKeys.isUserRegisteredMatrix,
+    );
     late String userId;
     if (isUserRegisteredMatrix != 'true') {
-      await register(
-        did: did,
-        kid: kid,
-        privateKey: privateKey,
-      );
+      await register(did: did, kid: kid, privateKey: privateKey);
       await secureStorageProvider.set(
         SecureStorageKeys.isUserRegisteredMatrix,
         true.toString(),
@@ -115,9 +109,7 @@ class MatrixChatImpl extends MatrixChatInterface {
       await client!.init();
     } catch (e, s) {
       logger.e('e: $e , s: $s');
-      await client!.init(
-        newHomeserver: Uri.parse(Urls.matrixHomeServer),
-      );
+      await client!.init(newHomeserver: Uri.parse(Urls.matrixHomeServer));
     }
   }
 
@@ -168,9 +160,7 @@ class MatrixChatImpl extends MatrixChatInterface {
     if (events == null || events.isEmpty) return [];
     final messageEvents =
         events.where((event) => event.type == 'm.room.message').toList()
-          ..sort(
-            (e1, e2) => e2.originServerTs.compareTo(e1.originServerTs),
-          );
+          ..sort((e1, e2) => e2.originServerTs.compareTo(e1.originServerTs));
 
     return messageEvents.map(mapEventToMessage).toList();
   }
@@ -202,8 +192,9 @@ class MatrixChatImpl extends MatrixChatInterface {
 
       final file = content['file'];
 
-      final url =
-          (file != null && file is Map<String, dynamic>) ? file['url'] : '';
+      final url = (file != null && file is Map<String, dynamic>)
+          ? file['url']
+          : '';
 
       message = ImageMessage(
         id: const Uuid().v4(),
@@ -225,9 +216,7 @@ class MatrixChatImpl extends MatrixChatInterface {
         uri: getThumbnail(url: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
-        author: User(
-          id: event.senderId,
-        ),
+        author: User(id: event.senderId),
       );
     } else if (event.messageType == 'm.audio') {
       var duration = 0;
@@ -244,17 +233,13 @@ class MatrixChatImpl extends MatrixChatInterface {
       message = AudioMessage(
         id: const Uuid().v4(),
         remoteId: event.eventId,
-        duration: Duration(
-          milliseconds: duration,
-        ),
+        duration: Duration(milliseconds: duration),
         name: event.plaintextBody,
         size: size,
         uri: getThumbnail(url: event.content['url'] as String? ?? ''),
         status: mapEventStatusToMessageStatus(event.status),
         createdAt: event.originServerTs.millisecondsSinceEpoch,
-        author: User(
-          id: event.senderId,
-        ),
+        author: User(id: event.senderId),
       );
     } else {
       message = TextMessage(
@@ -263,9 +248,7 @@ class MatrixChatImpl extends MatrixChatInterface {
         text: event.plaintextBody,
         createdAt: event.originServerTs.millisecondsSinceEpoch,
         status: mapEventStatusToMessageStatus(event.status),
-        author: User(
-          id: event.senderId,
-        ),
+        author: User(id: event.senderId),
       );
     }
     return message;
@@ -323,9 +306,7 @@ class MatrixChatImpl extends MatrixChatInterface {
   Future<void> handleFileSelection({
     required OnMessageCreated onMessageCreated,
   }) async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.any,
-    );
+    final result = await FilePicker.platform.pickFiles(type: FileType.any);
 
     if (result != null && result.files.single.path != null) {
       final messageId = const Uuid().v4();
@@ -345,7 +326,9 @@ class MatrixChatImpl extends MatrixChatInterface {
         await client!.joinRoomById(roomId);
         await enableRoomEncyption(roomId);
       }
-      await client!.getRoomById(roomId)?.sendFileEvent(
+      await client!
+          .getRoomById(roomId)
+          ?.sendFileEvent(
             MatrixFile(
               bytes: File(result.files.single.path!).readAsBytesSync(),
               name: result.files.single.name,
@@ -389,11 +372,10 @@ class MatrixChatImpl extends MatrixChatInterface {
           await client!.joinRoomById(roomId);
           await enableRoomEncyption(roomId);
         }
-        await client!.getRoomById(roomId)?.sendFileEvent(
-              MatrixFile(
-                bytes: bytes,
-                name: result.name,
-              ),
+        await client!
+            .getRoomById(roomId)
+            ?.sendFileEvent(
+              MatrixFile(bytes: bytes, name: result.name),
               txid: messageId,
             );
       }
@@ -428,9 +410,7 @@ class MatrixChatImpl extends MatrixChatInterface {
           StateEvent(
             type: EventTypes.Encryption,
             stateKey: '',
-            content: {
-              'algorithm': 'm.megolm.v1.aes-sha2',
-            },
+            content: {'algorithm': 'm.megolm.v1.aes-sha2'},
           ),
         ],
       );
@@ -489,12 +469,9 @@ class MatrixChatImpl extends MatrixChatInterface {
     int height = 500,
   }) {
     if (url.trim().isEmpty) return '';
-    final Uri uri = Uri.parse(url).getThumbnail(
-      client!,
-      height: height,
-      width: width,
-      animated: false,
-    );
+    final Uri uri = Uri.parse(
+      url,
+    ).getThumbnail(client!, height: height, width: width, animated: false);
     return uri.toString();
   }
 
@@ -557,15 +534,13 @@ class MatrixChatImpl extends MatrixChatInterface {
   Future<String> _getNonce(String did) async {
     await dotenv.load();
     final apiKey = dotenv.get('TALAO_MATRIX_API_KEY');
-    final nonce = await dioClient.get(
-      Urls.getNonce,
-      queryParameters: <String, dynamic>{
-        'did': did,
-      },
-      headers: <String, dynamic>{
-        'X-API-KEY': apiKey,
-      },
-    ) as String;
+    final nonce =
+        await dioClient.get(
+              Urls.getNonce,
+              queryParameters: <String, dynamic>{'did': did},
+              headers: <String, dynamic>{'X-API-KEY': apiKey},
+            )
+            as String;
     return nonce;
   }
 
@@ -602,12 +577,10 @@ class MatrixChatImpl extends MatrixChatInterface {
   @override
   Future<void> dispose() async {
     try {
-      await client?.logout().catchError(
-            (_) => logger.e('logout failed!'),
-          );
+      await client?.logout().catchError((_) => logger.e('logout failed!'));
       await client?.dispose().catchError(
-            (dynamic e) => logger.e('dispose failed with $e'),
-          );
+        (dynamic e) => logger.e('dispose failed with $e'),
+      );
       user = null;
       client = null;
     } catch (e, s) {
@@ -626,8 +599,10 @@ class MatrixChatImpl extends MatrixChatInterface {
         return;
       }
       await room.enableEncryption();
-      final verificationResponse =
-          await DeviceKeysList(client!.userID!, client!).startVerification();
+      final verificationResponse = await DeviceKeysList(
+        client!.userID!,
+        client!,
+      ).startVerification();
       logger.i('verification response: $verificationResponse');
       await verificationResponse.acceptVerification();
     } catch (e, s) {

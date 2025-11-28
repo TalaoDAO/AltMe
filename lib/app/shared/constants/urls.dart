@@ -5,9 +5,7 @@ class Urls {
 
   static const String checkIssuerEbsiUrl =
       'https://api.conformance.intebsi.xyz/trusted-issuers-registry/v2/issuers';
-  static const Set<String> issuerUrls = {
-    checkIssuerEbsiUrl,
-  };
+  static const Set<String> issuerUrls = {checkIssuerEbsiUrl};
 
   static const String issuerBaseUrl = 'https://issuer.talao.co';
 
@@ -60,7 +58,7 @@ class Urls {
   static const tzktGhostnetUrl = 'https://api.ghostnet.tzkt.io';
 
   //Moralis
-  static const moralisBaseUrl = 'https://deep-index.moralis.io/api/v2';
+  static const moralisBaseUrl = 'https://deep-index.moralis.io/api/v2.2';
 
   //Infura
   static const infuraBaseUrl = 'https://mainnet.infura.io/v3/';

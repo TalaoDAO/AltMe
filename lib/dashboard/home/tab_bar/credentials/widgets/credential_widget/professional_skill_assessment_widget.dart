@@ -15,8 +15,9 @@ class ProfessionalSkillAssessmentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final professionalSkillAssessmentModel = credentialModel.credentialPreview
-        .credentialSubjectModel as ProfessionalSkillAssessmentModel;
+    final professionalSkillAssessmentModel =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as ProfessionalSkillAssessmentModel;
 
     return CredentialBackground(
       credentialModel: credentialModel,
@@ -38,10 +39,7 @@ class ProfessionalSkillAssessmentWidget extends StatelessWidget {
           Column(
             children: professionalSkillAssessmentModel.signatureLines!
                 .map(
-                  (e) => DisplaySignatures(
-                    localizations: l10n,
-                    signature: e,
-                  ),
+                  (e) => DisplaySignatures(localizations: l10n, signature: e),
                 )
                 .toList(),
           ),

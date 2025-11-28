@@ -46,8 +46,7 @@ void main() {
       expect(UiDate.formatDate(dateTime), '2022-05-10');
     });
 
-    test(
-        'formatDateForCredentialCard returns '
+    test('formatDateForCredentialCard returns '
         'formatted date for credential card', () {
       const timestamp = '1643738400';
       expect(UiDate.formatDateForCredentialCard(timestamp), '2022-02-01');

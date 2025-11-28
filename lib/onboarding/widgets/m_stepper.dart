@@ -5,11 +5,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class MStepper extends StatelessWidget {
-  const MStepper({
-    super.key,
-    this.step = 1,
-    this.totalStep = 3,
-  });
+  const MStepper({super.key, this.step = 1, this.totalStep = 3});
 
   final int step;
   final int totalStep;
@@ -29,9 +25,7 @@ class MStepper extends StatelessWidget {
           '${l10n.step} $step/$totalStep',
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        const SizedBox(
-          height: Sizes.spaceSmall,
-        ),
+        const SizedBox(height: Sizes.spaceSmall),
         Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -49,11 +43,7 @@ class MStepper extends StatelessWidget {
 }
 
 class Step extends StatelessWidget {
-  const Step({
-    super.key,
-    this.isEnable = false,
-    this.width = 50,
-  });
+  const Step({super.key, this.isEnable = false, this.width = 50});
   final bool isEnable;
   final double width;
 

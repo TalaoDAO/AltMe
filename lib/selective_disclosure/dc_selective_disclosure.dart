@@ -15,9 +15,7 @@ class DcSelectiveDisclosure extends VcSelectiveDisclosure {
       Map<String, dynamic> buildingClaims,
     ) {
       // Only consider claims with path.length == level
-      final filtered = List<Map<String, dynamic>>.from(
-        claimsList,
-      );
+      final filtered = List<Map<String, dynamic>>.from(claimsList);
       filtered.removeWhere((claim) {
         final path = claim['path'];
         return path is! List<dynamic> || path.length != level;

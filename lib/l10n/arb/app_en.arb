@@ -1175,5 +1175,7 @@
   "aiPleaseWait": "This treatment can take up to 1 min",
   "trustedList": "Use trusted list",
   "trustedListSubtitle": "List of trusted entities in the current ecosystem. You are warned in case of interaction with non trusted entity.",
-  "notTrustedEntity": "This entity is not in the trusted list. You should be very cautious with untrusted entities."
+  "notTrustedEntity": "This entity is not in the trusted list. You should be very cautious with untrusted entities.",
+  "acceptanceRequest": "Payment request",
+  "pay": "share and pay"
 }

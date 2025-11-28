@@ -5,8 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../helpers/helpers.dart';
 
 void main() {
-  testWidgets('MnemonicDisplay shows the correct words',
-      (WidgetTester tester) async {
+  testWidgets('MnemonicDisplay shows the correct words', (
+    WidgetTester tester,
+  ) async {
     final mnemonic = [
       'apple',
       'banana',
@@ -22,11 +23,7 @@ void main() {
       'nectarine',
     ];
 
-    await tester.pumpApp(
-      Scaffold(
-        body: MnemonicDisplay(mnemonic: mnemonic),
-      ),
-    );
+    await tester.pumpApp(Scaffold(body: MnemonicDisplay(mnemonic: mnemonic)));
 
     await tester.pumpAndSettle();
 

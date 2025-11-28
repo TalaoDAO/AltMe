@@ -12,6 +12,8 @@ class TezosNetwork extends BlockchainNetwork {
     required String super.title,
     required String super.subTitle,
     required super.type,
+    required super.isMainNet,
+    required super.chainId,
     super.apiKey,
   });
 
@@ -19,25 +21,30 @@ class TezosNetwork extends BlockchainNetwork {
       _$TezosNetworkFromJson(json);
 
   factory TezosNetwork.mainNet() => const TezosNetwork(
-        type: BlockchainType.tezos,
-        networkname: 'Mainnet',
-        apiUrl: Urls.tzktMainnetUrl,
-        rpcNodeUrl: Urls.mainnetRPC,
-        title: 'Tezos Mainnet',
-        subTitle:
-            'This network is the official Tezos blockchain running Network.'
-            ' You should use this network by default.',
-      );
+    type: BlockchainType.tezos,
+    networkname: 'Mainnet',
+    apiUrl: Urls.tzktMainnetUrl,
+    rpcNodeUrl: Urls.mainnetRPC,
+    title: 'Tezos Mainnet',
+    subTitle:
+        'This network is the official Tezos blockchain running Network.'
+        ' You should use this network by default.',
+    isMainNet: true,
+    chainId: 0, // Or use a specific numeric ID for Tezos mainnet
+  );
 
   factory TezosNetwork.ghostnet() => const TezosNetwork(
-        type: BlockchainType.tezos,
-        networkname: 'Ghostnet',
-        apiUrl: Urls.tzktGhostnetUrl,
-        rpcNodeUrl: Urls.ghostnetRPC,
-        title: 'Tezos Ghostnet',
-        subTitle: 'This network is used to test protocol upgrades'
-            ' (do not use it unless you are a developer).',
-      );
+    type: BlockchainType.tezos,
+    networkname: 'Ghostnet',
+    apiUrl: Urls.tzktGhostnetUrl,
+    rpcNodeUrl: Urls.ghostnetRPC,
+    title: 'Tezos Ghostnet',
+    subTitle:
+        'This network is used to test protocol upgrades'
+        ' (do not use it unless you are a developer).',
+    isMainNet: false,
+    chainId: 0, // Or use a specific numeric ID for Tezos ghostnet
+  );
 
   @override
   Map<String, dynamic> toJson() => _$TezosNetworkToJson(this);

@@ -16,9 +16,9 @@ class DefiComplianceModel extends CredentialSubjectModel {
     super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.defiCompliance,
-          credentialCategory: CredentialCategory.financeCards,
-        );
+         credentialSubjectType: CredentialSubjectType.defiCompliance,
+         credentialCategory: CredentialCategory.financeCards,
+       );
 
   factory DefiComplianceModel.fromJson(Map<String, dynamic> json) =>
       _$DefiComplianceModelFromJson(json);

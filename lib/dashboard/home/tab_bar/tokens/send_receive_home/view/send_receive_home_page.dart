@@ -9,18 +9,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class SendReceiveHomePage extends StatefulWidget {
-  const SendReceiveHomePage({
-    super.key,
-    required this.selectedToken,
-  });
+  const SendReceiveHomePage({super.key, required this.selectedToken});
 
   final TokenModel selectedToken;
 
   static Route<dynamic> route({required TokenModel selectedToken}) {
     return MaterialPageRoute<void>(
-      builder: (_) => SendReceiveHomePage(
-        selectedToken: selectedToken,
-      ),
+      builder: (_) => SendReceiveHomePage(selectedToken: selectedToken),
       settings: const RouteSettings(name: '/sendReceiveHomePage'),
     );
   }
@@ -79,17 +74,20 @@ class _SendReceiveHomePageView extends StatelessWidget {
                 prev.currentCryptoIndex != next.currentCryptoIndex,
             listener: (_, walletState) {
               context.read<SendReceiveHomeCubit>().init(
-                    baseUrl:
-                        context.read<ManageNetworkCubit>().state.network.apiUrl,
-                  );
+                baseUrl: context
+                    .read<ManageNetworkCubit>()
+                    .state
+                    .network
+                    .apiUrl,
+              );
             },
           ),
           BlocListener<ManageNetworkCubit, ManageNetworkState>(
             listenWhen: (prev, next) => prev.network != next.network,
             listener: (_, manageNetworkState) {
-              context
-                  .read<SendReceiveHomeCubit>()
-                  .init(baseUrl: manageNetworkState.network.apiUrl);
+              context.read<SendReceiveHomeCubit>().init(
+                baseUrl: manageNetworkState.network.apiUrl,
+              );
             },
           ),
           BlocListener<SendReceiveHomeCubit, SendReceiveHomeState>(
@@ -133,9 +131,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                         Radius.circular(Sizes.icon3x),
                       ),
                     ),
-                    const SizedBox(
-                      height: Sizes.spaceSmall,
-                    ),
+                    const SizedBox(height: Sizes.spaceSmall),
                     Text(
                       l10n.myTokens,
                       style: Theme.of(context).textTheme.headlineSmall,
@@ -145,24 +141,18 @@ class _SendReceiveHomePageView extends StatelessWidget {
                         ChangeNetworkBottomSheetView.show(context: context);
                       },
                     ),
-                    const SizedBox(
-                      height: Sizes.spaceLarge,
-                    ),
+                    const SizedBox(height: Sizes.spaceLarge),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         MyText(
                           state.selectedToken.calculatedBalanceInDouble
-                              .decimalNumber(
-                                state.selectedToken.decimalsToShow,
-                              )
+                              .decimalNumber(state.selectedToken.decimalsToShow)
                               .formatNumber,
                           style: Theme.of(context).textTheme.headlineMedium,
                           maxLength: 12,
                         ),
-                        const SizedBox(
-                          width: Sizes.spaceXSmall,
-                        ),
+                        const SizedBox(width: Sizes.spaceXSmall),
                         MyText(
                           state.selectedToken.symbol,
                           style: Theme.of(context).textTheme.headlineMedium,
@@ -177,9 +167,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                               .formatNumber,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    const SizedBox(
-                      height: Sizes.spaceNormal,
-                    ),
+                    const SizedBox(height: Sizes.spaceNormal),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: Sizes.spaceSmall,
@@ -206,9 +194,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                               },
                             ),
                           ),
-                          const SizedBox(
-                            width: Sizes.spaceNormal,
-                          ),
+                          const SizedBox(width: Sizes.spaceNormal),
                           Flexible(
                             child: MyElevatedButton(
                               text: l10n.receive,
@@ -228,10 +214,10 @@ class _SendReceiveHomePageView extends StatelessWidget {
                                         .currentAccount!
                                         .walletAddress,
                                     item: state.selectedToken.symbol,
-                                    description:
-                                        l10n.sendOnlyToThisAddressDescription(
-                                      state.selectedToken.symbol,
-                                    ),
+                                    description: l10n
+                                        .sendOnlyToThisAddressDescription(
+                                          state.selectedToken.symbol,
+                                        ),
                                   ),
                                 );
                               },
@@ -240,9 +226,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: Sizes.spaceNormal,
-                    ),
+                    const SizedBox(height: Sizes.spaceNormal),
                     if (state.status == AppStatus.success)
                       RecentTransactions(
                         decimal: int.parse(state.selectedToken.decimals),
@@ -263,9 +247,7 @@ class _SendReceiveHomePageView extends StatelessWidget {
                       )
                     else
                       const Expanded(
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                        child: Center(child: CircularProgressIndicator()),
                       ),
                   ],
                 ),

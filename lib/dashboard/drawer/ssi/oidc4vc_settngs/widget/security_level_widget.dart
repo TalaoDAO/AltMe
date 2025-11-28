@@ -11,16 +11,21 @@ class SecurityLevelWidget extends StatelessWidget {
       builder: (context, state) {
         return OptionContainer(
           title: 'Wallet Level',
-          subtitle: 'Set to Strict to strengthen'
+          subtitle:
+              'Set to Strict to strengthen'
               ' controls for issuers and verifiers. Default: Permissive.',
           body: Switch(
             onChanged: (value) async {
               await context.read<ProfileCubit>().updateProfileSetting(
-                    securityLevel: value,
-                  );
+                securityLevel: value,
+              );
             },
-            value: state.model.profileSetting.selfSovereignIdentityOptions
-                .customOidc4vcProfile.securityLevel,
+            value: state
+                .model
+                .profileSetting
+                .selfSovereignIdentityOptions
+                .customOidc4vcProfile
+                .securityLevel,
             activeThumbColor: Theme.of(context).colorScheme.primary,
           ),
         );

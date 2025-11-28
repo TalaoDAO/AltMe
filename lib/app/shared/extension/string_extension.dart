@@ -20,12 +20,14 @@ extension StringExtension on String {
 
     final splits = number.split('.');
     if (splits.length == 2) {
-      final double intPart =
-          double.parse(splits.first.isEmpty ? '0' : splits.first);
+      final double intPart = double.parse(
+        splits.first.isEmpty ? '0' : splits.first,
+      );
       return '''${formatter.format(intPart)}${splits.last.isEmpty ? '' : '.${splits.last}'}''';
     } else if (splits.length == 1) {
-      final double intPart =
-          double.parse(splits.first.isEmpty ? '0' : splits.first);
+      final double intPart = double.parse(
+        splits.first.isEmpty ? '0' : splits.first,
+      );
       return formatter.format(intPart);
     } else {
       return this;
@@ -69,7 +71,7 @@ extension StringExtension on String {
 
     final twoDecimalNumber =
         (Decimal.parse(this) * Decimal.parse(number.toString())).floor() /
-            Decimal.parse(number.toString());
+        Decimal.parse(number.toString());
     return twoDecimalNumber.toDecimal().toString();
   }
 

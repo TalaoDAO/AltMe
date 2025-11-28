@@ -33,8 +33,9 @@ void main() {
 
   group('Help Center Menu Test', () {
     testWidgets('renders HelpCenterView', (tester) async {
-      when(() => mockProfileCubit.state)
-          .thenReturn(ProfileState(model: ProfileModel.empty()));
+      when(
+        () => mockProfileCubit.state,
+      ).thenReturn(ProfileState(model: ProfileModel.empty()));
       await tester.pumpApp(
         MultiBlocProvider(
           providers: [
@@ -49,8 +50,9 @@ void main() {
     });
 
     testWidgets('renders basic UI correctly', (tester) async {
-      when(() => mockProfileCubit.state)
-          .thenReturn(ProfileState(model: ProfileModel.empty()));
+      when(
+        () => mockProfileCubit.state,
+      ).thenReturn(ProfileState(model: ProfileModel.empty()));
       await tester.pumpApp(
         MultiBlocProvider(
           providers: [
@@ -65,75 +67,71 @@ void main() {
     });
 
     testWidgets(
-        'navigates to ContactUsPage when displayEmailSupport is enabled and '
-        'user taps "sendAnEmail"', (tester) async {
-      when(() => mockProfileCubit.state).thenReturn(
-        ProfileState(model: ProfileModel.empty()),
-      );
+      'navigates to ContactUsPage when displayEmailSupport is enabled and '
+      'user taps "sendAnEmail"',
+      (tester) async {
+        when(
+          () => mockProfileCubit.state,
+        ).thenReturn(ProfileState(model: ProfileModel.empty()));
 
-      await tester.pumpApp(
-        MockNavigatorProvider(
-          navigator: navigator,
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
-              BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
-            ],
-            child: HelpCenterView(profileCubit: mockProfileCubit),
-          ),
-        ),
-      );
-
-      expect(find.text('Send an email'), findsOneWidget);
-
-      await tester.tap(find.text('Send an email'));
-      await tester.pumpAndSettle();
-
-      verify(
-        () => navigator.push<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals('/ContactUsPage'),
+        await tester.pumpApp(
+          MockNavigatorProvider(
+            navigator: navigator,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
+                BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
+              ],
+              child: HelpCenterView(profileCubit: mockProfileCubit),
             ),
           ),
-        ),
-      ).called(1);
-    });
+        );
+
+        expect(find.text('Send an email'), findsOneWidget);
+
+        await tester.tap(find.text('Send an email'));
+        await tester.pumpAndSettle();
+
+        verify(
+          () => navigator.push<void>(
+            any(that: isRoute<void>(whereName: equals('/ContactUsPage'))),
+          ),
+        ).called(1);
+      },
+    );
 
     testWidgets(
-        'navigates to ContactUsPage when displayEmailSupport is enabled and '
-        'user taps "sendAnEmail"', (tester) async {
-      when(() => mockProfileCubit.state).thenReturn(
-        ProfileState(model: ProfileModel.empty()),
-      );
+      'navigates to ContactUsPage when displayEmailSupport is enabled and '
+      'user taps "sendAnEmail"',
+      (tester) async {
+        when(
+          () => mockProfileCubit.state,
+        ).thenReturn(ProfileState(model: ProfileModel.empty()));
 
-      await tester.pumpApp(
-        MockNavigatorProvider(
-          navigator: navigator,
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
-              BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
-            ],
-            child: HelpCenterView(profileCubit: mockProfileCubit),
-          ),
-        ),
-      );
-
-      expect(find.text('Send an email'), findsOneWidget);
-
-      await tester.tap(find.text('Send an email'));
-      await tester.pumpAndSettle();
-
-      verify(
-        () => navigator.push<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals('/ContactUsPage'),
+        await tester.pumpApp(
+          MockNavigatorProvider(
+            navigator: navigator,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
+                BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
+              ],
+              child: HelpCenterView(profileCubit: mockProfileCubit),
             ),
           ),
-        ),
-      ).called(1);
-    });
+        );
+
+        expect(find.text('Send an email'), findsOneWidget);
+
+        await tester.tap(find.text('Send an email'));
+        await tester.pumpAndSettle();
+
+        verify(
+          () => navigator.push<void>(
+            any(that: isRoute<void>(whereName: equals('/ContactUsPage'))),
+          ),
+        ).called(1);
+      },
+    );
   });
 }

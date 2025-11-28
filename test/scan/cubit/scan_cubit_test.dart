@@ -44,9 +44,9 @@ class MockCredentialSubjectModel extends Mock
 
   @override
   Map<String, dynamic> toJson() => {
-        'type': 'CredentialSubjectModel',
-        'credentialSubjectType': 'defaultCredential',
-      };
+    'type': 'CredentialSubjectModel',
+    'credentialSubjectType': 'defaultCredential',
+  };
 }
 
 class MockCredentialPreview extends Mock implements Credential {
@@ -59,9 +59,9 @@ class MockCredentialPreview extends Mock implements Credential {
 
   @override
   Map<String, dynamic> toJson() => {
-        'type': ['VerifiableCredential'],
-        'credentialSubjectModel': credentialSubjectModel.toJson(),
-      };
+    'type': ['VerifiableCredential'],
+    'credentialSubjectModel': credentialSubjectModel.toJson(),
+  };
 }
 
 void main() {
@@ -111,7 +111,8 @@ void main() {
       const did = 'did:key:test';
       const kid = 'did:key:test#key-1';
       final uri = Uri.parse(
-          'https://example.com/auth?client_id=test_client&nonce=test_nonce',);
+        'https://example.com/auth?client_id=test_client&nonce=test_nonce',
+      );
 
       final profileSetting = ProfileSetting.initial();
       final customOidc4vcProfile =
@@ -158,168 +159,16 @@ void main() {
       });
 
       test(
-          'returns credential when formatFromPresentationSubmission is vcSdJWT with single credential',
-          () async {
-        // Arrange
-        final presentationDefinition = PresentationDefinition(
-          id: 'test_presentation',
-          inputDescriptors: <InputDescriptor>[],
-        );
+        'returns credential when formatFromPresentationSubmission is vcSdJWT with single credential',
+        () async {
+          // Arrange
+          final presentationDefinition = PresentationDefinition(
+            id: 'test_presentation',
+            inputDescriptors: <InputDescriptor>[],
+          );
 
-        // Act
-        final result = await scanCubit.createVpToken(
-          credentialsToBePresented: [mockCredential],
-          presentationDefinition: presentationDefinition,
-          oidc4vc: mockOIDC4VC,
-          privateKey: privateKey,
-          did: did,
-          kid: kid,
-          uri: uri,
-          clientMetaData: null,
-          profileSetting: profileSetting,
-          formatFromPresentationSubmission: VCFormatType.vcSdJWT,
-        );
-
-        // Assert
-        expect(result, isNotNull);
-      });
-
-      test(
-          'returns encoded credentials list when formatFromPresentationSubmission is vcSdJWT with multiple credentials',
-          () async {
-        // Arrange
-        final presentationDefinition = PresentationDefinition(
-          id: 'test_presentation',
-          inputDescriptors: <InputDescriptor>[],
-        );
-
-        // Act
-        final result = await scanCubit.createVpToken(
-          credentialsToBePresented: [mockCredential, secondCredential],
-          presentationDefinition: presentationDefinition,
-          oidc4vc: mockOIDC4VC,
-          privateKey: privateKey,
-          did: did,
-          kid: kid,
-          uri: uri,
-          clientMetaData: null,
-          profileSetting: profileSetting,
-          formatFromPresentationSubmission: VCFormatType.vcSdJWT,
-        );
-
-        // Assert
-        expect(result, isNotNull);
-        try {
-          final decodedResult = jsonDecode(result) as List<dynamic>;
-          expect(decodedResult, isA<List<dynamic>>());
-        } catch (e) {
-          // If decoding fails, the result isn't a JSON list
-          fail('Result is not a valid JSON list: $result');
-        }
-      });
-
-      test(
-          'calls oidc4vc.extractVpToken when formatFromPresentationSubmission is jwtVc',
-          () async {
-        // Arrange
-        final presentationDefinition = PresentationDefinition(
-          id: 'test_presentation',
-          inputDescriptors: <InputDescriptor>[],
-        );
-
-        const vpToken = 'mocked_vp_token';
-
-        when(mockOIDC4VC.extractVpToken(
-          clientId: anyNamed('clientId'),
-          credentialsToBePresented: anyNamed('credentialsToBePresented'),
-          did: anyNamed('did'),
-          kid: anyNamed('kid'),
-          privateKey: anyNamed('privateKey'),
-          nonce: anyNamed('nonce'),
-          proofHeaderType: anyNamed('proofHeaderType'),
-        ),).thenAnswer((_) async => vpToken);
-
-        // Act
-        final result = await scanCubit.createVpToken(
-          credentialsToBePresented: [mockCredential],
-          presentationDefinition: presentationDefinition,
-          oidc4vc: mockOIDC4VC,
-          privateKey: privateKey,
-          did: did,
-          kid: kid,
-          uri: uri,
-          clientMetaData: null,
-          profileSetting: profileSetting,
-          formatFromPresentationSubmission: VCFormatType.jwtVc,
-        );
-
-        // Assert
-        verify(mockOIDC4VC.extractVpToken(
-          clientId: 'test_client',
-          credentialsToBePresented: anyNamed('credentialsToBePresented'),
-          did: did,
-          kid: kid,
-          privateKey: privateKey,
-          nonce: 'test_nonce',
-          proofHeaderType: customOidc4vcProfile.proofHeader,
-        ),).called(1);
-
-        expect(result, equals(vpToken));
-      });
-
-      test(
-          'calls didKitProvider.issuePresentation when formatFromPresentationSubmission is ldpVc',
-          () async {
-        // Arrange
-        final presentationDefinition = PresentationDefinition(
-          id: 'test_presentation',
-          inputDescriptors: <InputDescriptor>[],
-        );
-
-        const vpToken = 'mocked_didkit_vp_token';
-
-        when(mockDIDKitProvider.issuePresentation(
-          argThat(isA<String>()),
-          argThat(isA<String>()),
-          argThat(isA<String>()),
-        ),).thenAnswer((_) async => vpToken);
-
-        // Act
-        final result = await scanCubit.createVpToken(
-          credentialsToBePresented: [mockCredential],
-          presentationDefinition: presentationDefinition,
-          oidc4vc: mockOIDC4VC,
-          privateKey: privateKey,
-          did: did,
-          kid: kid,
-          uri: uri,
-          clientMetaData: null,
-          profileSetting: profileSetting,
-          formatFromPresentationSubmission: VCFormatType.ldpVc,
-        );
-
-        // Assert
-        verify(mockDIDKitProvider.issuePresentation(
-          argThat(isA<String>()),
-          argThat(isA<String>()),
-          argThat(isA<String>()),
-        ),).called(1);
-
-        expect(result, equals(vpToken));
-      });
-
-      test(
-          'throws Exception when formatFromPresentationSubmission is not supported',
-          () async {
-        // Arrange
-        final presentationDefinition = PresentationDefinition(
-          id: 'test_presentation',
-          inputDescriptors: <InputDescriptor>[],
-        );
-
-        // Act & Assert
-        expect(
-          () => scanCubit.createVpToken(
+          // Act
+          final result = await scanCubit.createVpToken(
             credentialsToBePresented: [mockCredential],
             presentationDefinition: presentationDefinition,
             oidc4vc: mockOIDC4VC,
@@ -329,11 +178,179 @@ void main() {
             uri: uri,
             clientMetaData: null,
             profileSetting: profileSetting,
-            formatFromPresentationSubmission: null,
-          ),
-          throwsA(isA<Exception>()),
-        );
-      });
+            formatFromPresentationSubmission: VCFormatType.vcSdJWT,
+          );
+
+          // Assert
+          expect(result, isNotNull);
+        },
+      );
+
+      test(
+        'returns encoded credentials list when formatFromPresentationSubmission is vcSdJWT with multiple credentials',
+        () async {
+          // Arrange
+          final presentationDefinition = PresentationDefinition(
+            id: 'test_presentation',
+            inputDescriptors: <InputDescriptor>[],
+          );
+
+          // Act
+          final result = await scanCubit.createVpToken(
+            credentialsToBePresented: [mockCredential, secondCredential],
+            presentationDefinition: presentationDefinition,
+            oidc4vc: mockOIDC4VC,
+            privateKey: privateKey,
+            did: did,
+            kid: kid,
+            uri: uri,
+            clientMetaData: null,
+            profileSetting: profileSetting,
+            formatFromPresentationSubmission: VCFormatType.vcSdJWT,
+          );
+
+          // Assert
+          expect(result, isNotNull);
+          try {
+            if (result is! String) {
+              fail('Result is not a String: $result');
+            }
+            final decodedResult = jsonDecode(result) as List<dynamic>;
+            expect(decodedResult, isA<List<dynamic>>());
+          } catch (e) {
+            // If decoding fails, the result isn't a JSON list
+            fail('Result is not a valid JSON list: $result');
+          }
+        },
+      );
+
+      test(
+        'calls oidc4vc.extractVpToken when formatFromPresentationSubmission is jwtVc',
+        () async {
+          // Arrange
+          final presentationDefinition = PresentationDefinition(
+            id: 'test_presentation',
+            inputDescriptors: <InputDescriptor>[],
+          );
+
+          const vpToken = 'mocked_vp_token';
+
+          when(
+            mockOIDC4VC.extractVpToken(
+              clientId: anyNamed('clientId'),
+              credentialsToBePresented: anyNamed('credentialsToBePresented'),
+              did: anyNamed('did'),
+              kid: anyNamed('kid'),
+              privateKey: anyNamed('privateKey'),
+              nonce: anyNamed('nonce'),
+              proofHeaderType: anyNamed('proofHeaderType'),
+            ),
+          ).thenAnswer((_) async => vpToken);
+
+          // Act
+          final result = await scanCubit.createVpToken(
+            credentialsToBePresented: [mockCredential],
+            presentationDefinition: presentationDefinition,
+            oidc4vc: mockOIDC4VC,
+            privateKey: privateKey,
+            did: did,
+            kid: kid,
+            uri: uri,
+            clientMetaData: null,
+            profileSetting: profileSetting,
+            formatFromPresentationSubmission: VCFormatType.jwtVc,
+          );
+
+          // Assert
+          verify(
+            mockOIDC4VC.extractVpToken(
+              clientId: 'test_client',
+              credentialsToBePresented: anyNamed('credentialsToBePresented'),
+              did: did,
+              kid: kid,
+              privateKey: privateKey,
+              nonce: 'test_nonce',
+              proofHeaderType: customOidc4vcProfile.proofHeader,
+            ),
+          ).called(1);
+
+          expect(result, equals(vpToken));
+        },
+      );
+
+      test(
+        'calls didKitProvider.issuePresentation when formatFromPresentationSubmission is ldpVc',
+        () async {
+          // Arrange
+          final presentationDefinition = PresentationDefinition(
+            id: 'test_presentation',
+            inputDescriptors: <InputDescriptor>[],
+          );
+
+          const vpToken = 'mocked_didkit_vp_token';
+
+          when(
+            mockDIDKitProvider.issuePresentation(
+              argThat(isA<String>()),
+              argThat(isA<String>()),
+              argThat(isA<String>()),
+            ),
+          ).thenAnswer((_) async => vpToken);
+
+          // Act
+          final result = await scanCubit.createVpToken(
+            credentialsToBePresented: [mockCredential],
+            presentationDefinition: presentationDefinition,
+            oidc4vc: mockOIDC4VC,
+            privateKey: privateKey,
+            did: did,
+            kid: kid,
+            uri: uri,
+            clientMetaData: null,
+            profileSetting: profileSetting,
+            formatFromPresentationSubmission: VCFormatType.ldpVc,
+          );
+
+          // Assert
+          verify(
+            mockDIDKitProvider.issuePresentation(
+              argThat(isA<String>()),
+              argThat(isA<String>()),
+              argThat(isA<String>()),
+            ),
+          ).called(1);
+
+          expect(result, equals(vpToken));
+        },
+      );
+
+      test(
+        'throws Exception when formatFromPresentationSubmission is not supported',
+        () async {
+          // Arrange
+          final presentationDefinition = PresentationDefinition(
+            id: 'test_presentation',
+            inputDescriptors: <InputDescriptor>[],
+          );
+
+          // Act & Assert
+          expect(
+            () => scanCubit.createVpToken(
+              credentialsToBePresented: [mockCredential],
+              presentationDefinition: presentationDefinition,
+              oidc4vc: mockOIDC4VC,
+              privateKey: privateKey,
+              did: did,
+              kid: kid,
+              uri: uri,
+              clientMetaData: null,
+              profileSetting: profileSetting,
+              formatFromPresentationSubmission: null,
+            ),
+            throwsA(isA<Exception>()),
+          );
+        },
+      );
     });
   });
 }

@@ -64,12 +64,12 @@ class WalletConnectState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        message,
-        sessionProposalEvent,
-        parameters,
-        signType,
-        transaction,
-        operationDetails,
-      ];
+    status,
+    message,
+    sessionProposalEvent,
+    parameters,
+    signType,
+    transaction,
+    operationDetails,
+  ];
 }

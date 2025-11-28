@@ -2,10 +2,8 @@ part of 'activity_log_cubit.dart';
 
 @JsonSerializable()
 class ActivityLogState extends Equatable {
-  ActivityLogState({
-    this.status = AppStatus.init,
-    List<LogData>? logDatas,
-  }) : logDatas = logDatas ?? [];
+  ActivityLogState({this.status = AppStatus.init, List<LogData>? logDatas})
+    : logDatas = logDatas ?? [];
 
   factory ActivityLogState.fromJson(Map<String, dynamic> json) =>
       _$ActivityLogStateFromJson(json);
@@ -17,10 +15,7 @@ class ActivityLogState extends Equatable {
     return copyWith(status: AppStatus.loading);
   }
 
-  ActivityLogState copyWith({
-    AppStatus? status,
-    List<LogData>? logDatas,
-  }) {
+  ActivityLogState copyWith({AppStatus? status, List<LogData>? logDatas}) {
     return ActivityLogState(
       status: status ?? this.status,
       logDatas: logDatas ?? this.logDatas,

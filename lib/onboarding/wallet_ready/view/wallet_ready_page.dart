@@ -94,17 +94,11 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                         width: MediaQuery.of(context).size.shortestSide * 0.5,
                         showPoweredBy: true,
                       ),
-                      const SizedBox(
-                        height: Sizes.spaceNormal,
-                      ),
+                      const SizedBox(height: Sizes.spaceNormal),
                       Text(
                         l10n.walletReadyTitle,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium!
-                            .copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style: Theme.of(context).textTheme.headlineMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
                       ),
                       // const SizedBox(height: Sizes.spaceNormal),
                       // Text(
@@ -124,9 +118,7 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(
-                          Sizes.spaceNormal,
-                        ),
+                        padding: const EdgeInsets.all(Sizes.spaceNormal),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -160,9 +152,9 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                                     },
                                     child: MyText(
                                       l10n.iAgreeToThe,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.titleMedium,
                                     ),
                                   ),
                                   Flexible(
@@ -182,9 +174,9 @@ class _WalletReadyViewState extends State<WalletReadyView> {
                                             .titleMedium
                                             ?.copyWith(
                                               fontWeight: FontWeight.bold,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
                                             ),
                                       ),
                                     ),

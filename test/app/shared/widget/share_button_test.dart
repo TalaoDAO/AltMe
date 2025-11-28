@@ -6,8 +6,9 @@ import '../../../helpers/helpers.dart';
 
 void main() {
   group('ShareButton', () {
-    testWidgets('ShareButton displays the correct icon and text',
-        (WidgetTester tester) async {
+    testWidgets('ShareButton displays the correct icon and text', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpApp(const Scaffold(body: ShareButton()));
 
       expect(find.byType(Image), findsOneWidget);

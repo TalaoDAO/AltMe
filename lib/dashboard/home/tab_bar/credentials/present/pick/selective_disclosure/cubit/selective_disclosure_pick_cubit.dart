@@ -45,18 +45,25 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
         }
       }
 
-      emit(state.copyWith(limitDisclosure: limitDisclosure, filters: json));
+      emit(
+        SelectiveDisclosureCubit().state.copyWith(
+          limitDisclosure: limitDisclosure,
+          filters: json,
+        ),
+      );
     }
   }
 
   void toggle(String claimKeyId, String? sd) {
-    final List<SelectedClaimsKeyIds> selectedClaimsKeys =
-        List.of(state.selectedClaimsKeyIds);
+    final List<SelectedClaimsKeyIds> selectedClaimsKeys = List.of(
+      state.selectedClaimsKeyIds,
+    );
 
     late List<SelectedClaimsKeyIds> ids;
 
-    final selectedKey = selectedClaimsKeys
-        .firstWhereOrNull((ele) => ele.keyId == '$claimKeyId#$sd');
+    final selectedKey = selectedClaimsKeys.firstWhereOrNull(
+      (ele) => ele.keyId == '$claimKeyId#$sd',
+    );
 
     if (selectedKey != null) {
       ids = List<SelectedClaimsKeyIds>.from(state.selectedClaimsKeyIds)
@@ -71,20 +78,20 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
       /// adding
       ids = [
         ...state.selectedClaimsKeyIds,
-        ...[
-          SelectedClaimsKeyIds(keyId: '$claimKeyId#$sd', isSelected: true),
-        ],
+        ...[SelectedClaimsKeyIds(keyId: '$claimKeyId#$sd', isSelected: true)],
       ];
     }
     emit(state.copyWith(selectedClaimsKeyIds: ids));
   }
 
   bool isSelectedDisclosure(String claimKeyId, String? sd) {
-    final List<SelectedClaimsKeyIds> selectedClaimsKeys =
-        List.of(state.selectedClaimsKeyIds);
+    final List<SelectedClaimsKeyIds> selectedClaimsKeys = List.of(
+      state.selectedClaimsKeyIds,
+    );
 
-    final selectedKey = selectedClaimsKeys
-        .firstWhereOrNull((ele) => ele.keyId == '$claimKeyId#$sd');
+    final selectedKey = selectedClaimsKeys.firstWhereOrNull(
+      (ele) => ele.keyId == '$claimKeyId#$sd',
+    );
 
     if (selectedKey != null) {
       return selectedKey.isSelected;
@@ -104,20 +111,20 @@ class SelectiveDisclosureCubit extends Cubit<SelectiveDisclosureState> {
     int? index;
 
     if (sd != null) {
-      index = selectiveDisclosure.disclosureFromJWT
-          .indexWhere((entry) => entry == sd);
+      index = selectiveDisclosure.disclosureFromJWT.indexWhere(
+        (entry) => entry == sd,
+      );
     } else if (threeDotValue != null) {
-      index = selectiveDisclosure.disclosureFromJWT
-          .indexWhere((entry) => entry == threeDotValue);
+      index = selectiveDisclosure.disclosureFromJWT.indexWhere(
+        (entry) => entry == threeDotValue,
+      );
     } else if (claimsKey != null) {
       index = selectiveDisclosure.disclosureListToContent.entries
           .toList()
           .indexWhere(
             (entry) =>
                 selectiveDisclosure
-                    .getMapFromList(
-                      jsonDecode(entry.value.toString()) as List,
-                    )
+                    .getMapFromList(jsonDecode(entry.value.toString()) as List)
                     .keys
                     .first ==
                 claimsKey,

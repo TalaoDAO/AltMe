@@ -6,7 +6,7 @@ enum CameraStatus {
   initializeFailed,
   loading,
   imageCaptured,
-  error
+  error,
 }
 
 @JsonSerializable()
@@ -46,9 +46,9 @@ class CameraState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        data,
-        acquiredCredentialsQuantity,
-        ageEstimate,
-      ];
+    status,
+    data,
+    acquiredCredentialsQuantity,
+    ageEstimate,
+  ];
 }

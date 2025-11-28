@@ -2,11 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 
 class NftUrlWidget extends StatelessWidget {
-  const NftUrlWidget({
-    super.key,
-    required this.text,
-    required this.onPressed,
-  });
+  const NftUrlWidget({super.key, required this.text, required this.onPressed});
 
   final String text;
   final VoidCallback onPressed;

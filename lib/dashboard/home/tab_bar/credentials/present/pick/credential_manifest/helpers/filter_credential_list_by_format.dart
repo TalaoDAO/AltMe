@@ -18,18 +18,16 @@ List<CredentialModel> filterCredenialListByFormat({
       formatsSupported: formatsSupported,
       credentialsToBePresented: credentials,
     );
-    credentials.removeWhere(
-      (CredentialModel credentialModel) {
-        /// we keep credential whose format are supported
-        bool remove = true;
-        for (final supportingFormat in supportingFormats) {
-          if (credentialModel.getFormat == supportingFormat.vcValue) {
-            remove = false;
-          }
+    credentials.removeWhere((CredentialModel credentialModel) {
+      /// we keep credential whose format are supported
+      bool remove = true;
+      for (final supportingFormat in supportingFormats) {
+        if (credentialModel.getFormat == supportingFormat.vcValue) {
+          remove = false;
         }
-        return remove;
-      },
-    );
+      }
+      return remove;
+    });
   }
   return credentials;
 }

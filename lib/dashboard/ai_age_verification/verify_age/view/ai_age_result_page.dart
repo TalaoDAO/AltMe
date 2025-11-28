@@ -65,8 +65,9 @@ class _AiAgeResultViewState extends State<AiAgeResultView> {
   @override
   void initState() {
     confettiController = ConfettiController();
-    Future<void>.delayed(Duration.zero)
-        .then((value) => confettiController.play());
+    Future<void>.delayed(
+      Duration.zero,
+    ).then((value) => confettiController.play());
     super.initState();
   }
 
@@ -86,9 +87,7 @@ class _AiAgeResultViewState extends State<AiAgeResultView> {
                         credentialSubjectType: widget.credentialSubjectType,
                         vcFormatType: widget.vcFormatType,
                       )
-                    : FailureWidget(
-                        vcFormatType: widget.vcFormatType,
-                      ),
+                    : FailureWidget(vcFormatType: widget.vcFormatType),
               ),
             ),
             if (state.acquiredCredentialsQuantity > 0)
@@ -133,9 +132,7 @@ class SuccessWidget extends StatelessWidget {
           width: MediaQuery.of(context).size.shortestSide * 0.5,
           showPoweredBy: true,
         ),
-        const SizedBox(
-          height: Sizes.spaceNormal,
-        ),
+        const SizedBox(height: Sizes.spaceNormal),
         Padding(
           padding: const EdgeInsets.all(8),
           child: Text(
@@ -144,17 +141,15 @@ class SuccessWidget extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
-        const SizedBox(
-          height: Sizes.spaceNormal,
-        ),
+        const SizedBox(height: Sizes.spaceNormal),
         Padding(
           padding: const EdgeInsets.all(8),
           child: Text(
             l10n.youGotAgeCredentials(credentialSubjectType.title),
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.normal,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.normal),
           ),
         ),
         const Spacer(),
@@ -175,10 +170,7 @@ class SuccessWidget extends StatelessWidget {
 }
 
 class FailureWidget extends StatelessWidget {
-  const FailureWidget({
-    super.key,
-    required this.vcFormatType,
-  });
+  const FailureWidget({super.key, required this.vcFormatType});
 
   final VCFormatType vcFormatType;
 
@@ -196,9 +188,7 @@ class FailureWidget extends StatelessWidget {
           width: MediaQuery.of(context).size.shortestSide * 0.5,
           showPoweredBy: true,
         ),
-        const SizedBox(
-          height: Sizes.spaceNormal,
-        ),
+        const SizedBox(height: Sizes.spaceNormal),
         Text(
           l10n.aiSystemWasNotAbleToEstimateYourAge,
           textAlign: TextAlign.center,

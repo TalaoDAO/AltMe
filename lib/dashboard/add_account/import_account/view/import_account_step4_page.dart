@@ -8,10 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ImportAccountStep4Page extends StatelessWidget {
-  const ImportAccountStep4Page({
-    super.key,
-    required this.importAccountCubit,
-  });
+  const ImportAccountStep4Page({super.key, required this.importAccountCubit});
 
   final ImportAccountCubit importAccountCubit;
 
@@ -20,9 +17,8 @@ class ImportAccountStep4Page extends StatelessWidget {
   }) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/importAccountStep4Page'),
-      builder: (_) => ImportAccountStep4Page(
-        importAccountCubit: importAccountCubit,
-      ),
+      builder: (_) =>
+          ImportAccountStep4Page(importAccountCubit: importAccountCubit),
     );
   }
 
@@ -48,14 +44,14 @@ class _ImportAccountStep4ViewState extends State<ImportAccountStep4View> {
 
   @override
   void initState() {
-    final List<CryptoAccountData> cryptoAccount =
-        context.read<WalletCubit>().state.cryptoAccount.data;
+    final List<CryptoAccountData> cryptoAccount = context
+        .read<WalletCubit>()
+        .state
+        .cryptoAccount
+        .data;
     accountNameList = cryptoAccount.map((e) => e.name).toList();
     accountNameTextController = TextEditingController(
-      text: generateDefaultAccountName(
-        accountNameList.length,
-        accountNameList,
-      ),
+      text: generateDefaultAccountName(accountNameList.length, accountNameList),
     );
     super.initState();
   }
@@ -97,21 +93,14 @@ class _ImportAccountStep4ViewState extends State<ImportAccountStep4View> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const MStepper(
-              totalStep: 4,
-              step: 4,
-            ),
-            const SizedBox(
-              height: Sizes.spaceNormal,
-            ),
+            const MStepper(totalStep: 4, step: 4),
+            const SizedBox(height: Sizes.spaceNormal),
             Text(
               l10n.setAccountNameDescription,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            const SizedBox(
-              height: Sizes.spaceNormal,
-            ),
+            const SizedBox(height: Sizes.spaceNormal),
             BaseTextField(
               controller: accountNameTextController,
               borderRadius: Sizes.smallRadius,
@@ -135,8 +124,8 @@ class _ImportAccountStep4ViewState extends State<ImportAccountStep4View> {
                     ? null
                     : () async {
                         await context.read<ImportAccountCubit>().import(
-                              accountName: accountNameTextController.text,
-                            );
+                          accountName: accountNameTextController.text,
+                        );
                       },
               );
             },

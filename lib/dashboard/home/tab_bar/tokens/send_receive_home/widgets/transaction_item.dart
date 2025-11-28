@@ -27,7 +27,8 @@ class TransactionItem extends StatelessWidget {
     final l10n = context.l10n;
     final amount = operationModel.calcAmount(
       decimal: decimal,
-      value: operationModel.parameter?.value?.value ??
+      value:
+          operationModel.parameter?.value?.value ??
           operationModel.amount.toString(),
     );
 
@@ -39,8 +40,11 @@ class TransactionItem extends StatelessWidget {
       button = l10n.operation;
     } else {
       final isSender = operationModel.isSender(
-        walletAddress:
-            context.read<WalletCubit>().state.currentAccount!.walletAddress,
+        walletAddress: context
+            .read<WalletCubit>()
+            .state
+            .currentAccount!
+            .walletAddress,
       );
 
       if (isSender) {
@@ -55,9 +59,7 @@ class TransactionItem extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(
-            height: Sizes.spaceXSmall,
-          ),
+          const SizedBox(height: Sizes.spaceXSmall),
           Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -83,61 +85,49 @@ class TransactionItem extends StatelessWidget {
                 child: MyText(
                   tokenUsdPrice != null
                       ? (tokenUsdPrice! * amount)
-                              .decimalNumber(2)
-                              .formatNumber +
-                          r'$'
+                                .decimalNumber(2)
+                                .formatNumber +
+                            r'$'
                       : r'$--.--',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
             ],
           ),
-          const SizedBox(
-            height: Sizes.spaceXSmall,
-          ),
+          const SizedBox(height: Sizes.spaceXSmall),
           Row(
             children: [
               Image.asset(
                 operationModel.isSender(
-                  walletAddress: context
-                      .read<WalletCubit>()
-                      .state
-                      .currentAccount!
-                      .walletAddress,
-                )
+                      walletAddress: context
+                          .read<WalletCubit>()
+                          .state
+                          .currentAccount!
+                          .walletAddress,
+                    )
                     ? IconStrings.send
                     : IconStrings.receive,
                 width: Sizes.icon,
                 height: Sizes.icon,
                 color: Theme.of(context).colorScheme.onSurface,
               ),
-              const SizedBox(
-                width: Sizes.space2XSmall,
-              ),
-              Text(
-                button,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(
-                width: Sizes.space2XSmall,
-              ),
+              const SizedBox(width: Sizes.space2XSmall),
+              Text(button, style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(width: Sizes.space2XSmall),
               Text(
                 operationModel.status,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: operationModel.status.toLowerCase() == 'applied'
-                          ? Theme.of(context).colorScheme.secondary
-                          : operationModel.status.toLowerCase() == 'failed' ||
-                                  operationModel.status.toLowerCase() ==
-                                      'backtracked'
-                              ? Theme.of(context).colorScheme.error
-                              : operationModel.status.toLowerCase() == 'skipped'
-                                  ? Theme.of(context).colorScheme.error
-                                  : null,
-                    ),
+                  color: operationModel.status.toLowerCase() == 'applied'
+                      ? Theme.of(context).colorScheme.secondary
+                      : operationModel.status.toLowerCase() == 'failed' ||
+                            operationModel.status.toLowerCase() == 'backtracked'
+                      ? Theme.of(context).colorScheme.error
+                      : operationModel.status.toLowerCase() == 'skipped'
+                      ? Theme.of(context).colorScheme.error
+                      : null,
+                ),
               ),
-              const SizedBox(
-                width: Sizes.space2XSmall,
-              ),
+              const SizedBox(width: Sizes.space2XSmall),
               Expanded(
                 child: MyText(
                   '''${amount.decimalNumber(amount < 1 ? 5 : 2).formatNumber} '''

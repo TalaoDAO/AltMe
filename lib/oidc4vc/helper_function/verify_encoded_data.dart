@@ -21,8 +21,10 @@ Future<VerificationType> verifyEncodedData({
     updateJwt = jwt.split('~').first;
   }
 
-  final Map<String, dynamic> header =
-      decodeHeader(jwtDecode: jwtDecode, token: updateJwt);
+  final Map<String, dynamic> header = decodeHeader(
+    jwtDecode: jwtDecode,
+    token: updateJwt,
+  );
 
   String? issuerKid;
 

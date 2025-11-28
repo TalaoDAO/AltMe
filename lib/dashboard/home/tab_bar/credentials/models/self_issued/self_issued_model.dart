@@ -18,10 +18,10 @@ class SelfIssuedModel extends CredentialSubjectModel {
     this.companyWebsite,
     this.jobTitle,
   }) : super(
-          issuedBy: const Author(''),
-          credentialSubjectType: CredentialSubjectType.selfIssued,
-          credentialCategory: CredentialCategory.othersCards,
-        );
+         issuedBy: const Author(''),
+         credentialSubjectType: CredentialSubjectType.selfIssued,
+         credentialCategory: CredentialCategory.othersCards,
+       );
 
   factory SelfIssuedModel.fromJson(Map<String, dynamic> json) =>
       _$SelfIssuedModelFromJson(json);
@@ -37,17 +37,16 @@ class SelfIssuedModel extends CredentialSubjectModel {
 
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'id': id,
-        if (givenName != null && givenName!.isNotEmpty) 'givenName': givenName,
-        if (familyName != null && familyName!.isNotEmpty)
-          'familyName': familyName,
-        if (telephone != null && telephone!.isNotEmpty) 'telephone': telephone,
-        if (address != null && address!.isNotEmpty) 'address': address,
-        'type': type,
-        if (email != null && email!.isNotEmpty) 'email': email,
-        if (workFor != null && workFor!.isNotEmpty) 'workFor': workFor,
-        if (companyWebsite != null && companyWebsite!.isNotEmpty)
-          'companyWebsite': companyWebsite,
-        if (jobTitle != null && jobTitle!.isNotEmpty) 'jobTitle': jobTitle,
-      };
+    'id': id,
+    if (givenName != null && givenName!.isNotEmpty) 'givenName': givenName,
+    if (familyName != null && familyName!.isNotEmpty) 'familyName': familyName,
+    if (telephone != null && telephone!.isNotEmpty) 'telephone': telephone,
+    if (address != null && address!.isNotEmpty) 'address': address,
+    'type': type,
+    if (email != null && email!.isNotEmpty) 'email': email,
+    if (workFor != null && workFor!.isNotEmpty) 'workFor': workFor,
+    if (companyWebsite != null && companyWebsite!.isNotEmpty)
+      'companyWebsite': companyWebsite,
+    if (jobTitle != null && jobTitle!.isNotEmpty) 'jobTitle': jobTitle,
+  };
 }

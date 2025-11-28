@@ -18,9 +18,9 @@ class LearningAchievementModel extends CredentialSubjectModel {
     super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.learningAchievement,
-          credentialCategory: CredentialCategory.identityCards,
-        );
+         credentialSubjectType: CredentialSubjectType.learningAchievement,
+         credentialCategory: CredentialCategory.identityCards,
+       );
 
   factory LearningAchievementModel.fromJson(Map<String, dynamic> json) =>
       _$LearningAchievementModelFromJson(json);

@@ -12,12 +12,16 @@ class DefiComplianceCredentialWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defiComplianceModel = credentialModel
-        .credentialPreview.credentialSubjectModel as DefiComplianceModel;
+    final defiComplianceModel =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as DefiComplianceModel;
     return CredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.defiComplianceCard,
       issuerName: credentialModel
-          .credentialPreview.credentialSubjectModel.issuedBy?.name,
+          .credentialPreview
+          .credentialSubjectModel
+          .issuedBy
+          ?.name,
       value: defiComplianceModel.amlComplianceCheck ?? '',
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,

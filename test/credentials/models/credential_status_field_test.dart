@@ -23,17 +23,16 @@ void main() {
     });
 
     test('fromJson constructor work correctly', () {
-      final credentialStatusField = CredentialStatusField.fromJson(
-        <String, dynamic>{
-          'id': '123',
-          'type': 'type',
-          'revocationListIndex': 'revocationListIndex',
-          'revocationListCredential': 'revocationListCredential',
-          'statusListCredential': 'statusListCredential',
-          'statusListIndex': 'statusListIndex',
-          'statusPurpose': 'statusPurpose',
-        },
-      );
+      final credentialStatusField =
+          CredentialStatusField.fromJson(<String, dynamic>{
+            'id': '123',
+            'type': 'type',
+            'revocationListIndex': 'revocationListIndex',
+            'revocationListCredential': 'revocationListCredential',
+            'statusListCredential': 'statusListCredential',
+            'statusListIndex': 'statusListIndex',
+            'statusPurpose': 'statusPurpose',
+          });
       expect(credentialStatusField.id, '123');
       expect(credentialStatusField.type, 'type');
       expect(credentialStatusField.revocationListIndex, 'revocationListIndex');

@@ -3,10 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class AragoIdentityCardWidget extends StatelessWidget {
-  const AragoIdentityCardWidget({
-    super.key,
-    required this.credentialModel,
-  });
+  const AragoIdentityCardWidget({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 

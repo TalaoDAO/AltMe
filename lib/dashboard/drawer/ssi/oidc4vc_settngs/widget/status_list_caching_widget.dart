@@ -15,11 +15,15 @@ class StatusListCachingWidget extends StatelessWidget {
           body: Switch(
             onChanged: (value) async {
               await context.read<ProfileCubit>().updateProfileSetting(
-                    statusListCaching: value,
-                  );
+                statusListCaching: value,
+              );
             },
-            value: state.model.profileSetting.selfSovereignIdentityOptions
-                .customOidc4vcProfile.statusListCache,
+            value: state
+                .model
+                .profileSetting
+                .selfSovereignIdentityOptions
+                .customOidc4vcProfile
+                .statusListCache,
             activeThumbColor: Theme.of(context).colorScheme.primary,
           ),
         );

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/models/blockchain_network/blockchain_network_helpers.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -38,17 +39,18 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     await dotenv.load();
     final apiKey = dotenv.get('COIN_GECKO_API_KEY');
 
-    final responseOfXTZUsdPrice = await client.get(
-      '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
-      queryParameters: {
-        'x_cg_demo_api_key': apiKey,
-      },
-    ) as Map<String, dynamic>;
+    final responseOfXTZUsdPrice =
+        await client.get(
+              '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
+              queryParameters: {'x_cg_demo_api_key': apiKey},
+            )
+            as Map<String, dynamic>;
     final xtzUSDPrice = responseOfXTZUsdPrice['tezos']['usd'] as double;
     emit(
       state.copyWith(
         networkFee: state.networkFee!.copyWith(
-          feeInUSD: xtzUSDPrice *
+          feeInUSD:
+              xtzUSDPrice *
               Decimal.parse(state.networkFee!.totalFee).toDouble(),
         ),
         networkFees: state.networkFees!
@@ -112,9 +114,9 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       );
     }
 
-    final amount =
-        Decimal.parse(state.tokenAmount.replaceAll('.', '').replaceAll(',', ''))
-            .toBigInt();
+    final amount = Decimal.parse(
+      state.tokenAmount.replaceAll('.', '').replaceAll(',', ''),
+    ).toBigInt();
 
     final credentials = EthPrivateKey.fromHex(state.selectedAccountSecretKey);
     final sender = credentials.address;
@@ -155,8 +157,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         networkFee: networkFee,
         totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
             ? (Decimal.parse(state.tokenAmount) -
-                    Decimal.parse(networkFee.totalFee))
-                .toString()
+                      Decimal.parse(networkFee.totalFee))
+                  .toString()
             : state.tokenAmount,
       ),
     );
@@ -183,17 +185,22 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
         logger.i('rpcNodeUrl: $rpcNodeUrlForTransaction');
         final client = TezartClient(rpcNodeUrlForTransaction);
-        final keystore = KeyGenerator()
-            .getKeystore(secretKey: state.selectedAccountSecretKey);
+        final keystore = KeyGenerator().getKeystore(
+          secretKey: state.selectedAccountSecretKey,
+        );
         late OperationsList? finalOperationList;
         final List<NetworkFeeModel> tezosNetworkFees = [];
         late NetworkFeeModel networkFee;
         if (state.selectedToken.contractAddress.isEmpty) {
           finalOperationList = await tezosTransfert(keystore, client);
-          final finalTotalFeesSum = finalOperationList.operations
-              .fold(0, (sum, element) => sum + element.totalFee);
-          final finalBakerFeesSum = finalOperationList.operations
-              .fold(0, (sum, element) => sum + element.fee);
+          final finalTotalFeesSum = finalOperationList.operations.fold(
+            0,
+            (sum, element) => sum + element.totalFee,
+          );
+          final finalBakerFeesSum = finalOperationList.operations.fold(
+            0,
+            (sum, element) => sum + element.fee,
+          );
 
           networkFee = NetworkFeeModel(
             totalFee: (finalTotalFeesSum / 1000000).toString(),
@@ -205,13 +212,19 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         } else {
           // Need to convert michelson expression into michelson
 
-          finalOperationList =
-              await _calculateMichelsonContractFee(client, keystore);
+          finalOperationList = await _calculateMichelsonContractFee(
+            client,
+            keystore,
+          );
           if (finalOperationList != null) {
-            final finalTotalFeesSum = finalOperationList.operations
-                .fold(0, (sum, element) => sum + element.totalFee);
-            final finalBakerFeesSum = finalOperationList.operations
-                .fold(0, (sum, element) => sum + element.fee);
+            final finalTotalFeesSum = finalOperationList.operations.fold(
+              0,
+              (sum, element) => sum + element.totalFee,
+            );
+            final finalBakerFeesSum = finalOperationList.operations.fold(
+              0,
+              (sum, element) => sum + element.fee,
+            );
 
             networkFee = NetworkFeeModel(
               totalFee: (finalTotalFeesSum / 1000000).toString(),
@@ -240,8 +253,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
             status: AppStatus.init,
             totalAmount: state.selectedToken.symbol == networkFee.tokenSymbol
                 ? (Decimal.parse(state.tokenAmount) -
-                        Decimal.parse(networkFee.totalFee))
-                    .toString()
+                          Decimal.parse(networkFee.totalFee))
+                      .toString()
                 : state.tokenAmount,
             operationsList: finalOperationList,
           ),
@@ -313,19 +326,27 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     const minFeesWithStorage = 6526;
     var transactionAmount =
         ((double.parse(state.tokenAmount) * 1000000).toInt()) -
-            minFeesWithStorage;
+        minFeesWithStorage;
     // Get fees
-    final OperationsList estimationOperationList =
-        await prepareTezosOperation(keystore, client, transactionAmount);
-    final initialFeesSum = estimationOperationList.operations
-        .fold(0, (sum, element) => sum + element.totalFee);
+    final OperationsList estimationOperationList = await prepareTezosOperation(
+      keystore,
+      client,
+      transactionAmount,
+    );
+    final initialFeesSum = estimationOperationList.operations.fold(
+      0,
+      (sum, element) => sum + element.totalFee,
+    );
     // get final operation
     // minus 1 to prevent overflow operation :-/
     // but it prevent burning gas for nothing.
     transactionAmount =
         transactionAmount - initialFeesSum + minFeesWithStorage - 1;
-    final finalOperationList =
-        await prepareTezosOperation(keystore, client, transactionAmount);
+    final finalOperationList = await prepareTezosOperation(
+      keystore,
+      client,
+      transactionAmount,
+    );
     return finalOperationList;
   }
 
@@ -361,16 +382,11 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
   void setNetworkFee({required NetworkFeeModel networkFee}) {
     final totalAmount = state.selectedToken.symbol == networkFee.tokenSymbol
         ? (Decimal.parse(state.tokenAmount) -
-                Decimal.parse(networkFee.totalFee))
-            .toString()
+                  Decimal.parse(networkFee.totalFee))
+              .toString()
         : state.tokenAmount;
 
-    emit(
-      state.copyWith(
-        networkFee: networkFee,
-        totalAmount: totalAmount,
-      ),
-    );
+    emit(state.copyWith(networkFee: networkFee, totalAmount: totalAmount));
   }
 
   bool canConfirmTheWithdrawal() {
@@ -407,15 +423,14 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
     final amount = BigInt.parse(
       tokenAmount
-          .decimalNumber(
-            int.parse(selectedEthereumNetwork.mainTokenDecimal),
-          )
+          .decimalNumber(int.parse(selectedEthereumNetwork.mainTokenDecimal))
           .replaceAll('.', '')
           .replaceAll(',', ''),
     );
 
-    getLogger(toString())
-        .i('selected network node rpc: $rpcNodeUrl, amount: $tokenAmount');
+    getLogger(
+      toString(),
+    ).i('selected network node rpc: $rpcNodeUrl, amount: $tokenAmount');
 
     final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
     final sender = credentials.address;
@@ -425,7 +440,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       chainId: selectedEthereumNetwork.chainId,
       privateKey: selectedAccountSecretKey,
       sender: sender,
-      reciever: EthereumAddress.fromHex(state.withdrawalAddress),
+      receiver: EthereumAddress.fromHex(state.withdrawalAddress),
       amount: EtherAmount.inWei(amount),
       gas: gas,
       gasPrice: gasPrice,
@@ -555,13 +570,14 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
             .replaceAll(',', ''),
       );
 
-      final amount = (tokenAmount *
-              double.parse(
-                1
-                    .toStringAsFixed(int.parse(token.decimals))
-                    .replaceAll('.', ''),
-              ))
-          .toInt();
+      final amount =
+          (tokenAmount *
+                  double.parse(
+                    1
+                        .toStringAsFixed(int.parse(token.decimals))
+                        .replaceAll('.', ''),
+                  ))
+              .toInt();
 
       final parameters = token.isFA1
           ? '''(Pair "${keyStore.publicKeyHash}" (Pair "${state.withdrawalAddress}" $amount))'''
@@ -586,11 +602,10 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         [parameters],
         codeFormat: TezosParameterFormat.Michelson,
       );
-      getLogger('sendContractInvocationOperation').i(
-        'Operation groupID ===> $resultInvoke',
-      );
-      if (resultInvoke['appliedOp']['contents'][0]['metadata']
-              ['operation_result']['status'] ==
+      getLogger(
+        'sendContractInvocationOperation',
+      ).i('Operation groupID ===> $resultInvoke');
+      if (resultInvoke['appliedOp']['contents'][0]['metadata']['operation_result']['status'] ==
           'failed') {
         emit(
           state.error(
@@ -603,8 +618,9 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         emit(state.success());
       }
     } catch (e, s) {
-      getLogger(runtimeType.toString())
-          .e('error in transferOperation , e: $e, s: $s');
+      getLogger(
+        runtimeType.toString(),
+      ).e('error in transferOperation , e: $e, s: $s');
 
       rethrow;
     }
@@ -650,7 +666,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       //final rpcUrl = manageNetworkCubit.state.network.rpcNodeUrl;
       //final rpcUrl = await web3RpcMainnetInfuraURL();
-      final amount = double.parse(tokenAmount) *
+      final amount =
+          double.parse(tokenAmount) *
           double.parse(
             1.toStringAsFixed(int.parse(token.decimals)).replaceAll('.', ''),
           );
@@ -677,8 +694,9 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         );
       }
     } catch (e, s) {
-      getLogger(runtimeType.toString())
-          .e('error in transferOperation , e: $e, s: $s');
+      getLogger(
+        runtimeType.toString(),
+      ).e('error in transferOperation , e: $e, s: $s');
       rethrow;
     }
   }

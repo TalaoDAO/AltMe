@@ -20,15 +20,11 @@ class PrivateKeyQrPage extends StatefulWidget {
     required String title,
     required String data,
     required double secondsLeft,
-  }) =>
-      MaterialPageRoute<void>(
-        builder: (context) => PrivateKeyQrPage(
-          data: data,
-          title: title,
-          secondsLeft: secondsLeft,
-        ),
-        settings: const RouteSettings(name: '/PrivateKeyQrPage'),
-      );
+  }) => MaterialPageRoute<void>(
+    builder: (context) =>
+        PrivateKeyQrPage(data: data, title: title, secondsLeft: secondsLeft),
+    settings: const RouteSettings(name: '/PrivateKeyQrPage'),
+  );
 
   @override
   State<PrivateKeyQrPage> createState() => _PrivateKeyQrPageState();
@@ -47,8 +43,10 @@ class _PrivateKeyQrPageState extends State<PrivateKeyQrPage>
       duration: Duration(seconds: widget.secondsLeft.toInt()),
     );
 
-    final Tween<double> rotationTween =
-        Tween(begin: widget.secondsLeft, end: 0);
+    final Tween<double> rotationTween = Tween(
+      begin: widget.secondsLeft,
+      end: 0,
+    );
 
     animation = rotationTween.animate(animationController)
       ..addStatusListener((status) {
@@ -87,9 +85,7 @@ class _PrivateKeyQrPageState extends State<PrivateKeyQrPage>
             const SizedBox(height: 10),
             CopyButton(
               onTap: () async {
-                await Clipboard.setData(
-                  ClipboardData(text: widget.data),
-                );
+                await Clipboard.setData(ClipboardData(text: widget.data));
                 AlertMessage.showStateMessage(
                   context: context,
                   stateMessage: StateMessage.success(

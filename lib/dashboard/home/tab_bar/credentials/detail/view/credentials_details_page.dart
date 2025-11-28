@@ -94,9 +94,9 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context
-          .read<CredentialDetailsCubit>()
-          .verifyCredential(widget.credentialModel);
+      context.read<CredentialDetailsCubit>().verifyCredential(
+        widget.credentialModel,
+      );
     });
   }
 
@@ -131,15 +131,19 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
       credentialImage = LdpVc(widget.credentialModel).getPicture;
     }
 
-    final credentialSubjectType = widget.credentialModel.credentialPreview
-        .credentialSubjectModel.credentialSubjectType;
+    final credentialSubjectType = widget
+        .credentialModel
+        .credentialPreview
+        .credentialSubjectModel
+        .credentialSubjectType;
 
     final showVerticalDescription =
         credentialSubjectType == CredentialSubjectType.eudiPid ||
-            credentialSubjectType == CredentialSubjectType.identityCredential ||
-            credentialSubjectType == CredentialSubjectType.verifiableIdCard;
+        credentialSubjectType == CredentialSubjectType.identityCredential ||
+        credentialSubjectType == CredentialSubjectType.verifiableIdCard;
 
-    final isOver18OfDippV3 = profileData.profileType == ProfileType.diipv3 &&
+    final isOver18OfDippV3 =
+        profileData.profileType == ProfileType.diipv3 &&
         credentialSubjectType == CredentialSubjectType.over18;
 
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
@@ -158,19 +162,24 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         }
       },
       builder: (context, state) {
-        final List<Activity> activities =
-            List<Activity>.from(widget.credentialModel.activities);
+        final List<Activity> activities = List<Activity>.from(
+          widget.credentialModel.activities,
+        );
 
-        final List<Activity> reversedList =
-            List<Activity>.from(activities.reversed);
+        final List<Activity> reversedList = List<Activity>.from(
+          activities.reversed,
+        );
 
         if (activities.isNotEmpty) {
           reversedList.insert(0, activities[0]);
           reversedList.removeLast();
         }
 
-        final profileSetting =
-            context.read<ProfileCubit>().state.model.profileSetting;
+        final profileSetting = context
+            .read<ProfileCubit>()
+            .state
+            .model
+            .profileSetting;
 
         return BasePage(
           title: l10n.cardDetails,
@@ -202,8 +211,8 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               children: [
                                 Expanded(
                                   child: CredentialDetailTabbar(
-                                    isSelected: state
-                                            .credentialDetailTabStatus ==
+                                    isSelected:
+                                        state.credentialDetailTabStatus ==
                                         CredentialDetailTabStatus.informations,
                                     title: l10n.credentialManifestInformations,
                                     onTap: () => context
@@ -218,7 +227,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                                   child: CredentialDetailTabbar(
                                     isSelected:
                                         state.credentialDetailTabStatus ==
-                                            CredentialDetailTabStatus.activity,
+                                        CredentialDetailTabStatus.activity,
                                     title: l10n.credentialDetailsActivity,
                                     onTap: () => context
                                         .read<CredentialDetailsCubit>()
@@ -259,9 +268,9 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             ),
                             Divider(
                               height: 0,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .surfaceContainerHigh,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.surfaceContainerHigh,
                             ),
                           ],
                         ),
@@ -327,7 +336,9 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
 
                           //// wallet attestation data
                           if (!isDeveloperMode &&
-                              widget.credentialModel.credentialPreview
+                              widget
+                                      .credentialModel
+                                      .credentialPreview
                                       .credentialSubjectModel
                                   is WalletCredentialModel) ...[
                             WalletCredentialetailsWidget(
@@ -375,10 +386,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
           ),
           navigation: SafeArea(
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 5,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -386,9 +394,9 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                     onPressed: widget.credentialModel.disAllowDelete
                         ? null
                         : () => deleteCredential(
-                              context,
-                              widget.credentialModel.id,
-                            ),
+                            context,
+                            widget.credentialModel.id,
+                          ),
                     text: l10n.credentialDetailDeleteCard,
                   ),
                   const SizedBox(height: 8),

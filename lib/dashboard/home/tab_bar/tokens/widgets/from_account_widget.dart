@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FromAccountWidget extends StatelessWidget {
-  const FromAccountWidget({
-    super.key,
-    this.isEnabled = true,
-  });
+  const FromAccountWidget({super.key, this.isEnabled = true});
 
   final bool isEnabled;
 

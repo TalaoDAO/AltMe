@@ -10,9 +10,9 @@ class ImportTalaoCommunityCardPage extends StatelessWidget {
   const ImportTalaoCommunityCardPage({super.key});
 
   static Route<dynamic> route() => MaterialPageRoute<void>(
-        builder: (context) => const ImportTalaoCommunityCardPage(),
-        settings: const RouteSettings(name: '/importTalaoCommunityCardPage'),
-      );
+    builder: (context) => const ImportTalaoCommunityCardPage(),
+    settings: const RouteSettings(name: '/importTalaoCommunityCardPage'),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -42,17 +42,19 @@ class _ImportTalaoCommunityCardViewState
     super.initState();
     privateKeyController = TextEditingController();
     privateKeyController.addListener(() {
-      context
-          .read<ImportTalaoCommunityCardCubit>()
-          .isPrivateKeyValid(privateKeyController.text);
+      context.read<ImportTalaoCommunityCardCubit>().isPrivateKeyValid(
+        privateKeyController.text,
+      );
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocConsumer<ImportTalaoCommunityCardCubit,
-        ImportTalaoCommunityCardState>(
+    return BlocConsumer<
+      ImportTalaoCommunityCardCubit,
+      ImportTalaoCommunityCardState
+    >(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
@@ -94,10 +96,9 @@ class _ImportTalaoCommunityCardViewState
                             Text(
                               l10n.drawerTalaoCommunityCardSubtitle,
                               textAlign: TextAlign.center,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(fontSize: 13),
+                              style: Theme.of(
+                                context,
+                              ).textTheme.titleMedium!.copyWith(fontSize: 13),
                             ),
                           ],
                         ),
@@ -111,7 +112,8 @@ class _ImportTalaoCommunityCardViewState
                               fillColor: Colors.transparent,
                               hintStyle: Theme.of(context).textTheme.bodyMedium,
                               controller: privateKeyController,
-                              error: state.isTextFieldEdited &&
+                              error:
+                                  state.isTextFieldEdited &&
                                       !state.isPrivateKeyValid
                                   ? l10n.drawerTalaoCommunityCardKeyError
                                   : null,
@@ -128,8 +130,9 @@ class _ImportTalaoCommunityCardViewState
                                 margin: const EdgeInsets.all(Sizes.spaceNormal),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color:
-                                      Theme.of(context).colorScheme.onTertiary,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onTertiary,
                                 ),
                                 child: const Icon(
                                   Icons.check,
@@ -143,10 +146,9 @@ class _ImportTalaoCommunityCardViewState
                         Text(
                           l10n.drawerTalaoCommunityCardSubtitle2,
                           textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(fontSize: 13),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleMedium!.copyWith(fontSize: 13),
                         ),
                       ],
                     ),

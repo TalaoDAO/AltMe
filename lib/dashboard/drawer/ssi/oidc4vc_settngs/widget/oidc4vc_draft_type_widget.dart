@@ -27,8 +27,8 @@ class OIDC4VCDraftTypeWidget extends StatelessWidget {
                   ListTile(
                     onTap: () {
                       context.read<ProfileCubit>().updateProfileSetting(
-                            oidc4vciDraftType: draftType,
-                          );
+                        oidc4vciDraftType: draftType,
+                      );
                     },
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
@@ -41,8 +41,12 @@ class OIDC4VCDraftTypeWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     trailing: Icon(
-                      state.model.profileSetting.selfSovereignIdentityOptions
-                                  .customOidc4vcProfile.oidc4vciDraft ==
+                      state
+                                  .model
+                                  .profileSetting
+                                  .selfSovereignIdentityOptions
+                                  .customOidc4vcProfile
+                                  .oidc4vciDraft ==
                               draftType
                           ? Icons.radio_button_checked
                           : Icons.radio_button_unchecked,

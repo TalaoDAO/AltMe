@@ -12,30 +12,25 @@ void main() {
       controller = TextEditingController();
     });
 
-    testWidgets('renders BaseTextField with default properties',
-        (WidgetTester tester) async {
+    testWidgets('renders BaseTextField with default properties', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpApp(
-        Scaffold(
-          body: BaseTextField(
-            controller: controller,
-          ),
-        ),
+        Scaffold(body: BaseTextField(controller: controller)),
       );
 
       expect(find.byType(TextFormField), findsOneWidget);
       expect(find.byType(SizedBox), findsNWidgets(2));
     });
 
-    testWidgets('renders BaseTextField with label',
-        (WidgetTester tester) async {
+    testWidgets('renders BaseTextField with label', (
+      WidgetTester tester,
+    ) async {
       const label = 'Test Label';
 
       await tester.pumpApp(
         Scaffold(
-          body: BaseTextField(
-            controller: controller,
-            label: label,
-          ),
+          body: BaseTextField(controller: controller, label: label),
         ),
       );
 
@@ -47,34 +42,30 @@ void main() {
 
       await tester.pumpApp(
         Scaffold(
-          body: BaseTextField(
-            controller: controller,
-            hint: hint,
-          ),
+          body: BaseTextField(controller: controller, hint: hint),
         ),
       );
 
       expect(find.text(hint), findsOneWidget);
     });
 
-    testWidgets('renders BaseTextField with error text',
-        (WidgetTester tester) async {
+    testWidgets('renders BaseTextField with error text', (
+      WidgetTester tester,
+    ) async {
       const error = 'Test Error';
 
       await tester.pumpApp(
         Scaffold(
-          body: BaseTextField(
-            controller: controller,
-            error: error,
-          ),
+          body: BaseTextField(controller: controller, error: error),
         ),
       );
 
       expect(find.text(error), findsOneWidget);
     });
 
-    testWidgets('renders BaseTextField with prefix and suffix icons',
-        (WidgetTester tester) async {
+    testWidgets('renders BaseTextField with prefix and suffix icons', (
+      WidgetTester tester,
+    ) async {
       const prefixIcon = Icon(Icons.email);
       const suffixIcon = Icon(Icons.visibility);
 
@@ -92,30 +83,25 @@ void main() {
       expect(find.byIcon(Icons.visibility), findsOneWidget);
     });
 
-    testWidgets('input text updates the controller',
-        (WidgetTester tester) async {
+    testWidgets('input text updates the controller', (
+      WidgetTester tester,
+    ) async {
       const inputText = 'Hello, Flutter!';
 
       await tester.pumpApp(
-        Scaffold(
-          body: BaseTextField(
-            controller: controller,
-          ),
-        ),
+        Scaffold(body: BaseTextField(controller: controller)),
       );
 
       await tester.enterText(find.byType(TextFormField), inputText);
       expect(controller.text, inputText);
     });
 
-    testWidgets('obscureText property works correctly',
-        (WidgetTester tester) async {
+    testWidgets('obscureText property works correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpApp(
         Scaffold(
-          body: BaseTextField(
-            controller: controller,
-            obscureText: true,
-          ),
+          body: BaseTextField(controller: controller, obscureText: true),
         ),
       );
 

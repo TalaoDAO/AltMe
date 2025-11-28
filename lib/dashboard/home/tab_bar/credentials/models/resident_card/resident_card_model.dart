@@ -22,9 +22,9 @@ class ResidentCardModel extends CredentialSubjectModel {
     this.birthDate,
     this.givenName,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.residentCard,
-          credentialCategory: CredentialCategory.contactInfoCredentials,
-        );
+         credentialSubjectType: CredentialSubjectType.residentCard,
+         credentialCategory: CredentialCategory.contactInfoCredentials,
+       );
 
   factory ResidentCardModel.fromJson(Map<String, dynamic> json) =>
       _$ResidentCardModelFromJson(json);

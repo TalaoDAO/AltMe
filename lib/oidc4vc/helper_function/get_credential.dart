@@ -8,12 +8,7 @@ import 'package:oidc4vc/oidc4vc.dart';
 /// Retreive credential_type from url
 // encodedCredentialOrFutureTokens,deferredCredentialEndpoint,
 // format
-Future<
-    (
-      List<dynamic>?,
-      String?,
-      String?,
-    )?> getCredential({
+Future<(List<dynamic>?, String?, String?)?> getCredential({
   required Oidc4vcParameters oidc4vcParameters,
   required dynamic credential,
   required ProfileCubit profileCubit,
@@ -39,13 +34,22 @@ Future<
     profileCubit: profileCubit,
   );
 
-  final customOidc4vcProfile = profileCubit.state.model.profileSetting
-      .selfSovereignIdentityOptions.customOidc4vcProfile;
+  final customOidc4vcProfile = profileCubit
+      .state
+      .model
+      .profileSetting
+      .selfSovereignIdentityOptions
+      .customOidc4vcProfile;
 
   var nonce = cnonce;
 
-  final (credentialType, types, credentialDefinition, vct, format) =
-      await profileCubit.oidc4vc.getCredentialData(
+  final (
+    credentialType,
+    types,
+    credentialDefinition,
+    vct,
+    format,
+  ) = await profileCubit.oidc4vc.getCredentialData(
     openIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
     credential: credential,
   );
@@ -71,8 +75,9 @@ Future<
               ((ele.containsKey('types') &&
                       (ele['types'] as List).contains(credentialType)) ||
                   (ele.containsKey('credential_definition') &&
-                      (ele['credential_definition']['type'] as List)
-                          .contains(credentialType))),
+                      (ele['credential_definition']['type'] as List).contains(
+                        credentialType,
+                      ))),
         )
         .firstOrNull;
 
@@ -197,16 +202,12 @@ Future<
     credentialResponseData.add(credentialResponseDataValue);
   }
 
-  final deferredCredentialEndpoint =
-      profileCubit.oidc4vc.getDeferredCredentialEndpoint(
-    oidc4vcParameters.issuerOpenIdConfiguration,
-  );
+  final deferredCredentialEndpoint = profileCubit.oidc4vc
+      .getDeferredCredentialEndpoint(
+        oidc4vcParameters.issuerOpenIdConfiguration,
+      );
 
-  return (
-    credentialResponseData,
-    deferredCredentialEndpoint,
-    format,
-  );
+  return (credentialResponseData, deferredCredentialEndpoint, format);
 }
 
 int count = 0;
@@ -219,11 +220,16 @@ Future<dynamic> getSingleCredentialData({
   required Map<String, dynamic> credentialData,
   required String publicKeyForDPop,
 }) async {
-  final credentialEndpoint =
-      profileCubit.oidc4vc.readCredentialEndpoint(openIdConfiguration);
+  final credentialEndpoint = profileCubit.oidc4vc.readCredentialEndpoint(
+    openIdConfiguration,
+  );
 
-  final customOidc4vcProfile = profileCubit.state.model.profileSetting
-      .selfSovereignIdentityOptions.customOidc4vcProfile;
+  final customOidc4vcProfile = profileCubit
+      .state
+      .model
+      .profileSetting
+      .selfSovereignIdentityOptions
+      .customOidc4vcProfile;
   try {
     String? dPop;
 
@@ -235,14 +241,14 @@ Future<dynamic> getSingleCredentialData({
       );
     }
 
-    final credentialResponseDataValue =
-        await profileCubit.oidc4vc.getSingleCredential(
-      accessToken: accessToken,
-      dio: Dio(),
-      credentialData: credentialData,
-      credentialEndpoint: credentialEndpoint,
-      dPop: dPop,
-    );
+    final credentialResponseDataValue = await profileCubit.oidc4vc
+        .getSingleCredential(
+          accessToken: accessToken,
+          dio: Dio(),
+          credentialData: credentialData,
+          credentialEndpoint: credentialEndpoint,
+          dPop: dPop,
+        );
 
     return credentialResponseDataValue;
   } catch (e) {

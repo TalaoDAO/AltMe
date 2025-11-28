@@ -12,11 +12,11 @@ class SelectNetworkFeeCubit extends Cubit<SelectNetworkFeeState> {
     required NetworkFeeModel selectedNetworkFee,
     List<NetworkFeeModel>? networkFeeList,
   }) : super(
-          SelectNetworkFeeState(
-            selectedNetworkFee: selectedNetworkFee,
-            networkFeeList: networkFeeList,
-          ),
-        );
+         SelectNetworkFeeState(
+           selectedNetworkFee: selectedNetworkFee,
+           networkFeeList: networkFeeList,
+         ),
+       );
 
   void setSelectedNetworkFee({required NetworkFeeModel selectedNetworkFee}) {
     emit(state.copyWith(selectedNetworkFee: selectedNetworkFee));

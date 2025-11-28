@@ -21,9 +21,7 @@ class DeleteMyWalletPage extends StatelessWidget {
 }
 
 class DeleteMyWalletView extends StatelessWidget {
-  const DeleteMyWalletView({
-    super.key,
-  });
+  const DeleteMyWalletView({super.key});
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;

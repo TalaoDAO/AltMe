@@ -21,8 +21,9 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   required bool cryptoHolderBinding,
 }) async {
   final keys = <String>[];
-  oidc4vcParameters.initialUri.queryParameters
-      .forEach((key, value) => keys.add(key));
+  oidc4vcParameters.initialUri.queryParameters.forEach(
+    (key, value) => keys.add(key),
+  );
   final uriFromScannedResponse = oidc4vcParameters.initialUri;
   late dynamic credentials;
 
@@ -31,15 +32,17 @@ Future<void> initiateOIDC4VCCredentialIssuance({
   }
   if (oidc4vcParameters.credentialOffer.containsKey('credentials')) {
     credentials = oidc4vcParameters.credentialOffer['credentials'];
-  } else if (oidc4vcParameters.credentialOffer
-      .containsKey('credential_configuration_ids')) {
+  } else if (oidc4vcParameters.credentialOffer.containsKey(
+    'credential_configuration_ids',
+  )) {
     credentials =
         oidc4vcParameters.credentialOffer['credential_configuration_ids'];
   } else {
     throw ResponseMessage(
       data: {
         'error': 'invalid_issuer_metadata',
-        'error_description': 'The issuer configuration is invalid. '
+        'error_description':
+            'The issuer configuration is invalid. '
             'The credential offer is missing.',
       },
     );

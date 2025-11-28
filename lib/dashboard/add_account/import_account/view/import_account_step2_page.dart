@@ -24,10 +24,7 @@ class ImportAccountStep2Page extends StatelessWidget {
 }
 
 class ImportAccountStep2View extends StatelessWidget {
-  const ImportAccountStep2View({
-    super.key,
-    required this.accountType,
-  });
+  const ImportAccountStep2View({super.key, required this.accountType});
 
   final AccountType accountType;
   @override
@@ -46,21 +43,14 @@ class ImportAccountStep2View extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const MStepper(
-            totalStep: 4,
-            step: 2,
-          ),
-          const SizedBox(
-            height: Sizes.spaceNormal,
-          ),
+          const MStepper(totalStep: 4, step: 2),
+          const SizedBox(height: Sizes.spaceNormal),
           Text(
             l10n.importEasilyFrom,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
-          const SizedBox(
-            height: Sizes.spaceNormal,
-          ),
+          const SizedBox(height: Sizes.spaceNormal),
           if (accountType == AccountType.tezos) ...[
             AccountItem(
               title: l10n.templeWallet,

@@ -2,11 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppCupertinoTextSelectionControls extends CupertinoTextSelectionControls {
-  AppCupertinoTextSelectionControls({
-    required this.onPaste,
-  });
+  AppCupertinoTextSelectionControls({required this.onPaste});
   ValueChanged<TextSelectionDelegate> onPaste;
-
 
   @override
   Future<void> handlePaste(TextSelectionDelegate delegate) {
@@ -16,9 +13,7 @@ class AppCupertinoTextSelectionControls extends CupertinoTextSelectionControls {
 }
 
 class AppMaterialTextSelectionControls extends MaterialTextSelectionControls {
-  AppMaterialTextSelectionControls({
-    required this.onPaste,
-  });
+  AppMaterialTextSelectionControls({required this.onPaste});
   ValueChanged<TextSelectionDelegate> onPaste;
   @override
   Future<void> handlePaste(TextSelectionDelegate delegate) {

@@ -8,19 +8,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 class NftDetailsPage extends StatelessWidget {
-  const NftDetailsPage({
-    super.key,
-    required this.nftModel,
-  });
+  const NftDetailsPage({super.key, required this.nftModel});
 
   final NftModel nftModel;
 
   static Route<dynamic> route({required NftModel nftModel}) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/nftDetailsPage'),
-      builder: (_) => NftDetailsPage(
-        nftModel: nftModel,
-      ),
+      builder: (_) => NftDetailsPage(nftModel: nftModel),
     );
   }
 
@@ -31,18 +26,13 @@ class NftDetailsPage extends StatelessWidget {
         manageNetworkCubit: context.read<ManageNetworkCubit>(),
         walletCubit: context.read<WalletCubit>(),
       ),
-      child: NftDetailsView(
-        nftModel: nftModel,
-      ),
+      child: NftDetailsView(nftModel: nftModel),
     );
   }
 }
 
 class NftDetailsView extends StatefulWidget {
-  const NftDetailsView({
-    super.key,
-    required this.nftModel,
-  });
+  const NftDetailsView({super.key, required this.nftModel});
 
   final NftModel nftModel;
 
@@ -89,9 +79,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                   aspectRatio: 1.1,
                   child: NftPicture(widget: widget, l10n: l10n),
                 ),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
-                ),
+                const SizedBox(height: Sizes.spaceSmall),
                 MyText(
                   '${widget.nftModel.name} ${widget.nftModel.tokenId}',
                   style: Theme.of(context).textTheme.titleLarge,
@@ -148,10 +136,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
                 ),
               ),
               IconButton(
-                icon: const Icon(
-                  Icons.open_in_new,
-                  size: Sizes.icon,
-                ),
+                icon: const Icon(Icons.open_in_new, size: Sizes.icon),
                 onPressed: () {
                   context
                       .read<ManageNetworkCubit>()
@@ -181,9 +166,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
         ),
       ],
       if (nftModel.creators != null && nftModel.creators!.isNotEmpty) ...[
-        const SizedBox(
-          height: Sizes.spaceXSmall,
-        ),
+        const SizedBox(height: Sizes.spaceXSmall),
         Text(
           '${l10n.creators} : ',
           style: Theme.of(context).textTheme.titleMedium,
@@ -197,10 +180,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               ),
             ),
             IconButton(
-              icon: const Icon(
-                Icons.open_in_new,
-                size: Sizes.icon,
-              ),
+              icon: const Icon(Icons.open_in_new, size: Sizes.icon),
               onPressed: () {
                 context
                     .read<ManageNetworkCubit>()
@@ -213,9 +193,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
         ),
       ],
       if (nftModel.publishers != null && nftModel.publishers!.isNotEmpty) ...[
-        const SizedBox(
-          height: Sizes.spaceXSmall,
-        ),
+        const SizedBox(height: Sizes.spaceXSmall),
         Text(
           '${l10n.publishers} : ',
           style: Theme.of(context).textTheme.titleMedium,
@@ -229,10 +207,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               ),
             ),
             IconButton(
-              icon: const Icon(
-                Icons.open_in_new,
-                size: Sizes.icon,
-              ),
+              icon: const Icon(Icons.open_in_new, size: Sizes.icon),
               onPressed: () {
                 context
                     .read<ManageNetworkCubit>()
@@ -245,9 +220,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
         ),
       ],
       if (nftModel.date != null || nftModel.firstTime != null) ...[
-        const SizedBox(
-          height: Sizes.spaceXSmall,
-        ),
+        const SizedBox(height: Sizes.spaceXSmall),
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
@@ -282,10 +255,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
             ),
           ),
           IconButton(
-            icon: const Icon(
-              Icons.open_in_new,
-              size: Sizes.icon,
-            ),
+            icon: const Icon(Icons.open_in_new, size: Sizes.icon),
             onPressed: () {
               context
                   .read<ManageNetworkCubit>()
@@ -297,9 +267,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
         ],
       ),
       if (nftModel.minterAddress != null && nftModel.type != 'ERC1155') ...[
-        const SizedBox(
-          height: Sizes.spaceXSmall,
-        ),
+        const SizedBox(height: Sizes.spaceXSmall),
         Text(
           '${l10n.creator} : ',
           style: Theme.of(context).textTheme.titleMedium,
@@ -313,10 +281,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
               ),
             ),
             IconButton(
-              icon: const Icon(
-                Icons.open_in_new,
-                size: Sizes.icon,
-              ),
+              icon: const Icon(Icons.open_in_new, size: Sizes.icon),
               onPressed: () {
                 context
                     .read<ManageNetworkCubit>()
@@ -329,9 +294,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
         ),
       ],
       if (nftModel.lastMetadataSync != null) ...[
-        const SizedBox(
-          height: Sizes.spaceXSmall,
-        ),
+        const SizedBox(height: Sizes.spaceXSmall),
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
@@ -351,11 +314,7 @@ class _NftDetailsViewState extends State<NftDetailsView> {
 }
 
 class NftPicture extends StatelessWidget {
-  const NftPicture({
-    super.key,
-    required this.widget,
-    required this.l10n,
-  });
+  const NftPicture({super.key, required this.widget, required this.l10n});
 
   final NftDetailsView widget;
   final AppLocalizations l10n;
@@ -366,9 +325,7 @@ class NftPicture extends StatelessWidget {
       widget.nftModel.displayUrl ?? (widget.nftModel.thumbnailUrl ?? ''),
       fit: BoxFit.contain,
       errorMessage: l10n.nftTooBigToLoad,
-      borderRadius: const BorderRadius.all(
-        Radius.circular(Sizes.largeRadius),
-      ),
+      borderRadius: const BorderRadius.all(Radius.circular(Sizes.largeRadius)),
     );
   }
 }
@@ -393,8 +350,9 @@ class SendButton extends StatelessWidget {
         child: MyElevatedButton(
           text: l10n.send,
           onPressed: () {
-            Navigator.of(context)
-                .push<void>(SendToPage.route(nftModel: widget.nftModel));
+            Navigator.of(
+              context,
+            ).push<void>(SendToPage.route(nftModel: widget.nftModel));
           },
         ),
       ),
@@ -403,11 +361,7 @@ class SendButton extends StatelessWidget {
 }
 
 class BurnButton extends StatelessWidget {
-  const BurnButton({
-    super.key,
-    required this.l10n,
-    required this.widget,
-  });
+  const BurnButton({super.key, required this.l10n, required this.widget});
 
   final AppLocalizations l10n;
   final NftDetailsView widget;
@@ -432,12 +386,8 @@ class BurnButton extends StatelessWidget {
             if (confirmed ?? false) {
               await context
                   .read<NftDetailsCubit>()
-                  .burnDefiComplianceToken(
-                    nftModel: widget.nftModel,
-                  )
-                  .timeout(
-                    const Duration(minutes: 1),
-                  );
+                  .burnDefiComplianceToken(nftModel: widget.nftModel)
+                  .timeout(const Duration(minutes: 1));
             }
           },
         ),
@@ -461,18 +411,16 @@ class PickButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (widget.nftModel.isTransferable == false ||
-        AltMeStrings.contractDontSendAddress
-            .contains(widget.nftModel.contractAddress)) {
+        AltMeStrings.contractDontSendAddress.contains(
+          widget.nftModel.contractAddress,
+        )) {
       return const SizedBox.shrink();
     }
-    if (AltMeStrings.minterBurnAddress
-        .contains(widget.nftModel.contractAddress)) {
+    if (AltMeStrings.minterBurnAddress.contains(
+      widget.nftModel.contractAddress,
+    )) {
       return BurnButton(l10n: l10n, widget: widget);
     }
-    return SendButton(
-      l10n: l10n,
-      isTezos: isTezos,
-      widget: widget,
-    );
+    return SendButton(l10n: l10n, isTezos: isTezos, widget: widget);
   }
 }

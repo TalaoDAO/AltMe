@@ -5,14 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AccountPrivateKeyPage extends StatefulWidget {
-  const AccountPrivateKeyPage({
-    super.key,
-    required this.privateKey,
-  });
+  const AccountPrivateKeyPage({super.key, required this.privateKey});
 
-  static Route<dynamic> route({
-    required String privateKey,
-  }) {
+  static Route<dynamic> route({required String privateKey}) {
     return MaterialPageRoute<void>(
       builder: (_) => AccountPrivateKeyPage(privateKey: privateKey),
       settings: const RouteSettings(name: '/AccountPrivateKeyPage'),
@@ -94,8 +89,8 @@ class _AccountPrivateKeyPageState extends State<AccountPrivateKeyPage>
                 widget.privateKey,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      decoration: TextDecoration.underline,
-                    ),
+                  decoration: TextDecoration.underline,
+                ),
               ),
               const SizedBox(height: Sizes.spaceXLarge),
               CopyButton(

@@ -93,8 +93,9 @@ Future<String> getWalletAttestationData({
           jwtDecode: jwtDecode,
           jwt: response.toString(),
           fromStatusList: true,
-          useOAuthAuthorizationServerLink:
-              useOauthServerAuthEndPoint(profileModel),
+          useOAuthAuthorizationServerLink: useOauthServerAuthEndPoint(
+            profileModel,
+          ),
         );
 
         if (isVerified != VerificationType.verified) {

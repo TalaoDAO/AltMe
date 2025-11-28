@@ -62,9 +62,9 @@ class QRCodeScanState extends Equatable {
     if (uri.toString().startsWith('${Parameters.universalLink}/oidc4vc?uri=')) {
       newUri = Uri.parse(
         Uri.decodeFull(
-          uri
-              .toString()
-              .substring('${Parameters.universalLink}/oidc4vc?uri='.length),
+          uri.toString().substring(
+            '${Parameters.universalLink}/oidc4vc?uri='.length,
+          ),
         ),
       );
     } else {
@@ -81,12 +81,5 @@ class QRCodeScanState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        status,
-        uri,
-        route,
-        isScan,
-        message,
-        dialogData,
-      ];
+  List<Object?> get props => [status, uri, route, isScan, message, dialogData];
 }

@@ -21,9 +21,7 @@ class ConnectedDappsState extends Equatable {
     return copyWith(status: AppStatus.loading);
   }
 
-  ConnectedDappsState error({
-    required MessageHandler messageHandler,
-  }) {
+  ConnectedDappsState error({required MessageHandler messageHandler}) {
     return copyWith(status: AppStatus.error);
   }
 

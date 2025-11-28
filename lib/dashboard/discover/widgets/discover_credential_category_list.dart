@@ -22,16 +22,15 @@ class DiscoverCredentialCategoryList extends StatelessWidget {
           scrollDirection: Axis.vertical,
           children: dummyCredentials.keys
               .where(
-            (category) => dummyCredentials[category]?.isNotEmpty ?? false,
-          )
-              .map(
-            (category) {
-              return DiscoverCredentialCategoryItem(
-                dummyCredentials: dummyCredentials[category] ?? [],
-                credentialCategory: category,
-              );
-            },
-          ).toList(),
+                (category) => dummyCredentials[category]?.isNotEmpty ?? false,
+              )
+              .map((category) {
+                return DiscoverCredentialCategoryItem(
+                  dummyCredentials: dummyCredentials[category] ?? [],
+                  credentialCategory: category,
+                );
+              })
+              .toList(),
         ),
       ),
     );

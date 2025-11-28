@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/models/blockchain_network/blockchain_network_helpers.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/key_generator/key_generator.dart';
@@ -59,11 +60,12 @@ class OperationCubit extends Cubit<OperationState> {
           dAppName =
               beaconCubit.state.beaconRequest?.request?.appMetadata?.name ?? '';
         case ConnectionBridgeType.walletconnect:
-          final List<SavedDappData> savedDapps =
-              await connectedDappRepository.findAll();
+          final List<SavedDappData> savedDapps = await connectedDappRepository
+              .findAll();
 
-          final SavedDappData? savedDappData =
-              savedDapps.firstWhereOrNull((SavedDappData element) {
+          final SavedDappData? savedDappData = savedDapps.firstWhereOrNull((
+            SavedDappData element,
+          ) {
             return walletConnectCubit.state.sessionTopic ==
                 element.sessionData!.topic;
           });
@@ -99,8 +101,8 @@ class OperationCubit extends Cubit<OperationState> {
             );
           }
 
-          final CryptoAccountData? currentAccount =
-              walletCubit.getCryptoAccountData(publicKey);
+          final CryptoAccountData? currentAccount = walletCubit
+              .getCryptoAccountData(publicKey);
 
           log.i('currentAccount -$currentAccount');
           if (currentAccount == null) {
@@ -134,7 +136,8 @@ class OperationCubit extends Cubit<OperationState> {
   Future<void> getUsdPrice(ConnectionBridgeType connectionBridgeType) async {
     if (isClosed) return;
     try {
-      final isTezos = connectionBridgeType == ConnectionBridgeType.beacon ||
+      final isTezos =
+          connectionBridgeType == ConnectionBridgeType.beacon ||
           (connectionBridgeType == ConnectionBridgeType.walletconnect &&
               state.cryptoAccountData?.blockchainType == BlockchainType.tezos);
 
@@ -185,12 +188,12 @@ class OperationCubit extends Cubit<OperationState> {
       await dotenv.load();
       final apiKey = dotenv.get('COIN_GECKO_API_KEY');
 
-      final responseOfXTZUsdPrice = await dioClient.get(
-        '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
-        queryParameters: {
-          'x_cg_demo_api_key': apiKey,
-        },
-      ) as Map<String, dynamic>;
+      final responseOfXTZUsdPrice =
+          await dioClient.get(
+                '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
+                queryParameters: {'x_cg_demo_api_key': apiKey},
+              )
+              as Map<String, dynamic>;
       return responseOfXTZUsdPrice['tezos']['usd'] as double;
     } catch (_) {
       return null;
@@ -244,7 +247,6 @@ class OperationCubit extends Cubit<OperationState> {
           operationDetails = tezosOperationDetails!;
           sourceAddress = operationDetails.first.source!;
 
-          // TODO(bibash): check later
           networkType = NetworkType.mainnet;
         }
 
@@ -271,21 +273,24 @@ class OperationCubit extends Cubit<OperationState> {
 
         log.i('after operationList.estimate()');
         amount = (amountData / 1e6).toString();
-        totalFee = (operationList.operations
-                    .map((Operation e) => e.totalFee)
-                    .reduce((int value, int element) => value + element) /
-                1e6)
-            .toString();
-        bakerFee = (operationList.operations
-                    .map((Operation e) => e.fee)
-                    .reduce((int value, int element) => value + element) /
-                1e6)
-            .toString();
+        totalFee =
+            (operationList.operations
+                        .map((Operation e) => e.totalFee)
+                        .reduce((int value, int element) => value + element) /
+                    1e6)
+                .toString();
+        bakerFee =
+            (operationList.operations
+                        .map((Operation e) => e.fee)
+                        .reduce((int value, int element) => value + element) /
+                    1e6)
+                .toString();
         log.i('bakerFee - $bakerFee');
       } else if (transaction != null) {
         final EtherAmount ethAmount = transaction.value!;
-        amount =
-            MWeb3Client.formatEthAmount(amount: ethAmount.getInWei).toString();
+        amount = MWeb3Client.formatEthAmount(
+          amount: ethAmount.getInWei,
+        ).toString();
 
         final web3RpcURL = await fetchRpcUrl(
           blockchainNetwork: manageNetworkCubit.state.network,
@@ -298,8 +303,9 @@ class OperationCubit extends Cubit<OperationState> {
           sender: transaction.from!,
           reciever: transaction.to!,
           amount: ethAmount,
-          data:
-              transaction.data == null ? null : utf8.decode(transaction.data!),
+          data: transaction.data == null
+              ? null
+              : utf8.decode(transaction.data!),
         );
 
         totalFee = MWeb3Client.formatEthAmount(amount: feeData).toString();
@@ -451,7 +457,6 @@ class OperationCubit extends Cubit<OperationState> {
           operationDetails = tezosOperationDetails!;
           sourceAddress = operationDetails.first.source!;
 
-          // TODO(bibash): check later
           networkType = NetworkType.mainnet;
         }
 
@@ -509,10 +514,11 @@ class OperationCubit extends Cubit<OperationState> {
           web3RpcURL: rpcUrl,
           privateKey: transactionAccountData.secretKey,
           sender: transaction.from!,
-          reciever: transaction.to!,
+          receiver: transaction.to!,
           amount: ethAmount,
-          data:
-              transaction.data == null ? null : utf8.decode(transaction.data!),
+          data: transaction.data == null
+              ? null
+              : utf8.decode(transaction.data!),
         );
 
         walletConnectCubit.completer[walletConnectCubit.completer.length - 1]!
@@ -623,8 +629,8 @@ class OperationCubit extends Cubit<OperationState> {
       try {
         log.i('getOperationList');
 
-        final CryptoAccountData? currentAccount =
-            walletCubit.getCryptoAccountData(sourceAddress);
+        final CryptoAccountData? currentAccount = walletCubit
+            .getCryptoAccountData(sourceAddress);
 
         if (currentAccount == null) {
           throw ResponseMessage(
@@ -658,9 +664,9 @@ class OperationCubit extends Cubit<OperationState> {
         if (preCheckBalance) {
           /// check xtz balance
           log.i('checking xtz');
-          final int balance = await dioClient.get(
-            '$baseUrl/v1/accounts/$sourceAddress/balance',
-          ) as int;
+          final int balance =
+              await dioClient.get('$baseUrl/v1/accounts/$sourceAddress/balance')
+                  as int;
           log.i('total xtz - $balance');
           final formattedBalance = int.parse(
             balance.toStringAsFixed(6).replaceAll('.', '').replaceAll(',', ''),
@@ -681,8 +687,9 @@ class OperationCubit extends Cubit<OperationState> {
         }
 
         final client = TezartClient(rpcNodeUrlForTransaction!);
-        final keystore =
-            keyGenerator.getKeystore(secretKey: currentAccount.secretKey);
+        final keystore = keyGenerator.getKeystore(
+          secretKey: currentAccount.secretKey,
+        );
 
         final operationList = OperationsList(
           source: keystore,
@@ -755,8 +762,9 @@ class OperationCubit extends Cubit<OperationState> {
           storage: storage,
           customFee: fee != null ? int.parse(fee) : null,
           customGasLimit: gasLimit != null ? int.parse(gasLimit) : null,
-          customStorageLimit:
-              storageLimit != null ? int.parse(storageLimit) : null,
+          customStorageLimit: storageLimit != null
+              ? int.parse(storageLimit)
+              : null,
         );
         operations.add(operation);
       } else {
@@ -775,8 +783,9 @@ class OperationCubit extends Cubit<OperationState> {
           params: parameters,
           customFee: fee != null ? int.parse(fee) : null,
           customGasLimit: gasLimit != null ? int.parse(gasLimit) : null,
-          customStorageLimit:
-              storageLimit != null ? int.parse(storageLimit) : null,
+          customStorageLimit: storageLimit != null
+              ? int.parse(storageLimit)
+              : null,
         );
 
         operations.add(operation);
