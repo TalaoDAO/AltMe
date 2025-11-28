@@ -43,16 +43,15 @@ class WalletSettingsMenuView extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const BackLeadingButton(
-                padding: EdgeInsets.zero,
-              ),
+              const BackLeadingButton(padding: EdgeInsets.zero),
               const DrawerLogo(),
               DrawerItem(
                 title: l10n.languageSettings,
                 subtitle: l10n.languageSettingsDescription,
                 onTap: () async {
-                  await Navigator.of(context)
-                      .push<void>(LanguageSettings.route());
+                  await Navigator.of(
+                    context,
+                  ).push<void>(LanguageSettings.route());
                 },
               ),
               DrawerItem(
@@ -84,7 +83,9 @@ class WalletSettingsMenuView extends StatelessWidget {
                                   );
                             },
                             value: helpCenterOptions.displayNotification,
-                            activeColor: Theme.of(context).colorScheme.primary,
+                            activeThumbColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
                           );
                         },
                       ),

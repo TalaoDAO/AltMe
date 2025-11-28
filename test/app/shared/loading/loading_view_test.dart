@@ -29,8 +29,10 @@ void main() {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        LoadingView()
-                            .show(context: context, text: 'Loading...');
+                        LoadingView().show(
+                          context: context,
+                          text: 'Loading...',
+                        );
                       },
                       child: const Text('Show Loading View'),
                     ),

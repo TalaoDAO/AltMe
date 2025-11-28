@@ -42,7 +42,8 @@ class ProfileSelectorWidget extends StatelessWidget {
                       children: [
                         Text(
                           buildContext
-                              .l10n.chooseYourSSIProfileOrCustomizeYourOwn,
+                              .l10n
+                              .chooseYourSSIProfileOrCustomizeYourOwn,
                           style: Theme.of(buildContext).textTheme.titleMedium,
                         ),
                       ],
@@ -68,7 +69,8 @@ class ProfileSelectorWidget extends StatelessWidget {
                             onTap: () async {
                               if (profileType == ProfileType.custom) {
                                 final l10n = context.l10n;
-                                final bool moveAhead = await showDialog<bool>(
+                                final bool moveAhead =
+                                    await showDialog<bool>(
                                       context: context,
                                       builder: (_) {
                                         return ConfirmDialog(
@@ -85,16 +87,17 @@ class ProfileSelectorWidget extends StatelessWidget {
                               }
                               LoadingView().show(context: buildContext);
 
-                              await context
-                                  .read<ProfileCubit>()
-                                  .setProfile(profileType);
+                              await context.read<ProfileCubit>().setProfile(
+                                profileType,
+                              );
                               await context
                                   .read<CredentialsCubit>()
                                   .loadAllCredentials();
 
                               if (profileType == ProfileType.custom) {
-                                return Navigator.of(context)
-                                    .push<void>(Oidc4vcSettingMenu.route());
+                                return Navigator.of(
+                                  context,
+                                ).push<void>(Oidc4vcSettingMenu.route());
                               }
                               LoadingView().hide();
                             },
@@ -122,10 +125,9 @@ class ProfileSelectorWidget extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: Divider(
                               height: 0,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withValues(alpha: 0.12),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurface.withValues(alpha: 0.12),
                             ),
                           ),
                         ],

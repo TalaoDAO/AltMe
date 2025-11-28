@@ -18,12 +18,11 @@ enum CredentialCategory {
 
 List<CredentialCategory> get getCredentialCategorySorted {
   final values = List<CredentialCategory>.from(CredentialCategory.values);
-  return values
-    ..sort((a, b) {
-      final aOrder = a.order;
-      final bOrder = b.order;
-      return aOrder > bOrder ? 0 : 1;
-    });
+  return values..sort((a, b) {
+    final aOrder = a.order;
+    final bOrder = b.order;
+    return aOrder > bOrder ? 0 : 1;
+  });
 }
 
 extension CredentialCategoryX on CredentialCategory {
@@ -180,9 +179,9 @@ class CredentialCategoryConfig extends Equatable {
 
   @override
   List<Object?> get props => [
-        homeTitle,
-        homeSubTitle,
-        discoverTitle,
-        discoverSubTitle,
-      ];
+    homeTitle,
+    homeSubTitle,
+    discoverTitle,
+    discoverSubTitle,
+  ];
 }

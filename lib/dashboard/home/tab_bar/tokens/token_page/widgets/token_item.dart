@@ -4,11 +4,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class TokenItem extends StatelessWidget {
-  const TokenItem({
-    super.key,
-    required this.token,
-    this.isSecure = false,
-  });
+  const TokenItem({super.key, required this.token, this.isSecure = false});
 
   final TokenModel token;
   final bool isSecure;
@@ -52,11 +48,10 @@ class TokenItem extends StatelessWidget {
                 child: MyText(
                   isSecure
                       ? '****'
-                      : ('''${token.calculatedBalanceInDouble.decimalNumber(token.decimalsToShow).formatNumber} ${token.symbol}'''),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontSize: 13),
+                      : '''${token.calculatedBalanceInDouble.decimalNumber(token.decimalsToShow).formatNumber} ${token.symbol}''',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium!.copyWith(fontSize: 13),
                 ),
               ),
               Flexible(
@@ -64,7 +59,7 @@ class TokenItem extends StatelessWidget {
                   isSecure
                       ? '****'
                       : (r'$' +
-                          token.balanceInUSD.decimalNumber(2).formatNumber),
+                            token.balanceInUSD.decimalNumber(2).formatNumber),
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),

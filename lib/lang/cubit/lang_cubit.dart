@@ -11,12 +11,9 @@ import 'package:secure_storage/secure_storage.dart';
 
 class LangCubit extends Cubit<LangState> {
   LangCubit({required this.secureStorageProvider})
-      : super(
-          const LangState(
-            locale: Locale('en'),
-            languageType: LanguageType.phone,
-          ),
-        );
+    : super(
+        const LangState(locale: Locale('en'), languageType: LanguageType.phone),
+      );
   final SecureStorageProvider secureStorageProvider;
 
   /// emit new state if language recorded is dufferent than english
@@ -31,9 +28,7 @@ class LangCubit extends Cubit<LangState> {
       emit(
         state.copyWith(
           languageType: languageType,
-          locale: Locale(
-            languageType.name,
-          ),
+          locale: Locale(languageType.name),
         ),
       );
     }
@@ -41,8 +36,9 @@ class LangCubit extends Cubit<LangState> {
 
   Future<LanguageType> getRecordedLanguage() async {
     LanguageType languageType = LanguageType.phone;
-    final languageTypeString =
-        await secureStorageProvider.get(SecureStorageKeys.language);
+    final languageTypeString = await secureStorageProvider.get(
+      SecureStorageKeys.language,
+    );
     if (languageTypeString != null) {
       languageType = getLanguageType(languageTypeString, languageType);
     } else {
@@ -66,10 +62,7 @@ class LangCubit extends Cubit<LangState> {
   }
 
   Future<void> recordLanguage(String language) async {
-    await secureStorageProvider.set(
-      SecureStorageKeys.language,
-      language,
-    );
+    await secureStorageProvider.set(SecureStorageKeys.language, language);
   }
 
   Future<void> setLocale(Locale locale) async {
@@ -84,15 +77,13 @@ class LangCubit extends Cubit<LangState> {
       newLocale = locale;
       newlanguageType = getLanguageType(locale.languageCode, newlanguageType);
     }
-    if (AppLocalizations.supportedLocales
-        .contains(Locale(newLocale.languageCode))) {
+    if (AppLocalizations.supportedLocales.contains(
+      Locale(newLocale.languageCode),
+    )) {
       emit(LangState(languageType: newlanguageType, locale: newLocale));
     } else {
       emit(
-        LangState(
-          languageType: newlanguageType,
-          locale: const Locale('en'),
-        ),
+        LangState(languageType: newlanguageType, locale: const Locale('en')),
       );
     }
   }

@@ -19,10 +19,7 @@ class EthereumNftModel extends NftModel {
     required this.type,
     this.minterAddress,
     this.lastMetadataSync,
-  }) : super(
-          displayUri: animationUrl,
-          thumbnailUri: image,
-        );
+  }) : super(displayUri: animationUrl, thumbnailUri: image);
 
   factory EthereumNftModel.fromJson(Map<String, dynamic> json) =>
       _$EthereumNftModelFromJson(json);
@@ -51,17 +48,17 @@ class EthereumNftModel extends NftModel {
 
   @override
   List<Object?> get props => [
-        name,
-        symbol,
-        tokenId,
-        displayUri,
-        thumbnailUri,
-        description,
-        contractAddress,
-        balance,
-        type,
-        isTransferable,
-        minterAddress,
-        lastMetadataSync,
-      ];
+    name,
+    symbol,
+    tokenId,
+    displayUri,
+    thumbnailUri,
+    description,
+    contractAddress,
+    balance,
+    type,
+    isTransferable,
+    minterAddress,
+    lastMetadataSync,
+  ];
 }

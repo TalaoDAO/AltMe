@@ -92,20 +92,20 @@ class TezosNftModel extends NftModel {
 
   @override
   List<Object?> get props => [
-        id,
-        tokenId,
-        name,
-        symbol,
-        displayUri,
-        thumbnailUri,
-        balance,
-        description,
-        identifier,
-        mPublishers,
-        mCreators,
-        date,
-        isTransferable,
-        firstTime,
-        artifactUri,
-      ];
+    id,
+    tokenId,
+    name,
+    symbol,
+    displayUri,
+    thumbnailUri,
+    balance,
+    description,
+    identifier,
+    mPublishers,
+    mCreators,
+    date,
+    isTransferable,
+    firstTime,
+    artifactUri,
+  ];
 }

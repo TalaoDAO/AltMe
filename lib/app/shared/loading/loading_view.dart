@@ -54,8 +54,10 @@ class LoadingView {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 25),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 25,
+                ),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

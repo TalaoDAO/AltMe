@@ -15,18 +15,34 @@ class PreRegisteredWidget extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final clientIdController = TextEditingController(
-          text: state.model.profileSetting.selfSovereignIdentityOptions
-              .customOidc4vcProfile.clientId,
+          text: state
+              .model
+              .profileSetting
+              .selfSovereignIdentityOptions
+              .customOidc4vcProfile
+              .clientId,
         );
 
         final clientSecretController = TextEditingController(
-          text: state.model.profileSetting.selfSovereignIdentityOptions
-              .customOidc4vcProfile.clientSecret,
+          text: state
+              .model
+              .profileSetting
+              .selfSovereignIdentityOptions
+              .customOidc4vcProfile
+              .clientSecret,
         );
-        final clientId = state.model.profileSetting.selfSovereignIdentityOptions
-            .customOidc4vcProfile.clientId;
-        final clientSecret = state.model.profileSetting
-            .selfSovereignIdentityOptions.customOidc4vcProfile.clientSecret;
+        final clientId = state
+            .model
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile
+            .clientId;
+        final clientSecret = state
+            .model
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile
+            .clientSecret;
         return OptionContainer(
           title: 'Pre-registered',
           body: Padding(
@@ -46,9 +62,7 @@ class PreRegisteredWidget extends StatelessWidget {
                             vertical: 15,
                           ),
                           shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(25),
-                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
                           ),
                           content: SizedBox(
                             width:
@@ -62,20 +76,17 @@ class PreRegisteredWidget extends StatelessWidget {
                                   height: 50,
                                   color: textColor,
                                 ),
-                                const SizedBox(
-                                  height: Sizes.spaceNormal,
-                                ),
+                                const SizedBox(height: Sizes.spaceNormal),
                                 TextFormField(
                                   controller: clientIdController,
-                                  style:
-                                      Theme.of(context).textTheme.labelMedium,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.labelMedium,
                                   maxLines: 1,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
-                                        Radius.circular(
-                                          Sizes.smallRadius,
-                                        ),
+                                        Radius.circular(Sizes.smallRadius),
                                       ),
                                     ),
                                     contentPadding: EdgeInsets.symmetric(
@@ -84,9 +95,7 @@ class PreRegisteredWidget extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: Sizes.spaceNormal,
-                                ),
+                                const SizedBox(height: Sizes.spaceNormal),
                                 MyElevatedButton(
                                   text: 'Confirm',
                                   verticalSpacing: 14,
@@ -95,9 +104,9 @@ class PreRegisteredWidget extends StatelessWidget {
                                   fontSize: 15,
                                   elevation: 0,
                                   onPressed: () {
-                                    Navigator.of(context).pop(
-                                      clientIdController.text.trim(),
-                                    );
+                                    Navigator.of(
+                                      context,
+                                    ).pop(clientIdController.text.trim());
                                   },
                                 ),
                                 const SizedBox(height: 15),
@@ -110,8 +119,8 @@ class PreRegisteredWidget extends StatelessWidget {
 
                     if (clientId != null) {
                       await context.read<ProfileCubit>().updateProfileSetting(
-                            clientId: clientId,
-                          );
+                        clientId: clientId,
+                      );
                     }
                   },
                   child: Container(
@@ -124,9 +133,7 @@ class PreRegisteredWidget extends StatelessWidget {
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                       borderRadius: const BorderRadius.all(
-                        Radius.circular(
-                          Sizes.smallRadius,
-                        ),
+                        Radius.circular(Sizes.smallRadius),
                       ),
                     ),
                     child: Row(
@@ -139,10 +146,7 @@ class PreRegisteredWidget extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        const Icon(
-                          Icons.edit,
-                          size: 20,
-                        ),
+                        const Icon(Icons.edit, size: 20),
                       ],
                     ),
                   ),
@@ -161,9 +165,7 @@ class PreRegisteredWidget extends StatelessWidget {
                             vertical: 15,
                           ),
                           shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(25),
-                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
                           ),
                           content: SizedBox(
                             width:
@@ -177,20 +179,17 @@ class PreRegisteredWidget extends StatelessWidget {
                                   height: 50,
                                   color: textColor,
                                 ),
-                                const SizedBox(
-                                  height: Sizes.spaceNormal,
-                                ),
+                                const SizedBox(height: Sizes.spaceNormal),
                                 TextFormField(
                                   controller: clientSecretController,
-                                  style:
-                                      Theme.of(context).textTheme.labelMedium,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.labelMedium,
                                   maxLines: 1,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
-                                        Radius.circular(
-                                          Sizes.smallRadius,
-                                        ),
+                                        Radius.circular(Sizes.smallRadius),
                                       ),
                                     ),
                                     contentPadding: EdgeInsets.symmetric(
@@ -199,9 +198,7 @@ class PreRegisteredWidget extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: Sizes.spaceNormal,
-                                ),
+                                const SizedBox(height: Sizes.spaceNormal),
                                 MyElevatedButton(
                                   text: 'Confirm',
                                   verticalSpacing: 14,
@@ -210,9 +207,9 @@ class PreRegisteredWidget extends StatelessWidget {
                                   fontSize: 15,
                                   elevation: 0,
                                   onPressed: () {
-                                    Navigator.of(context).pop(
-                                      clientSecretController.text.trim(),
-                                    );
+                                    Navigator.of(
+                                      context,
+                                    ).pop(clientSecretController.text.trim());
                                   },
                                 ),
                                 const SizedBox(height: 15),
@@ -225,8 +222,8 @@ class PreRegisteredWidget extends StatelessWidget {
 
                     if (clientSecret != null) {
                       await context.read<ProfileCubit>().updateProfileSetting(
-                            clientSecret: clientSecret,
-                          );
+                        clientSecret: clientSecret,
+                      );
                     }
                   },
                   child: Container(
@@ -239,9 +236,7 @@ class PreRegisteredWidget extends StatelessWidget {
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                       borderRadius: const BorderRadius.all(
-                        Radius.circular(
-                          Sizes.smallRadius,
-                        ),
+                        Radius.circular(Sizes.smallRadius),
                       ),
                     ),
                     child: Row(
@@ -254,10 +249,7 @@ class PreRegisteredWidget extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        const Icon(
-                          Icons.edit,
-                          size: 20,
-                        ),
+                        const Icon(Icons.edit, size: 20),
                       ],
                     ),
                   ),

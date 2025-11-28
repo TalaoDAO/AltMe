@@ -31,7 +31,10 @@ class CryptoAccountSwitcherButton extends StatelessWidget {
 
         return (walletState.cryptoAccount.data.isNotEmpty &&
                 walletState
-                    .cryptoAccount.data[currentIndex].walletAddress.isNotEmpty)
+                    .cryptoAccount
+                    .data[currentIndex]
+                    .walletAddress
+                    .isNotEmpty)
             ? Flexible(
                 child: InkWell(
                   onTap: () {
@@ -51,10 +54,7 @@ class CryptoAccountSwitcherButton extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (blockchainType != null) ...[
-                        Image.asset(
-                          blockchainType.icon,
-                          width: Sizes.icon,
-                        ),
+                        Image.asset(blockchainType.icon, width: Sizes.icon),
                         const SizedBox(width: 5),
                       ],
                       Flexible(

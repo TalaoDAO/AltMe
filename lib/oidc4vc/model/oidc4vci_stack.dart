@@ -5,9 +5,7 @@ part 'oidc4vci_stack.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Oidc4VCIStack {
-  Oidc4VCIStack({
-    this.stack = const <Oidc4VCIState>[],
-  });
+  Oidc4VCIStack({this.stack = const <Oidc4VCIState>[]});
 
   factory Oidc4VCIStack.fromJson(Map<String, dynamic> json) =>
       _$Oidc4VCIStackFromJson(json);

@@ -22,9 +22,7 @@ class OnBoardingGenPhraseState extends Equatable {
     );
   }
 
-  OnBoardingGenPhraseState error({
-    required MessageHandler messageHandler,
-  }) {
+  OnBoardingGenPhraseState error({required MessageHandler messageHandler}) {
     return OnBoardingGenPhraseState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),

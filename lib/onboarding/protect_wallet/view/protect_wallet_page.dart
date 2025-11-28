@@ -19,16 +19,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class ProtectWalletPage extends StatelessWidget {
-  const ProtectWalletPage({
-    super.key,
-    this.routeType,
-  });
+  const ProtectWalletPage({super.key, this.routeType});
 
   final WalletRouteType? routeType;
 
-  static Route<dynamic> route({
-    WalletRouteType? routeType,
-  }) {
+  static Route<dynamic> route({WalletRouteType? routeType}) {
     return MaterialPageRoute<void>(
       builder: (_) => ProtectWalletPage(routeType: routeType),
       settings: const RouteSettings(name: '/ProtectWalletPage'),
@@ -95,8 +90,9 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
         await widget.onboardingCubit.emitOnboardingProcessing();
         final mnemonic = bip39.generateMnemonic().split(' ');
 
-        await widget.onBoardingGenPhraseCubit
-            .generateSSIAndCryptoAccount(mnemonic);
+        await widget.onBoardingGenPhraseCubit.generateSSIAndCryptoAccount(
+          mnemonic,
+        );
       } else {
         await Navigator.of(context).push<void>(OnBoardingGenPhrasePage.route());
       }
@@ -164,7 +160,8 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                   title: l10n.pinUnlock,
                   subtitle: l10n.secureWithDevicePINOnly,
                   image: IconStrings.pincode,
-                  isSelected: !isFromOnboarding &&
+                  isSelected:
+                      !isFromOnboarding &&
                       walletProtectionType == WalletProtectionType.pinCode,
                   onTap: () {
                     Navigator.of(context).push<void>(
@@ -196,7 +193,8 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                   title: l10n.biometricUnlock,
                   subtitle: l10n.secureWithFingerprint,
                   image: IconStrings.right,
-                  isSelected: !isFromOnboarding &&
+                  isSelected:
+                      !isFromOnboarding &&
                       walletProtectionType == WalletProtectionType.biometrics,
                   onTap: () {
                     Navigator.of(context).push<void>(
@@ -231,7 +229,8 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                   title: l10n.pinUnlockAndBiometric2FA,
                   subtitle: l10n.secureWithFingerprintAndPINBackup,
                   image: IconStrings.lock,
-                  isSelected: !isFromOnboarding &&
+                  isSelected:
+                      !isFromOnboarding &&
                       walletProtectionType == WalletProtectionType.FA2,
                   onTap: () {
                     Navigator.of(context).push<void>(
@@ -246,9 +245,9 @@ class _ProtectWalletViewState extends State<ProtectWalletView> {
                                 if (isEnabled) {
                                   await widget.profileCubit
                                       .setWalletProtectionType(
-                                    walletProtectionType:
-                                        WalletProtectionType.FA2,
-                                  );
+                                        walletProtectionType:
+                                            WalletProtectionType.FA2,
+                                      );
                                   Navigator.of(context).pop();
                                   if (isFromOnboarding) {
                                     await createImportAccount();

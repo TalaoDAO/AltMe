@@ -23,10 +23,7 @@ class StarterPage extends StatelessWidget {
 }
 
 class StarterView extends StatelessWidget {
-  const StarterView({
-    super.key,
-    required this.profileCubit,
-  });
+  const StarterView({super.key, required this.profileCubit});
 
   final ProfileCubit profileCubit;
 
@@ -71,12 +68,10 @@ class StarterView extends StatelessWidget {
                         MyOutlinedButton(
                           text: l10n.restoreWallet,
                           onPressed: () async {
-                            await profileCubit.setWalletType(
-                              walletType: WalletType.personal,
-                            );
                             await profileCubit.setProfileSetting(
                               profileSetting: ProfileSetting.initial(),
                               profileType: ProfileType.diipv3,
+                              walletType: WalletType.personal,
                             );
                             await Navigator.of(context).push<void>(
                               ProtectWalletPage.route(
@@ -90,13 +85,10 @@ class StarterView extends StatelessWidget {
                           text: l10n.createWallet,
                           verticalSpacing: 15,
                           onPressed: () async {
-                            await profileCubit.setWalletType(
-                              walletType: WalletType.personal,
-                            );
-
                             await profileCubit.setProfileSetting(
                               profileSetting: ProfileSetting.initial(),
                               profileType: ProfileType.diipv3,
+                              walletType: WalletType.personal,
                             );
 
                             await Navigator.of(context).push<void>(

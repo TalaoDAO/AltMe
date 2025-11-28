@@ -44,10 +44,9 @@ class ErrorDetailsDialog extends StatelessWidget {
               if (erroDescription != null) ...[
                 Text(
                   erroDescription!,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: textColor),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge!.copyWith(color: textColor),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -63,11 +62,10 @@ class ErrorDetailsDialog extends StatelessWidget {
                   child: Text(
                     l10n.moreDetails,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                          decoration: TextDecoration.underline,
-                          decorationColor:
-                              Theme.of(context).colorScheme.primary,
-                        ),
+                      color: Theme.of(context).colorScheme.primary,
+                      decoration: TextDecoration.underline,
+                      decorationColor: Theme.of(context).colorScheme.primary,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),

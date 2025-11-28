@@ -57,7 +57,8 @@ class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {
     void Function({
       required CryptoAccount cryptoAccount,
       required MessageHandler messageHandler,
-    })? onComplete,
+    })?
+    onComplete,
   }) async {}
 }
 
@@ -154,9 +155,9 @@ void main() {
             builder: (context) => Scaffold(
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
-                  Navigator.of(context).push<void>(
-                    OnBoardingGenPhrasePage.route(),
-                  );
+                  Navigator.of(
+                    context,
+                  ).push<void>(OnBoardingGenPhrasePage.route());
                 },
               ),
             ),
@@ -169,9 +170,7 @@ void main() {
       verify(
         () => navigator.push<void>(
           any(
-            that: isRoute<void>(
-              whereName: equals('/onBoardingGenPhrasePage'),
-            ),
+            that: isRoute<void>(whereName: equals('/onBoardingGenPhrasePage')),
           ),
         ),
       ).called(1);
@@ -181,9 +180,7 @@ void main() {
       await tester.pumpApp(
         MultiBlocProvider(
           providers: [
-            BlocProvider.value(
-              value: onBoardingGenPhraseCubit,
-            ),
+            BlocProvider.value(value: onBoardingGenPhraseCubit),
             BlocProvider<HomeCubit>.value(value: homeCubit),
             BlocProvider<WalletCubit>.value(value: walletCubit),
             BlocProvider<SplashCubit>.value(value: splashCubit),
@@ -217,8 +214,7 @@ void main() {
       expect(find.byType(MyElevatedButton), findsOneWidget);
     });
 
-    testWidgets(
-        'navigates to OnBoardingVerifyPhrasePage when Verify Now button'
+    testWidgets('navigates to OnBoardingVerifyPhrasePage when Verify Now button'
         ' is tapped', (tester) async {
       await tester.pumpApp(
         MockNavigatorProvider(
@@ -243,17 +239,14 @@ void main() {
       ).called(1);
     });
 
-    testWidgets('Verify Later button triggers onboarding processing',
-        (WidgetTester tester) async {
+    testWidgets('Verify Later button triggers onboarding processing', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpApp(
         MultiBlocProvider(
           providers: [
-            BlocProvider.value(
-              value: onboardingCubit,
-            ),
-            BlocProvider.value(
-              value: onBoardingGenPhraseCubit,
-            ),
+            BlocProvider.value(value: onboardingCubit),
+            BlocProvider.value(value: onBoardingGenPhraseCubit),
           ],
           child: const OnBoardingGenPhraseView(),
         ),

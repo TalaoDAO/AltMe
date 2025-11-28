@@ -11,9 +11,7 @@ void main() {
     setUp(() {
       controllers = List.generate(
         6,
-        (index) => TextEditingController(
-          text: '',
-        ),
+        (index) => TextEditingController(text: ''),
       );
     });
 

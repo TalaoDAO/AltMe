@@ -37,10 +37,7 @@ extension on ProfileType {
 }
 
 class AiRequestAnalysisButton extends StatelessWidget {
-  const AiRequestAnalysisButton({
-    super.key,
-    required this.link,
-  });
+  const AiRequestAnalysisButton({super.key, required this.link});
 
   final String link;
 
@@ -54,7 +51,8 @@ class AiRequestAnalysisButton extends StatelessWidget {
         /// current link with talao.io. In the popup User can
         /// press on the accept button to continue or cancel
         /// to close the popup
-        final acceptAnalysis = await showDialog<bool>(
+        final acceptAnalysis =
+            await showDialog<bool>(
               context: context,
               builder: (BuildContext context) {
                 return ConfirmDialog(
@@ -86,46 +84,47 @@ class AiRequestAnalysisButton extends StatelessWidget {
             'api-key': dotenv.get('WALLET_API_KEY_ID360'),
           };
           try {
-            final response = await client.post(
-              'https://talao.co/ai/wallet/qrcode',
-              data: {
-                'qrcode': base64Link,
-                'oidc4vciDraft': context
-                    .read<ProfileCubit>()
-                    .state
-                    .model
-                    .profileSetting
-                    .selfSovereignIdentityOptions
-                    .customOidc4vcProfile
-                    .oidc4vciDraft
-                    .numbering,
-                'oidc4vpDraft': context
-                    .read<ProfileCubit>()
-                    .state
-                    .model
-                    .profileSetting
-                    .selfSovereignIdentityOptions
-                    .customOidc4vcProfile
-                    .oidc4vpDraft
-                    .numbering,
-                'profil': context
-                    .read<ProfileCubit>()
-                    .state
-                    .model
-                    .profileType
-                    .aiProfile,
-              },
-              headers: headers,
-            ) as String;
+            final response =
+                await client.post(
+                      'https://talao.co/ai/wallet/qrcode',
+                      data: {
+                        'qrcode': base64Link,
+                        'oidc4vciDraft': context
+                            .read<ProfileCubit>()
+                            .state
+                            .model
+                            .profileSetting
+                            .selfSovereignIdentityOptions
+                            .customOidc4vcProfile
+                            .oidc4vciDraft
+                            .numbering,
+                        'oidc4vpDraft': context
+                            .read<ProfileCubit>()
+                            .state
+                            .model
+                            .profileSetting
+                            .selfSovereignIdentityOptions
+                            .customOidc4vcProfile
+                            .oidc4vpDraft
+                            .numbering,
+                        'profil': context
+                            .read<ProfileCubit>()
+                            .state
+                            .model
+                            .profileType
+                            .aiProfile,
+                      },
+                      headers: headers,
+                      timeout: 90,
+                    )
+                    as String;
             if (response == '') {
               throw Exception('Ai analysis is null or empty');
             }
             LoadingView().hide();
-            await Navigator.of(context).push<void>(
-              AiAnalysisPage.route(
-                content: response,
-              ),
-            );
+            await Navigator.of(
+              context,
+            ).push<void>(AiAnalysisPage.route(content: response));
           } catch (e) {
             LoadingView().hide();
             Exception('Error during AI analysis: $e');

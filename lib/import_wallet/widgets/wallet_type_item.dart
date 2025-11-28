@@ -17,11 +17,13 @@ class WalletTypeItem extends StatelessWidget {
         margin: const EdgeInsets.all(Sizes.space2XSmall),
         decoration: BoxDecoration(
           color: Theme.of(context).highlightColor,
-          borderRadius:
-              const BorderRadius.all(Radius.circular(Sizes.smallRadius)),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(Sizes.smallRadius),
+          ),
           border: Border.all(
-            color:
-                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12),
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.12),
           ),
         ),
         child: Row(
@@ -43,22 +45,15 @@ class WalletTypeItem extends StatelessWidget {
                 height: Sizes.icon2x,
               ),
             ),
-            const SizedBox(
-              width: Sizes.spaceXSmall,
-            ),
-            Text(
-              model.title,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+            const SizedBox(width: Sizes.spaceXSmall),
+            Text(model.title, style: Theme.of(context).textTheme.bodySmall),
             const Spacer(),
             Icon(
               Icons.keyboard_arrow_right_rounded,
               size: Sizes.icon,
               color: Theme.of(context).colorScheme.onSurface,
             ),
-            const SizedBox(
-              width: Sizes.spaceSmall,
-            ),
+            const SizedBox(width: Sizes.spaceSmall),
           ],
         ),
       ),

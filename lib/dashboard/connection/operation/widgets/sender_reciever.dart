@@ -47,14 +47,8 @@ class SenderReceiverCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            MyText(
-              value,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+            Text(title, style: Theme.of(context).textTheme.bodySmall),
+            MyText(value, style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),
       ),

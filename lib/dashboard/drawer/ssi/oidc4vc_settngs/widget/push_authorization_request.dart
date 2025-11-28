@@ -16,12 +16,16 @@ class PushAuthorizationRequesWidget extends StatelessWidget {
           body: Switch(
             onChanged: (value) async {
               await context.read<ProfileCubit>().updateProfileSetting(
-                    pushAuthorizationRequest: value,
-                  );
+                pushAuthorizationRequest: value,
+              );
             },
-            value: state.model.profileSetting.selfSovereignIdentityOptions
-                .customOidc4vcProfile.pushAuthorizationRequest,
-            activeColor: Theme.of(context).colorScheme.primary,
+            value: state
+                .model
+                .profileSetting
+                .selfSovereignIdentityOptions
+                .customOidc4vcProfile
+                .pushAuthorizationRequest,
+            activeThumbColor: Theme.of(context).colorScheme.primary,
           ),
         );
       },

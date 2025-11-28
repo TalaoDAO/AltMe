@@ -38,6 +38,11 @@ class SplashState extends Equatable {
   Map<String, dynamic> toJson() => _$SplashStateToJson(this);
 
   @override
-  List<Object?> get props =>
-      [status, versionNumber, buildNumber, isNewVersion, loadedValue];
+  List<Object?> get props => [
+    status,
+    versionNumber,
+    buildNumber,
+    isNewVersion,
+    loadedValue,
+  ];
 }

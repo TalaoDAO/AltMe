@@ -5,10 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class HomeCredentialItem extends StatelessWidget {
-  const HomeCredentialItem({
-    super.key,
-    required this.credentialModel,
-  });
+  const HomeCredentialItem({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 

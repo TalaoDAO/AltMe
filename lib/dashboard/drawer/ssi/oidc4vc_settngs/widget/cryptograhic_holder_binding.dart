@@ -11,17 +11,22 @@ class CryptographicHolderBindingWidget extends StatelessWidget {
       builder: (context, state) {
         return OptionContainer(
           title: 'Cryptographic Holder Binding',
-          subtitle: 'Disable cryptographic binding for claim based'
+          subtitle:
+              'Disable cryptographic binding for claim based'
               ' binding credentials. Default: On.',
           body: Switch(
             onChanged: (value) async {
               await context.read<ProfileCubit>().updateProfileSetting(
-                    cryptoHolderBinding: value,
-                  );
+                cryptoHolderBinding: value,
+              );
             },
-            value: state.model.profileSetting.selfSovereignIdentityOptions
-                .customOidc4vcProfile.cryptoHolderBinding,
-            activeColor: Theme.of(context).colorScheme.primary,
+            value: state
+                .model
+                .profileSetting
+                .selfSovereignIdentityOptions
+                .customOidc4vcProfile
+                .cryptoHolderBinding,
+            activeThumbColor: Theme.of(context).colorScheme.primary,
           ),
         );
       },

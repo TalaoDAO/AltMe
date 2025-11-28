@@ -26,15 +26,14 @@ class ImportFromWalletPage extends StatelessWidget {
     required WalletTypeModel walletTypeModel,
     required RestoreType? restoreType,
     String? accountName,
-  }) =>
-      MaterialPageRoute<void>(
-        builder: (context) => ImportFromWalletPage(
-          walletTypeModel: walletTypeModel,
-          accountName: accountName,
-          restoreType: restoreType,
-        ),
-        settings: const RouteSettings(name: '/ImportFromWalletPage'),
-      );
+  }) => MaterialPageRoute<void>(
+    builder: (context) => ImportFromWalletPage(
+      walletTypeModel: walletTypeModel,
+      accountName: accountName,
+      restoreType: restoreType,
+    ),
+    settings: const RouteSettings(name: '/ImportFromWalletPage'),
+  );
 
   final WalletTypeModel walletTypeModel;
   final String? accountName;
@@ -90,9 +89,9 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
 
     mnemonicController = TextEditingController();
     mnemonicController.addListener(() {
-      context
-          .read<ImportWalletCubit>()
-          .isMnemonicsOrKeyValid(mnemonicController.text);
+      context.read<ImportWalletCubit>().isMnemonicsOrKeyValid(
+        mnemonicController.text,
+      );
     });
   }
 
@@ -145,7 +144,8 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
       builder: (context, state) {
         final importAccount = l10n.importAccount.split(' ');
         return BasePage(
-          title: '${importAccount[0]} ${widget.walletTypeModel.walletName} '
+          title:
+              '${importAccount[0]} ${widget.walletTypeModel.walletName} '
               '${importAccount[1]}',
           titleLeading: const BackLeadingButton(),
           scrollView: true,
@@ -184,9 +184,9 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
                   child: Text(
                     l10n.importWalletText,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          letterSpacing: 1.2,
-                        ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleLarge?.copyWith(letterSpacing: 1.2),
                   ),
                 ),
                 const SizedBox(height: Sizes.spaceLarge),
@@ -209,8 +209,8 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
                       controller: mnemonicController,
                       error:
                           state.isTextFieldEdited && !state.isMnemonicOrKeyValid
-                              ? l10n.recoveryMnemonicError
-                              : null,
+                          ? l10n.recoveryMnemonicError
+                          : null,
                     ),
                     if (state.isMnemonicOrKeyValid)
                       Container(
@@ -234,16 +234,16 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
                 const SizedBox(height: Sizes.spaceSmall),
                 Text(
                   l10n.recoveryPhraseDescriptions,
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        fontSize: 12,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium!.copyWith(fontSize: 12),
                 ),
                 const SizedBox(height: Sizes.spaceLarge),
                 Text(
                   l10n.privateKeyDescriptions,
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        fontSize: 12,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium!.copyWith(fontSize: 12),
                 ),
               ],
             ),
@@ -257,10 +257,10 @@ class _ImportFromOtherWalletViewState extends State<ImportFromOtherWalletView> {
                     ? null
                     : () async {
                         await context.read<ImportWalletCubit>().import(
-                              restoreType: widget.restoreType,
-                              accountName: widget.accountName,
-                              mnemonicOrKey: mnemonicController.text,
-                            );
+                          restoreType: widget.restoreType,
+                          accountName: widget.accountName,
+                          mnemonicOrKey: mnemonicController.text,
+                        );
                       },
               ),
             ),

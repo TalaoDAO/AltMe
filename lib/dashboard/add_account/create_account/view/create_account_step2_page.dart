@@ -11,10 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateAccountStep2Page extends StatelessWidget {
-  const CreateAccountStep2Page({
-    super.key,
-    required this.accountType,
-  });
+  const CreateAccountStep2Page({super.key, required this.accountType});
 
   final AccountType accountType;
 
@@ -34,18 +31,13 @@ class CreateAccountStep2Page extends StatelessWidget {
         walletCubit: context.read<WalletCubit>(),
         walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
-      child: CreateAccountStep2View(
-        accountType: accountType,
-      ),
+      child: CreateAccountStep2View(accountType: accountType),
     );
   }
 }
 
 class CreateAccountStep2View extends StatefulWidget {
-  const CreateAccountStep2View({
-    super.key,
-    required this.accountType,
-  });
+  const CreateAccountStep2View({super.key, required this.accountType});
 
   final AccountType accountType;
 
@@ -59,14 +51,14 @@ class _CreateAccountStep2ViewState extends State<CreateAccountStep2View> {
 
   @override
   void initState() {
-    final List<CryptoAccountData> cryptoAccount =
-        context.read<WalletCubit>().state.cryptoAccount.data;
+    final List<CryptoAccountData> cryptoAccount = context
+        .read<WalletCubit>()
+        .state
+        .cryptoAccount
+        .data;
     accountNameList = cryptoAccount.map((e) => e.name).toList();
     accountNameTextController = TextEditingController(
-      text: generateDefaultAccountName(
-        accountNameList.length,
-        accountNameList,
-      ),
+      text: generateDefaultAccountName(accountNameList.length, accountNameList),
     );
     super.initState();
   }
@@ -110,21 +102,14 @@ class _CreateAccountStep2ViewState extends State<CreateAccountStep2View> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const MStepper(
-              totalStep: 2,
-              step: 2,
-            ),
-            const SizedBox(
-              height: Sizes.spaceNormal,
-            ),
+            const MStepper(totalStep: 2, step: 2),
+            const SizedBox(height: Sizes.spaceNormal),
             Text(
               l10n.setAccountNameDescription,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            const SizedBox(
-              height: Sizes.spaceNormal,
-            ),
+            const SizedBox(height: Sizes.spaceNormal),
             BaseTextField(
               controller: accountNameTextController,
               borderRadius: Sizes.smallRadius,
@@ -154,9 +139,9 @@ class _CreateAccountStep2ViewState extends State<CreateAccountStep2View> {
                 );
               } else {
                 context.read<CreateAccountCubit>().createCryptoAccount(
-                      accountName: accountName,
-                      blockChaintype: getBlockchainType(widget.accountType),
-                    );
+                  accountName: accountName,
+                  blockChaintype: getBlockchainType(widget.accountType),
+                );
               }
             },
           ),

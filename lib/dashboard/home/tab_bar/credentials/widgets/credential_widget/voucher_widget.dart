@@ -3,22 +3,14 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class VoucherWidget extends StatelessWidget {
-  const VoucherWidget({
-    super.key,
-    required this.credentialModel,
-  });
+  const VoucherWidget({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 
   @override
   Widget build(BuildContext context) {
     return const Column(
-      children: [
-        CardAnimation(
-          recto: VoucherRecto(),
-          verso: VoucherVerso(),
-        ),
-      ],
+      children: [CardAnimation(recto: VoucherRecto(), verso: VoucherVerso())],
     );
   }
 }

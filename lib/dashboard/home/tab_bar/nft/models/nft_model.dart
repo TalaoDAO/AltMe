@@ -64,14 +64,14 @@ class NftModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        name,
-        symbol,
-        tokenId,
-        description,
-        displayUri,
-        thumbnailUri,
-        contractAddress,
-        balance,
-        isTransferable,
-      ];
+    name,
+    symbol,
+    tokenId,
+    description,
+    displayUri,
+    thumbnailUri,
+    contractAddress,
+    balance,
+    isTransferable,
+  ];
 }

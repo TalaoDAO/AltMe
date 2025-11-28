@@ -35,8 +35,8 @@ class RevealPrivateKeyButton extends StatelessWidget {
               child: MyText(
                 l10n.revealPrivateKey.toUpperCase(),
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ),
           ],

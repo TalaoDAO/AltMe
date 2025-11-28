@@ -11,9 +11,9 @@ class VerifiersMetadataPage extends StatelessWidget {
   const VerifiersMetadataPage({super.key});
 
   static Route<dynamic> route() => MaterialPageRoute<void>(
-        builder: (_) => const VerifiersMetadataPage(),
-        settings: const RouteSettings(name: '/VerifiersMetadataPage'),
-      );
+    builder: (_) => const VerifiersMetadataPage(),
+    settings: const RouteSettings(name: '/VerifiersMetadataPage'),
+  );
 
   @override
   Widget build(BuildContext context) {

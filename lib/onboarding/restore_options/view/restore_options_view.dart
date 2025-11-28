@@ -7,9 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RestoreOptionsPage extends StatelessWidget {
-  const RestoreOptionsPage({
-    super.key,
-  });
+  const RestoreOptionsPage({super.key});
 
   static Route<dynamic> route() {
     return MaterialPageRoute<void>(
@@ -50,28 +48,27 @@ class RestoreOptionsView extends StatelessWidget {
               RestoreOptionWidget(
                 title: l10n.restoreACryptoWallet,
                 isSelected: state == RestoreType.cryptoWallet,
-                onTap: () => context
-                    .read<RestoreOptionsCubit>()
-                    .updateSwitch(RestoreType.cryptoWallet),
+                onTap: () => context.read<RestoreOptionsCubit>().updateSwitch(
+                  RestoreType.cryptoWallet,
+                ),
               ),
               RestoreOptionWidget(
                 title: l10n.restoreAnAppBackup(Parameters.appName),
                 isSelected: state == RestoreType.appBackup,
-                onTap: () => context
-                    .read<RestoreOptionsCubit>()
-                    .updateSwitch(RestoreType.appBackup),
+                onTap: () => context.read<RestoreOptionsCubit>().updateSwitch(
+                  RestoreType.appBackup,
+                ),
               ),
             ],
           ),
           navigation: Padding(
-            padding: const EdgeInsets.all(
-              Sizes.spaceSmall,
-            ),
+            padding: const EdgeInsets.all(Sizes.spaceSmall),
             child: MyElevatedButton(
               text: l10n.continueString,
               onPressed: () {
-                Navigator.of(context)
-                    .push<void>(ImportWalletPage.route(restoreType: state));
+                Navigator.of(
+                  context,
+                ).push<void>(ImportWalletPage.route(restoreType: state));
               },
             ),
           ),

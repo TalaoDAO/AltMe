@@ -1,4 +1,1 @@
-enum RevocationStatus {
-  active,
-  revoked,
-}
+enum RevocationStatus { active, revoked }

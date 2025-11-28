@@ -13,18 +13,18 @@ void main() {
   group('NetworkException Test', () {
     group('DioException', () {
       test(
-          'return requestCancelled response message is DioExceptionType.cancel',
-          () {
-        final error = DioException(
-          requestOptions: RequestOptions(path: ''),
-          type: DioExceptionType.cancel,
-        );
-        final message = NetworkException.getDioException(error: error);
-        expect(message.message, NetworkError.NETWORK_ERROR_REQUEST_CANCELLED);
-      });
+        'return requestCancelled response message is DioExceptionType.cancel',
+        () {
+          final error = DioException(
+            requestOptions: RequestOptions(path: ''),
+            type: DioExceptionType.cancel,
+          );
+          final message = NetworkException.getDioException(error: error);
+          expect(message.message, NetworkError.NETWORK_ERROR_REQUEST_CANCELLED);
+        },
+      );
 
-      test(
-          'return requestTimeout response when message is '
+      test('return requestTimeout response when message is '
           'DioExceptionType.connectTimeout', () {
         final error = DioException(
           requestOptions: RequestOptions(path: ''),
@@ -34,12 +34,9 @@ void main() {
         expect(message.message, NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT);
       });
 
-      test(
-          'return noInternetConnection response when message is '
+      test('return noInternetConnection response when message is '
           'DioExceptionType.other', () {
-        final error = DioException(
-          requestOptions: RequestOptions(path: ''),
-        );
+        final error = DioException(requestOptions: RequestOptions(path: ''));
         final message = NetworkException.getDioException(error: error);
         expect(
           message.message,
@@ -47,8 +44,7 @@ void main() {
         );
       });
 
-      test(
-          'return receiveTimeout response when message is '
+      test('return receiveTimeout response when message is '
           'DioExceptionType.receiveTimeout', () {
         final error = DioException(
           requestOptions: RequestOptions(path: ''),
@@ -58,13 +54,10 @@ void main() {
         expect(message.message, NetworkError.NETWORK_ERROR_SEND_TIMEOUT);
       });
 
-      test(
-          'return receiveTimeout response when message is '
+      test('return receiveTimeout response when message is '
           'DioExceptionType.sendTimeout', () {
         final error = DioException(
-          requestOptions: RequestOptions(
-            path: '',
-          ),
+          requestOptions: RequestOptions(path: ''),
           type: DioExceptionType.sendTimeout,
         );
         final message = NetworkException.getDioException(error: error);
@@ -72,21 +65,20 @@ void main() {
       });
 
       test(
-          '''return badRequest response when message is DioExceptionType.receiveTimeout''',
-          () {
-        final error = DioException(
-          requestOptions: RequestOptions(path: ''),
-          type: DioExceptionType.badResponse,
-          response: Response<dynamic>(
-            requestOptions: RequestOptions(
-              path: '',
+        '''return badRequest response when message is DioExceptionType.receiveTimeout''',
+        () {
+          final error = DioException(
+            requestOptions: RequestOptions(path: ''),
+            type: DioExceptionType.badResponse,
+            response: Response<dynamic>(
+              requestOptions: RequestOptions(path: ''),
+              statusCode: 400,
             ),
-            statusCode: 400,
-          ),
-        );
-        final message = NetworkException.getDioException(error: error);
-        expect(message.message, NetworkError.NETWORK_ERROR_BAD_REQUEST);
-      });
+          );
+          final message = NetworkException.getDioException(error: error);
+          expect(message.message, NetworkError.NETWORK_ERROR_BAD_REQUEST);
+        },
+      );
     });
 
     group('StatusCode', () {
@@ -95,9 +87,7 @@ void main() {
           requestOptions: RequestOptions(path: ''),
           type: DioExceptionType.unknown,
           response: Response<dynamic>(
-            requestOptions: RequestOptions(
-              path: '',
-            ),
+            requestOptions: RequestOptions(path: ''),
             statusCode: 404,
           ),
         );
@@ -113,17 +103,12 @@ void main() {
           requestOptions: RequestOptions(path: ''),
           type: DioExceptionType.connectionError,
           response: Response<dynamic>(
-            requestOptions: RequestOptions(
-              path: '',
-            ),
+            requestOptions: RequestOptions(path: ''),
             statusCode: 500,
           ),
         );
         final message = NetworkException.getDioException(error: error);
-        expect(
-          message.message,
-          NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR,
-        );
+        expect(message.message, NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR);
       });
 
       test('return unauthenticated response when statusCode is 401', () {
@@ -131,9 +116,7 @@ void main() {
           requestOptions: RequestOptions(path: ''),
           type: DioExceptionType.badResponse,
           response: Response<dynamic>(
-            requestOptions: RequestOptions(
-              path: '',
-            ),
+            requestOptions: RequestOptions(path: ''),
             statusCode: 401,
           ),
         );
@@ -146,9 +129,7 @@ void main() {
           requestOptions: RequestOptions(path: ''),
           type: DioExceptionType.badResponse,
           response: Response<dynamic>(
-            requestOptions: RequestOptions(
-              path: '',
-            ),
+            requestOptions: RequestOptions(path: ''),
             statusCode: 403,
           ),
         );
@@ -164,9 +145,7 @@ void main() {
           requestOptions: RequestOptions(path: ''),
           type: DioExceptionType.badResponse,
           response: Response<dynamic>(
-            requestOptions: RequestOptions(
-              path: '',
-            ),
+            requestOptions: RequestOptions(path: ''),
             statusCode: 408,
           ),
         );
@@ -179,9 +158,7 @@ void main() {
           requestOptions: RequestOptions(path: ''),
           type: DioExceptionType.badResponse,
           response: Response<dynamic>(
-            requestOptions: RequestOptions(
-              path: '',
-            ),
+            requestOptions: RequestOptions(path: ''),
             statusCode: 409,
           ),
         );
@@ -194,9 +171,7 @@ void main() {
           requestOptions: RequestOptions(path: ''),
           type: DioExceptionType.badResponse,
           response: Response<dynamic>(
-            requestOptions: RequestOptions(
-              path: '',
-            ),
+            requestOptions: RequestOptions(path: ''),
             statusCode: 429,
           ),
         );
@@ -209,9 +184,7 @@ void main() {
           requestOptions: RequestOptions(path: ''),
           type: DioExceptionType.badResponse,
           response: Response<dynamic>(
-            requestOptions: RequestOptions(
-              path: '',
-            ),
+            requestOptions: RequestOptions(path: ''),
             statusCode: 501,
           ),
         );
@@ -224,9 +197,7 @@ void main() {
           requestOptions: RequestOptions(path: ''),
           type: DioExceptionType.badResponse,
           response: Response<dynamic>(
-            requestOptions: RequestOptions(
-              path: '',
-            ),
+            requestOptions: RequestOptions(path: ''),
             statusCode: 503,
           ),
         );
@@ -239,9 +210,7 @@ void main() {
           requestOptions: RequestOptions(path: ''),
           type: DioExceptionType.badResponse,
           response: Response<dynamic>(
-            requestOptions: RequestOptions(
-              path: '',
-            ),
+            requestOptions: RequestOptions(path: ''),
             statusCode: 504,
           ),
         );
@@ -249,11 +218,13 @@ void main() {
         expect(message.message, NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT);
       });
 
-      test('return defaultError response when status code is not from our list',
-          () {
-        final message = NetworkException.handleResponse(410, null);
-        expect(message.message, NetworkError.NETWORK_ERROR_NOT_READY);
-      });
+      test(
+        'return defaultError response when status code is not from our list',
+        () {
+          final message = NetworkException.handleResponse(410, null);
+          expect(message.message, NetworkError.NETWORK_ERROR_NOT_READY);
+        },
+      );
     });
 
     group('OtherError', () {
@@ -273,335 +244,397 @@ void main() {
       });
 
       test(
-          '''returns UnableToProcess response if message is "is not a subtype of"''',
-          () async {
-        final message =
-            NetworkException.getDioException(error: 'is not a subtype of');
-        expect(message.message, NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS);
-      });
+        '''returns UnableToProcess response if message is "is not a subtype of"''',
+        () async {
+          final message = NetworkException.getDioException(
+            error: 'is not a subtype of',
+          );
+          expect(message.message, NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS);
+        },
+      );
 
-      test('return UnexpectedError response if message has untracked response',
-          () async {
-        final message =
-            NetworkException.getDioException(error: 'I am random response');
-        expect(message.message, NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR);
-      });
+      test(
+        'return UnexpectedError response if message has untracked response',
+        () async {
+          final message = NetworkException.getDioException(
+            error: 'I am random response',
+          );
+          expect(message.message, NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR);
+        },
+      );
     });
 
     group('getErrorMessage function', () {
       testWidgets(
-          'returns NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED)',
-          (tester) async {
+        'returns NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED for '
+        'NetworkException(message: NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED)',
+        (tester) async {
+          final MessageHandler messageHandler = NetworkException(
+            message: NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED,
+          );
+          await tester.pumpApp(Container());
+          final BuildContext context = tester.element(find.byType(Container));
+          final String text = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
+          expect(
+            text,
+            NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED.localise(context),
+          );
+        },
+      );
+
+      testWidgets(
+        'returns NetworkError.NETWORK_ERROR_REQUEST_CANCELLED for '
+        'NetworkException(message: NetworkError.NETWORK_ERROR_REQUEST_CANCELLED)',
+        (tester) async {
+          final MessageHandler messageHandler = NetworkException(
+            message: NetworkError.NETWORK_ERROR_REQUEST_CANCELLED,
+          );
+          await tester.pumpApp(Container());
+          final BuildContext context = tester.element(find.byType(Container));
+          final String text = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
+          expect(
+            text,
+            NetworkError.NETWORK_ERROR_REQUEST_CANCELLED.localise(context),
+          );
+        },
+      );
+
+      testWidgets(
+        'returns NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR for '
+        'NetworkException(message: NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR)',
+        (tester) async {
+          final MessageHandler messageHandler = NetworkException(
+            message: NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR,
+          );
+          await tester.pumpApp(Container());
+          final BuildContext context = tester.element(find.byType(Container));
+          final String text = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
+          expect(
+            text,
+            NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR.localise(context),
+          );
+        },
+      );
+
+      testWidgets(
+        'returns NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE for '
+        'NetworkException(message: NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE)',
+        (tester) async {
+          final MessageHandler messageHandler = NetworkException(
+            message: NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE,
+          );
+          await tester.pumpApp(Container());
+          final BuildContext context = tester.element(find.byType(Container));
+          final String text = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
+          expect(
+            text,
+            NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE.localise(context),
+          );
+        },
+      );
+
+      testWidgets(
+        'returns NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED for '
+        'NetworkException(message: NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED)',
+        (tester) async {
+          final MessageHandler messageHandler = NetworkException(
+            message: NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED,
+          );
+          await tester.pumpApp(Container());
+          final BuildContext context = tester.element(find.byType(Container));
+          final String text = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
+          expect(
+            text,
+            NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED.localise(context),
+          );
+        },
+      );
+
+      testWidgets('returns NetworkError.NETWORK_ERROR_BAD_REQUEST for '
+          'NetworkException(message: NetworkError.NETWORK_ERROR_BAD_REQUEST)', (
+        tester,
+      ) async {
         final MessageHandler messageHandler = NetworkException(
-          message: NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED,
+          message: NetworkError.NETWORK_ERROR_BAD_REQUEST,
         );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED.localise(context),
-        );
+        expect(text, NetworkError.NETWORK_ERROR_BAD_REQUEST.localise(context));
       });
 
       testWidgets(
-          'returns NetworkError.NETWORK_ERROR_REQUEST_CANCELLED for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_REQUEST_CANCELLED)',
-          (tester) async {
+        'returns NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST for '
+        'NetworkException(message: NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST)',
+        (tester) async {
+          final MessageHandler messageHandler = NetworkException(
+            message: NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST,
+          );
+          await tester.pumpApp(Container());
+          final BuildContext context = tester.element(find.byType(Container));
+          final String text = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
+          expect(
+            text,
+            NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST.localise(context),
+          );
+        },
+      );
+
+      testWidgets(
+        'returns NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR for '
+        'NetworkException(message: NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR)',
+        (tester) async {
+          final MessageHandler messageHandler = NetworkException(
+            message: NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR,
+          );
+          await tester.pumpApp(Container());
+          final BuildContext context = tester.element(find.byType(Container));
+          final String text = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
+          expect(
+            text,
+            NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR.localise(context),
+          );
+        },
+      );
+
+      testWidgets(
+        'returns NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT for '
+        'NetworkException(message: NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT)',
+        (tester) async {
+          final MessageHandler messageHandler = NetworkException(
+            message: NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT,
+          );
+          await tester.pumpApp(Container());
+          final BuildContext context = tester.element(find.byType(Container));
+          final String text = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
+          expect(
+            text,
+            NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT.localise(context),
+          );
+        },
+      );
+
+      testWidgets(
+        'returns NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION for '
+        'NetworkException(message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION)',
+        (tester) async {
+          final MessageHandler messageHandler = NetworkException(
+            message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
+          );
+          await tester.pumpApp(Container());
+          final BuildContext context = tester.element(find.byType(Container));
+          final String text = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
+          expect(
+            text,
+            NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION.localise(context),
+          );
+        },
+      );
+
+      testWidgets('returns NetworkError.NETWORK_ERROR_CONFLICT for '
+          'NetworkException(message: NetworkError.NETWORK_ERROR_CONFLICT)', (
+        tester,
+      ) async {
         final MessageHandler messageHandler = NetworkException(
-          message: NetworkError.NETWORK_ERROR_REQUEST_CANCELLED,
+          message: NetworkError.NETWORK_ERROR_CONFLICT,
         );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_REQUEST_CANCELLED.localise(context),
-        );
+        expect(text, NetworkError.NETWORK_ERROR_CONFLICT.localise(context));
       });
 
       testWidgets(
-          'returns NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR)',
-          (tester) async {
+        'returns NetworkError.NETWORK_ERROR_SEND_TIMEOUT for '
+        'NetworkException(message: NetworkError.NETWORK_ERROR_SEND_TIMEOUT)',
+        (tester) async {
+          final MessageHandler messageHandler = NetworkException(
+            message: NetworkError.NETWORK_ERROR_SEND_TIMEOUT,
+          );
+          await tester.pumpApp(Container());
+          final BuildContext context = tester.element(find.byType(Container));
+          final String text = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
+          expect(
+            text,
+            NetworkError.NETWORK_ERROR_SEND_TIMEOUT.localise(context),
+          );
+        },
+      );
+
+      testWidgets(
+        'returns NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS for '
+        'NetworkException(message: NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS)',
+        (tester) async {
+          final MessageHandler messageHandler = NetworkException(
+            message: NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS,
+          );
+          await tester.pumpApp(Container());
+          final BuildContext context = tester.element(find.byType(Container));
+          final String text = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
+          expect(
+            text,
+            NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS.localise(context),
+          );
+        },
+      );
+
+      testWidgets(
+        'returns NetworkError.NETWORK_ERROR_NOT_ACCEPTABLE for '
+        'NetworkException(message: NetworkError.NETWORK_ERROR_NOT_ACCEPTABLE)',
+        (tester) async {
+          final MessageHandler messageHandler = NetworkException(
+            message: NetworkError.NETWORK_ERROR_NOT_ACCEPTABLE,
+          );
+          await tester.pumpApp(Container());
+          final BuildContext context = tester.element(find.byType(Container));
+          final String text = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
+          expect(
+            text,
+            NetworkError.NETWORK_ERROR_NOT_ACCEPTABLE.localise(context),
+          );
+        },
+      );
+
+      testWidgets(
+        'returns NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT for '
+        'NetworkException(message: NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT)',
+        (tester) async {
+          final MessageHandler messageHandler = NetworkException(
+            message: NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT,
+          );
+          await tester.pumpApp(Container());
+          final BuildContext context = tester.element(find.byType(Container));
+          final String text = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
+          expect(
+            text,
+            NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT.localise(context),
+          );
+        },
+      );
+
+      testWidgets(
+        'returns NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS for '
+        'NetworkException(message: NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS)',
+        (tester) async {
+          final MessageHandler messageHandler = NetworkException(
+            message: NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS,
+          );
+          await tester.pumpApp(Container());
+          final BuildContext context = tester.element(find.byType(Container));
+          final String text = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
+          expect(
+            text,
+            NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS.localise(context),
+          );
+        },
+      );
+
+      testWidgets(
+        'returns NetworkError.NETWORK_ERROR_UNAUTHENTICATED for '
+        'NetworkException(message: NetworkError.NETWORK_ERROR_UNAUTHENTICATED)',
+        (tester) async {
+          final MessageHandler messageHandler = NetworkException(
+            message: NetworkError.NETWORK_ERROR_UNAUTHENTICATED,
+          );
+          await tester.pumpApp(Container());
+          final BuildContext context = tester.element(find.byType(Container));
+          final String text = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
+          expect(
+            text,
+            NetworkError.NETWORK_ERROR_UNAUTHENTICATED.localise(context),
+          );
+        },
+      );
+
+      testWidgets('returns NetworkError.NETWORK_ERROR_NOT_FOUND for '
+          'NetworkException(message: NetworkError.NETWORK_ERROR_NOT_FOUND)', (
+        tester,
+      ) async {
         final MessageHandler messageHandler = NetworkException(
-          message: NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR,
+          message: NetworkError.NETWORK_ERROR_NOT_FOUND,
         );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR.localise(context),
-        );
+        expect(text, NetworkError.NETWORK_ERROR_NOT_FOUND.localise(context));
       });
 
       testWidgets(
-          'returns NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE)',
-          (tester) async {
+        'returns NetworkError.NETWORK_ERROR_PRECONDITION_FAILED for '
+        'NetworkException(message: NetworkError.NETWORK_ERROR_PRECONDITION_FAILED)',
+        (tester) async {
+          final MessageHandler messageHandler = NetworkException(
+            message: NetworkError.NETWORK_ERROR_PRECONDITION_FAILED,
+          );
+          await tester.pumpApp(Container());
+          final BuildContext context = tester.element(find.byType(Container));
+          final String text = messageHandler.getMessage(
+            context,
+            messageHandler,
+          );
+          expect(
+            text,
+            NetworkError.NETWORK_ERROR_PRECONDITION_FAILED.localise(context),
+          );
+        },
+      );
+
+      testWidgets('returns NetworkError.NETWORK_ERROR_NOT_READY for '
+          'NetworkException(message: NetworkError.NETWORK_ERROR_NOT_READY)', (
+        tester,
+      ) async {
         final MessageHandler messageHandler = NetworkException(
-          message: NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE,
+          message: NetworkError.NETWORK_ERROR_NOT_READY,
         );
         await tester.pumpApp(Container());
         final BuildContext context = tester.element(find.byType(Container));
         final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE.localise(context),
-        );
-      });
-
-      testWidgets(
-          'returns NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED)',
-          (tester) async {
-        final MessageHandler messageHandler = NetworkException(
-          message: NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED,
-        );
-        await tester.pumpApp(Container());
-        final BuildContext context = tester.element(find.byType(Container));
-        final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED.localise(context),
-        );
-      });
-
-      testWidgets(
-          'returns NetworkError.NETWORK_ERROR_BAD_REQUEST for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_BAD_REQUEST)',
-          (tester) async {
-        final MessageHandler messageHandler =
-            NetworkException(message: NetworkError.NETWORK_ERROR_BAD_REQUEST);
-        await tester.pumpApp(Container());
-        final BuildContext context = tester.element(find.byType(Container));
-        final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_BAD_REQUEST.localise(context),
-        );
-      });
-
-      testWidgets(
-          'returns NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST)',
-          (tester) async {
-        final MessageHandler messageHandler = NetworkException(
-          message: NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST,
-        );
-        await tester.pumpApp(Container());
-        final BuildContext context = tester.element(find.byType(Container));
-        final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST.localise(context),
-        );
-      });
-
-      testWidgets(
-          'returns NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR)',
-          (tester) async {
-        final MessageHandler messageHandler = NetworkException(
-          message: NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR,
-        );
-        await tester.pumpApp(Container());
-        final BuildContext context = tester.element(find.byType(Container));
-        final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR.localise(context),
-        );
-      });
-
-      testWidgets(
-          'returns NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT)',
-          (tester) async {
-        final MessageHandler messageHandler = NetworkException(
-          message: NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT,
-        );
-        await tester.pumpApp(Container());
-        final BuildContext context = tester.element(find.byType(Container));
-        final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT.localise(context),
-        );
-      });
-
-      testWidgets(
-          'returns NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION)',
-          (tester) async {
-        final MessageHandler messageHandler = NetworkException(
-          message: NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION,
-        );
-        await tester.pumpApp(Container());
-        final BuildContext context = tester.element(find.byType(Container));
-        final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION.localise(context),
-        );
-      });
-
-      testWidgets(
-          'returns NetworkError.NETWORK_ERROR_CONFLICT for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_CONFLICT)',
-          (tester) async {
-        final MessageHandler messageHandler =
-            NetworkException(message: NetworkError.NETWORK_ERROR_CONFLICT);
-        await tester.pumpApp(Container());
-        final BuildContext context = tester.element(find.byType(Container));
-        final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_CONFLICT.localise(context),
-        );
-      });
-
-      testWidgets(
-          'returns NetworkError.NETWORK_ERROR_SEND_TIMEOUT for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_SEND_TIMEOUT)',
-          (tester) async {
-        final MessageHandler messageHandler =
-            NetworkException(message: NetworkError.NETWORK_ERROR_SEND_TIMEOUT);
-        await tester.pumpApp(Container());
-        final BuildContext context = tester.element(find.byType(Container));
-        final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_SEND_TIMEOUT.localise(context),
-        );
-      });
-
-      testWidgets(
-          'returns NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS)',
-          (tester) async {
-        final MessageHandler messageHandler = NetworkException(
-          message: NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS,
-        );
-        await tester.pumpApp(Container());
-        final BuildContext context = tester.element(find.byType(Container));
-        final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS.localise(context),
-        );
-      });
-
-      testWidgets(
-          'returns NetworkError.NETWORK_ERROR_NOT_ACCEPTABLE for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_NOT_ACCEPTABLE)',
-          (tester) async {
-        final MessageHandler messageHandler = NetworkException(
-          message: NetworkError.NETWORK_ERROR_NOT_ACCEPTABLE,
-        );
-        await tester.pumpApp(Container());
-        final BuildContext context = tester.element(find.byType(Container));
-        final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_NOT_ACCEPTABLE.localise(context),
-        );
-      });
-
-      testWidgets(
-          'returns NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT)',
-          (tester) async {
-        final MessageHandler messageHandler = NetworkException(
-          message: NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT,
-        );
-        await tester.pumpApp(Container());
-        final BuildContext context = tester.element(find.byType(Container));
-        final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT.localise(context),
-        );
-      });
-
-      testWidgets(
-          'returns NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS)',
-          (tester) async {
-        final MessageHandler messageHandler = NetworkException(
-          message: NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS,
-        );
-        await tester.pumpApp(Container());
-        final BuildContext context = tester.element(find.byType(Container));
-        final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS.localise(context),
-        );
-      });
-
-      testWidgets(
-          'returns NetworkError.NETWORK_ERROR_UNAUTHENTICATED for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_UNAUTHENTICATED)',
-          (tester) async {
-        final MessageHandler messageHandler = NetworkException(
-          message: NetworkError.NETWORK_ERROR_UNAUTHENTICATED,
-        );
-        await tester.pumpApp(Container());
-        final BuildContext context = tester.element(find.byType(Container));
-        final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_UNAUTHENTICATED.localise(context),
-        );
-      });
-
-      testWidgets(
-          'returns NetworkError.NETWORK_ERROR_NOT_FOUND for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_NOT_FOUND)',
-          (tester) async {
-        final MessageHandler messageHandler =
-            NetworkException(message: NetworkError.NETWORK_ERROR_NOT_FOUND);
-        await tester.pumpApp(Container());
-        final BuildContext context = tester.element(find.byType(Container));
-        final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_NOT_FOUND.localise(context),
-        );
-      });
-
-      testWidgets(
-          'returns NetworkError.NETWORK_ERROR_PRECONDITION_FAILED for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_PRECONDITION_FAILED)',
-          (tester) async {
-        final MessageHandler messageHandler = NetworkException(
-          message: NetworkError.NETWORK_ERROR_PRECONDITION_FAILED,
-        );
-        await tester.pumpApp(Container());
-        final BuildContext context = tester.element(find.byType(Container));
-        final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_PRECONDITION_FAILED.localise(context),
-        );
-      });
-
-      testWidgets(
-          'returns NetworkError.NETWORK_ERROR_NOT_READY for '
-          'NetworkException(message: NetworkError.NETWORK_ERROR_NOT_READY)',
-          (tester) async {
-        final MessageHandler messageHandler =
-            NetworkException(message: NetworkError.NETWORK_ERROR_NOT_READY);
-        await tester.pumpApp(Container());
-        final BuildContext context = tester.element(find.byType(Container));
-        final String text = messageHandler.getMessage(context, messageHandler);
-        expect(
-          text,
-          NetworkError.NETWORK_ERROR_NOT_READY.localise(context),
-        );
+        expect(text, NetworkError.NETWORK_ERROR_NOT_READY.localise(context));
       });
     });
   });

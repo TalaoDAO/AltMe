@@ -21,19 +21,19 @@ class DialogCloseButton extends StatelessWidget {
           if (showText)
             Text(
               l10n.close,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: color,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium!.copyWith(color: color),
             ),
           const SizedBox(width: 5),
           Container(
             padding: const EdgeInsets.all(0.5),
             decoration: BoxDecoration(
-              color: color ??
-                  Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.6),
+              color:
+                  color ??
+                  Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.6),
               shape: BoxShape.circle,
             ),
             child: const Icon(

@@ -52,20 +52,20 @@ class DiscoverDummyCredential extends Equatable {
 
   @override
   List<Object?> get props => [
-        link,
-        image,
-        credentialSubjectType,
-        websiteLink,
-        whyGetThisCard,
-        expirationDateDetails,
-        howToGetIt,
-        longDescription,
-        display,
-        whyGetThisCardExtern,
-        expirationDateDetailsExtern,
-        howToGetItExtern,
-        longDescriptionExtern,
-        websiteLinkExtern,
-        vcFormatType,
-      ];
+    link,
+    image,
+    credentialSubjectType,
+    websiteLink,
+    whyGetThisCard,
+    expirationDateDetails,
+    howToGetIt,
+    longDescription,
+    display,
+    whyGetThisCardExtern,
+    expirationDateDetailsExtern,
+    howToGetItExtern,
+    longDescriptionExtern,
+    websiteLinkExtern,
+    vcFormatType,
+  ];
 }

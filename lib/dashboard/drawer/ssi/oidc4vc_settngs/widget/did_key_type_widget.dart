@@ -36,16 +36,21 @@ class KeyIdentifierAndKeyTypeWidget extends StatelessWidget {
                 children: [
                   ListTile(
                     onTap: () {
-                      final customOidc4vcProfile = state.model.profileSetting
-                          .selfSovereignIdentityOptions.customOidc4vcProfile;
+                      final customOidc4vcProfile = state
+                          .model
+                          .profileSetting
+                          .selfSovereignIdentityOptions
+                          .customOidc4vcProfile;
 
                       /// if user chooses VC format ldp_vc with did:ebsi or
                       /// did:jwk - Display message "The ldp_format is not
                       /// supported by this DID method"
-                      final isldpVc = customOidc4vcProfile.vcFormatType ==
+                      final isldpVc =
+                          customOidc4vcProfile.vcFormatType ==
                           VCFormatType.ldpVc;
 
-                      final isUnmatchedDid = didKeyType == DidKeyType.ebsiv3 ||
+                      final isUnmatchedDid =
+                          didKeyType == DidKeyType.ebsiv3 ||
                           didKeyType == DidKeyType.ebsiv4 ||
                           didKeyType == DidKeyType.jwkP256;
 
@@ -53,7 +58,8 @@ class KeyIdentifierAndKeyTypeWidget extends StatelessWidget {
                         showDialog<bool>(
                           context: context,
                           builder: (context) => const ErrorDetailsDialog(
-                            erroDescription: 'The ldp_format is not supported'
+                            erroDescription:
+                                'The ldp_format is not supported'
                                 ' by this DID method.',
                           ),
                         );
@@ -62,8 +68,8 @@ class KeyIdentifierAndKeyTypeWidget extends StatelessWidget {
                       }
 
                       context.read<ProfileCubit>().updateProfileSetting(
-                            didKeyType: didKeyType,
-                          );
+                        didKeyType: didKeyType,
+                      );
                     },
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
@@ -76,8 +82,12 @@ class KeyIdentifierAndKeyTypeWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     trailing: Icon(
-                      state.model.profileSetting.selfSovereignIdentityOptions
-                                  .customOidc4vcProfile.defaultDid ==
+                      state
+                                  .model
+                                  .profileSetting
+                                  .selfSovereignIdentityOptions
+                                  .customOidc4vcProfile
+                                  .defaultDid ==
                               didKeyType
                           ? Icons.radio_button_checked
                           : Icons.radio_button_unchecked,

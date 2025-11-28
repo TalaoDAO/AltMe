@@ -51,11 +51,7 @@ class MWeb3Client {
       parameters: params,
     );
 
-    await client.signTransaction(
-      credentials,
-      transaction,
-      chainId: chainId,
-    );
+    await client.signTransaction(credentials, transaction, chainId: chainId);
 
     final result = await client.sendTransaction(
       credentials,
@@ -72,12 +68,10 @@ class MWeb3Client {
   }) {
     if (amount == BigInt.zero) return 0;
 
-    final String ethAmount = EtherAmount.fromBigInt(fromUnit, amount)
-        .getValueInUnit(toUnit)
-        .toStringAsFixed(6)
-        .characters
-        .take(7)
-        .toString();
+    final String ethAmount = EtherAmount.fromBigInt(
+      fromUnit,
+      amount,
+    ).getValueInUnit(toUnit).toStringAsFixed(6).characters.take(7).toString();
 
     return double.parse(ethAmount);
   }
@@ -95,8 +89,9 @@ class MWeb3Client {
       final gasPrice = await client.getGasPrice();
       final credentials = EthPrivateKey.fromHex(selectedAccountSecretKey);
       final sender = credentials.address;
-      final EthereumAddress receiver =
-          EthereumAddress.fromHex(withdrawalAddress);
+      final EthereumAddress receiver = EthereumAddress.fromHex(
+        withdrawalAddress,
+      );
 
       // read the contract abi and tell web3dart where
       // it's deployed (contractAddr)
@@ -109,8 +104,9 @@ class MWeb3Client {
       late List<dynamic> sendTransactionFunctionParams;
 
       if (token.standard?.toLowerCase() == 'erc20') {
-        final abiCode =
-            await rootBundle.loadString('assets/abi/erc20.abi.json');
+        final abiCode = await rootBundle.loadString(
+          'assets/abi/erc20.abi.json',
+        );
         final contractAddress = EthereumAddress.fromHex(token.contractAddress);
         contract = DeployedContract(
           ContractAbi.fromJson(abiCode, 'ERC20'),
@@ -128,8 +124,9 @@ class MWeb3Client {
           BigInt.from(amountInWei),
         ];
       } else if (token.standard?.toLowerCase() == 'erc721') {
-        final abiCode =
-            await rootBundle.loadString('assets/abi/erc721.abi.json');
+        final abiCode = await rootBundle.loadString(
+          'assets/abi/erc721.abi.json',
+        );
         final contractAddress = EthereumAddress.fromHex(token.contractAddress);
         contract = DeployedContract(
           ContractAbi.fromJson(abiCode, 'ERC721'),
@@ -152,8 +149,9 @@ class MWeb3Client {
         ];
       } else {
         //ERC1155
-        final abiCode =
-            await rootBundle.loadString('assets/abi/erc1155.abi.json');
+        final abiCode = await rootBundle.loadString(
+          'assets/abi/erc1155.abi.json',
+        );
         final contractAddress = EthereumAddress.fromHex(token.contractAddress);
         contract = DeployedContract(
           ContractAbi.fromJson(abiCode, 'ERC1155'),
@@ -164,10 +162,7 @@ class MWeb3Client {
         //transferEvent = contract.event('TransferSingle');
         balanceFunction = contract.function('balanceOf');
         sendFunction = contract.function('safeTransferFrom');
-        balanceFunctionParams = <dynamic>[
-          sender,
-          BigInt.parse(token.tokenId!),
-        ];
+        balanceFunctionParams = <dynamic>[sender, BigInt.parse(token.tokenId!)];
 
         final bytes = Uint8List.fromList([]);
         sendTransactionFunctionParams = <dynamic>[
@@ -277,7 +272,7 @@ class MWeb3Client {
     required int chainId,
     required String privateKey,
     required EthereumAddress sender,
-    required EthereumAddress reciever,
+    required EthereumAddress receiver,
     required EtherAmount amount,
     BigInt? gas,
     EtherAmount? gasPrice,
@@ -285,23 +280,53 @@ class MWeb3Client {
   }) async {
     log.i('sendEthereumTransaction');
     final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
+    final Credentials credentials = EthPrivateKey.fromHex(privateKey);
+
+    final transaction = await getTransactionForEvmTransaction(
+      web3Client: web3Client,
+      sender: sender,
+      receiver: receiver,
+      amount: amount,
+      gas: gas,
+      gasPrice: gasPrice,
+      data: data,
+    );
+
+    final transactionHash = await web3Client.sendTransaction(
+      credentials,
+      transaction,
+      chainId: chainId,
+    );
+
+    log.i('chainId: $chainId');
+    log.i('transactionHash - $transactionHash');
+    return transactionHash;
+  }
+
+  static Future<Transaction> getTransactionForEvmTransaction({
+    required Web3Client web3Client,
+    required EthereumAddress sender,
+    required EthereumAddress receiver,
+    required EtherAmount amount,
+    BigInt? gas,
+    EtherAmount? gasPrice,
+    String? data,
+  }) async {
     final int nonce = await web3Client.getTransactionCount(sender);
 
     gasPrice ??= await web3Client.getGasPrice();
 
     gas ??= await web3Client.estimateGas(
       sender: sender,
-      to: reciever,
+      to: receiver,
       gasPrice: gasPrice,
       value: amount,
       data: data != null ? hexToBytes(data) : null,
     );
 
-    final Credentials credentials = EthPrivateKey.fromHex(privateKey);
-
     final transaction = Transaction(
       from: sender,
-      to: reciever,
+      to: receiver,
       gasPrice: gasPrice,
       value: amount,
       data: data != null ? hexToBytes(data) : null,
@@ -311,18 +336,86 @@ class MWeb3Client {
 
     log.i('nonce: $nonce');
     log.i('maxGas: ${gas.toInt()}');
-    log.i('chainId: $chainId');
     log.i('gasPrice: $gasPrice');
     final fee = gas * gasPrice.getInWei;
     log.i('$gas * gasPrice.getInWei = $fee');
 
-    final transactionHash = await web3Client.sendTransaction(
+    return transaction;
+  }
+
+  static Future<Uint8List> getEvmTransactionSignature({
+    required String web3RpcURL,
+    required int chainId,
+    required String privateKey,
+    required EthereumAddress sender,
+    required EthereumAddress receiver,
+    required EtherAmount amount,
+    BigInt? gas,
+    EtherAmount? gasPrice,
+    String? data,
+  }) async {
+    log.i('getEvmTransactionSignature');
+    final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
+    final Credentials credentials = EthPrivateKey.fromHex(privateKey);
+
+    final transaction = await getTransactionForEvmTransaction(
+      web3Client: web3Client,
+      sender: sender,
+      receiver: receiver,
+      amount: amount,
+      gas: gas,
+      gasPrice: gasPrice,
+      data: data,
+    );
+
+    // TODO(hawkbee): Ensure the account balance is big enough
+    // final ethBalance = await MWeb3Client.getEVMBalance(
+    //   rpcUrl: web3RpcURL,
+    //   secretKey: privateKey,
+    // );
+
+    var signed = await web3Client.signTransaction(
       credentials,
       transaction,
       chainId: chainId,
+      fetchChainIdFromNetworkId: false,
     );
 
-    log.i('transactionHash - $transactionHash');
+    if (transaction.isEIP1559) {
+      signed = prependTransactionType(0x02, signed);
+    }
+
+    return signed;
+  }
+
+  /// Currently used by OIDC4VP transaction flow because we need to get
+  /// the hash sooner. We send the hash to the verifier to facilitate
+  /// the payment validation.
+  /// ATTENTION: This process won't work if a transaction is done on the account
+  /// in the meanwhile because the signature may depends on the transaction
+  /// count of the block.
+  static Future<String> sendEVMTransactionWithSignature({
+    required Uint8List signed,
+    required String web3RpcURL,
+  }) async {
+    log.i('sendEVMTransactionWithSignature');
+    try {
+      final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
+
+      return web3Client.sendRawTransaction(signed);
+    } catch (e, s) {
+      log.e('sendEVMTransactionWithSignature error: $e, stack: $s');
+      rethrow;
+    }
+  }
+
+  static String convertSignatureToStringHash(Uint8List signature) {
+    // Hash the signed transaction using Keccak-256
+    final Uint8List hash = keccak256(signature);
+
+    // Convert to hexadecimal with 0x prefix
+    final String transactionHash = bytesToHex(hash, include0x: true);
+
     return transactionHash;
   }
 }

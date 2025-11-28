@@ -1,18 +1,9 @@
 import 'package:altme/l10n/l10n.dart';
 
-enum LanguageType {
-  phone,
-  ca,
-  en,
-  es,
-  fr,
-}
+enum LanguageType { phone, ca, en, es, fr }
 
 extension LanguageTypeX on LanguageType {
-  String getTitle({
-    required AppLocalizations l10n,
-    required String name,
-  }) {
+  String getTitle({required AppLocalizations l10n, required String name}) {
     switch (this) {
       case LanguageType.phone:
         return l10n.phoneLanguage;

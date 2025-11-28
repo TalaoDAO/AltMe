@@ -39,8 +39,9 @@ class _AllTokensViewState extends State<_AllTokensView> {
     final l10n = context.l10n;
     return BlocBuilder<AllTokensCubit, AllTokensState>(
       builder: (context, state) {
-        getLogger('_AllTokensView')
-            .i('list of selected contract: ${state.selectedContracts}');
+        getLogger(
+          '_AllTokensView',
+        ).i('list of selected contract: ${state.selectedContracts}');
         return BasePage(
           scrollView: false,
           padding: EdgeInsets.zero,
@@ -64,7 +65,8 @@ class _AllTokensViewState extends State<_AllTokensView> {
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     TextButton(
-                      onPressed: (state.status == AppStatus.loading ||
+                      onPressed:
+                          (state.status == AppStatus.loading ||
                               state.status == AppStatus.fetching)
                           ? null
                           : () async {
@@ -92,10 +94,7 @@ class _AllTokensViewState extends State<_AllTokensView> {
                         horizontal: Sizes.space2XSmall,
                       ),
                       onPressed: () {},
-                      icon: const Icon(
-                        Icons.search,
-                        size: Sizes.icon2x,
-                      ),
+                      icon: const Icon(Icons.search, size: Sizes.icon2x),
                     ),
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(
@@ -116,12 +115,12 @@ class _AllTokensViewState extends State<_AllTokensView> {
                         onChange: (isChecked) {
                           if (isChecked) {
                             context.read<AllTokensCubit>().addContract(
-                                  contractModel: tokenContractModel,
-                                );
+                              contractModel: tokenContractModel,
+                            );
                           } else {
                             context.read<AllTokensCubit>().removeContract(
-                                  contractModel: tokenContractModel,
-                                );
+                              contractModel: tokenContractModel,
+                            );
                           }
                         },
                       );
@@ -129,10 +128,9 @@ class _AllTokensViewState extends State<_AllTokensView> {
                     separatorBuilder: (_, __) {
                       return Divider(
                         height: 0.3,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withValues(alpha: 0.12),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.12),
                       );
                     },
                     itemCount: state.filteredContracts.length,

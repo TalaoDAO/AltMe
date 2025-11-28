@@ -37,9 +37,7 @@ class Credential {
       'dummy4',
       'dummy5',
       '', //date
-      [
-        Proof.dummy(),
-      ],
+      [Proof.dummy()],
       DefaultCredentialSubjectModel(
         id: 'dummy7',
         type: 'dummy8',

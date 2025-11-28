@@ -8,8 +8,7 @@ class ProfessionalExperienceAssessmentRecipient {
 
   factory ProfessionalExperienceAssessmentRecipient.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$ProfessionalExperienceAssessmentRecipientFromJson(json);
+  ) => _$ProfessionalExperienceAssessmentRecipientFromJson(json);
 
   @JsonKey(defaultValue: '')
   final String name;

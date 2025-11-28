@@ -176,8 +176,10 @@ void main() {
         jsonEncode(BlockchainType.ethereum.filter.toJson()),
         equals(
           jsonEncode(
-            Filter(type: 'String', pattern: 'EthereumAssociatedAddress')
-                .toJson(),
+            Filter(
+              type: 'String',
+              pattern: 'EthereumAssociatedAddress',
+            ).toJson(),
           ),
         ),
       );
@@ -193,8 +195,10 @@ void main() {
         jsonEncode(BlockchainType.polygon.filter.toJson()),
         equals(
           jsonEncode(
-            Filter(type: 'String', pattern: 'PolygonAssociatedAddress')
-                .toJson(),
+            Filter(
+              type: 'String',
+              pattern: 'PolygonAssociatedAddress',
+            ).toJson(),
           ),
         ),
       );
@@ -202,8 +206,10 @@ void main() {
         jsonEncode(BlockchainType.binance.filter.toJson()),
         equals(
           jsonEncode(
-            Filter(type: 'String', pattern: 'BinanceAssociatedAddress')
-                .toJson(),
+            Filter(
+              type: 'String',
+              pattern: 'BinanceAssociatedAddress',
+            ).toJson(),
           ),
         ),
       );
@@ -211,8 +217,10 @@ void main() {
         jsonEncode(BlockchainType.etherlink.filter.toJson()),
         equals(
           jsonEncode(
-            Filter(type: 'String', pattern: 'EtherlinkAssociatedAddress')
-                .toJson(),
+            Filter(
+              type: 'String',
+              pattern: 'EtherlinkAssociatedAddress',
+            ).toJson(),
           ),
         ),
       );

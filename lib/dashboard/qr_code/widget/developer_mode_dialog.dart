@@ -50,9 +50,7 @@ class DeveloperModeDialog extends StatelessWidget {
             if (uri != null && Parameters.isAIServiceEnabled)
               Column(
                 children: [
-                  AiRequestAnalysisButton(
-                    link: uri!.toString(),
-                  ),
+                  AiRequestAnalysisButton(link: uri!.toString()),
                   const SizedBox(height: Sizes.spaceSmall),
                 ],
               )

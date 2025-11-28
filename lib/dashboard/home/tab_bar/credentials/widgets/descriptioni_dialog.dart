@@ -3,10 +3,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class DescriptionDialog extends StatelessWidget {
-  const DescriptionDialog({
-    super.key,
-    required this.text,
-  });
+  const DescriptionDialog({super.key, required this.text});
 
   final String text;
 

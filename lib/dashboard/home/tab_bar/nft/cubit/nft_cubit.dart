@@ -130,17 +130,17 @@ class NftCubit extends Cubit<NftState> {
       // this wallet address in API call ->
       // 0xd8da6bf26964af9d7eed9e03e53415d37aa96045
 
-      final Map<String, dynamic> response = await client.get(
-        '${Urls.moralisBaseUrl}/$walletAddress/nft',
-        queryParameters: <String, dynamic>{
-          'chain': network.chain,
-          'format': 'decimal',
-          'normalizeMetadata': true,
-        },
-        headers: <String, String>{
-          'X-API-KEY': moralisApiKey,
-        },
-      ) as Map<String, dynamic>;
+      final Map<String, dynamic> response =
+          await client.get(
+                '${Urls.moralisBaseUrl}/$walletAddress/nft',
+                queryParameters: <String, dynamic>{
+                  'chain': network.chain,
+                  'format': 'decimal',
+                  'normalizeMetadata': true,
+                },
+                headers: <String, String>{'X-API-KEY': moralisApiKey},
+              )
+              as Map<String, dynamic>;
 
       final result = response['result'] as List<dynamic>;
       if (result.isEmpty) {
@@ -150,7 +150,8 @@ class NftCubit extends Cubit<NftState> {
       final nftList = List<EthereumNftModel>.from(
         result.map<EthereumNftModel>((dynamic e) {
           return EthereumNftModel(
-            name: (e['name'] as String? ??
+            name:
+                (e['name'] as String? ??
                     e['normalized_metadata']['name'] as String?) ??
                 '',
             symbol: e['symbol'] as String?,
@@ -172,9 +173,7 @@ class NftCubit extends Cubit<NftState> {
           try {
             await client.get(
               '${Urls.moralisBaseUrl}/nft/${element.contractAddress}/${element.tokenId}/metadata/resync',
-              headers: <String, String>{
-                'X-API-KEY': moralisApiKey,
-              },
+              headers: <String, String>{'X-API-KEY': moralisApiKey},
             );
           } catch (e, s) {
             getLogger(toString()).e('failed to resync e: $e s: $s');
@@ -195,19 +194,21 @@ class NftCubit extends Cubit<NftState> {
     required TezosNetwork network,
   }) async {
     try {
-      final List<dynamic> response = await client.get(
-        '${network.apiUrl}/v1/tokens/balances',
-        queryParameters: <String, dynamic>{
-          'account': walletAddress,
-          'balance.eq': 1,
-          'token.metadata.null': false,
-          'sort.desc': 'firstLevel',
-          'select':
-              'token.tokenId as tokenId,token.id as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance,token.metadata.thumbnailUri as thumbnailUri,token.metadata.description as description,token.standard as standard,token.metadata.symbol as symbol,token.contract.address as contractAddress,token.metadata.identifier as identifier,token.metadata.creators as creators,token.metadata.publishers as publishers,token.metadata.date as date,token.metadata.is_transferable as isTransferable,firstTime,token.metadata.artifactUri as artifactUri', // ignore: lines_longer_than_80_chars
-          'offset': offset,
-          'limit': limit,
-        },
-      ) as List<dynamic>;
+      final List<dynamic> response =
+          await client.get(
+                '${network.apiUrl}/v1/tokens/balances',
+                queryParameters: <String, dynamic>{
+                  'account': walletAddress,
+                  'balance.eq': 1,
+                  'token.metadata.null': false,
+                  'sort.desc': 'firstLevel',
+                  'select':
+                      'token.tokenId as tokenId,token.id as id,token.metadata.name as name,token.metadata.displayUri as displayUri,balance,token.metadata.thumbnailUri as thumbnailUri,token.metadata.description as description,token.standard as standard,token.metadata.symbol as symbol,token.contract.address as contractAddress,token.metadata.identifier as identifier,token.metadata.creators as creators,token.metadata.publishers as publishers,token.metadata.date as date,token.metadata.is_transferable as isTransferable,firstTime,token.metadata.artifactUri as artifactUri', // ignore: lines_longer_than_80_chars
+                  'offset': offset,
+                  'limit': limit,
+                },
+              )
+              as List<dynamic>;
       final List<TezosNftModel> data = response
           .map((dynamic e) => TezosNftModel.fromJson(e as Map<String, dynamic>))
           .toList();

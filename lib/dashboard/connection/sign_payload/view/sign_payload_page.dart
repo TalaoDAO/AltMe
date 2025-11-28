@@ -13,10 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class SignPayloadPage extends StatelessWidget {
-  const SignPayloadPage({
-    super.key,
-    required this.connectionBridgeType,
-  });
+  const SignPayloadPage({super.key, required this.connectionBridgeType});
 
   final ConnectionBridgeType connectionBridgeType;
 
@@ -24,9 +21,8 @@ class SignPayloadPage extends StatelessWidget {
     required ConnectionBridgeType connectionBridgeType,
   }) {
     return MaterialPageRoute<void>(
-      builder: (_) => SignPayloadPage(
-        connectionBridgeType: connectionBridgeType,
-      ),
+      builder: (_) =>
+          SignPayloadPage(connectionBridgeType: connectionBridgeType),
       settings: const RouteSettings(name: SIGN_PAYLOAD_PAGE),
     );
   }
@@ -50,10 +46,7 @@ class SignPayloadPage extends StatelessWidget {
 }
 
 class SignPayloadView extends StatefulWidget {
-  const SignPayloadView({
-    super.key,
-    required this.connectionBridgeType,
-  });
+  const SignPayloadView({super.key, required this.connectionBridgeType});
 
   final ConnectionBridgeType connectionBridgeType;
 
@@ -67,15 +60,17 @@ class _SignPayloadViewState extends State<SignPayloadView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => context.read<SignPayloadCubit>().init(
-            connectionBridgeType: widget.connectionBridgeType,
-          ),
+        connectionBridgeType: widget.connectionBridgeType,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final BeaconRequest? beaconRequest =
-        context.read<BeaconCubit>().state.beaconRequest;
+    final BeaconRequest? beaconRequest = context
+        .read<BeaconCubit>()
+        .state
+        .beaconRequest;
 
     final l10n = context.l10n;
     return BlocConsumer<SignPayloadCubit, SignPayloadState>(
@@ -147,8 +142,8 @@ class _SignPayloadViewState extends State<SignPayloadView> {
             if (context.read<SignPayloadCubit>().state.status !=
                 AppStatus.success) {
               context.read<SignPayloadCubit>().rejectSigning(
-                    connectionBridgeType: widget.connectionBridgeType,
-                  );
+                connectionBridgeType: widget.connectionBridgeType,
+              );
             }
             if (didPop) Navigator.of(context).pop();
           },
@@ -157,8 +152,8 @@ class _SignPayloadViewState extends State<SignPayloadView> {
             title: l10n.confirm_sign,
             titleLeading: BackLeadingButton(
               onPressed: () => context.read<SignPayloadCubit>().rejectSigning(
-                    connectionBridgeType: widget.connectionBridgeType,
-                  ),
+                connectionBridgeType: widget.connectionBridgeType,
+              ),
             ),
             body: BackgroundCard(
               height: double.infinity,
@@ -230,9 +225,9 @@ class _SignPayloadViewState extends State<SignPayloadView> {
                           ? null
                           : () {
                               context.read<SignPayloadCubit>().sign(
-                                    connectionBridgeType:
-                                        widget.connectionBridgeType,
-                                  );
+                                connectionBridgeType:
+                                    widget.connectionBridgeType,
+                              );
                             },
                     ),
                     const SizedBox(height: 8),
@@ -241,8 +236,8 @@ class _SignPayloadViewState extends State<SignPayloadView> {
                       text: l10n.cancel,
                       onPressed: () {
                         context.read<SignPayloadCubit>().rejectSigning(
-                              connectionBridgeType: widget.connectionBridgeType,
-                            );
+                          connectionBridgeType: widget.connectionBridgeType,
+                        );
                       },
                     ),
                   ],

@@ -29,9 +29,9 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
     required BlockchainType blockChaintype,
   }) async {
     emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
-    final String? ssiMnemonic =
-        await getSecureStorage.get(SecureStorageKeys.ssiMnemonic);
+    final String? ssiMnemonic = await getSecureStorage.get(
+      SecureStorageKeys.ssiMnemonic,
+    );
 
     await walletCubit.createCryptoWallet(
       accountName: accountName,
@@ -43,19 +43,20 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
       qrCodeScanCubit: qrCodeScanCubit,
       credentialsCubit: credentialsCubit,
       walletConnectCubit: walletConnectCubit,
-      onComplete: ({
-        required CryptoAccount cryptoAccount,
-        required MessageHandler messageHandler,
-      }) async {
-        emit(
-          state.success(
-            cryptoAccount: cryptoAccount,
-            messageHandler: ResponseMessage(
-              message: ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
-            ),
-          ),
-        );
-      },
+      onComplete:
+          ({
+            required CryptoAccount cryptoAccount,
+            required MessageHandler messageHandler,
+          }) async {
+            emit(
+              state.success(
+                cryptoAccount: cryptoAccount,
+                messageHandler: ResponseMessage(
+                  message: ResponseString.RESPONSE_STRING_CRYPTO_ACCOUNT_ADDED,
+                ),
+              ),
+            );
+          },
     );
   }
 }

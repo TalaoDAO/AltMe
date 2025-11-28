@@ -119,9 +119,7 @@ class FakeNavigationDelegate extends PlatformNavigationDelegate {
   Future<void> setOnUrlChange(UrlChangeCallback onUrlChange) async {}
 
   @override
-  Future<void> setOnHttpAuthRequest(
-    HttpAuthRequestCallback handler,
-  ) async {}
+  Future<void> setOnHttpAuthRequest(HttpAuthRequestCallback handler) async {}
 
   @override
   Future<void> setOnHttpError(HttpResponseErrorCallback onHttpError) async {}
@@ -160,26 +158,33 @@ void main() {
       mockSecureStorageProvider = MockSecureStorageProvider();
 
       // Mock secure storage methods
-      when(() => mockSecureStorageProvider.get(any()))
-          .thenAnswer((_) async => '');
-      when(() => mockSecureStorageProvider.set(any(), any()))
-          .thenAnswer((_) async => {});
-      when(() => mockSecureStorageProvider.delete(any()))
-          .thenAnswer((_) async => {});
-      when(() => mockSecureStorageProvider.deleteAll())
-          .thenAnswer((_) async => {});
-      when(() => mockSecureStorageProvider.getAllValues())
-          .thenAnswer((_) async => <String, String>{});
+      when(
+        () => mockSecureStorageProvider.get(any()),
+      ).thenAnswer((_) async => '');
+      when(
+        () => mockSecureStorageProvider.set(any(), any()),
+      ).thenAnswer((_) async => {});
+      when(
+        () => mockSecureStorageProvider.delete(any()),
+      ).thenAnswer((_) async => {});
+      when(
+        () => mockSecureStorageProvider.deleteAll(),
+      ).thenAnswer((_) async => {});
+      when(
+        () => mockSecureStorageProvider.getAllValues(),
+      ).thenAnswer((_) async => <String, String>{});
 
       // Set default states
       when(() => mockWalletCubit.state).thenReturn(const WalletState());
       when(() => mockWertCubit.state).thenReturn('');
-      when(() => mockManageNetworkCubit.state)
-          .thenReturn(ManageNetworkState(network: TezosNetwork.mainNet()));
+      when(
+        () => mockManageNetworkCubit.state,
+      ).thenReturn(ManageNetworkState(network: TezosNetwork.mainNet()));
     });
 
-    testWidgets('renders WertView when WalletCubit state is valid',
-        (tester) async {
+    testWidgets('renders WertView when WalletCubit state is valid', (
+      tester,
+    ) async {
       // Arrange
       when(() => mockWalletCubit.state).thenReturn(
         WalletState(
@@ -205,7 +210,8 @@ void main() {
             BlocProvider<WalletCubit>.value(value: mockWalletCubit),
             BlocProvider<WertCubit>.value(value: mockWertCubit),
             BlocProvider<ManageNetworkCubit>.value(
-                value: mockManageNetworkCubit),
+              value: mockManageNetworkCubit,
+            ),
           ],
           child: const WertView(),
         ),
@@ -243,7 +249,8 @@ void main() {
             BlocProvider<WalletCubit>.value(value: mockWalletCubit),
             BlocProvider<WertCubit>.value(value: mockWertCubit),
             BlocProvider<ManageNetworkCubit>.value(
-                value: mockManageNetworkCubit),
+              value: mockManageNetworkCubit,
+            ),
           ],
           child: const WertView(),
         ),
@@ -282,7 +289,8 @@ void main() {
             BlocProvider<WalletCubit>.value(value: mockWalletCubit),
             BlocProvider<WertCubit>.value(value: mockWertCubit),
             BlocProvider<ManageNetworkCubit>.value(
-                value: mockManageNetworkCubit),
+              value: mockManageNetworkCubit,
+            ),
           ],
           child: const WertView(),
         ),

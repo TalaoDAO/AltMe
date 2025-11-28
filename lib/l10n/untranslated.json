@@ -15,7 +15,9 @@
     "aiPleaseWait",
     "trustedList",
     "trustedListSubtitle",
-    "notTrustedEntity"
+    "notTrustedEntity",
+    "acceptanceRequest",
+    "pay"
   ],
 
   "es": [
@@ -34,16 +36,8 @@
     "aiPleaseWait",
     "trustedList",
     "trustedListSubtitle",
-    "notTrustedEntity"
-  ],
-
-  "fr": [
-    "saveBackupPolygonCredentialSubtitle",
-    "back",
-    "iaAnalyze",
-    "iaAnalyzeTitle",
-    "trustedList",
-    "trustedListSubtitle",
-    "notTrustedEntity"
+    "notTrustedEntity",
+    "acceptanceRequest",
+    "pay"
   ]
 }

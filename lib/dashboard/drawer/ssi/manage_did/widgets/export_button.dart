@@ -17,17 +17,9 @@ class ExportButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(
-            IconStrings.export,
-            width: Sizes.icon2x,
-          ),
-          const SizedBox(
-            height: Sizes.space2XSmall,
-          ),
-          Text(
-            l10n.export,
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
+          Image.asset(IconStrings.export, width: Sizes.icon2x),
+          const SizedBox(height: Sizes.space2XSmall),
+          Text(l10n.export, style: Theme.of(context).textTheme.headlineSmall),
         ],
       ),
     );

@@ -2,11 +2,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class CredentialImage extends StatelessWidget {
-  const CredentialImage({
-    this.child,
-    required this.image,
-    super.key,
-  });
+  const CredentialImage({this.child, required this.image, super.key});
   final Widget? child;
   final String image;
 
@@ -15,10 +11,7 @@ class CredentialImage extends StatelessWidget {
     return CredentialContainer(
       child: DecoratedBox(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.fill,
-            image: AssetImage(image),
-          ),
+          image: DecorationImage(fit: BoxFit.fill, image: AssetImage(image)),
         ),
         child: child,
       ),

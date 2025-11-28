@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
@@ -19,10 +21,7 @@ class VcSelectiveDisclosure {
         .toList();
 
     final encryptedPayload = encryptedValues!.first;
-    return decodePayload(
-      jwtDecode: JWTDecode(),
-      token: encryptedPayload,
-    );
+    return decodePayload(jwtDecode: JWTDecode(), token: encryptedPayload);
   }
 
   Map<String, dynamic> get claims {
@@ -125,22 +124,16 @@ class VcSelectiveDisclosure {
     return data;
   }
 
-  Map<String, dynamic> contentOfSh256Hash(
-    String element,
-  ) {
+  Map<String, dynamic> contentOfSh256Hash(String element) {
     final data = <String, dynamic>{};
     try {
       final sh256Hash = sh256HashOfContent(element);
       final lisString = jsonDecode(element);
       if (lisString is List) {
         if (lisString.length == 3) {
-          data[sh256Hash] = {
-            lisString[1]: lisString[2],
-          };
+          data[sh256Hash] = {lisString[1]: lisString[2]};
         } else if (lisString.length == 2) {
-          data[sh256Hash] = {
-            lisString[0]: lisString[1],
-          };
+          data[sh256Hash] = {lisString[0]: lisString[1]};
         }
       }
       return data;
@@ -176,10 +169,7 @@ class VcSelectiveDisclosure {
       if (keyPresent) {
         final value = matches.first.value;
         if (value is Map<String, dynamic>) {
-          final (claimsData, _) = getClaimsData(
-            key: key,
-            parentKeyId: null,
-          );
+          final (claimsData, _) = getClaimsData(key: key, parentKeyId: null);
           if (claimsData.isEmpty) return null;
           final valueType =
               value['value_type'] ?? valueTypeIfNull(claimsData[0].data);
@@ -199,12 +189,8 @@ class VcSelectiveDisclosure {
     dynamic data;
     final value = <ClaimsData>[];
     final JsonPath dataPath = parentKeyId == null
-        ? JsonPath(
-            r'$..["' + key + '"]',
-          )
-        : JsonPath(
-            r'$..["' + parentKeyId + '"]["' + key + '"]',
-          );
+        ? JsonPath(r'$..["' + key + '"]')
+        : JsonPath(r'$..["' + parentKeyId + '"]["' + key + '"]');
     final String? sd = sdForNested(searchedKey: key, parentKeyId: parentKeyId);
     try {
       final uncryptedDataPath = dataPath.read(extractedValuesFromJwt).first;
@@ -227,12 +213,11 @@ class VcSelectiveDisclosure {
         );
       } catch (e) {
         if (parentKeyId != null) {
-          final JsonPath fallbackDataPath = JsonPath(
-            r'$..["' + key + '"]',
-          );
+          final JsonPath fallbackDataPath = JsonPath(r'$..["' + key + '"]');
           try {
-            final uncryptedDataPath =
-                fallbackDataPath.read(extractedValuesFromJwt).first;
+            final uncryptedDataPath = fallbackDataPath
+                .read(extractedValuesFromJwt)
+                .first;
             data = uncryptedDataPath.value;
             value.add(
               ClaimsData(
@@ -242,8 +227,9 @@ class VcSelectiveDisclosure {
             );
           } catch (e) {
             try {
-              final credentialModelPath =
-                  fallbackDataPath.read(credentialModel.data).first;
+              final credentialModelPath = fallbackDataPath
+                  .read(credentialModel.data)
+                  .first;
               data = credentialModelPath.value;
               value.add(
                 ClaimsData(
@@ -263,12 +249,7 @@ class VcSelectiveDisclosure {
         value.clear();
         for (final ele in data) {
           if (ele is String) {
-            value.add(
-              ClaimsData(
-                isfromDisclosureOfJWT: false,
-                data: ele,
-              ),
-            );
+            value.add(ClaimsData(isfromDisclosureOfJWT: false, data: ele));
           } else if (ele is Map) {
             final threeDotValue = ele['...'];
             if (threeDotValue != null) {
@@ -276,8 +257,9 @@ class VcSelectiveDisclosure {
                 final sh256Hash = sh256HashOfContent(element);
                 if (sh256Hash == threeDotValue) {
                   if (element.startsWith('[') && element.endsWith(']')) {
-                    final trimmedElement =
-                        element.substring(1, element.length - 1).split(',');
+                    final trimmedElement = element
+                        .substring(1, element.length - 1)
+                        .split(',');
                     value.add(
                       ClaimsData(
                         isfromDisclosureOfJWT: true,

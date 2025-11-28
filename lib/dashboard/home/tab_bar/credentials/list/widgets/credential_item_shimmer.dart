@@ -16,12 +16,8 @@ class CredentialItemShimmer extends StatelessWidget {
             aspectRatio: 1.5,
             child: ShimmerWidget.rectangular(height: 0),
           ),
-          SizedBox(
-            height: 8,
-          ),
-          ShimmerWidget.rectangular(
-            height: 15,
-          ),
+          SizedBox(height: 8),
+          ShimmerWidget.rectangular(height: 15),
         ],
       ),
     );

@@ -5,7 +5,7 @@ import 'package:secure_storage/secure_storage.dart';
 
 class ActivityLogManager {
   ActivityLogManager(SecureStorageProvider secureStorageProvider)
-      : _secureStorageProvider = secureStorageProvider;
+    : _secureStorageProvider = secureStorageProvider;
 
   final SecureStorageProvider _secureStorageProvider;
 
@@ -19,9 +19,8 @@ class ActivityLogManager {
       final logStrings = logDataJson.split('\n');
       return logStrings
           .map(
-            (logString) => LogData.fromJson(
-              jsonDecode(logString) as Map<String, dynamic>,
-            ),
+            (logString) =>
+                LogData.fromJson(jsonDecode(logString) as Map<String, dynamic>),
           )
           .toList();
     }

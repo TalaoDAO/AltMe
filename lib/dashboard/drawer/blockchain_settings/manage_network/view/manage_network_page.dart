@@ -10,9 +10,9 @@ class ManageNetworkPage extends StatelessWidget {
   const ManageNetworkPage({super.key});
 
   static Route<dynamic> route() => MaterialPageRoute<void>(
-        builder: (_) => const ManageNetworkPage(),
-        settings: const RouteSettings(name: '/manageNetworkPage'),
-      );
+    builder: (_) => const ManageNetworkPage(),
+    settings: const RouteSettings(name: '/manageNetworkPage'),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +26,11 @@ class ManageNetworkPage extends StatelessWidget {
       body: BlocBuilder<ManageNetworkCubit, ManageNetworkState>(
         bloc: context.read<ManageNetworkCubit>(),
         builder: (context, state) {
-          final blockchainType =
-              context.read<WalletCubit>().state.currentAccount!.blockchainType;
+          final blockchainType = context
+              .read<WalletCubit>()
+              .state
+              .currentAccount!
+              .blockchainType;
           final currentNetworkList = blockchainType.networks;
 
           return Column(
@@ -40,30 +43,26 @@ class ManageNetworkPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 15),
-              ...List.generate(
-                currentNetworkList.length,
-                (index) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      NetworkSelector(
-                        network: currentNetworkList[index],
-                        groupValue: state.network,
+              ...List.generate(currentNetworkList.length, (index) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    NetworkSelector(
+                      network: currentNetworkList[index],
+                      groupValue: state.network,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Divider(
+                        height: 0,
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.12),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Divider(
-                          height: 0,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.12),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
+                    ),
+                  ],
+                );
+              }),
             ],
           );
         },

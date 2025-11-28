@@ -22,8 +22,9 @@ class MyBlockchainAccountBaseWidget extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: Sizes.credentialAspectRatio,
         child: CustomMultiChildLayout(
-          delegate:
-              MyBlockchainAccountBaseWidgetDelegate(position: Offset.zero),
+          delegate: MyBlockchainAccountBaseWidgetDelegate(
+            position: Offset.zero,
+          ),
           children: [
             LayoutId(
               id: 'proofMessage',
@@ -33,9 +34,9 @@ class MyBlockchainAccountBaseWidget extends StatelessWidget {
                 child: MyText(
                   proofMessage,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
@@ -48,9 +49,9 @@ class MyBlockchainAccountBaseWidget extends StatelessWidget {
                   alignment: Alignment.bottomLeft,
                   child: MyText(
                     walletAddress,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Colors.white,
-                        ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium!.copyWith(color: Colors.white),
                     minFontSize: 8,
                     maxLines: 2,
                   ),
@@ -81,10 +82,7 @@ class MyBlockchainAccountBaseWidgetDelegate extends MultiChildLayoutDelegate {
 
     if (hasChild('image')) {
       layoutChild('image', BoxConstraints.loose(size));
-      positionChild(
-        'image',
-        Offset(size.width * 0.8, size.height * 0.05),
-      );
+      positionChild('image', Offset(size.width * 0.8, size.height * 0.05));
     }
 
     if (hasChild('walletAddress')) {

@@ -39,20 +39,17 @@ class SelectiveDisclosureState extends Equatable {
 
   @override
   List<Object?> get props => [
-        selectedClaimsKeyIds,
-        selectedSDIndexInJWT,
-        message,
-        limitDisclosure,
-        filters,
-      ];
+    selectedClaimsKeyIds,
+    selectedSDIndexInJWT,
+    message,
+    limitDisclosure,
+    filters,
+  ];
 }
 
 @JsonSerializable()
 class SelectedClaimsKeyIds extends Equatable {
-  const SelectedClaimsKeyIds({
-    required this.keyId,
-    required this.isSelected,
-  });
+  const SelectedClaimsKeyIds({required this.keyId, required this.isSelected});
 
   factory SelectedClaimsKeyIds.fromJson(Map<String, dynamic> json) =>
       _$SelectedClaimsKeyIdsFromJson(json);
@@ -60,10 +57,7 @@ class SelectedClaimsKeyIds extends Equatable {
   final String keyId;
   final bool isSelected;
 
-  SelectedClaimsKeyIds copyWith({
-    String? keyId,
-    bool? isSelected,
-  }) {
+  SelectedClaimsKeyIds copyWith({String? keyId, bool? isSelected}) {
     return SelectedClaimsKeyIds(
       keyId: keyId ?? this.keyId,
       isSelected: isSelected ?? this.isSelected,
@@ -73,8 +67,5 @@ class SelectedClaimsKeyIds extends Equatable {
   Map<String, dynamic> toJson() => _$SelectedClaimsKeyIdsToJson(this);
 
   @override
-  List<Object?> get props => [
-        keyId,
-        isSelected,
-      ];
+  List<Object?> get props => [keyId, isSelected];
 }

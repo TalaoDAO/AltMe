@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WhiteListPage extends StatefulWidget {
-  const WhiteListPage({
-    super.key,
-  });
+  const WhiteListPage({super.key});
 
   static Route<String?> route() {
     return MaterialPageRoute<String?>(
@@ -61,9 +59,7 @@ class _WhiteListPageState extends State<WhiteListPage> {
                 l10n.sendTo,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
-              const SizedBox(
-                height: Sizes.spaceNormal,
-              ),
+              const SizedBox(height: Sizes.spaceNormal),
               BlocBuilder<WalletCubit, WalletState>(
                 builder: (context, walletState) {
                   final accounts = walletState.cryptoAccount.data

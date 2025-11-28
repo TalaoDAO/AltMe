@@ -44,10 +44,9 @@ class ErrorDialog extends StatelessWidget {
             const SizedBox(height: 25),
             Text(
               title,
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineMedium!
-                  .copyWith(color: textColor),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium!.copyWith(color: textColor),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
@@ -56,10 +55,9 @@ class ErrorDialog extends StatelessWidget {
                 text: l10n.moreDetails,
                 verticalSpacing: 14,
                 fontSize: 15,
-                borderColor: Theme.of(context)
-                    .colorScheme
-                    .onSurface
-                    .withValues(alpha: 0.2),
+                borderColor: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.2),
                 backgroundColor: background,
                 textColor: textColor,
                 borderRadius: Sizes.smallRadius,

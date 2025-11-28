@@ -133,8 +133,9 @@ void main() {
     beaconCubit = MockBeaconCubit();
     walletConnectCubit = MockWalletConnectCubit();
     enterpriseCubit = MockEnterpriseCubit();
-    when(() => splashCubit.state)
-        .thenReturn(const SplashState(status: SplashStatus.init));
+    when(
+      () => splashCubit.state,
+    ).thenReturn(const SplashState(status: SplashStatus.init));
     when(() => splashCubit.initialiseApp()).thenAnswer((_) async {});
     when(() => flavorCubit.state).thenReturn(FlavorMode.development);
   });
@@ -185,8 +186,9 @@ void main() {
         expect(find.byType(BasePage), findsOneWidget);
       });
 
-      testWidgets('correct image is rendered for development flavor',
-          (tester) async {
+      testWidgets('correct image is rendered for development flavor', (
+        tester,
+      ) async {
         when(() => flavorCubit.state).thenReturn(FlavorMode.development);
         await tester.pumpApp(makeTestableWidget());
         await tester.pumpAndSettle();
@@ -196,8 +198,9 @@ void main() {
         expect(assetImage.assetName, equals(ImageStrings.appLogoDev));
       });
 
-      testWidgets('correct image is rendered for staging flavor',
-          (tester) async {
+      testWidgets('correct image is rendered for staging flavor', (
+        tester,
+      ) async {
         when(() => flavorCubit.state).thenReturn(FlavorMode.staging);
         await tester.pumpApp(makeTestableWidget());
         await tester.pumpAndSettle();
@@ -207,8 +210,9 @@ void main() {
         expect(assetImage.assetName, equals(ImageStrings.appLogoStage));
       });
 
-      testWidgets('correct image is rendered for production flavor',
-          (tester) async {
+      testWidgets('correct image is rendered for production flavor', (
+        tester,
+      ) async {
         when(() => flavorCubit.state).thenReturn(FlavorMode.production);
         await tester.pumpApp(makeTestableWidget());
         await tester.pumpAndSettle();
@@ -221,18 +225,10 @@ void main() {
       testWidgets('loading progress is animated correctly', (tester) async {
         whenListen(
           splashCubit,
-          Stream.fromIterable(
-            [
-              const SplashState(
-                status: SplashStatus.init,
-                loadedValue: 0,
-              ),
-              const SplashState(
-                status: SplashStatus.init,
-                loadedValue: 1,
-              ),
-            ],
-          ),
+          Stream.fromIterable([
+            const SplashState(status: SplashStatus.init, loadedValue: 0),
+            const SplashState(status: SplashStatus.init, loadedValue: 1),
+          ]),
           initialState: const SplashState(
             status: SplashStatus.init,
             loadedValue: 1,
@@ -243,38 +239,39 @@ void main() {
 
         expect(find.byType(LoadingProgress), findsOneWidget);
 
-        final midScale =
-            tester.widget<LoadingProgress>(find.byType(LoadingProgress));
+        final midScale = tester.widget<LoadingProgress>(
+          find.byType(LoadingProgress),
+        );
         expect(midScale.value, 0.5);
 
         await tester.pump(const Duration(milliseconds: 250));
 
-        final finalScale =
-            tester.widget<LoadingProgress>(find.byType(LoadingProgress));
+        final finalScale = tester.widget<LoadingProgress>(
+          find.byType(LoadingProgress),
+        );
         expect(finalScale.value, 1.0);
       });
     });
 
     group('Routing', () {
       testWidgets(
-          '''navigates to StarterPage when state is SplashStatus.routeToOnboarding''',
-          (tester) async {
-        whenListen(
-          splashCubit,
-          Stream.fromIterable(
-            [
+        '''navigates to StarterPage when state is SplashStatus.routeToOnboarding''',
+        (tester) async {
+          whenListen(
+            splashCubit,
+            Stream.fromIterable([
               const SplashState(status: SplashStatus.init),
               const SplashState(status: SplashStatus.routeToOnboarding),
-            ],
-          ),
-          initialState: const SplashState(status: SplashStatus.init),
-        );
+            ]),
+            initialState: const SplashState(status: SplashStatus.init),
+          );
 
-        await tester.pumpApp(makeTestableWidget());
+          await tester.pumpApp(makeTestableWidget());
 
-        await tester.pumpAndSettle();
-        expect(find.byType(StarterPage), findsOneWidget);
-      });
+          await tester.pumpAndSettle();
+          expect(find.byType(StarterPage), findsOneWidget);
+        },
+      );
     });
   });
 }

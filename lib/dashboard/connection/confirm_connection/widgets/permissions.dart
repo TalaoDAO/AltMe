@@ -52,10 +52,7 @@ class PermissionText extends StatelessWidget {
           ),
           const SizedBox(width: 5),
           Expanded(
-            child: MyText(
-              text,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+            child: MyText(text, style: Theme.of(context).textTheme.bodyMedium),
           ),
         ],
       ),

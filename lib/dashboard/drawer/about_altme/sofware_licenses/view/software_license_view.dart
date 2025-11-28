@@ -8,9 +8,9 @@ class SoftwareLicensePage extends StatelessWidget {
   const SoftwareLicensePage({super.key});
 
   static Route<dynamic> route() => MaterialPageRoute<void>(
-        builder: (_) => const SoftwareLicensePage(),
-        settings: const RouteSettings(name: '/SoftwareLicensePage'),
-      );
+    builder: (_) => const SoftwareLicensePage(),
+    settings: const RouteSettings(name: '/SoftwareLicensePage'),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +61,9 @@ class _SoftwareLicenseViewState extends State<SoftwareLicenseView> {
             physics: const ScrollPhysics(),
             itemBuilder: (context, index) {
               return BackgroundCard(
-                color: Theme.of(context)
-                    .colorScheme
-                    .surface
-                    .withValues(alpha: 0.07),
+                color: Theme.of(
+                  context,
+                ).colorScheme.surface.withValues(alpha: 0.07),
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 margin: const EdgeInsets.only(bottom: 8),
                 child: TransparentInkWell(

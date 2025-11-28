@@ -2,8 +2,6 @@ part of 'reset_wallet_cubit.dart';
 
 @JsonSerializable()
 class ResetWalletState extends Equatable {
-
-
   const ResetWalletState({
     this.isRecoveryPhraseWritten = false,
     this.isBackupCredentialSaved = false,
@@ -30,8 +28,5 @@ class ResetWalletState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        isBackupCredentialSaved,
-        isRecoveryPhraseWritten,
-      ];
+  List<Object?> get props => [isBackupCredentialSaved, isRecoveryPhraseWritten];
 }

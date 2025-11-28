@@ -23,13 +23,8 @@ class ShareButton extends StatelessWidget {
             height: Sizes.icon2x,
             color: Theme.of(context).colorScheme.onSurface,
           ),
-          const SizedBox(
-            width: Sizes.spaceSmall,
-          ),
-          Text(
-            l10n.share,
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
+          const SizedBox(width: Sizes.spaceSmall),
+          Text(l10n.share, style: Theme.of(context).textTheme.headlineSmall),
         ],
       ),
     );

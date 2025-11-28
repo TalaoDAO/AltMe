@@ -3,10 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class ProofOfTwitterStatsWidget extends StatelessWidget {
-  const ProofOfTwitterStatsWidget({
-    super.key,
-    required this.credentialModel,
-  });
+  const ProofOfTwitterStatsWidget({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 
@@ -15,7 +12,10 @@ class ProofOfTwitterStatsWidget extends StatelessWidget {
     return CredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.twitterStatsCard,
       issuerName: credentialModel
-          .credentialPreview.credentialSubjectModel.issuedBy?.name,
+          .credentialPreview
+          .credentialSubjectModel
+          .issuedBy
+          ?.name,
       value: '',
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,

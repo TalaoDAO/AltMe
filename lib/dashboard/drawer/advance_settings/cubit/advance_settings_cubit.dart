@@ -9,9 +9,8 @@ part 'advance_settings_cubit.g.dart';
 part 'advance_settings_state.dart';
 
 class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
-  AdvanceSettingsCubit({
-    required this.secureStorageProvider,
-  }) : super(Parameters.defaultAdvanceSettingsState) {
+  AdvanceSettingsCubit({required this.secureStorageProvider})
+    : super(Parameters.defaultAdvanceSettingsState) {
     initialise();
   }
 
@@ -20,50 +19,64 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
   Future<void> initialise() async {
     final isGamingEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isGamingEnabled) ??
-                'true') ==
-            'true';
-    final isIdentityEnabled =
-        (await secureStorageProvider.get(SecureStorageKeys.isIdentityEnabled) ??
-                'true') ==
-            'true';
-    final isProfessionalEnabled = (await secureStorageProvider
-                .get(SecureStorageKeys.isProfessionalEnabled) ??
             'true') ==
         'true';
-    final isCommunityEnabled = (await secureStorageProvider
-                .get(SecureStorageKeys.isCommunityEnabled) ??
+    final isIdentityEnabled =
+        (await secureStorageProvider.get(SecureStorageKeys.isIdentityEnabled) ??
+            'true') ==
+        'true';
+    final isProfessionalEnabled =
+        (await secureStorageProvider.get(
+              SecureStorageKeys.isProfessionalEnabled,
+            ) ??
+            'true') ==
+        'true';
+    final isCommunityEnabled =
+        (await secureStorageProvider.get(
+              SecureStorageKeys.isCommunityEnabled,
+            ) ??
             'true') ==
         'true';
     final isOtherEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isOtherEnabled) ??
-                'true') ==
-            'true';
-    final isBlockchainAccountsEnabled = (await secureStorageProvider
-                .get(SecureStorageKeys.isBlockchainAccountsEnabled) ??
             'true') ==
         'true';
-    final isEducationEnabled = (await secureStorageProvider
-                .get(SecureStorageKeys.isEducationEnabled) ??
+    final isBlockchainAccountsEnabled =
+        (await secureStorageProvider.get(
+              SecureStorageKeys.isBlockchainAccountsEnabled,
+            ) ??
             'true') ==
         'true';
-    final isSocialMediaEnabled = (await secureStorageProvider
-                .get(SecureStorageKeys.isSocialMediaEnabled) ??
+    final isEducationEnabled =
+        (await secureStorageProvider.get(
+              SecureStorageKeys.isEducationEnabled,
+            ) ??
+            'true') ==
+        'true';
+    final isSocialMediaEnabled =
+        (await secureStorageProvider.get(
+              SecureStorageKeys.isSocialMediaEnabled,
+            ) ??
             'true') ==
         'true';
     final isPassEnabled =
         (await secureStorageProvider.get(SecureStorageKeys.isPassEnabled) ??
-                'true') ==
-            'true';
-    final isFinanceEnabled =
-        (await secureStorageProvider.get(SecureStorageKeys.isFinanceEnabled) ??
-                'true') ==
-            'true';
-    final isHumanityProofEnabled = (await secureStorageProvider
-                .get(SecureStorageKeys.isHumanityProofEnabled) ??
             'true') ==
         'true';
-    final isWalletIntegrityEnabled = (await secureStorageProvider
-                .get(SecureStorageKeys.isWalletIntegrityEnabled) ??
+    final isFinanceEnabled =
+        (await secureStorageProvider.get(SecureStorageKeys.isFinanceEnabled) ??
+            'true') ==
+        'true';
+    final isHumanityProofEnabled =
+        (await secureStorageProvider.get(
+              SecureStorageKeys.isHumanityProofEnabled,
+            ) ??
+            'true') ==
+        'true';
+    final isWalletIntegrityEnabled =
+        (await secureStorageProvider.get(
+              SecureStorageKeys.isWalletIntegrityEnabled,
+            ) ??
             'true') ==
         'true';
 
@@ -164,11 +177,7 @@ class AdvanceSettingsCubit extends Cubit<AdvanceSettingsState> {
   }
 
   void toggleEducationRadio() {
-    emit(
-      state.copyWith(
-        isEducationEnabled: !state.isEducationEnabled,
-      ),
-    );
+    emit(state.copyWith(isEducationEnabled: !state.isEducationEnabled));
     secureStorageProvider.set(
       SecureStorageKeys.isEducationEnabled,
       state.isEducationEnabled.toString(),

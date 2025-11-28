@@ -21,9 +21,9 @@ class EUVerifiableIdModel extends CredentialSubjectModel {
     super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.euVerifiableId,
-          credentialCategory: CredentialCategory.educationCards,
-        );
+         credentialSubjectType: CredentialSubjectType.euVerifiableId,
+         credentialCategory: CredentialCategory.educationCards,
+       );
 
   factory EUVerifiableIdModel.fromJson(Map<String, dynamic> json) =>
       _$EUVerifiableIdModelFromJson(json);

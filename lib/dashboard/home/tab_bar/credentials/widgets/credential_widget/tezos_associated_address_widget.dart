@@ -4,18 +4,16 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class TezosAssociatedAddressWidget extends StatelessWidget {
-  const TezosAssociatedAddressWidget({
-    super.key,
-    this.credentialModel,
-  });
+  const TezosAssociatedAddressWidget({super.key, this.credentialModel});
 
   final CredentialModel? credentialModel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final associatedAddress = credentialModel?.credentialPreview
-        .credentialSubjectModel as TezosAssociatedAddressModel?;
+    final associatedAddress =
+        credentialModel?.credentialPreview.credentialSubjectModel
+            as TezosAssociatedAddressModel?;
     return MyBlockchainAccountBaseWidget(
       background: ImageStrings.tezosOwnershipCard,
       proofMessage: l10n.tezosProofMessage,

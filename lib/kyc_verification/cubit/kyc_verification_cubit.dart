@@ -9,10 +9,8 @@ part 'kyc_verification_state.dart';
 part 'kyc_verification_cubit.g.dart';
 
 class KycVerificationCubit extends Cubit<KycVerificationState> {
-  KycVerificationCubit({
-    required this.client,
-    required this.profileCubit,
-  }) : super(const KycVerificationState());
+  KycVerificationCubit({required this.client, required this.profileCubit})
+    : super(const KycVerificationState());
 
   final DioClient client;
   final ProfileCubit profileCubit;
@@ -24,8 +22,13 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
       await dotenv.load();
       final walletApiKey = dotenv.get('WALLET_API_KEY_ID360');
 
-      final didKeyType = profileCubit.state.model.profileSetting
-          .selfSovereignIdentityOptions.customOidc4vcProfile.defaultDid;
+      final didKeyType = profileCubit
+          .state
+          .model
+          .profileSetting
+          .selfSovereignIdentityOptions
+          .customOidc4vcProfile
+          .defaultDid;
 
       final privateKey = await getPrivateKey(
         profileCubit: profileCubit,
@@ -44,9 +47,7 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
           'client_id': AltMeStrings.clientIdForID360,
           'did': did,
         },
-        headers: {
-          'api-key': walletApiKey,
-        },
+        headers: {'api-key': walletApiKey},
       );
       return response?['code']?.toString();
     } catch (e, s) {
@@ -60,10 +61,7 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
     required String link,
     dynamic Function()? onKycApproved,
   }) async {
-    await startKycVerifcation(
-      vcType: vcType,
-      link: link,
-    );
+    await startKycVerifcation(vcType: vcType, link: link);
   }
 
   Future<void> startKycVerifcation({
@@ -81,7 +79,8 @@ class KycVerificationCubit extends Cubit<KycVerificationState> {
     late String url;
 
     if (link == null) {
-      url = '${Urls.authenticateForId360}/$code?vc_type=${vcType.value}'
+      url =
+          '${Urls.authenticateForId360}/$code?vc_type=${vcType.value}'
           '&client_id=$walletId&callback=${Parameters.redirectUri}';
     } else {
       url = link;

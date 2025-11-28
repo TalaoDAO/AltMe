@@ -18,26 +18,16 @@ class AppTheme {
       useMaterial3: true,
       brightness: brightness,
       snackBarTheme: const SnackBarThemeData(
-        contentTextStyle: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-        ),
+        contentTextStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
       ),
-      tabBarTheme: const TabBarTheme(dividerColor: Colors.transparent),
+      tabBarTheme: const TabBarThemeData(dividerColor: Colors.transparent),
       textTheme: const TextTheme(
-        titleLarge: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.normal,
-        ),
-        bodySmall: TextStyle(
-          fontSize: 11,
-        ),
+        titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+        bodySmall: TextStyle(fontSize: 11),
       ),
       buttonTheme: ButtonThemeData(
         textTheme: ButtonTextTheme.primary,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
     return theme.copyWith(

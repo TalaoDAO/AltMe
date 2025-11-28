@@ -18,12 +18,21 @@ LivenessCardModel _$LivenessCardModelFromJson(Map<String, dynamic> json) =>
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
     );
 
-Map<String, dynamic> _$LivenessCardModelToJson(LivenessCardModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'type': instance.type,
-      'issuedBy': instance.issuedBy?.toJson(),
-      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
-      'expires': instance.expires,
-      'offers': instance.offers?.toJson(),
-    };
+Map<String, dynamic> _$LivenessCardModelToJson(LivenessCardModel instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'type': instance.type,
+    'issuedBy': instance.issuedBy?.toJson(),
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('offeredBy', instance.offeredBy?.toJson());
+  val['expires'] = instance.expires;
+  val['offers'] = instance.offers?.toJson();
+  return val;
+}

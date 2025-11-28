@@ -14,9 +14,9 @@ class PhonePassModel extends CredentialSubjectModel {
     super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.phonePass,
-          credentialCategory: CredentialCategory.contactInfoCredentials,
-        );
+         credentialSubjectType: CredentialSubjectType.phonePass,
+         credentialCategory: CredentialCategory.contactInfoCredentials,
+       );
 
   factory PhonePassModel.fromJson(Map<String, dynamic> json) =>
       _$PhonePassModelFromJson(json);

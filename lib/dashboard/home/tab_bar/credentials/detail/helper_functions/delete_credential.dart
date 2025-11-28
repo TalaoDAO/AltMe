@@ -6,7 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> deleteCredential(BuildContext context, String id) async {
   final l10n = context.l10n;
-  final confirm = await showDialog<bool>(
+  final confirm =
+      await showDialog<bool>(
         context: context,
         builder: (BuildContext context) {
           return ConfirmDialog(
@@ -20,8 +21,6 @@ Future<void> deleteCredential(BuildContext context, String id) async {
 
   if (confirm) {
     final credentialsCubit = context.read<CredentialsCubit>();
-    await credentialsCubit.deleteById(
-      id: id,
-    );
+    await credentialsCubit.deleteById(id: id);
   }
 }

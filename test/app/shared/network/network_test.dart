@@ -22,8 +22,10 @@ void main() {
   late DioClient service;
 
   setUp(() {
-    dioAdapter =
-        DioAdapter(dio: Dio(BaseOptions()), matcher: const UrlRequestMatcher());
+    dioAdapter = DioAdapter(
+      dio: Dio(BaseOptions()),
+      matcher: const UrlRequestMatcher(),
+    );
     client.httpClientAdapter = dioAdapter;
     mockSecureStorageProvider = MockSecureStorageProvider();
     service = DioClient(
@@ -72,12 +74,9 @@ void main() {
 
     group('Get Method', () {
       test('Get Method Success test', () async {
-        dioAdapter.onGet(
-          baseUrl + testPath,
-          (request) {
-            return request.reply(200, successMessage);
-          },
-        );
+        dioAdapter.onGet(baseUrl + testPath, (request) {
+          return request.reply(200, successMessage);
+        });
 
         final dynamic response = await service.get(baseUrl + testPath);
 

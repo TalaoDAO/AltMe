@@ -35,20 +35,28 @@ EUVerifiableIdModel _$EUVerifiableIdModelFromJson(Map<String, dynamic> json) =>
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
     );
 
-Map<String, dynamic> _$EUVerifiableIdModelToJson(
-        EUVerifiableIdModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'type': instance.type,
-      'issuedBy': instance.issuedBy?.toJson(),
-      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
-      'expires': instance.expires,
-      'awardingOpportunity': instance.awardingOpportunity?.toJson(),
-      'dateOfBirth': instance.dateOfBirth,
-      'familyName': instance.familyName,
-      'givenNames': instance.givenNames,
-      'gradingScheme': instance.gradingScheme?.toJson(),
-      'identifier': instance.identifier,
-      'learningAchievement': instance.learningAchievement?.toJson(),
-      'learningSpecification': instance.learningSpecification?.toJson(),
-    };
+Map<String, dynamic> _$EUVerifiableIdModelToJson(EUVerifiableIdModel instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'type': instance.type,
+    'issuedBy': instance.issuedBy?.toJson(),
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('offeredBy', instance.offeredBy?.toJson());
+  val['expires'] = instance.expires;
+  val['awardingOpportunity'] = instance.awardingOpportunity?.toJson();
+  val['dateOfBirth'] = instance.dateOfBirth;
+  val['familyName'] = instance.familyName;
+  val['givenNames'] = instance.givenNames;
+  val['gradingScheme'] = instance.gradingScheme?.toJson();
+  val['identifier'] = instance.identifier;
+  val['learningAchievement'] = instance.learningAchievement?.toJson();
+  val['learningSpecification'] = instance.learningSpecification?.toJson();
+  return val;
+}

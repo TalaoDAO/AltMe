@@ -4,18 +4,16 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class PolygonAssociatedAddressWidget extends StatelessWidget {
-  const PolygonAssociatedAddressWidget({
-    super.key,
-    this.credentialModel,
-  });
+  const PolygonAssociatedAddressWidget({super.key, this.credentialModel});
 
   final CredentialModel? credentialModel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final associatedAddress = credentialModel?.credentialPreview
-        .credentialSubjectModel as PolygonAssociatedAddressModel?;
+    final associatedAddress =
+        credentialModel?.credentialPreview.credentialSubjectModel
+            as PolygonAssociatedAddressModel?;
     return MyBlockchainAccountBaseWidget(
       background: ImageStrings.polygonOwnershipCard,
       proofMessage: l10n.polygonProofMessage,

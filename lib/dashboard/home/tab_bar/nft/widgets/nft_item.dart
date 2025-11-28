@@ -41,9 +41,7 @@ class NftItem extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 8,
-            ),
+            const SizedBox(height: 8),
             MyText(
               '$description $id',
               maxLines: 1,

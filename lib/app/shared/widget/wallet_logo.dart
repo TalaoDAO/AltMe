@@ -32,10 +32,10 @@ class WalletLogo extends StatelessWidget {
             image = flavorCubit.state == FlavorMode.development
                 ? ImageStrings.appLogoDev
                 : flavorCubit.state == FlavorMode.staging
-                    ? ImageStrings.appLogoStage
-                    : ImageStrings.appLogo;
+                ? ImageStrings.appLogoStage
+                : ImageStrings.appLogo;
           case ProfileType.ebsiV3:
-          // case ProfileType.ebsiV4:
+            // case ProfileType.ebsiV4:
             image = ImageStrings.ebsiLogo;
           case ProfileType.europeanWallet:
           case ProfileType.inji:
@@ -55,7 +55,8 @@ class WalletLogo extends StatelessWidget {
               child: SizedBox(
                 width: width,
                 height: height,
-                child: (Uri.parse(image).isAbsolute ||
+                child:
+                    (Uri.parse(image).isAbsolute ||
                         profileModel.profileType == ProfileType.enterprise)
                     ? CachedImageFromNetwork(
                         image,

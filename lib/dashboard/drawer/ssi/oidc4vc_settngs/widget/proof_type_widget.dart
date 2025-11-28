@@ -27,8 +27,8 @@ class ProofTypeWidget extends StatelessWidget {
                   ListTile(
                     onTap: () {
                       context.read<ProfileCubit>().updateProfileSetting(
-                            proofType: proofType,
-                          );
+                        proofType: proofType,
+                      );
                     },
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
@@ -41,8 +41,12 @@ class ProofTypeWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     trailing: Icon(
-                      state.model.profileSetting.selfSovereignIdentityOptions
-                                  .customOidc4vcProfile.proofType ==
+                      state
+                                  .model
+                                  .profileSetting
+                                  .selfSovereignIdentityOptions
+                                  .customOidc4vcProfile
+                                  .proofType ==
                               proofType
                           ? Icons.radio_button_checked
                           : Icons.radio_button_unchecked,

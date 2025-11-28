@@ -12,10 +12,7 @@ class CredentialListShimmer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 5),
-        const ShimmerWidget.rectangular(
-          height: 12,
-          width: 100,
-        ),
+        const ShimmerWidget.rectangular(height: 12, width: 100),
         const SizedBox(height: 15),
         Expanded(
           child: GridView.builder(

@@ -1,6 +1,5 @@
 part of 'scan_cubit.dart';
 
-@JsonSerializable()
 class ScanState extends Equatable {
   const ScanState({
     this.status = ScanStatus.init,
@@ -10,10 +9,12 @@ class ScanState extends Equatable {
     this.challenge,
     this.domain,
     this.done,
+    this.transactionData,
+    this.blockchainTransactionsSignatures,
+    this.credentialPresentation,
+    this.presentationIssuer,
+    this.credentialsToBePresented,
   });
-
-  factory ScanState.fromJson(Map<String, dynamic> json) =>
-      _$ScanStateFromJson(json);
 
   final ScanStatus status;
   final StateMessage? message;
@@ -21,11 +22,16 @@ class ScanState extends Equatable {
   final String? keyId;
   final String? challenge;
   final String? domain;
+  final List<dynamic>? transactionData;
+  final List<Uint8List>? blockchainTransactionsSignatures;
+  final CredentialModel? credentialPresentation;
+  final Issuer? presentationIssuer;
+  final List<CredentialModel>? credentialsToBePresented;
   @JsonKey(includeFromJson: false, includeToJson: false)
   final dynamic Function(String)? done;
 
   ScanState loading() {
-    return ScanState(
+    return copyWith(
       status: ScanStatus.loading,
       uri: uri,
       keyId: keyId,
@@ -42,7 +48,7 @@ class ScanState extends Equatable {
     String? domain,
     required dynamic Function(String) done,
   }) {
-    return ScanState(
+    return copyWith(
       status: ScanStatus.askPermissionDidAuth,
       uri: uri,
       keyId: keyId,
@@ -53,32 +59,79 @@ class ScanState extends Equatable {
   }
 
   ScanState warning({required MessageHandler messageHandler}) {
-    return ScanState(
+    return copyWith(
       status: ScanStatus.warning,
       message: StateMessage.warning(messageHandler: messageHandler),
     );
   }
 
   ScanState error({required StateMessage message}) {
-    return ScanState(
-      status: ScanStatus.error,
-      message: message,
-    );
+    return copyWith(status: ScanStatus.error, message: message);
   }
 
   ScanState copyWith({
-    required ScanStatus status,
+    ScanStatus? status,
     StateMessage? message,
+    Uri? uri,
+    String? keyId,
+    String? challenge,
+    String? domain,
+    dynamic Function(String)? done,
+    List<dynamic>? transactionData,
+    List<Uint8List>? blockchainTransactionsSignatures,
+    CredentialModel? credentialPresentation,
+    Issuer? presentationIssuer,
+    List<CredentialModel>? credentialsToBePresented,
   }) {
+    // when status is successfull we need to reset transactionData and
+    // blockchainTransactionsSignatures to null if they are not provided
+    var newTransactionData = transactionData ?? this.transactionData;
+    var newBlockchainTransactionsSignatures =
+        blockchainTransactionsSignatures ??
+        this.blockchainTransactionsSignatures;
+    var newCredentialPresentation =
+        credentialPresentation ?? this.credentialPresentation;
+    var newPresentationIssuer = presentationIssuer ?? this.presentationIssuer;
+    var newCredentialsToBePresented =
+        credentialsToBePresented ?? this.credentialsToBePresented;
+
+    if (status == ScanStatus.success || status == ScanStatus.error) {
+      newTransactionData = null;
+      newBlockchainTransactionsSignatures = null;
+      newCredentialsToBePresented = null;
+      newPresentationIssuer = null;
+      newCredentialPresentation = null;
+    }
+
     return ScanState(
-      status: status,
-      message: message,
+      status: status ?? this.status,
+      message: message ?? this.message,
+      uri: uri ?? this.uri,
+      keyId: keyId ?? this.keyId,
+      challenge: challenge ?? this.challenge,
+      domain: domain ?? this.domain,
+      done: done ?? this.done,
+      transactionData: newTransactionData,
+      blockchainTransactionsSignatures: newBlockchainTransactionsSignatures,
+      credentialPresentation: newCredentialPresentation,
+      presentationIssuer: newPresentationIssuer,
+      credentialsToBePresented: newCredentialsToBePresented,
     );
   }
 
-  Map<String, dynamic> toJson() => _$ScanStateToJson(this);
-
   @override
-  List<Object?> get props =>
-      [status, message, uri, keyId, challenge, domain, done];
+  List<Object?> get props => [
+    status,
+    message,
+    uri,
+    keyId,
+    challenge,
+    domain,
+    done,
+    transactionData,
+    blockchainTransactionsSignatures,
+    credentialPresentation,
+    presentationIssuer,
+    credentialsToBePresented,
+  ];
 }

@@ -5,11 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SendToPage extends StatelessWidget {
-  const SendToPage({
-    super.key,
-    this.defaultSelectedToken,
-    this.nftModel,
-  });
+  const SendToPage({super.key, this.defaultSelectedToken, this.nftModel});
 
   final TokenModel? defaultSelectedToken;
   final NftModel? nftModel;
@@ -40,11 +36,7 @@ class SendToPage extends StatelessWidget {
 }
 
 class SendToView extends StatefulWidget {
-  const SendToView({
-    super.key,
-    this.defaultSelectedToken,
-    this.nftModel,
-  });
+  const SendToView({super.key, this.defaultSelectedToken, this.nftModel});
 
   final TokenModel? defaultSelectedToken;
   final NftModel? nftModel;
@@ -62,8 +54,8 @@ class _SendToViewState extends State<SendToView>
   void initState() {
     withdrawalAddressController.addListener(() {
       context.read<SendToCubit>().setWithdrawalAddress(
-            withdrawalAddress: withdrawalAddressController.text,
-          );
+        withdrawalAddress: withdrawalAddressController.text,
+      );
     });
     super.initState();
   }
@@ -125,9 +117,9 @@ class _SendToViewState extends State<SendToView>
                             ConfirmTokenTransactionPage.route(
                               selectedToken: isTezos
                                   ? (widget.nftModel! as TezosNftModel)
-                                      .getToken()
+                                        .getToken()
                                   : (widget.nftModel! as EthereumNftModel)
-                                      .getToken(),
+                                        .getToken(),
                               withdrawalAddress: state.withdrawalAddress,
                               amount: '1',
                               isNFT: true,

@@ -45,10 +45,5 @@ class RecoveryKeyState extends Equatable {
   Map<String, dynamic> toJson() => _$RecoveryKeyStateToJson(this);
 
   @override
-  List<Object?> get props => [
-        status,
-        message,
-        mnemonics,
-        hasVerifiedMnemonics,
-      ];
+  List<Object?> get props => [status, message, mnemonics, hasVerifiedMnemonics];
 }

@@ -46,7 +46,8 @@ class _WithdrawalAddressInputPage extends StatefulWidget {
 }
 
 class _WithdrawalAddressInputPageState
-    extends State<_WithdrawalAddressInputPage> with WalletAddressValidator {
+    extends State<_WithdrawalAddressInputPage>
+    with WalletAddressValidator {
   late final withdrawalAddressController =
       widget.withdrawalAddressController ?? TextEditingController();
 
@@ -60,9 +61,9 @@ class _WithdrawalAddressInputPageState
         if (withdrawalAddressController.text.isEmpty) {
           context.read<WithdrawalInputCubit>().setState(isTextFieldEmpty: true);
         } else {
-          context
-              .read<WithdrawalInputCubit>()
-              .setState(isTextFieldEmpty: false);
+          context.read<WithdrawalInputCubit>().setState(
+            isTextFieldEmpty: false,
+          );
         }
       });
     });
@@ -89,8 +90,8 @@ class _WithdrawalAddressInputPageState
               child: Text(
                 widget.caption!,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ),
           Row(
@@ -138,9 +139,7 @@ class _WithdrawalAddressInputPageState
                   ),
                 ),
               ),
-              const SizedBox(
-                width: Sizes.spaceSmall,
-              ),
+              const SizedBox(width: Sizes.spaceSmall),
               BlocBuilder<WithdrawalInputCubit, bool>(
                 builder: (_, isEmpty) => isEmpty
                     ? Row(
@@ -152,9 +151,7 @@ class _WithdrawalAddressInputPageState
                               width: Sizes.icon2x,
                             ),
                           ),
-                          const SizedBox(
-                            width: Sizes.spaceSmall,
-                          ),
+                          const SizedBox(width: Sizes.spaceSmall),
                           InkWell(
                             onTap: _openWhiteList,
                             child: Image.asset(
@@ -180,8 +177,10 @@ class _WithdrawalAddressInputPageState
   }
 
   Future<void> _openQRScanner() async {
-    final result =
-        await Navigator.push<String?>(context, QrScannerPage.route());
+    final result = await Navigator.push<String?>(
+      context,
+      QrScannerPage.route(),
+    );
     if (result?.startsWith('ethereum:') ?? false) {
       withdrawalAddressController.text = result!.replaceAll('ethereum:', '');
     } else {
@@ -190,8 +189,10 @@ class _WithdrawalAddressInputPageState
   }
 
   Future<void> _openWhiteList() async {
-    final result =
-        await Navigator.push<String?>(context, WhiteListPage.route());
+    final result = await Navigator.push<String?>(
+      context,
+      WhiteListPage.route(),
+    );
     withdrawalAddressController.text = result ?? '';
   }
 }

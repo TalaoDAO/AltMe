@@ -15,9 +15,9 @@ class StudentCardModel extends CredentialSubjectModel {
     super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.studentCard,
-          credentialCategory: CredentialCategory.contactInfoCredentials,
-        );
+         credentialSubjectType: CredentialSubjectType.studentCard,
+         credentialCategory: CredentialCategory.contactInfoCredentials,
+       );
 
   factory StudentCardModel.fromJson(Map<String, dynamic> json) =>
       _$StudentCardModelFromJson(json);
@@ -31,7 +31,7 @@ class StudentCardModel extends CredentialSubjectModel {
   Map<String, dynamic> toJson() => _$StudentCardModelToJson(this);
 
   static ProfessionalStudentCardRecipient
-      _fromJsonProfessionalStudentCardRecipient(dynamic json) {
+  _fromJsonProfessionalStudentCardRecipient(dynamic json) {
     if (json == null || json == '') {
       return ProfessionalStudentCardRecipient.empty();
     }

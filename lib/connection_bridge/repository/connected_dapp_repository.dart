@@ -7,7 +7,7 @@ import 'package:secure_storage/secure_storage.dart';
 
 class ConnectedDappRepository {
   ConnectedDappRepository(SecureStorageProvider secureStorageProvider)
-      : _secureStorageProvider = secureStorageProvider;
+    : _secureStorageProvider = secureStorageProvider;
 
   final SecureStorageProvider _secureStorageProvider;
 
@@ -18,9 +18,7 @@ class ConnectedDappRepository {
     try {
       final data = await _secureStorageProvider.getAllValues();
       data.removeWhere(
-        (key, value) => !key.startsWith(
-          '${SecureStorageKeys.savedDaaps}/',
-        ),
+        (key, value) => !key.startsWith('${SecureStorageKeys.savedDaaps}/'),
       );
       final savedPeerData = <SavedDappData>[];
       data.forEach((key, value) {
@@ -39,8 +37,9 @@ class ConnectedDappRepository {
 
   Future<BeaconRequest?> findBeaconDappsByPublicKey(String publicKey) async {
     log.i('findByPublicKey');
-    final String? data = await _secureStorageProvider
-        .get('${SecureStorageKeys.savedDaaps}/$publicKey');
+    final String? data = await _secureStorageProvider.get(
+      '${SecureStorageKeys.savedDaaps}/$publicKey',
+    );
     if (data == null) {
       return null;
     }

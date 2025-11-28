@@ -80,9 +80,7 @@ class TransactionDoneDialog extends StatelessWidget {
                   onTap: onTrasactionHashTap,
                   onLongPress: () async {
                     await Clipboard.setData(
-                      ClipboardData(
-                        text: transactionHash!,
-                      ),
+                      ClipboardData(text: transactionHash!),
                     );
                     AlertMessage.showStateMessage(
                       context: context,
@@ -94,9 +92,9 @@ class TransactionDoneDialog extends StatelessWidget {
                   child: Text(
                     transactionHash!,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
-                        ),
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),

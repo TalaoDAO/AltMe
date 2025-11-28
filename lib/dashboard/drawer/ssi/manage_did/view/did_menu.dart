@@ -34,9 +34,7 @@ class DidView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const BackLeadingButton(
-                  padding: EdgeInsets.zero,
-                ),
+                const BackLeadingButton(padding: EdgeInsets.zero),
                 WalletLogo(
                   height: 90,
                   width: MediaQuery.of(context).size.shortestSide * 0.5,
@@ -63,9 +61,7 @@ class DidView extends StatelessWidget {
                       title: title,
                       onTap: () {
                         Navigator.of(context).push<void>(
-                          ManageDidPage.route(
-                            didKeyType: didKeyType,
-                          ),
+                          ManageDidPage.route(didKeyType: didKeyType),
                         );
                       },
                     );
@@ -74,9 +70,9 @@ class DidView extends StatelessWidget {
                 DrawerItem(
                   title: l10n.jwkThumbprintP256Key,
                   onTap: () {
-                    Navigator.of(context).push<void>(
-                      JWKThumbprintP256KeyPage.route(),
-                    );
+                    Navigator.of(
+                      context,
+                    ).push<void>(JWKThumbprintP256KeyPage.route());
                   },
                 ),
               ],

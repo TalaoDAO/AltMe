@@ -31,11 +31,7 @@ class CachedImageFromNetwork extends StatelessWidget {
     if (url.startsWith('assets')) {
       return ClipRRect(
         borderRadius: borderRadius ?? BorderRadius.zero,
-        child: Image.asset(
-          url,
-          width: width,
-          height: height,
-        ),
+        child: Image.asset(url, width: width, height: height),
       );
     } else {
       return ClipRRect(
@@ -48,75 +44,67 @@ class CachedImageFromNetwork extends StatelessWidget {
                 placeholderBuilder: (_) => Container(
                   width: width,
                   height: height,
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.6),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               )
             : url.startsWith('http')
-                ? CachedNetworkImage(
-                    imageUrl: url,
-                    fit: fit,
-                    width: width,
-                    height: height,
-                    progressIndicatorBuilder:
-                        (context, child, downloadProgress) {
-                      return showLoading
-                          ? DecoratedBox(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Theme.of(context).colorScheme.primary,
-                                    Theme.of(context).colorScheme.secondary,
-                                  ],
-                                  begin: Alignment.bottomLeft,
-                                  end: Alignment.topRight,
-                                  stops: const [0.3, 1.0],
-                                ),
-                              ),
-                            )
-                          : Container(
-                              color: bgColor ??
-                                  Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
-                                      .withValues(alpha: 0.6),
-                            );
-                    },
-                    errorWidget: (context, error, dynamic _) => errorMessage ==
-                            null
-                        ? ColoredBox(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withValues(alpha: 0.6),
-                            child: Icon(
-                              Icons.error,
-                              color: Theme.of(context).colorScheme.onSurface,
+            ? CachedNetworkImage(
+                imageUrl: url,
+                fit: fit,
+                width: width,
+                height: height,
+                progressIndicatorBuilder: (context, child, downloadProgress) {
+                  return showLoading
+                      ? DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Theme.of(context).colorScheme.primary,
+                                Theme.of(context).colorScheme.secondary,
+                              ],
+                              begin: Alignment.bottomLeft,
+                              end: Alignment.topRight,
+                              stops: const [0.3, 1.0],
                             ),
-                          )
-                        : ErrorWidget(errorMessage: errorMessage),
-                  )
-                : Image.memory(
-                    base64Decode(
-                      url.replaceAll(RegExp('data:image/[^;]+;base64,'), ''),
-                    ),
-                    fit: fit,
-                    width: width,
-                    height: height,
-                  ),
+                          ),
+                        )
+                      : Container(
+                          color:
+                              bgColor ??
+                              Theme.of(
+                                context,
+                              ).colorScheme.onSurface.withValues(alpha: 0.6),
+                        );
+                },
+                errorWidget: (context, error, dynamic _) => errorMessage == null
+                    ? ColoredBox(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.6),
+                        child: Icon(
+                          Icons.error,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      )
+                    : ErrorWidget(errorMessage: errorMessage),
+              )
+            : Image.memory(
+                base64Decode(
+                  url.replaceAll(RegExp('data:image/[^;]+;base64,'), ''),
+                ),
+                fit: fit,
+                width: width,
+                height: height,
+              ),
       );
     }
   }
 }
 
 class ErrorWidget extends StatelessWidget {
-  const ErrorWidget({
-    super.key,
-    required this.errorMessage,
-    this.bgColor,
-  });
+  const ErrorWidget({super.key, required this.errorMessage, this.bgColor});
 
   final String? errorMessage;
   final Color? bgColor;

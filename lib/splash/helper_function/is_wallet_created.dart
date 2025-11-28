@@ -19,14 +19,16 @@ Future<bool> isWalletCreated({
   final log = getLogger('IsWalletCreated');
 
   log.i('did initialisation');
-  final String? ssiMnemonic =
-      await secureStorageProvider.get(SecureStorageKeys.ssiMnemonic);
+  final String? ssiMnemonic = await secureStorageProvider.get(
+    SecureStorageKeys.ssiMnemonic,
+  );
   if (ssiMnemonic == null || ssiMnemonic.isEmpty) {
     return false;
   }
 
-  final String? ssiKey =
-      await secureStorageProvider.get(SecureStorageKeys.ssiKey);
+  final String? ssiKey = await secureStorageProvider.get(
+    SecureStorageKeys.ssiKey,
+  );
   if (ssiKey == null || ssiKey.isEmpty) {
     return false;
   }
@@ -55,24 +57,26 @@ Future<void> blockchainInitialize({
   required String ssiMnemonic,
   required SecureStorageProvider secureStorageProvider,
 }) async {
-  // TODO(bibash): currentCryptoIndex => currentTezosIndex & currentEthIndex
-  final String? currentCryptoIndex =
-      await secureStorageProvider.get(SecureStorageKeys.currentCryptoIndex);
+  final String? currentCryptoIndex = await secureStorageProvider.get(
+    SecureStorageKeys.currentCryptoIndex,
+  );
 
   if (currentCryptoIndex != null && currentCryptoIndex.isNotEmpty) {
     /// load active index
     final activeIndex = int.parse(currentCryptoIndex);
     await walletCubit.setCurrentWalletAccount(activeIndex);
 
-    final String? savedCryptoAccount =
-        await secureStorageProvider.get(SecureStorageKeys.cryptoAccount);
+    final String? savedCryptoAccount = await secureStorageProvider.get(
+      SecureStorageKeys.cryptoAccount,
+    );
 
     if (savedCryptoAccount != null && savedCryptoAccount.isNotEmpty) {
       //load all the content of walletAddress
       final cryptoAccountJson =
           jsonDecode(savedCryptoAccount) as Map<String, dynamic>;
-      final CryptoAccount cryptoAccount =
-          CryptoAccount.fromJson(cryptoAccountJson);
+      final CryptoAccount cryptoAccount = CryptoAccount.fromJson(
+        cryptoAccountJson,
+      );
       walletCubit.emitCryptoAccount(cryptoAccount);
     } else {
       await walletCubit.setCurrentWalletAccount(0);

@@ -24,11 +24,12 @@ class FeeDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final grandTotal =
-        (Decimal.parse(amount) + Decimal.parse(totalFee)).toDouble();
+    final grandTotal = (Decimal.parse(amount) + Decimal.parse(totalFee))
+        .toDouble();
 
-    final bakerCost =
-        bakerFee == null ? null : Decimal.parse(bakerFee!).toDouble();
+    final bakerCost = bakerFee == null
+        ? null
+        : Decimal.parse(bakerFee!).toDouble();
     final storageFee = bakerFee == null
         ? null
         : (Decimal.parse(totalFee) - Decimal.parse(bakerFee!)).toDouble();
@@ -41,10 +42,7 @@ class FeeDetails extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
-                l10n.amount,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
+              Text(l10n.amount, style: Theme.of(context).textTheme.bodySmall),
               const Spacer(),
               Text(
                 '${amount.decimalNumber(6).formatNumber} $symbol',
@@ -133,9 +131,7 @@ class FeeDetails extends StatelessWidget {
 
   Widget _buildDivider(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: Sizes.spaceSmall,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: Sizes.spaceSmall),
       child: Divider(
         height: 0.1,
         color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12),

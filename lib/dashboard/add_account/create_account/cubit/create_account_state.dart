@@ -2,10 +2,7 @@ part of 'create_account_cubit.dart';
 
 @JsonSerializable()
 class CreateAccountState extends Equatable {
-  const CreateAccountState({
-    this.status = AppStatus.init,
-    this.message,
-  });
+  const CreateAccountState({this.status = AppStatus.init, this.message});
 
   factory CreateAccountState.fromJson(Map<String, dynamic> json) =>
       _$CreateAccountStateFromJson(json);
@@ -14,9 +11,7 @@ class CreateAccountState extends Equatable {
   final StateMessage? message;
 
   CreateAccountState loading() {
-    return const CreateAccountState(
-      status: AppStatus.loading,
-    );
+    return const CreateAccountState(status: AppStatus.loading);
   }
 
   CreateAccountState error({required MessageHandler messageHandler}) {
@@ -41,8 +36,5 @@ class CreateAccountState extends Equatable {
   Map<String, dynamic> toJson() => _$CreateAccountStateToJson(this);
 
   @override
-  List<Object?> get props => [
-        status,
-        message,
-      ];
+  List<Object?> get props => [status, message];
 }

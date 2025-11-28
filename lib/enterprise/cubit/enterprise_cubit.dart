@@ -64,14 +64,20 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       );
 
       /// save data
-      await profileCubit.secureStorageProvider
-          .set(SecureStorageKeys.enterpriseEmail, email);
+      await profileCubit.secureStorageProvider.set(
+        SecureStorageKeys.enterpriseEmail,
+        email,
+      );
 
-      await profileCubit.secureStorageProvider
-          .set(SecureStorageKeys.enterprisePassword, password);
+      await profileCubit.secureStorageProvider.set(
+        SecureStorageKeys.enterprisePassword,
+        password,
+      );
 
-      await profileCubit.secureStorageProvider
-          .set(SecureStorageKeys.enterpriseWalletProvider, url);
+      await profileCubit.secureStorageProvider.set(
+        SecureStorageKeys.enterpriseWalletProvider,
+        url,
+      );
     } catch (e) {
       emitError(e);
     }
@@ -146,13 +152,15 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         setting,
       );
 
-      final profileSetting =
-          ProfileSetting.fromJson(jsonDecode(setting) as Map<String, dynamic>);
+      final profileSetting = ProfileSetting.fromJson(
+        jsonDecode(setting) as Map<String, dynamic>,
+      );
 
       ///save to profileCubit
       await profileCubit.setProfileSetting(
         profileSetting: profileSetting,
         profileType: ProfileType.enterprise,
+        walletType: WalletType.enterprise,
       );
       final helpCenterOptions = profileSetting.helpCenterOptions;
 
@@ -168,11 +176,6 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       }
 
       // chat is not initiatied at start
-
-      /// uprade wallet to enterprise
-      await profileCubit.setWalletType(
-        walletType: WalletType.enterprise,
-      );
 
       final blockchainOptions = profileSetting.blockchainOptions;
       if (blockchainOptions != null && Parameters.walletHandlesCrypto) {
@@ -197,9 +200,9 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
             messageHandler: ResponseMessage(
               message: status == AppStatus.addEnterpriseAccount
                   ? ResponseString
-                      .RESPONSE_STRING_successfullyAddedEnterpriseAccount
+                        .RESPONSE_STRING_successfullyAddedEnterpriseAccount
                   : ResponseString
-                      .RESPONSE_STRING_successfullyUpdatedEnterpriseAccount,
+                        .RESPONSE_STRING_successfullyUpdatedEnterpriseAccount,
             ),
           ),
         ),
@@ -219,10 +222,8 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
   Future<void> getWalletAttestationBitStatus() async {
     try {
-      final walletAttestationData =
-          await profileCubit.secureStorageProvider.get(
-        SecureStorageKeys.walletAttestationData,
-      );
+      final walletAttestationData = await profileCubit.secureStorageProvider
+          .get(SecureStorageKeys.walletAttestationData);
 
       final jwtVc = walletAttestationData.toString();
 
@@ -250,8 +251,9 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
               ),
             );
 
-            final payload =
-                profileCubit.jwtDecode.parseJwt(response.toString());
+            final payload = profileCubit.jwtDecode.parseJwt(
+              response.toString(),
+            );
 
             final newStatusList = payload['status_list'];
             if (newStatusList != null &&
@@ -292,10 +294,8 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         SecureStorageKeys.enterpriseWalletProvider,
       );
 
-      final walletAttestationData =
-          await profileCubit.secureStorageProvider.get(
-        SecureStorageKeys.walletAttestationData,
-      );
+      final walletAttestationData = await profileCubit.secureStorageProvider
+          .get(SecureStorageKeys.walletAttestationData);
 
       if (savedEmail == null ||
           savedPassword == null ||
@@ -328,8 +328,9 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         data: data,
       );
 
-      final profileSettingJson =
-          profileCubit.jwtDecode.parseJwt(response as String);
+      final profileSettingJson = profileCubit.jwtDecode.parseJwt(
+        response as String,
+      );
 
       await profileCubit.secureStorageProvider.set(
         SecureStorageKeys.enterpriseProfileSetting,
@@ -342,6 +343,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       await profileCubit.setProfileSetting(
         profileSetting: profileSetting,
         profileType: ProfileType.enterprise,
+        walletType: WalletType.enterprise,
       );
       // if (isVerified == VerificationType.verified) {
       //   emit(
@@ -372,8 +374,8 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
           helpCenterOptions.customNotificationRoom != null) {
         final roomName = helpCenterOptions.customNotificationRoom;
 
-        final savedRoomName =
-            await matrixNotificationCubit.getRoomIdFromStorage();
+        final savedRoomName = await matrixNotificationCubit
+            .getRoomIdFromStorage();
 
         if (roomName != savedRoomName) {
           await matrixNotificationCubit.clearRoomIdFromStorage();
@@ -444,8 +446,9 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     }
 
     if (blockchainType != null) {
-      final index = cryptoAccountDataList
-          .indexWhereOrNull((a) => a.blockchainType == blockchainType);
+      final index = cryptoAccountDataList.indexWhereOrNull(
+        (a) => a.blockchainType == blockchainType,
+      );
       if (index != null) {
         await credentialsCubit.walletCubit.setCurrentWalletAccount(index);
       }
@@ -465,9 +468,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     );
   }
 
-  Future<void> getWalletProviderAccount(
-    QRCodeScanCubit qrCodeScanCubit,
-  ) async {
+  Future<void> getWalletProviderAccount(QRCodeScanCubit qrCodeScanCubit) async {
     late final dynamic configurationResponse;
     // check if wallet is Altme or Talao
     if (Parameters.appName == 'Altme') {

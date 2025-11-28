@@ -15,9 +15,9 @@ class EmailPassModel extends CredentialSubjectModel {
     super.offeredBy,
     this.passbaseMetadata,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.emailPass,
-          credentialCategory: CredentialCategory.contactInfoCredentials,
-        );
+         credentialSubjectType: CredentialSubjectType.emailPass,
+         credentialCategory: CredentialCategory.contactInfoCredentials,
+       );
 
   factory EmailPassModel.fromJson(Map<String, dynamic> json) =>
       _$EmailPassModelFromJson(json);

@@ -11,21 +11,18 @@ part 'theme_state.dart';
 // https://medium.com/flutter-community/create-a-theme-and-primary-color-switcher-for-your-flutter-app-using-provider-fd334dd7d761
 
 class ThemeCubit extends Cubit<ThemeState> {
-  ThemeCubit({
-    required ThemePersistence themeRepository,
-  })  : _themeRepository = themeRepository,
-        super(const ThemeState());
+  ThemeCubit({required ThemePersistence themeRepository})
+    : _themeRepository = themeRepository,
+      super(const ThemeState());
 
   final ThemePersistence _themeRepository;
   late StreamSubscription<ThemeMode> _themeSubscription;
 
   void getCurrentTheme() {
     // Since `getTheme()` returns a stream, we listen to the output
-    _themeSubscription = _themeRepository.getTheme().listen(
-      (themeMode) {
-        emit(state.copyWith(themeMode: themeMode));
-      },
-    );
+    _themeSubscription = _themeRepository.getTheme().listen((themeMode) {
+      emit(state.copyWith(themeMode: themeMode));
+    });
   }
 
   void switchTheme(ThemeMode themeMode) {

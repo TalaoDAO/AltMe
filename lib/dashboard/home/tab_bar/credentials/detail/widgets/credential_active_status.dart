@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CredentialActiveStatus extends StatelessWidget {
-  const CredentialActiveStatus({
-    super.key,
-    required this.credentialStatus,
-  });
+  const CredentialActiveStatus({super.key, required this.credentialStatus});
 
   final CredentialStatus? credentialStatus;
 
@@ -22,8 +19,8 @@ class CredentialActiveStatus extends StatelessWidget {
             Text(
               credentialStatus?.message(context) ?? '',
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
             const SizedBox(width: 5),
             if (credentialStatus != null)

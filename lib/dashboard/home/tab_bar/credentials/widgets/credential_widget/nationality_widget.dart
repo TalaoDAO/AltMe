@@ -8,22 +8,24 @@ class NationalityWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final nationalityModel = credentialModel
-        .credentialPreview.credentialSubjectModel as NationalityModel;
+    final nationalityModel =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as NationalityModel;
 
     return CredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.nationalityProof,
       issuerName: credentialModel
-          .credentialPreview.credentialSubjectModel.issuedBy?.name,
+          .credentialPreview
+          .credentialSubjectModel
+          .issuedBy
+          ?.name,
       value: nationalityModel.nationality,
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),
       expirationDate: credentialModel.expirationDate == null
           ? '--'
-          : UiDate.formatDateForCredentialCard(
-              credentialModel.expirationDate!,
-            ),
+          : UiDate.formatDateForCredentialCard(credentialModel.expirationDate!),
     );
   }
 }

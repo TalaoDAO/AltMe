@@ -6,20 +6,13 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AiAnalysisPage extends StatelessWidget {
-  const AiAnalysisPage({
-    super.key,
-    required this.content,
-  });
+  const AiAnalysisPage({super.key, required this.content});
 
   final String content;
 
-  static Route<dynamic> route({
-    required String content,
-  }) =>
+  static Route<dynamic> route({required String content}) =>
       MaterialPageRoute<void>(
-        builder: (_) => AiAnalysisPage(
-          content: content,
-        ),
+        builder: (_) => AiAnalysisPage(content: content),
         settings: const RouteSettings(name: '/AiAnalysisPage'),
       );
 
@@ -45,9 +38,7 @@ class AiAnalysisPage extends StatelessWidget {
         ),
       ),
       navigation: Padding(
-        padding: const EdgeInsets.all(
-          Sizes.spaceSmall,
-        ),
+        padding: const EdgeInsets.all(Sizes.spaceSmall),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

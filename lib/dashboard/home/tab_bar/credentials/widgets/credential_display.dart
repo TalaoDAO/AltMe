@@ -22,11 +22,11 @@ class CredentialDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (credentialModel
-        .credentialPreview.credentialSubjectModel.credentialSubjectType) {
+        .credentialPreview
+        .credentialSubjectModel
+        .credentialSubjectType) {
       case CredentialSubjectType.defiCompliance:
-        return DefiComplianceCredentialWidget(
-          credentialModel: credentialModel,
-        );
+        return DefiComplianceCredentialWidget(credentialModel: credentialModel);
       case CredentialSubjectType.walletCredential:
         return WalletCredentialWidget(credentialModel: credentialModel);
 
@@ -65,13 +65,13 @@ class CredentialDisplay extends StatelessWidget {
           final credentialName = credentialModel.credentialPreview.type[0];
           final CredentialSubjectType credentialSubjectType =
               getCredTypeFromName(credentialName) ??
-                  CredentialSubjectType.defaultCredential;
+              CredentialSubjectType.defaultCredential;
 
           final DiscoverDummyCredential discoverDummyCredential =
               credentialSubjectType.dummyCredential(
-            profileSetting: profileSetting,
-            assignedVCFormatType: VCFormatType.ldpVc, // just assigning
-          );
+                profileSetting: profileSetting,
+                assignedVCFormatType: VCFormatType.ldpVc, // just assigning
+              );
 
           return Opacity(
             opacity: 0.5,
@@ -317,9 +317,7 @@ class CredentialDisplay extends StatelessWidget {
         );
 
       case CredentialSubjectType.ethereumPooAddress:
-        return EthereumPooAddressWidget(
-          credentialModel: credentialModel,
-        );
+        return EthereumPooAddressWidget(credentialModel: credentialModel);
 
       case CredentialSubjectType.tezosPooAddress:
         return TezosPooAddressWidget(credentialModel: credentialModel);

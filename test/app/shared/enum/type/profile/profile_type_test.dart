@@ -16,8 +16,10 @@ void main() {
       expect(ProfileType.defaultOne.getTitle(name: ''), 'Default');
       expect(ProfileType.enterprise.getTitle(name: ''), 'Enterprise');
       expect(ProfileType.enterprise.getTitle(name: 'Test'), 'Test');
-      expect(ProfileType.europeanWallet.getTitle(name: ''),
-          'Prototype for EWC pilot');
+      expect(
+        ProfileType.europeanWallet.getTitle(name: ''),
+        'Prototype for EWC pilot',
+      );
       expect(ProfileType.inji.getTitle(name: ''), 'Inji by MOSIP');
     });
 

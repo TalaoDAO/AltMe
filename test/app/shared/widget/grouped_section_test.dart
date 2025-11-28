@@ -5,8 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../helpers/helpers.dart';
 
 void main() {
-  testWidgets('GroupedSection renders children correctly',
-      (WidgetTester tester) async {
+  testWidgets('GroupedSection renders children correctly', (
+    WidgetTester tester,
+  ) async {
     final testChildren = <Widget>[
       const Text('Child 1'),
       const Text('Child 2'),
@@ -14,11 +15,7 @@ void main() {
     ];
 
     await tester.pumpApp(
-      Scaffold(
-        body: GroupedSection(
-          children: testChildren,
-        ),
-      ),
+      Scaffold(body: GroupedSection(children: testChildren)),
     );
 
     // Verify the children are displayed

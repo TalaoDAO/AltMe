@@ -1,20 +1,22 @@
 part of 'credentials_cubit.dart';
 
 ///helper function to generate Tezos/Ethereum AssociatedAddressCredential
-Future<CredentialModel?> generateAssociatedWalletCredential({
+Future<CredentialModel?> generateCryptoAccountOwnershipProof({
   required CryptoAccountData cryptoAccountData,
   required DIDKitProvider didKitProvider,
-  required BlockchainType blockchainType,
   required KeyGenerator keyGenerator,
   required String did,
   required CustomOidc4VcProfile customOidc4vcProfile,
   required OIDC4VC oidc4vc,
   required Map<String, dynamic> privateKey,
   required ProfileType profileType,
+  required VCFormatType vcFormatType,
   String? oldId,
 }) async {
-  final log =
-      getLogger('CredentialsCubit - generateAssociatedWalletCredential');
+  final log = getLogger(
+    'CredentialsCubit - generateAssociatedWalletCredential',
+  );
+  final blockchainType = cryptoAccountData.blockchainType;
   log.i(blockchainType);
   try {
     final didMethod = getDidMethod(blockchainType);
@@ -31,11 +33,6 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
     log.i('jwkKey - $jwkKey');
     log.i('didKitProvider.keyToDID - $issuer');
 
-    //Issue: https://github.com/spruceid/didkit/issues/329
-    // final verificationMethod =
-    //     await didKitProvider.keyToVerificationMethod(didMethod, jwkKey);
-    //log.i('didKitProvider.keyToVerificationMethod - $verificationMethod');
-
     late String verificationMethod;
 
     switch (blockchainType) {
@@ -48,8 +45,10 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
       case BlockchainType.binance:
       case BlockchainType.etherlink:
         //verificationMethod = '$issuer#Recovery2020';
-        verificationMethod =
-            await didKitProvider.keyToVerificationMethod(didMethod, jwkKey);
+        verificationMethod = await didKitProvider.keyToVerificationMethod(
+          didMethod,
+          jwkKey,
+        );
     }
 
     log.i('verificationMethod - $verificationMethod');
@@ -140,36 +139,127 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
     }
 
     log.i(jsonEncode(associatedAddressCredential.toJson()));
-    final String vc = await didKitProvider.issueCredential(
-      jsonEncode(associatedAddressCredential.toJson()),
-      jsonEncode(options),
-      jwkKey,
-    );
-
-    log.i('didKitProvider.issueCredential - $vc');
-
-    final result =
-        await didKitProvider.verifyCredential(vc, jsonEncode(verifyOptions));
-    log.i('didKitProvider.verifyCredential - $result');
-    final jsonVerification = jsonDecode(result) as Map<String, dynamic>;
-
-    if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
-      log.w(
-        'credential verification return warnings',
-        error: jsonVerification['warnings'],
-      );
-    }
-
-    final credentialManifest = blockchainType.credentialManifest;
-
-    if ((jsonVerification['errors'] as List<dynamic>).isNotEmpty) {
-      log.e('failed to verify credential, ${jsonVerification['errors']}');
-      if (jsonVerification['errors'][0] != 'No applicable proof') {
-        throw ResponseMessage(
-          message: ResponseString
-              .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL,
+    late String vc;
+    switch (vcFormatType) {
+      case VCFormatType.vcSdJWT:
+      case VCFormatType.dcSdJWT:
+        final String jwkKey = await keyGenerator.jwkFromSecretKey(
+          secretKey: cryptoAccountData.secretKey,
+          accountType: blockchainType.accountType,
+          alg: Alg.ES256K,
         );
-      } else {
+
+        final cryptoAccountPrivateKey = jwkKey;
+
+        const didMethod = AltMeStrings.defaultDIDMethod;
+        final cryptoAccountDid = didKitProvider.keyToDID(
+          didMethod,
+          cryptoAccountPrivateKey,
+        );
+        final cryptoAccountKid = await didKitProvider.keyToVerificationMethod(
+          didMethod,
+          cryptoAccountPrivateKey,
+        );
+
+        final DateTime dateTime = DateTime.now();
+
+        final iat = (dateTime.millisecondsSinceEpoch / 1000).round();
+        const vct =
+            'https://vc-registry.com/vct/registry/publish/2ab5fa6078eb308aedae7ee438c5bd1807bea3f8a77c014f69f4143da91f077e';
+        const vctIntegrity =
+            'sha256-1UrQWdTJDYXTB3pzikDEX6ocWm7HV5I8QqNPrw+HeWQ=';
+
+        final publicJWKString = sortedPublicJwk(jsonEncode(privateKey));
+        final publicJWK = jsonDecode(publicJWKString) as Map<String, dynamic>;
+
+        final payload = {
+          'iat': iat,
+          'vct': vct,
+          'iss': cryptoAccountData.walletAddress,
+          'vct#integrity': vctIntegrity,
+          'blockchain_network': cryptoAccountData.blockchainType.name,
+          'wallet_address': cryptoAccountData.walletAddress,
+          'cnf': {
+            'jwk': {...publicJWK},
+          },
+        };
+
+        final cryptoAccountTokenParameters = TokenParameters(
+          privateKey: jsonDecode(jwkKey) as Map<String, dynamic>,
+          did: cryptoAccountDid,
+          kid: cryptoAccountKid,
+          mediaType: vcFormatType == VCFormatType.dcSdJWT
+              ? MediaType.dcSdJWT
+              : MediaType.vcSdJWT,
+          clientType: customOidc4vcProfile.clientType,
+          // Mismatch between the cnf of the crypto card and the wallet
+          // identity identifier #3392
+          // proofHeaderType: customOidc4vcProfile.proofHeader,
+          proofHeaderType: ProofHeaderType.jwk,
+          clientId: customOidc4vcProfile.clientId ?? '',
+        );
+
+        /// sign and get token
+        final jwt =
+            // ignore: lines_longer_than_80_chars
+            '${generateToken(payload: payload, tokenParameters: cryptoAccountTokenParameters)}~';
+        log.i('jwt - $jwt');
+        final data = getCredentialDataFromJson(
+          data: jwt,
+          format: vcFormatType.vcValue,
+          jwtDecode: JWTDecode(),
+          credentialType:
+              'https://vc-registry.com/vct/registry/publish/2ab5fa6078eb308aedae7ee438c5bd1807bea3f8a77c014f69f4143da91f077e',
+        );
+
+        final credential = CredentialModel(
+          id: id,
+          image: 'image',
+          shareLink: '',
+          jwt: jwt,
+          format: vcFormatType.vcValue,
+          activities: [Activity(acquisitionAt: dateTime)],
+          profileLinkedId: profileType.getVCId,
+          data: data,
+          // Just metadata to get correct card and category
+          credentialPreview: Credential.fromJson(
+            associatedAddressCredential.toJson() as Map<String, dynamic>,
+          ),
+        );
+        return credential;
+      case VCFormatType.ldpVc:
+        vc = await didKitProvider.issueCredential(
+          jsonEncode(associatedAddressCredential.toJson()),
+          jsonEncode(options),
+          jwkKey,
+        );
+        log.i('didKitProvider.issueCredential - $vc');
+
+        final result = await didKitProvider.verifyCredential(
+          vc,
+          jsonEncode(verifyOptions),
+        );
+        log.i('didKitProvider.verifyCredential - $result');
+        final jsonVerification = jsonDecode(result) as Map<String, dynamic>;
+
+        if ((jsonVerification['warnings'] as List<dynamic>).isNotEmpty) {
+          log.w(
+            'credential verification return warnings',
+            error: jsonVerification['warnings'],
+          );
+        }
+
+        final credentialManifest = blockchainType.credentialManifest;
+
+        if ((jsonVerification['errors'] as List<dynamic>).isNotEmpty) {
+          log.e('failed to verify credential, ${jsonVerification['errors']}');
+          if (jsonVerification['errors'][0] != 'No applicable proof') {
+            throw ResponseMessage(
+              message: ResponseString
+                  .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL,
+            );
+          }
+        }
         return _createCredential(
           vc: vc,
           oldId: oldId,
@@ -180,22 +270,14 @@ Future<CredentialModel?> generateAssociatedWalletCredential({
           kid: verificationMethod,
           did: did,
           profileType: profileType,
-          vcFormatType: VCFormatType.ldpVc,
+          vcFormatType: vcFormatType,
         );
-      }
-    } else {
-      return _createCredential(
-        vc: vc,
-        oldId: oldId,
-        credentialManifest: credentialManifest,
-        customOidc4vcProfile: customOidc4vcProfile,
-        oidc4vc: oidc4vc,
-        privateKey: privateKey,
-        kid: verificationMethod,
-        did: did,
-        profileType: profileType,
-        vcFormatType: VCFormatType.ldpVc,
-      );
+      case VCFormatType.jwtVc:
+      case VCFormatType.jwtVcJson:
+      case VCFormatType.jwtVcJsonLd:
+      case VCFormatType.auto:
+        // TODO(all): Handle this case.
+        throw UnimplementedError();
     }
   } catch (e, s) {
     log.e(
@@ -224,7 +306,7 @@ Future<CredentialModel> _createCredential({
   String? jwt;
   DateTime dateTime = DateTime.now();
 
-  if (vcFormatType != VCFormatType.ldpVc) {
+  if (vcFormatType == VCFormatType.dcSdJWT) {
     /// id -> jti (optional)
     /// issuer -> iss (compulsary)
     /// issuanceDate -> iat (optional)
@@ -258,10 +340,7 @@ Future<CredentialModel> _createCredential({
     );
 
     /// sign and get token
-    jwt = generateToken(
-      payload: jsonContent,
-      tokenParameters: tokenParameters,
-    );
+    jwt = generateToken(payload: jsonContent, tokenParameters: tokenParameters);
   }
 
   final id = oldId ?? 'urn:uuid:${const Uuid().v4()}';

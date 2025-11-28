@@ -13,9 +13,9 @@ class FantomPooAddressModel extends CredentialSubjectModel {
     super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.fantomPooAddress,
-          credentialCategory: CredentialCategory.blockchainAccountsCards,
-        );
+         credentialSubjectType: CredentialSubjectType.fantomPooAddress,
+         credentialCategory: CredentialCategory.blockchainAccountsCards,
+       );
 
   factory FantomPooAddressModel.fromJson(Map<String, dynamic> json) =>
       _$FantomPooAddressModelFromJson(json);

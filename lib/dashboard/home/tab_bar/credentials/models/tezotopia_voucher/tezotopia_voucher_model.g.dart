@@ -20,12 +20,21 @@ TezotopiaVoucherModel _$TezotopiaVoucherModelFromJson(
     );
 
 Map<String, dynamic> _$TezotopiaVoucherModelToJson(
-        TezotopiaVoucherModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'type': instance.type,
-      'issuedBy': instance.issuedBy?.toJson(),
-      if (instance.offeredBy?.toJson() case final value?) 'offeredBy': value,
-      'offers': instance.offers?.toJson(),
-      'identifier': instance.identifier,
-    };
+    TezotopiaVoucherModel instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'type': instance.type,
+    'issuedBy': instance.issuedBy?.toJson(),
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('offeredBy', instance.offeredBy?.toJson());
+  val['offers'] = instance.offers?.toJson();
+  val['identifier'] = instance.identifier;
+  return val;
+}

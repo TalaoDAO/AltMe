@@ -21,8 +21,7 @@ class ProfessionalStudentCardRecipient {
 
   factory ProfessionalStudentCardRecipient.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$ProfessionalStudentCardRecipientFromJson(json);
+  ) => _$ProfessionalStudentCardRecipientFromJson(json);
 
   @JsonKey(defaultValue: '')
   final String email;
@@ -42,7 +41,6 @@ class ProfessionalStudentCardRecipient {
   final String gender;
   @JsonKey(defaultValue: '')
   final String jobTitle;
-  
 
   Map<String, dynamic> toJson() =>
       _$ProfessionalStudentCardRecipientToJson(this);

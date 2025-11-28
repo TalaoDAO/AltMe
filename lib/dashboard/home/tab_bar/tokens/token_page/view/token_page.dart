@@ -42,11 +42,9 @@ class _TokensViewState extends State<TokensView> {
   }
 
   void onItemTap(TokenModel selectedToken) {
-    Navigator.of(context).push<void>(
-      SendReceiveHomePage.route(
-        selectedToken: selectedToken,
-      ),
-    );
+    Navigator.of(
+      context,
+    ).push<void>(SendReceiveHomePage.route(selectedToken: selectedToken));
   }
 
   @override
@@ -98,8 +96,10 @@ class _TokensViewState extends State<TokensView> {
             const SizedBox(height: Sizes.spaceXSmall),
             BlocBuilder<TokensCubit, TokensState>(
               builder: (context, state) {
-                final index =
-                    context.read<WalletCubit>().state.currentCryptoIndex;
+                final index = context
+                    .read<WalletCubit>()
+                    .state
+                    .currentCryptoIndex;
 
                 final blockchain = context
                     .read<WalletCubit>()
@@ -118,30 +118,22 @@ class _TokensViewState extends State<TokensView> {
                       tokensCubit: context.read<TokensCubit>(),
                     ),
                     if (blockchain == BlockchainType.tezos)
-                      const SizedBox(
-                        height: Sizes.spaceSmall,
-                      ),
+                      const SizedBox(height: Sizes.spaceSmall),
                     if (blockchain == BlockchainType.tezos)
                       AddTokenButton(
                         onTap: () {
-                          Navigator.of(context)
-                              .push<void>(
-                            AllTokensPage.route(),
-                          )
-                              .then(
-                            (value) {
-                              context.read<TokensCubit>().updateTokenList();
-                            },
-                          );
+                          Navigator.of(
+                            context,
+                          ).push<void>(AllTokensPage.route()).then((value) {
+                            context.read<TokensCubit>().updateTokenList();
+                          });
                         },
                       ),
                   ],
                 );
               },
             ),
-            const SizedBox(
-              height: Sizes.spaceSmall,
-            ),
+            const SizedBox(height: Sizes.spaceSmall),
             Expanded(
               child: BlocConsumer<TokensCubit, TokensState>(
                 listener: (context, state) {
@@ -165,8 +157,10 @@ class _TokensViewState extends State<TokensView> {
                   }
                 },
                 builder: (context, state) {
-                  final index =
-                      context.read<WalletCubit>().state.currentCryptoIndex;
+                  final index = context
+                      .read<WalletCubit>()
+                      .state
+                      .currentCryptoIndex;
 
                   final blockchain = context
                       .read<WalletCubit>()
@@ -184,8 +178,10 @@ class _TokensViewState extends State<TokensView> {
                   if (state.message != null) {
                     final MessageHandler messageHandler =
                         state.message!.messageHandler!;
-                    message =
-                        messageHandler.getMessage(context, messageHandler);
+                    message = messageHandler.getMessage(
+                      context,
+                      messageHandler,
+                    );
                   }
 
                   if (state.status == AppStatus.fetching) {

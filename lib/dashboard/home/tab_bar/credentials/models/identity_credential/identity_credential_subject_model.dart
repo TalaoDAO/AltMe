@@ -6,14 +6,11 @@ part 'identity_credential_subject_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class IdentityCredentialSubjectModel extends CredentialSubjectModel {
-  IdentityCredentialSubjectModel({
-    super.id,
-    super.type,
-    super.issuedBy,
-  }) : super(
-          credentialSubjectType: CredentialSubjectType.identityCredential,
-          credentialCategory: CredentialCategory.identityCards,
-        );
+  IdentityCredentialSubjectModel({super.id, super.type, super.issuedBy})
+    : super(
+        credentialSubjectType: CredentialSubjectType.identityCredential,
+        credentialCategory: CredentialCategory.identityCards,
+      );
 
   factory IdentityCredentialSubjectModel.fromJson(Map<String, dynamic> json) =>
       _$IdentityCredentialSubjectModelFromJson(json);

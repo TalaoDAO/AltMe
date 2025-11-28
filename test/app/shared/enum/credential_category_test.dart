@@ -114,25 +114,27 @@ class MockAppLocalizations extends Mock implements AppLocalizations {
 }
 
 void main() {
-  test('getCredentialCategorySorted should return categories in sorted order',
-      () {
-    final sortedCategories = [
-      CredentialCategory.identityCards,
-      CredentialCategory.professionalCards,
-      CredentialCategory.contactInfoCredentials,
-      CredentialCategory.educationCards,
-      CredentialCategory.financeCards,
-      CredentialCategory.humanityProofCards,
-      CredentialCategory.socialMediaCards,
-      CredentialCategory.walletIntegrity,
-      CredentialCategory.blockchainAccountsCards,
-      CredentialCategory.othersCards,
-      CredentialCategory.pendingCards,
-      CredentialCategory.advantagesCards,
-    ];
+  test(
+    'getCredentialCategorySorted should return categories in sorted order',
+    () {
+      final sortedCategories = [
+        CredentialCategory.identityCards,
+        CredentialCategory.professionalCards,
+        CredentialCategory.contactInfoCredentials,
+        CredentialCategory.educationCards,
+        CredentialCategory.financeCards,
+        CredentialCategory.humanityProofCards,
+        CredentialCategory.socialMediaCards,
+        CredentialCategory.walletIntegrity,
+        CredentialCategory.blockchainAccountsCards,
+        CredentialCategory.othersCards,
+        CredentialCategory.pendingCards,
+        CredentialCategory.advantagesCards,
+      ];
 
-    expect(getCredentialCategorySorted, sortedCategories);
-  });
+      expect(getCredentialCategorySorted, sortedCategories);
+    },
+  );
 
   group('CredentialCategoryExtension', () {
     test('order should return correct order for each category', () {
@@ -150,30 +152,38 @@ void main() {
       expect(CredentialCategory.pendingCards.order, 9);
     });
 
-    test('showInHomeIfListEmpty should return correct value for each category',
-        () {
-      expect(CredentialCategory.identityCards.showInHomeIfListEmpty, true);
-      expect(CredentialCategory.professionalCards.showInHomeIfListEmpty, false);
-      expect(CredentialCategory.advantagesCards.showInHomeIfListEmpty, false);
-      expect(
-        CredentialCategory.contactInfoCredentials.showInHomeIfListEmpty,
-        false,
-      );
-      expect(
-        CredentialCategory.blockchainAccountsCards.showInHomeIfListEmpty,
-        false,
-      );
-      expect(CredentialCategory.educationCards.showInHomeIfListEmpty, false);
-      expect(CredentialCategory.othersCards.showInHomeIfListEmpty, false);
-      expect(CredentialCategory.financeCards.showInHomeIfListEmpty, false);
-      expect(
-        CredentialCategory.humanityProofCards.showInHomeIfListEmpty,
-        false,
-      );
-      expect(CredentialCategory.socialMediaCards.showInHomeIfListEmpty, false);
-      expect(CredentialCategory.walletIntegrity.showInHomeIfListEmpty, false);
-      expect(CredentialCategory.pendingCards.showInHomeIfListEmpty, false);
-    });
+    test(
+      'showInHomeIfListEmpty should return correct value for each category',
+      () {
+        expect(CredentialCategory.identityCards.showInHomeIfListEmpty, true);
+        expect(
+          CredentialCategory.professionalCards.showInHomeIfListEmpty,
+          false,
+        );
+        expect(CredentialCategory.advantagesCards.showInHomeIfListEmpty, false);
+        expect(
+          CredentialCategory.contactInfoCredentials.showInHomeIfListEmpty,
+          false,
+        );
+        expect(
+          CredentialCategory.blockchainAccountsCards.showInHomeIfListEmpty,
+          false,
+        );
+        expect(CredentialCategory.educationCards.showInHomeIfListEmpty, false);
+        expect(CredentialCategory.othersCards.showInHomeIfListEmpty, false);
+        expect(CredentialCategory.financeCards.showInHomeIfListEmpty, false);
+        expect(
+          CredentialCategory.humanityProofCards.showInHomeIfListEmpty,
+          false,
+        );
+        expect(
+          CredentialCategory.socialMediaCards.showInHomeIfListEmpty,
+          false,
+        );
+        expect(CredentialCategory.walletIntegrity.showInHomeIfListEmpty, false);
+        expect(CredentialCategory.pendingCards.showInHomeIfListEmpty, false);
+      },
+    );
 
     test('config should return correct configuration for each category', () {
       final localizations = MockAppLocalizations();

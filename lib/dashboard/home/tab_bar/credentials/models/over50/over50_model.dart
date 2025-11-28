@@ -6,15 +6,11 @@ part 'over50_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Over50Model extends CredentialSubjectModel {
-  Over50Model({
-    super.id,
-    super.type,
-    super.issuedBy,
-    super.offeredBy,
-  }) : super(
-          credentialSubjectType: CredentialSubjectType.over50,
-          credentialCategory: CredentialCategory.identityCards,
-        );
+  Over50Model({super.id, super.type, super.issuedBy, super.offeredBy})
+    : super(
+        credentialSubjectType: CredentialSubjectType.over50,
+        credentialCategory: CredentialCategory.identityCards,
+      );
 
   factory Over50Model.fromJson(Map<String, dynamic> json) =>
       _$Over50ModelFromJson(json);

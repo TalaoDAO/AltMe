@@ -39,8 +39,9 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
       final baseUrl = networkCubit.state.network.apiUrl;
 
       log.i('fetching balance');
-      final int balance = await client
-          .get('$baseUrl/v1/accounts/$walletAddress/balance') as int;
+      final int balance =
+          await client.get('$baseUrl/v1/accounts/$walletAddress/balance')
+              as int;
 
       final formattedBalance = balance / 1e6;
 
@@ -60,9 +61,7 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
         decimalsToShow: 2,
       );
 
-      emit(
-        state.copyWith(status: AppStatus.idle, xtzModel: token),
-      );
+      emit(state.copyWith(status: AppStatus.idle, xtzModel: token));
     } catch (e) {
       log.e('xtzData fetching failure , e: $e');
       if (e is MessageHandler) {
@@ -85,12 +84,12 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
       await dotenv.load();
       final apiKey = dotenv.get('COIN_GECKO_API_KEY');
 
-      final responseOfXTZUsdPrice = await client.get(
-        '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
-        queryParameters: {
-          'x_cg_demo_api_key': apiKey,
-        },
-      ) as Map<String, dynamic>;
+      final responseOfXTZUsdPrice =
+          await client.get(
+                '${Urls.coinGeckoBase}simple/price?ids=tezos&vs_currencies=usd',
+                queryParameters: {'x_cg_demo_api_key': apiKey},
+              )
+              as Map<String, dynamic>;
       return responseOfXTZUsdPrice['tezos']['usd'] as double;
     } catch (_) {
       return null;
@@ -103,8 +102,8 @@ class ConnectedDappsCubit extends Cubit<ConnectedDappsState> {
       emit(state.loading());
 
       log.i('fetching saved peers');
-      final List<SavedDappData> savedDapps =
-          await connectedDappRepository.findAll();
+      final List<SavedDappData> savedDapps = await connectedDappRepository
+          .findAll();
 
       log.i('savedPeerDatas - $savedDapps');
 

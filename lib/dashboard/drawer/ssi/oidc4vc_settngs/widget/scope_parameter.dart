@@ -11,17 +11,22 @@ class ScopeParameterWidget extends StatelessWidget {
       builder: (context, state) {
         return OptionContainer(
           title: 'Scope Parameters',
-          subtitle: 'Enable to force wallet to use scope'
+          subtitle:
+              'Enable to force wallet to use scope'
               ' instead of authorization_details. Default: Off.',
           body: Switch(
             onChanged: (value) async {
               await context.read<ProfileCubit>().updateProfileSetting(
-                    scope: value,
-                  );
+                scope: value,
+              );
             },
-            value: state.model.profileSetting.selfSovereignIdentityOptions
-                .customOidc4vcProfile.scope,
-            activeColor: Theme.of(context).colorScheme.primary,
+            value: state
+                .model
+                .profileSetting
+                .selfSovereignIdentityOptions
+                .customOidc4vcProfile
+                .scope,
+            activeThumbColor: Theme.of(context).colorScheme.primary,
           ),
         );
       },

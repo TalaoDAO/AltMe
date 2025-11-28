@@ -62,9 +62,11 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(
-        const CredentialManifestPickState(filteredCredentialList: []),);
-    registerFallbackValue(const CredentialsState(
-        status: CredentialsStatus.idle, credentials: [],),);
+      const CredentialManifestPickState(filteredCredentialList: []),
+    );
+    registerFallbackValue(
+      const CredentialsState(status: CredentialsStatus.idle, credentials: []),
+    );
     registerFallbackValue(const ScanState());
     registerFallbackValue(MockProfileState(model: MockProfileModel()));
     registerFallbackValue(Uri());
@@ -110,9 +112,9 @@ void main() {
       when(() => profileModel.profileType).thenReturn(ProfileType.ebsiV3);
 
       // Set up profile cubit
-      when(() => profileCubit.state).thenReturn(
-        MockProfileState(model: profileModel),
-      );
+      when(
+        () => profileCubit.state,
+      ).thenReturn(MockProfileState(model: profileModel));
 
       // Set up organization info and issuer
       when(() => organizationInfo.website).thenReturn('example.com');
@@ -138,21 +140,26 @@ void main() {
       );
 
       // Set up credential manifest
-      when(() => credentialManifest.presentationDefinition)
-          .thenReturn(presentationDefinition);
+      when(
+        () => credentialManifest.presentationDefinition,
+      ).thenReturn(presentationDefinition);
       when(() => credential.credentialManifest).thenReturn(credentialManifest);
 
       // Set up credential
       final mockCredentialPreview = MockCredential();
       final mockSubjectModel = MockCredentialSubjectModel();
-      when(() => mockSubjectModel.credentialSubjectType)
-          .thenReturn(CredentialSubjectType.defaultCredential);
-      when(() => mockCredentialPreview.credentialSubjectModel)
-          .thenReturn(mockSubjectModel);
-      when(() => mockCredentialPreview.type)
-          .thenReturn(['VerifiableCredential']);
-      when(() => credential.credentialPreview)
-          .thenReturn(mockCredentialPreview);
+      when(
+        () => mockSubjectModel.credentialSubjectType,
+      ).thenReturn(CredentialSubjectType.defaultCredential);
+      when(
+        () => mockCredentialPreview.credentialSubjectModel,
+      ).thenReturn(mockSubjectModel);
+      when(
+        () => mockCredentialPreview.type,
+      ).thenReturn(['VerifiableCredential']);
+      when(
+        () => credential.credentialPreview,
+      ).thenReturn(mockCredentialPreview);
       when(() => credential.id).thenReturn('test-id');
 
       // Set up credential manifest pick cubit
@@ -167,25 +174,18 @@ void main() {
 
       // Set up credentials cubit
       when(() => credentialsCubit.state).thenReturn(
-        const CredentialsState(
-          status: CredentialsStatus.idle,
-          credentials: [],
-        ),
+        const CredentialsState(status: CredentialsStatus.idle, credentials: []),
       );
 
       // Set up scan cubit
-      when(() => scanCubit.state).thenReturn(
-        const ScanState(
-          status: ScanStatus.success,
-        ),
-      );
+      when(
+        () => scanCubit.state,
+      ).thenReturn(const ScanState(status: ScanStatus.success));
 
       // Set up QR code scan cubit
-      when(() => qrCodeScanCubit.state).thenReturn(
-        const QRCodeScanState(
-          status: QrScanStatus.idle,
-        ),
-      );
+      when(
+        () => qrCodeScanCubit.state,
+      ).thenReturn(const QRCodeScanState(status: QrScanStatus.idle));
     });
 
     testWidgets('renders without crashing', (WidgetTester tester) async {
@@ -203,9 +203,7 @@ void main() {
               RepositoryProvider<LocalAuthApi>(
                 create: (_) => MockLocalAuthApi(),
               ),
-              RepositoryProvider<OIDC4VC>(
-                create: (_) => MockOIDC4VC(),
-              ),
+              RepositoryProvider<OIDC4VC>(create: (_) => MockOIDC4VC()),
             ],
             child: MultiBlocProvider(
               providers: [

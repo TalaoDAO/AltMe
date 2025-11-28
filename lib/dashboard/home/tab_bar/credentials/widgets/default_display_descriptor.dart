@@ -23,9 +23,11 @@ class DefaultDisplayDescriptor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final backgroundColor = credentialModel.display?.backgroundColor;
-    final backgroundImage = credentialModel.display?.backgroundImage?.url ??
+    final backgroundImage =
+        credentialModel.display?.backgroundImage?.url ??
         credentialModel.display?.backgroundImage?.uri;
-    final altText = credentialModel.display?.backgroundImage?.altText ??
+    final altText =
+        credentialModel.display?.backgroundImage?.altText ??
         credentialModel.display?.backgroundImage?.altText;
 
     return (backgroundImage != null && backgroundImage != '')
@@ -44,35 +46,35 @@ class DefaultDisplayDescriptor extends StatelessWidget {
             ),
           )
         : backgroundColor != null
-            ? CredentialBackground(
-                credentialModel: credentialModel,
-                showBgDecoration: showBgDecoration,
-                padding: EdgeInsets.zero,
-                child: AspectRatio(
-                  aspectRatio: Sizes.credentialAspectRatio,
-                  child: Stack(
-                    children: [
-                      DefaultCardBody(
-                        credentialModel: credentialModel,
-                        descriptionMaxLine: descriptionMaxLine,
-                        displyalDescription: displyalDescription,
-                      ),
-                      if (isDiscover) Image.asset(ImageStrings.blankGetCard),
-                    ],
-                  ),
-                ),
-              )
-            : CredentialImage(
-                image: ImageStrings.defaultCard,
-                child: AspectRatio(
-                  aspectRatio: Sizes.credentialAspectRatio,
-                  child: DefaultCardBody(
+        ? CredentialBackground(
+            credentialModel: credentialModel,
+            showBgDecoration: showBgDecoration,
+            padding: EdgeInsets.zero,
+            child: AspectRatio(
+              aspectRatio: Sizes.credentialAspectRatio,
+              child: Stack(
+                children: [
+                  DefaultCardBody(
                     credentialModel: credentialModel,
                     descriptionMaxLine: descriptionMaxLine,
                     displyalDescription: displyalDescription,
                   ),
-                ),
-              );
+                  if (isDiscover) Image.asset(ImageStrings.blankGetCard),
+                ],
+              ),
+            ),
+          )
+        : CredentialImage(
+            image: ImageStrings.defaultCard,
+            child: AspectRatio(
+              aspectRatio: Sizes.credentialAspectRatio,
+              child: DefaultCardBody(
+                credentialModel: credentialModel,
+                descriptionMaxLine: descriptionMaxLine,
+                displyalDescription: displyalDescription,
+              ),
+            ),
+          );
   }
 }
 
@@ -103,7 +105,8 @@ class DefaultCardBody extends StatelessWidget {
           )
         : null;
 
-    final logo = credentialModel.display?.logo?.url ??
+    final logo =
+        credentialModel.display?.logo?.url ??
         credentialModel.display?.logo?.uri;
 
     return CustomMultiChildLayout(
@@ -138,10 +141,9 @@ class DefaultCardBody extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: DisplayNameCard(
                       credentialModel: credentialModel,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineMedium!
-                          .copyWith(color: textColor),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.headlineMedium!.copyWith(color: textColor),
                     ),
                   ),
                 ),
@@ -150,10 +152,17 @@ class DefaultCardBody extends StatelessWidget {
           ),
         ),
         if (credentialModel
-                    .credentialPreview.credentialSubjectModel.issuedBy?.name !=
+                    .credentialPreview
+                    .credentialSubjectModel
+                    .issuedBy
+                    ?.name !=
                 null &&
-            credentialModel.credentialPreview.credentialSubjectModel.issuedBy!
-                .name.isNotEmpty)
+            credentialModel
+                .credentialPreview
+                .credentialSubjectModel
+                .issuedBy!
+                .name
+                .isNotEmpty)
           LayoutId(
             id: 'provided-by',
             child: FractionallySizedBox(
@@ -164,18 +173,19 @@ class DefaultCardBody extends StatelessWidget {
                   children: <InlineSpan>[
                     TextSpan(
                       text: '${l10n.providedBy} ',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: textColor),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium!.copyWith(color: textColor),
                     ),
                     TextSpan(
-                      text: credentialModel.credentialPreview
-                          .credentialSubjectModel.issuedBy?.name,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: textColor),
+                      text: credentialModel
+                          .credentialPreview
+                          .credentialSubjectModel
+                          .issuedBy
+                          ?.name,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium!.copyWith(color: textColor),
                     ),
                   ],
                 ),
@@ -192,10 +202,9 @@ class DefaultCardBody extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: DisplayDescriptionCard(
                   credentialModel: credentialModel,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: textColor),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium!.copyWith(color: textColor),
                   maxLines: descriptionMaxLine,
                 ),
               ),
@@ -209,10 +218,9 @@ class DefaultCardBody extends StatelessWidget {
               widthFactor: 0.4,
               child: MyText(
                 l10n.issuedOn,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: textColor),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium!.copyWith(color: textColor),
               ),
             ),
           ),
@@ -226,10 +234,9 @@ class DefaultCardBody extends StatelessWidget {
                 UiDate.formatDateForCredentialCard(
                   credentialModel.credentialPreview.issuanceDate,
                 ),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: textColor),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium!.copyWith(color: textColor),
               ),
             ),
           ),
@@ -241,10 +248,9 @@ class DefaultCardBody extends StatelessWidget {
               widthFactor: 0.4,
               child: MyText(
                 l10n.expirationDate,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: textColor),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium!.copyWith(color: textColor),
               ),
             ),
           ),
@@ -258,10 +264,9 @@ class DefaultCardBody extends StatelessWidget {
                 UiDate.formatDateForCredentialCard(
                   credentialModel.expirationDate!,
                 ),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: textColor),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium!.copyWith(color: textColor),
               ),
             ),
           ),

@@ -31,7 +31,8 @@ class Circle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fillColor = circleUIConfig.fillColor ??
+    final fillColor =
+        circleUIConfig.fillColor ??
         Theme.of(context).colorScheme.primaryContainer;
     final borderColor =
         circleUIConfig.borderColor ?? Theme.of(context).colorScheme.onSurface;
@@ -45,11 +46,11 @@ class Circle extends StatelessWidget {
         border: Border.all(
           color: filled
               ? allowAction
-                  ? fillColor
-                  : fillColor.withValues(alpha: 0.1)
+                    ? fillColor
+                    : fillColor.withValues(alpha: 0.1)
               : allowAction
-                  ? borderColor
-                  : borderColor.withValues(alpha: 0.1),
+              ? borderColor
+              : borderColor.withValues(alpha: 0.1),
           width: circleUIConfig.borderWidth,
         ),
       ),

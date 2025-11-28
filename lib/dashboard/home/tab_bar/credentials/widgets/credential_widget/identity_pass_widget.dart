@@ -4,10 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class IdentityPassWidget extends StatelessWidget {
-  const IdentityPassWidget({
-    super.key,
-    required this.credentialModel,
-  });
+  const IdentityPassWidget({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 
@@ -15,8 +12,9 @@ class IdentityPassWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final identityPassModel = credentialModel
-        .credentialPreview.credentialSubjectModel as IdentityPassModel;
+    final identityPassModel =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as IdentityPassModel;
     return CredentialBackground(
       credentialModel: credentialModel,
       child: Column(
@@ -106,9 +104,7 @@ class IdentityPassWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             child: SizedBox(
               height: 40,
-              child: DisplayIssuer(
-                issuer: identityPassModel.issuedBy!,
-              ),
+              child: DisplayIssuer(issuer: identityPassModel.issuedBy!),
             ),
           ),
         ],

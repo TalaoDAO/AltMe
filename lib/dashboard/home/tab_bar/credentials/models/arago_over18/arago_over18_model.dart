@@ -6,15 +6,11 @@ part 'arago_over18_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class AragoOver18Model extends CredentialSubjectModel {
-  AragoOver18Model({
-    super.id,
-    super.type,
-    super.issuedBy,
-    super.offeredBy,
-  }) : super(
-          credentialSubjectType: CredentialSubjectType.aragoOver18,
-          credentialCategory: CredentialCategory.identityCards,
-        );
+  AragoOver18Model({super.id, super.type, super.issuedBy, super.offeredBy})
+    : super(
+        credentialSubjectType: CredentialSubjectType.aragoOver18,
+        credentialCategory: CredentialCategory.identityCards,
+      );
 
   factory AragoOver18Model.fromJson(Map<String, dynamic> json) =>
       _$AragoOver18ModelFromJson(json);

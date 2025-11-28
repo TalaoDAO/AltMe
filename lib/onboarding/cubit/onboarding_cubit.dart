@@ -14,18 +14,10 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   final log = getLogger('OnboardingCubit');
 
   Future<void> emitOnboardingProcessing() async {
-    emit(
-      state.copyWith(
-        status: AppStatus.loading,
-      ),
-    );
+    emit(state.copyWith(status: AppStatus.loading));
   }
 
   Future<void> emitOnboardingDone() async {
-    emit(
-      state.copyWith(
-        status: AppStatus.success,
-      ),
-    );
+    emit(state.copyWith(status: AppStatus.success));
   }
 }

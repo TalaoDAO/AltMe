@@ -18,9 +18,7 @@ class ImportAccountStep3Page extends StatelessWidget {
   static Route<dynamic> route({required AccountType accountType}) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/importAccountStep3Page'),
-      builder: (_) => ImportAccountStep3Page(
-        accountType: accountType,
-      ),
+      builder: (_) => ImportAccountStep3Page(accountType: accountType),
     );
   }
 
@@ -37,9 +35,7 @@ class ImportAccountStep3Page extends StatelessWidget {
         walletCubit: context.read<WalletCubit>(),
         walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
-      child: ImportAccountStep3View(
-        accountType: accountType,
-      ),
+      child: ImportAccountStep3View(accountType: accountType),
     );
   }
 }
@@ -59,9 +55,9 @@ class _ImportAccountStep3ViewState extends State<ImportAccountStep3View> {
   void initState() {
     mnemonicController = TextEditingController();
     mnemonicController.addListener(() {
-      context
-          .read<ImportAccountCubit>()
-          .isMnemonicsOrKeyValid(mnemonicController.text);
+      context.read<ImportAccountCubit>().isMnemonicsOrKeyValid(
+        mnemonicController.text,
+      );
     });
     context.read<ImportAccountCubit>().setAccountType(widget.accountType);
     super.initState();
@@ -83,23 +79,16 @@ class _ImportAccountStep3ViewState extends State<ImportAccountStep3View> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const MStepper(
-            totalStep: 4,
-            step: 3,
-          ),
-          const SizedBox(
-            height: Sizes.spaceNormal,
-          ),
+          const MStepper(totalStep: 4, step: 3),
+          const SizedBox(height: Sizes.spaceNormal),
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: Sizes.spaceLarge,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceLarge),
             child: Text(
               l10n.importWalletText,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    letterSpacing: 1.2,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(letterSpacing: 1.2),
             ),
           ),
           const SizedBox(height: Sizes.spaceLarge),
@@ -121,8 +110,8 @@ class _ImportAccountStep3ViewState extends State<ImportAccountStep3View> {
                     controller: mnemonicController,
                     error:
                         state.isTextFieldEdited && !state.isMnemonicOrKeyValid
-                            ? l10n.recoveryMnemonicError
-                            : null,
+                        ? l10n.recoveryMnemonicError
+                        : null,
                   ),
                   if (state.isMnemonicOrKeyValid)
                     Container(
@@ -148,16 +137,16 @@ class _ImportAccountStep3ViewState extends State<ImportAccountStep3View> {
           const SizedBox(height: Sizes.spaceSmall),
           Text(
             l10n.recoveryPhraseDescriptions,
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  fontSize: 12,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium!.copyWith(fontSize: 12),
           ),
           const SizedBox(height: Sizes.spaceLarge),
           Text(
             l10n.privateKeyDescriptions,
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  fontSize: 12,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium!.copyWith(fontSize: 12),
           ),
         ],
       ),
@@ -181,8 +170,8 @@ class _ImportAccountStep3ViewState extends State<ImportAccountStep3View> {
                       LoadingView().hide();
                       await Navigator.of(context).push<void>(
                         ImportAccountStep4Page.route(
-                          importAccountCubit:
-                              context.read<ImportAccountCubit>(),
+                          importAccountCubit: context
+                              .read<ImportAccountCubit>(),
                         ),
                       );
                     },

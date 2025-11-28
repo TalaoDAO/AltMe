@@ -46,18 +46,18 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
       create: (_) => ConfirmTokenTransactionCubit(
         manageNetworkCubit: context.read<ManageNetworkCubit>(),
         walletCubit: context.read<WalletCubit>(),
-        client: DioClient(
-          secureStorageProvider: getSecureStorage,
-          dio: Dio(),
-        ),
+        client: DioClient(secureStorageProvider: getSecureStorage, dio: Dio()),
         keyGenerator: KeyGenerator(),
         initialState: ConfirmTokenTransactionState(
           withdrawalAddress: withdrawalAddress,
           tokenAmount: amount,
           totalAmount: amount,
           selectedToken: selectedToken,
-          selectedAccountSecretKey:
-              context.read<WalletCubit>().state.currentAccount!.secretKey,
+          selectedAccountSecretKey: context
+              .read<WalletCubit>()
+              .state
+              .currentAccount!
+              .secretKey,
         ),
       ),
       child: ConfirmWithdrawalView(
@@ -99,15 +99,17 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
     return widget.selectedToken.decimalsToShow == 0
         ? 0
         : amount >= 1
-            ? 2
-            : 5;
+        ? 2
+        : 5;
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocConsumer<ConfirmTokenTransactionCubit,
-        ConfirmTokenTransactionState>(
+    return BlocConsumer<
+      ConfirmTokenTransactionCubit,
+      ConfirmTokenTransactionState
+    >(
       listener: (context, state) {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
@@ -196,12 +198,11 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                         children: [
                           Text(
                             l10n.to,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
+                            style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
                                 ),
                           ),
                           const SizedBox(height: Sizes.spaceXSmall),
@@ -233,10 +234,10 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
                     onEditButtonPressed: () async {
                       final NetworkFeeModel? networkFeeModel =
                           await SelectNetworkFeeBottomSheet.show(
-                        context: context,
-                        selectedNetworkFee: state.networkFee!,
-                        networkFeeList: state.networkFees ?? [],
-                      );
+                            context: context,
+                            selectedNetworkFee: state.networkFee!,
+                            networkFeeList: state.networkFees ?? [],
+                          );
 
                       if (networkFeeModel != null) {
                         context
@@ -259,7 +260,8 @@ class _ConfirmWithdrawalViewState extends State<ConfirmWithdrawalView> {
               child: MyElevatedButton(
                 borderRadius: Sizes.normalRadius,
                 text: l10n.confirm,
-                onPressed: context
+                onPressed:
+                    context
                         .read<ConfirmTokenTransactionCubit>()
                         .canConfirmTheWithdrawal()
                     ? () async {
