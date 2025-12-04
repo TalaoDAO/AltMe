@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
+import 'package:altme/key_generator/src/enum.dart';
+import 'package:altme/key_generator/src/key_generator.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
-import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
@@ -48,17 +49,20 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           walletCubit.state.currentAccount!;
 
       switch (connectionBridgeType) {
-
         case ConnectionBridgeType.beacon:
-          final KeyStoreModel sourceKeystore = getKeysFromSecretKey(
+          // final KeyStoreModel sourceKeystore = getKeysFromSecretKey(
+          //   secretKey: currentAccount.secretKey,
+          // );
+          final pubkey = await KeyGenerator().hexPubKey(
             secretKey: currentAccount.secretKey,
+            accountType: AccountType.tezos,
           );
 
           log.i('Start connecting to beacon');
           final Map<dynamic, dynamic> response = await beacon
               .permissionResponse(
                 id: beaconCubit.state.beaconRequest!.request!.id!,
-                publicKey: sourceKeystore.publicKey,
+                publicKey: pubkey,
                 address: currentAccount.walletAddress,
               );
 
