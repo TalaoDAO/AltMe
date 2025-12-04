@@ -9,7 +9,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
-import 'package:dartez/dartez.dart';
+
 import 'package:decimal/decimal.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -545,29 +545,14 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       emit(state.loading());
 
-      final sourceKeystore = Keystore.fromSecretKey(selectedAccountSecretKey);
-
-      final keyStore = KeyStoreModel(
-        publicKey: sourceKeystore.publicKey,
-        secretKey: sourceKeystore.secretKey,
-        publicKeyHash: sourceKeystore.address,
+      final client = TezartClient(rpcNodeUrl);
+      final keystore = KeyGenerator().getKeystore(
+        secretKey: selectedAccountSecretKey,
       );
 
-      final dynamic signer = await Dartez.createSigner(
-        Dartez.writeKeyWithHint(keyStore.secretKey, 'edsk'),
-      );
-
-      final List<String> contractAddress = [token.contractAddress];
-
-      // fee calculated by XTZ
-      final customFee = int.parse(
-        Decimal.parse(state.networkFee!.totalFee)
-            .toDouble()
-            .toStringAsFixed(
-              6,
-            ) // 6 is because the deciaml of XTZ is alway 6 (mutez)
-            .replaceAll('.', '')
-            .replaceAll(',', ''),
+      final contract = Contract(
+        contractAddress: token.contractAddress,
+        rpcInterface: client.rpcInterface,
       );
 
       final amount =
@@ -580,33 +565,44 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
               .toInt();
 
       final parameters = token.isFA1
-          ? '''(Pair "${keyStore.publicKeyHash}" (Pair "${state.withdrawalAddress}" $amount))'''
-          : '''{Pair "${keyStore.publicKeyHash}" {Pair "${state.withdrawalAddress}" (Pair ${int.parse(token.tokenId ?? '0')} $amount)}}''';
+          ? '''(Pair "${keystore.publicKey}" (Pair "${state.withdrawalAddress}" $amount))'''
+          : '''{Pair "${keystore.publicKey}" {Pair "${state.withdrawalAddress}" (Pair ${int.parse(token.tokenId ?? '0')} $amount)}}''';
 
       getLogger('sendContractInvocationOperation').i(
-        'sending from: ${keyStore.publicKeyHash}'
+        'sending from: ${keystore.publicKey}'
         ',to: ${state.withdrawalAddress} ,amountInInt: $amount '
         'amountInDecimal: $tokenAmount tokenSymbol: ${token.symbol}',
       );
 
-      final dynamic resultInvoke = await Dartez.sendContractInvocationOperation(
-        rpcNodeUrl,
-        signer as SoftSigner,
-        keyStore,
-        contractAddress,
-        [0],
-        customFee,
-        1000,
-        customFee,
-        ['transfer'],
-        [parameters],
-        codeFormat: TezosParameterFormat.Michelson,
+      // fee calculated by XTZ
+      final customFee = int.parse(
+        Decimal.parse(state.networkFee!.totalFee)
+            .toDouble()
+            .toStringAsFixed(
+              6,
+            ) // 6 is because the deciaml of XTZ is alway 6 (mutez)
+            .replaceAll('.', '')
+            .replaceAll(',', ''),
       );
+
+      final operationList = await contract.callOperation(
+        entrypoint: 'transfer',
+        amount: amount,
+        params: parameters,
+        source: keystore,
+        publicKey: keystore.publicKey,
+        customFee: customFee,
+      );
+
+      await operationList.executeAndMonitor(null);
+
+      emit(state.success());
+    } catch (e, s) {
       getLogger(
-        'sendContractInvocationOperation',
-      ).i('Operation groupID ===> $resultInvoke');
-      if (resultInvoke['appliedOp']['contents'][0]['metadata']['operation_result']['status'] ==
-          'failed') {
+        runtimeType.toString(),
+      ).e('error in transferOperation , e: $e, s: $s');
+
+      if (e is TezartNodeError) {
         emit(
           state.error(
             messageHandler: ResponseMessage(
@@ -615,14 +611,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
           ),
         );
       } else {
-        emit(state.success());
+        rethrow;
       }
-    } catch (e, s) {
-      getLogger(
-        runtimeType.toString(),
-      ).e('error in transferOperation , e: $e, s: $s');
-
-      rethrow;
     }
   }
 

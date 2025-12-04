@@ -9,7 +9,7 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:convert/convert.dart';
-import 'package:dartez/dartez.dart';
+import 'package:altme/app/shared/services/tezos_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:eth_sig_util/eth_sig_util.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -29,6 +29,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
     required this.qrCodeScanCubit,
     required this.walletConnectCubit,
     required this.connectedDappRepository,
+    required this.tezosService,
   }) : super(const SignPayloadState());
 
   final WalletCubit walletCubit;
@@ -37,6 +38,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
   final QRCodeScanCubit qrCodeScanCubit;
   final WalletConnectCubit walletConnectCubit;
   final ConnectedDappRepository connectedDappRepository;
+  final TezosService tezosService;
 
   final log = getLogger('SignPayloadCubit');
 
@@ -392,12 +394,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
   }
 
   Future<String> tezosSigning(String secretKey) async {
-    final dynamic signer = await Dartez.createSigner(
-      Dartez.writeKeyWithHint(secretKey, 'edsk'),
-    );
-
-    final signature = Dartez.signPayload(
-      signer: signer as SoftSigner,
+    final signature = await tezosService.signPayload(
+      secretKey: secretKey,
       payload: encodedPayloaForTezos,
     );
 

@@ -38,9 +38,7 @@ dependencies:
   dart_web3:
     git:
       url: https://github.com/TalaoDAO/dart_web3.git
-  dartez:
-    git:
-      url: https://github.com/TalaoDAO/Dartez.git
+
       ref: main
   decimal: ^2.3.3
   device_info_plus: ^11.2.2
