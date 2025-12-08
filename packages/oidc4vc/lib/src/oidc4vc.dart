@@ -509,12 +509,20 @@ class OIDC4VC {
             final didDocument = await dio.get<dynamic>(
               'https://unires:test@unires.talao.co/1.0/identifiers/$didKey',
             );
+            if (didDocument.data is String) {
+              return jsonDecode(didDocument.data as String)
+                  as Map<String, dynamic>;
+            }
             return didDocument.data as Map<String, dynamic>;
           } catch (e) {
             try {
               final didDocument = await dio.get<dynamic>(
                 'https://dev.uniresolver.io/1.0/identifiers/$didKey',
               );
+              if (didDocument.data is String) {
+                return jsonDecode(didDocument.data as String)
+                    as Map<String, dynamic>;
+              }
               return didDocument.data as Map<String, dynamic>;
             } catch (e) {
               rethrow;
