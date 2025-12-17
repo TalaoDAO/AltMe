@@ -81,14 +81,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.7"
-  argon2:
-    dependency: transitive
-    description:
-      name: argon2
-      sha256: ee456fa6f71392faadd9c43f4a2cc66c8d56132337fe71dc09d217d4e994102e
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   args:
     dependency: transitive
     description:
@@ -178,14 +170,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
-  blake2b:
-    dependency: transitive
-    description:
-      name: blake2b
-      sha256: "514623351f7c7cacd510e0cad42a28b74936dc546652a2ebe80a0543cf5b651f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.3"
   bloc:
     dependency: "direct main"
     description:
@@ -564,20 +548,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
+      ref: main
       resolved-ref: "9b0a47bb55c3b225aa80b67a133a0527666bf673"
       url: "https://github.com/TalaoDAO/dart_web3.git"
     source: git
     version: "0.0.3"
-  dartez:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: main
-      resolved-ref: a34ec875c211d85f7555717e4839f94ceedac3af
-      url: "https://github.com/TalaoDAO/Dartez.git"
-    source: git
-    version: "1.0.3"
   dbus:
     dependency: transitive
     description:
@@ -2198,22 +2173,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
-  sodium:
-    dependency: transitive
-    description:
-      name: sodium
-      sha256: "515b86c186f4caca49051caf858d878ca7cc4ff4542411e9febb50654eac8a62"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.4.6"
-  sodium_libs:
-    dependency: transitive
-    description:
-      name: sodium_libs
-      sha256: f3f9c516b4183226b7a08ca43a765ebc9e02cfd92e46e8a6cc490f98ffe73052
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.4.6+4"
   source_gen:
     dependency: transitive
     description:
