@@ -337,7 +337,7 @@ class OperationCubit extends Cubit<OperationState> {
         if (json['reason'] != null) {
           final reason = json['reason']!;
           late ResponseString responseString;
-          if (reason == 'contract.balance_too_low') {
+          if (reason.contains('contract.balance_too_low')) {
             responseString = ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW;
           } else if (reason.contains('contract.cannot_pay_storage_fee')) {
             responseString =
