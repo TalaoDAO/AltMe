@@ -37,290 +37,296 @@ void main() {
       }
     });
 
-    test('CredentialSubjectType defaultBackgroundColor returns correct value',
-        () {
-      expect(
-        CredentialSubjectType.defiCompliance.defaultBackgroundColor,
-        equals(const Color.fromARGB(255, 62, 15, 163)),
-      );
+    test(
+      'CredentialSubjectType defaultBackgroundColor returns correct value',
+      () {
+        expect(
+          CredentialSubjectType.defiCompliance.defaultBackgroundColor,
+          equals(const Color.fromARGB(255, 62, 15, 163)),
+        );
 
-      expect(
-        CredentialSubjectType.identityPass.defaultBackgroundColor,
-        equals(const Color(0xffCAFFBF)),
-      );
+        expect(
+          CredentialSubjectType.identityPass.defaultBackgroundColor,
+          equals(const Color(0xffCAFFBF)),
+        );
 
-      expect(
-        CredentialSubjectType
-            .professionalExperienceAssessment.defaultBackgroundColor,
-        equals(const Color(0xFFFFADAD)),
-      );
+        expect(
+          CredentialSubjectType
+              .professionalExperienceAssessment
+              .defaultBackgroundColor,
+          equals(const Color(0xFFFFADAD)),
+        );
 
-      expect(
-        CredentialSubjectType
-            .professionalSkillAssessment.defaultBackgroundColor,
-        equals(const Color(0xffCAFFBF)),
-      );
+        expect(
+          CredentialSubjectType
+              .professionalSkillAssessment
+              .defaultBackgroundColor,
+          equals(const Color(0xffCAFFBF)),
+        );
 
-      expect(
-        CredentialSubjectType.residentCard.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.residentCard.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.selfIssued.defaultBackgroundColor,
-        equals(const Color(0xffEFF0F6)),
-      );
+        expect(
+          CredentialSubjectType.selfIssued.defaultBackgroundColor,
+          equals(const Color(0xffEFF0F6)),
+        );
 
-      expect(
-        CredentialSubjectType.defaultCredential.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.defaultCredential.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.professionalStudentCard.defaultBackgroundColor,
-        equals(const Color(0xffCAFFBF)),
-      );
+        expect(
+          CredentialSubjectType.professionalStudentCard.defaultBackgroundColor,
+          equals(const Color(0xffCAFFBF)),
+        );
 
-      expect(
-        CredentialSubjectType.walletCredential.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.walletCredential.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.livenessCard.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.livenessCard.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.nationality.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.nationality.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.tezotopiaMembership.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.tezotopiaMembership.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.chainbornMembership.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.chainbornMembership.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.twitterCard.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.twitterCard.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.gender.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.gender.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.tezosAssociatedWallet.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.tezosAssociatedWallet.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.verifiableIdCard.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.verifiableIdCard.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.over13.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.over13.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.over15.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.over15.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.over18.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.over18.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.over21.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.over21.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.over50.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.over50.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.over65.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.over65.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.passportFootprint.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.passportFootprint.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.certificateOfEmployment.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.certificateOfEmployment.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.emailPass.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.emailPass.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.ageRange.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.ageRange.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.phonePass.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.phonePass.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.learningAchievement.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.learningAchievement.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.studentCard.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.studentCard.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.voucher.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.voucher.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.tezVoucher.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.tezVoucher.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.diplomaCard.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.diplomaCard.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.aragoPass.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.aragoPass.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.aragoIdentityCard.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.aragoIdentityCard.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.aragoLearningAchievement.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.aragoLearningAchievement.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.aragoEmailPass.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.aragoEmailPass.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.aragoOver18.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.aragoOver18.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.ethereumAssociatedWallet.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.ethereumAssociatedWallet.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.fantomAssociatedWallet.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.fantomAssociatedWallet.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.polygonAssociatedWallet.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.polygonAssociatedWallet.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.binanceAssociatedWallet.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.binanceAssociatedWallet.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.etherlinkAssociatedWallet.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType
+              .etherlinkAssociatedWallet
+              .defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.ethereumPooAddress.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.ethereumPooAddress.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.fantomPooAddress.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.fantomPooAddress.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.polygonPooAddress.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.polygonPooAddress.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.binancePooAddress.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.binancePooAddress.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.tezosPooAddress.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.tezosPooAddress.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.pcdsAgentCertificate.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.pcdsAgentCertificate.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.euDiplomaCard.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.euDiplomaCard.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.euVerifiableId.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.euVerifiableId.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.employeeCredential.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.employeeCredential.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.legalPersonalCredential.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.legalPersonalCredential.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.identityCredential.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.identityCredential.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.eudiPid.defaultBackgroundColor,
-        equals(Colors.white),
-      );
+        expect(
+          CredentialSubjectType.eudiPid.defaultBackgroundColor,
+          equals(Colors.white),
+        );
 
-      expect(
-        CredentialSubjectType.pid.defaultBackgroundColor,
-        equals(Colors.white),
-      );
-    });
+        expect(
+          CredentialSubjectType.pid.defaultBackgroundColor,
+          equals(Colors.white),
+        );
+      },
+    );
 
     test('CredentialSubjectType name returns correct value', () {
       expect(
@@ -820,7 +826,8 @@ void main() {
       expect(CredentialSubjectType.phonePass.supportSingleOnly, false);
       expect(
         CredentialSubjectType
-            .professionalExperienceAssessment.supportSingleOnly,
+            .professionalExperienceAssessment
+            .supportSingleOnly,
         false,
       );
       expect(

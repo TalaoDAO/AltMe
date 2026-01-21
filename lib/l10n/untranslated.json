@@ -16,7 +16,9 @@
     "aiPleaseWait",
     "trustedList",
     "trustedListSubtitle",
-    "notTrustedEntity"
+    "notTrustedEntity",
+    "acceptanceRequest",
+    "pay"
   ],
 
   "el": [
@@ -42,7 +44,9 @@
     "aiPleaseWait",
     "trustedList",
     "trustedListSubtitle",
-    "notTrustedEntity"
+    "notTrustedEntity",
+    "acceptanceRequest",
+    "pay"
   ],
 
   "es": [
@@ -62,17 +66,12 @@
     "aiPleaseWait",
     "trustedList",
     "trustedListSubtitle",
-    "notTrustedEntity"
+    "notTrustedEntity",
+    "acceptanceRequest",
+    "pay"
   ],
 
   "fr": [
-    "saveBackupPolygonCredentialSubtitle",
-    "back",
-    "greek",
-    "iaAnalyze",
-    "iaAnalyzeTitle",
-    "trustedList",
-    "trustedListSubtitle",
-    "notTrustedEntity"
+    "greek"
   ]
 }

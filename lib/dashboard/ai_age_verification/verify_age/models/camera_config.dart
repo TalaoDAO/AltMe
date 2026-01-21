@@ -5,9 +5,7 @@ part 'camera_config.g.dart';
 
 @JsonSerializable()
 class CameraConfig extends Equatable {
-  const CameraConfig({
-    this.frontCameraAsDefault = true,
-  });
+  const CameraConfig({this.frontCameraAsDefault = true});
 
   factory CameraConfig.fromJson(Map<String, dynamic> json) =>
       _$CameraConfigFromJson(json);
@@ -23,7 +21,5 @@ class CameraConfig extends Equatable {
   Map<String, dynamic> toJson() => _$CameraConfigToJson(this);
 
   @override
-  List<Object?> get props => [
-        frontCameraAsDefault,
-      ];
+  List<Object?> get props => [frontCameraAsDefault];
 }

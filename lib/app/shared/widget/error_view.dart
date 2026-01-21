@@ -19,10 +19,7 @@ class ErrorView extends StatelessWidget {
       // ignore: require_trailing_commas
       children: [
         Center(
-          child: Text(
-            message,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
+          child: Text(message, style: Theme.of(context).textTheme.bodyMedium),
         ),
         const SizedBox(height: Sizes.spaceSmall),
         SizedBox(

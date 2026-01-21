@@ -125,7 +125,8 @@ class ManageAccountsItem extends StatelessWidget {
               Expanded(
                 child: RevealPrivateKeyButton(
                   onTap: () async {
-                    final confirm = await showDialog<bool>(
+                    final confirm =
+                        await showDialog<bool>(
                           context: context,
                           builder: (context) => ConfirmDialog(
                             title: l10n.warningDialogTitle,

@@ -33,9 +33,7 @@ class ProtectWidget extends StatelessWidget {
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.surfaceContainer,
           borderRadius: const BorderRadius.all(
-            Radius.circular(
-              Sizes.normalRadius,
-            ),
+            Radius.circular(Sizes.normalRadius),
           ),
         ),
         child: SizedBox(
@@ -53,9 +51,7 @@ class ProtectWidget extends StatelessWidget {
                         : Theme.of(context).colorScheme.onSurface,
                     BlendMode.srcIn,
                   ),
-                  child: Image.asset(
-                    image,
-                  ),
+                  child: Image.asset(image),
                 ),
               ),
               const SizedBox(width: 15),
@@ -67,16 +63,16 @@ class ProtectWidget extends StatelessWidget {
                       title,
                       style: isSelected
                           ? Theme.of(context).textTheme.titleLarge!.copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              )
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            )
                           : Theme.of(context).textTheme.titleLarge,
                     ),
                     Text(
                       subtitle,
                       style: isSelected
                           ? Theme.of(context).textTheme.titleMedium!.copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              )
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            )
                           : Theme.of(context).textTheme.titleMedium,
                     ),
                   ],

@@ -9,7 +9,7 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:convert/convert.dart';
-import 'package:dartez/dartez.dart';
+import 'package:altme/app/shared/services/tezos_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:eth_sig_util/eth_sig_util.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -29,6 +29,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
     required this.qrCodeScanCubit,
     required this.walletConnectCubit,
     required this.connectedDappRepository,
+    required this.tezosService,
   }) : super(const SignPayloadState());
 
   final WalletCubit walletCubit;
@@ -37,6 +38,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
   final QRCodeScanCubit qrCodeScanCubit;
   final WalletConnectCubit walletConnectCubit;
   final ConnectedDappRepository connectedDappRepository;
+  final TezosService tezosService;
 
   final log = getLogger('SignPayloadCubit');
 
@@ -117,11 +119,12 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           dAppName =
               beaconCubit.state.beaconRequest?.request?.appMetadata?.name ?? '';
         case ConnectionBridgeType.walletconnect:
-          final List<SavedDappData> savedDapps =
-              await connectedDappRepository.findAll();
+          final List<SavedDappData> savedDapps = await connectedDappRepository
+              .findAll();
 
-          final SavedDappData? savedDappData =
-              savedDapps.firstWhereOrNull((SavedDappData element) {
+          final SavedDappData? savedDappData = savedDapps.firstWhereOrNull((
+            SavedDappData element,
+          ) {
             return walletConnectCubit.state.sessionTopic ==
                 element.sessionData!.topic;
           });
@@ -175,8 +178,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
 
           final address = beaconRequest.request!.sourceAddress!;
 
-          final CryptoAccountData? currentAccount =
-              walletCubit.getCryptoAccountData(address);
+          final CryptoAccountData? currentAccount = walletCubit
+              .getCryptoAccountData(address);
 
           if (currentAccount == null) {
             return emit(
@@ -195,12 +198,12 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
 
           final String signature = await tezosSigning(currentAccount.secretKey);
 
-          final Map<dynamic, dynamic> response =
-              await beacon.signPayloadResponse(
-            id: beaconCubit.state.beaconRequest!.request!.id!,
-            signature: signature,
-            type: signingType,
-          );
+          final Map<dynamic, dynamic> response = await beacon
+              .signPayloadResponse(
+                id: beaconCubit.state.beaconRequest!.request!.id!,
+                signature: signature,
+                type: signingType,
+              );
 
           success = json.decode(response['success'].toString()) as bool;
 
@@ -218,8 +221,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             publicKey = walletConnectState.parameters[0].toString();
           } else if (walletConnectCubit.state.signType ==
               Parameters.TEZOS_SIGN) {
-            publicKey =
-                walletConnectCubit.state.parameters['account'].toString();
+            publicKey = walletConnectCubit.state.parameters['account']
+                .toString();
           } else if (walletConnectCubit.state.signType ==
               Parameters.PERSONAL_SIGN) {
             publicKey = walletConnectState.parameters[1].toString();
@@ -233,8 +236,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             );
           }
 
-          final CryptoAccountData? currentAccount =
-              walletCubit.getCryptoAccountData(publicKey);
+          final CryptoAccountData? currentAccount = walletCubit
+              .getCryptoAccountData(publicKey);
 
           log.i('currentAccount -$currentAccount');
           if (currentAccount == null) {
@@ -255,13 +258,12 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
           /// sign
           if (walletConnectCubit.state.signType == Parameters.PERSONAL_SIGN ||
               walletConnectCubit.state.signType == Parameters.ETH_SIGN) {
-            final Credentials credentials =
-                EthPrivateKey.fromHex(currentAccount.secretKey);
+            final Credentials credentials = EthPrivateKey.fromHex(
+              currentAccount.secretKey,
+            );
             final String signature = hex.encode(
               credentials.signPersonalMessageToUint8List(
-                Uint8List.fromList(
-                  utf8.encode(state.payloadMessage!),
-                ),
+                Uint8List.fromList(utf8.encode(state.payloadMessage!)),
               ),
             );
             walletConnectCubit
@@ -283,16 +285,18 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
             success = true;
           } else if (walletConnectCubit.state.signType ==
               Parameters.TEZOS_SIGN) {
-            final String signature =
-                await tezosSigning(currentAccount.secretKey);
+            final String signature = await tezosSigning(
+              currentAccount.secretKey,
+            );
             walletConnectCubit
                 .completer[walletConnectCubit.completer.length - 1]!
                 .complete(signature);
             success = true;
           } else if (walletConnectCubit.state.signType ==
               Parameters.ETH_SIGN_TRANSACTION) {
-            final Credentials credentials =
-                EthPrivateKey.fromHex(currentAccount.secretKey);
+            final Credentials credentials = EthPrivateKey.fromHex(
+              currentAccount.secretKey,
+            );
             await dotenv.load();
             final infuraApiKey = dotenv.get('INFURA_API_KEY');
             final ethRpcUrl = Urls.infuraBaseUrl + infuraApiKey;
@@ -390,21 +394,15 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
   }
 
   Future<String> tezosSigning(String secretKey) async {
-    final dynamic signer = await Dartez.createSigner(
-      Dartez.writeKeyWithHint(secretKey, 'edsk'),
-    );
-
-    final signature = Dartez.signPayload(
-      signer: signer as SoftSigner,
+    final signature = await tezosService.signPayload(
+      secretKey: secretKey,
       payload: encodedPayloaForTezos,
     );
 
     return signature;
   }
 
-  void rejectSigning({
-    required ConnectionBridgeType connectionBridgeType,
-  }) {
+  void rejectSigning({required ConnectionBridgeType connectionBridgeType}) {
     if (isClosed) return;
     switch (connectionBridgeType) {
       case ConnectionBridgeType.beacon:

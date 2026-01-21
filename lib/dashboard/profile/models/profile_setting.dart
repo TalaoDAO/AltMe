@@ -24,15 +24,15 @@ class ProfileSetting extends Equatable {
       _$ProfileSettingFromJson(json);
 
   factory ProfileSetting.initial() => ProfileSetting(
-        blockchainOptions: BlockchainOptions.initial(),
-        discoverCardsOptions: DiscoverCardsOptions.initial(),
-        generalOptions: GeneralOptions.empty(),
-        helpCenterOptions: HelpCenterOptions.initial(),
-        selfSovereignIdentityOptions: SelfSovereignIdentityOptions.initial(),
-        settingsMenu: SettingsMenu.initial(),
-        version: '',
-        walletSecurityOptions: WalletSecurityOptions.initial(),
-      );
+    blockchainOptions: BlockchainOptions.initial(),
+    discoverCardsOptions: DiscoverCardsOptions.initial(),
+    generalOptions: GeneralOptions.empty(),
+    helpCenterOptions: HelpCenterOptions.initial(),
+    selfSovereignIdentityOptions: SelfSovereignIdentityOptions.initial(),
+    settingsMenu: SettingsMenu.initial(),
+    version: '',
+    walletSecurityOptions: WalletSecurityOptions.initial(),
+  );
 
   final BlockchainOptions? blockchainOptions;
   final DiscoverCardsOptions? discoverCardsOptions;
@@ -54,31 +54,29 @@ class ProfileSetting extends Equatable {
     SettingsMenu? settingsMenu,
     String? version,
     WalletSecurityOptions? walletSecurityOptions,
-  }) =>
-      ProfileSetting(
-        blockchainOptions: blockchainOptions ?? this.blockchainOptions,
-        discoverCardsOptions: discoverCardsOptions ?? this.discoverCardsOptions,
-        generalOptions: generalOptions ?? this.generalOptions,
-        helpCenterOptions: helpCenterOptions ?? this.helpCenterOptions,
-        selfSovereignIdentityOptions:
-            selfSovereignIdentityOptions ?? this.selfSovereignIdentityOptions,
-        settingsMenu: settingsMenu ?? this.settingsMenu,
-        version: version ?? this.version,
-        walletSecurityOptions:
-            walletSecurityOptions ?? this.walletSecurityOptions,
-      );
+  }) => ProfileSetting(
+    blockchainOptions: blockchainOptions ?? this.blockchainOptions,
+    discoverCardsOptions: discoverCardsOptions ?? this.discoverCardsOptions,
+    generalOptions: generalOptions ?? this.generalOptions,
+    helpCenterOptions: helpCenterOptions ?? this.helpCenterOptions,
+    selfSovereignIdentityOptions:
+        selfSovereignIdentityOptions ?? this.selfSovereignIdentityOptions,
+    settingsMenu: settingsMenu ?? this.settingsMenu,
+    version: version ?? this.version,
+    walletSecurityOptions: walletSecurityOptions ?? this.walletSecurityOptions,
+  );
 
   @override
   List<Object?> get props => [
-        blockchainOptions,
-        discoverCardsOptions,
-        generalOptions,
-        helpCenterOptions,
-        selfSovereignIdentityOptions,
-        settingsMenu,
-        version,
-        walletSecurityOptions,
-      ];
+    blockchainOptions,
+    discoverCardsOptions,
+    generalOptions,
+    helpCenterOptions,
+    selfSovereignIdentityOptions,
+    settingsMenu,
+    version,
+    walletSecurityOptions,
+  ];
 }
 
 @JsonSerializable()
@@ -103,18 +101,18 @@ class BlockchainOptions extends Equatable {
       _$BlockchainOptionsFromJson(json);
 
   factory BlockchainOptions.initial() => const BlockchainOptions(
-        associatedAddressFormat: VCFormatType.ldpVc,
-        bnbSupport: true,
-        ethereumSupport: true,
-        fantomSupport: true,
-        hederaSupport: true,
-        infuraRpcNode: false,
-        polygonSupport: true,
-        etherlinkSupport: true,
-        tezosSupport: true,
-        tzproRpcNode: false,
-        testnet: false,
-      );
+    associatedAddressFormat: VCFormatType.ldpVc,
+    bnbSupport: true,
+    ethereumSupport: true,
+    fantomSupport: true,
+    hederaSupport: true,
+    infuraRpcNode: false,
+    polygonSupport: true,
+    etherlinkSupport: true,
+    tezosSupport: true,
+    tzproRpcNode: false,
+    testnet: false,
+  );
 
   final VCFormatType? associatedAddressFormat;
   final bool bnbSupport;
@@ -167,20 +165,20 @@ class BlockchainOptions extends Equatable {
 
   @override
   List<Object?> get props => [
-        associatedAddressFormat,
-        bnbSupport,
-        ethereumSupport,
-        fantomSupport,
-        hederaSupport,
-        infuraApiKey,
-        infuraRpcNode,
-        polygonSupport,
-        etherlinkSupport,
-        tezosSupport,
-        tzproApiKey,
-        tzproRpcNode,
-        testnet,
-      ];
+    associatedAddressFormat,
+    bnbSupport,
+    ethereumSupport,
+    fantomSupport,
+    hederaSupport,
+    infuraApiKey,
+    infuraRpcNode,
+    polygonSupport,
+    etherlinkSupport,
+    tezosSupport,
+    tzproApiKey,
+    tzproRpcNode,
+    testnet,
+  ];
 }
 
 @JsonSerializable()
@@ -217,45 +215,45 @@ class DiscoverCardsOptions extends Equatable {
       _$DiscoverCardsOptionsFromJson(json);
 
   factory DiscoverCardsOptions.initial() => const DiscoverCardsOptions(
-        displayDefi: true,
-        displayHumanity: false,
-        displayOver13: false,
-        displayOver15: false,
-        displayOver18: true,
-        displayOver21: false,
-        displayOver50: false,
-        displayVerifiableId: true,
-        displayVerifiableIdSdJwt: true,
-        displayOver65: false,
-        displayAgeRange: false,
-        displayGender: false,
-        displayExternalIssuer: [],
-      );
+    displayDefi: true,
+    displayHumanity: false,
+    displayOver13: false,
+    displayOver15: false,
+    displayOver18: true,
+    displayOver21: false,
+    displayOver50: false,
+    displayVerifiableId: true,
+    displayVerifiableIdSdJwt: true,
+    displayOver65: false,
+    displayAgeRange: false,
+    displayGender: false,
+    displayExternalIssuer: [],
+  );
 
   factory DiscoverCardsOptions.none() => const DiscoverCardsOptions(
-        displayDefi: false,
-        displayHumanity: false,
-        displayHumanityJwt: false,
-        displayOver13: false,
-        displayOver15: false,
-        displayOver18: false,
-        displayOver18Jwt: false,
-        displayOver21: false,
-        displayOver50: false,
-        displayChainborn: false,
-        displayTezotopia: false,
-        displayVerifiableId: false,
-        displayVerifiableIdJwt: false,
-        displayOver65: false,
-        displayEmailPass: false,
-        displayEmailPassJwt: false,
-        displayPhonePass: false,
-        displayPhonePassJwt: false,
-        displayAgeRange: false,
-        displayGender: false,
-        displayExternalIssuer: [],
-        displayEmailPassSdJwt: false,
-      );
+    displayDefi: false,
+    displayHumanity: false,
+    displayHumanityJwt: false,
+    displayOver13: false,
+    displayOver15: false,
+    displayOver18: false,
+    displayOver18Jwt: false,
+    displayOver21: false,
+    displayOver50: false,
+    displayChainborn: false,
+    displayTezotopia: false,
+    displayVerifiableId: false,
+    displayVerifiableIdJwt: false,
+    displayOver65: false,
+    displayEmailPass: false,
+    displayEmailPassJwt: false,
+    displayPhonePass: false,
+    displayPhonePassJwt: false,
+    displayAgeRange: false,
+    displayGender: false,
+    displayExternalIssuer: [],
+    displayEmailPassSdJwt: false,
+  );
 
   final bool displayDefi;
   final bool displayHumanity;
@@ -445,31 +443,31 @@ class DiscoverCardsOptions extends Equatable {
 
   @override
   List<Object?> get props => [
-        displayDefi,
-        displayHumanity,
-        displayOver13,
-        displayOver15,
-        displayOver18,
-        displayOver18Jwt,
-        displayOver18SdJwt,
-        displayVerifiableId,
-        displayOver21,
-        displayOver65,
-        displayAgeRange,
-        displayGender,
-        displayOver50,
-        displayEmailPass,
-        displayEmailPassJwt,
-        displayPhonePass,
-        displayPhonePassJwt,
-        displayPhonePassSdJwt,
-        displayExternalIssuer,
-        displayHumanityJwt,
-        displayOver18Jwt,
-        displayVerifiableIdJwt,
-        displayChainborn,
-        displayTezotopia,
-      ];
+    displayDefi,
+    displayHumanity,
+    displayOver13,
+    displayOver15,
+    displayOver18,
+    displayOver18Jwt,
+    displayOver18SdJwt,
+    displayVerifiableId,
+    displayOver21,
+    displayOver65,
+    displayAgeRange,
+    displayGender,
+    displayOver50,
+    displayEmailPass,
+    displayEmailPassJwt,
+    displayPhonePass,
+    displayPhonePassJwt,
+    displayPhonePassSdJwt,
+    displayExternalIssuer,
+    displayHumanityJwt,
+    displayOver18Jwt,
+    displayVerifiableIdJwt,
+    displayChainborn,
+    displayTezotopia,
+  ];
 }
 
 @JsonSerializable()
@@ -494,19 +492,19 @@ class GeneralOptions extends Equatable {
       _$GeneralOptionsFromJson(json);
 
   factory GeneralOptions.empty() => GeneralOptions(
-        walletType: WalletAppType.altme,
-        companyName: '',
-        companyWebsite: '',
-        companyLogo: '',
-        tagLine: '',
-        splashScreenTitle: '',
-        profileName: '',
-        profileVersion: '',
-        published: DateTime.now(),
-        profileId: '',
-        customerPlan: '',
-        primaryColor: '',
-      );
+    walletType: WalletAppType.altme,
+    companyName: '',
+    companyWebsite: '',
+    companyLogo: '',
+    tagLine: '',
+    splashScreenTitle: '',
+    profileName: '',
+    profileVersion: '',
+    published: DateTime.now(),
+    profileId: '',
+    customerPlan: '',
+    primaryColor: '',
+  );
 
   final WalletAppType walletType;
   final String companyName;
@@ -558,19 +556,19 @@ class GeneralOptions extends Equatable {
 
   @override
   List<Object?> get props => [
-        walletType,
-        companyName,
-        companyWebsite,
-        companyLogo,
-        tagLine,
-        splashScreenTitle,
-        profileName,
-        profileVersion,
-        published,
-        profileId,
-        customerPlan,
-        primaryColor,
-      ];
+    walletType,
+    companyName,
+    companyWebsite,
+    companyLogo,
+    tagLine,
+    splashScreenTitle,
+    profileName,
+    profileVersion,
+    published,
+    profileId,
+    customerPlan,
+    primaryColor,
+  ];
 }
 
 @JsonSerializable()
@@ -591,12 +589,12 @@ class HelpCenterOptions extends Equatable {
       _$HelpCenterOptionsFromJson(json);
 
   factory HelpCenterOptions.initial() => const HelpCenterOptions(
-        customChatSupport: false,
-        customEmailSupport: false,
-        displayChatSupport: true,
-        displayEmailSupport: true,
-        displayNotification: true,
-      );
+    customChatSupport: false,
+    customEmailSupport: false,
+    displayChatSupport: true,
+    displayEmailSupport: true,
+    displayNotification: true,
+  );
 
   final bool customChatSupport;
   final String? customChatSupportName;
@@ -620,34 +618,32 @@ class HelpCenterOptions extends Equatable {
     bool? displayNotification,
     bool? customNotification,
     String? customNotificationRoom,
-  }) =>
-      HelpCenterOptions(
-        customChatSupport: customChatSupport ?? this.customChatSupport,
-        customEmailSupport: customEmailSupport ?? this.customEmailSupport,
-        displayChatSupport: displayChatSupport ?? this.displayChatSupport,
-        displayEmailSupport: displayEmailSupport ?? this.displayEmailSupport,
-        customChatSupportName:
-            customChatSupportName ?? this.customChatSupportName,
-        customEmail: customEmail ?? this.customEmail,
-        displayNotification: displayNotification ?? this.displayNotification,
-        customNotification: customNotification ?? this.customNotification,
-        customNotificationRoom:
-            customNotificationRoom ?? this.customNotificationRoom,
-      );
+  }) => HelpCenterOptions(
+    customChatSupport: customChatSupport ?? this.customChatSupport,
+    customEmailSupport: customEmailSupport ?? this.customEmailSupport,
+    displayChatSupport: displayChatSupport ?? this.displayChatSupport,
+    displayEmailSupport: displayEmailSupport ?? this.displayEmailSupport,
+    customChatSupportName: customChatSupportName ?? this.customChatSupportName,
+    customEmail: customEmail ?? this.customEmail,
+    displayNotification: displayNotification ?? this.displayNotification,
+    customNotification: customNotification ?? this.customNotification,
+    customNotificationRoom:
+        customNotificationRoom ?? this.customNotificationRoom,
+  );
 
   @override
   List<Object?> get props => [
-        customChatSupport,
-        customChatSupportName,
-        customEmail,
-        customEmailSupport,
-        displayChatSupport,
-        displayEmailSupport,
-        displayNotification,
-        customNotification,
-        customNotificationRoom,
-        displayNotification,
-      ];
+    customChatSupport,
+    customChatSupportName,
+    customEmail,
+    customEmailSupport,
+    displayChatSupport,
+    displayEmailSupport,
+    displayNotification,
+    customNotification,
+    customNotificationRoom,
+    displayNotification,
+  ];
 }
 
 @JsonSerializable()
@@ -674,18 +670,17 @@ class SelfSovereignIdentityOptions extends Equatable {
   SelfSovereignIdentityOptions copyWith({
     CustomOidc4VcProfile? customOidc4vcProfile,
     bool? displayManageDecentralizedId,
-  }) =>
-      SelfSovereignIdentityOptions(
-        customOidc4vcProfile: customOidc4vcProfile ?? this.customOidc4vcProfile,
-        displayManageDecentralizedId:
-            displayManageDecentralizedId ?? this.displayManageDecentralizedId,
-      );
+  }) => SelfSovereignIdentityOptions(
+    customOidc4vcProfile: customOidc4vcProfile ?? this.customOidc4vcProfile,
+    displayManageDecentralizedId:
+        displayManageDecentralizedId ?? this.displayManageDecentralizedId,
+  );
 
   @override
   List<Object?> get props => [
-        customOidc4vcProfile,
-        displayManageDecentralizedId,
-      ];
+    customOidc4vcProfile,
+    displayManageDecentralizedId,
+  ];
 }
 
 @JsonSerializable()
@@ -714,20 +709,20 @@ class CustomOidc4VcProfile extends Equatable {
   });
 
   factory CustomOidc4VcProfile.initial() => CustomOidc4VcProfile(
-        clientAuthentication: ClientAuthentication.clientId,
-        credentialManifestSupport: false,
-        cryptoHolderBinding: true,
-        defaultDid: DidKeyType.edDSA,
-        oidc4vciDraft: OIDC4VCIDraftType.draft13,
-        oidc4vpDraft: OIDC4VPDraftType.draft21,
-        scope: false,
-        securityLevel: false,
-        siopv2Draft: SIOPV2DraftType.draft12,
-        clientType: ClientType.did,
-        clientId: Parameters.clientId,
-        clientSecret: randomString(12),
-        displayMode: false,
-      );
+    clientAuthentication: ClientAuthentication.clientId,
+    credentialManifestSupport: false,
+    cryptoHolderBinding: true,
+    defaultDid: DidKeyType.edDSA,
+    oidc4vciDraft: OIDC4VCIDraftType.draft13,
+    oidc4vpDraft: OIDC4VPDraftType.draft21,
+    scope: false,
+    securityLevel: false,
+    siopv2Draft: SIOPV2DraftType.draft12,
+    clientType: ClientType.did,
+    clientId: Parameters.clientId,
+    clientSecret: randomString(12),
+    displayMode: false,
+  );
 
   factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) {
     final profileFromJson = _$CustomOidc4VcProfileFromJson(json);
@@ -788,55 +783,54 @@ class CustomOidc4VcProfile extends Equatable {
     ProofType? proofType,
     bool? dpopSupport,
     bool? displayMode,
-  }) =>
-      CustomOidc4VcProfile(
-        clientAuthentication: clientAuthentication ?? this.clientAuthentication,
-        credentialManifestSupport:
-            credentialManifestSupport ?? this.credentialManifestSupport,
-        cryptoHolderBinding: cryptoHolderBinding ?? this.cryptoHolderBinding,
-        defaultDid: defaultDid ?? this.defaultDid,
-        oidc4vciDraft: oidc4vciDraft ?? this.oidc4vciDraft,
-        oidc4vpDraft: oidc4vpDraft ?? this.oidc4vpDraft,
-        scope: scope ?? this.scope,
-        proofHeader: proofHeader ?? this.proofHeader,
-        securityLevel: securityLevel ?? this.securityLevel,
-        statusListCache: statusListCache ?? this.statusListCache,
-        pushAuthorizationRequest:
-            pushAuthorizationRequest ?? this.pushAuthorizationRequest,
-        siopv2Draft: siopv2Draft ?? this.siopv2Draft,
-        clientType: clientType ?? this.clientType,
-        clientId: clientId ?? this.clientId,
-        clientSecret: clientSecret ?? this.clientSecret,
-        vcFormatType: vcFormatType ?? this.vcFormatType,
-        proofType: proofType ?? this.proofType,
-        dpopSupport: dpopSupport ?? this.dpopSupport,
-        formatsSupported: formatsSupported ?? this.formatsSupported,
-        displayMode: displayMode ?? this.displayMode,
-      );
+  }) => CustomOidc4VcProfile(
+    clientAuthentication: clientAuthentication ?? this.clientAuthentication,
+    credentialManifestSupport:
+        credentialManifestSupport ?? this.credentialManifestSupport,
+    cryptoHolderBinding: cryptoHolderBinding ?? this.cryptoHolderBinding,
+    defaultDid: defaultDid ?? this.defaultDid,
+    oidc4vciDraft: oidc4vciDraft ?? this.oidc4vciDraft,
+    oidc4vpDraft: oidc4vpDraft ?? this.oidc4vpDraft,
+    scope: scope ?? this.scope,
+    proofHeader: proofHeader ?? this.proofHeader,
+    securityLevel: securityLevel ?? this.securityLevel,
+    statusListCache: statusListCache ?? this.statusListCache,
+    pushAuthorizationRequest:
+        pushAuthorizationRequest ?? this.pushAuthorizationRequest,
+    siopv2Draft: siopv2Draft ?? this.siopv2Draft,
+    clientType: clientType ?? this.clientType,
+    clientId: clientId ?? this.clientId,
+    clientSecret: clientSecret ?? this.clientSecret,
+    vcFormatType: vcFormatType ?? this.vcFormatType,
+    proofType: proofType ?? this.proofType,
+    dpopSupport: dpopSupport ?? this.dpopSupport,
+    formatsSupported: formatsSupported ?? this.formatsSupported,
+    displayMode: displayMode ?? this.displayMode,
+  );
 
   @override
   List<Object?> get props => [
-        clientAuthentication,
-        credentialManifestSupport,
-        clientId,
-        clientSecret,
-        cryptoHolderBinding,
-        defaultDid,
-        oidc4vciDraft,
-        oidc4vpDraft,
-        scope,
-        proofHeader,
-        securityLevel,
-        statusListCache,
-        pushAuthorizationRequest,
-        siopv2Draft,
-        clientType,
-        vcFormatType,
-        formatsSupported,
-        proofType,
-        dpopSupport,
-        displayMode,
-      ];
+    clientAuthentication,
+    credentialManifestSupport,
+    clientId,
+    clientSecret,
+    cryptoHolderBinding,
+    defaultDid,
+    oidc4vciDraft,
+    oidc4vpDraft,
+    scope,
+    proofHeader,
+    securityLevel,
+    statusListCache,
+    pushAuthorizationRequest,
+    siopv2Draft,
+    clientType,
+    vcFormatType,
+    formatsSupported,
+    proofType,
+    dpopSupport,
+    displayMode,
+  ];
 }
 
 @JsonSerializable()
@@ -853,10 +847,10 @@ class SettingsMenu extends Equatable {
       _$SettingsMenuFromJson(json);
 
   factory SettingsMenu.initial() => const SettingsMenu(
-        displayDeveloperMode: true,
-        displayHelpCenter: true,
-        displayProfile: true,
-      );
+    displayDeveloperMode: true,
+    displayHelpCenter: true,
+    displayProfile: true,
+  );
 
   final bool displayDeveloperMode;
   final bool displayHelpCenter;
@@ -872,24 +866,23 @@ class SettingsMenu extends Equatable {
     bool? displayProfile,
     bool? displaySelfSovereignIdentity,
     bool? displayActivityLog,
-  }) =>
-      SettingsMenu(
-        displayDeveloperMode: displayDeveloperMode ?? this.displayDeveloperMode,
-        displayHelpCenter: displayHelpCenter ?? this.displayHelpCenter,
-        displayProfile: displayProfile ?? this.displayProfile,
-        displaySelfSovereignIdentity:
-            displaySelfSovereignIdentity ?? this.displaySelfSovereignIdentity,
-        displayActivityLog: displayActivityLog ?? this.displayActivityLog,
-      );
+  }) => SettingsMenu(
+    displayDeveloperMode: displayDeveloperMode ?? this.displayDeveloperMode,
+    displayHelpCenter: displayHelpCenter ?? this.displayHelpCenter,
+    displayProfile: displayProfile ?? this.displayProfile,
+    displaySelfSovereignIdentity:
+        displaySelfSovereignIdentity ?? this.displaySelfSovereignIdentity,
+    displayActivityLog: displayActivityLog ?? this.displayActivityLog,
+  );
 
   @override
   List<Object?> get props => [
-        displayDeveloperMode,
-        displayHelpCenter,
-        displayProfile,
-        displaySelfSovereignIdentity,
-        displayActivityLog,
-      ];
+    displayDeveloperMode,
+    displayHelpCenter,
+    displayProfile,
+    displaySelfSovereignIdentity,
+    displayActivityLog,
+  ];
 }
 
 @JsonSerializable()
@@ -907,12 +900,12 @@ class WalletSecurityOptions extends Equatable {
       _$WalletSecurityOptionsFromJson(json);
 
   factory WalletSecurityOptions.initial() => const WalletSecurityOptions(
-        confirmSecurityVerifierAccess: false,
-        displaySecurityAdvancedSettings: true,
-        secureSecurityAuthenticationWithPinCode: false,
-        verifySecurityIssuerWebsiteIdentity: false,
-        trustedList: false,
-      );
+    confirmSecurityVerifierAccess: false,
+    displaySecurityAdvancedSettings: true,
+    secureSecurityAuthenticationWithPinCode: false,
+    verifySecurityIssuerWebsiteIdentity: false,
+    trustedList: false,
+  );
 
   final bool confirmSecurityVerifierAccess;
   final bool displaySecurityAdvancedSettings;
@@ -930,29 +923,28 @@ class WalletSecurityOptions extends Equatable {
     bool? verifySecurityIssuerWebsiteIdentity,
     String? trustedListUrl,
     bool? trustedList,
-  }) =>
-      WalletSecurityOptions(
-        confirmSecurityVerifierAccess:
-            confirmSecurityVerifierAccess ?? this.confirmSecurityVerifierAccess,
-        displaySecurityAdvancedSettings: displaySecurityAdvancedSettings ??
-            this.displaySecurityAdvancedSettings,
-        secureSecurityAuthenticationWithPinCode:
-            secureSecurityAuthenticationWithPinCode ??
-                this.secureSecurityAuthenticationWithPinCode,
-        verifySecurityIssuerWebsiteIdentity:
-            verifySecurityIssuerWebsiteIdentity ??
-                this.verifySecurityIssuerWebsiteIdentity,
-        trustedListUrl: trustedListUrl ?? this.trustedListUrl,
-        trustedList: trustedList ?? this.trustedList,
-      );
+  }) => WalletSecurityOptions(
+    confirmSecurityVerifierAccess:
+        confirmSecurityVerifierAccess ?? this.confirmSecurityVerifierAccess,
+    displaySecurityAdvancedSettings:
+        displaySecurityAdvancedSettings ?? this.displaySecurityAdvancedSettings,
+    secureSecurityAuthenticationWithPinCode:
+        secureSecurityAuthenticationWithPinCode ??
+        this.secureSecurityAuthenticationWithPinCode,
+    verifySecurityIssuerWebsiteIdentity:
+        verifySecurityIssuerWebsiteIdentity ??
+        this.verifySecurityIssuerWebsiteIdentity,
+    trustedListUrl: trustedListUrl ?? this.trustedListUrl,
+    trustedList: trustedList ?? this.trustedList,
+  );
 
   @override
   List<Object?> get props => [
-        confirmSecurityVerifierAccess,
-        displaySecurityAdvancedSettings,
-        secureSecurityAuthenticationWithPinCode,
-        verifySecurityIssuerWebsiteIdentity,
-        trustedListUrl,
-        trustedList,
-      ];
+    confirmSecurityVerifierAccess,
+    displaySecurityAdvancedSettings,
+    secureSecurityAuthenticationWithPinCode,
+    verifySecurityIssuerWebsiteIdentity,
+    trustedListUrl,
+    trustedList,
+  ];
 }

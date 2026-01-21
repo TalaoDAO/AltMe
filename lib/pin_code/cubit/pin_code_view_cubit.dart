@@ -78,20 +78,14 @@ class PinCodeViewCubit extends Cubit<PinCodeViewState> {
             digit: passCode,
             passwordDigits: passwordDigits,
           )) {
-            setEnteredPasscode(
-              '',
-              PinCodeErrors.errorSerie,
-            );
+            setEnteredPasscode('', PinCodeErrors.errorSerie);
             return;
           }
           if (isPincodeSequence(
             digit: passCode,
             passwordDigits: passwordDigits,
           )) {
-            setEnteredPasscode(
-              '',
-              PinCodeErrors.errorSequence,
-            );
+            setEnteredPasscode('', PinCodeErrors.errorSequence);
             return;
           }
           await secureStorageProvider.set(SecureStorageKeys.pinCode, passCode);
@@ -99,7 +93,7 @@ class PinCodeViewCubit extends Cubit<PinCodeViewState> {
           if (!isUserPin) {
             final isValid =
                 (await secureStorageProvider.get(SecureStorageKeys.pinCode)) ==
-                    passCode;
+                passCode;
             if (!isValid) {
               emit(
                 state.copyWith(
@@ -120,16 +114,10 @@ class PinCodeViewCubit extends Cubit<PinCodeViewState> {
           ),
         );
       } else {
-        setEnteredPasscode(
-          passCode,
-          PinCodeErrors.none,
-        );
+        setEnteredPasscode(passCode, PinCodeErrors.none);
       }
     } else {
-      setEnteredPasscode(
-        text,
-        PinCodeErrors.none,
-      );
+      setEnteredPasscode(text, PinCodeErrors.none);
     }
   }
 

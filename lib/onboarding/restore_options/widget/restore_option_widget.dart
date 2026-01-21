@@ -29,9 +29,7 @@ class RestoreOptionWidget extends StatelessWidget {
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.surfaceContainer,
           borderRadius: const BorderRadius.all(
-            Radius.circular(
-              Sizes.normalRadius,
-            ),
+            Radius.circular(Sizes.normalRadius),
           ),
         ),
         child: SizedBox(
@@ -48,8 +46,8 @@ class RestoreOptionWidget extends StatelessWidget {
                       title,
                       style: isSelected
                           ? Theme.of(context).textTheme.titleLarge!.copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              )
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            )
                           : Theme.of(context).textTheme.titleLarge,
                     ),
                   ],

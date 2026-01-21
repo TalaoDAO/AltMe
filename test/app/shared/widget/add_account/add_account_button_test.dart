@@ -7,11 +7,7 @@ import '../../../../helpers/helpers.dart';
 void main() {
   group('AddAccountButton', () {
     testWidgets('renders correctly', (tester) async {
-      await tester.pumpApp(
-        Scaffold(
-          body: AddAccountButton(onPressed: () {}),
-        ),
-      );
+      await tester.pumpApp(Scaffold(body: AddAccountButton(onPressed: () {})));
 
       expect(find.byType(InkWell), findsOneWidget);
       expect(find.byType(Container), findsOneWidget);
@@ -22,11 +18,7 @@ void main() {
     });
 
     testWidgets('displays correct text', (tester) async {
-      await tester.pumpApp(
-        Scaffold(
-          body: AddAccountButton(onPressed: () {}),
-        ),
-      );
+      await tester.pumpApp(Scaffold(body: AddAccountButton(onPressed: () {})));
 
       expect(find.text('Add Account'), findsOneWidget);
       expect(find.text('Create or import a new account.'), findsOneWidget);

@@ -5,10 +5,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class DidPrivateKey extends StatelessWidget {
-  const DidPrivateKey({
-    super.key,
-    required this.route,
-  });
+  const DidPrivateKey({super.key, required this.route});
 
   final Route<dynamic> route;
 
@@ -17,27 +14,22 @@ class DidPrivateKey extends StatelessWidget {
     final l10n = context.l10n;
     return Column(
       children: [
-        const SizedBox(
-          height: Sizes.space2XLarge,
-        ),
+        const SizedBox(height: Sizes.space2XLarge),
         Text(
           l10n.didPrivateKey,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
-        const SizedBox(
-          height: Sizes.spaceNormal,
-        ),
+        const SizedBox(height: Sizes.spaceNormal),
         Text(
           l10n.didPrivateKeyDescription,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        const SizedBox(
-          height: Sizes.spaceXLarge,
-        ),
+        const SizedBox(height: Sizes.spaceXLarge),
         RevealButton(
           onTap: () async {
-            final confirm = await showDialog<bool>(
+            final confirm =
+                await showDialog<bool>(
                   context: context,
                   builder: (context) => ConfirmDialog(
                     title: l10n.warningDialogTitle,

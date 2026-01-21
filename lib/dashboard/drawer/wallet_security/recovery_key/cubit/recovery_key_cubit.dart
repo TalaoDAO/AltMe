@@ -44,8 +44,9 @@ class RecoveryKeyCubit extends Cubit<RecoveryKeyState> {
     emit(state.loading());
     bool isMnemonicsVerified = false;
 
-    final hasVerifiedMnemonics =
-        await secureStorageProvider.get(SecureStorageKeys.hasVerifiedMnemonics);
+    final hasVerifiedMnemonics = await secureStorageProvider.get(
+      SecureStorageKeys.hasVerifiedMnemonics,
+    );
 
     if (hasVerifiedMnemonics != null && hasVerifiedMnemonics == 'yes') {
       isMnemonicsVerified = true;

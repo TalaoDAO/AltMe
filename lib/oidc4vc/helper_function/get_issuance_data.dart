@@ -122,11 +122,11 @@ Future<Oidc4vcParameters> getIssuanceData({
     txCode: txCode,
     issuerState: issuerState,
   );
-  final Oidc4vcParameters oidc4vcParameters =
-      await oidc4vc.authorizationParameters(
-    oidc4vcParameters: oidc4vcParametersfromIssuer,
-    dio: Dio(),
-  );
+  final Oidc4vcParameters oidc4vcParameters = await oidc4vc
+      .authorizationParameters(
+        oidc4vcParameters: oidc4vcParametersfromIssuer,
+        dio: Dio(),
+      );
   final credentialsSupported = issuerOpenIdConfiguration.credentialsSupported;
   final credentialConfigurationsSupported =
       issuerOpenIdConfiguration.credentialConfigurationsSupported;
@@ -155,25 +155,17 @@ Future<Oidc4vcParameters> getIssuanceData({
           oidc4vcType == OIDC4VCType.EBSI) {
         if (credSupported?.trustFramework != null &&
             credSupported == credSupported?.trustFramework) {
-          return oidc4vcParameters.copyWith(
-            oidc4vcType: OIDC4VCType.DEFAULT,
-          );
+          return oidc4vcParameters.copyWith(oidc4vcType: OIDC4VCType.DEFAULT);
         }
 
         if (credSupported?.trustFramework?.name != null &&
             credSupported?.trustFramework?.name == 'ebsi') {
-          return oidc4vcParameters.copyWith(
-            oidc4vcType: OIDC4VCType.EBSI,
-          );
+          return oidc4vcParameters.copyWith(oidc4vcType: OIDC4VCType.EBSI);
         } else {
-          return oidc4vcParameters.copyWith(
-            oidc4vcType: OIDC4VCType.DEFAULT,
-          );
+          return oidc4vcParameters.copyWith(oidc4vcType: OIDC4VCType.DEFAULT);
         }
       }
-      return oidc4vcParameters.copyWith(
-        oidc4vcType: oidc4vcType,
-      );
+      return oidc4vcParameters.copyWith(oidc4vcType: oidc4vcType);
     }
   }
 

@@ -36,6 +36,12 @@ class ProfileModel extends Equatable {
     profileType: ProfileType.custom,
     profileSetting: ProfileSetting.initial(),
   );
+    walletType: WalletType.personal,
+    walletProtectionType: WalletProtectionType.pinCode,
+    isDeveloperMode: false,
+    profileType: ProfileType.custom,
+    profileSetting: ProfileSetting.initial(),
+  );
 
   factory ProfileModel.ebsiV3({
     required WalletType walletType,

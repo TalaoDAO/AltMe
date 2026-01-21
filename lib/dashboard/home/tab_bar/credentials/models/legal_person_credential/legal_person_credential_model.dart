@@ -12,9 +12,9 @@ class LegalPersonCredentialModel extends CredentialSubjectModel {
     super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.legalPersonalCredential,
-          credentialCategory: CredentialCategory.professionalCards,
-        );
+         credentialSubjectType: CredentialSubjectType.legalPersonalCredential,
+         credentialCategory: CredentialCategory.professionalCards,
+       );
 
   factory LegalPersonCredentialModel.fromJson(Map<String, dynamic> json) =>
       _$LegalPersonCredentialModelFromJson(json);

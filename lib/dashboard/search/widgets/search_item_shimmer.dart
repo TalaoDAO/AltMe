@@ -13,9 +13,7 @@ class SearchItemShimmer extends StatelessWidget {
         color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.07),
         child: const AspectRatio(
           aspectRatio: Sizes.credentialAspectRatio,
-          child: ShimmerWidget.rectangular(
-            height: 150,
-          ),
+          child: ShimmerWidget.rectangular(height: 150),
         ),
       ),
     );

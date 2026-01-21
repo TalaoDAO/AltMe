@@ -6,18 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class SearchPage extends StatelessWidget {
-  const SearchPage({
-    super.key,
-    this.hideAppBar = true,
-  });
+  const SearchPage({super.key, this.hideAppBar = true});
 
   final bool hideAppBar;
 
   static Route<void> route() {
     return MaterialPageRoute(
-      builder: (_) => const SearchPage(
-        hideAppBar: false,
-      ),
+      builder: (_) => const SearchPage(hideAppBar: false),
       settings: const RouteSettings(name: '/searchPage'),
     );
   }
@@ -29,18 +24,13 @@ class SearchPage extends StatelessWidget {
         secureStorageProvider: secure_storage.getSecureStorage,
         repository: CredentialsRepository(secure_storage.getSecureStorage),
       ),
-      child: SearchView(
-        hideAppBar: hideAppBar,
-      ),
+      child: SearchView(hideAppBar: hideAppBar),
     );
   }
 }
 
 class SearchView extends StatelessWidget {
-  const SearchView({
-    super.key,
-    this.hideAppBar = false,
-  });
+  const SearchView({super.key, this.hideAppBar = false});
 
   final bool hideAppBar;
 

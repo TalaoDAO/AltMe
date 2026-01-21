@@ -41,8 +41,11 @@ class _ChangeNetworkBottomSheetPageState
     final l10n = context.l10n;
     return BlocBuilder<ManageNetworkCubit, ManageNetworkState>(
       builder: (context, state) {
-        final blockchainType =
-            context.read<WalletCubit>().state.currentAccount!.blockchainType;
+        final blockchainType = context
+            .read<WalletCubit>()
+            .state
+            .currentAccount!
+            .blockchainType;
         final allNetworks = blockchainType.networks;
         return DecoratedBox(
           decoration: BoxDecoration(
@@ -85,10 +88,9 @@ class _ChangeNetworkBottomSheetPageState
                     padding: const EdgeInsets.all(Sizes.space2XSmall),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withValues(alpha: 0.12),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.12),
                         width: 0.2,
                       ),
                       borderRadius: const BorderRadius.all(
@@ -109,10 +111,9 @@ class _ChangeNetworkBottomSheetPageState
                         ),
                         child: Divider(
                           height: 0.2,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.12),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.12),
                         ),
                       ),
                     ),

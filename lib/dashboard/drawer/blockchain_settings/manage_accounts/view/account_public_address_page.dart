@@ -52,17 +52,13 @@ class AccountPublicAddressPage extends StatelessWidget {
                   accountName,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                const SizedBox(
-                  height: Sizes.spaceXLarge,
-                ),
+                const SizedBox(height: Sizes.spaceXLarge),
                 Container(
                   padding: const EdgeInsets.all(Sizes.spaceSmall),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(
-                      Radius.circular(
-                        Sizes.normalRadius,
-                      ),
+                      Radius.circular(Sizes.normalRadius),
                     ),
                   ),
                   child: QrImageView(
@@ -70,19 +66,15 @@ class AccountPublicAddressPage extends StatelessWidget {
                     backgroundColor: Colors.white,
                   ),
                 ),
-                const SizedBox(
-                  height: Sizes.spaceNormal,
-                ),
+                const SizedBox(height: Sizes.spaceNormal),
                 Text(
                   accountAddress,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        decoration: TextDecoration.underline,
-                      ),
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
-                const SizedBox(
-                  height: Sizes.spaceXLarge,
-                ),
+                const SizedBox(height: Sizes.spaceXLarge),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
@@ -90,9 +82,7 @@ class AccountPublicAddressPage extends StatelessWidget {
                     CopyButton(
                       onTap: () async {
                         await Clipboard.setData(
-                          ClipboardData(
-                            text: accountAddress,
-                          ),
+                          ClipboardData(text: accountAddress),
                         );
                         AlertMessage.showStateMessage(
                           context: context,

@@ -8,10 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 typedef TokenSelectBoxChanged = dynamic Function(TokenModel);
 
 class TokenSelectBoxView extends StatelessWidget {
-  const TokenSelectBoxView({
-    super.key,
-    required this.selectedToken,
-  });
+  const TokenSelectBoxView({super.key, required this.selectedToken});
 
   final TokenModel selectedToken;
 
@@ -76,9 +73,9 @@ class _TokenSelectBoxItem extends StatelessWidget {
                     context,
                   );
                   if (selectedToken != null) {
-                    context
-                        .read<TokenSelectBoxCubit>()
-                        .setSelectedToken(tokenModel: selectedToken);
+                    context.read<TokenSelectBoxCubit>().setSelectedToken(
+                      tokenModel: selectedToken,
+                    );
                   }
                 },
                 child: BackgroundCard(
@@ -98,9 +95,7 @@ class _TokenSelectBoxItem extends StatelessWidget {
                               Radius.circular(Sizes.smallRadius),
                             ),
                           ),
-                          const SizedBox(
-                            width: Sizes.spaceXSmall,
-                          ),
+                          const SizedBox(width: Sizes.spaceXSmall),
                           MyText(
                             tokenModel.name.isEmpty
                                 ? tokenModel.symbol
@@ -111,9 +106,7 @@ class _TokenSelectBoxItem extends StatelessWidget {
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(
-                            width: Sizes.spaceXSmall,
-                          ),
+                          const SizedBox(width: Sizes.spaceXSmall),
                           Icon(
                             Icons.keyboard_arrow_down_outlined,
                             size: Sizes.icon,
@@ -145,11 +138,10 @@ class _TokenSelectBoxItem extends StatelessWidget {
                                 .decimalNumber(2)
                                 .formatNumber,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withValues(alpha: 0.6),
-                            ),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.6),
+                        ),
                       ),
                     ],
                   ),

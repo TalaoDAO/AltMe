@@ -11,7 +11,7 @@ class EthereumNetwork extends BlockchainNetwork {
     required super.rpcNodeUrl,
     required String super.title,
     required String super.subTitle,
-    required this.chainId,
+    required super.chainId,
     required this.chain,
     this.mainTokenName = 'Ethereum',
     this.mainTokenDecimal = '18',
@@ -19,37 +19,40 @@ class EthereumNetwork extends BlockchainNetwork {
     this.mainTokenSymbol = 'ETH',
     required super.type,
     super.apiKey,
+    required super.isMainNet,
   });
 
   factory EthereumNetwork.mainNet() => const EthereumNetwork(
-        type: BlockchainType.ethereum,
-        networkname: 'Mainnet',
-        apiUrl: Urls.moralisBaseUrl,
-        chainId: 1,
-        chain: 'eth',
-        rpcNodeUrl: 'https://ethereum.publicnode.com',
-        title: 'Ethereum Mainnet',
-        subTitle:
-            'This network is the official Ethereum blockchain running Network.'
-            ' You should use this network by default.',
-      );
+    type: BlockchainType.ethereum,
+    networkname: 'Mainnet',
+    apiUrl: Urls.moralisBaseUrl,
+    chainId: 1,
+    chain: 'eth',
+    rpcNodeUrl: 'https://ethereum.publicnode.com',
+    title: 'Ethereum Mainnet',
+    subTitle:
+        'This network is the official Ethereum blockchain running Network.'
+        ' You should use this network by default.',
+    isMainNet: true,
+  );
 
   factory EthereumNetwork.testNet() => const EthereumNetwork(
-        type: BlockchainType.ethereum,
-        networkname: 'Testnet',
-        apiUrl: Urls.moralisBaseUrl,
-        chain: 'sepolia',
-        chainId: 11155111, // Sepolia testnet chainId
-        rpcNodeUrl: 'https://rpc.sepolia.dev',
-        title: 'Ethereum Testnet (Sepolia)',
-        subTitle: 'This network is used to test protocol upgrades'
-            ' (do not use it unless you are a developer).',
-      );
+    type: BlockchainType.ethereum,
+    networkname: 'Testnet',
+    apiUrl: Urls.moralisBaseUrl,
+    chain: 'sepolia',
+    chainId: 11155111, // Sepolia testnet chainId
+    rpcNodeUrl: 'https://ethereum-sepolia-rpc.publicnode.com',
+    title: 'Ethereum Testnet (Sepolia)',
+    subTitle:
+        'This network is used to test protocol upgrades'
+        ' (do not use it unless you are a developer).',
+    isMainNet: false,
+  );
 
   factory EthereumNetwork.fromJson(Map<String, dynamic> json) =>
       _$EthereumNetworkFromJson(json);
 
-  final int chainId;
   final String chain;
   final String mainTokenName;
   final String mainTokenSymbol;
@@ -61,12 +64,11 @@ class EthereumNetwork extends BlockchainNetwork {
 
   @override
   List<Object?> get props => [
-        super.props,
-        chainId,
-        chain,
-        mainTokenName,
-        mainTokenIcon,
-        mainTokenSymbol,
-        mainTokenDecimal,
-      ];
+    super.props,
+    chain,
+    mainTokenName,
+    mainTokenIcon,
+    mainTokenSymbol,
+    mainTokenDecimal,
+  ];
 }

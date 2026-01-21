@@ -10,8 +10,9 @@ class DrawerItemDivider extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color:
-                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12),
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.12),
             width: 0.2,
           ),
         ),

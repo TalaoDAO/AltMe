@@ -30,10 +30,5 @@ class ContractModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        id,
-        symbol,
-        name,
-        image,
-      ];
+  List<Object?> get props => [id, symbol, name, image];
 }

@@ -49,10 +49,13 @@ class AdvancedSecuritySettingsView extends StatelessWidget {
                   child: Switch(
                     onChanged: (value) async {
                       await context.read<ProfileCubit>().updateProfileSetting(
-                            verifySecurityIssuerWebsiteIdentity: value,
-                          );
+                        verifySecurityIssuerWebsiteIdentity: value,
+                      );
                     },
-                    value: state.model.profileSetting.walletSecurityOptions
+                    value: state
+                        .model
+                        .profileSetting
+                        .walletSecurityOptions
                         .verifySecurityIssuerWebsiteIdentity,
                     activeThumbColor: Theme.of(context).colorScheme.primary,
                   ),
@@ -67,10 +70,13 @@ class AdvancedSecuritySettingsView extends StatelessWidget {
                   child: Switch(
                     onChanged: (value) async {
                       await context.read<ProfileCubit>().updateProfileSetting(
-                            confirmSecurityVerifierAccess: value,
-                          );
+                        confirmSecurityVerifierAccess: value,
+                      );
                     },
-                    value: state.model.profileSetting.walletSecurityOptions
+                    value: state
+                        .model
+                        .profileSetting
+                        .walletSecurityOptions
                         .confirmSecurityVerifierAccess,
                     activeThumbColor: Theme.of(context).colorScheme.primary,
                   ),
@@ -85,11 +91,14 @@ class AdvancedSecuritySettingsView extends StatelessWidget {
                   child: Switch(
                     onChanged: (value) async {
                       await context.read<ProfileCubit>().updateProfileSetting(
-                            trustedList: value,
-                          );
+                        trustedList: value,
+                      );
                     },
                     value: state
-                        .model.profileSetting.walletSecurityOptions.trustedList,
+                        .model
+                        .profileSetting
+                        .walletSecurityOptions
+                        .trustedList,
                     activeThumbColor: Theme.of(context).colorScheme.primary,
                   ),
                 ),
@@ -103,10 +112,13 @@ class AdvancedSecuritySettingsView extends StatelessWidget {
                   child: Switch(
                     onChanged: (value) async {
                       await context.read<ProfileCubit>().updateProfileSetting(
-                            secureSecurityAuthenticationWithPinCode: value,
-                          );
+                        secureSecurityAuthenticationWithPinCode: value,
+                      );
                     },
-                    value: state.model.profileSetting.walletSecurityOptions
+                    value: state
+                        .model
+                        .profileSetting
+                        .walletSecurityOptions
                         .secureSecurityAuthenticationWithPinCode,
                     activeThumbColor: Theme.of(context).colorScheme.primary,
                   ),

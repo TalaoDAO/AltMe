@@ -54,10 +54,5 @@ class CredentialsState extends Equatable {
   Map<String, dynamic> toJson() => _$CredentialsStateToJson(this);
 
   @override
-  List<Object?> get props => [
-        status,
-        message,
-        credentials,
-        dummyCredentials,
-      ];
+  List<Object?> get props => [status, message, credentials, dummyCredentials];
 }

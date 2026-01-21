@@ -16,6 +16,7 @@ PolygonNetwork _$PolygonNetworkFromJson(Map<String, dynamic> json) =>
       chainId: (json['chainId'] as num).toInt(),
       chain: json['chain'] as String,
       type: $enumDecode(_$BlockchainTypeEnumMap, json['type']),
+      isMainNet: json['isMainNet'] as bool,
       apiKey: json['apiKey'] as String? ?? '',
     );
 
@@ -28,6 +29,7 @@ Map<String, dynamic> _$PolygonNetworkToJson(PolygonNetwork instance) =>
       'title': instance.title,
       'subTitle': instance.subTitle,
       'type': _$BlockchainTypeEnumMap[instance.type]!,
+      'isMainNet': instance.isMainNet,
       'chainId': instance.chainId,
       'chain': instance.chain,
     };

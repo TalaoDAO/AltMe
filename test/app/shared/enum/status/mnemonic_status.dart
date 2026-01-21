@@ -1,10 +1,6 @@
 import 'dart:ui';
 
-enum MnemonicStatus {
-  unselected,
-  selected,
-  wrongSelection,
-}
+enum MnemonicStatus { unselected, selected, wrongSelection }
 
 extension MnemonicStatusX on MnemonicStatus {
   bool get showOrder {

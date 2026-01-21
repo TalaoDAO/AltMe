@@ -16,9 +16,9 @@ class ProfessionalExperienceAssessmentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final professionalExperienceAssessmentModel = credentialModel
-        .credentialPreview
-        .credentialSubjectModel as ProfessionalExperienceAssessmentModel;
+    final professionalExperienceAssessmentModel =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as ProfessionalExperienceAssessmentModel;
 
     return CredentialBackground(
       credentialModel: credentialModel,
@@ -87,13 +87,8 @@ class ProfessionalExperienceAssessmentWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        GetTranslation.getTranslation(
-                          item.reviewBody,
-                          l10n,
-                        ),
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium,
+                        GetTranslation.getTranslation(item.reviewBody, l10n),
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       StarRating(
                         starCount: 5,

@@ -120,8 +120,10 @@ class _SelectTokenBottomSheetViewState
                       if (state.message != null) {
                         final MessageHandler messageHandler =
                             state.message!.messageHandler!;
-                        message =
-                            messageHandler.getMessage(context, messageHandler);
+                        message = messageHandler.getMessage(
+                          context,
+                          messageHandler,
+                        );
                       }
 
                       if (state.status == AppStatus.fetching) {

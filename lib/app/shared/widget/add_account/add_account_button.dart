@@ -22,13 +22,8 @@ class AddAccountButton extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset(
-                  IconStrings.addSquare,
-                  width: Sizes.icon2x,
-                ),
-                const SizedBox(
-                  width: Sizes.spaceSmall,
-                ),
+                Image.asset(IconStrings.addSquare, width: Sizes.icon2x),
+                const SizedBox(width: Sizes.spaceSmall),
                 Text(
                   l10n.cryptoAddAccount,
                   style: Theme.of(context).textTheme.titleMedium,

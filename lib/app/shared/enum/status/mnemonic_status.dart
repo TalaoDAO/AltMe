@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum MnemonicStatus {
-  unselected,
-  selected,
-}
+enum MnemonicStatus { unselected, selected }
 
 extension MnemonicStatusX on MnemonicStatus {
   Color color(BuildContext context) {

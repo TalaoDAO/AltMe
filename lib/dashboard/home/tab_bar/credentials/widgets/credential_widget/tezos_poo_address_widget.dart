@@ -4,18 +4,16 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class TezosPooAddressWidget extends StatelessWidget {
-  const TezosPooAddressWidget({
-    super.key,
-    required this.credentialModel,
-  });
+  const TezosPooAddressWidget({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final pooAddress = credentialModel.credentialPreview.credentialSubjectModel
-        as TezosPooAddressModel;
+    final pooAddress =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as TezosPooAddressModel;
     return PooAddressBaseWidget(
       image: IconStrings.tezos,
       name: l10n.tezosNetwork,

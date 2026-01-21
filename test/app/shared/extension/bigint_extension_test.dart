@@ -18,10 +18,21 @@ void main() {
     test('toBytes handles large BigInt values', () {
       final bigInt = BigInt.parse('123456789012345678901234567890');
       final bytes = bigInt.toBytes;
-      expect(
-        bytes,
-        [1, 142, 233, 15, 246, 195, 115, 224, 238, 78, 63, 10, 210],
-      );
+      expect(bytes, [
+        1,
+        142,
+        233,
+        15,
+        246,
+        195,
+        115,
+        224,
+        238,
+        78,
+        63,
+        10,
+        210,
+      ]);
     });
   });
 }

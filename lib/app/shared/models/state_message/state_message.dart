@@ -70,12 +70,12 @@ class StateMessage extends Equatable {
 
   @override
   List<Object?> get props => [
-        type,
-        messageHandler,
-        stringMessage,
-        injectedMessage,
-        showDialog,
-        duration,
-        callToAction,
-      ];
+    type,
+    messageHandler,
+    stringMessage,
+    injectedMessage,
+    showDialog,
+    duration,
+    callToAction,
+  ];
 }

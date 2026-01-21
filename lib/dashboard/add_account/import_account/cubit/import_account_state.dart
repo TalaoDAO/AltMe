@@ -52,9 +52,7 @@ class ImportAccountState extends Equatable {
     );
   }
 
-  ImportAccountState success({
-    MessageHandler? messageHandler,
-  }) {
+  ImportAccountState success({MessageHandler? messageHandler}) {
     return ImportAccountState(
       status: AppStatus.success,
       message: messageHandler == null
@@ -70,10 +68,10 @@ class ImportAccountState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        isMnemonicOrKeyValid,
-        isTextFieldEdited,
-        message,
-        accountType,
-      ];
+    status,
+    isMnemonicOrKeyValid,
+    isTextFieldEdited,
+    message,
+    accountType,
+  ];
 }

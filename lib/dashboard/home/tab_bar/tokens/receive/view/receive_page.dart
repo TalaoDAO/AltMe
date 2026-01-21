@@ -55,9 +55,7 @@ class ReceivePage extends StatelessWidget {
                   '${l10n.receive} $item',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                const SizedBox(
-                  height: Sizes.spaceXLarge,
-                ),
+                const SizedBox(height: Sizes.spaceXLarge),
                 BackgroundCard(
                   padding: const EdgeInsets.all(Sizes.spaceNormal),
                   color: Theme.of(context).colorScheme.surface,
@@ -69,9 +67,7 @@ class ReceivePage extends StatelessWidget {
                         decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.all(
-                            Radius.circular(
-                              Sizes.normalRadius,
-                            ),
+                            Radius.circular(Sizes.normalRadius),
                           ),
                         ),
                         child: QrImageView(
@@ -79,9 +75,7 @@ class ReceivePage extends StatelessWidget {
                           backgroundColor: Colors.white,
                         ),
                       ),
-                      const SizedBox(
-                        height: Sizes.spaceNormal,
-                      ),
+                      const SizedBox(height: Sizes.spaceNormal),
                       Text(
                         accountAddress,
                         textAlign: TextAlign.center,
@@ -90,17 +84,13 @@ class ReceivePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: Sizes.spaceSmall,
-                ),
+                const SizedBox(height: Sizes.spaceSmall),
                 Text(
                   description,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                const SizedBox(
-                  height: Sizes.spaceXLarge,
-                ),
+                const SizedBox(height: Sizes.spaceXLarge),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
@@ -108,9 +98,7 @@ class ReceivePage extends StatelessWidget {
                     CopyButton(
                       onTap: () async {
                         await Clipboard.setData(
-                          ClipboardData(
-                            text: accountAddress,
-                          ),
+                          ClipboardData(text: accountAddress),
                         );
                         AlertMessage.showStateMessage(
                           context: context,
@@ -120,9 +108,7 @@ class ReceivePage extends StatelessWidget {
                         );
                       },
                     ),
-                    const SizedBox(
-                      width: Sizes.space2XLarge,
-                    ),
+                    const SizedBox(width: Sizes.space2XLarge),
                     ShareButton(
                       onTap: () {
                         final box = context.findRenderObject() as RenderBox?;

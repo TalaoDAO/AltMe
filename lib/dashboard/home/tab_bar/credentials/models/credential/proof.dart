@@ -14,13 +14,7 @@ class Proof {
 
   factory Proof.fromJson(Map<String, dynamic> json) => _$ProofFromJson(json);
 
-  factory Proof.dummy() => Proof(
-        'dummy',
-        'dummy',
-        'dummy',
-        'dummy',
-        'dummy',
-      );
+  factory Proof.dummy() => Proof('dummy', 'dummy', 'dummy', 'dummy', 'dummy');
 
   final String type;
   final String? proofPurpose;

@@ -39,8 +39,9 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
     var presentationDefinition =
         credential.credentialManifest!.presentationDefinition!;
 
-    presentationDefinition =
-        applySubmissionRequirements(presentationDefinition);
+    presentationDefinition = applySubmissionRequirements(
+      presentationDefinition,
+    );
 
     /// Get instruction to filter credentials of the wallet
     final filteredCredentialList = getCredentialsFromPresentationDefinition(
@@ -126,7 +127,7 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
               'error': 'invalid_format',
               'error_description':
                   'The count or min parameter should be provided in the '
-                      'submissionRequirements of presentation_definition.',
+                  'submissionRequirements of presentation_definition.',
             },
           );
         }
@@ -136,7 +137,7 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
             'error': 'invalid_format',
             'error_description':
                 'The submissionRequirements should be provided in the '
-                    'presentation_definition.',
+                'presentation_definition.',
           },
         );
       }
@@ -145,11 +146,6 @@ class CredentialManifestPickCubit extends Cubit<CredentialManifestPickState> {
       isButtonEnabled = selected.isNotEmpty;
     }
 
-    emit(
-      state.copyWith(
-        selected: selected,
-        isButtonEnabled: isButtonEnabled,
-      ),
-    );
+    emit(state.copyWith(selected: selected, isButtonEnabled: isButtonEnabled));
   }
 }

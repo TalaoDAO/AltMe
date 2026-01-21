@@ -5,9 +5,7 @@ part 'faq.g.dart';
 
 @JsonSerializable()
 class FaqModel extends Equatable {
-  const FaqModel({
-    required this.faq,
-  });
+  const FaqModel({required this.faq});
 
   factory FaqModel.fromJson(Map<String, dynamic> json) =>
       _$FaqModelFromJson(json);
@@ -22,11 +20,7 @@ class FaqModel extends Equatable {
 
 @JsonSerializable()
 class FaqElement extends Equatable {
-  const FaqElement({
-    required this.que,
-    required this.ans,
-    this.href,
-  });
+  const FaqElement({required this.que, required this.ans, this.href});
 
   factory FaqElement.fromJson(Map<String, dynamic> json) =>
       _$FaqElementFromJson(json);

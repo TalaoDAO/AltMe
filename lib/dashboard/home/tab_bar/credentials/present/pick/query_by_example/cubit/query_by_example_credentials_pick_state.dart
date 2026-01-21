@@ -9,8 +9,7 @@ class QueryByExampleCredentialPickState extends Equatable {
 
   factory QueryByExampleCredentialPickState.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$QueryByExampleCredentialPickStateFromJson(json);
+  ) => _$QueryByExampleCredentialPickStateFromJson(json);
 
   final int? selected;
   final List<CredentialModel> filteredCredentialList;
@@ -30,8 +29,5 @@ class QueryByExampleCredentialPickState extends Equatable {
       _$QueryByExampleCredentialPickStateToJson(this);
 
   @override
-  List<Object?> get props => [
-        selected,
-        filteredCredentialList,
-      ];
+  List<Object?> get props => [selected, filteredCredentialList];
 }

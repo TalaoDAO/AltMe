@@ -47,11 +47,5 @@ class HomeState extends Equatable {
   Map<String, dynamic> toJson() => _$HomeStateToJson(this);
 
   @override
-  List<Object?> get props => [
-        status,
-        message,
-        homeStatus,
-        link,
-        data,
-      ];
+  List<Object?> get props => [status, message, homeStatus, link, data];
 }

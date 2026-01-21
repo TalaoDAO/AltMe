@@ -51,25 +51,21 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
   }
 
   void setAccountType(AccountType accountType) {
-    emit(
-      state.populating(
-        accountType: accountType,
-      ),
-    );
+    emit(state.populating(accountType: accountType));
   }
 
   Future<void> import({String? accountName}) async {
     final log = getLogger('ImportAccountCubit - import');
     emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
-
     try {
       /// crypto wallet
-      final BlockchainType blockchainType =
-          getBlockchainType(state.accountType);
+      final BlockchainType blockchainType = getBlockchainType(
+        state.accountType,
+      );
 
-      final String? mnemonicOrKey = await getSecureStorage
-          .get(SecureStorageKeys.importAccountStep2Mnemonics);
+      final String? mnemonicOrKey = await getSecureStorage.get(
+        SecureStorageKeys.importAccountStep2Mnemonics,
+      );
 
       if (mnemonicOrKey == null) {
         throw ResponseMessage(
@@ -89,16 +85,13 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
         qrCodeScanCubit: qrCodeScanCubit,
         credentialsCubit: credentialsCubit,
         walletConnectCubit: walletConnectCubit,
-        onComplete: ({
-          required CryptoAccount cryptoAccount,
-          required MessageHandler messageHandler,
-        }) async {
-          emit(
-            state.success(
-              messageHandler: messageHandler,
-            ),
-          );
-        },
+        onComplete:
+            ({
+              required CryptoAccount cryptoAccount,
+              required MessageHandler messageHandler,
+            }) async {
+              emit(state.success(messageHandler: messageHandler));
+            },
       );
 
       await homeCubit.emitHasWallet();

@@ -17,11 +17,15 @@ class DisplayModeWidget extends StatelessWidget {
           body: Switch(
             onChanged: (value) async {
               await context.read<ProfileCubit>().updateProfileSetting(
-                    displayMode: value,
-                  );
+                displayMode: value,
+              );
             },
-            value: state.model.profileSetting.selfSovereignIdentityOptions
-                .customOidc4vcProfile.displayMode,
+            value: state
+                .model
+                .profileSetting
+                .selfSovereignIdentityOptions
+                .customOidc4vcProfile
+                .displayMode,
             activeThumbColor: Theme.of(context).colorScheme.primary,
           ),
         );

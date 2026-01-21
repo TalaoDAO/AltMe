@@ -59,14 +59,14 @@ class TrustedEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        type,
-        name,
-        description,
-        endpoint,
-        postalAddress,
-        electronicAddress,
-        rootCertificates,
-        vcTypes,
-      ];
+    id,
+    type,
+    name,
+    description,
+    endpoint,
+    postalAddress,
+    electronicAddress,
+    rootCertificates,
+    vcTypes,
+  ];
 }

@@ -62,7 +62,6 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
   }) async {
     final log = getLogger('ImportWalletCubit - import');
     emit(state.loading());
-    await Future<void>.delayed(const Duration(milliseconds: 500));
 
     final isFromOnboarding = restoreType != null;
 
@@ -72,7 +71,8 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
         /// ssi creation
 
         late String mnemonic;
-        final isSecretKey = mnemonicOrKey.startsWith('edsk') ||
+        final isSecretKey =
+            mnemonicOrKey.startsWith('edsk') ||
             mnemonicOrKey.startsWith('spsk') ||
             mnemonicOrKey.startsWith('p2sk') ||
             mnemonicOrKey.startsWith('0x');
@@ -111,16 +111,13 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
         qrCodeScanCubit: qrCodeScanCubit,
         credentialsCubit: credentialsCubit,
         walletConnectCubit: walletConnectCubit,
-        onComplete: ({
-          required CryptoAccount cryptoAccount,
-          required MessageHandler messageHandler,
-        }) async {
-          emit(
-            state.success(
-              messageHandler: messageHandler,
-            ),
-          );
-        },
+        onComplete:
+            ({
+              required CryptoAccount cryptoAccount,
+              required MessageHandler messageHandler,
+            }) async {
+              emit(state.success(messageHandler: messageHandler));
+            },
       );
 
       if (isFromOnboarding) {

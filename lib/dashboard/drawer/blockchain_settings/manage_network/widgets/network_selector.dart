@@ -27,9 +27,9 @@ class NetworkSelector extends StatelessWidget {
               children: <InlineSpan>[
                 TextSpan(
                   text: network.title,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const TextSpan(text: '\n'),
                 TextSpan(

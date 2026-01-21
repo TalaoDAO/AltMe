@@ -31,10 +31,9 @@ class WalletRevokedDialog extends StatelessWidget {
             const SizedBox(height: 25),
             Text(
               l10n.theWalletIsSuspended,
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineMedium!
-                  .copyWith(color: textColor),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium!.copyWith(color: textColor),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
@@ -60,10 +59,9 @@ class WalletRevokedDialog extends StatelessWidget {
               },
               child: Text(
                 l10n.close.toUpperCase(),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge!
-                    .copyWith(color: textColor),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge!.copyWith(color: textColor),
                 textAlign: TextAlign.center,
               ),
             ),

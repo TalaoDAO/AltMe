@@ -12,9 +12,9 @@ class RecoveryKeyPage extends StatelessWidget {
   const RecoveryKeyPage({super.key});
 
   static Route<dynamic> route() => MaterialPageRoute<void>(
-        builder: (_) => const RecoveryKeyPage(),
-        settings: const RouteSettings(name: '/recoveryKeyPage'),
-      );
+    builder: (_) => const RecoveryKeyPage(),
+    settings: const RouteSettings(name: '/recoveryKeyPage'),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +44,9 @@ class _RecoveryKeyViewState extends State<RecoveryKeyView>
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        await context.read<RecoveryKeyCubit>().getMnemonics();
-      },
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await context.read<RecoveryKeyCubit>().getMnemonics();
+    });
 
     animationController = AnimationController(
       vsync: this,

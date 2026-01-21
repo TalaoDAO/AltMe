@@ -2,9 +2,7 @@ part of 'send_to_cubit.dart';
 
 @JsonSerializable()
 class SendToState extends Equatable {
-  const SendToState({
-    this.withdrawalAddress = '',
-  });
+  const SendToState({this.withdrawalAddress = ''});
 
   factory SendToState.fromJson(Map<String, dynamic> json) =>
       _$SendToStateFromJson(json);
@@ -24,7 +22,5 @@ class SendToState extends Equatable {
   Map<String, dynamic> toJson() => _$SendToStateToJson(this);
 
   @override
-  List<Object?> get props => [
-        withdrawalAddress,
-      ];
+  List<Object?> get props => [withdrawalAddress];
 }

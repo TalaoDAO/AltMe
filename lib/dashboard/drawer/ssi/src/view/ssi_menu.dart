@@ -44,9 +44,7 @@ class SSIView extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const BackLeadingButton(
-            padding: EdgeInsets.zero,
-          ),
+          const BackLeadingButton(padding: EdgeInsets.zero),
           const DrawerLogo(),
           if (displayManageDecentralizedId)
             DrawerItem(

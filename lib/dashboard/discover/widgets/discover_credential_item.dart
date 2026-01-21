@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DiscoverCredentialItem extends StatelessWidget {
-  const DiscoverCredentialItem({
-    super.key,
-    required this.dummyCredential,
-  });
+  const DiscoverCredentialItem({super.key, required this.dummyCredential});
 
   final DiscoverDummyCredential dummyCredential;
 
@@ -26,8 +23,8 @@ class DiscoverCredentialItem extends StatelessWidget {
           );
           return;
         }
-// If dummyCredential is an external issuer we don't display the detail screen
-// we go directly to the issuer endpoint
+        // If dummyCredential is an external issuer we don't display
+        // the detail screen, we go directly to the issuer endpoint
         await Navigator.push<void>(
           context,
           DiscoverDetailsPage.route(

@@ -27,9 +27,7 @@ class BeaconState extends Equatable {
     );
   }
 
-  BeaconState error({
-    required MessageHandler messageHandler,
-  }) {
+  BeaconState error({required MessageHandler messageHandler}) {
     return BeaconState(
       status: BeaconStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),

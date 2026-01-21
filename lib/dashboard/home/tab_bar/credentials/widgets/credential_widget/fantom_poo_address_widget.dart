@@ -4,18 +4,16 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class FantomPooAddressWidget extends StatelessWidget {
-  const FantomPooAddressWidget({
-    super.key,
-    required this.credentialModel,
-  });
+  const FantomPooAddressWidget({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final pooAddress = credentialModel.credentialPreview.credentialSubjectModel
-        as FantomPooAddressModel;
+    final pooAddress =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as FantomPooAddressModel;
 
     return PooAddressBaseWidget(
       image: IconStrings.fantom,

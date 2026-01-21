@@ -7,20 +7,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DidPrivateKeyPage extends StatefulWidget {
-  const DidPrivateKeyPage({
-    super.key,
-    required this.didKeyType,
-  });
+  const DidPrivateKeyPage({super.key, required this.didKeyType});
 
   final DidKeyType didKeyType;
 
-  static Route<dynamic> route({
-    required DidKeyType didKeyType,
-  }) {
+  static Route<dynamic> route({required DidKeyType didKeyType}) {
     return MaterialPageRoute<void>(
-      builder: (_) => DidPrivateKeyPage(
-        didKeyType: didKeyType,
-      ),
+      builder: (_) => DidPrivateKeyPage(didKeyType: didKeyType),
       settings: const RouteSettings(name: '/DidPrivateKeyPage'),
     );
   }
@@ -87,9 +80,7 @@ class _DidPrivateKeyPageState extends State<DidPrivateKeyPage>
               l10n.didPrivateKey,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
-            const SizedBox(
-              height: Sizes.spaceNormal,
-            ),
+            const SizedBox(height: Sizes.spaceNormal),
             FutureBuilder<String>(
               future: getKey(),
               builder: (context, snapshot) {

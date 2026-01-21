@@ -35,6 +35,10 @@ class OnBoardingTosState extends Equatable {
   Map<String, dynamic> toJson() => _$OnBoardingTosStateToJson(this);
 
   @override
-  List<Object?> get props =>
-      [agreeTerms, scrollIsOver, readTerms, acceptanceButtonEnabled];
+  List<Object?> get props => [
+    agreeTerms,
+    scrollIsOver,
+    readTerms,
+    acceptanceButtonEnabled,
+  ];
 }

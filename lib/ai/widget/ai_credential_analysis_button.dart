@@ -16,10 +16,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class AiCredentialAnalysisButton extends StatelessWidget {
-  const AiCredentialAnalysisButton({
-    super.key,
-    required this.credential,
-  });
+  const AiCredentialAnalysisButton({super.key, required this.credential});
 
   /// received credential is already in base64 format if it is a jwt and
   /// is converted to base64 if it is a json-ld
@@ -34,9 +31,7 @@ class AiCredentialAnalysisButton extends StatelessWidget {
         if (credential.aiCredentialAnalysis != null &&
             credential.aiCredentialAnalysis!.isNotEmpty) {
           await Navigator.of(context).push<void>(
-            AiAnalysisPage.route(
-              content: credential.aiCredentialAnalysis!,
-            ),
+            AiAnalysisPage.route(content: credential.aiCredentialAnalysis!),
           );
           return;
         }
@@ -45,7 +40,8 @@ class AiCredentialAnalysisButton extends StatelessWidget {
         /// current link with talao.io. In the popup User can
         /// press on the accept button to continue or cancel
         /// to close the popup
-        final acceptAnalysis = await showDialog<bool>(
+        final acceptAnalysis =
+            await showDialog<bool>(
               context: context,
               builder: (BuildContext context) {
                 return ConfirmDialog(
@@ -62,9 +58,7 @@ class AiCredentialAnalysisButton extends StatelessWidget {
         if (acceptAnalysis) {
           LoadingView().show(context: context, text: l10n.aiPleaseWait);
           final encodedCredential = base64Encode(
-            utf8.encode(
-              credential.jwt ?? jsonEncode(credential.data),
-            ),
+            utf8.encode(credential.jwt ?? jsonEncode(credential.data)),
           );
           final client = DioClient(
             secureStorageProvider: getSecureStorage,
@@ -81,27 +75,24 @@ class AiCredentialAnalysisButton extends StatelessWidget {
             'api-key': dotenv.get('WALLET_API_KEY_ID360'),
           };
           try {
-            final response = await client.post(
-              'https://talao.co/ai/wallet/vc',
-              data: {
-                'vc': encodedCredential,
-              },
-              headers: headers,
-              timeout: 90,
-            ) as String;
+            final response =
+                await client.post(
+                      'https://talao.co/ai/wallet/vc',
+                      data: {'vc': encodedCredential},
+                      headers: headers,
+                      timeout: 90,
+                    )
+                    as String;
             if (response == '') {
               throw Exception('Ai analysis is null or empty');
             }
             LoadingView().hide();
             await context.read<CredentialsCubit>().updateCredential(
-                  credential:
-                      credential.copyWith(aiCredentialAnalysis: response),
-                );
-            await Navigator.of(context).push<void>(
-              AiAnalysisPage.route(
-                content: response,
-              ),
+              credential: credential.copyWith(aiCredentialAnalysis: response),
             );
+            await Navigator.of(
+              context,
+            ).push<void>(AiAnalysisPage.route(content: response));
           } catch (e) {
             LoadingView().hide();
             Exception('Error during AI analysis: $e');

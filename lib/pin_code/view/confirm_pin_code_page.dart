@@ -36,9 +36,8 @@ class ConfirmPinCodePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PinCodeViewCubit(
-        secureStorageProvider: getSecureStorage,
-      ),
+      create: (context) =>
+          PinCodeViewCubit(secureStorageProvider: getSecureStorage),
       child: ConfirmPinCodeView(
         storedPassword: storedPassword,
         isValidCallback: isValidCallback,
@@ -92,10 +91,7 @@ class _ConfirmPinCodeViewState extends State<ConfirmPinCodeView> {
         body: PinCodeWidget(
           title: l10n.confirmYourPinCode,
           header: widget.isFromOnboarding
-              ? MStepper(
-                  step: 2,
-                  totalStep: byPassScreen ? 2 : 3,
-                )
+              ? MStepper(step: 2, totalStep: byPassScreen ? 2 : 3)
               : null,
           deleteButton: Text(
             l10n.deleteDigit,

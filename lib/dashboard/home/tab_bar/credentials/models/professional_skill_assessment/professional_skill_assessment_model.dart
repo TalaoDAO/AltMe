@@ -18,15 +18,14 @@ class ProfessionalSkillAssessmentModel extends CredentialSubjectModel {
     this.familyName,
     this.givenName,
   }) : super(
-          credentialSubjectType:
-              CredentialSubjectType.professionalSkillAssessment,
-          credentialCategory: CredentialCategory.identityCards,
-        );
+         credentialSubjectType:
+             CredentialSubjectType.professionalSkillAssessment,
+         credentialCategory: CredentialCategory.identityCards,
+       );
 
   factory ProfessionalSkillAssessmentModel.fromJson(
     Map<String, dynamic> json,
-  ) =>
-      _$ProfessionalSkillAssessmentModelFromJson(json);
+  ) => _$ProfessionalSkillAssessmentModelFromJson(json);
 
   final List<Skill>? skills;
   @JsonKey(defaultValue: '')

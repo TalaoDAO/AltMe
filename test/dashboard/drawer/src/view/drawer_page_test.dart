@@ -34,8 +34,9 @@ void main() {
 
   group('DrawerPage Tests', () {
     testWidgets('renders DrawerView', (tester) async {
-      when(() => mockProfileCubit.state)
-          .thenReturn(ProfileState(model: ProfileModel.empty()));
+      when(
+        () => mockProfileCubit.state,
+      ).thenReturn(ProfileState(model: ProfileModel.empty()));
       await tester.pumpApp(
         MultiBlocProvider(
           providers: [
@@ -50,8 +51,9 @@ void main() {
     });
 
     testWidgets('renders basic UI correctly', (tester) async {
-      when(() => mockProfileCubit.state)
-          .thenReturn(ProfileState(model: ProfileModel.empty()));
+      when(
+        () => mockProfileCubit.state,
+      ).thenReturn(ProfileState(model: ProfileModel.empty()));
       await tester.pumpApp(
         MultiBlocProvider(
           providers: [
@@ -67,49 +69,47 @@ void main() {
     });
 
     testWidgets(
-        'navigates to PickProfileMenu when displayProfile is enabled and '
-        '"Wallet Profile" is tapped', (tester) async {
-      when(() => mockProfileCubit.state).thenReturn(
-        ProfileState(model: ProfileModel.empty()),
-      );
+      'navigates to PickProfileMenu when displayProfile is enabled and '
+      '"Wallet Profile" is tapped',
+      (tester) async {
+        when(
+          () => mockProfileCubit.state,
+        ).thenReturn(ProfileState(model: ProfileModel.empty()));
 
-      await tester.pumpApp(
-        MockNavigatorProvider(
-          navigator: navigator,
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
-              BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
-            ],
-            child: DrawerView(profileCubit: mockProfileCubit),
-          ),
-        ),
-      );
-
-      expect(find.text('Wallet Profiles'), findsOneWidget);
-      expect(
-        find.text('Choose your SSI profile or customize your own'),
-        findsOneWidget,
-      );
-
-      await tester.tap(find.text('Wallet Profiles'));
-      await tester.pumpAndSettle();
-
-      verify(
-        () => navigator.push<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals('/PickProfileMenu'),
+        await tester.pumpApp(
+          MockNavigatorProvider(
+            navigator: navigator,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
+                BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
+              ],
+              child: DrawerView(profileCubit: mockProfileCubit),
             ),
           ),
-        ),
-      ).called(1);
-    });
+        );
+
+        expect(find.text('Wallet Profiles'), findsOneWidget);
+        expect(
+          find.text('Choose your SSI profile or customize your own'),
+          findsOneWidget,
+        );
+
+        await tester.tap(find.text('Wallet Profiles'));
+        await tester.pumpAndSettle();
+
+        verify(
+          () => navigator.push<void>(
+            any(that: isRoute<void>(whereName: equals('/PickProfileMenu'))),
+          ),
+        ).called(1);
+      },
+    );
 
     testWidgets('navigates to WalletSettingsMenu on tapped', (tester) async {
-      when(() => mockProfileCubit.state).thenReturn(
-        ProfileState(model: ProfileModel.empty()),
-      );
+      when(
+        () => mockProfileCubit.state,
+      ).thenReturn(ProfileState(model: ProfileModel.empty()));
       await tester.pumpApp(
         MockNavigatorProvider(
           navigator: navigator,
@@ -131,21 +131,16 @@ void main() {
 
       verify(
         () => navigator.push<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals('/WalletSettingsMenu'),
-            ),
-          ),
+          any(that: isRoute<void>(whereName: equals('/WalletSettingsMenu'))),
         ),
       ).called(1);
     });
 
-    testWidgets(
-        'when walletHandlesCrypto is true, '
+    testWidgets('when walletHandlesCrypto is true, '
         'navigates to BlockchainSettingsMenu on tapped', (tester) async {
-      when(() => mockProfileCubit.state).thenReturn(
-        ProfileState(model: ProfileModel.empty()),
-      );
+      when(
+        () => mockProfileCubit.state,
+      ).thenReturn(ProfileState(model: ProfileModel.empty()));
       await tester.pumpApp(
         MockNavigatorProvider(
           navigator: navigator,
@@ -174,9 +169,7 @@ void main() {
         verify(
           () => navigator.push<void>(
             any(
-              that: isRoute<void>(
-                whereName: equals('/BlockchainSettingsMenu'),
-              ),
+              that: isRoute<void>(whereName: equals('/BlockchainSettingsMenu')),
             ),
           ),
         ).called(1);
@@ -184,50 +177,49 @@ void main() {
     });
 
     testWidgets(
-        'setDeveloperModeStatus is called when displayDeveloperMode is enabled '
-        'and "developerMode" is tapped', (tester) async {
-      when(() => mockProfileCubit.state).thenReturn(
-        ProfileState(model: ProfileModel.empty()),
-      );
+      'setDeveloperModeStatus is called when displayDeveloperMode is enabled '
+      'and "developerMode" is tapped',
+      (tester) async {
+        when(
+          () => mockProfileCubit.state,
+        ).thenReturn(ProfileState(model: ProfileModel.empty()));
 
-      when(
-        () => mockProfileCubit.setDeveloperModeStatus(
-          enabled: true,
-        ),
-      ).thenAnswer((_) async => {});
+        when(
+          () => mockProfileCubit.setDeveloperModeStatus(enabled: true),
+        ).thenAnswer((_) async => {});
 
-      await tester.pumpApp(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
-            BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
-          ],
-          child: DrawerView(profileCubit: mockProfileCubit),
-        ),
-      );
+        await tester.pumpApp(
+          MultiBlocProvider(
+            providers: [
+              BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
+              BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
+            ],
+            child: DrawerView(profileCubit: mockProfileCubit),
+          ),
+        );
 
-      expect(find.text('Developer Mode'), findsOneWidget);
-      expect(
-        find.text('Enable developer mode to access advanced debugging tools'),
-        findsOneWidget,
-      );
+        expect(find.text('Developer Mode'), findsOneWidget);
+        expect(
+          find.text('Enable developer mode to access advanced debugging tools'),
+          findsOneWidget,
+        );
 
-      await tester.scrollUntilVisible(find.text('Developer Mode'), 0);
+        await tester.scrollUntilVisible(find.text('Developer Mode'), 0);
 
-      await tester.tap(find.byKey(const Key('developerMode')));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key('developerMode')));
+        await tester.pumpAndSettle();
 
-      verify(
-        () => mockProfileCubit.setDeveloperModeStatus(enabled: true),
-      ).called(1);
-    });
+        verify(
+          () => mockProfileCubit.setDeveloperModeStatus(enabled: true),
+        ).called(1);
+      },
+    );
 
-    testWidgets(
-        'navigates to HelpCenterMenu when displayHelpCenter is enabled '
+    testWidgets('navigates to HelpCenterMenu when displayHelpCenter is enabled '
         'and "helpCenter" is tapped', (tester) async {
-      when(() => mockProfileCubit.state).thenReturn(
-        ProfileState(model: ProfileModel.empty()),
-      );
+      when(
+        () => mockProfileCubit.state,
+      ).thenReturn(ProfileState(model: ProfileModel.empty()));
 
       await tester.pumpApp(
         MockNavigatorProvider(
@@ -246,8 +238,10 @@ void main() {
 
       expect(find.text('Help Center'), findsOneWidget);
       expect(
-        find.text('Contact us and get support if you need '
-            'assistance on using our wallet'),
+        find.text(
+          'Contact us and get support if you need '
+          'assistance on using our wallet',
+        ),
         findsOneWidget,
       );
 
@@ -256,20 +250,17 @@ void main() {
 
       verify(
         () => navigator.push<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals('/HelpCenterMenu'),
-            ),
-          ),
+          any(that: isRoute<void>(whereName: equals('/HelpCenterMenu'))),
         ),
       ).called(1);
     });
 
-    testWidgets('navigates to AboutAltmeMenu when "about" is tapped',
-        (tester) async {
-      when(() => mockProfileCubit.state).thenReturn(
-        ProfileState(model: ProfileModel.empty()),
-      );
+    testWidgets('navigates to AboutAltmeMenu when "about" is tapped', (
+      tester,
+    ) async {
+      when(
+        () => mockProfileCubit.state,
+      ).thenReturn(ProfileState(model: ProfileModel.empty()));
 
       await tester.pumpApp(
         MockNavigatorProvider(
@@ -297,20 +288,17 @@ void main() {
 
       verify(
         () => navigator.push<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals('/AboutAltmeMenu'),
-            ),
-          ),
+          any(that: isRoute<void>(whereName: equals('/AboutAltmeMenu'))),
         ),
       ).called(1);
     });
 
-    testWidgets('navigates to ResetWalletMenu when "resetWallet" is tapped',
-        (tester) async {
-      when(() => mockProfileCubit.state).thenReturn(
-        ProfileState(model: ProfileModel.empty()),
-      );
+    testWidgets('navigates to ResetWalletMenu when "resetWallet" is tapped', (
+      tester,
+    ) async {
+      when(
+        () => mockProfileCubit.state,
+      ).thenReturn(ProfileState(model: ProfileModel.empty()));
 
       await tester.pumpApp(
         MockNavigatorProvider(
@@ -338,11 +326,7 @@ void main() {
 
       verify(
         () => navigator.push<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals('/ResetWalletMenu'),
-            ),
-          ),
+          any(that: isRoute<void>(whereName: equals('/ResetWalletMenu'))),
         ),
       ).called(1);
     });

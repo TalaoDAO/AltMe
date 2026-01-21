@@ -13,10 +13,7 @@ import 'package:reown_walletkit/reown_walletkit.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class OperationPage extends StatelessWidget {
-  const OperationPage({
-    super.key,
-    required this.connectionBridgeType,
-  });
+  const OperationPage({super.key, required this.connectionBridgeType});
 
   final ConnectionBridgeType connectionBridgeType;
 
@@ -24,9 +21,7 @@ class OperationPage extends StatelessWidget {
     required ConnectionBridgeType connectionBridgeType,
   }) {
     return MaterialPageRoute<void>(
-      builder: (_) => OperationPage(
-        connectionBridgeType: connectionBridgeType,
-      ),
+      builder: (_) => OperationPage(connectionBridgeType: connectionBridgeType),
       settings: const RouteSettings(name: OPERATION_PAGE),
     );
   }
@@ -55,10 +50,7 @@ class OperationPage extends StatelessWidget {
 }
 
 class OperationView extends StatefulWidget {
-  const OperationView({
-    super.key,
-    required this.connectionBridgeType,
-  });
+  const OperationView({super.key, required this.connectionBridgeType});
 
   final ConnectionBridgeType connectionBridgeType;
 
@@ -70,13 +62,11 @@ class _OperationViewState extends State<OperationView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        await context
-            .read<OperationCubit>()
-            .initialise(widget.connectionBridgeType);
-      },
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await context.read<OperationCubit>().initialise(
+        widget.connectionBridgeType,
+      );
+    });
   }
 
   @override
@@ -115,11 +105,14 @@ class _OperationViewState extends State<OperationView> {
 
         bool isSmartContract = false;
 
-        final BeaconRequest? beaconRequest =
-            context.read<BeaconCubit>().state.beaconRequest;
+        final BeaconRequest? beaconRequest = context
+            .read<BeaconCubit>()
+            .state
+            .beaconRequest;
 
-        final WalletConnectState walletConnectState =
-            context.read<WalletConnectCubit>().state;
+        final WalletConnectState walletConnectState = context
+            .read<WalletConnectCubit>()
+            .state;
 
         final List<OperationDetails>? tezosOperationDetails =
             walletConnectState.operationDetails;
@@ -156,8 +149,8 @@ class _OperationViewState extends State<OperationView> {
               return;
             }
             context.read<OperationCubit>().rejectOperation(
-                  connectionBridgeType: widget.connectionBridgeType,
-                );
+              connectionBridgeType: widget.connectionBridgeType,
+            );
             if (didPop) Navigator.of(context).pop();
           },
           child: BasePage(
@@ -165,8 +158,8 @@ class _OperationViewState extends State<OperationView> {
             title: l10n.confirm,
             titleLeading: BackLeadingButton(
               onPressed: () => context.read<OperationCubit>().rejectOperation(
-                    connectionBridgeType: widget.connectionBridgeType,
-                  ),
+                connectionBridgeType: widget.connectionBridgeType,
+              ),
             ),
             body: BackgroundCard(
               height: double.infinity,
@@ -176,9 +169,9 @@ class _OperationViewState extends State<OperationView> {
                   ? ErrorView(
                       message: message,
                       onTap: () {
-                        context
-                            .read<OperationCubit>()
-                            .initialise(widget.connectionBridgeType);
+                        context.read<OperationCubit>().initialise(
+                          widget.connectionBridgeType,
+                        );
                       },
                     )
                   : SingleChildScrollView(
@@ -198,9 +191,7 @@ class _OperationViewState extends State<OperationView> {
                             MyText(
                               '''${state.amount.decimalNumber(6).formatNumber} ${symbol ?? ''}''',
                               textAlign: TextAlign.center,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
+                              style: Theme.of(context).textTheme.headlineSmall
                                   ?.copyWith(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w900,
@@ -255,9 +246,9 @@ class _OperationViewState extends State<OperationView> {
                       onPressed: state.status != AppStatus.idle
                           ? null
                           : () {
-                              context
-                                  .read<OperationCubit>()
-                                  .sendOperataion(widget.connectionBridgeType);
+                              context.read<OperationCubit>().sendOperataion(
+                                widget.connectionBridgeType,
+                              );
                             },
                     ),
                     const SizedBox(height: 8),
@@ -266,8 +257,8 @@ class _OperationViewState extends State<OperationView> {
                       text: isSmartContract ? l10n.reject : l10n.cancel,
                       onPressed: () {
                         context.read<OperationCubit>().rejectOperation(
-                              connectionBridgeType: widget.connectionBridgeType,
-                            );
+                          connectionBridgeType: widget.connectionBridgeType,
+                        );
                       },
                     ),
                   ],

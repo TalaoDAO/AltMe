@@ -65,13 +65,15 @@ void main() {
       expect(find.byType(SvgPicture), findsOneWidget);
     });
 
-    testWidgets('verify property of widget set correctly',
-        (WidgetTester tester) async {
+    testWidgets('verify property of widget set correctly', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(makeTestableWidget());
       await tester.pumpAndSettle();
       expect(find.byType(BaseIllustrationPage), findsOneWidget);
-      final baseIllustrationPage = tester
-          .widget<BaseIllustrationPage>(find.byType(BaseIllustrationPage));
+      final baseIllustrationPage = tester.widget<BaseIllustrationPage>(
+        find.byType(BaseIllustrationPage),
+      );
       expect(baseIllustrationPage.asset, 'asset');
       expect(baseIllustrationPage.action, 'action');
       expect(baseIllustrationPage.description, 'description');

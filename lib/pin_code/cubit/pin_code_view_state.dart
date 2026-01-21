@@ -42,10 +42,10 @@ class PinCodeViewState extends Equatable {
 
   @override
   List<Object?> get props => [
-        enteredPasscode,
-        loginAttemptCount,
-        allowAction,
-        loginAttemptsRemaining,
-        pinCodeError,
-      ];
+    enteredPasscode,
+    loginAttemptCount,
+    allowAction,
+    loginAttemptsRemaining,
+    pinCodeError,
+  ];
 }

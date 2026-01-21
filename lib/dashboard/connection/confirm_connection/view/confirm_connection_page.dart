@@ -10,10 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class ConfirmConnectionPage extends StatelessWidget {
-  const ConfirmConnectionPage({
-    super.key,
-    required this.connectionBridgeType,
-  });
+  const ConfirmConnectionPage({super.key, required this.connectionBridgeType});
 
   final ConnectionBridgeType connectionBridgeType;
 
@@ -21,9 +18,8 @@ class ConfirmConnectionPage extends StatelessWidget {
     required ConnectionBridgeType connectionBridgeType,
   }) {
     return MaterialPageRoute<void>(
-      builder: (_) => ConfirmConnectionPage(
-        connectionBridgeType: connectionBridgeType,
-      ),
+      builder: (_) =>
+          ConfirmConnectionPage(connectionBridgeType: connectionBridgeType),
       settings: const RouteSettings(name: CONFIRM_CONNECTION_PAGE),
     );
   }
@@ -35,8 +31,9 @@ class ConfirmConnectionPage extends StatelessWidget {
         beacon: Beacon(),
         beaconCubit: context.read<BeaconCubit>(),
         walletCubit: context.read<WalletCubit>(),
-        connectedDappRepository:
-            ConnectedDappRepository(secure_storage.getSecureStorage),
+        connectedDappRepository: ConnectedDappRepository(
+          secure_storage.getSecureStorage,
+        ),
         walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
       child: ConfirmConnectionView(connectionBridgeType: connectionBridgeType),
@@ -45,10 +42,7 @@ class ConfirmConnectionPage extends StatelessWidget {
 }
 
 class ConfirmConnectionView extends StatelessWidget {
-  const ConfirmConnectionView({
-    super.key,
-    required this.connectionBridgeType,
-  });
+  const ConfirmConnectionView({super.key, required this.connectionBridgeType});
 
   final ConnectionBridgeType connectionBridgeType;
 
@@ -89,8 +83,8 @@ class ConfirmConnectionView extends StatelessWidget {
           if (context.read<ConfirmConnectionCubit>().state.status !=
               AppStatus.success) {
             context.read<ConfirmConnectionCubit>().rejectConnection(
-                  connectionBridgeType: connectionBridgeType,
-                );
+              connectionBridgeType: connectionBridgeType,
+            );
           }
 
           if (didPop) Navigator.of(context).pop();
@@ -99,10 +93,9 @@ class ConfirmConnectionView extends StatelessWidget {
           scrollView: false,
           title: l10n.connection,
           titleLeading: BackLeadingButton(
-            onPressed: () =>
-                context.read<ConfirmConnectionCubit>().rejectConnection(
-                      connectionBridgeType: connectionBridgeType,
-                    ),
+            onPressed: () => context
+                .read<ConfirmConnectionCubit>()
+                .rejectConnection(connectionBridgeType: connectionBridgeType),
           ),
           body: BackgroundCard(
             height: double.infinity,
@@ -119,14 +112,19 @@ class ConfirmConnectionView extends StatelessWidget {
                     Text(
                       connectionBridgeType == ConnectionBridgeType.beacon
                           ? context
-                              .read<BeaconCubit>()
-                              .state
-                              .beaconRequest!
-                              .request!
-                              .appMetadata!
-                              .name!
-                          : walletConnectCubit.state.sessionProposalEvent!
-                              .params.proposer.metadata.name,
+                                .read<BeaconCubit>()
+                                .state
+                                .beaconRequest!
+                                .request!
+                                .appMetadata!
+                                .name!
+                          : walletConnectCubit
+                                .state
+                                .sessionProposalEvent!
+                                .params
+                                .proposer
+                                .metadata
+                                .name,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
@@ -136,8 +134,13 @@ class ConfirmConnectionView extends StatelessWidget {
                     if (connectionBridgeType ==
                         ConnectionBridgeType.walletconnect) ...[
                       Text(
-                        walletConnectCubit.state.sessionProposalEvent!.params
-                            .proposer.metadata.url,
+                        walletConnectCubit
+                            .state
+                            .sessionProposalEvent!
+                            .params
+                            .proposer
+                            .metadata
+                            .url,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: Sizes.spaceNormal),
@@ -162,7 +165,9 @@ class ConfirmConnectionView extends StatelessWidget {
                   BlocBuilder<WalletCubit, WalletState>(
                     builder: (context, walletState) {
                       if (connectionBridgeType == ConnectionBridgeType.beacon &&
-                          walletState.currentAccount?.blockchainType
+                          walletState
+                                  .currentAccount
+                                  ?.blockchainType
                                   .connectionBridge !=
                               connectionBridgeType) {
                         return Container();
@@ -174,8 +179,8 @@ class ConfirmConnectionView extends StatelessWidget {
                         text: l10n.connect,
                         onPressed: () {
                           context.read<ConfirmConnectionCubit>().connect(
-                                connectionBridgeType: connectionBridgeType,
-                              );
+                            connectionBridgeType: connectionBridgeType,
+                          );
                         },
                       );
                     },
@@ -186,8 +191,8 @@ class ConfirmConnectionView extends StatelessWidget {
                     text: l10n.cancel,
                     onPressed: () {
                       context.read<ConfirmConnectionCubit>().rejectConnection(
-                            connectionBridgeType: connectionBridgeType,
-                          );
+                        connectionBridgeType: connectionBridgeType,
+                      );
                     },
                   ),
                 ],

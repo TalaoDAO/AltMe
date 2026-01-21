@@ -22,9 +22,7 @@ class DashboardState extends Equatable {
     );
   }
 
-  DashboardState error({
-    required MessageHandler messageHandler,
-  }) {
+  DashboardState error({required MessageHandler messageHandler}) {
     return DashboardState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),

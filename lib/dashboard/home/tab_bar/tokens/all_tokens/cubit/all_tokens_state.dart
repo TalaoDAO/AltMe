@@ -33,17 +33,15 @@ class AllTokensState extends Equatable {
   }
 
   bool containContract({required ContractModel contractModel}) {
-    return selectedContracts.any(
-      (element) => element == contractModel,
-    );
+    return selectedContracts.any((element) => element == contractModel);
   }
 
   @override
   List<Object?> get props => [
-        status,
-        message,
-        contracts,
-        selectedContracts,
-        filteredContracts,
-      ];
+    status,
+    message,
+    contracts,
+    selectedContracts,
+    filteredContracts,
+  ];
 }

@@ -6,8 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../helpers/helpers.dart';
 
 void main() {
-  testWidgets('MyRichText displays the correct rich text',
-      (WidgetTester tester) async {
+  testWidgets('MyRichText displays the correct rich text', (
+    WidgetTester tester,
+  ) async {
     const textSpan = TextSpan(
       text: 'Hello ',
       children: [
@@ -18,8 +19,9 @@ void main() {
       ],
     );
 
-    await tester
-        .pumpApp(const Scaffold(body: MyRichText(text: textSpan, maxLines: 1)));
+    await tester.pumpApp(
+      const Scaffold(body: MyRichText(text: textSpan, maxLines: 1)),
+    );
 
     await tester.pumpAndSettle();
 
@@ -36,16 +38,14 @@ void main() {
       const Scaffold(
         body: SizedBox(
           width: 100,
-          child: MyRichText(
-            text: longTextSpan,
-            maxLines: 1,
-          ),
+          child: MyRichText(text: longTextSpan, maxLines: 1),
         ),
       ),
     );
 
-    final richTextWidget =
-        tester.widget<AutoSizeText>(find.byType(AutoSizeText));
+    final richTextWidget = tester.widget<AutoSizeText>(
+      find.byType(AutoSizeText),
+    );
     expect(richTextWidget.maxLines, 1);
   });
 }

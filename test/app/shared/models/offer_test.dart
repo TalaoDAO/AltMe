@@ -7,10 +7,10 @@ void main() {
       final offer = Offer('value', 'currency');
       expect(offer.value, 'value');
       expect(offer.currency, 'currency');
-      expect(
-        offer.toJson(),
-        <String, dynamic>{'value': 'value', 'currency': 'currency'},
-      );
+      expect(offer.toJson(), <String, dynamic>{
+        'value': 'value',
+        'currency': 'currency',
+      });
     });
 
     test('fromJson constructor work properly', () {
@@ -18,10 +18,7 @@ void main() {
       final offer = Offer.fromJson(json);
       expect(offer.value, 'value');
       expect(offer.currency, 'currency');
-      expect(
-        offer.toJson(),
-        json,
-      );
+      expect(offer.toJson(), json);
     });
   });
 }

@@ -29,15 +29,8 @@ abstract class MatrixChatInterface {
   });
   Message mapEventToMessage(Event event);
   Status mapEventStatusToMessageStatus(EventStatus status);
-  String getThumbnail({
-    required String url,
-    int width = 500,
-    int height = 500,
-  });
-  Future<String> login({
-    required String username,
-    required String password,
-  });
+  String getThumbnail({required String url, int width = 500, int height = 500});
+  Future<String> login({required String username, required String password});
   Future<void> register({
     required String did,
     required String kid,
@@ -50,8 +43,5 @@ abstract class MatrixChatInterface {
   Future<void> clearRoomIdInStorage(String roomIdStoredKey);
   int getUnreadMessageCount(String? roomId);
   Future<List<Message>> retriveMessagesFromDB(String roomId);
-  Future<void> markMessageAsRead(
-    List<String?>? eventIds,
-    String? roomId,
-  );
+  Future<void> markMessageAsRead(List<String?>? eventIds, String? roomId);
 }

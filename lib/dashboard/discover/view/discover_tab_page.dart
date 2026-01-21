@@ -70,10 +70,7 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
                   indicator: BoxDecoration(
                     color: Colors.transparent,
                     borderRadius: BorderRadius.zero,
-                    border: Border.all(
-                      color: Colors.transparent,
-                      width: 0,
-                    ),
+                    border: Border.all(color: Colors.transparent, width: 0),
                   ),
                   indicatorSize: TabBarIndicatorSize.label,
                   tabs: [
@@ -120,11 +117,7 @@ class _DiscoverTabPageViewState extends State<DiscoverTabPageView>
                   child: TabBarView(
                     controller: _tabController,
                     physics: const NeverScrollableScrollPhysics(),
-                    children: const [
-                      DiscoverPage(),
-                      NftPage(),
-                      TokensPage(),
-                    ],
+                    children: const [DiscoverPage(), NftPage(), TokensPage()],
                   ),
                 ),
               ),

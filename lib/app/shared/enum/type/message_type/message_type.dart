@@ -3,9 +3,4 @@ import 'package:flutter/material.dart';
 
 part 'message_type_extension.dart';
 
-enum MessageType {
-  error,
-  warning,
-  info,
-  success,
-}
+enum MessageType { error, warning, info, success }

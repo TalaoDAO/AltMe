@@ -9,9 +9,9 @@ class AdvancedSettingsPage extends StatelessWidget {
   const AdvancedSettingsPage({super.key});
 
   static Route<dynamic> route() => MaterialPageRoute<void>(
-        builder: (_) => const AdvancedSettingsPage(),
-        settings: const RouteSettings(name: '/advanceSettingsPage'),
-      );
+    builder: (_) => const AdvancedSettingsPage(),
+    settings: const RouteSettings(name: '/advanceSettingsPage'),
+  );
 
   @override
   Widget build(BuildContext context) {

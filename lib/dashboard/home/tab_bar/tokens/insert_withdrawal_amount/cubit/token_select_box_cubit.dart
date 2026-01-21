@@ -19,9 +19,9 @@ class TokenSelectBoxCubit extends Cubit<TokenSelectBoxState> {
   Future<void> getBalanceOfAssetList() async {
     final defaultData = tokensCubit.state.data;
     if (defaultData.isEmpty ||
-        !defaultData.map((e) => e.symbol).contains(
-              insertWithdrawalPageCubit.defaultSelectedToken.symbol,
-            )) {
+        !defaultData
+            .map((e) => e.symbol)
+            .contains(insertWithdrawalPageCubit.defaultSelectedToken.symbol)) {
       setLoading(isLoading: true);
       await tokensCubit.getTokens();
       if (tokensCubit.state.data.isNotEmpty) {
@@ -31,7 +31,9 @@ class TokenSelectBoxCubit extends Cubit<TokenSelectBoxState> {
     } else {
       await tokensCubit.getTokens();
       if (tokensCubit.state.data.isNotEmpty &&
-          !tokensCubit.state.data.map((e) => e.symbol).contains(
+          !tokensCubit.state.data
+              .map((e) => e.symbol)
+              .contains(
                 insertWithdrawalPageCubit.defaultSelectedToken.symbol,
               )) {
         setSelectedToken(tokenModel: tokensCubit.state.data.first);

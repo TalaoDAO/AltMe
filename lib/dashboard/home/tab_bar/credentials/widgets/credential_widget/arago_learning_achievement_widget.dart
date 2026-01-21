@@ -16,10 +16,12 @@ class AragoLearningAchievementWidget extends StatelessWidget {
     return Column(
       children: [
         CardAnimation(
-          recto:
-              AragoLearningAchievementRecto(credentialModel: credentialModel),
-          verso:
-              AragoLearningAchievementVerso(credentialModel: credentialModel),
+          recto: AragoLearningAchievementRecto(
+            credentialModel: credentialModel,
+          ),
+          verso: AragoLearningAchievementVerso(
+            credentialModel: credentialModel,
+          ),
         ),
       ],
     );
@@ -44,8 +46,9 @@ class AragoLearningAchievementRecto extends Recto {
           widthFactor: 0.7,
           alignment: Alignment.centerLeft,
           child: CustomMultiChildLayout(
-            delegate:
-                AragoLearningAchievementVersoDelegate(position: Offset.zero),
+            delegate: AragoLearningAchievementVersoDelegate(
+              position: Offset.zero,
+            ),
             children: [
               LayoutId(
                 id: 'name',
@@ -58,7 +61,10 @@ class AragoLearningAchievementRecto extends Recto {
                 id: 'school',
                 child: MyText(
                   credentialModel
-                      .credentialPreview.credentialSubjectModel.issuedBy!.name,
+                      .credentialPreview
+                      .credentialSubjectModel
+                      .issuedBy!
+                      .name,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),

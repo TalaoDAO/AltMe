@@ -10,9 +10,10 @@ void main() {
     });
 
     test('fromJson constructor work correctly', () {
-      final translation = Translation.fromJson(
-        <String, dynamic>{'@language': 'fr', '@value': 'Translation'},
-      );
+      final translation = Translation.fromJson(<String, dynamic>{
+        '@language': 'fr',
+        '@value': 'Translation',
+      });
       expect(translation.language, 'fr');
       expect(translation.value, 'Translation');
     });
@@ -28,9 +29,7 @@ void main() {
     });
 
     test('default values work correctly with empty json', () {
-      final translation = Translation.fromJson(
-        <String, dynamic>{},
-      );
+      final translation = Translation.fromJson(<String, dynamic>{});
       expect(translation.language, 'en');
       expect(translation.value, '');
     });

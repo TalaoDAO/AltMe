@@ -17,19 +17,17 @@ class CongratulationsAccountCreationPage extends StatelessWidget {
 
   static Route<dynamic> route({required AccountType accountType}) {
     return MaterialPageRoute<void>(
-      settings:
-          const RouteSettings(name: '/congratulationsAccountCreationPage'),
-      builder: (_) => CongratulationsAccountCreationPage(
-        accountType: accountType,
+      settings: const RouteSettings(
+        name: '/congratulationsAccountCreationPage',
       ),
+      builder: (_) =>
+          CongratulationsAccountCreationPage(accountType: accountType),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return CongratulationsAccountCreationView(
-      accountType: accountType,
-    );
+    return CongratulationsAccountCreationView(accountType: accountType);
   }
 }
 
@@ -53,8 +51,9 @@ class _CongratulationsAccountCreationViewState
   @override
   void initState() {
     confettiController = ConfettiController();
-    Future<void>.delayed(Duration.zero)
-        .then((value) => confettiController.play());
+    Future<void>.delayed(
+      Duration.zero,
+    ).then((value) => confettiController.play());
     super.initState();
   }
 
@@ -114,31 +113,23 @@ class _CongratulationsAccountCreationViewState
                   width: MediaQuery.of(context).size.shortestSide * 0.5,
                   showPoweredBy: true,
                 ),
-                const SizedBox(
-                  height: Sizes.spaceNormal,
-                ),
+                const SizedBox(height: Sizes.spaceNormal),
                 Text(
                   l10n.congratulations,
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
-                const SizedBox(
-                  height: Sizes.spaceNormal,
-                ),
+                const SizedBox(height: Sizes.spaceNormal),
                 Text(
                   message,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
-                const SizedBox(
-                  height: Sizes.space3XLarge,
-                ),
+                const SizedBox(height: Sizes.space3XLarge),
               ],
             ),
           ),
           navigation: Padding(
-            padding: const EdgeInsets.all(
-              Sizes.spaceSmall,
-            ),
+            padding: const EdgeInsets.all(Sizes.spaceSmall),
             child: MyElevatedButton(
               text: l10n.letsGo,
               onPressed: () {

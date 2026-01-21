@@ -4,10 +4,7 @@ part 'benefit.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Benefit {
-  Benefit({
-    this.category,
-    this.discount,
-  });
+  Benefit({this.category, this.discount});
 
   factory Benefit.fromJson(Map<String, dynamic> json) =>
       _$BenefitFromJson(json);

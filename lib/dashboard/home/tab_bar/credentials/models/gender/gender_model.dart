@@ -14,9 +14,9 @@ class GenderModel extends CredentialSubjectModel {
     super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.gender,
-          credentialCategory: CredentialCategory.identityCards,
-        );
+         credentialSubjectType: CredentialSubjectType.gender,
+         credentialCategory: CredentialCategory.identityCards,
+       );
 
   factory GenderModel.fromJson(Map<String, dynamic> json) =>
       _$GenderModelFromJson(json);

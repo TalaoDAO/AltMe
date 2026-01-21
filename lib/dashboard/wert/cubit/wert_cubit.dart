@@ -64,12 +64,8 @@ class WertCubit extends Cubit<String> {
         emit(link);
       }
     } else {
-      log.e(
-        'Wert is not supporting this blockchain type',
-      );
-      throw Exception(
-        'Wert is not supporting this blockchain type',
-      );
+      log.e('Wert is not supporting this blockchain type');
+      throw Exception('Wert is not supporting this blockchain type');
     }
   }
 }

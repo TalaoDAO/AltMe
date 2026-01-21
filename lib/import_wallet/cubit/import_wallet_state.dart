@@ -60,9 +60,7 @@ class ImportWalletState extends Equatable {
     );
   }
 
-  ImportWalletState success({
-    MessageHandler? messageHandler,
-  }) {
+  ImportWalletState success({MessageHandler? messageHandler}) {
     return ImportWalletState(
       status: AppStatus.success,
       message: messageHandler == null
@@ -77,9 +75,9 @@ class ImportWalletState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        isMnemonicOrKeyValid,
-        isTextFieldEdited,
-        message,
-      ];
+    status,
+    isMnemonicOrKeyValid,
+    isTextFieldEdited,
+    message,
+  ];
 }

@@ -5,11 +5,7 @@ part 'operation_parameter_value_model.g.dart';
 
 @JsonSerializable()
 class OperationParameterValueModel extends Equatable {
-  const OperationParameterValueModel({
-    this.to,
-    this.from,
-    this.value,
-  });
+  const OperationParameterValueModel({this.to, this.from, this.value});
 
   factory OperationParameterValueModel.fromJson(Map<String, dynamic> json) =>
       _$OperationParameterValueModelFromJson(json);

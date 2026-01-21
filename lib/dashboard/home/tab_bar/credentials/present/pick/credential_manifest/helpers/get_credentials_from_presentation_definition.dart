@@ -12,8 +12,11 @@ List<CredentialModel> getCredentialsFromPresentationDefinition({
   required int inputDescriptorIndex,
   required ProfileType profileType,
 }) {
-  final filterList = presentationDefinition
-          .inputDescriptors[inputDescriptorIndex].constraints?.fields ??
+  final filterList =
+      presentationDefinition
+          .inputDescriptors[inputDescriptorIndex]
+          .constraints
+          ?.fields ??
       <Field>[];
 
   final credentialListFilteredByFormat = filterCredenialListByFormat(

@@ -6,15 +6,11 @@ part 'over13_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Over13Model extends CredentialSubjectModel {
-  Over13Model({
-    super.id,
-    super.type,
-    super.issuedBy,
-    super.offeredBy,
-  }) : super(
-          credentialSubjectType: CredentialSubjectType.over13,
-          credentialCategory: CredentialCategory.identityCards,
-        );
+  Over13Model({super.id, super.type, super.issuedBy, super.offeredBy})
+    : super(
+        credentialSubjectType: CredentialSubjectType.over13,
+        credentialCategory: CredentialCategory.identityCards,
+      );
 
   factory Over13Model.fromJson(Map<String, dynamic> json) =>
       _$Over13ModelFromJson(json);

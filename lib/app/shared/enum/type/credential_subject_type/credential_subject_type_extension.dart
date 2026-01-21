@@ -639,9 +639,12 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     /// handles the dummy casse
 
     final oidc4vcDraftType = profileSetting
-        .selfSovereignIdentityOptions.customOidc4vcProfile.oidc4vciDraft;
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile
+        .oidc4vciDraft;
 
-    final isEmailPassOrPhonePass = this == CredentialSubjectType.emailPass ||
+    final isEmailPassOrPhonePass =
+        this == CredentialSubjectType.emailPass ||
         this == CredentialSubjectType.phonePass;
 
     final format = assignedVCFormatType.urlValue(
@@ -685,7 +688,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.emailPass:
         image = ImageStrings.dummyEmailPassCard;
 
-        link = '${Urls.emailPassUrl}'
+        link =
+            '${Urls.emailPassUrl}'
             '?draft=${oidc4vcDraftType.numbering}'
             '&format=$format';
 
@@ -697,7 +701,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over13:
         image = ImageStrings.dummyOver13Card;
 
-        link = '${Urls.id360Url}'
+        link =
+            '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
             '&format=$format'
             '&type=over13';
@@ -710,7 +715,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over15:
         image = ImageStrings.dummyOver15Card;
 
-        link = '${Urls.id360Url}'
+        link =
+            '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
             '&format=$format'
             '&type=over15';
@@ -723,7 +729,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over18:
         image = ImageStrings.dummyOver18Card;
 
-        link = '${Urls.id360Url}'
+        link =
+            '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
             '&format=$format'
             '&type=over18';
@@ -736,7 +743,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over21:
         image = ImageStrings.dummyOver21Card;
 
-        link = '${Urls.id360Url}'
+        link =
+            '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
             '&format=$format'
             '&type=over21';
@@ -749,7 +757,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over50:
         image = ImageStrings.dummyOver50Card;
 
-        link = '${Urls.id360Url}'
+        link =
+            '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
             '&format=$format'
             '&type=over50';
@@ -762,7 +771,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.over65:
         image = ImageStrings.dummyOver65Card;
 
-        link = '${Urls.id360Url}'
+        link =
+            '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
             '&format=$format'
             '&type=over65';
@@ -814,7 +824,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
           type = 'individualverifiableattestation';
         }
 
-        link = '${Urls.id360Url}'
+        link =
+            '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
             '&format=$format'
             '&type=$type';
@@ -861,7 +872,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.phonePass:
         image = ImageStrings.dummyPhonePassCard;
 
-        link = '${Urls.phonePassUrl}'
+        link =
+            '${Urls.phonePassUrl}'
             '?draft=${oidc4vcDraftType.numbering}'
             '&format=$format';
 
@@ -874,7 +886,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.livenessCard:
         image = ImageStrings.livenessDummy;
 
-        link = '${Urls.id360Url}'
+        link =
+            '${Urls.id360Url}'
             '?draft=${oidc4vcDraftType.numbering}'
             '&format=$format'
             '&type=liveness';
@@ -946,8 +959,9 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       expirationDateDetails: expirationDateDetails == null
           ? null
           : ResponseMessage(message: expirationDateDetails),
-      howToGetIt:
-          howToGetIt == null ? null : ResponseMessage(message: howToGetIt),
+      howToGetIt: howToGetIt == null
+          ? null
+          : ResponseMessage(message: howToGetIt),
       websiteLink: websiteLink,
       longDescription: longDescription == null
           ? null

@@ -88,40 +88,43 @@ class _SelectNetworkFeeBottomSheetViewState
               Expanded(
                 child:
                     BlocBuilder<SelectNetworkFeeCubit, SelectNetworkFeeState>(
-                  builder: (context, state) {
-                    return ListView.separated(
-                      itemCount: state.networkFeeList.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, i) {
-                        return SelectNetworkFeeItem(
-                          networkFeeModel: state.networkFeeList[i],
-                          isSelected: state.selectedNetworkFee ==
-                              state.networkFeeList[i],
-                          onPressed: () {
-                            context
-                                .read<SelectNetworkFeeCubit>()
-                                .setSelectedNetworkFee(
-                                  selectedNetworkFee: state.networkFeeList[i],
-                                );
-                            Navigator.of(context).pop(state.networkFeeList[i]);
+                      builder: (context, state) {
+                        return ListView.separated(
+                          itemCount: state.networkFeeList.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, i) {
+                            return SelectNetworkFeeItem(
+                              networkFeeModel: state.networkFeeList[i],
+                              isSelected:
+                                  state.selectedNetworkFee ==
+                                  state.networkFeeList[i],
+                              onPressed: () {
+                                context
+                                    .read<SelectNetworkFeeCubit>()
+                                    .setSelectedNetworkFee(
+                                      selectedNetworkFee:
+                                          state.networkFeeList[i],
+                                    );
+                                Navigator.of(
+                                  context,
+                                ).pop(state.networkFeeList[i]);
+                              },
+                            );
                           },
+                          separatorBuilder: (_, __) => Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: Sizes.spaceSmall,
+                            ),
+                            child: Divider(
+                              height: 0.2,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurface.withValues(alpha: 0.12),
+                            ),
+                          ),
                         );
                       },
-                      separatorBuilder: (_, __) => Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Sizes.spaceSmall,
-                        ),
-                        child: Divider(
-                          height: 0.2,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.12),
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                    ),
               ),
             ],
           ),

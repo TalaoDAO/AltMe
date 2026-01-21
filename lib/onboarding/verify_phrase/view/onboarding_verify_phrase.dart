@@ -29,14 +29,13 @@ class OnBoardingVerifyPhrasePage extends StatelessWidget {
   static Route<dynamic> route({
     required List<String> mnemonic,
     required bool isFromOnboarding,
-  }) =>
-      MaterialPageRoute<void>(
-        builder: (context) => OnBoardingVerifyPhrasePage(
-          mnemonic: mnemonic,
-          isFromOnboarding: isFromOnboarding,
-        ),
-        settings: const RouteSettings(name: '/OnBoardingVerifyPhrasePage'),
-      );
+  }) => MaterialPageRoute<void>(
+    builder: (context) => OnBoardingVerifyPhrasePage(
+      mnemonic: mnemonic,
+      isFromOnboarding: isFromOnboarding,
+    ),
+    settings: const RouteSettings(name: '/OnBoardingVerifyPhrasePage'),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +60,8 @@ class OnBoardingVerifyPhrasePage extends StatelessWidget {
           return OnBoardingVerifyPhraseView(
             mnemonic: mnemonic,
             isFromOnboarding: isFromOnboarding,
-            onBoardingVerifyPhraseCubit:
-                context.read<OnBoardingVerifyPhraseCubit>(),
+            onBoardingVerifyPhraseCubit: context
+                .read<OnBoardingVerifyPhraseCubit>(),
             onboardingCubit: context.read<OnboardingCubit>(),
           );
         },
@@ -104,8 +103,10 @@ class _OnBoardingVerifyPhraseViewState
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return BlocConsumer<OnBoardingVerifyPhraseCubit,
-        OnBoardingVerifyPhraseState>(
+    return BlocConsumer<
+      OnBoardingVerifyPhraseCubit,
+      OnBoardingVerifyPhraseState
+    >(
       listener: (context, state) async {
         if (state.status == AppStatus.loading) {
           LoadingView().show(context: context);
@@ -147,10 +148,7 @@ class _OnBoardingVerifyPhraseViewState
               : Column(
                   children: [
                     if (widget.isFromOnboarding) ...[
-                      const MStepper(
-                        step: 3,
-                        totalStep: 3,
-                      ),
+                      const MStepper(step: 3, totalStep: 3),
                       const SizedBox(height: Sizes.spaceNormal),
                     ],
                     Padding(
@@ -191,8 +189,9 @@ class _OnBoardingVerifyPhraseViewState
                                   order: col1Mnemonics.userSelectedOrder,
                                   word:
                                       widget.mnemonic[col1Mnemonics.order - 1],
-                                  color: col1Mnemonics.mnemonicStatus
-                                      .color(context),
+                                  color: col1Mnemonics.mnemonicStatus.color(
+                                    context,
+                                  ),
                                   onTap: () {
                                     widget.onBoardingVerifyPhraseCubit.verify(
                                       mnemonic: widget.mnemonic,
@@ -208,8 +207,9 @@ class _OnBoardingVerifyPhraseViewState
                                   order: col2Mnemonics.userSelectedOrder,
                                   word:
                                       widget.mnemonic[col2Mnemonics.order - 1],
-                                  color: col2Mnemonics.mnemonicStatus
-                                      .color(context),
+                                  color: col2Mnemonics.mnemonicStatus.color(
+                                    context,
+                                  ),
                                   onTap: () {
                                     widget.onBoardingVerifyPhraseCubit.verify(
                                       mnemonic: widget.mnemonic,
@@ -225,8 +225,9 @@ class _OnBoardingVerifyPhraseViewState
                                   order: col3Mnemonics.userSelectedOrder,
                                   word:
                                       widget.mnemonic[col3Mnemonics.order - 1],
-                                  color: col3Mnemonics.mnemonicStatus
-                                      .color(context),
+                                  color: col3Mnemonics.mnemonicStatus.color(
+                                    context,
+                                  ),
                                   onTap: () {
                                     widget.onBoardingVerifyPhraseCubit.verify(
                                       mnemonic: widget.mnemonic,
@@ -256,9 +257,9 @@ class _OnBoardingVerifyPhraseViewState
                         await widget.onboardingCubit.emitOnboardingProcessing();
                         await widget.onBoardingVerifyPhraseCubit
                             .generateSSIAndCryptoAccount(
-                          mnemonic: widget.mnemonic,
-                          isFromOnboarding: widget.isFromOnboarding,
-                        );
+                              mnemonic: widget.mnemonic,
+                              isFromOnboarding: widget.isFromOnboarding,
+                            );
                       }
                     : null,
               ),

@@ -39,39 +39,37 @@ List<CredentialModel> getCredentialsFromFilterList({
             final searchList = getTextsFromCredential(path, credentialData);
             if (searchList.isNotEmpty) {
               /// remove unmatched credential
-              searchList.removeWhere(
-                (searchParameter) {
-                  final filter = field.filter;
+              searchList.removeWhere((searchParameter) {
+                final filter = field.filter;
 
-                  /// condition matched - no further filtration needed
-                  if (filter == null) return false;
+                /// condition matched - no further filtration needed
+                if (filter == null) return false;
 
-                  String? pattern = filter.pattern;
-                  if (pattern != null) {
-                    pattern = filter.pattern;
-                  } else if (filter.contains?.containsConst != null) {
-                    pattern = filter.contains?.containsConst;
-                  } else if (filter.containsConst != null) {
-                    pattern = filter.containsConst;
-                  } else {
-                    /// sd-jwt vc bool case
-                    if (searchParameter == 'true') return false;
-                  }
+                String? pattern = filter.pattern;
+                if (pattern != null) {
+                  pattern = filter.pattern;
+                } else if (filter.contains?.containsConst != null) {
+                  pattern = filter.contains?.containsConst;
+                } else if (filter.containsConst != null) {
+                  pattern = filter.containsConst;
+                } else {
+                  /// sd-jwt vc bool case
+                  if (searchParameter == 'true') return false;
+                }
 
-                  if (pattern == null) {
-                    return false;
-                  } else if (pattern.endsWith(r'$')) {
-                    final RegExp regEx = RegExp(pattern);
-                    final Match? match = regEx.firstMatch(searchParameter);
+                if (pattern == null) {
+                  return false;
+                } else if (pattern.endsWith(r'$')) {
+                  final RegExp regEx = RegExp(pattern);
+                  final Match? match = regEx.firstMatch(searchParameter);
 
-                    if (match != null) return false;
-                  } else {
-                    if (searchParameter == pattern) return false;
-                  }
+                  if (match != null) return false;
+                } else {
+                  if (searchParameter == pattern) return false;
+                }
 
-                  return true;
-                },
-              );
+                return true;
+              });
             }
 
             /// if [searchList] is not empty we mark this credential as
@@ -96,18 +94,16 @@ List<CredentialModel> getCredentialsFromFilterList({
 
     final credentials = selectedCredential.toSet().toList();
 
-    credentials.sort(
-      (a, b) {
-        final firstCredName = a.display?.name ??
-            a.credentialPreview.credentialSubjectModel.credentialSubjectType
-                .name;
-        final secondCredName = b.display?.name ??
-            b.credentialPreview.credentialSubjectModel.credentialSubjectType
-                .name;
+    credentials.sort((a, b) {
+      final firstCredName =
+          a.display?.name ??
+          a.credentialPreview.credentialSubjectModel.credentialSubjectType.name;
+      final secondCredName =
+          b.display?.name ??
+          b.credentialPreview.credentialSubjectModel.credentialSubjectType.name;
 
-        return firstCredName.compareTo(secondCredName);
-      },
-    );
+      return firstCredName.compareTo(secondCredName);
+    });
 
     return credentials;
   }

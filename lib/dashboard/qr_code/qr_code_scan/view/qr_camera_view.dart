@@ -24,7 +24,7 @@ class QrCameraView extends StatefulWidget {
   final VoidCallback? onCameraFeedReady;
   final VoidCallback? onDetectorViewModeChanged;
   final dynamic Function(CameraLensDirection direction)?
-      onCameraLensDirectionChanged;
+  onCameraLensDirectionChanged;
   final CameraLensDirection initialCameraLensDirection;
 
   @override
@@ -259,8 +259,11 @@ class BlurPainter extends CustomPainter {
     final Path canvasPath = Path()..addRect(rect);
 
     // Subtract the middle square path from the canvas path
-    final Path blurredPath =
-        Path.combine(PathOperation.difference, canvasPath, squarePath);
+    final Path blurredPath = Path.combine(
+      PathOperation.difference,
+      canvasPath,
+      squarePath,
+    );
 
     // Draw the blurred path on the canvas
     canvas.drawPath(blurredPath, blurPaint);

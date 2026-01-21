@@ -81,7 +81,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>openid</string>
+			<string>siopv2</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>siopv2</string>
@@ -91,7 +91,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>openid</string>
+			<string>openid-vc</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>openid-vc</string>
@@ -101,7 +101,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>openid</string>
+			<string>altme-openid-vc</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>compellio-openid-vc</string>
@@ -111,7 +111,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>openid</string>
+			<string>openid4vp</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>openid4vp</string>
@@ -121,7 +121,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>openid</string>
+			<string>eudi-openid4vp</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>eudi-openid4vp</string>
@@ -131,7 +131,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>openid</string>
+			<string>altme-openid-credential-offer</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>compellio-openid-credential-offer</string>

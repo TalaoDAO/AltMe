@@ -5,11 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QrCodeDisplayPage extends StatelessWidget {
-  const QrCodeDisplayPage({
-    super.key,
-    required this.title,
-    required this.data,
-  });
+  const QrCodeDisplayPage({super.key, required this.title, required this.data});
 
   final String title;
   final String data;
@@ -42,9 +38,7 @@ class QrCodeDisplayPage extends StatelessWidget {
             const SizedBox(height: 10),
             CopyButton(
               onTap: () async {
-                await Clipboard.setData(
-                  ClipboardData(text: data),
-                );
+                await Clipboard.setData(ClipboardData(text: data));
                 AlertMessage.showStateMessage(
                   context: context,
                   stateMessage: StateMessage.success(

@@ -19,10 +19,7 @@ class DisplayMappingWidget extends StatelessWidget {
     if (object is DisplayMappingText) {
       return Padding(
         padding: const EdgeInsets.all(8),
-        child: ManifestText2(
-          text: object.text,
-          style: style,
-        ),
+        child: ManifestText2(text: object.text, style: style),
       );
     }
     if (object is DisplayMappingPath) {
@@ -40,17 +37,12 @@ class DisplayMappingWidget extends StatelessWidget {
       }
 
       if (widgets.isNotEmpty) {
-        return Column(
-          children: widgets,
-        );
+        return Column(children: widgets);
       }
       if (object.fallback != null) {
         return Padding(
           padding: const EdgeInsets.all(8),
-          child: ManifestText2(
-            text: object.fallback ?? '',
-            style: style,
-          ),
+          child: ManifestText2(text: object.fallback ?? '', style: style),
         );
       }
     }
@@ -59,11 +51,7 @@ class DisplayMappingWidget extends StatelessWidget {
 }
 
 class ManifestText2 extends StatelessWidget {
-  const ManifestText2({
-    super.key,
-    required this.text,
-    required this.style,
-  });
+  const ManifestText2({super.key, required this.text, required this.style});
 
   final String text;
   final TextStyle style;

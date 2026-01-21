@@ -19,19 +19,13 @@ class TrustedEntityPostalAddress extends StatelessWidget {
       );
     }
     if (postalAddress.postalCode != null) {
-      fields.add(
-        Text(postalAddress.postalCode!, style: textTheme.bodyLarge),
-      );
+      fields.add(Text(postalAddress.postalCode!, style: textTheme.bodyLarge));
     }
     if (postalAddress.locality != null) {
-      fields.add(
-        Text(postalAddress.locality!, style: textTheme.bodyLarge),
-      );
+      fields.add(Text(postalAddress.locality!, style: textTheme.bodyLarge));
     }
     if (postalAddress.countryName != null) {
-      fields.add(
-        Text(postalAddress.countryName!, style: textTheme.bodyLarge),
-      );
+      fields.add(Text(postalAddress.countryName!, style: textTheme.bodyLarge));
     }
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),

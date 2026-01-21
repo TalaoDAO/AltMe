@@ -74,12 +74,8 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
                     l10n.networkFee,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
-                  const SizedBox(
-                    width: Sizes.spaceXSmall,
-                  ),
-                  EditButton(
-                    onTap: onEditButtonPressed,
-                  ),
+                  const SizedBox(width: Sizes.spaceXSmall),
+                  EditButton(onTap: onEditButtonPressed),
                   const Spacer(),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -191,9 +187,7 @@ class ConfirmTransactionDetailsCard extends StatelessWidget {
 
   Widget _buildDivider(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: Sizes.spaceSmall,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: Sizes.spaceSmall),
       child: Divider(
         height: 0.1,
         color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.12),

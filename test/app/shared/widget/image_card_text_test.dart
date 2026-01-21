@@ -5,9 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ImageCarText widget', () {
     testWidgets('property set properly', (WidgetTester tester) async {
-      const testableWidget = MaterialApp(
-        home: ImageCardText(text: 'Test'),
-      );
+      const testableWidget = MaterialApp(home: ImageCardText(text: 'Test'));
 
       await tester.pumpWidget(testableWidget);
 

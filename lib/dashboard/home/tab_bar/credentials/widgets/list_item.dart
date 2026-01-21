@@ -26,13 +26,13 @@ class _BaseItem extends StatefulWidget {
 class __BaseItemState extends State<_BaseItem> {
   @override
   Widget build(BuildContext context) => Opacity(
-        opacity: !widget.enabled ? 0.33 : 1,
-        child: GestureDetector(
-          onTap: widget.onTap,
-          onLongPress: widget.onLongPress,
-          child: IntrinsicHeight(child: widget.child),
-        ),
-      );
+    opacity: !widget.enabled ? 0.33 : 1,
+    child: GestureDetector(
+      onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
+      child: IntrinsicHeight(child: widget.child),
+    ),
+  );
 }
 
 class CredentialsListPageItem extends StatelessWidget {
@@ -94,8 +94,11 @@ class CredentialsDisplayItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profileSetting =
-        context.read<ProfileCubit>().state.model.profileSetting;
+    final profileSetting = context
+        .read<ProfileCubit>()
+        .state
+        .model
+        .profileSetting;
     return _BaseItem(
       enabled: true,
       onTap: onTap,
@@ -132,8 +135,11 @@ class DisplaySelectionElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profileSetting =
-        context.read<ProfileCubit>().state.model.profileSetting;
+    final profileSetting = context
+        .read<ProfileCubit>()
+        .state
+        .model
+        .profileSetting;
     return CredentialSelectionPadding(
       child: Column(
         children: <Widget>[

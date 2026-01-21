@@ -10,9 +10,9 @@ class OnBoardingTosPage extends StatelessWidget {
   const OnBoardingTosPage({super.key});
 
   static Route<dynamic> route() => MaterialPageRoute<void>(
-        builder: (context) => const OnBoardingTosPage(),
-        settings: const RouteSettings(name: '/onBoardingTermsPage'),
-      );
+    builder: (context) => const OnBoardingTosPage(),
+    settings: const RouteSettings(name: '/onBoardingTermsPage'),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +30,7 @@ class OnBoardingTosPage extends StatelessWidget {
 }
 
 class OnBoardingTosView extends StatefulWidget {
-  const OnBoardingTosView({
-    super.key,
-    required this.onBoardingTosCubit,
-  });
+  const OnBoardingTosView({super.key, required this.onBoardingTosCubit});
 
   final OnBoardingTosCubit onBoardingTosCubit;
 
@@ -92,16 +89,18 @@ class _OnBoardingTosViewState extends State<OnBoardingTosView> {
                           value: state.agreeTerms,
                           text: l10n.agreeTermsAndConditionCheckBox,
                           onChange: (value) {
-                            widget.onBoardingTosCubit
-                                .setAgreeTerms(agreeTerms: value);
+                            widget.onBoardingTosCubit.setAgreeTerms(
+                              agreeTerms: value,
+                            );
                           },
                         ),
                         CheckboxItem(
                           value: state.readTerms,
                           text: l10n.readTermsOfUseCheckBox,
                           onChange: (value) {
-                            widget.onBoardingTosCubit
-                                .setReadTerms(readTerms: value);
+                            widget.onBoardingTosCubit.setReadTerms(
+                              readTerms: value,
+                            );
                           },
                         ),
                         const SizedBox(height: 15),
@@ -121,9 +120,7 @@ class _OnBoardingTosViewState extends State<OnBoardingTosView> {
             ),
             floatingActionButton: state.scrollIsOver
                 ? null
-                : ScrollDownButton(
-                    onPressed: onScrollDownButtonPressed,
-                  ),
+                : ScrollDownButton(onPressed: onScrollDownButtonPressed),
           ),
         );
       },

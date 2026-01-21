@@ -18,14 +18,10 @@ class SendReceiveHomeState extends Equatable {
   final StateMessage? message;
 
   SendReceiveHomeState loading() {
-    return copyWith(
-      status: AppStatus.loading,
-    );
+    return copyWith(status: AppStatus.loading);
   }
 
-  SendReceiveHomeState error({
-    required MessageHandler messageHandler,
-  }) {
+  SendReceiveHomeState error({required MessageHandler messageHandler}) {
     return copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
@@ -64,10 +60,5 @@ class SendReceiveHomeState extends Equatable {
   Map<String, dynamic> toJson() => _$SendReceiveHomeStateToJson(this);
 
   @override
-  List<Object?> get props => [
-        status,
-        message,
-        operations,
-        selectedToken,
-      ];
+  List<Object?> get props => [status, message, operations, selectedToken];
 }

@@ -22,22 +22,20 @@ class ActiviateBiometricsPage extends StatelessWidget {
     required void Function({required bool isEnabled}) onAction,
     required bool isFromOnboarding,
     required LocalAuthApi localAuthApi,
-  }) =>
-      RightToLeftRoute<void>(
-        builder: (context) => ActiviateBiometricsPage(
-          onAction: onAction,
-          isFromOnboarding: isFromOnboarding,
-          localAuthApi: localAuthApi,
-        ),
-        settings: const RouteSettings(name: '/activiateBiometricsPage'),
-      );
+  }) => RightToLeftRoute<void>(
+    builder: (context) => ActiviateBiometricsPage(
+      onAction: onAction,
+      isFromOnboarding: isFromOnboarding,
+      localAuthApi: localAuthApi,
+    ),
+    settings: const RouteSettings(name: '/activiateBiometricsPage'),
+  );
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ActiveBiometricsCubit(
-        profileCubit: context.read<ProfileCubit>(),
-      ),
+      create: (context) =>
+          ActiveBiometricsCubit(profileCubit: context.read<ProfileCubit>()),
       child: ActivateBiometricsView(
         isFromOnboarding: isFromOnboarding,
         onAction: onAction,
@@ -79,17 +77,12 @@ class _ActivateBiometricsViewState extends State<ActivateBiometricsView> {
       builder: (context, isEnabled) {
         return BasePage(
           scrollView: false,
-          padding: const EdgeInsets.symmetric(
-            horizontal: Sizes.spaceXSmall,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: Sizes.spaceXSmall),
           titleLeading: const BackLeadingButton(),
           body: Column(
             children: [
               if (widget.isFromOnboarding) ...[
-                MStepper(
-                  step: 1,
-                  totalStep: byPassScreen ? 2 : 3,
-                ),
+                MStepper(step: 1, totalStep: byPassScreen ? 2 : 3),
                 const Spacer(),
               ],
               Text(
@@ -103,14 +96,12 @@ class _ActivateBiometricsViewState extends State<ActivateBiometricsView> {
                 fit: BoxFit.fitHeight,
                 height: MediaQuery.of(context).size.longestSide * 0.26,
               ),
-              const SizedBox(
-                height: Sizes.spaceSmall,
-              ),
+              const SizedBox(height: Sizes.spaceSmall),
               BiometricsSwitch(
                 value: isEnabled,
                 onChange: (value) async {
-                  final hasBiometrics =
-                      await widget.localAuthApi.hasBiometrics();
+                  final hasBiometrics = await widget.localAuthApi
+                      .hasBiometrics();
 
                   if (hasBiometrics) {
                     final result = await widget.localAuthApi.authenticate(
@@ -118,9 +109,9 @@ class _ActivateBiometricsViewState extends State<ActivateBiometricsView> {
                     );
 
                     if (result) {
-                      context
-                          .read<ActiveBiometricsCubit>()
-                          .updateSwitch(value: value);
+                      context.read<ActiveBiometricsCubit>().updateSwitch(
+                        value: value,
+                      );
                     }
                   } else {
                     await showDialog<bool>(

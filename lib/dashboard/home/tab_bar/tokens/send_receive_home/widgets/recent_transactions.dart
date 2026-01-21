@@ -35,9 +35,7 @@ class RecentTransactions extends StatelessWidget {
               l10n.recentTransactions,
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            const SizedBox(
-              height: Sizes.spaceNormal,
-            ),
+            const SizedBox(height: Sizes.spaceNormal),
             Expanded(
               child: operations.isEmpty
                   ? Container()
@@ -54,8 +52,9 @@ class RecentTransactions extends StatelessWidget {
                                 .read<ManageNetworkCubit>()
                                 .state
                                 .network;
-                            network
-                                .openBlockchainExplorer(operations[index].hash);
+                            network.openBlockchainExplorer(
+                              operations[index].hash,
+                            );
                           },
                         ),
                         separatorBuilder: (_, __) {
@@ -65,10 +64,9 @@ class RecentTransactions extends StatelessWidget {
                             ),
                             child: Divider(
                               height: 0.2,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withValues(alpha: 0.12),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurface.withValues(alpha: 0.12),
                             ),
                           );
                         },

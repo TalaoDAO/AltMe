@@ -65,9 +65,9 @@ class RestoreCredentialState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        message,
-        recoveredCredentialLength,
-        backupFilePath,
-      ];
+    status,
+    message,
+    recoveredCredentialLength,
+    backupFilePath,
+  ];
 }

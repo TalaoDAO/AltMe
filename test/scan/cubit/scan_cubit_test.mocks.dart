@@ -703,13 +703,37 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
           ) as _i16.Future<List<_i5.CredentialModel>>);
 
   @override
-  _i16.Future<void> insertAssociatedWalletCredential(
+  _i16.Future<void> addCryptoProofsPerProfile(
           {required _i10.CryptoAccountData? cryptoAccountData}) =>
       (super.noSuchMethod(
         Invocation.method(
-          #insertAssociatedWalletCredential,
+          #addCryptoProofsPerProfile,
           [],
           {#cryptoAccountData: cryptoAccountData},
+        ),
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
+
+  @override
+  _i16.Future<void> addCryptoProofsPerFormat({
+    required List<_i9.VCFormatType>? formatsSupported,
+    required _i10.CryptoAccountData? cryptoAccountData,
+    required String? did,
+    required Map<String, dynamic>? private,
+    required bool? showStatus,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #addCryptoProofsPerFormat,
+          [],
+          {
+            #formatsSupported: formatsSupported,
+            #cryptoAccountData: cryptoAccountData,
+            #did: did,
+            #private: private,
+            #showStatus: showStatus,
+          },
         ),
         returnValue: _i16.Future<void>.value(),
         returnValueForMissingStub: _i16.Future<void>.value(),
@@ -726,6 +750,15 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
         returnValue: _i16.Future<void>.value(),
         returnValueForMissingStub: _i16.Future<void>.value(),
       ) as _i16.Future<void>);
+
+  @override
+  void emitError(_i15.MessageHandler? error) => super.noSuchMethod(
+        Invocation.method(
+          #emitError,
+          [error],
+        ),
+        returnValueForMissingStub: null,
+      );
 
   @override
   void emit(_i12.CredentialsState? state) => super.noSuchMethod(
@@ -1275,13 +1308,13 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
       ) as _i16.Future<void>);
 
   @override
-  _i16.Future<_i5.ProfileModel> getTrustedList(
+  _i16.Future<_i5.ProfileModel> addTrustedList(
     String? trustedListUrl,
     _i5.ProfileModel? profileModel,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #getTrustedList,
+          #addTrustedList,
           [
             trustedListUrl,
             profileModel,
@@ -1290,7 +1323,7 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
         returnValue: _i16.Future<_i5.ProfileModel>.value(_FakeProfileModel_16(
           this,
           Invocation.method(
-            #getTrustedList,
+            #addTrustedList,
             [
               trustedListUrl,
               profileModel,
@@ -1300,11 +1333,15 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
       ) as _i16.Future<_i5.ProfileModel>);
 
   @override
-  _i16.Future<void> update(_i5.ProfileModel? profileModel) =>
+  _i16.Future<void> update(
+    _i5.ProfileModel? profileModel, {
+    _i15.AppStatus? status,
+  }) =>
       (super.noSuchMethod(
         Invocation.method(
           #update,
           [profileModel],
+          {#status: status},
         ),
         returnValue: _i16.Future<void>.value(),
         returnValueForMissingStub: _i16.Future<void>.value(),
@@ -1318,18 +1355,6 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
           #setWalletProtectionType,
           [],
           {#walletProtectionType: walletProtectionType},
-        ),
-        returnValue: _i16.Future<void>.value(),
-        returnValueForMissingStub: _i16.Future<void>.value(),
-      ) as _i16.Future<void>);
-
-  @override
-  _i16.Future<void> setWalletType({required _i15.WalletType? walletType}) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #setWalletType,
-          [],
-          {#walletType: walletType},
         ),
         returnValue: _i16.Future<void>.value(),
         returnValueForMissingStub: _i16.Future<void>.value(),
@@ -1415,6 +1440,7 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
   _i16.Future<void> setProfileSetting({
     required _i5.ProfileSetting? profileSetting,
     required _i15.ProfileType? profileType,
+    required _i15.WalletType? walletType,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1423,6 +1449,7 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
           {
             #profileSetting: profileSetting,
             #profileType: profileType,
+            #walletType: walletType,
           },
         ),
         returnValue: _i16.Future<void>.value(),
@@ -1440,11 +1467,15 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
       ) as _i16.Future<void>);
 
   @override
-  _i16.Future<void> setProfile(_i15.ProfileType? profileType) =>
+  _i16.Future<void> setProfile(
+    _i15.ProfileType? profileType, {
+    _i15.AppStatus? status,
+  }) =>
       (super.noSuchMethod(
         Invocation.method(
           #setProfile,
           [profileType],
+          {#status: status},
         ),
         returnValue: _i16.Future<void>.value(),
         returnValueForMissingStub: _i16.Future<void>.value(),

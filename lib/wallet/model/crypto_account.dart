@@ -6,9 +6,7 @@ part 'crypto_account.g.dart';
 
 @JsonSerializable()
 class CryptoAccount extends Equatable {
-  const CryptoAccount({
-    this.data = const [],
-  });
+  const CryptoAccount({this.data = const []});
 
   factory CryptoAccount.fromJson(Map<String, dynamic> json) =>
       _$CryptoAccountFromJson(json);

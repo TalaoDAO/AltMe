@@ -381,7 +381,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         if (trustedListUrl != null &&
             trustedListUrl.isNotEmpty &&
             needsUpdate) {
-          profileModel = await getTrustedList(trustedListUrl, profileModel);
+          profileModel = await addTrustedList(trustedListUrl, profileModel);
         }
       }
       profileModel = profileModel.copyWith(oidc4VCIStack: oidc4VCIStack);
@@ -399,7 +399,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  Future<ProfileModel> getTrustedList(
+  Future<ProfileModel> addTrustedList(
     String trustedListUrl,
     ProfileModel profileModel,
   ) async {
@@ -429,7 +429,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  Future<void> update(ProfileModel profileModel) async {
+  Future<void> update(ProfileModel profileModel, {AppStatus? status}) async {
     emit(state.loading());
     final log = getLogger('ProfileCubit - update');
 
@@ -459,7 +459,12 @@ class ProfileCubit extends Cubit<ProfileState> {
         profileModel.profileType.toString(),
       );
 
-      emit(state.copyWith(model: profileModel, status: AppStatus.success));
+      emit(
+        state.copyWith(
+          model: profileModel,
+          status: status ?? AppStatus.success,
+        ),
+      );
     } catch (e, s) {
       log.e('something went wrong', error: e, stackTrace: s);
 
@@ -479,11 +484,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     final profileModel = state.model.copyWith(
       walletProtectionType: walletProtectionType,
     );
-    await update(profileModel);
-  }
-
-  Future<void> setWalletType({required WalletType walletType}) async {
-    final profileModel = state.model.copyWith(walletType: walletType);
     await update(profileModel);
   }
 
@@ -523,7 +523,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             'Trusted list URL is not set in the profile settings.',
           );
         }
-        trustedListContent = (await getTrustedList(
+        trustedListContent = (await addTrustedList(
           trustedListUrl,
           state.model,
         )).trustedList;
@@ -598,6 +598,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> setProfileSetting({
     required ProfileSetting profileSetting,
     required ProfileType profileType,
+    required WalletType? walletType,
   }) async {
     final externalIssuers =
         profileSetting.discoverCardsOptions?.displayExternalIssuer;
@@ -674,17 +675,15 @@ class ProfileCubit extends Cubit<ProfileState> {
       }
     }
     late TrustedList? trustedListContent;
-    final trustedList = profileSetting.walletSecurityOptions.trustedList;
-    if (trustedList) {
+    final hasTrustedList = profileSetting.walletSecurityOptions.trustedList;
+    if (hasTrustedList) {
       final trustedListUrl =
           state.model.profileSetting.walletSecurityOptions.trustedListUrl;
       if (trustedListUrl == null || trustedListUrl.isEmpty) {
         throw Exception('Trusted list URL is not set in the profile settings.');
       }
-      trustedListContent = (await getTrustedList(
-        trustedListUrl,
-        state.model,
-      )).trustedList;
+      final trustedList = await addTrustedList(trustedListUrl, state.model);
+      trustedListContent = trustedList.trustedList;
     } else {
       trustedListContent = null;
     }
@@ -705,6 +704,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       profileType: profileType,
       enterpriseWalletName: profileSetting.generalOptions.profileName,
       trustedList: trustedListContent,
+      walletType: walletType,
     );
     await update(profileModel);
   }
@@ -715,7 +715,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     return super.close();
   }
 
-  Future<void> setProfile(ProfileType profileType) async {
+  Future<void> setProfile(ProfileType profileType, {AppStatus? status}) async {
     final previousProfileType = state.model.profileType;
     if (previousProfileType == ProfileType.custom) {
       await secureStorageProvider.set(
@@ -745,6 +745,7 @@ class ProfileCubit extends Cubit<ProfileState> {
                 .customOidc4vcProfile
                 .clientSecret,
           ),
+          status: status,
         );
       case ProfileType.ebsiV4:
         await update(
@@ -787,6 +788,7 @@ class ProfileCubit extends Cubit<ProfileState> {
                 .customOidc4vcProfile
                 .clientSecret,
           ),
+          status: status,
         );
 
       case ProfileType.diipv3:
@@ -809,6 +811,7 @@ class ProfileCubit extends Cubit<ProfileState> {
                 .customOidc4vcProfile
                 .clientSecret,
           ),
+          status: status,
         );
       case ProfileType.diipv4:
         await update(
@@ -830,6 +833,7 @@ class ProfileCubit extends Cubit<ProfileState> {
                 .customOidc4vcProfile
                 .clientSecret,
           ),
+          status: status,
         );
       case ProfileType.custom:
         final String? customProfileSettingBackup = await secureStorageProvider
@@ -851,6 +855,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             profileType: profileType,
             profileSetting: customProfileSetting,
           ),
+          status: status,
         );
       case ProfileType.enterprise:
         final String enterpriseProfileSettingData =
@@ -872,6 +877,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             enterpriseWalletName:
                 enterpriseProfileSetting.generalOptions.profileName,
           ),
+          status: status,
         );
       case ProfileType.europeanWallet:
         final profileSetting = await _setupWalletProfile(
@@ -885,6 +891,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             profileType: profileType,
             profileSetting: profileSetting,
           ),
+          status: status,
         );
         emit(state.copyWith(status: AppStatus.addEuropeanProfile));
 
@@ -900,6 +907,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             profileType: profileType,
             profileSetting: profileSetting,
           ),
+          status: status,
         );
         emit(state.copyWith(status: AppStatus.addInjiProfile));
     }

@@ -48,9 +48,9 @@ class KeyVerifiedView extends StatelessWidget {
                 l10n.mnemonicsVerifiedMessage,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.normal,
-                      color: Theme.of(context).colorScheme.onTertiary,
-                    ),
+                  fontWeight: FontWeight.normal,
+                  color: Theme.of(context).colorScheme.onTertiary,
+                ),
               ),
               const SizedBox(height: Sizes.space3XLarge),
             ],

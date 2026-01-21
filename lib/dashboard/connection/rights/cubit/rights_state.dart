@@ -2,10 +2,7 @@ part of 'rights_cubit.dart';
 
 @JsonSerializable()
 class RightsState extends Equatable {
-  const RightsState({
-    this.status = AppStatus.init,
-    this.message,
-  });
+  const RightsState({this.status = AppStatus.init, this.message});
 
   factory RightsState.fromJson(Map<String, dynamic> json) =>
       _$RightsStateFromJson(json);
@@ -17,9 +14,7 @@ class RightsState extends Equatable {
     return const RightsState(status: AppStatus.loading);
   }
 
-  RightsState error({
-    required MessageHandler messageHandler,
-  }) {
+  RightsState error({required MessageHandler messageHandler}) {
     return RightsState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),

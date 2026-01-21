@@ -11,11 +11,13 @@ bool checkPresentationIsTrusted({
   // Check in jwt.payload['presentation_definition']['input_descriptors']['constraints']['fields']
   // that an element has path = ["$.vct"] and filter['const'] = one of
   // the vcTypes in the trustedEntity.
-  final inputDescriptors = jwt.payload['presentation_definition']
-      ['input_descriptors'] as List<dynamic>?;
+  final inputDescriptors =
+      jwt.payload['presentation_definition']['input_descriptors']
+          as List<dynamic>?;
   if (inputDescriptors == null) {
     throw Exception(
-        'No input descriptors found in the presentation definition',);
+      'No input descriptors found in the presentation definition',
+    );
   }
   for (final inputDescriptor in inputDescriptors) {
     final constraints = inputDescriptor['constraints'];
@@ -42,6 +44,7 @@ bool checkPresentationIsTrusted({
   // If no matching vcType is found, throw an exception.
 
   throw Exception(
-      // ignore: lines_longer_than_80_chars
-      'No matching vcType found in the presentation definition for the trusted entity',);
+    // ignore: lines_longer_than_80_chars
+    'No matching vcType found in the presentation definition for the trusted entity',
+  );
 }

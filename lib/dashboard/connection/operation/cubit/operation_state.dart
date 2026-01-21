@@ -29,9 +29,7 @@ class OperationState extends Equatable {
     return copyWith(status: AppStatus.loading);
   }
 
-  OperationState error({
-    required MessageHandler messageHandler,
-  }) {
+  OperationState error({required MessageHandler messageHandler}) {
     return copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
@@ -65,13 +63,13 @@ class OperationState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        message,
-        amount,
-        totalFee,
-        bakerFee,
-        usdRate,
-        cryptoAccountData,
-        dAppName,
-      ];
+    status,
+    message,
+    amount,
+    totalFee,
+    bakerFee,
+    usdRate,
+    cryptoAccountData,
+    dAppName,
+  ];
 }

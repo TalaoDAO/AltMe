@@ -47,12 +47,12 @@ extension ResponseStringX on ResponseString {
         return globalMessage.RESPONSE_STRING_FAILED_TO_SAVE_PROFILE;
 
       case ResponseString
-            .RESPONSE_STRING_FAILED_TO_CREATE_SELF_ISSUED_CREDENTIAL:
+          .RESPONSE_STRING_FAILED_TO_CREATE_SELF_ISSUED_CREDENTIAL:
         return globalMessage
             .RESPONSE_STRING_FAILED_TO_CREATE_SELF_ISSUED_CREDENTIAL;
 
       case ResponseString
-            .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL:
+          .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL:
         return globalMessage
             .RESPONSE_STRING_FAILED_TO_VERIFY_SELF_ISSUED_CREDENTIAL;
 
@@ -72,17 +72,17 @@ extension ResponseStringX on ResponseString {
         return globalMessage.RESPONSE_STRING_credentialSuccessfullyExported;
 
       case ResponseString
-            .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE:
+          .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE:
         return globalMessage
             .RESPONSE_STRING_RECOVERY_CREDENTIAL_JSON_FORMAT_ERROR_MESSAGE;
 
       case ResponseString
-            .RESPONSE_STRING_RECOVERY_CREDENTIAL_AUTH_ERROR_MESSAGE:
+          .RESPONSE_STRING_RECOVERY_CREDENTIAL_AUTH_ERROR_MESSAGE:
         return globalMessage
             .RESPONSE_STRING_RECOVERY_CREDENTIAL_AUTH_ERROR_MESSAGE;
 
       case ResponseString
-            .RESPONSE_STRING_RECOVERY_CREDENTIAL_DEFAULT_ERROR_MESSAGE:
+          .RESPONSE_STRING_RECOVERY_CREDENTIAL_DEFAULT_ERROR_MESSAGE:
         return globalMessage
             .RESPONSE_STRING_RECOVERY_CREDENTIAL_DEFAULT_ERROR_MESSAGE;
 
@@ -90,17 +90,17 @@ extension ResponseStringX on ResponseString {
         return globalMessage.RESPONSE_STRING_CREDENTIAL_ADDED_MESSAGE;
 
       case ResponseString
-            .RESPONSE_STRING_CREDENTIAL_DETAIL_EDIT_SUCCESS_MESSAGE:
+          .RESPONSE_STRING_CREDENTIAL_DETAIL_EDIT_SUCCESS_MESSAGE:
         return globalMessage
             .RESPONSE_STRING_CREDENTIAL_DETAIL_EDIT_SUCCESS_MESSAGE;
 
       case ResponseString
-            .RESPONSE_STRING_CREDENTIAL_DETAIL_DELETE_SUCCESS_MESSAGE:
+          .RESPONSE_STRING_CREDENTIAL_DETAIL_DELETE_SUCCESS_MESSAGE:
         return globalMessage
             .RESPONSE_STRING_CREDENTIAL_DETAIL_DELETE_SUCCESS_MESSAGE;
 
       case ResponseString
-            .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING:
+          .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING:
         return globalMessage
             .RESPONSE_STRING_CREDENTIAL_VERIFICATION_RETURN_WARNING;
 
@@ -115,7 +115,7 @@ extension ResponseStringX on ResponseString {
             .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER;
 
       case ResponseString
-            .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL:
+          .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL:
         return globalMessage
             .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL;
 
@@ -126,12 +126,12 @@ extension ResponseStringX on ResponseString {
         return globalMessage.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED;
 
       case ResponseString
-            .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE:
+          .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE:
         return globalMessage
             .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE;
 
       case ResponseString
-            .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER:
+          .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER:
         return globalMessage
             .RESPONSE_STRING_AN_ERROR_OCCURRED_WHILE_CONNECTING_TO_THE_SERVER;
 
@@ -139,7 +139,7 @@ extension ResponseStringX on ResponseString {
         return globalMessage.RESPONSE_STRING_ERROR_GENERATING_KEY;
 
       case ResponseString
-            .RESPONSE_STRING_FAILED_TO_SAVE_MNEMONIC_PLEASE_TRY_AGAIN:
+          .RESPONSE_STRING_FAILED_TO_SAVE_MNEMONIC_PLEASE_TRY_AGAIN:
         return globalMessage
             .RESPONSE_STRING_FAILED_TO_SAVE_MNEMONIC_PLEASE_TRY_AGAIN;
 
@@ -162,7 +162,7 @@ extension ResponseStringX on ResponseString {
         return globalMessage.RESPONSE_STRING_DID_KEY_NOT_RESOLVED;
 
       case ResponseString
-            .RESPONSE_STRING_DID_KEY_AND_RSA_KEY_VERIFIED_SUCCESSFULLY:
+          .RESPONSE_STRING_DID_KEY_AND_RSA_KEY_VERIFIED_SUCCESSFULLY:
         return globalMessage
             .RESPONSE_STRING_DID_KEY_AND_RSA_KEY_VERIFIED_SUCCESSFULLY;
 
@@ -498,8 +498,8 @@ extension ResponseStringX on ResponseString {
         return globalMessage.RESPONSE_STRING_theWalletIsSuspended;
 
       case ResponseString.RESPONSE_STRING_couldNotFindTheAccountWithThisAddress:
-        return globalMessage
-            .RESPONSE_STRING_couldNotFindTheAccountWithThisAddress(
+        // ignore: lines_longer_than_80_chars
+        return globalMessage.RESPONSE_STRING_couldNotFindTheAccountWithThisAddress(
           injectedMessage ?? '',
         );
 
@@ -511,7 +511,7 @@ extension ResponseStringX on ResponseString {
             .RESPONSE_STRING_vpFormatsNotSupportedErrorDescription;
 
       case ResponseString
-            .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription:
+          .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription:
         return globalMessage
             .RESPONSE_STRING_invalidPresentationDefinitionUriErrorDescription;
 

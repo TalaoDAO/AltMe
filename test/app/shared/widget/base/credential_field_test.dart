@@ -34,8 +34,9 @@ void main() {
 
     testWidgets('verify property is correct', (WidgetTester tester) async {
       await tester.pumpWidget(makeTestableWidget());
-      final credentialFieldWidget =
-          tester.widget<CredentialField>(find.byType(CredentialField));
+      final credentialFieldWidget = tester.widget<CredentialField>(
+        find.byType(CredentialField),
+      );
       expect(credentialFieldWidget.value, 'value');
       expect(credentialFieldWidget.title, 'title');
       expect(credentialFieldWidget.key, isA<GlobalKey>());
@@ -49,8 +50,9 @@ void main() {
       expect(findDisplayCredentialField, findsOneWidget);
     });
 
-    testWidgets('verify DisplayCredentialField is gone when title is null',
-        (WidgetTester tester) async {
+    testWidgets('verify DisplayCredentialField is gone when title is null', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(makeTestableWidgetWithEmptyValue());
       final findDisplayCredentialField = find.byType(DisplayCredentialField);
       expect(findDisplayCredentialField, findsNothing);

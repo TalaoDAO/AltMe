@@ -60,17 +60,15 @@ class CredentialBaseWidget extends StatelessWidget {
                       children: <InlineSpan>[
                         TextSpan(
                           text: '${l10n.providedBy} ',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Colors.white,
-                                  ),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.copyWith(color: Colors.white),
                         ),
                         TextSpan(
                           text: issuerName,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Colors.white,
-                                  ),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.copyWith(color: Colors.white),
                         ),
                       ],
                     ),
@@ -87,9 +85,9 @@ class CredentialBaseWidget extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: MyText(
                       value!,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.white,
-                          ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium?.copyWith(color: Colors.white),
                     ),
                   ),
                 ),
@@ -102,9 +100,9 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     l10n.issuedOn,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.white,
-                        ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Colors.white),
                   ),
                 ),
               ),
@@ -116,9 +114,9 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     issuanceDate!,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.white,
-                        ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Colors.white),
                   ),
                 ),
               ),
@@ -130,9 +128,9 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     l10n.expirationDate,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.white,
-                        ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Colors.white),
                   ),
                 ),
               ),
@@ -144,9 +142,9 @@ class CredentialBaseWidget extends StatelessWidget {
                   widthFactor: 0.4,
                   child: MyText(
                     expirationDate!,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.white,
-                        ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Colors.white),
                   ),
                 ),
               ),
@@ -166,10 +164,7 @@ class CredentialBaseWidgetDelegate extends MultiChildLayoutDelegate {
   void performLayout(Size size) {
     if (hasChild('title')) {
       layoutChild('title', BoxConstraints.loose(size));
-      positionChild(
-        'title',
-        Offset(size.width * 0.06, size.height * 0.08),
-      );
+      positionChild('title', Offset(size.width * 0.06, size.height * 0.08));
     }
 
     if (hasChild('provided-by')) {
@@ -182,18 +177,12 @@ class CredentialBaseWidgetDelegate extends MultiChildLayoutDelegate {
 
     if (hasChild('value')) {
       layoutChild('value', BoxConstraints.loose(size));
-      positionChild(
-        'value',
-        Offset(size.width * 0.06, size.height * 0.48),
-      );
+      positionChild('value', Offset(size.width * 0.06, size.height * 0.48));
     }
 
     if (hasChild('issued-on')) {
       layoutChild('issued-on', BoxConstraints.loose(size));
-      positionChild(
-        'issued-on',
-        Offset(size.width * 0.06, size.height * 0.73),
-      );
+      positionChild('issued-on', Offset(size.width * 0.06, size.height * 0.73));
     }
     if (hasChild('issued-on-value')) {
       layoutChild('issued-on-value', BoxConstraints.loose(size));

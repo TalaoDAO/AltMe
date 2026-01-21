@@ -14,13 +14,8 @@ class Did extends StatelessWidget {
     final l10n = context.l10n;
     return Column(
       children: [
-        Text(
-          l10n.did,
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
-        const SizedBox(
-          height: Sizes.spaceNormal,
-        ),
+        Text(l10n.did, style: Theme.of(context).textTheme.headlineSmall),
+        const SizedBox(height: Sizes.spaceNormal),
         Text(
           did,
           textAlign: TextAlign.center,
@@ -33,11 +28,7 @@ class Did extends StatelessWidget {
             children: [
               CopyButton(
                 onTap: () async {
-                  await Clipboard.setData(
-                    ClipboardData(
-                      text: did,
-                    ),
-                  );
+                  await Clipboard.setData(ClipboardData(text: did));
                   AlertMessage.showStateMessage(
                     context: context,
                     stateMessage: StateMessage.success(

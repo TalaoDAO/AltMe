@@ -40,9 +40,7 @@ class WalletSecurityView extends StatelessWidget {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const BackLeadingButton(
-                padding: EdgeInsets.zero,
-              ),
+              const BackLeadingButton(padding: EdgeInsets.zero),
               const DrawerLogo(),
               DrawerItem(
                 title: l10n.protectYourWallet,
@@ -53,8 +51,9 @@ class WalletSecurityView extends StatelessWidget {
                     title: l10n.typeYourPINCodeToAuthenticate,
                     localAuthApi: LocalAuthApi(),
                     onSuccess: () {
-                      Navigator.of(context)
-                          .push<void>(ProtectWalletPage.route());
+                      Navigator.of(
+                        context,
+                      ).push<void>(ProtectWalletPage.route());
                     },
                   );
                 },
@@ -65,7 +64,8 @@ class WalletSecurityView extends StatelessWidget {
                     ? l10n.showWalletRecoveryPhraseSubtitle
                     : l10n.showWalletRecoveryPhraseSubtitle2,
                 onTap: () async {
-                  final confirm = await showDialog<bool>(
+                  final confirm =
+                      await showDialog<bool>(
                         context: context,
                         builder: (_) => ConfirmDialog(
                           title: l10n.warningDialogTitle,
@@ -82,21 +82,25 @@ class WalletSecurityView extends StatelessWidget {
                       title: l10n.typeYourPINCodeToAuthenticate,
                       localAuthApi: LocalAuthApi(),
                       onSuccess: () {
-                        Navigator.of(context)
-                            .push<void>(RecoveryKeyPage.route());
+                        Navigator.of(
+                          context,
+                        ).push<void>(RecoveryKeyPage.route());
                       },
                     );
                   }
                 },
               ),
-              if (state.model.profileSetting.walletSecurityOptions
+              if (state
+                  .model
+                  .profileSetting
+                  .walletSecurityOptions
                   .displaySecurityAdvancedSettings)
                 DrawerItem(
                   title: l10n.advancedSecuritySettings,
                   onTap: () {
-                    Navigator.of(context).push<void>(
-                      AdvancedSecuritySettingsMenu.route(),
-                    );
+                    Navigator.of(
+                      context,
+                    ).push<void>(AdvancedSecuritySettingsMenu.route());
                   },
                 ),
               DrawerItem(
@@ -111,8 +115,9 @@ class WalletSecurityView extends StatelessWidget {
                         BackupMnemonicPage.route(
                           title: l10n.backupCredential,
                           isValidCallback: () {
-                            Navigator.of(context)
-                                .push<void>(BackupCredentialPage.route());
+                            Navigator.of(
+                              context,
+                            ).push<void>(BackupCredentialPage.route());
                           },
                         ),
                       );

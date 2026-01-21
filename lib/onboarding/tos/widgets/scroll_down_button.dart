@@ -18,14 +18,8 @@ class ScrollDownButton extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text(
-              l10n.scroll,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              size: 24,
-            ),
+            Text(l10n.scroll, style: Theme.of(context).textTheme.bodySmall),
+            const Icon(Icons.keyboard_arrow_down_rounded, size: 24),
           ],
         ),
       ),

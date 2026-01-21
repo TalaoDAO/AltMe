@@ -48,9 +48,7 @@ class SelectNetworkFeeItem extends StatelessWidget {
             '''${networkFeeModel.totalFee.formatNumber} ${networkFeeModel.tokenSymbol}''',
             style: Theme.of(context).textTheme.bodySmall,
           ),
-          const SizedBox(
-            height: Sizes.space2XSmall,
-          ),
+          const SizedBox(height: Sizes.space2XSmall),
           MyText(
             '''\$${networkFeeModel.feeInUSD == 0.0 ? '--.--' : networkFeeModel.feeInUSD.decimalNumber(4).formatNumber}''',
             style: Theme.of(context).textTheme.bodyMedium,

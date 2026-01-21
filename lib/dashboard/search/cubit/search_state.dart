@@ -34,9 +34,7 @@ class SearchState extends Equatable {
     );
   }
 
-  SearchState populate({
-    List<CredentialModel>? credentials,
-  }) {
+  SearchState populate({List<CredentialModel>? credentials}) {
     return SearchState(
       status: AppStatus.populate,
       credentials: credentials ?? this.credentials,

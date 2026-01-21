@@ -56,9 +56,9 @@ class MyElevatedButton extends StatelessWidget {
               child: MyText(
                 text.toUpperCase(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    ),
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
               ),
             )
           : ElevatedButton.icon(
@@ -81,9 +81,9 @@ class MyElevatedButton extends StatelessWidget {
               label: MyText(
                 text.toUpperCase(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    ),
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
               ),
             ),
     );
@@ -117,9 +117,7 @@ ButtonStyle elevatedStyleFrom({
       ),
     ),
     shape: WidgetStateProperty.all(
-      RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(borderRadius),
-      ),
+      RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
     ),
   );
 }

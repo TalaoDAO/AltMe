@@ -36,21 +36,21 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   final WalletCubit walletCubit;
 
   Map<String, dynamic Function(String, dynamic)> get sessionRequestHandlers => {
-        Parameters.ETH_SIGN: ethSign,
-        Parameters.ETH_SIGN_TRANSACTION: ethSignTransaction,
-        Parameters.ETH_SIGN_TYPE_DATA: ethSignTypedData,
-        Parameters.ETH_SIGN_TYPE_DATA_V4: ethSignTypedDataV4,
-        // SupportedEVMMethods.switchChain.name: switchChain,
-        // 'wallet_addEthereumChain': addChain,
-        Parameters.TEZOS_GET_ACCOUNTS: tezosGetAccounts,
-        Parameters.TEZOS_SIGN: tezosSign,
-        Parameters.TEZOS_SEND: tezosSend,
-      };
+    Parameters.ETH_SIGN: ethSign,
+    Parameters.ETH_SIGN_TRANSACTION: ethSignTransaction,
+    Parameters.ETH_SIGN_TYPE_DATA: ethSignTypedData,
+    Parameters.ETH_SIGN_TYPE_DATA_V4: ethSignTypedDataV4,
+    // SupportedEVMMethods.switchChain.name: switchChain,
+    // 'wallet_addEthereumChain': addChain,
+    Parameters.TEZOS_GET_ACCOUNTS: tezosGetAccounts,
+    Parameters.TEZOS_SIGN: tezosSign,
+    Parameters.TEZOS_SEND: tezosSend,
+  };
 
   Map<String, dynamic Function(String, dynamic)> get methodRequestHandlers => {
-        Parameters.PERSONAL_SIGN: personalSign,
-        Parameters.ETH_SEND_TRANSACTION: ethSendTransaction,
-      };
+    Parameters.PERSONAL_SIGN: personalSign,
+    Parameters.ETH_SEND_TRANSACTION: ethSendTransaction,
+  };
 
   final log = getLogger('WalletConnectCubit');
 
@@ -62,8 +62,9 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     try {
       _reownWalletKit = null;
 
-      final String? savedCryptoAccount =
-          await secureStorageProvider.get(SecureStorageKeys.cryptoAccount);
+      final String? savedCryptoAccount = await secureStorageProvider.get(
+        SecureStorageKeys.cryptoAccount,
+      );
 
       log.i('Create the web3wallet');
       await dotenv.load();
@@ -84,13 +85,15 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       );
 
       log.i('Setup our listeners');
-      _reownWalletKit!.core.pairing.onPairingInvalid
-          .subscribe(_onPairingInvalid);
+      _reownWalletKit!.core.pairing.onPairingInvalid.subscribe(
+        _onPairingInvalid,
+      );
       _reownWalletKit!.core.pairing.onPairingCreate.subscribe(_onPairingCreate);
       _reownWalletKit!.pairings.onSync.subscribe(_onPairingsSync);
       _reownWalletKit!.onSessionProposal.subscribe(_onSessionProposal);
-      _reownWalletKit!.onSessionProposalError
-          .subscribe(_onSessionProposalError);
+      _reownWalletKit!.onSessionProposalError.subscribe(
+        _onSessionProposalError,
+      );
       _reownWalletKit!.onSessionConnect.subscribe(_onSessionConnect);
       _reownWalletKit!.onSessionAuthRequest.subscribe(_onAuthRequest);
 
@@ -103,8 +106,9 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         //load all the content of walletAddress
         final cryptoAccountJson =
             jsonDecode(savedCryptoAccount) as Map<String, dynamic>;
-        final CryptoAccount cryptoAccount =
-            CryptoAccount.fromJson(cryptoAccountJson);
+        final CryptoAccount cryptoAccount = CryptoAccount.fromJson(
+          cryptoAccountJson,
+        );
 
         final cryptoAccounts = cryptoAccount.data.toList();
 
@@ -188,9 +192,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     log.i('walletConnectUri - $walletConnectUri');
 
     final Uri uriData = Uri.parse(walletConnectUri);
-    final PairingInfo pairingInfo = await _reownWalletKit!.pair(
-      uri: uriData,
-    );
+    final PairingInfo pairingInfo = await _reownWalletKit!.pair(uri: uriData);
     log.i(pairingInfo);
   }
 
@@ -285,9 +287,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       log.i(args);
       //sessions.value.add(args.session);
 
-      final savedDappData = SavedDappData(
-        sessionData: args.session,
-      );
+      final savedDappData = SavedDappData(sessionData: args.session);
 
       log.i(savedDappData.toJson());
       connectedDappRepository.insert(savedDappData);
@@ -622,10 +622,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
     final currentAccount = walletCubit.state.currentAccount!;
 
     final pRequest = _reownWalletKit!.pendingRequests.getAll().last;
-    var response = JsonRpcResponse(
-      id: pRequest.id,
-      jsonrpc: '2.0',
-    );
+    var response = JsonRpcResponse(id: pRequest.id, jsonrpc: '2.0');
 
     final isTezos = currentAccount.blockchainType == BlockchainType.tezos;
 
@@ -641,7 +638,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
             'algo': 'ed25519',
             'pubkey': pubkey,
             'address': currentAccount.walletAddress,
-          }
+          },
         ],
       );
     } else {
@@ -686,9 +683,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
         error: const JsonRpcError(code: 5001, message: 'User rejected method'),
       );
     } else {
-      response = response.copyWith(
-        result: {'signature': result},
-      );
+      response = response.copyWith(result: {'signature': result});
     }
 
     await _reownWalletKit!.respondSessionRequest(
@@ -836,12 +831,14 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
 
   Future<void> dispose() async {
     log.i('web3wallet dispose');
-    _reownWalletKit!.core.pairing.onPairingInvalid
-        .unsubscribe(_onPairingInvalid);
+    _reownWalletKit!.core.pairing.onPairingInvalid.unsubscribe(
+      _onPairingInvalid,
+    );
     _reownWalletKit!.pairings.onSync.unsubscribe(_onPairingsSync);
     _reownWalletKit!.onSessionProposal.unsubscribe(_onSessionProposal);
-    _reownWalletKit!.onSessionProposalError
-        .unsubscribe(_onSessionProposalError);
+    _reownWalletKit!.onSessionProposalError.unsubscribe(
+      _onSessionProposalError,
+    );
     _reownWalletKit!.onSessionConnect.unsubscribe(_onSessionConnect);
     _reownWalletKit!.onSessionRequest.unsubscribe(_onSessionRequest);
     _reownWalletKit!.onSessionAuthRequest.unsubscribe(_onAuthRequest);

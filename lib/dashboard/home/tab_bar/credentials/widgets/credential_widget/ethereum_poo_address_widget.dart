@@ -4,18 +4,16 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class EthereumPooAddressWidget extends StatelessWidget {
-  const EthereumPooAddressWidget({
-    super.key,
-    required this.credentialModel,
-  });
+  const EthereumPooAddressWidget({super.key, required this.credentialModel});
 
   final CredentialModel credentialModel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final pooAddress = credentialModel.credentialPreview.credentialSubjectModel
-        as EthereumPooAddressModel;
+    final pooAddress =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as EthereumPooAddressModel;
 
     return PooAddressBaseWidget(
       image: IconStrings.ethereum,

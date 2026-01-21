@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 class DisplayWidget extends StatelessWidget {
-  const DisplayWidget({
-    super.key,
-    required this.display,
-  });
+  const DisplayWidget({super.key, required this.display});
 
   final Display display;
 

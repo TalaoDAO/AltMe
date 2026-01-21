@@ -70,8 +70,9 @@ void main() {
     expect(find.text('Test Message'), findsOneWidget);
     expect(find.byType(ErrorDialog), findsOneWidget);
   });
-  testWidgets('SnackBarContent is displayed correctly',
-      (WidgetTester tester) async {
+  testWidgets('SnackBarContent is displayed correctly', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpApp(
       const Scaffold(
         body: SnackBarContent(
@@ -85,8 +86,9 @@ void main() {
     expect(find.byType(ElevatedButton), findsOneWidget);
   });
 
-  testWidgets('AlertMessage shows Network error properly',
-      (WidgetTester tester) async {
+  testWidgets('AlertMessage shows Network error properly', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpApp(
       Scaffold(
         body: Builder(
@@ -96,9 +98,7 @@ void main() {
                 AlertMessage.showStateMessage(
                   context: context,
                   stateMessage: StateMessage(
-                    messageHandler: NetworkException(
-                      data: 'Netwok Test',
-                    ),
+                    messageHandler: NetworkException(data: 'Netwok Test'),
                     injectedMessage: null,
                     showDialog: false,
                     duration: const Duration(seconds: 2),
@@ -119,8 +119,9 @@ void main() {
     expect(find.text('Netwok Test'), findsOneWidget);
   });
 
-  testWidgets('AlertMessage shows default message when nothing is provided',
-      (WidgetTester tester) async {
+  testWidgets('AlertMessage shows default message when nothing is provided', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpApp(
       Scaffold(
         body: Builder(
@@ -150,8 +151,9 @@ void main() {
 
     expect(find.text('This request is not supported'), findsOneWidget);
   });
-  testWidgets('AlertMessage shows ResponseMessage correctly',
-      (WidgetTester tester) async {
+  testWidgets('AlertMessage shows ResponseMessage correctly', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpApp(
       Scaffold(
         body: Builder(

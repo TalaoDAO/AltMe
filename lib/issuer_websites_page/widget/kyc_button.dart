@@ -3,9 +3,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class KYCButton extends StatelessWidget {
-  const KYCButton({
-    super.key,
-  });
+  const KYCButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +35,12 @@ class KYCButton extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: MyOutlinedButton(
-                          borderColor:
-                              Theme.of(context).colorScheme.secondaryContainer,
-                          textColor:
-                              Theme.of(context).colorScheme.secondaryContainer,
+                          borderColor: Theme.of(
+                            context,
+                          ).colorScheme.secondaryContainer,
+                          textColor: Theme.of(
+                            context,
+                          ).colorScheme.secondaryContainer,
                           onPressed: () {
                             Navigator.of(context).pop(true);
                           },

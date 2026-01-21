@@ -20,24 +20,14 @@ class NftState extends Equatable {
   final BlockchainType blockchainType;
 
   NftState fetching() {
-    return NftState(
-      status: AppStatus.fetching,
-      data: data,
-      offset: offset,
-    );
+    return NftState(status: AppStatus.fetching, data: data, offset: offset);
   }
 
   NftState loading() {
-    return NftState(
-      status: AppStatus.loading,
-      data: data,
-      offset: offset,
-    );
+    return NftState(status: AppStatus.loading, data: data, offset: offset);
   }
 
-  NftState error({
-    required MessageHandler messageHandler,
-  }) {
+  NftState error({required MessageHandler messageHandler}) {
     return NftState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
@@ -46,9 +36,7 @@ class NftState extends Equatable {
     );
   }
 
-  NftState populate({
-    List<NftModel>? data,
-  }) {
+  NftState populate({List<NftModel>? data}) {
     return NftState(
       status: AppStatus.populate,
       data: data ?? this.data,
@@ -87,11 +75,5 @@ class NftState extends Equatable {
   Map<String, dynamic> toJson() => _$NftStateToJson(this);
 
   @override
-  List<Object?> get props => [
-        status,
-        message,
-        data,
-        offset,
-        blockchainType,
-      ];
+  List<Object?> get props => [status, message, data, offset, blockchainType];
 }

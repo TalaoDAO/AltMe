@@ -10,10 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class ConnectedDappsPage extends StatelessWidget {
-  const ConnectedDappsPage({
-    super.key,
-    required this.walletAddress,
-  });
+  const ConnectedDappsPage({super.key, required this.walletAddress});
 
   final String walletAddress;
 
@@ -30,13 +27,8 @@ class ConnectedDappsPage extends StatelessWidget {
       create: (_) => ConnectedDappsCubit(
         beacon: Beacon(),
         networkCubit: context.read<ManageNetworkCubit>(),
-        client: DioClient(
-          secureStorageProvider: getSecureStorage,
-          dio: Dio(),
-        ),
-        connectedDappRepository: ConnectedDappRepository(
-          getSecureStorage,
-        ),
+        client: DioClient(secureStorageProvider: getSecureStorage, dio: Dio()),
+        connectedDappRepository: ConnectedDappRepository(getSecureStorage),
       ),
       child: ConnectedDappsView(walletAddress: walletAddress),
     );
@@ -44,10 +36,7 @@ class ConnectedDappsPage extends StatelessWidget {
 }
 
 class ConnectedDappsView extends StatefulWidget {
-  const ConnectedDappsView({
-    super.key,
-    required this.walletAddress,
-  });
+  const ConnectedDappsView({super.key, required this.walletAddress});
 
   final String walletAddress;
 
@@ -59,11 +48,9 @@ class _ConnectedDappsViewState extends State<ConnectedDappsView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        await context.read<ConnectedDappsCubit>().init(widget.walletAddress);
-      },
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await context.read<ConnectedDappsCubit>().init(widget.walletAddress);
+    });
   }
 
   @override
@@ -107,9 +94,9 @@ class _ConnectedDappsViewState extends State<ConnectedDappsView> {
                 ? ErrorView(
                     message: message,
                     onTap: () {
-                      context
-                          .read<ConnectedDappsCubit>()
-                          .init(widget.walletAddress);
+                      context.read<ConnectedDappsCubit>().init(
+                        widget.walletAddress,
+                      );
                     },
                   )
                 : SingleChildScrollView(
@@ -161,18 +148,21 @@ class _ConnectedDappsViewState extends State<ConnectedDappsView> {
                                           child: Text(
                                             savedDappData.walletAddress != null
                                                 ? savedDappData.peer!.name
-                                                : savedDappData.sessionData!
-                                                    .peer.metadata.name,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium,
+                                                : savedDappData
+                                                      .sessionData!
+                                                      .peer
+                                                      .metadata
+                                                      .name,
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.bodyMedium,
                                           ),
                                         ),
                                         Icon(
                                           Icons.chevron_right,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onPrimary,
                                         ),
                                       ],
                                     ),
@@ -191,10 +181,9 @@ class _ConnectedDappsViewState extends State<ConnectedDappsView> {
                               },
                               separatorBuilder: (_, __) => Divider(
                                 height: 0.1,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withValues(alpha: 0.12),
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.12),
                               ),
                             ),
                         ],

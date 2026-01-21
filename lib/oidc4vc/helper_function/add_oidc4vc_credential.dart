@@ -54,7 +54,7 @@ Future<void> addOIDC4VCCredential({
       credentialFromOIDC4VC = data is Map<String, dynamic>
           ? data
           : jsonDecode(encodedCredentialFromOIDC4VC['credential'].toString())
-              as Map<String, dynamic>;
+                as Map<String, dynamic>;
 
     case VCFormatType.auto:
       throw ResponseMessage(
@@ -104,8 +104,9 @@ Future<void> addOIDC4VCCredential({
         credentialType: credentialType,
       );
   }
-  final Map<String, dynamic> newCredential =
-      Map<String, dynamic>.from(credentialFromOIDC4VC);
+  final Map<String, dynamic> newCredential = Map<String, dynamic>.from(
+    credentialFromOIDC4VC,
+  );
 
   newCredential['format'] = format;
   newCredential['credentialPreview'] = credentialFromOIDC4VC;
@@ -169,7 +170,7 @@ Future<void> addOIDC4VCCredential({
   // insert the credential in the wallet
   await credentialsCubit.insertCredential(
     credential: credentialModel,
-    showStatus: false,
+    showStatus: true,
     showMessage: isLastCall,
     uri: Uri.parse(issuer ?? ''),
   );

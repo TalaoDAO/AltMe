@@ -14,16 +14,17 @@ class GenderWidget extends StatelessWidget {
     return CredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.genderProof,
       issuerName: credentialModel
-          .credentialPreview.credentialSubjectModel.issuedBy?.name,
+          .credentialPreview
+          .credentialSubjectModel
+          .issuedBy
+          ?.name,
       value: genderModel.gender ?? '',
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),
       expirationDate: credentialModel.expirationDate == null
           ? '--'
-          : UiDate.formatDateForCredentialCard(
-              credentialModel.expirationDate!,
-            ),
+          : UiDate.formatDateForCredentialCard(credentialModel.expirationDate!),
     );
   }
 }

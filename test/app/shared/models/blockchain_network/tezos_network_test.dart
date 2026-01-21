@@ -34,6 +34,8 @@ void main() {
         subTitle: 'Subtitle',
         type: BlockchainType.tezos,
         apiKey: 'apikey',
+        isMainNet: false,
+        chainId: 0,
       );
 
       final json = tezosNetwork.toJson();

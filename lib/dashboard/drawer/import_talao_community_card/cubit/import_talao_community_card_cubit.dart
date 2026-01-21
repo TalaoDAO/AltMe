@@ -9,9 +9,8 @@ part 'import_talao_community_card_state.dart';
 
 class ImportTalaoCommunityCardCubit
     extends Cubit<ImportTalaoCommunityCardState> {
-  ImportTalaoCommunityCardCubit({
-    required this.walletCubit,
-  }) : super(const ImportTalaoCommunityCardState());
+  ImportTalaoCommunityCardCubit({required this.walletCubit})
+    : super(const ImportTalaoCommunityCardState());
 
   final WalletCubit walletCubit;
 

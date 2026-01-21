@@ -21,9 +21,9 @@ class EUDiplomaCardModel extends CredentialSubjectModel {
     super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.euDiplomaCard,
-          credentialCategory: CredentialCategory.educationCards,
-        );
+         credentialSubjectType: CredentialSubjectType.euDiplomaCard,
+         credentialCategory: CredentialCategory.educationCards,
+       );
 
   factory EUDiplomaCardModel.fromJson(Map<String, dynamic> json) =>
       _$EUDiplomaCardModelFromJson(json);
@@ -90,10 +90,7 @@ class AwardingBody {
 
 @JsonSerializable(explicitToJson: true)
 class GradingScheme {
-  GradingScheme({
-    this.id = '',
-    this.title = '',
-  });
+  GradingScheme({this.id = '', this.title = ''});
 
   factory GradingScheme.fromJson(Map<String, dynamic> json) =>
       _$GradingSchemeFromJson(json);

@@ -14,10 +14,10 @@ class Issuer {
   factory Issuer.fromJson(Map<String, dynamic> json) => _$IssuerFromJson(json);
 
   factory Issuer.emptyIssuer(String domain) => Issuer(
-        preferredName: '',
-        did: [],
-        organizationInfo: OrganizationInfo.emptyOrganizationInfo(domain),
-      );
+    preferredName: '',
+    did: [],
+    organizationInfo: OrganizationInfo.emptyOrganizationInfo(domain),
+  );
 
   @JsonKey(defaultValue: '')
   final String preferredName;

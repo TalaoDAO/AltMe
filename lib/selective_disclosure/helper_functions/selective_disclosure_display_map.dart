@@ -34,12 +34,7 @@ class SelectiveDisclosureDisplayMap {
   final Map<String, dynamic> filters;
   final List<SelectedClaimsKeyIds> selectedClaimsKeyIds;
   final bool displayMode;
-  final void Function(
-    String?,
-    String,
-    String?,
-    String?,
-  )? onPressed;
+  final void Function(String?, String, String?, String?)? onPressed;
 
   Map<String, dynamic> get buildMap {
     final builtMap = <String, dynamic>{};
@@ -62,8 +57,9 @@ class SelectiveDisclosureDisplayMap {
 
       /// Getting value_type if defined in the claim
       final type = mapValue['value_type'] as String?;
-      final bool hasNestedData =
-          mapValue.values.any((element) => element is Map<String, dynamic>);
+      final bool hasNestedData = mapValue.values.any(
+        (element) => element is Map<String, dynamic>,
+      );
 
       if (hasNestedData) {
         final nestedMap = SelectiveDisclosureDisplayMap(
@@ -82,20 +78,14 @@ class SelectiveDisclosureDisplayMap {
         if (nestedMap.isNotEmpty) {
           final fundation = claimData(mapKey, title, type, parentKeyId);
           if (fundation.isEmpty) {
-            builtMap.addAll(
-              {title: nestedMap},
-            );
+            builtMap.addAll({title: nestedMap});
           } else {
             final fundationValue = fundation.values.first;
             fundationValue['value'] = nestedMap;
-            builtMap.addAll(
-              {fundation.keys.first: fundationValue},
-            );
+            builtMap.addAll({fundation.keys.first: fundationValue});
           }
         } else {
-          builtMap.addAll(
-            claimData(mapKey, title, type, parentKeyId),
-          );
+          builtMap.addAll(claimData(mapKey, title, type, parentKeyId));
         }
       } else {
         builtMap.addAll(claimData(mapKey, title, type, parentKeyId));
@@ -122,9 +112,7 @@ class SelectiveDisclosureDisplayMap {
       /// if so, return empty container
       final content = selectiveDisclosure.disclosureToContent(disclosure);
 
-      final digest = sh256HashOfContent(
-        content,
-      );
+      final digest = sh256HashOfContent(content);
       final disclosuresContent = Map<String, dynamic>.from(
         selectiveDisclosure.disclosureListToContent,
       );
@@ -148,7 +136,7 @@ class SelectiveDisclosureDisplayMap {
         /// either in the payload or the claims
         final nestedValue =
             selectiveDisclosure.extractedValuesFromJwtWithSd[parentKeyId] ??
-                SelectiveDisclosure(credentialModel).payload[parentKeyId];
+            SelectiveDisclosure(credentialModel).payload[parentKeyId];
         if (nestedValue == null) continue;
         bool displayElement = false;
         if (nestedValue is String) {
@@ -166,9 +154,7 @@ class SelectiveDisclosureDisplayMap {
       /// Check if the disclosure is already displayed in the claims
       /// from the display. If so, return empty container, else build the widget
       final value = selectiveDisclosure
-          .contentOfSh256Hash(
-            content,
-          )
+          .contentOfSh256Hash(content)
           .entries
           .first
           .value;
@@ -217,9 +203,7 @@ class SelectiveDisclosureDisplayMap {
         displayMode: displayMode,
       ).buildMap;
       if (mapNestedSelectiveDisclosure.isNotEmpty) {
-        builtMap.addAll({
-          element.key.toString(): mapNestedSelectiveDisclosure,
-        });
+        builtMap.addAll({element.key.toString(): mapNestedSelectiveDisclosure});
       }
     } else {
       final isCompulsary = limitDisclosure == 'required';
@@ -232,9 +216,7 @@ class SelectiveDisclosureDisplayMap {
           .indexWhere(
             (entry) =>
                 SelectiveDisclosure(credentialModel)
-                    .getMapFromList(
-                      jsonDecode(entry.value.toString()) as List,
-                    )
+                    .getMapFromList(jsonDecode(entry.value.toString()) as List)
                     .keys
                     .first ==
                 element.key.toString(),
@@ -280,10 +262,9 @@ class SelectiveDisclosureDisplayMap {
     String? parentKeyId,
   ) {
     final claimDataMap = <String, dynamic>{};
-    final (claimsData, sd) = SelectiveDisclosure(credentialModel).getClaimsData(
-      key: mapKey,
-      parentKeyId: parentKeyId,
-    );
+    final (claimsData, sd) = SelectiveDisclosure(
+      credentialModel,
+    ).getClaimsData(key: mapKey, parentKeyId: parentKeyId);
 
     if (claimsData.isEmpty) return claimDataMap;
     int index = 0;
@@ -298,8 +279,9 @@ class SelectiveDisclosureDisplayMap {
       final isCompulsary = limitDisclosure == 'required';
 
       bool isDisabled = isCompulsary;
-      final selectedKeyId = selectedClaimsKeyIds
-          .firstWhereOrNull((ele) => ele.keyId == '$claimKey#$sd');
+      final selectedKeyId = selectedClaimsKeyIds.firstWhereOrNull(
+        (ele) => ele.keyId == '$claimKey#$sd',
+      );
       if (isPresentation) {
         if (filters.isNotEmpty) {
           isDisabled = isCompulsary;
@@ -310,24 +292,14 @@ class SelectiveDisclosureDisplayMap {
                   element.data.replaceAll(' ', '') == value) {
                 if (isCompulsary) isDisabled = false;
                 if (selectedKeyId == null) {
-                  onPressed?.call(
-                    key,
-                    claimKey,
-                    element.threeDotValue,
-                    sd,
-                  );
+                  onPressed?.call(key, claimKey, element.threeDotValue, sd);
                 }
               }
             } else {
               if (claimKey == key && element.data == value) {
                 if (isCompulsary) isDisabled = false;
                 if (selectedKeyId == null) {
-                  onPressed?.call(
-                    key,
-                    claimKey,
-                    null,
-                    sd,
-                  );
+                  onPressed?.call(key, claimKey, null, sd);
                 }
               }
             }
@@ -341,9 +313,7 @@ class SelectiveDisclosureDisplayMap {
           .indexWhere(
             (entry) =>
                 SelectiveDisclosure(credentialModel)
-                    .getMapFromList(
-                      jsonDecode(entry.value.toString()) as List,
-                    )
+                    .getMapFromList(jsonDecode(entry.value.toString()) as List)
                     .keys
                     .first ==
                 claimKey,
@@ -394,9 +364,7 @@ class SelectiveDisclosureDisplayMap {
 
   bool isNestedInpayload(List<String> contents, String digest) {
     final payloadSd = SelectiveDisclosure(credentialModel).payload;
-    final JsonPath dataPathSd = JsonPath(
-      r'$..["_sd"]',
-    );
+    final JsonPath dataPathSd = JsonPath(r'$..["_sd"]');
     final List<dynamic> listSd = [];
     payloadSd.remove('_sd');
     dataPathSd.read(payloadSd).forEach((element) {
@@ -406,9 +374,7 @@ class SelectiveDisclosureDisplayMap {
     });
     final payloadThreeDot = SelectiveDisclosure(credentialModel).payload;
 
-    final JsonPath dataPathThreeDot = JsonPath(
-      r'$..["..."]',
-    );
+    final JsonPath dataPathThreeDot = JsonPath(r'$..["..."]');
     final List<dynamic> listThreeDot = [];
     payloadThreeDot.remove('_sd');
     dataPathThreeDot.read(payloadThreeDot).forEach((element) {

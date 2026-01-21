@@ -21,6 +21,7 @@ EthereumNetwork _$EthereumNetworkFromJson(Map<String, dynamic> json) =>
       mainTokenSymbol: json['mainTokenSymbol'] as String? ?? 'ETH',
       type: $enumDecode(_$BlockchainTypeEnumMap, json['type']),
       apiKey: json['apiKey'] as String? ?? '',
+      isMainNet: json['isMainNet'] as bool,
     );
 
 Map<String, dynamic> _$EthereumNetworkToJson(EthereumNetwork instance) =>
@@ -32,6 +33,7 @@ Map<String, dynamic> _$EthereumNetworkToJson(EthereumNetwork instance) =>
       'title': instance.title,
       'subTitle': instance.subTitle,
       'type': _$BlockchainTypeEnumMap[instance.type]!,
+      'isMainNet': instance.isMainNet,
       'chainId': instance.chainId,
       'chain': instance.chain,
       'mainTokenName': instance.mainTokenName,

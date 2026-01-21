@@ -18,10 +18,7 @@ class MarkdownPage extends StatelessWidget {
       titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
       scrollView: false,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 0,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
       body: BackgroundCard(
         padding: EdgeInsets.zero,
         child: FutureBuilder<String>(
@@ -31,10 +28,9 @@ class MarkdownPage extends StatelessWidget {
               return GptMarkdown(
                 snapshot.data!,
                 style: TextStyle(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.6),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               );
             }

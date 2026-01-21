@@ -47,8 +47,12 @@ class VCFormatWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     trailing: Icon(
-                      state.model.profileSetting.selfSovereignIdentityOptions
-                                  .customOidc4vcProfile.vcFormatType ==
+                      state
+                                  .model
+                                  .profileSetting
+                                  .selfSovereignIdentityOptions
+                                  .customOidc4vcProfile
+                                  .vcFormatType ==
                               vcFormatType
                           ? Icons.radio_button_checked
                           : Icons.radio_button_unchecked,

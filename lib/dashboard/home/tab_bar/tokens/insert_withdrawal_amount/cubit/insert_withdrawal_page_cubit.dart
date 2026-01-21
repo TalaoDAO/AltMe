@@ -10,11 +10,8 @@ part 'insert_withdrawal_page_state.dart';
 part 'insert_withdrawal_page_cubit.g.dart';
 
 class InsertWithdrawalPageCubit extends Cubit<InsertWithdrawalPageState> {
-  InsertWithdrawalPageCubit({
-    required this.defaultSelectedToken,
-  }) : super(
-          InsertWithdrawalPageState(selectedToken: defaultSelectedToken),
-        );
+  InsertWithdrawalPageCubit({required this.defaultSelectedToken})
+    : super(InsertWithdrawalPageState(selectedToken: defaultSelectedToken));
 
   final TokenModel defaultSelectedToken;
 
@@ -24,7 +21,8 @@ class InsertWithdrawalPageCubit extends Cubit<InsertWithdrawalPageState> {
     emit(
       state.copyWith(
         amount: amount,
-        isValidWithdrawal: double.parse(amount) > 0 &&
+        isValidWithdrawal:
+            double.parse(amount) > 0 &&
             Decimal.parse(amount) <=
                 Decimal.parse(state.selectedToken.calculatedBalance),
       ),
@@ -35,7 +33,8 @@ class InsertWithdrawalPageCubit extends Cubit<InsertWithdrawalPageState> {
     emit(
       state.copyWith(
         selectedToken: selectedToken,
-        isValidWithdrawal: double.parse(state.amount) > 0 &&
+        isValidWithdrawal:
+            double.parse(state.amount) > 0 &&
             Decimal.parse(state.amount) <=
                 Decimal.parse(state.selectedToken.calculatedBalance),
       ),

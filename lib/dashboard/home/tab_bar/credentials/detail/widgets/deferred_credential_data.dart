@@ -31,9 +31,7 @@ class DeferredCredentialData extends StatelessWidget {
         CredentialField(
           padding: const EdgeInsets.only(top: 10),
           title: l10n.dateOfRequest,
-          value: UiDate.formatDate(
-            credentialModel.pendingInfo!.requestedAt,
-          ),
+          value: UiDate.formatDate(credentialModel.pendingInfo!.requestedAt),
           titleColor: Theme.of(context).colorScheme.onSurface,
           valueColor: Theme.of(context).colorScheme.onSurface,
           showVertically: showVertically,

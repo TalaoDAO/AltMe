@@ -74,19 +74,17 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
           children: [
             Text(
               widget.title,
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineMedium!
-                  .copyWith(color: text),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium!.copyWith(color: text),
               textAlign: TextAlign.center,
             ),
             if (widget.subtitle != null)
               Text(
                 widget.subtitle!,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: text),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge!.copyWith(color: text),
                 textAlign: TextAlign.center,
               ),
             const SizedBox(height: 24),
@@ -122,10 +120,9 @@ class _TextFieldDialogState extends State<TextFieldDialog> {
               fontSize: 12,
               elevation: 0,
               borderRadius: Sizes.smallRadius,
-              borderColor: Theme.of(context)
-                  .colorScheme
-                  .onSurface
-                  .withValues(alpha: 0.2),
+              borderColor: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.2),
               backgroundColor: background,
               textColor: Theme.of(context).colorScheme.onSurface,
               onPressed: () {

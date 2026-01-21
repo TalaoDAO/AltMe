@@ -14,11 +14,7 @@ class DisplayTermsOfUseCubit extends Cubit<bool> {
 }
 
 class DisplayTermsofUse extends StatefulWidget {
-  const DisplayTermsofUse({
-    super.key,
-    this.physics,
-    this.shrinkWrap = true,
-  });
+  const DisplayTermsofUse({super.key, this.physics, this.shrinkWrap = true});
 
   final ScrollPhysics? physics;
   final bool shrinkWrap;
@@ -64,15 +60,14 @@ class _DisplayTermsofUseState extends State<DisplayTermsofUse> {
           builder: (context, snapshot) {
             if (snapshot.data != null) {
               return Theme(
-                data: Theme.of(context)
-                    .copyWith(dividerColor: Colors.transparent),
+                data: Theme.of(
+                  context,
+                ).copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
                   initiallyExpanded: false,
                   childrenPadding: EdgeInsets.zero,
                   onExpansionChanged: (isExpanded) {
-                    displayTermsOfUseCubit.setExpanded(
-                      isExpanded: isExpanded,
-                    );
+                    displayTermsOfUseCubit.setExpanded(isExpanded: isExpanded);
                   },
                   tilePadding: const EdgeInsets.symmetric(horizontal: 8),
                   trailing: const SizedBox.shrink(),

@@ -27,6 +27,11 @@ class CryptoAccountData extends Equatable {
   Map<String, dynamic> toJson() => _$CryptoAccountDataToJson(this);
 
   @override
-  List<Object?> get props =>
-      [name, secretKey, walletAddress, isImported, blockchainType];
+  List<Object?> get props => [
+    name,
+    secretKey,
+    walletAddress,
+    isImported,
+    blockchainType,
+  ];
 }

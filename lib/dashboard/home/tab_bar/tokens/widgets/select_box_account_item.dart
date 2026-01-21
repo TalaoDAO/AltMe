@@ -41,10 +41,7 @@ class SelectBoxAccountItem extends StatelessWidget {
       ),
       title: Row(
         children: [
-          Image.asset(
-            cryptoAccountData.blockchainType.icon,
-            width: Sizes.icon,
-          ),
+          Image.asset(cryptoAccountData.blockchainType.icon, width: Sizes.icon),
           const SizedBox(width: Sizes.spaceXSmall),
           Expanded(
             child: MyText(

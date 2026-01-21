@@ -26,11 +26,8 @@ class UserPinPage extends StatelessWidget {
     required TxCode? txCode,
   }) {
     return MaterialPageRoute<void>(
-      builder: (_) => UserPinPage(
-        onProceed: onProceed,
-        onCancel: onCancel,
-        txCode: txCode,
-      ),
+      builder: (_) =>
+          UserPinPage(onProceed: onProceed, onCancel: onCancel, txCode: txCode),
       settings: const RouteSettings(name: '/UserPinPage'),
     );
   }

@@ -52,8 +52,8 @@ class InsertWithdrawalAmountView extends StatefulWidget {
 
 class _InsertWithdrawalAmountViewState
     extends State<InsertWithdrawalAmountView> {
-  late final insertWithdrawalPageCubit =
-      context.read<InsertWithdrawalPageCubit>();
+  late final insertWithdrawalPageCubit = context
+      .read<InsertWithdrawalPageCubit>();
 
   @override
   Widget build(BuildContext context) {

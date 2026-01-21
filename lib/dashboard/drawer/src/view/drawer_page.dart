@@ -13,19 +13,14 @@ class DrawerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        return DrawerView(
-          profileCubit: context.read<ProfileCubit>(),
-        );
+        return DrawerView(profileCubit: context.read<ProfileCubit>());
       },
     );
   }
 }
 
 class DrawerView extends StatelessWidget {
-  const DrawerView({
-    super.key,
-    required this.profileCubit,
-  });
+  const DrawerView({super.key, required this.profileCubit});
 
   final ProfileCubit profileCubit;
 
@@ -48,9 +43,7 @@ class DrawerView extends StatelessWidget {
                     children: <Widget>[
                       const Align(
                         alignment: Alignment.topLeft,
-                        child: BackLeadingButton(
-                          padding: EdgeInsets.zero,
-                        ),
+                        child: BackLeadingButton(padding: EdgeInsets.zero),
                       ),
                       const DrawerLogo(),
                       const AppVersionDrawer(),
@@ -71,13 +64,16 @@ class DrawerView extends StatelessWidget {
                         const SizedBox(height: Sizes.spaceSmall),
                       ],
                       if (profileModel
-                          .profileSetting.settingsMenu.displayProfile) ...[
+                          .profileSetting
+                          .settingsMenu
+                          .displayProfile) ...[
                         DrawerCategoryItem(
                           title: l10n.walletProfiles,
                           subTitle: l10n.walletProfilesDescription,
                           onClick: () {
-                            Navigator.of(context)
-                                .push<void>(PickProfileMenu.route());
+                            Navigator.of(
+                              context,
+                            ).push<void>(PickProfileMenu.route());
                           },
                         ),
                         const SizedBox(height: Sizes.spaceSmall),
@@ -86,8 +82,9 @@ class DrawerView extends StatelessWidget {
                         title: l10n.walletSecurityAndBackup,
                         subTitle: l10n.walletSecurityDescription,
                         onClick: () {
-                          Navigator.of(context)
-                              .push<void>(WalletSecurityMenu.route());
+                          Navigator.of(
+                            context,
+                          ).push<void>(WalletSecurityMenu.route());
                         },
                       ),
                       const SizedBox(height: Sizes.spaceSmall),
@@ -95,8 +92,9 @@ class DrawerView extends StatelessWidget {
                         title: l10n.walletSettings,
                         subTitle: l10n.walletSettingsDescription,
                         onClick: () {
-                          Navigator.of(context)
-                              .push<void>(WalletSettingsMenu.route());
+                          Navigator.of(
+                            context,
+                          ).push<void>(WalletSettingsMenu.route());
                         },
                       ),
                       if (Parameters.walletHandlesCrypto)
@@ -107,14 +105,17 @@ class DrawerView extends StatelessWidget {
                               title: l10n.blockchainSettings,
                               subTitle: l10n.blockchainSettingsDescription,
                               onClick: () {
-                                Navigator.of(context)
-                                    .push<void>(BlockchainSettingsMenu.route());
+                                Navigator.of(
+                                  context,
+                                ).push<void>(BlockchainSettingsMenu.route());
                               },
                             ),
                           ],
                         ),
                       const SizedBox(height: Sizes.spaceSmall),
-                      if (profileModel.profileSetting.settingsMenu
+                      if (profileModel
+                          .profileSetting
+                          .settingsMenu
                           .displaySelfSovereignIdentity) ...[
                         DrawerCategoryItem(
                           title: l10n.ssi,
@@ -125,7 +126,9 @@ class DrawerView extends StatelessWidget {
                         ),
                         const SizedBox(height: Sizes.spaceSmall),
                       ],
-                      if (profileModel.profileSetting.settingsMenu
+                      if (profileModel
+                          .profileSetting
+                          .settingsMenu
                           .displayDeveloperMode) ...[
                         DrawerCategoryItem(
                           title: l10n.developerMode,
@@ -142,8 +145,9 @@ class DrawerView extends StatelessWidget {
                                     );
                                   },
                                   value: state.model.isDeveloperMode,
-                                  activeThumbColor:
-                                      Theme.of(context).colorScheme.primary,
+                                  activeThumbColor: Theme.of(
+                                    context,
+                                  ).colorScheme.primary,
                                 );
                               },
                             ),
@@ -152,13 +156,16 @@ class DrawerView extends StatelessWidget {
                         const SizedBox(height: Sizes.spaceSmall),
                       ],
                       if (profileModel
-                          .profileSetting.settingsMenu.displayHelpCenter) ...[
+                          .profileSetting
+                          .settingsMenu
+                          .displayHelpCenter) ...[
                         DrawerCategoryItem(
                           title: l10n.helpCenter,
                           subTitle: l10n.helpCenterDescription,
                           onClick: () {
-                            Navigator.of(context)
-                                .push<void>(HelpCenterMenu.route());
+                            Navigator.of(
+                              context,
+                            ).push<void>(HelpCenterMenu.route());
                           },
                         ),
                         const SizedBox(height: Sizes.spaceSmall),
@@ -167,19 +174,23 @@ class DrawerView extends StatelessWidget {
                         title: l10n.about,
                         subTitle: l10n.aboutDescription,
                         onClick: () {
-                          Navigator.of(context)
-                              .push<void>(AboutAltmeMenu.route());
+                          Navigator.of(
+                            context,
+                          ).push<void>(AboutAltmeMenu.route());
                         },
                       ),
                       const SizedBox(height: Sizes.spaceSmall),
                       if (profileModel
-                          .profileSetting.settingsMenu.displayActivityLog) ...[
+                          .profileSetting
+                          .settingsMenu
+                          .displayActivityLog) ...[
                         DrawerCategoryItem(
                           title: l10n.activityLog,
                           subTitle: l10n.activityLogDescription,
                           onClick: () {
-                            Navigator.of(context)
-                                .push<void>(ActivityLogPage.route());
+                            Navigator.of(
+                              context,
+                            ).push<void>(ActivityLogPage.route());
                           },
                         ),
                         const SizedBox(height: Sizes.spaceSmall),
@@ -188,8 +199,9 @@ class DrawerView extends StatelessWidget {
                         title: l10n.resetWallet,
                         subTitle: l10n.resetWalletDescription,
                         onClick: () {
-                          Navigator.of(context)
-                              .push<void>(ResetWalletMenu.route());
+                          Navigator.of(
+                            context,
+                          ).push<void>(ResetWalletMenu.route());
                         },
                       ),
                       const SizedBox(height: Sizes.spaceNormal),

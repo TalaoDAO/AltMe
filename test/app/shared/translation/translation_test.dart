@@ -33,9 +33,7 @@ void main() {
     });
 
     test('returns empty string if no translations are available', () {
-      final translations = [
-        Translation('fr', 'Bonjour'),
-      ];
+      final translations = [Translation('fr', 'Bonjour')];
       when(() => l10n.localeName).thenReturn('es');
       final result = GetTranslation.getTranslation(translations, l10n);
       expect(result, '');

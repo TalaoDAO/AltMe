@@ -26,8 +26,8 @@ class ClientTypeWidget extends StatelessWidget {
                   ListTile(
                     onTap: () {
                       context.read<ProfileCubit>().updateProfileSetting(
-                            clientType: clientType,
-                          );
+                        clientType: clientType,
+                      );
                     },
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
@@ -40,8 +40,12 @@ class ClientTypeWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     trailing: Icon(
-                      state.model.profileSetting.selfSovereignIdentityOptions
-                                  .customOidc4vcProfile.clientType ==
+                      state
+                                  .model
+                                  .profileSetting
+                                  .selfSovereignIdentityOptions
+                                  .customOidc4vcProfile
+                                  .clientType ==
                               clientType
                           ? Icons.radio_button_checked
                           : Icons.radio_button_unchecked,

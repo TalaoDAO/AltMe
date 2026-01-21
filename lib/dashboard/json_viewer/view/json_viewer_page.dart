@@ -20,15 +20,11 @@ class JsonViewerPage extends StatelessWidget {
     required String title,
     required String data,
     bool showButton = true,
-  }) =>
-      MaterialPageRoute<void>(
-        builder: (_) => JsonViewerPage(
-          title: title,
-          data: data,
-          showButton: showButton,
-        ),
-        settings: const RouteSettings(name: '/JsonViewerPage'),
-      );
+  }) => MaterialPageRoute<void>(
+    builder: (_) =>
+        JsonViewerPage(title: title, data: data, showButton: showButton),
+    settings: const RouteSettings(name: '/JsonViewerPage'),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +43,7 @@ class JsonViewerPage extends StatelessWidget {
       navigation: !showButton
           ? null
           : Padding(
-              padding: const EdgeInsets.all(
-                Sizes.spaceSmall,
-              ),
+              padding: const EdgeInsets.all(Sizes.spaceSmall),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

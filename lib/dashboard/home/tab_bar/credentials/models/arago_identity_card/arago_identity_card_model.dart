@@ -17,9 +17,9 @@ class AragoIdentityCardModel extends CredentialSubjectModel {
     super.id,
     super.type,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.aragoIdentityCard,
-          credentialCategory: CredentialCategory.identityCards,
-        );
+         credentialSubjectType: CredentialSubjectType.aragoIdentityCard,
+         credentialCategory: CredentialCategory.identityCards,
+       );
 
   factory AragoIdentityCardModel.fromJson(Map<String, dynamic> json) =>
       _$AragoIdentityCardModelFromJson(json);

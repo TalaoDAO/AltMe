@@ -6,32 +6,25 @@ import '../../../../helpers/helpers.dart';
 
 void main() {
   group('BeCarefulDialog Widget Tests', () {
-    testWidgets('renders BeCarefulDialog with title',
-        (WidgetTester tester) async {
+    testWidgets('renders BeCarefulDialog with title', (
+      WidgetTester tester,
+    ) async {
       const title = 'Test Title';
 
-      await tester.pumpApp(
-        const Scaffold(
-          body: BeCarefulDialog(
-            title: title,
-          ),
-        ),
-      );
+      await tester.pumpApp(const Scaffold(body: BeCarefulDialog(title: title)));
 
       expect(find.text(title), findsOneWidget);
     });
 
-    testWidgets('renders BeCarefulDialog with subtitle',
-        (WidgetTester tester) async {
+    testWidgets('renders BeCarefulDialog with subtitle', (
+      WidgetTester tester,
+    ) async {
       const title = 'Test Title';
       const subtitle = 'Test Subtitle';
 
       await tester.pumpApp(
         const Scaffold(
-          body: BeCarefulDialog(
-            title: title,
-            subtitle: subtitle,
-          ),
+          body: BeCarefulDialog(title: title, subtitle: subtitle),
         ),
       );
 
@@ -39,19 +32,16 @@ void main() {
       expect(find.text(subtitle), findsOneWidget);
     });
 
-    testWidgets('renders BeCarefulDialog with yes and no buttons',
-        (WidgetTester tester) async {
+    testWidgets('renders BeCarefulDialog with yes and no buttons', (
+      WidgetTester tester,
+    ) async {
       const title = 'Test Title';
       const yesText = 'Yes';
       const noText = 'No';
 
       await tester.pumpApp(
         const Scaffold(
-          body: BeCarefulDialog(
-            title: title,
-            yes: yesText,
-            no: noText,
-          ),
+          body: BeCarefulDialog(title: title, yes: yesText, no: noText),
         ),
       );
 
@@ -59,8 +49,9 @@ void main() {
       expect(find.text(noText.toUpperCase()), findsOneWidget);
     });
 
-    testWidgets('clicking no button closes the dialog',
-        (WidgetTester tester) async {
+    testWidgets('clicking no button closes the dialog', (
+      WidgetTester tester,
+    ) async {
       const title = 'Test Title';
       const noText = 'No';
 
@@ -96,45 +87,46 @@ void main() {
     });
 
     testWidgets(
-        'clicking yes button triggers onContinueClick and closes the dialog',
-        (WidgetTester tester) async {
-      const title = 'Test Title';
-      const yesText = 'Yes';
-      bool onContinueClicked = false;
+      'clicking yes button triggers onContinueClick and closes the dialog',
+      (WidgetTester tester) async {
+        const title = 'Test Title';
+        const yesText = 'Yes';
+        bool onContinueClicked = false;
 
-      await tester.pumpApp(
-        Scaffold(
-          body: Builder(
-            builder: (context) {
-              return ElevatedButton(
-                onPressed: () {
-                  BeCarefulDialog.show(
-                    context: context,
-                    title: title,
-                    yes: yesText,
-                    onContinueClick: () {
-                      onContinueClicked = true;
-                    },
-                  );
-                },
-                child: const Text('Show Dialog'),
-              );
-            },
+        await tester.pumpApp(
+          Scaffold(
+            body: Builder(
+              builder: (context) {
+                return ElevatedButton(
+                  onPressed: () {
+                    BeCarefulDialog.show(
+                      context: context,
+                      title: title,
+                      yes: yesText,
+                      onContinueClick: () {
+                        onContinueClicked = true;
+                      },
+                    );
+                  },
+                  child: const Text('Show Dialog'),
+                );
+              },
+            ),
           ),
-        ),
-      );
+        );
 
-      await tester.tap(find.text('Show Dialog'));
-      await tester.pumpAndSettle();
+        await tester.tap(find.text('Show Dialog'));
+        await tester.pumpAndSettle();
 
-      expect(find.text(title), findsOneWidget);
-      expect(find.text(yesText.toUpperCase()), findsOneWidget);
+        expect(find.text(title), findsOneWidget);
+        expect(find.text(yesText.toUpperCase()), findsOneWidget);
 
-      await tester.tap(find.text(yesText.toUpperCase()));
-      await tester.pumpAndSettle();
+        await tester.tap(find.text(yesText.toUpperCase()));
+        await tester.pumpAndSettle();
 
-      expect(find.text(title), findsNothing);
-      expect(onContinueClicked, isTrue);
-    });
+        expect(find.text(title), findsNothing);
+        expect(onContinueClicked, isTrue);
+      },
+    );
   });
 }

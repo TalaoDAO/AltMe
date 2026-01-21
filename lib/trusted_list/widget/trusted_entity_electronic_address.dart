@@ -27,9 +27,7 @@ class TrustedEntityElectronicAddress extends StatelessWidget {
       child: InkWell(
         onTap: () async {
           try {
-            await LaunchUrl.launch(
-              electronicAddress.uri,
-            );
+            await LaunchUrl.launch(electronicAddress.uri);
             Navigator.pop(context);
           } catch (_) {
             AlertMessage.showStateMessage(
@@ -42,9 +40,7 @@ class TrustedEntityElectronicAddress extends StatelessWidget {
         },
         child: Text(
           displayValue,
-          style: textTheme.bodyLarge?.copyWith(
-            color: Colors.blue,
-          ),
+          style: textTheme.bodyLarge?.copyWith(color: Colors.blue),
         ),
       ),
     );

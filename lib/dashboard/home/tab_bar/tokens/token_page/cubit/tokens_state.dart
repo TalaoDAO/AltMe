@@ -24,14 +24,10 @@ class TokensState extends Equatable {
   final BlockchainType blockchainType;
 
   TokensState fetching() {
-    return copyWith(
-      status: AppStatus.fetching,
-    );
+    return copyWith(status: AppStatus.fetching);
   }
 
-  TokensState errorWhileFetching({
-    required MessageHandler messageHandler,
-  }) {
+  TokensState errorWhileFetching({required MessageHandler messageHandler}) {
     return copyWith(
       status: AppStatus.errorWhileFetching,
       message: StateMessage.error(messageHandler: messageHandler),
@@ -39,33 +35,21 @@ class TokensState extends Equatable {
   }
 
   TokensState loading() {
-    return copyWith(
-      status: AppStatus.loading,
-    );
+    return copyWith(status: AppStatus.loading);
   }
 
-  TokensState error({
-    required MessageHandler messageHandler,
-  }) {
+  TokensState error({required MessageHandler messageHandler}) {
     return copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
     );
   }
 
-  TokensState populate({
-    Set<TokenModel>? data,
-  }) {
-    return copyWith(
-      status: AppStatus.populate,
-      data: data,
-    );
+  TokensState populate({Set<TokenModel>? data}) {
+    return copyWith(status: AppStatus.populate, data: data);
   }
 
-  TokensState success({
-    MessageHandler? messageHandler,
-    Set<TokenModel>? data,
-  }) {
+  TokensState success({MessageHandler? messageHandler, Set<TokenModel>? data}) {
     return copyWith(
       status: AppStatus.success,
       data: data,
@@ -111,12 +95,12 @@ class TokensState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        message,
-        data,
-        isSecure,
-        totalBalanceInUSD,
-        offset,
-        blockchainType,
-      ];
+    status,
+    message,
+    data,
+    isSecure,
+    totalBalanceInUSD,
+    offset,
+    blockchainType,
+  ];
 }

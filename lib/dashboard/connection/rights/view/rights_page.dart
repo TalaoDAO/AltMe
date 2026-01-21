@@ -8,10 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
 
 class RightsPage extends StatelessWidget {
-  const RightsPage({
-    super.key,
-    required this.savedDappData,
-  });
+  const RightsPage({super.key, required this.savedDappData});
 
   final SavedDappData savedDappData;
 
@@ -27,8 +24,9 @@ class RightsPage extends StatelessWidget {
     return BlocProvider(
       create: (_) => RightsCubit(
         beacon: Beacon(),
-        connectedDappRepository:
-            ConnectedDappRepository(secure_storage.getSecureStorage),
+        connectedDappRepository: ConnectedDappRepository(
+          secure_storage.getSecureStorage,
+        ),
         walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
       child: RightsView(savedDappData: savedDappData),
@@ -37,10 +35,7 @@ class RightsPage extends StatelessWidget {
 }
 
 class RightsView extends StatelessWidget {
-  const RightsView({
-    super.key,
-    required this.savedDappData,
-  });
+  const RightsView({super.key, required this.savedDappData});
 
   final SavedDappData savedDappData;
 
@@ -116,9 +111,9 @@ class RightsView extends StatelessWidget {
                   no: l10n.cancel,
                   yes: l10n.revokeAll,
                   onContinueClick: () {
-                    context
-                        .read<RightsCubit>()
-                        .disconnect(savedDappData: savedDappData);
+                    context.read<RightsCubit>().disconnect(
+                      savedDappData: savedDappData,
+                    );
                   },
                 );
               },

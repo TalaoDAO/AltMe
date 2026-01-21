@@ -37,4 +37,5 @@ class MyRouteObserver extends RouteObserver<PageRoute<dynamic>> {
     context.read<RouteCubit>().setCurrentScreen(routeName);
   }
 }
+
 // coverage:ignore-end

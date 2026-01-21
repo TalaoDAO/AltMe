@@ -16,8 +16,5 @@ class LicenseModel extends Equatable {
   Map<String, dynamic> toJson() => _$LicenseModelToJson(this);
 
   @override
-  List<Object> get props => [
-        title,
-        description,
-      ];
+  List<Object> get props => [title, description];
 }

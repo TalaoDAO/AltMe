@@ -35,10 +35,7 @@ class OptionContainer extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
+                Text(title, style: Theme.of(context).textTheme.titleLarge),
                 if (subtitle != null) ...[
                   const SizedBox(height: 10),
                   Text(

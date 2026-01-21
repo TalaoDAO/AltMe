@@ -36,9 +36,7 @@ class ConfirmTokenTransactionState extends Equatable {
     );
   }
 
-  ConfirmTokenTransactionState error({
-    required MessageHandler messageHandler,
-  }) {
+  ConfirmTokenTransactionState error({required MessageHandler messageHandler}) {
     return copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
@@ -95,16 +93,16 @@ class ConfirmTokenTransactionState extends Equatable {
 
   @override
   List<Object?> get props => [
-        withdrawalAddress,
-        status,
-        message,
-        networkFee,
-        networkFees,
-        tokenAmount,
-        totalAmount,
-        selectedToken,
-        transactionHash,
-        selectedAccountSecretKey,
-        operationsList,
-      ];
+    withdrawalAddress,
+    status,
+    message,
+    networkFee,
+    networkFees,
+    tokenAmount,
+    totalAmount,
+    selectedToken,
+    transactionHash,
+    selectedAccountSecretKey,
+    operationsList,
+  ];
 }

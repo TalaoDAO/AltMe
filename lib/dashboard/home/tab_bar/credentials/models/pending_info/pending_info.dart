@@ -30,10 +30,10 @@ class PendingInfo extends Equatable {
 
   @override
   List<Object?> get props => [
-        encodedCredentialFromOIDC4VC,
-        accessToken,
-        deferredCredentialEndpoint,
-        format,
-        url,
-      ];
+    encodedCredentialFromOIDC4VC,
+    accessToken,
+    deferredCredentialEndpoint,
+    format,
+    url,
+  ];
 }

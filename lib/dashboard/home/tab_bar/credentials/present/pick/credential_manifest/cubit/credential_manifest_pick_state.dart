@@ -41,10 +41,10 @@ class CredentialManifestPickState extends Equatable {
 
   @override
   List<Object?> get props => [
-        selected,
-        filteredCredentialList,
-        presentationDefinition,
-        isButtonEnabled,
-        message,
-      ];
+    selected,
+    filteredCredentialList,
+    presentationDefinition,
+    isButtonEnabled,
+    message,
+  ];
 }

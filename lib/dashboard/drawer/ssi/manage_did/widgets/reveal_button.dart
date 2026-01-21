@@ -33,9 +33,7 @@ class RevealButton extends StatelessWidget {
               width: Sizes.icon2x,
               color: Colors.white,
             ),
-            const SizedBox(
-              height: Sizes.space2XSmall,
-            ),
+            const SizedBox(height: Sizes.space2XSmall),
             Text(
               l10n.reveal.toUpperCase(),
               style: Theme.of(context).textTheme.bodyMedium,

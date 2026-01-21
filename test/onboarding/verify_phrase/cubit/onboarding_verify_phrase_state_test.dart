@@ -4,16 +4,18 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('OnBoardingVerifyPhraseState', () {
-    test('success method returns a new state with updated status and message',
-        () {
-      final state = OnBoardingVerifyPhraseState();
-      final newState = state.success(messageHandler: ResponseMessage());
+    test(
+      'success method returns a new state with updated status and message',
+      () {
+        final state = OnBoardingVerifyPhraseState();
+        final newState = state.success(messageHandler: ResponseMessage());
 
-      expect(newState.status, AppStatus.success);
-      expect(newState.message, isNotNull);
-      expect(newState.isVerified, state.isVerified);
-      expect(newState.mnemonicStates, state.mnemonicStates);
-    });
+        expect(newState.status, AppStatus.success);
+        expect(newState.message, isNotNull);
+        expect(newState.isVerified, state.isVerified);
+        expect(newState.mnemonicStates, state.mnemonicStates);
+      },
+    );
 
     test('toJson and fromJson work correctly', () {
       final state = OnBoardingVerifyPhraseState(

@@ -6,14 +6,11 @@ part 'eudipid_subject_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class EudipidSubjectModel extends CredentialSubjectModel {
-  EudipidSubjectModel({
-    super.id,
-    super.type,
-    super.issuedBy,
-  }) : super(
-          credentialSubjectType: CredentialSubjectType.eudiPid,
-          credentialCategory: CredentialCategory.identityCards,
-        );
+  EudipidSubjectModel({super.id, super.type, super.issuedBy})
+    : super(
+        credentialSubjectType: CredentialSubjectType.eudiPid,
+        credentialCategory: CredentialCategory.identityCards,
+      );
 
   factory EudipidSubjectModel.fromJson(Map<String, dynamic> json) =>
       _$EudipidSubjectModelFromJson(json);

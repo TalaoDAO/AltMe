@@ -4,10 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 class CameraBlured extends StatelessWidget {
-  const CameraBlured({
-    super.key,
-    required this.cameraController,
-  });
+  const CameraBlured({super.key, required this.cameraController});
 
   final CameraController cameraController;
 
@@ -20,9 +17,7 @@ class CameraBlured extends StatelessWidget {
         BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0),
-            ),
+            decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0)),
           ),
         ),
         Center(child: CameraPreview(cameraController)),

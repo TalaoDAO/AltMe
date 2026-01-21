@@ -4,5 +4,5 @@ enum KycVerificationStatus {
   approved,
   rejected,
   loading,
-  unkown
+  unkown,
 }

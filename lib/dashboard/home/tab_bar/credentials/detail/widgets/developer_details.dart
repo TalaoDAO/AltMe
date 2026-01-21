@@ -41,9 +41,9 @@ class DeveloperDetails extends StatelessWidget {
         jwtDecode: jwtDecode,
         token: credentialModel.jwt!,
       );
-      payload = const JsonEncoder.withIndent('  ').convert(
-        Map.of(jsonPayload)..removeWhere((key, value) => key == 'jwt'),
-      );
+      payload = const JsonEncoder.withIndent(
+        '  ',
+      ).convert(Map.of(jsonPayload)..removeWhere((key, value) => key == 'jwt'));
 
       if (credentialModel.getFormat == VCFormatType.vcSdJWT.vcValue ||
           credentialModel.getFormat == VCFormatType.dcSdJWT.vcValue) {
@@ -54,8 +54,9 @@ class DeveloperDetails extends StatelessWidget {
           selectiveDisclosure: selectiveDisclosure,
         );
 
-        payload = const JsonEncoder.withIndent('  ')
-            .convert(Map.of(data)..removeWhere((key, value) => key == 'jwt'));
+        payload = const JsonEncoder.withIndent(
+          '  ',
+        ).convert(Map.of(data)..removeWhere((key, value) => key == 'jwt'));
       }
     } else {
       data = const JsonEncoder.withIndent('  ').convert(credentialModel.data);

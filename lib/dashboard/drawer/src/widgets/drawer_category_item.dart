@@ -37,10 +37,9 @@ class DrawerCategoryItem extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   if (subTitle != null) ...[
                     const SizedBox(height: Sizes.space2XSmall),
@@ -59,10 +58,9 @@ class DrawerCategoryItem extends StatelessWidget {
               Icon(
                 Icons.chevron_right,
                 size: Sizes.icon2x,
-                color: Theme.of(context)
-                    .colorScheme
-                    .onSurface
-                    .withValues(alpha: 0.6),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             ],
           ],

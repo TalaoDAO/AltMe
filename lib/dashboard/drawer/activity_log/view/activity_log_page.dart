@@ -38,11 +38,9 @@ class _ActivityLogViewState extends State<ActivityLogView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        await context.read<ActivityLogCubit>().getAllLogs();
-      },
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await context.read<ActivityLogCubit>().getAllLogs();
+    });
   }
 
   @override
@@ -96,13 +94,17 @@ class _ActivityLogViewState extends State<ActivityLogView> {
                       case LogType.restoreWallet:
                         message = l10n.restoredCredentials;
                       case LogType.addVC:
-                        message =
-                            l10n.addedCredential(credentialName, domainName);
+                        message = l10n.addedCredential(
+                          credentialName,
+                          domainName,
+                        );
                       case LogType.deleteVC:
                         message = l10n.deletedCredential(credentialName);
                       case LogType.presentVC:
                         message = l10n.presentedCredential(
-                            credentialName, domainName,);
+                          credentialName,
+                          domainName,
+                        );
                       case LogType.importKey:
                         message = l10n.keysImported;
                     }

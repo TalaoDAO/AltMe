@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DividerForRadioList extends StatelessWidget {
-  const DividerForRadioList({
-    super.key,
-  });
+  const DividerForRadioList({super.key});
 
   @override
   Widget build(BuildContext context) {

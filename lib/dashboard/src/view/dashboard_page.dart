@@ -15,9 +15,9 @@ class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
 
   static Route<dynamic> route() => MaterialPageRoute<void>(
-        builder: (context) => const DashboardPage(),
-        settings: const RouteSettings(name: AltMeStrings.dashBoardPage),
-      );
+    builder: (context) => const DashboardPage(),
+    settings: const RouteSettings(name: AltMeStrings.dashBoardPage),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +68,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   void bottomTapped(int index) {
     if (context.read<HomeCubit>().state.homeStatus == HomeStatus.hasNoWallet) {
-      showDialog<void>(
-        context: context,
-        builder: (_) => const WalletDialog(),
-      );
+      showDialog<void>(context: context, builder: (_) => const WalletDialog());
       return;
     }
     context.read<DashboardCubit>().onPageChanged(index);
@@ -124,8 +121,9 @@ class _DashboardViewState extends State<DashboardView> {
                       context: context,
                       title: l10n.typeYourPINCodeToAuthenticate,
                       localAuthApi: LocalAuthApi(),
-                      onSuccess: () => Navigator.of(context)
-                          .push<void>(RecoveryKeyPage.route()),
+                      onSuccess: () => Navigator.of(
+                        context,
+                      ).push<void>(RecoveryKeyPage.route()),
                     );
                   },
                 ),
@@ -247,16 +245,15 @@ class _DashboardViewState extends State<DashboardView> {
                             _getTitle(dashboardState.selectedIndex, l10n),
                             maxLines: 2,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall!
+                            style: Theme.of(context).textTheme.headlineSmall!
                                 .copyWith(fontWeight: FontWeight.bold),
                           ),
                           Expanded(
                             child: PageView(
                               controller: pageController,
-                              onPageChanged:
-                                  context.read<DashboardCubit>().onPageChanged,
+                              onPageChanged: context
+                                  .read<DashboardCubit>()
+                                  .onPageChanged,
                               physics: const NeverScrollableScrollPhysics(),
                               children: [
                                 const HomePage(),

@@ -11,9 +11,7 @@ part 'camera_cubit.g.dart';
 part 'camera_state.dart';
 
 class CameraCubit extends Cubit<CameraState> {
-  CameraCubit({
-    required this.defaultConfig,
-  }) : super(const CameraState());
+  CameraCubit({required this.defaultConfig}) : super(const CameraState());
 
   final CameraConfig defaultConfig;
 
@@ -44,11 +42,7 @@ class CameraCubit extends Cubit<CameraState> {
       }
     } catch (e, s) {
       emit(state.copyWith(status: CameraStatus.initializeFailed));
-      logger.e(
-        'error: $e, stack: $s',
-        error: e,
-        stackTrace: s,
-      );
+      logger.e('error: $e, stack: $s', error: e, stackTrace: s);
     }
     cameraController = CameraController(
       selectedCamera ?? cameras[0],
@@ -67,8 +61,9 @@ class CameraCubit extends Cubit<CameraState> {
       await cameraController!.pausePreview();
       final imageSize = await xFile.length();
 
-      logger
-          .i('Real size: ${(imageSize / (1024 * 1024)).toStringAsFixed(2)} MB');
+      logger.i(
+        'Real size: ${(imageSize / (1024 * 1024)).toStringAsFixed(2)} MB',
+      );
 
       /// fileInMB = fileSizeInBytes / (1024 * 1024)
 
@@ -97,8 +92,9 @@ class CameraCubit extends Cubit<CameraState> {
         fixedImageBytes = img.encodeJpg(img.decodeImage(photoCaptured)!);
       } else {
         // we flip the image because we sure that the selfi image filping
-        fixedImageBytes =
-            img.encodeJpg(img.flipHorizontal(img.decodeImage(photoCaptured)!));
+        fixedImageBytes = img.encodeJpg(
+          img.flipHorizontal(img.decodeImage(photoCaptured)!),
+        );
       }
 
       emit(
@@ -180,10 +176,7 @@ class CameraCubit extends Cubit<CameraState> {
 
   Future<void> updateAgeEstimate(String ageEstimate) async {
     emit(
-      state.copyWith(
-        ageEstimate: ageEstimate,
-        status: CameraStatus.loading,
-      ),
+      state.copyWith(ageEstimate: ageEstimate, status: CameraStatus.loading),
     );
   }
 }

@@ -20,9 +20,9 @@ class OnBoardingGenPhrasePage extends StatelessWidget {
   const OnBoardingGenPhrasePage({super.key});
 
   static Route<dynamic> route() => MaterialPageRoute<void>(
-        builder: (context) => const OnBoardingGenPhrasePage(),
-        settings: const RouteSettings(name: '/onBoardingGenPhrasePage'),
-      );
+    builder: (context) => const OnBoardingGenPhrasePage(),
+    settings: const RouteSettings(name: '/onBoardingGenPhrasePage'),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -106,13 +106,8 @@ class _OnBoardingGenPhraseViewState extends State<OnBoardingGenPhraseView> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      const MStepper(
-                        step: 3,
-                        totalStep: 3,
-                      ),
-                      const SizedBox(
-                        height: Sizes.spaceNormal,
-                      ),
+                      const MStepper(step: 3, totalStep: 3),
+                      const SizedBox(height: Sizes.spaceNormal),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: Sizes.spaceNormal,

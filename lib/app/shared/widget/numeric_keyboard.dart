@@ -94,18 +94,20 @@ class NumericKeyboard extends StatelessWidget {
   }
 
   List<Widget> buildButtons(BuildContext context, List<String> keyboardItems) {
-    final List<Widget> allKeyboardButtons =
-        List.generate(keyboardItems.length, (index) {
-      return KeyboardButton(
-        digitBorderWidth: keyboardUIConfig.digitBorderWidth,
-        digitShape: keyboardUIConfig.digitShape,
-        semanticsLabel: keyboardItems[index],
-        onTap: onKeyboardTap,
-        label: keyboardItems[index],
-        digitTextStyle: keyboardUIConfig.digitTextStyle,
-        allowAction: allowAction,
-      );
-    });
+    final List<Widget> allKeyboardButtons = List.generate(
+      keyboardItems.length,
+      (index) {
+        return KeyboardButton(
+          digitBorderWidth: keyboardUIConfig.digitBorderWidth,
+          digitShape: keyboardUIConfig.digitShape,
+          semanticsLabel: keyboardItems[index],
+          onTap: onKeyboardTap,
+          label: keyboardItems[index],
+          digitTextStyle: keyboardUIConfig.digitTextStyle,
+          allowAction: allowAction,
+        );
+      },
+    );
 
     if (leadingButton != null) {
       allKeyboardButtons.insert(keyboardItems.length - 1, leadingButton!);
@@ -180,10 +182,8 @@ class KeyboardButton extends StatelessWidget {
                           ? Border.all(
                               color: allowAction
                                   ? Theme.of(context).colorScheme.onSurface
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
-                                      .withValues(alpha: 0.1),
+                                  : Theme.of(context).colorScheme.onSurface
+                                        .withValues(alpha: 0.1),
                               width: digitBorderWidth,
                             )
                           : null,
@@ -199,26 +199,23 @@ class KeyboardButton extends StatelessWidget {
                               label!,
                               style: digitTextStyle != null
                                   ? allowAction
-                                      ? digitTextStyle
-                                      : digitTextStyle!.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurface
-                                              .withValues(alpha: 0.1),
-                                        )
-                                  : allowAction
-                                      ? Theme.of(context)
-                                          .textTheme
-                                          .headlineMedium
-                                      : Theme.of(context)
-                                          .textTheme
-                                          .headlineMedium!
-                                          .copyWith(
+                                        ? digitTextStyle
+                                        : digitTextStyle!.copyWith(
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .onSurface
                                                 .withValues(alpha: 0.1),
-                                          ),
+                                          )
+                                  : allowAction
+                                  ? Theme.of(context).textTheme.headlineMedium
+                                  : Theme.of(
+                                      context,
+                                    ).textTheme.headlineMedium!.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface
+                                          .withValues(alpha: 0.1),
+                                    ),
                               semanticsLabel: semanticsLabel,
                             )
                           : icon,
@@ -255,7 +252,8 @@ class KeyboardButton extends StatelessWidget {
                       child: label != null
                           ? Text(
                               label!,
-                              style: digitTextStyle ??
+                              style:
+                                  digitTextStyle ??
                                   Theme.of(context).textTheme.headlineMedium,
                               semanticsLabel: semanticsLabel,
                             )
@@ -292,7 +290,7 @@ class AlignedGrid extends StatelessWidget {
     final rows = children.length / columns;
     final itemHeight =
         (keyboardSize.height - (runSpacing * (rows - 1)) - heightAdjustment) /
-            rows;
+        rows;
     final itemSize = min(itemHeight, itemWidth);
     return Wrap(
       runSpacing: runSpacing,
@@ -300,11 +298,7 @@ class AlignedGrid extends StatelessWidget {
       alignment: WrapAlignment.center,
       children: children
           .map(
-            (item) => SizedBox(
-              width: itemSize,
-              height: itemSize,
-              child: item,
-            ),
+            (item) => SizedBox(width: itemSize, height: itemSize, child: item),
           )
           .toList(growable: false),
     );

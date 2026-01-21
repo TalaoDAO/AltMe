@@ -18,11 +18,7 @@ class BackLeadingButton extends StatelessWidget {
     return IconButton(
       padding: padding,
       onPressed: onPressed ?? () => Navigator.of(context).pop(),
-      icon: Icon(
-        Icons.chevron_left,
-        color: colorValue,
-        size: 35,
-      ),
+      icon: Icon(Icons.chevron_left, color: colorValue, size: 35),
     );
   }
 }

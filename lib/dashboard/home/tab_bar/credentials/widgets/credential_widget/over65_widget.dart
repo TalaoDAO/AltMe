@@ -12,16 +12,17 @@ class Over65Widget extends StatelessWidget {
     return CredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.over65,
       issuerName: credentialModel
-          .credentialPreview.credentialSubjectModel.issuedBy?.name,
+          .credentialPreview
+          .credentialSubjectModel
+          .issuedBy
+          ?.name,
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),
       value: context.l10n.youAreOver65,
       expirationDate: credentialModel.expirationDate == null
           ? '--'
-          : UiDate.formatDateForCredentialCard(
-              credentialModel.expirationDate!,
-            ),
+          : UiDate.formatDateForCredentialCard(credentialModel.expirationDate!),
     );
   }
 }

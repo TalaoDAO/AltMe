@@ -36,8 +36,9 @@ class SoftwareLicenseCubit extends Cubit<SoftwareLicenseState> {
         .map((entry) => LicenseModel(entry.key, entry.value))
         .toList();
 
-    licenses
-        .sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+    licenses.sort(
+      (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
+    );
 
     emit(state.copyWith(status: AppStatus.populate, licenses: licenses));
   }

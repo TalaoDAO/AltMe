@@ -6,5 +6,4 @@ void main() {
   test('can access AppTheme', () {
     expect(AppTheme, isNotNull);
   });
-
 }

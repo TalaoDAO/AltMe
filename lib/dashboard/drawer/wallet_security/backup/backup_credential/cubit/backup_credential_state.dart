@@ -16,15 +16,10 @@ class BackupCredentialState extends Equatable {
   final String filePath;
 
   BackupCredentialState loading() {
-    return BackupCredentialState(
-      status: AppStatus.loading,
-      filePath: filePath,
-    );
+    return BackupCredentialState(status: AppStatus.loading, filePath: filePath);
   }
 
-  BackupCredentialState error({
-    required MessageHandler messageHandler,
-  }) {
+  BackupCredentialState error({required MessageHandler messageHandler}) {
     return BackupCredentialState(
       status: AppStatus.error,
       filePath: filePath,

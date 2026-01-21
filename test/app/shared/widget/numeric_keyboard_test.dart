@@ -26,8 +26,9 @@ void main() {
       expect(find.byType(KeyboardButton), findsNWidgets(10));
     });
 
-    testWidgets('tapping a keyboard button triggers the callback',
-        (tester) async {
+    testWidgets('tapping a keyboard button triggers the callback', (
+      tester,
+    ) async {
       final mockCallback = MockKeyboardTapCallback();
 
       await tester.pumpApp(
@@ -99,8 +100,9 @@ void main() {
       verify(() => mockCallback.call('1')).called(1);
     });
 
-    testWidgets('does not trigger onTap callback when disabled',
-        (tester) async {
+    testWidgets('does not trigger onTap callback when disabled', (
+      tester,
+    ) async {
       final mockCallback = MockKeyboardTapCallback();
       await tester.pumpApp(
         Scaffold(
@@ -119,8 +121,9 @@ void main() {
       verifyNever(() => mockCallback.call(any()));
     });
 
-    testWidgets('triggers onLongPress callback when long pressed',
-        (tester) async {
+    testWidgets('triggers onLongPress callback when long pressed', (
+      tester,
+    ) async {
       final mockCallback = MockKeyboardTapCallback();
       await tester.pumpApp(
         Scaffold(
@@ -139,8 +142,9 @@ void main() {
       verify(() => mockCallback.call('1')).called(1);
     });
 
-    testWidgets('does not trigger onLongPress callback when disabled',
-        (tester) async {
+    testWidgets('does not trigger onLongPress callback when disabled', (
+      tester,
+    ) async {
       final mockCallback = MockKeyboardTapCallback();
       await tester.pumpApp(
         Scaffold(

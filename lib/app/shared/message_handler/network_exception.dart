@@ -5,10 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class NetworkException with MessageHandler {
-  NetworkException({
-    this.message,
-    this.data,
-  });
+  NetworkException({this.message, this.data});
 
   final NetworkError? message;
   final dynamic data;
@@ -90,9 +87,7 @@ class NetworkException with MessageHandler {
     }
   }
 
-  static NetworkException getDioException({
-    required dynamic error,
-  }) {
+  static NetworkException getDioException({required dynamic error}) {
     if (error is Exception) {
       NetworkException networkException;
       if (error is DioException) {
@@ -174,26 +169,31 @@ class NetworkException with MessageHandler {
         case NetworkError.NETWORK_ERROR_REQUEST_CANCELLED:
           return NetworkError.NETWORK_ERROR_REQUEST_CANCELLED.localise(context);
         case NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR:
-          return NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR
-              .localise(context);
+          return NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR.localise(
+            context,
+          );
         case NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE:
-          return NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE
-              .localise(context);
+          return NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE.localise(
+            context,
+          );
         case NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED:
-          return NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED
-              .localise(context);
+          return NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED.localise(
+            context,
+          );
         case NetworkError.NETWORK_ERROR_BAD_REQUEST:
           return NetworkError.NETWORK_ERROR_BAD_REQUEST.localise(context);
         case NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST:
-          return NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST
-              .localise(context);
+          return NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST.localise(
+            context,
+          );
         case NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR:
           return NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR.localise(context);
         case NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT:
           return NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT.localise(context);
         case NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION:
-          return NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION
-              .localise(context);
+          return NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION.localise(
+            context,
+          );
         case NetworkError.NETWORK_ERROR_CONFLICT:
           return NetworkError.NETWORK_ERROR_CONFLICT.localise(context);
         case NetworkError.NETWORK_ERROR_SEND_TIMEOUT:
@@ -211,8 +211,9 @@ class NetworkException with MessageHandler {
         case NetworkError.NETWORK_ERROR_NOT_FOUND:
           return NetworkError.NETWORK_ERROR_NOT_FOUND.localise(context);
         case NetworkError.NETWORK_ERROR_PRECONDITION_FAILED:
-          return NetworkError.NETWORK_ERROR_PRECONDITION_FAILED
-              .localise(context);
+          return NetworkError.NETWORK_ERROR_PRECONDITION_FAILED.localise(
+            context,
+          );
         case NetworkError.NETWORK_ERROR_NOT_READY:
           return NetworkError.NETWORK_ERROR_NOT_READY.localise(context);
       }

@@ -13,9 +13,9 @@ class PolygonPooAddressModel extends CredentialSubjectModel {
     super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.polygonPooAddress,
-          credentialCategory: CredentialCategory.blockchainAccountsCards,
-        );
+         credentialSubjectType: CredentialSubjectType.polygonPooAddress,
+         credentialCategory: CredentialCategory.blockchainAccountsCards,
+       );
 
   factory PolygonPooAddressModel.fromJson(Map<String, dynamic> json) =>
       _$PolygonPooAddressModelFromJson(json);

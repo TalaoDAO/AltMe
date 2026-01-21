@@ -15,9 +15,9 @@ class LivenessCardModel extends CredentialSubjectModel {
     super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.livenessCard,
-          credentialCategory: CredentialCategory.identityCards,
-        );
+         credentialSubjectType: CredentialSubjectType.livenessCard,
+         credentialCategory: CredentialCategory.identityCards,
+       );
 
   factory LivenessCardModel.fromJson(Map<String, dynamic> json) =>
       _$LivenessCardModelFromJson(json);

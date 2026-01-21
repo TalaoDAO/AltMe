@@ -27,11 +27,11 @@ class NumKeyboard extends StatelessWidget {
       onKeyboardTap: (text) {
         if (!allowAction) return;
         context.read<PinCodeViewCubit>().onKeyboardButtonPressed(
-              passwordDigits: passwordDigits,
-              text: text,
-              cancelCallback: cancelCallback,
-              isNewCode: isNewCode,
-            );
+          passwordDigits: passwordDigits,
+          text: text,
+          cancelCallback: cancelCallback,
+          isNewCode: isNewCode,
+        );
       },
       keyboardUIConfig: keyboardUIConfig,
       trailingButton: keyboardButton,

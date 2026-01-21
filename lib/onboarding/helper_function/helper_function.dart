@@ -38,8 +38,10 @@ Future<void> generateAccount({
     accountType: AccountType.ssi,
   );
 
-  await profileCubit.secureStorageProvider
-      .set(SecureStorageKeys.ssiKey, ssiKey);
+  await profileCubit.secureStorageProvider.set(
+    SecureStorageKeys.ssiKey,
+    ssiKey,
+  );
 
   await activityLogManager.saveLog(LogData(type: LogType.walletInit));
 

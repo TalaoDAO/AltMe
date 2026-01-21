@@ -25,9 +25,7 @@ class OnBoardingVerifyPhraseState extends Equatable {
     );
   }
 
-  OnBoardingVerifyPhraseState error({
-    required MessageHandler messageHandler,
-  }) {
+  OnBoardingVerifyPhraseState error({required MessageHandler messageHandler}) {
     return OnBoardingVerifyPhraseState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
@@ -99,9 +97,5 @@ class MnemonicState extends Equatable {
   Map<String, dynamic> toJson() => _$MnemonicStateToJson(this);
 
   @override
-  List<Object?> get props => [
-        mnemonicStatus,
-        order,
-        userSelectedOrder,
-      ];
+  List<Object?> get props => [mnemonicStatus, order, userSelectedOrder];
 }

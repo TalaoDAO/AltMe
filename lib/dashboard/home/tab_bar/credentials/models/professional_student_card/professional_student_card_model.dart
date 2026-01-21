@@ -15,9 +15,9 @@ class ProfessionalStudentCardModel extends CredentialSubjectModel {
     super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.professionalStudentCard,
-          credentialCategory: CredentialCategory.contactInfoCredentials,
-        );
+         credentialSubjectType: CredentialSubjectType.professionalStudentCard,
+         credentialCategory: CredentialCategory.contactInfoCredentials,
+       );
 
   factory ProfessionalStudentCardModel.fromJson(Map<String, dynamic> json) =>
       _$ProfessionalStudentCardModelFromJson(json);

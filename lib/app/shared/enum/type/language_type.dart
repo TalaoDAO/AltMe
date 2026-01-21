@@ -10,10 +10,7 @@ enum LanguageType {
 }
 
 extension LanguageTypeX on LanguageType {
-  String getTitle({
-    required AppLocalizations l10n,
-    required String name,
-  }) {
+  String getTitle({required AppLocalizations l10n, required String name}) {
     switch (this) {
       case LanguageType.phone:
         return l10n.phoneLanguage;

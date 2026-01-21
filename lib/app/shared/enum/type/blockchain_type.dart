@@ -3,14 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/key_generator/key_generator.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 
-enum BlockchainType {
-  tezos,
-  ethereum,
-  fantom,
-  polygon,
-  binance,
-  etherlink,
-}
+enum BlockchainType { tezos, ethereum, fantom, polygon, binance, etherlink }
 
 extension BlockchainTypeX on BlockchainType {
   String get icon {
@@ -259,36 +252,18 @@ extension BlockchainTypeX on BlockchainType {
   List<BlockchainNetwork> get networks {
     switch (this) {
       case BlockchainType.tezos:
-        return [
-          TezosNetwork.mainNet(),
-          TezosNetwork.ghostnet(),
-        ];
+        return [TezosNetwork.mainNet(), TezosNetwork.ghostnet()];
 
       case BlockchainType.ethereum:
-        return [
-          EthereumNetwork.mainNet(),
-          EthereumNetwork.testNet(),
-        ];
+        return [EthereumNetwork.mainNet(), EthereumNetwork.testNet()];
       case BlockchainType.fantom:
-        return [
-          FantomNetwork.mainNet(),
-          FantomNetwork.testNet(),
-        ];
+        return [FantomNetwork.mainNet(), FantomNetwork.testNet()];
       case BlockchainType.polygon:
-        return [
-          PolygonNetwork.mainNet(),
-          PolygonNetwork.testNet(),
-        ];
+        return [PolygonNetwork.mainNet(), PolygonNetwork.testNet()];
       case BlockchainType.binance:
-        return [
-          BinanceNetwork.mainNet(),
-          BinanceNetwork.testNet(),
-        ];
+        return [BinanceNetwork.mainNet(), BinanceNetwork.testNet()];
       case BlockchainType.etherlink:
-        return [
-          EtherlinkNetwork.mainNet(),
-          EtherlinkNetwork.testNet(),
-        ];
+        return [EtherlinkNetwork.mainNet(), EtherlinkNetwork.testNet()];
     }
   }
 

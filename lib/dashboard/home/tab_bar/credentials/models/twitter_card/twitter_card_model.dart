@@ -6,15 +6,11 @@ part 'twitter_card_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class TwitterCardModel extends CredentialSubjectModel {
-  TwitterCardModel({
-    super.id,
-    super.type,
-    super.issuedBy,
-    super.offeredBy,
-  }) : super(
-          credentialSubjectType: CredentialSubjectType.twitterCard,
-          credentialCategory: CredentialCategory.socialMediaCards,
-        );
+  TwitterCardModel({super.id, super.type, super.issuedBy, super.offeredBy})
+    : super(
+        credentialSubjectType: CredentialSubjectType.twitterCard,
+        credentialCategory: CredentialCategory.socialMediaCards,
+      );
 
   factory TwitterCardModel.fromJson(Map<String, dynamic> json) =>
       _$TwitterCardModelFromJson(json);

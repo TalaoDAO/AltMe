@@ -13,8 +13,7 @@ class DiscoverPage extends StatefulWidget {
 
 class _DiscoverPageState extends State<DiscoverPage> {
   Future<void> onRefresh() async {
-    await context.read<CredentialsCubit>().loadAllCredentials(
-        );
+    await context.read<CredentialsCubit>().loadAllCredentials();
   }
 
   @override
@@ -31,11 +30,11 @@ class _DiscoverPageState extends State<DiscoverPage> {
           // ? EdgeInsets.zero
           // :
           const EdgeInsets.fromLTRB(
-        Sizes.spaceSmall,
-        Sizes.spaceSmall,
-        Sizes.spaceSmall,
-        0,
-      ),
+            Sizes.spaceSmall,
+            Sizes.spaceSmall,
+            Sizes.spaceSmall,
+            0,
+          ),
       backgroundColor: Colors.transparent,
       body: BlocListener<ProfileCubit, ProfileState>(
         listenWhen: (previous, current) {

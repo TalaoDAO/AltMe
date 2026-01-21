@@ -11,13 +11,15 @@ void main() {
 
   setUpAll(() {
     when(navigator.canPop).thenReturn(true);
-    when(() => navigator.pushReplacement<void, void>(any()))
-        .thenAnswer((_) async {});
+    when(
+      () => navigator.pushReplacement<void, void>(any()),
+    ).thenAnswer((_) async {});
     when(() => navigator.push<void>(any())).thenAnswer((_) async {});
   });
 
-  testWidgets('sensibleRoute pushes replacement route if isSameRoute is true',
-      (WidgetTester tester) async {
+  testWidgets('sensibleRoute pushes replacement route if isSameRoute is true', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpApp(
       MockNavigatorProvider(
         navigator: navigator,
@@ -41,46 +43,40 @@ void main() {
 
     verify(
       () => navigator.pushReplacement<void, void>(
-        any(
-          that: isRoute<void>(
-            whereName: equals('/starterPage'),
-          ),
-        ),
+        any(that: isRoute<void>(whereName: equals('/starterPage'))),
       ),
     ).called(1);
   });
 
-  testWidgets('sensibleRoute pushes replacement route if isSameRoute is false',
-      (WidgetTester tester) async {
-    await tester.pumpApp(
-      MockNavigatorProvider(
-        navigator: navigator,
-        child: Builder(
-          builder: (context) => Scaffold(
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                sensibleRoute(
-                  context: context,
-                  route: StarterPage.route(),
-                  isSameRoute: false,
-                );
-              },
+  testWidgets(
+    'sensibleRoute pushes replacement route if isSameRoute is false',
+    (WidgetTester tester) async {
+      await tester.pumpApp(
+        MockNavigatorProvider(
+          navigator: navigator,
+          child: Builder(
+            builder: (context) => Scaffold(
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  sensibleRoute(
+                    context: context,
+                    route: StarterPage.route(),
+                    isSameRoute: false,
+                  );
+                },
+              ),
             ),
           ),
         ),
-      ),
-    );
-    await tester.tap(find.byType(FloatingActionButton));
-    await tester.pumpAndSettle();
+      );
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
 
-    verify(
-      () => navigator.push<void>(
-        any(
-          that: isRoute<void>(
-            whereName: equals('/starterPage'),
-          ),
+      verify(
+        () => navigator.push<void>(
+          any(that: isRoute<void>(whereName: equals('/starterPage'))),
         ),
-      ),
-    ).called(1);
-  });
+      ).called(1);
+    },
+  );
 }

@@ -14,7 +14,11 @@ class EmployeeCredentialWidget extends StatelessWidget {
     //     .credentialPreview.credentialSubjectModel as EmployeeCredentialModel;
 
     final DisplayMapping? titleDisplayMapping = credentialModel
-        .credentialManifest?.outputDescriptors?.first.display?.title;
+        .credentialManifest
+        ?.outputDescriptors
+        ?.first
+        .display
+        ?.title;
 
     var title = '';
 
@@ -28,11 +32,18 @@ class EmployeeCredentialWidget extends StatelessWidget {
 
     if (title == '') {
       title = credentialModel
-          .credentialPreview.credentialSubjectModel.credentialSubjectType.title;
+          .credentialPreview
+          .credentialSubjectModel
+          .credentialSubjectType
+          .title;
     }
 
     final DisplayMapping? subTitleDisplayMapping = credentialModel
-        .credentialManifest?.outputDescriptors?.first.display?.subtitle;
+        .credentialManifest
+        ?.outputDescriptors
+        ?.first
+        .display
+        ?.subtitle;
 
     var subTitle = '';
 
@@ -47,7 +58,10 @@ class EmployeeCredentialWidget extends StatelessWidget {
     return CredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.employeeCard,
       issuerName: credentialModel
-          .credentialPreview.credentialSubjectModel.issuedBy?.name,
+          .credentialPreview
+          .credentialSubjectModel
+          .issuedBy
+          ?.name,
       value: subTitle,
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
@@ -55,9 +69,7 @@ class EmployeeCredentialWidget extends StatelessWidget {
       title: title,
       expirationDate: credentialModel.expirationDate == null
           ? '--'
-          : UiDate.formatDateForCredentialCard(
-              credentialModel.expirationDate!,
-            ),
+          : UiDate.formatDateForCredentialCard(credentialModel.expirationDate!),
     );
   }
 }

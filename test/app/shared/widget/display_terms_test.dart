@@ -16,8 +16,9 @@ void main() {
       expect(appState.log, isNotNull);
     });
 
-    testWidgets('returns privacy policies and terms for empty string',
-        (tester) async {
+    testWidgets('returns privacy policies and terms for empty string', (
+      tester,
+    ) async {
       await tester.pumpApp(const DisplayTermsofUse());
       final dynamic appState = tester.state(find.byType(DisplayTermsofUse));
       final list = await appState.getBodyData('');

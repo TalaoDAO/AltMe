@@ -121,17 +121,17 @@ class TokenModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        contractAddress,
-        name,
-        symbol,
-        icon,
-        thumbnailUri,
-        balance,
-        decimals,
-        tokenUSDPrice,
-        balanceInUSD,
-        tokenId,
-        standard,
-        decimalsToShow,
-      ];
+    contractAddress,
+    name,
+    symbol,
+    icon,
+    thumbnailUri,
+    balance,
+    decimals,
+    tokenUSDPrice,
+    balanceInUSD,
+    tokenId,
+    standard,
+    decimalsToShow,
+  ];
 }

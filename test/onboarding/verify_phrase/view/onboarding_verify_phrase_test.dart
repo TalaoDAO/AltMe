@@ -61,7 +61,8 @@ class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {
     void Function({
       required CryptoAccount cryptoAccount,
       required MessageHandler messageHandler,
-    })? onComplete,
+    })?
+    onComplete,
   }) async {}
 }
 
@@ -143,15 +144,18 @@ void main() {
     setUpAll(() {
       when(() => secureStorageProvider.get(any())).thenAnswer((_) async => '');
 
-      when(() => secureStorageProvider.set(any(), any()))
-          .thenAnswer((_) async => Future<void>.value());
+      when(
+        () => secureStorageProvider.set(any(), any()),
+      ).thenAnswer((_) async => Future<void>.value());
 
       when(navigator.canPop).thenReturn(true);
       when(() => navigator.push<void>(any())).thenAnswer((_) async {});
-      when(() => navigator.pushAndRemoveUntil<void>(any(), any()))
-          .thenAnswer((_) async {});
-      when(() => navigator.pushReplacement<void, void>(any()))
-          .thenAnswer((_) async {});
+      when(
+        () => navigator.pushAndRemoveUntil<void>(any(), any()),
+      ).thenAnswer((_) async {});
+      when(
+        () => navigator.pushReplacement<void, void>(any()),
+      ).thenAnswer((_) async {});
     });
 
     testWidgets('is routable', (tester) async {
@@ -192,14 +196,16 @@ void main() {
     testWidgets('renders ProtectWalletView', (tester) async {
       when(() => flavorCubit.state).thenAnswer((_) => FlavorMode.development);
       when(
-        () => secureStorageProvider
-            .get(SecureStorageKeys.enterpriseProfileSetting),
+        () => secureStorageProvider.get(
+          SecureStorageKeys.enterpriseProfileSetting,
+        ),
       ).thenAnswer((_) async => null);
-      when(() => didKitProvider.keyToDID(any(), any())).thenReturn(
-        'did:key:z6MkkCk2d3LN8qn6tWxR1qxibMCpp9E9vJVBrfv5djSk3F56',
-      );
-      when(() => didKitProvider.keyToVerificationMethod(any(), any()))
-          .thenAnswer(
+      when(
+        () => didKitProvider.keyToDID(any(), any()),
+      ).thenReturn('did:key:z6MkkCk2d3LN8qn6tWxR1qxibMCpp9E9vJVBrfv5djSk3F56');
+      when(
+        () => didKitProvider.keyToVerificationMethod(any(), any()),
+      ).thenAnswer(
         (_) async => 'did:key:z6MkkCk2d3LN8qn6tWxR1qxibMCpp9E9vJVBrfv5djSk3F56',
       );
       await tester.pumpApp(
@@ -305,13 +311,13 @@ void main() {
       expect(find.byType(PhraseWord), findsNWidgets(12));
     });
 
-    testWidgets(
-        'selects the phrase words correctly and state is verified and'
+    testWidgets('selects the phrase words correctly and state is verified and'
         ' emits Success when button is pressed and navigates to correct screen'
         ' when isFromOnboarding is false', (tester) async {
       when(() => flavorCubit.state).thenAnswer((_) => FlavorMode.development);
-      when(() => onboardingCubit.emitOnboardingProcessing())
-          .thenAnswer((_) async {});
+      when(
+        () => onboardingCubit.emitOnboardingProcessing(),
+      ).thenAnswer((_) async {});
       final onBoardingVerifyPhraseCubit = OnBoardingVerifyPhraseCubit(
         didKitProvider: didKitProvider,
         keyGenerator: keyGenerator,
@@ -368,10 +374,7 @@ void main() {
         );
       }
 
-      expect(
-        onBoardingVerifyPhraseCubit.state.isVerified,
-        true,
-      );
+      expect(onBoardingVerifyPhraseCubit.state.isVerified, true);
 
       await tester.pumpAndSettle();
 
@@ -380,91 +383,87 @@ void main() {
 
       verify(
         () => navigator.pushReplacement<void, void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals('/KeyVerifiedPage'),
-            ),
-          ),
+          any(that: isRoute<void>(whereName: equals('/KeyVerifiedPage'))),
         ),
       ).called(1);
     });
 
     testWidgets(
-        'emits Success when button is pressed and navigates to correct screen'
-        ' when isFromOnboarding is false', (tester) async {
-      when(() => flavorCubit.state).thenAnswer((_) => FlavorMode.development);
-      when(() => onboardingCubit.emitOnboardingProcessing())
-          .thenAnswer((_) async {});
-      final onBoardingVerifyPhraseCubit = OnBoardingVerifyPhraseCubit(
-        didKitProvider: didKitProvider,
-        keyGenerator: keyGenerator,
-        homeCubit: homeCubit,
-        walletCubit: walletCubit,
-        splashCubit: splashCubit,
-        altmeChatSupportCubit: altmeChatSupportCubit,
-        matrixNotificationCubit: matrixNotificationCubit,
-        profileCubit: ProfileCubit(
+      'emits Success when button is pressed and navigates to correct screen'
+      ' when isFromOnboarding is false',
+      (tester) async {
+        when(() => flavorCubit.state).thenAnswer((_) => FlavorMode.development);
+        when(
+          () => onboardingCubit.emitOnboardingProcessing(),
+        ).thenAnswer((_) async {});
+        final onBoardingVerifyPhraseCubit = OnBoardingVerifyPhraseCubit(
           didKitProvider: didKitProvider,
-          jwtDecode: JWTDecode(),
-          oidc4vc: oidc4vc,
-          secureStorageProvider: secureStorageProvider,
-          langCubit: MockLangCubit(),
-        ),
-        flavorCubit: flavorCubit,
-        activityLogManager: activityLogManager,
-        credentialsCubit: credentialsCubit,
-        qrCodeScanCubit: qrCodeScanCubit,
-        walletConnectCubit: walletConnectCubit,
-      );
+          keyGenerator: keyGenerator,
+          homeCubit: homeCubit,
+          walletCubit: walletCubit,
+          splashCubit: splashCubit,
+          altmeChatSupportCubit: altmeChatSupportCubit,
+          matrixNotificationCubit: matrixNotificationCubit,
+          profileCubit: ProfileCubit(
+            didKitProvider: didKitProvider,
+            jwtDecode: JWTDecode(),
+            oidc4vc: oidc4vc,
+            secureStorageProvider: secureStorageProvider,
+            langCubit: MockLangCubit(),
+          ),
+          flavorCubit: flavorCubit,
+          activityLogManager: activityLogManager,
+          credentialsCubit: credentialsCubit,
+          qrCodeScanCubit: qrCodeScanCubit,
+          walletConnectCubit: walletConnectCubit,
+        );
 
-      await tester.pumpApp(
-        MockNavigatorProvider(
-          navigator: navigator,
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<OnBoardingVerifyPhraseCubit>.value(
-                value: onBoardingVerifyPhraseCubit,
+        await tester.pumpApp(
+          MockNavigatorProvider(
+            navigator: navigator,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<OnBoardingVerifyPhraseCubit>.value(
+                  value: onBoardingVerifyPhraseCubit,
+                ),
+                BlocProvider<OnboardingCubit>.value(value: onboardingCubit),
+              ],
+              child: OnBoardingVerifyPhraseView(
+                mnemonic: mnemonicString.split(' '),
+                isFromOnboarding: true,
+                onBoardingVerifyPhraseCubit: onBoardingVerifyPhraseCubit,
+                onboardingCubit: onboardingCubit,
               ),
-              BlocProvider<OnboardingCubit>.value(value: onboardingCubit),
-            ],
-            child: OnBoardingVerifyPhraseView(
-              mnemonic: mnemonicString.split(' '),
-              isFromOnboarding: true,
-              onBoardingVerifyPhraseCubit: onBoardingVerifyPhraseCubit,
-              onboardingCubit: onboardingCubit,
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      for (int i = 0; i < 12; i++) {
-        final key = Key((i + 1).toString());
-        await tester.ensureVisible(find.byKey(key));
-        await tester.tap(find.byKey(key));
-      }
+        for (int i = 0; i < 12; i++) {
+          final key = Key((i + 1).toString());
+          await tester.ensureVisible(find.byKey(key));
+          await tester.tap(find.byKey(key));
+        }
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Continue'.toUpperCase()));
+        await tester.tap(find.text('Continue'.toUpperCase()));
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      verify(
-        () => navigator.pushAndRemoveUntil<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals('/walletReadyPage'),
-            ),
+        verify(
+          () => navigator.pushAndRemoveUntil<void>(
+            any(that: isRoute<void>(whereName: equals('/walletReadyPage'))),
+            any(that: isA<RoutePredicate>()),
           ),
-          any(that: isA<RoutePredicate>()),
-        ),
-      ).called(1);
-    });
+        ).called(1);
+      },
+    );
     testWidgets('emits Error when error occurs', (tester) async {
       when(() => flavorCubit.state).thenAnswer((_) => FlavorMode.development);
-      when(() => onboardingCubit.emitOnboardingProcessing())
-          .thenAnswer((_) async {});
+      when(
+        () => onboardingCubit.emitOnboardingProcessing(),
+      ).thenAnswer((_) async {});
       when(
         () => secureStorageProvider.set(
           SecureStorageKeys.hasVerifiedMnemonics,
@@ -571,8 +570,9 @@ void main() {
       await tester.pumpAndSettle();
 
       // to make sure that index is not 0
-      final index = onBoardingVerifyPhraseCubit.state.mnemonicStates
-          .indexWhere((element) => element.order != 1);
+      final index = onBoardingVerifyPhraseCubit.state.mnemonicStates.indexWhere(
+        (element) => element.order != 1,
+      );
 
       final mnemonicState =
           onBoardingVerifyPhraseCubit.state.mnemonicStates[index];

@@ -10,7 +10,7 @@ part 'restore_credential_mnemonic_state.dart';
 class RestoreCredentialMnemonicCubit
     extends Cubit<RestoreCredentialMnemonicState> {
   RestoreCredentialMnemonicCubit()
-      : super(const RestoreCredentialMnemonicState());
+    : super(const RestoreCredentialMnemonicState());
 
   void isMnemonicsValid(String value) {
     emit(

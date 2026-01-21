@@ -15,11 +15,15 @@ class DPopSupoprtWidget extends StatelessWidget {
           body: Switch(
             onChanged: (value) async {
               await context.read<ProfileCubit>().updateProfileSetting(
-                    dpopSupport: value,
-                  );
+                dpopSupport: value,
+              );
             },
-            value: state.model.profileSetting.selfSovereignIdentityOptions
-                .customOidc4vcProfile.dpopSupport,
+            value: state
+                .model
+                .profileSetting
+                .selfSovereignIdentityOptions
+                .customOidc4vcProfile
+                .dpopSupport,
             activeThumbColor: Theme.of(context).colorScheme.primary,
           ),
         );

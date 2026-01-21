@@ -15,11 +15,7 @@ import 'package:matrix/matrix.dart' hide User;
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ChatRoomView<B extends ChatRoomCubit> extends StatefulWidget {
-  const ChatRoomView({
-    super.key,
-    this.appBarTitle,
-    this.chatWelcomeMessage,
-  });
+  const ChatRoomView({super.key, this.appBarTitle, this.chatWelcomeMessage});
 
   final String? appBarTitle;
   final String? chatWelcomeMessage;
@@ -36,16 +32,14 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        liveChatCubit = context.read<B>();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      liveChatCubit = context.read<B>();
 
-        await context.read<AltmeChatSupportCubit>().init();
+      await context.read<AltmeChatSupportCubit>().init();
 
-        /// we are on same screen, it is considered as read
-        context.read<AltmeChatSupportCubit>().hardCodeAllMessageAsRead();
-      },
-    );
+      /// we are on same screen, it is considered as read
+      context.read<AltmeChatSupportCubit>().hardCodeAllMessageAsRead();
+    });
   }
 
   @override
@@ -64,16 +58,15 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
     return BasePage(
       title: widget.appBarTitle,
       scrollView: false,
-      titleLeading:
-          widget.appBarTitle == null ? null : const BackLeadingButton(),
+      titleLeading: widget.appBarTitle == null
+          ? null
+          : const BackLeadingButton(),
       titleAlignment: Alignment.topCenter,
       padding: const EdgeInsets.all(Sizes.spaceSmall),
       body: BlocBuilder<B, ChatRoomState>(
         builder: (context, ChatRoomState state) {
           if (state.status == AppStatus.loading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           } else if (state.status == AppStatus.error) {
             String message = '';
             if (state.message != null) {
@@ -86,10 +79,7 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
               }
             }
             return Center(
-              child: ErrorView(
-                message: message,
-                onTap: liveChatCubit!.init,
-              ),
+              child: ErrorView(message: message, onTap: liveChatCubit!.init),
             );
           } else {
             if (liveChatCubit == null) {
@@ -208,10 +198,7 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                               ),
                             );
                           },
-                          child: Image.file(
-                            File(link),
-                            fit: BoxFit.contain,
-                          ),
+                          child: Image.file(File(link), fit: BoxFit.contain),
                         );
                       }
                     },
@@ -238,19 +225,12 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
-                          const SizedBox(
-                            height: Sizes.spaceSmall,
-                          ),
+                          const SizedBox(height: Sizes.spaceSmall),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(
-                                Icons.lock,
-                                size: Sizes.icon,
-                              ),
-                              const SizedBox(
-                                width: Sizes.space2XSmall,
-                              ),
+                              const Icon(Icons.lock, size: Sizes.icon),
+                              const SizedBox(width: Sizes.space2XSmall),
                               Flexible(
                                 child: MyText(
                                   l10n.e2eEncyptedChat,
@@ -260,9 +240,9 @@ class _ChatRoomViewState<B extends ChatRoomCubit> extends State<ChatRoomView> {
                                       .textTheme
                                       .titleMedium!
                                       .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .tertiary,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.tertiary,
                                       ),
                                 ),
                               ),

@@ -6,14 +6,11 @@ part 'pid_subject_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class PidSubjectModel extends CredentialSubjectModel {
-  PidSubjectModel({
-    super.id,
-    super.type,
-    super.issuedBy,
-  }) : super(
-          credentialSubjectType: CredentialSubjectType.pid,
-          credentialCategory: CredentialCategory.identityCards,
-        );
+  PidSubjectModel({super.id, super.type, super.issuedBy})
+    : super(
+        credentialSubjectType: CredentialSubjectType.pid,
+        credentialCategory: CredentialCategory.identityCards,
+      );
 
   factory PidSubjectModel.fromJson(Map<String, dynamic> json) =>
       _$PidSubjectModelFromJson(json);

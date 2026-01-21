@@ -11,9 +11,8 @@ abstract class ThemePersistence {
 }
 
 class ThemeRepository implements ThemePersistence {
-  ThemeRepository({
-    required SharedPreferences sharedPreferences,
-  }) : _sharedPreferences = sharedPreferences {
+  ThemeRepository({required SharedPreferences sharedPreferences})
+    : _sharedPreferences = sharedPreferences {
     _init();
   }
 

@@ -35,18 +35,22 @@ void main() {
       final mockCredentialManifest = MockCredentialManifest();
 
       // Setup credential manifest
-      when(() => mockCredentialManifest.presentationDefinition)
-          .thenReturn(testPresentationDefinition);
-      when(() => testCredential.credentialManifest)
-          .thenReturn(mockCredentialManifest);
+      when(
+        () => mockCredentialManifest.presentationDefinition,
+      ).thenReturn(testPresentationDefinition);
+      when(
+        () => testCredential.credentialManifest,
+      ).thenReturn(mockCredentialManifest);
       when(() => testCredential.id).thenReturn('test-id');
       when(() => testCredential.getFormat).thenReturn('jwt_vc');
 
       // Setup presentation definition
-      when(() => testPresentationDefinition.inputDescriptors)
-          .thenReturn([testInputDescriptor]);
-      when(() => testPresentationDefinition.id)
-          .thenReturn('test-presentation-id');
+      when(
+        () => testPresentationDefinition.inputDescriptors,
+      ).thenReturn([testInputDescriptor]);
+      when(
+        () => testPresentationDefinition.id,
+      ).thenReturn('test-presentation-id');
 
       // Setup input descriptor
       when(() => testInputDescriptor.id).thenReturn('test-input-descriptor');
@@ -96,11 +100,7 @@ void main() {
       ),
       expect: () => [
         isA<CredentialManifestPickState>()
-            .having(
-              (state) => state.selected,
-              'selected',
-              equals([0]),
-            )
+            .having((state) => state.selected, 'selected', equals([0]))
             .having(
               (state) => state.isButtonEnabled,
               'isButtonEnabled',
@@ -125,11 +125,7 @@ void main() {
       ),
       expect: () => [
         isA<CredentialManifestPickState>()
-            .having(
-              (state) => state.selected,
-              'selected',
-              equals([1]),
-            )
+            .having((state) => state.selected, 'selected', equals([1]))
             .having(
               (state) => state.isButtonEnabled,
               'isButtonEnabled',

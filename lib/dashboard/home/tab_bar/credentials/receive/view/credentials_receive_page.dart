@@ -22,15 +22,11 @@ class CredentialsReceivePage extends StatefulWidget {
     required Uri uri,
     required Map<String, dynamic> preview,
     required Issuer issuer,
-  }) =>
-      MaterialPageRoute<void>(
-        builder: (context) => CredentialsReceivePage(
-          uri: uri,
-          preview: preview,
-          issuer: issuer,
-        ),
-        settings: const RouteSettings(name: '/credentialsReceive'),
-      );
+  }) => MaterialPageRoute<void>(
+    builder: (context) =>
+        CredentialsReceivePage(uri: uri, preview: preview, issuer: issuer),
+    settings: const RouteSettings(name: '/credentialsReceive'),
+  );
 
   @override
   State<CredentialsReceivePage> createState() => _CredentialsReceivePageState();
@@ -62,8 +58,11 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
 
         final textColor = Theme.of(context).colorScheme.onSurface;
 
-        final profileSetting =
-            context.read<ProfileCubit>().state.model.profileSetting;
+        final profileSetting = context
+            .read<ProfileCubit>()
+            .state
+            .model
+            .profileSetting;
 
         return BasePage(
           title: l10n.credentialReceiveTitle,
@@ -103,8 +102,8 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                     title: Text(
                       l10n.credentialManifestDescription,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     children: <Widget>[
                       Padding(
@@ -132,7 +131,8 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                   text: l10n.credentialAddThisCard,
                   onPressed: () {
                     if (credentialModel
-                            .credentialManifest?.presentationDefinition !=
+                            .credentialManifest
+                            ?.presentationDefinition !=
                         null) {
                       Navigator.of(context).pushReplacement<void, void>(
                         CredentialManifestOfferPickPage.route(
@@ -145,13 +145,13 @@ class _CredentialsReceivePageState extends State<CredentialsReceivePage> {
                       );
                     } else {
                       context.read<ScanCubit>().credentialOfferOrPresent(
-                            uri: widget.uri,
-                            credentialModel: credentialModel,
-                            keyId: SecureStorageKeys.ssiKey,
-                            issuer: widget.issuer,
-                            credentialsToBePresented: [],
-                            qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-                          );
+                        uri: widget.uri,
+                        credentialModel: credentialModel,
+                        keyId: SecureStorageKeys.ssiKey,
+                        issuer: widget.issuer,
+                        credentialsToBePresented: [],
+                        qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+                      );
                     }
                   },
                 ),

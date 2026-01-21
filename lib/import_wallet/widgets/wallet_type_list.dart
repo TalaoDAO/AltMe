@@ -20,9 +20,7 @@ class WalletTypeList extends StatelessWidget {
       itemBuilder: (_, index) {
         return WalletTypeItem(
           model: data[index],
-          onTap: () => onItemTap?.call(
-            data[index],
-          ),
+          onTap: () => onItemTap?.call(data[index]),
         );
       },
       itemCount: data.length,

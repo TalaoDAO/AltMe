@@ -1,7 +1,7 @@
 import 'package:altme/trusted_list/model/trusted_entity.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
-/// Checks if the certificate in the JWT header is present in the trusted 
+/// Checks if the certificate in the JWT header is present in the trusted
 /// entity's rootCertificate list.
 bool isCertificateValid({
   required TrustedEntity trustedEntity,

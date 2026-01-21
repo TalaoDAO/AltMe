@@ -22,8 +22,9 @@ void main() {
       when(navigator.canPop).thenReturn(true);
 
       when(() => navigator.push<void>(any())).thenAnswer((_) async {});
-      when(() => navigator.pushAndRemoveUntil<void>(any(), any()))
-          .thenAnswer((_) async {});
+      when(
+        () => navigator.pushAndRemoveUntil<void>(any(), any()),
+      ).thenAnswer((_) async {});
     });
 
     testWidgets('is routable', (tester) async {
@@ -34,9 +35,7 @@ void main() {
             builder: (context) => Scaffold(
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
-                  Navigator.of(context).push<void>(
-                    OnBoardingTosPage.route(),
-                  );
+                  Navigator.of(context).push<void>(OnBoardingTosPage.route());
                 },
               ),
             ),
@@ -47,18 +46,15 @@ void main() {
       await tester.pumpAndSettle();
       verify(
         () => navigator.push<void>(
-          any(
-            that: isRoute<void>(
-              whereName: equals('/onBoardingTermsPage'),
-            ),
-          ),
+          any(that: isRoute<void>(whereName: equals('/onBoardingTermsPage'))),
         ),
       ).called(1);
     });
 
     testWidgets('renders OnBoardingTosPage', (tester) async {
-      when(() => onBoardingTosCubit.state)
-          .thenReturn(const OnBoardingTosState());
+      when(
+        () => onBoardingTosCubit.state,
+      ).thenReturn(const OnBoardingTosState());
       await tester.pumpApp(
         BlocProvider<OnBoardingTosCubit>.value(
           value: onBoardingTosCubit,
@@ -70,8 +66,9 @@ void main() {
     });
 
     testWidgets('nothing happens when button is pressed', (tester) async {
-      when(() => onBoardingTosCubit.state)
-          .thenReturn(const OnBoardingTosState());
+      when(
+        () => onBoardingTosCubit.state,
+      ).thenReturn(const OnBoardingTosState());
 
       await tester.pumpApp(
         BlocProvider<OnBoardingTosCubit>(
@@ -86,8 +83,9 @@ void main() {
     });
 
     testWidgets('checkboxes toggle state', (WidgetTester tester) async {
-      when(() => onBoardingTosCubit.state)
-          .thenReturn(const OnBoardingTosState());
+      when(
+        () => onBoardingTosCubit.state,
+      ).thenReturn(const OnBoardingTosState());
 
       when(
         () => onBoardingTosCubit.setAgreeTerms(
@@ -115,8 +113,9 @@ void main() {
       await tester.tap(agreeCheckbox);
       await tester.pumpAndSettle();
 
-      verify(() => onBoardingTosCubit.setAgreeTerms(agreeTerms: true))
-          .called(1);
+      verify(
+        () => onBoardingTosCubit.setAgreeTerms(agreeTerms: true),
+      ).called(1);
 
       await tester.tap(readCheckbox);
       await tester.pumpAndSettle();
@@ -124,10 +123,12 @@ void main() {
       verify(() => onBoardingTosCubit.setReadTerms(readTerms: true)).called(1);
     });
 
-    testWidgets('blocks going back from OnBoardingTosPage start page',
-        (tester) async {
-      when(() => onBoardingTosCubit.state)
-          .thenReturn(const OnBoardingTosState());
+    testWidgets('blocks going back from OnBoardingTosPage start page', (
+      tester,
+    ) async {
+      when(
+        () => onBoardingTosCubit.state,
+      ).thenReturn(const OnBoardingTosState());
       await tester.pumpApp(
         BlocProvider<OnBoardingTosCubit>(
           create: (context) => onBoardingTosCubit,
@@ -140,34 +141,32 @@ void main() {
       expect(find.byType(OnBoardingTosView), findsOneWidget);
     });
 
-    testWidgets(
-      'MyElevatedButton press calls onAcceptancePressed',
-      (WidgetTester tester) async {
-        when(() => onBoardingTosCubit.state)
-            .thenReturn(const OnBoardingTosState());
-        await tester.pumpApp(
-          BlocProvider<OnBoardingTosCubit>(
-            create: (context) => onBoardingTosCubit,
-            child: OnBoardingTosView(onBoardingTosCubit: onBoardingTosCubit),
-          ),
-        );
+    testWidgets('MyElevatedButton press calls onAcceptancePressed', (
+      WidgetTester tester,
+    ) async {
+      when(
+        () => onBoardingTosCubit.state,
+      ).thenReturn(const OnBoardingTosState());
+      await tester.pumpApp(
+        BlocProvider<OnBoardingTosCubit>(
+          create: (context) => onBoardingTosCubit,
+          child: OnBoardingTosView(onBoardingTosCubit: onBoardingTosCubit),
+        ),
+      );
 
-        when(() => onBoardingTosCubit.state).thenReturn(
-          const OnBoardingTosState(
-            agreeTerms: true,
-            readTerms: true,
-          ),
-        );
-        await tester.pump();
+      when(
+        () => onBoardingTosCubit.state,
+      ).thenReturn(const OnBoardingTosState(agreeTerms: true, readTerms: true));
+      await tester.pump();
 
-        final button = find.text('Start'.toUpperCase());
-        expect(button, findsOneWidget);
-      },
-    );
+      final button = find.text('Start'.toUpperCase());
+      expect(button, findsOneWidget);
+    });
 
     testWidgets('renders DisplayTerms', (tester) async {
-      when(() => onBoardingTosCubit.state)
-          .thenReturn(const OnBoardingTosState());
+      when(
+        () => onBoardingTosCubit.state,
+      ).thenReturn(const OnBoardingTosState());
       await tester.pumpApp(
         BlocProvider<OnBoardingTosCubit>(
           create: (context) => onBoardingTosCubit,
@@ -178,12 +177,11 @@ void main() {
       expect(find.byType(DisplayTermsofUse), findsOneWidget);
     });
 
-    testWidgets(
-        'navigated to DashboardPage when Start is pressed'
+    testWidgets('navigated to DashboardPage when Start is pressed'
         ' when agreeTerms and readTerms are true.', (tester) async {
-      when(() => onBoardingTosCubit.state).thenReturn(
-        const OnBoardingTosState(agreeTerms: true, readTerms: true),
-      );
+      when(
+        () => onBoardingTosCubit.state,
+      ).thenReturn(const OnBoardingTosState(agreeTerms: true, readTerms: true));
       await tester.pumpApp(
         MockNavigatorProvider(
           navigator: navigator,
@@ -198,9 +196,7 @@ void main() {
       verify(
         () => navigator.pushAndRemoveUntil<void>(
           any(
-            that: isRoute<void>(
-              whereName: equals(AltMeStrings.dashBoardPage),
-            ),
+            that: isRoute<void>(whereName: equals(AltMeStrings.dashBoardPage)),
           ),
           any(that: isA<RoutePredicate>()),
         ),

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('CustomListTileCard displays correctly and responds to tap',
-      (WidgetTester tester) async {
+  testWidgets('CustomListTileCard displays correctly and responds to tap', (
+    WidgetTester tester,
+  ) async {
     bool triggerred = false;
     await tester.pumpWidget(
       MaterialApp(

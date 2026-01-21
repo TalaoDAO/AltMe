@@ -3,11 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class CredentialUrlImage extends StatelessWidget {
-  const CredentialUrlImage({
-    required this.child,
-    required this.url,
-    super.key,
-  });
+  const CredentialUrlImage({required this.child, required this.url, super.key});
   final Widget child;
   final String url;
 

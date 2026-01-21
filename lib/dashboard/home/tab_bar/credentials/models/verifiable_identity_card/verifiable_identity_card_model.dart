@@ -18,9 +18,9 @@ class VerifiableIdCardModel extends CredentialSubjectModel {
     super.id,
     super.type,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.verifiableIdCard,
-          credentialCategory: CredentialCategory.identityCards,
-        );
+         credentialSubjectType: CredentialSubjectType.verifiableIdCard,
+         credentialCategory: CredentialCategory.identityCards,
+       );
 
   factory VerifiableIdCardModel.fromJson(Map<String, dynamic> json) =>
       _$VerifiableIdCardModelFromJson(json);

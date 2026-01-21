@@ -7,10 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectAccount extends StatelessWidget {
-  const SelectAccount({
-    super.key,
-    required this.connectionBridgeType,
-  });
+  const SelectAccount({super.key, required this.connectionBridgeType});
 
   final ConnectionBridgeType connectionBridgeType;
 
@@ -56,10 +53,9 @@ class SelectAccount extends StatelessWidget {
                 ),
                 child: Divider(
                   height: 0.2,
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.12),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.12),
                 ),
               ),
             );

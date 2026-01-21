@@ -10,10 +10,7 @@ class LangState extends Equatable {
   final LanguageType languageType;
 
   @override
-  List<Object?> get props => [
-        locale,
-        languageType,
-      ];
+  List<Object?> get props => [locale, languageType];
 
   LangState copyWith({Locale? locale, LanguageType? languageType}) {
     return LangState(

@@ -18,11 +18,7 @@ class DisplayDescriptionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final nameValue = getDescription(context);
-    return MyText(
-      nameValue,
-      maxLines: maxLines,
-      style: style,
-    );
+    return MyText(nameValue, maxLines: maxLines, style: style);
   }
 
   String getDescription(BuildContext context) {

@@ -2,10 +2,7 @@ part of 'confirm_connection_cubit.dart';
 
 @JsonSerializable()
 class ConfirmConnectionState extends Equatable {
-  const ConfirmConnectionState({
-    this.status = AppStatus.init,
-    this.message,
-  });
+  const ConfirmConnectionState({this.status = AppStatus.init, this.message});
 
   factory ConfirmConnectionState.fromJson(Map<String, dynamic> json) =>
       _$ConfirmConnectionStateFromJson(json);
@@ -17,9 +14,7 @@ class ConfirmConnectionState extends Equatable {
     return const ConfirmConnectionState(status: AppStatus.loading);
   }
 
-  ConfirmConnectionState error({
-    required MessageHandler messageHandler,
-  }) {
+  ConfirmConnectionState error({required MessageHandler messageHandler}) {
     return ConfirmConnectionState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),

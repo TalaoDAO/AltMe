@@ -4,18 +4,16 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class EthereumAssociatedAddressWidget extends StatelessWidget {
-  const EthereumAssociatedAddressWidget({
-    super.key,
-    this.credentialModel,
-  });
+  const EthereumAssociatedAddressWidget({super.key, this.credentialModel});
 
   final CredentialModel? credentialModel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final associatedAddress = credentialModel?.credentialPreview
-        .credentialSubjectModel as EthereumAssociatedAddressModel?;
+    final associatedAddress =
+        credentialModel?.credentialPreview.credentialSubjectModel
+            as EthereumAssociatedAddressModel?;
 
     return MyBlockchainAccountBaseWidget(
       background: ImageStrings.ethereumOwnershipCard,

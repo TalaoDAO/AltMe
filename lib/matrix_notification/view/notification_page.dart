@@ -26,9 +26,7 @@ class NotificationPage extends StatelessWidget {
 }
 
 class NotificationView<B extends ChatRoomCubit> extends StatefulWidget {
-  const NotificationView({
-    super.key,
-  });
+  const NotificationView({super.key});
 
   @override
   _NotificationViewState<B> createState() => _NotificationViewState();
@@ -43,14 +41,12 @@ class _NotificationViewState<B extends ChatRoomCubit>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        liveChatCubit = context.read<B>();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      liveChatCubit = context.read<B>();
 
-        await context.read<MatrixNotificationCubit>().init();
-        liveChatCubit!.setMessagesAsRead();
-      },
-    );
+      await context.read<MatrixNotificationCubit>().init();
+      liveChatCubit!.setMessagesAsRead();
+    });
   }
 
   @override
@@ -71,9 +67,7 @@ class _NotificationViewState<B extends ChatRoomCubit>
       body: BlocBuilder<B, ChatRoomState>(
         builder: (context, ChatRoomState state) {
           if (state.status == AppStatus.loading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           } else if (state.status == AppStatus.error) {
             String message = '';
             if (state.message != null) {
@@ -86,10 +80,7 @@ class _NotificationViewState<B extends ChatRoomCubit>
               }
             }
             return Center(
-              child: ErrorView(
-                message: message,
-                onTap: liveChatCubit!.init,
-              ),
+              child: ErrorView(message: message, onTap: liveChatCubit!.init),
             );
           } else {
             if (liveChatCubit == null) {
@@ -192,8 +183,9 @@ class _NotificationViewState<B extends ChatRoomCubit>
                                           width: double.infinity,
                                           child: MxcImage(
                                             url: message.uri,
-                                            event: message.metadata!['event']
-                                                as Event,
+                                            event:
+                                                message.metadata!['event']
+                                                    as Event,
                                             fit: BoxFit.fitWidth,
                                           ),
                                         ),

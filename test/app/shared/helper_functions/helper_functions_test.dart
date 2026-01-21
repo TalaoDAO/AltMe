@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/models/blockchain_network/blockchain_network_helpers.dart';
 import 'package:altme/dashboard/home/home.dart';
 import 'package:altme/key_generator/key_generator.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -30,8 +31,10 @@ void main() {
     TestWidgetsFlutterBinding.ensureInitialized();
     mockSecureStorage = MockSecureStorage();
 
-    dioAdapter =
-        DioAdapter(dio: Dio(BaseOptions()), matcher: const UrlRequestMatcher());
+    dioAdapter = DioAdapter(
+      dio: Dio(BaseOptions()),
+      matcher: const UrlRequestMatcher(),
+    );
     client.httpClientAdapter = dioAdapter;
     mockClient = DioClient(
       baseUrl: 'https://example.com/',
@@ -200,8 +203,9 @@ void main() {
       const mockMnemonic =
           'word1 word2 word3 word4 word5 word6 word7 word8 word9 word10 word11 word12';
 
-      when(() => mockSecureStorage.get(SecureStorageKeys.ssiMnemonic))
-          .thenAnswer((_) => Future.value(mockMnemonic));
+      when(
+        () => mockSecureStorage.get(SecureStorageKeys.ssiMnemonic),
+      ).thenAnswer((_) => Future.value(mockMnemonic));
 
       final result = await getssiMnemonicsInList(mockSecureStorage);
 
@@ -225,20 +229,15 @@ void main() {
     });
 
     test('getDateTimeWithoutSpace replaces spaces with dashes', () {
-      final formattedDateTime =
-          getDateTimeWithoutSpace(dateTime: DateTime(2022, 1, 1, 1, 1, 1, 1));
+      final formattedDateTime = getDateTimeWithoutSpace(
+        dateTime: DateTime(2022, 1, 1, 1, 1, 1, 1),
+      );
       expect(formattedDateTime, '2022-01-01-01:01:01.001');
     });
 
     test('getIndexValue returns correct index for each DidKeyType', () {
-      expect(
-        getIndexValue(isEBSI: true, didKeyType: DidKeyType.secp256k1),
-        3,
-      );
-      expect(
-        getIndexValue(isEBSI: false, didKeyType: DidKeyType.secp256k1),
-        1,
-      );
+      expect(getIndexValue(isEBSI: true, didKeyType: DidKeyType.secp256k1), 3);
+      expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.secp256k1), 1);
 
       expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.p256), 4);
       expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.ebsiv3), 5);
@@ -272,8 +271,9 @@ void main() {
               mockSecureStorage.get(SecureStorageKeys.p256PrivateKeyForWallet),
         ).thenAnswer((_) => Future.value(null));
 
-        when(() => mockSecureStorage.set(any(), any()))
-            .thenAnswer((_) async {});
+        when(
+          () => mockSecureStorage.set(any(), any()),
+        ).thenAnswer((_) async {});
 
         final result = await getWalletAttestationP256Key(mockSecureStorage);
         final data = jsonDecode(result) as Map<String, dynamic>;
@@ -292,8 +292,9 @@ void main() {
       test('returns existing key', () async {
         const existingKey = 'existing_key';
         when(
-          () => mockSecureStorage
-              .get(SecureStorageKeys.p256PrivateKeyToGetAndPresentVC),
+          () => mockSecureStorage.get(
+            SecureStorageKeys.p256PrivateKeyToGetAndPresentVC,
+          ),
         ).thenAnswer((_) => Future.value(existingKey));
 
         final result = await getP256KeyToGetAndPresentVC(mockSecureStorage);
@@ -303,12 +304,14 @@ void main() {
 
       test('generates and returns new key', () async {
         when(
-          () => mockSecureStorage
-              .get(SecureStorageKeys.p256PrivateKeyToGetAndPresentVC),
+          () => mockSecureStorage.get(
+            SecureStorageKeys.p256PrivateKeyToGetAndPresentVC,
+          ),
         ).thenAnswer((_) => Future.value(null));
 
-        when(() => mockSecureStorage.set(any(), any()))
-            .thenAnswer((_) async {});
+        when(
+          () => mockSecureStorage.set(any(), any()),
+        ).thenAnswer((_) async {});
 
         final result = await getP256KeyToGetAndPresentVC(mockSecureStorage);
         final data = jsonDecode(result) as Map<String, dynamic>;
@@ -371,10 +374,7 @@ void main() {
 
       test('decodeHeader correctly decodes a JWT token', () {
         final decodedData = decodeHeader(jwtDecode: jwtDecode, token: jwt);
-        final expectedData = {
-          'alg': 'HS256',
-          'typ': 'JWT',
-        };
+        final expectedData = {'alg': 'HS256', 'typ': 'JWT'};
         expect(decodedData, expectedData);
       });
 
@@ -405,15 +405,14 @@ void main() {
         expect(result, 'Bibash Man Shrestha');
       });
 
-      test('generateUriList returns list of URIs from "uri_list" parameter',
-          () {
+      test('generateUriList returns list of URIs from "uri_list" parameter', () {
         const url =
             'https://example.com?uri_list=https%3A%2F%2Fexample.com%2Fpath1&uri_list=https%3A%2F%2Fexample.com%2Fpath2';
         final result = generateUriList(url);
-        expect(
-          result,
-          ['https://example.com/path1', 'https://example.com/path2'],
-        );
+        expect(result, [
+          'https://example.com/path1',
+          'https://example.com/path2',
+        ]);
       });
 
       test('sortedPublcJwk returns sorted public JWK without private key', () {
@@ -425,7 +424,7 @@ void main() {
           'x': 'SjTww7i4eF-JKBYlShJqJ3lWQIVJF5y1g5uHY3gfAro',
           'y': '1bNb6uA0gKClEFhodSfgcW8FvfSHTgxE8WyFvSZ8bxc',
         };
-        final result = sortedPublcJwk(jsonEncode(privateKey));
+        final result = sortedPublicJwk(jsonEncode(privateKey));
         const expected =
             '{"crv":"secp256k1","kid":"1234567890","kty":"EC","x":"SjTww7i4eF-JKBYlShJqJ3lWQIVJF5y1g5uHY3gfAro","y":"1bNb6uA0gKClEFhodSfgcW8FvfSHTgxE8WyFvSZ8bxc"}';
         expect(result, expected);
@@ -579,22 +578,25 @@ void main() {
           final uri = Uri.parse(
             "https://example.com?presentation_definition={'title':'Test'}",
           );
-          final presentationDefinition =
-              await getPresentationDefinition(uri: uri, client: mockClient);
+          final presentationDefinition = await getPresentationDefinition(
+            uri: uri,
+            client: mockClient,
+          );
 
           expect(presentationDefinition, {'title': 'Test'});
         });
 
         test('returns null for invalid URI', () async {
           final uri = Uri.parse('https://example.com');
-          final presentationDefinition =
-              await getPresentationDefinition(uri: uri, client: mockClient);
+          final presentationDefinition = await getPresentationDefinition(
+            uri: uri,
+            client: mockClient,
+          );
 
           expect(presentationDefinition, isNull);
         });
 
-        test(
-            'returns presentation definition from URI with '
+        test('returns presentation definition from URI with '
             'presentation_definition_uri', () async {
           final uri = Uri.parse(
             'https://example.com?presentation_definition_uri=https://example.com/presentation.com',
@@ -605,8 +607,10 @@ void main() {
             (request) => request.reply(200, {'title': 'Test'}),
           );
 
-          final presentationDefinition =
-              await getPresentationDefinition(uri: uri, client: mockClient);
+          final presentationDefinition = await getPresentationDefinition(
+            uri: uri,
+            client: mockClient,
+          );
 
           expect(presentationDefinition, {'title': 'Test'});
         });
@@ -621,8 +625,10 @@ void main() {
             (request) => request.reply(200, 'asfd'),
           );
 
-          final presentationDefinition =
-              await getPresentationDefinition(uri: uri, client: mockClient);
+          final presentationDefinition = await getPresentationDefinition(
+            uri: uri,
+            client: mockClient,
+          );
 
           expect(presentationDefinition, isNull);
         });
@@ -630,24 +636,28 @@ void main() {
 
       group('getClientMetada', () {
         test('returns client metadata from URI', () async {
-          final uri =
-              Uri.parse("https://example.com?client_metadata={'title':'Test'}");
-          final clientMetadata =
-              await getClientMetada(uri: uri, client: mockClient);
+          final uri = Uri.parse(
+            "https://example.com?client_metadata={'title':'Test'}",
+          );
+          final clientMetadata = await getClientMetada(
+            uri: uri,
+            client: mockClient,
+          );
 
           expect(clientMetadata, {'title': 'Test'});
         });
 
         test('returns null for invalid URI', () async {
           final uri = Uri.parse('https://example.com');
-          final clientMetadata =
-              await getClientMetada(uri: uri, client: mockClient);
+          final clientMetadata = await getClientMetada(
+            uri: uri,
+            client: mockClient,
+          );
 
           expect(clientMetadata, isNull);
         });
 
-        test(
-            'returns client metadata from URI with '
+        test('returns client metadata from URI with '
             'client_metadata_uri', () async {
           final uri = Uri.parse(
             'https://example.com?client_metadata_uri=https://example.com.com',
@@ -658,8 +668,10 @@ void main() {
             (request) => request.reply(200, {'title': 'Test'}),
           );
 
-          final clientMetadata =
-              await getClientMetada(uri: uri, client: mockClient);
+          final clientMetadata = await getClientMetada(
+            uri: uri,
+            client: mockClient,
+          );
 
           expect(clientMetadata, {'title': 'Test'});
         });
@@ -693,20 +705,24 @@ void main() {
           expect(result, equals(credential));
         });
 
-        test('getCredentialData returns last credential type if it is a Map',
-            () {
-          final credential = {
-            'types': ['type1', 'type2', 'type3'],
-          };
-          final result = getCredentialData(credential);
-          expect(result, equals('type3'));
-        });
+        test(
+          'getCredentialData returns last credential type if it is a Map',
+          () {
+            final credential = {
+              'types': ['type1', 'type2', 'type3'],
+            };
+            final result = getCredentialData(credential);
+            expect(result, equals('type3'));
+          },
+        );
 
-        test('getCredentialData throws exception for invalid credential format',
-            () {
-          const credential = 123;
-          expect(() => getCredentialData(credential), throwsException);
-        });
+        test(
+          'getCredentialData throws exception for invalid credential format',
+          () {
+            const credential = 123;
+            expect(() => getCredentialData(credential), throwsException);
+          },
+        );
 
         test('getMessageHandler returns correct MessageHandler', () {
           expect(getMessageHandler(MessageHandler), isA<MessageHandler>());
@@ -730,7 +746,8 @@ void main() {
             ),
             isA<ResponseMessage>().having((e) => e.data, '', {
               'error': 'unsupported_format',
-              'error_description': 'Test format exception\n'
+              'error_description':
+                  'Test format exception\n'
                   '\n'
                   'source',
             }),
@@ -1076,54 +1093,51 @@ void main() {
 
         group('getPresentVCDetails', () {
           test(
-              'returns correct value when presentationDefinition ldp_vc formats',
-              () {
-            expect(
-              getPresentVCDetails(
-                formatsSupported: [VCFormatType.ldpVc],
-                presentationDefinition: PresentationDefinition(
-                  inputDescriptors: [],
-                  format: Format.fromJson(
-                    {
-                      'ldp_vc': {
-                        'proof_type': <dynamic>[],
-                      },
-                    },
+            'returns correct value when presentationDefinition ldp_vc formats',
+            () {
+              expect(
+                getPresentVCDetails(
+                  formatsSupported: [VCFormatType.ldpVc],
+                  presentationDefinition: PresentationDefinition(
+                    inputDescriptors: [],
+                    format: Format.fromJson({
+                      'ldp_vc': {'proof_type': <dynamic>[]},
+                    }),
                   ),
+                  clientMetaData: null,
+                  credentialsToBePresented: [],
                 ),
-                clientMetaData: null,
-                credentialsToBePresented: [],
-              ),
-              [VCFormatType.ldpVc],
-            );
-          });
+                [VCFormatType.ldpVc],
+              );
+            },
+          );
 
           test(
-              'throws ResponseMessage when presentationDefinition has no formats',
-              () {
-            final presentationDefinition = PresentationDefinition(
-              inputDescriptors: [],
-              format: Format.fromJson({}),
-            );
+            'throws ResponseMessage when presentationDefinition has no formats',
+            () {
+              final presentationDefinition = PresentationDefinition(
+                inputDescriptors: [],
+                format: Format.fromJson({}),
+              );
 
-            expect(
-              () => getPresentVCDetails(
-                formatsSupported: [VCFormatType.ldpVc],
-                presentationDefinition: presentationDefinition,
-                clientMetaData: null,
-                credentialsToBePresented: [],
-              ),
-              throwsA(
-                isA<ResponseMessage>().having((e) => e.data, '', {
-                  'error': 'invalid_request',
-                  'error_description': 'VC format is missing',
-                }),
-              ),
-            );
-          });
+              expect(
+                () => getPresentVCDetails(
+                  formatsSupported: [VCFormatType.ldpVc],
+                  presentationDefinition: presentationDefinition,
+                  clientMetaData: null,
+                  credentialsToBePresented: [],
+                ),
+                throwsA(
+                  isA<ResponseMessage>().having((e) => e.data, '', {
+                    'error': 'invalid_request',
+                    'error_description': 'VC format is missing',
+                  }),
+                ),
+              );
+            },
+          );
 
-          test(
-              'returns correct value(VCFormatType.jwtVc) when'
+          test('returns correct value(VCFormatType.jwtVc) when'
               ' presentationDefinition.format'
               ' and clientMetaData are null', () {
             expect(
@@ -1146,8 +1160,7 @@ void main() {
             );
           });
 
-          test(
-              'returns correct value(VCFormatType.jwtVcJson) when'
+          test('returns correct value(VCFormatType.jwtVcJson) when'
               ' presentationDefinition.format'
               ' and clientMetaData are null', () {
             expect(
@@ -1170,8 +1183,7 @@ void main() {
             );
           });
 
-          test(
-              'returns correct value(VCFormatType.vcSdJWT) when'
+          test('returns correct value(VCFormatType.vcSdJWT) when'
               ' presentationDefinition.format'
               ' and clientMetaData are null', () {
             expect(
@@ -1194,8 +1206,7 @@ void main() {
             );
           });
 
-          test(
-              'returns correct value(VCFormatType.jwtVcJson) when'
+          test('returns correct value(VCFormatType.jwtVcJson) when'
               ' presentationDefinition.format is null'
               ' and clientMetaData is provided', () {
             expect(
@@ -1206,9 +1217,7 @@ void main() {
                   format: null,
                 ),
                 clientMetaData: {
-                  'vp_formats': {
-                    'jwt_vc_json': 'here',
-                  },
+                  'vp_formats': {'jwt_vc_json': 'here'},
                 },
                 credentialsToBePresented: [],
               ),
@@ -1216,8 +1225,7 @@ void main() {
             );
           });
 
-          test(
-              'returns correct value(VCFormatType.vc+sd-jwt) when'
+          test('returns correct value(VCFormatType.vc+sd-jwt) when'
               ' presentationDefinition.format is null'
               ' and clientMetaData is provided', () {
             expect(
@@ -1228,9 +1236,7 @@ void main() {
                   format: null,
                 ),
                 clientMetaData: {
-                  'vp_formats': {
-                    'vc+sd-jwt': 'here',
-                  },
+                  'vp_formats': {'vc+sd-jwt': 'here'},
                 },
                 credentialsToBePresented: [],
               ),
@@ -1243,9 +1249,7 @@ void main() {
           test('returns an empty list when no _sd key is present', () {
             final data = {
               'a': 1,
-              'b': {
-                'c': 2,
-              },
+              'b': {'c': 2},
             };
             final result = collectSdValues(data);
             expect(result, isEmpty);
@@ -1270,17 +1274,11 @@ void main() {
           test('collects values from ... keys within lists', () {
             final data = {
               'a': [
-                {
-                  '...': 1,
-                },
-                {
-                  '...': 2,
-                },
+                {'...': 1},
+                {'...': 2},
               ],
               'c': [
-                {
-                  '...': 3,
-                },
+                {'...': 3},
               ],
             };
             final result = collectSdValues(data);
@@ -1293,15 +1291,11 @@ void main() {
               'a': {
                 '_sd': [2],
                 'b': [
-                  {
-                    '...': 3,
-                  },
+                  {'...': 3},
                 ],
               },
               'd': [
-                {
-                  '...': 5,
-                },
+                {'...': 5},
               ],
             };
             final result = collectSdValues(data);
@@ -1314,9 +1308,7 @@ void main() {
               'b': {
                 'c': 2,
                 'd': [
-                  {
-                    'e': 3,
-                  },
+                  {'e': 3},
                 ],
               },
             };
@@ -1339,9 +1331,7 @@ void main() {
             expect(
               () => checkX509(
                 clientId: '',
-                header: {
-                  'x5c': 'i am not list',
-                },
+                header: {'x5c': 'i am not list'},
                 encodedData: '',
               ),
               throwsA(
@@ -1357,9 +1347,7 @@ void main() {
             expect(
               () => checkX509(
                 clientId: '',
-                header: {
-                  'x5c': <dynamic>[],
-                },
+                header: {'x5c': <dynamic>[]},
                 encodedData: '',
               ),
               throwsA(

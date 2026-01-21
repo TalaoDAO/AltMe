@@ -25,16 +25,15 @@ class Oidc4vcCredentialPickPage extends StatelessWidget {
     required String? userPin,
     required String? txCode,
     required Oidc4vcParameters oidc4vcParameters,
-  }) =>
-      MaterialPageRoute<void>(
-        builder: (context) => Oidc4vcCredentialPickPage(
-          credentials: credentials,
-          userPin: userPin,
-          txCode: txCode,
-          oidc4vcParameters: oidc4vcParameters,
-        ),
-        settings: const RouteSettings(name: '/Oidc4vcCredentialPickPage'),
-      );
+  }) => MaterialPageRoute<void>(
+    builder: (context) => Oidc4vcCredentialPickPage(
+      credentials: credentials,
+      userPin: userPin,
+      txCode: txCode,
+      oidc4vcParameters: oidc4vcParameters,
+    ),
+    settings: const RouteSettings(name: '/Oidc4vcCredentialPickPage'),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -80,94 +79,86 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
           return BasePage(
             title: l10n.credentialPickTitle,
             titleTrailing: const WhiteCloseButton(),
-            padding: const EdgeInsets.symmetric(
-              vertical: 24,
-              horizontal: 16,
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
             body: Column(
               children: <Widget>[
-                ...List.generate(
-                  credentials.length,
-                  (index) {
-                    final credential = getCredentialData(credentials[index]);
+                ...List.generate(credentials.length, (index) {
+                  final credential = getCredentialData(credentials[index]);
 
-                    final CredentialSubjectType credentialSubjectType =
-                        getCredTypeFromName(credential) ??
-                            CredentialSubjectType.defaultCredential;
+                  final CredentialSubjectType credentialSubjectType =
+                      getCredTypeFromName(credential) ??
+                      CredentialSubjectType.defaultCredential;
 
-                    final profileModel =
-                        context.read<ProfileCubit>().state.model;
+                  final profileModel = context.read<ProfileCubit>().state.model;
 
-                    final profileSetting = profileModel.profileSetting;
-                    final formatType = profileSetting
-                        .selfSovereignIdentityOptions
-                        .customOidc4vcProfile
-                        .vcFormatType;
+                  final profileSetting = profileModel.profileSetting;
+                  final formatType = profileSetting
+                      .selfSovereignIdentityOptions
+                      .customOidc4vcProfile
+                      .vcFormatType;
 
-                    final DiscoverDummyCredential discoverDummyCredential =
-                        credentialSubjectType.dummyCredential(
-                      profileSetting: profileSetting,
-                      assignedVCFormatType: formatType,
-                    );
+                  final DiscoverDummyCredential discoverDummyCredential =
+                      credentialSubjectType.dummyCredential(
+                        profileSetting: profileSetting,
+                        assignedVCFormatType: formatType,
+                      );
 
-                    // fetch for displaying the image
-                    final (Display? display, _) = fetchDisplay(
-                      openIdConfiguration:
-                          oidc4vcParameters.issuerOpenIdConfiguration,
-                      credentialType: credential,
-                      languageCode: languageCode,
-                    );
+                  // fetch for displaying the image
+                  final (Display? display, _) = fetchDisplay(
+                    openIdConfiguration:
+                        oidc4vcParameters.issuerOpenIdConfiguration,
+                    credentialType: credential,
+                    languageCode: languageCode,
+                  );
 
-                    return TransparentInkWell(
-                      onTap: () => context
-                          .read<Oidc4vcCredentialPickCubit>()
-                          .updateList(index),
-                      child: Column(
-                        children: [
-                          if (credentialSubjectType ==
-                                  CredentialSubjectType.defaultCredential &&
-                              display != null)
-                            CredentialDisplay(
-                              credentialModel: CredentialModel(
-                                id: '',
-                                image: '',
-                                credentialPreview: Credential.dummy(),
-                                shareLink: '',
-                                data: const <String, dynamic>{},
-                                display: display,
-                                profileLinkedId:
-                                    profileModel.profileType.getVCId,
-                              ),
-                              credDisplayType: CredDisplayType.List,
-                              profileSetting: profileSetting,
-                              displyalDescription: true,
-                              isDiscover: false,
-                            )
-                          else
-                            DummyCredentialImage(
-                              credentialSubjectType: credentialSubjectType,
-                              image: discoverDummyCredential.image,
-                              credentialName: credential,
-                              displayExternalIssuer: display,
+                  return TransparentInkWell(
+                    onTap: () => context
+                        .read<Oidc4vcCredentialPickCubit>()
+                        .updateList(index),
+                    child: Column(
+                      children: [
+                        if (credentialSubjectType ==
+                                CredentialSubjectType.defaultCredential &&
+                            display != null)
+                          CredentialDisplay(
+                            credentialModel: CredentialModel(
+                              id: '',
+                              image: '',
+                              credentialPreview: Credential.dummy(),
+                              shareLink: '',
+                              data: const <String, dynamic>{},
+                              display: display,
+                              profileLinkedId: profileModel.profileType.getVCId,
                             ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Icon(
-                                state.contains(index)
-                                    ? Icons.check_box
-                                    : Icons.check_box_outline_blank,
-                                size: 25,
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
+                            credDisplayType: CredDisplayType.List,
+                            profileSetting: profileSetting,
+                            displyalDescription: true,
+                            isDiscover: false,
+                          )
+                        else
+                          DummyCredentialImage(
+                            credentialSubjectType: credentialSubjectType,
+                            image: discoverDummyCredential.image,
+                            credentialName: credential,
+                            displayExternalIssuer: display,
+                          ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Icon(
+                              state.contains(index)
+                                  ? Icons.check_box
+                                  : Icons.check_box_outline_blank,
+                              size: 25,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
               ],
             ),
             navigation: SafeArea(
@@ -179,8 +170,9 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                       : () async {
                           if (state.isEmpty) return;
 
-                          final selectedCredentials =
-                              state.map((index) => credentials[index]).toList();
+                          final selectedCredentials = state
+                              .map((index) => credentials[index])
+                              .toList();
 
                           await context
                               .read<QRCodeScanCubit>()

@@ -3,15 +3,15 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/key_generator/key_generator.dart';
+import 'package:altme/app/shared/models/key_store_model.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:asn1lib/asn1lib.dart' as asn1lib;
 import 'package:convert/convert.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:dartez/dartez.dart';
+import 'package:tezart/tezart.dart';
 import 'package:dio/dio.dart';
 import 'package:fast_base58/fast_base58.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:jose_plus/jose.dart';
 import 'package:json_path/json_path.dart';
@@ -62,12 +62,12 @@ bool isValidPrivateKey(String value) {
 }
 
 KeyStoreModel getKeysFromSecretKey({required String secretKey}) {
-  final List<String> sourceKeystore = Dartez.getKeysFromSecretKey(secretKey);
+  final keystore = Keystore.fromSecretKey(secretKey);
 
   return KeyStoreModel(
-    secretKey: sourceKeystore[0],
-    publicKey: sourceKeystore[1],
-    publicKeyHash: sourceKeystore[2],
+    secretKey: keystore.secretKey,
+    publicKey: keystore.publicKey,
+    publicKeyHash: keystore.address,
   );
 }
 
@@ -534,14 +534,14 @@ Future<(String, String)> getDidAndKid({
       final List<int> prefixByteList = [0xd1, 0xd6, 0x03];
       final List<int> prefix = prefixByteList.map((byte) => byte).toList();
 
-      final encodedData = utf8.encode(sortedPublcJwk(privateKey));
+      final encodedData = utf8.encode(sortedPublicJwk(privateKey));
       final encodedAddress = Base58Encode([...prefix, ...encodedData]);
 
       did = 'did:key:z$encodedAddress';
       final String lastPart = did.split(':')[2];
       kid = '$did#$lastPart';
     case DidKeyType.jwkP256:
-      final encodedData = utf8.encode(sortedPublcJwk(privateKey));
+      final encodedData = utf8.encode(sortedPublicJwk(privateKey));
 
       final base64EncodedJWK = base64UrlEncode(encodedData).replaceAll('=', '');
       did = 'did:jwk:$base64EncodedJWK';
@@ -605,7 +605,7 @@ Future<(String, String)> fetchDidAndKid({
   return (did, kid);
 }
 
-String sortedPublcJwk(String privateKey) {
+String sortedPublicJwk(String privateKey) {
   final private = jsonDecode(privateKey) as Map<String, dynamic>;
   final publicJWK = Map.of(private)..removeWhere((key, value) => key == 'd');
 
@@ -990,6 +990,8 @@ MessageHandler getMessageHandler(dynamic e) {
     final error = NetworkException.getDioException(error: e);
 
     return NetworkException(data: error.data);
+  } else if (e is ResponseMessage) {
+    return e;
   } else if (e is FormatException) {
     return ResponseMessage(
       data: {
@@ -1652,7 +1654,6 @@ Display? extractDisplay(
 
 List<String> getStringCredentialsForToken({
   required List<CredentialModel> credentialsToBePresented,
-  required ProfileCubit profileCubit,
 }) {
   final credentialList = credentialsToBePresented.map((item) {
     final isVcSdJWT =
@@ -1660,13 +1661,51 @@ List<String> getStringCredentialsForToken({
         item.getFormat == VCFormatType.dcSdJWT.vcValue;
 
     if (isVcSdJWT) {
-      return item.selectiveDisclosureJwt ?? jsonEncode(item.toJson());
+      // if item.selectiveDisclosureJwt is null throw an error
+      if (item.selectiveDisclosureJwt == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description':
+                'Selective disclosure JWT is required for sd-jwt format.',
+          },
+        );
+      }
+      return item.selectiveDisclosureJwt!;
     }
 
     return jsonEncode(item.toJson());
   }).toList();
 
   return credentialList;
+}
+
+List<String> getCredentialMapForToken({
+  required List<CredentialModel> credentialsToBePresented,
+}) {
+  final List<String> credentialMap = [];
+
+  for (final credential in credentialsToBePresented) {
+    final isVcSdJWT =
+        credential.getFormat == VCFormatType.vcSdJWT.vcValue ||
+        credential.getFormat == VCFormatType.dcSdJWT.vcValue;
+
+    if (isVcSdJWT) {
+      // if credential.selectiveDisclosureJwt is null throw an error
+      if (credential.selectiveDisclosureJwt == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_presentation',
+            'error_description':
+                'Selective disclosure JWT is required for sd-jwt format.',
+          },
+        );
+      }
+      credentialMap.add(credential.selectiveDisclosureJwt!);
+    }
+  }
+
+  return credentialMap;
 }
 
 //(presentLdpVc, presentJwtVc, presentJwtVcJson, presentVcSdJwt)
@@ -2029,28 +2068,29 @@ Future<Map<String, dynamic>?> checkX509({
 
     /// clientId is an url. string domain is the domain from this url
     final domain = clientId;
+    if (domain != '') {
+      /// valid domains is the list from the extnValue in which DNS: prefix
+      /// is removed. scheme like http:// or https:// is also removed
+      final validDomains = extnValue
+          .replaceAll('DNS:', '')
+          .replaceAll('URI:', '')
+          .replaceAll(' ', '')
+          .split(',')
+          .map(
+            (String extnValueDomain) =>
+                extnValueDomain.replaceAll(RegExp('^(http|https)://'), ''),
+          )
+          .toList();
 
-    /// valid domains is the list from the extnValue in which DNS: prefix
-    /// is removed. scheme like http:// or https:// is also removed
-    final validDomains = extnValue
-        .replaceAll('DNS:', '')
-        .replaceAll('URI:', '')
-        .replaceAll(' ', '')
-        .split(',')
-        .map(
-          (String extnValueDomain) =>
-              extnValueDomain.replaceAll(RegExp('^(http|https)://'), ''),
-        )
-        .toList();
-
-    /// check if the domain is in the validDomains list
-    if (!validDomains.contains(domain)) {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_format',
-          'error_description': 'x509_san_dns scheme error',
-        },
-      );
+      /// check if the domain is in the validDomains list
+      if (!validDomains.contains(domain)) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_format',
+            'error_description': 'x509_san_dns scheme error',
+          },
+        );
+      }
     }
 
     final publicKey = cert.publicKey;
@@ -2136,38 +2176,6 @@ Future<Map<String, dynamic>?> checkVerifierAttestation({
     return (credentialSubjectModel.associatedAddress, BlockchainType.etherlink);
   }
   return (null, null);
-}
-
-Future<String> fetchRpcUrl({
-  required BlockchainNetwork blockchainNetwork,
-  required DotEnv dotEnv,
-}) async {
-  String rpcUrl = '';
-
-  if (blockchainNetwork is BinanceNetwork ||
-      blockchainNetwork is FantomNetwork ||
-      blockchainNetwork is EtherlinkNetwork) {
-    rpcUrl = blockchainNetwork.rpcNodeUrl as String;
-  } else {
-    if (blockchainNetwork.networkname == 'Mainnet') {
-      await dotEnv.load();
-      final String infuraApiKey = dotEnv.get('INFURA_API_KEY');
-
-      late String prefixUrl;
-
-      if (blockchainNetwork is PolygonNetwork) {
-        prefixUrl = Parameters.POLYGON_INFURA_URL;
-      } else {
-        prefixUrl = Parameters.web3RpcMainnetUrl;
-      }
-
-      return '$prefixUrl$infuraApiKey';
-    } else {
-      rpcUrl = blockchainNetwork.rpcNodeUrl as String;
-    }
-  }
-
-  return rpcUrl;
 }
 
 String getDidMethod(BlockchainType blockchainType) {
@@ -2305,13 +2313,6 @@ Map<String, dynamic> getCredentialDataFromJson({
   if (!credential.containsKey('issuer')) {
     if (jsonContent.containsKey('iss')) {
       credential['issuer'] = jsonContent['iss'];
-    } else {
-      throw ResponseMessage(
-        data: {
-          'error': 'unsupported_format',
-          'error_description': 'Issuer is missing',
-        },
-      );
     }
   }
 

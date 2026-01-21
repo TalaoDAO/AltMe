@@ -47,8 +47,9 @@ Future<void> getAndAddDefferedCredential({
         'Authorization': 'Bearer $accessToken',
       };
 
-      final transactionId =
-          pendingInfo.encodedCredentialFromOIDC4VC['transaction_id'].toString();
+      final transactionId = pendingInfo
+          .encodedCredentialFromOIDC4VC['transaction_id']
+          .toString();
 
       body = {'transaction_id': transactionId};
   }
@@ -69,14 +70,14 @@ Future<void> getAndAddDefferedCredential({
     }
   }
 
-  final dynamic encodedCredentialOrFutureToken =
-      await oidc4vc.getDeferredCredential(
-    credentialHeaders: credentialHeaders,
-    deferredCredentialEndpoint:
-        credentialModel.pendingInfo!.deferredCredentialEndpoint,
-    body: body,
-    dio: Dio(),
-  );
+  final dynamic encodedCredentialOrFutureToken = await oidc4vc
+      .getDeferredCredential(
+        credentialHeaders: credentialHeaders,
+        deferredCredentialEndpoint:
+            credentialModel.pendingInfo!.deferredCredentialEndpoint,
+        body: body,
+        dio: Dio(),
+      );
 
   await addOIDC4VCCredential(
     encodedCredentialFromOIDC4VC: encodedCredentialOrFutureToken,

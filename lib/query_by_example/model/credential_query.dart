@@ -5,11 +5,7 @@ part 'credential_query.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class CredentialQuery {
-  CredentialQuery({
-    this.reason,
-    this.example,
-    this.required,
-  });
+  CredentialQuery({this.reason, this.example, this.required});
 
   factory CredentialQuery.fromJson(Map<String, dynamic> json) =>
       _$CredentialQueryFromJson(json);

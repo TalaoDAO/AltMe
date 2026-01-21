@@ -19,8 +19,10 @@ void main() {
     test('copyWith updates locale', () {
       const newLocale = Locale('fr', 'FR');
       expect(
-        const LangState(locale: locale, languageType: languageType)
-            .copyWith(locale: newLocale),
+        const LangState(
+          locale: locale,
+          languageType: languageType,
+        ).copyWith(locale: newLocale),
         const LangState(locale: newLocale, languageType: languageType),
       );
     });

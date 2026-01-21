@@ -5,10 +5,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class SubTitle extends StatelessWidget {
-  const SubTitle({
-    super.key,
-    required this.profileModel,
-  });
+  const SubTitle({super.key, required this.profileModel});
 
   final ProfileModel profileModel;
 
@@ -23,9 +20,9 @@ class SubTitle extends StatelessWidget {
       child: Text(
         isEnterprise ? tag : l10n.splashSubtitle,
         textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-              fontWeight: FontWeight.normal,
-            ),
+        style: Theme.of(
+          context,
+        ).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.normal),
       ),
     );
   }

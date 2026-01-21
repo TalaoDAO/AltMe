@@ -33,8 +33,9 @@ void main() {
   setUpAll(() {
     WidgetsFlutterBinding.ensureInitialized();
     mockProfileCubit = MockProfileCubit();
-    activeBiometricsCubit =
-        ActiveBiometricsCubit(profileCubit: mockProfileCubit);
+    activeBiometricsCubit = ActiveBiometricsCubit(
+      profileCubit: mockProfileCubit,
+    );
     localAuthApi = MockLocalAuthApi();
   });
 
@@ -75,9 +76,7 @@ void main() {
       verify(
         () => navigator.push<void>(
           any(
-            that: isRoute<void>(
-              whereName: equals('/activiateBiometricsPage'),
-            ),
+            that: isRoute<void>(whereName: equals('/activiateBiometricsPage')),
           ),
         ),
       ).called(1);
@@ -87,9 +86,7 @@ void main() {
       await tester.pumpApp(
         MultiBlocProvider(
           providers: [
-            BlocProvider.value(
-              value: activeBiometricsCubit,
-            ),
+            BlocProvider.value(value: activeBiometricsCubit),
             BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
           ],
           child: ActiviateBiometricsPage(
@@ -124,36 +121,39 @@ void main() {
     });
 
     testWidgets(
-        'MyElevatedButton should be enabled and trigger onAction callback',
-        (tester) async {
-      bool callbackCalled = false;
+      'MyElevatedButton should be enabled and trigger onAction callback',
+      (tester) async {
+        bool callbackCalled = false;
 
-      await tester.pumpApp(
-        MockNavigatorProvider(
-          navigator: navigator,
-          child: BlocProvider.value(
-            value: activeBiometricsCubit,
-            child: ActivateBiometricsView(
-              isFromOnboarding: true,
-              localAuthApi: localAuthApi,
-              onAction: ({required bool isEnabled}) {
-                callbackCalled = isEnabled;
-              },
+        await tester.pumpApp(
+          MockNavigatorProvider(
+            navigator: navigator,
+            child: BlocProvider.value(
+              value: activeBiometricsCubit,
+              child: ActivateBiometricsView(
+                isFromOnboarding: true,
+                localAuthApi: localAuthApi,
+                onAction: ({required bool isEnabled}) {
+                  callbackCalled = isEnabled;
+                },
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      await tester.tap(find.text('Next'.toUpperCase()));
+        await tester.tap(find.text('Next'.toUpperCase()));
 
-      expect(callbackCalled, true);
-    });
+        expect(callbackCalled, true);
+      },
+    );
 
     group('BiometricsSwitch', () {
-      testWidgets('show Diloag when biometrics is not available',
-          (tester) async {
-        when(() => localAuthApi.hasBiometrics())
-            .thenAnswer((_) => Future.value(false));
+      testWidgets('show Diloag when biometrics is not available', (
+        tester,
+      ) async {
+        when(
+          () => localAuthApi.hasBiometrics(),
+        ).thenAnswer((_) => Future.value(false));
 
         await tester.pumpApp(
           MockNavigatorProvider(
@@ -176,8 +176,9 @@ void main() {
       });
 
       testWidgets('show Diloag when biometrics is available', (tester) async {
-        when(() => localAuthApi.hasBiometrics())
-            .thenAnswer((_) => Future.value(true));
+        when(
+          () => localAuthApi.hasBiometrics(),
+        ).thenAnswer((_) => Future.value(true));
         when(
           () => localAuthApi.authenticate(
             localizedReason: 'Scan Fingerprint to Authenticate',

@@ -15,9 +15,9 @@ class TezotopiaVoucherModel extends CredentialSubjectModel {
     this.identifier,
     this.offers,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.tezVoucher,
-          credentialCategory: CredentialCategory.advantagesCards,
-        );
+         credentialSubjectType: CredentialSubjectType.tezVoucher,
+         credentialCategory: CredentialCategory.advantagesCards,
+       );
 
   factory TezotopiaVoucherModel.fromJson(Map<String, dynamic> json) =>
       _$TezotopiaVoucherModelFromJson(json);

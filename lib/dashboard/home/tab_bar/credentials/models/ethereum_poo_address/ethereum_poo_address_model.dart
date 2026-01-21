@@ -13,9 +13,9 @@ class EthereumPooAddressModel extends CredentialSubjectModel {
     super.issuedBy,
     super.offeredBy,
   }) : super(
-          credentialSubjectType: CredentialSubjectType.ethereumPooAddress,
-          credentialCategory: CredentialCategory.blockchainAccountsCards,
-        );
+         credentialSubjectType: CredentialSubjectType.ethereumPooAddress,
+         credentialCategory: CredentialCategory.blockchainAccountsCards,
+       );
 
   factory EthereumPooAddressModel.fromJson(Map<String, dynamic> json) =>
       _$EthereumPooAddressModelFromJson(json);

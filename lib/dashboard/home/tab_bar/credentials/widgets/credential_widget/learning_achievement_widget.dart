@@ -52,7 +52,10 @@ class LearningAchievementRecto extends Recto {
                 id: 'school',
                 child: MyText(
                   credentialModel
-                      .credentialPreview.credentialSubjectModel.issuedBy!.name,
+                      .credentialPreview
+                      .credentialSubjectModel
+                      .issuedBy!
+                      .name,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
@@ -79,8 +82,9 @@ class LearningAchievementVerso extends Verso {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final learningAchievementModel = credentialModel
-        .credentialPreview.credentialSubjectModel as LearningAchievementModel;
+    final learningAchievementModel =
+        credentialModel.credentialPreview.credentialSubjectModel
+            as LearningAchievementModel;
 
     return CredentialImage(
       image: ImageStrings.learningAchievementBack,
@@ -110,10 +114,9 @@ class LearningAchievementVerso extends Verso {
                 children: [
                   ImageCardText(
                     text: '${l10n.personalLastName}: ',
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   ImageCardText(
                     text: learningAchievementModel.familyName!,
@@ -128,10 +131,9 @@ class LearningAchievementVerso extends Verso {
                 children: [
                   ImageCardText(
                     text: '${l10n.personalFirstName}: ',
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   ImageCardText(
                     text: learningAchievementModel.givenName!,
@@ -146,10 +148,9 @@ class LearningAchievementVerso extends Verso {
                 children: [
                   ImageCardText(
                     text: '${l10n.birthdate}: ',
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   ImageCardText(
                     text: UiDate.formatStringDate(
@@ -167,10 +168,9 @@ class LearningAchievementVerso extends Verso {
                   ImageCardText(
                     text:
                         '''${learningAchievementModel.hasCredential!.title}: ''',
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   ImageCardText(
                     text: learningAchievementModel.hasCredential!.description,
@@ -185,10 +185,9 @@ class LearningAchievementVerso extends Verso {
                 children: [
                   ImageCardText(
                     text: '${l10n.proof}: ',
-                    textStyle: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   InkWell(
                     onTap: () async {

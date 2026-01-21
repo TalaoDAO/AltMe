@@ -25,8 +25,8 @@ class PinCodeWidget extends StatefulWidget {
     this.isNewCode = false,
     this.isUserPin = false,
     this.showKeyboard = false,
-  })  : circleUIConfig = circleUIConfig ?? const CircleUIConfig(),
-        keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig();
+  }) : circleUIConfig = circleUIConfig ?? const CircleUIConfig(),
+       keyboardUIConfig = keyboardUIConfig ?? const KeyboardUIConfig();
 
   final OnLoginAttempt? onLoginAttempt;
   final Widget? header;
@@ -85,15 +85,15 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
           if (currentText.length > _previousText.length) {
             _latestKey = currentText.substring(currentText.length - 1);
             context.read<PinCodeViewCubit>().onKeyboardButtonPressed(
-                  passwordDigits: widget.passwordDigits,
-                  text: _latestKey,
-                  cancelCallback: widget.cancelCallback,
-                  isNewCode: widget.isNewCode,
-                );
+              passwordDigits: widget.passwordDigits,
+              text: _latestKey,
+              cancelCallback: widget.cancelCallback,
+              isNewCode: widget.isNewCode,
+            );
           } else if (currentText.length < _previousText.length) {
-            context
-                .read<PinCodeViewCubit>()
-                .onDeleteCancelButtonPressed(widget.cancelCallback);
+            context.read<PinCodeViewCubit>().onDeleteCancelButtonPressed(
+              widget.cancelCallback,
+            );
           }
           _previousText = currentText;
         });
@@ -121,8 +121,10 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
         return previous.loginAttemptCount != current.loginAttemptCount;
       },
       listener: (context, state) {
-        widget.onLoginAttempt
-            ?.call(state.loginAttemptCount, state.loginAttemptsRemaining);
+        widget.onLoginAttempt?.call(
+          state.loginAttemptCount,
+          state.loginAttemptsRemaining,
+        );
       },
       builder: (context, state) {
         final enteredPasscode = state.enteredPasscode;
@@ -144,9 +146,10 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                 else
                                   WalletLogo(
                                     height: 90,
-                                    width: MediaQuery.of(context)
-                                            .size
-                                            .shortestSide *
+                                    width:
+                                        MediaQuery.of(
+                                          context,
+                                        ).size.shortestSide *
                                         0.5,
                                     showPoweredBy: true,
                                   ),
@@ -173,12 +176,13 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                           allowAction: state.allowAction,
                                           filled:
                                               index < enteredPasscode.length,
-                                          circleUIConfig: (state.pinCodeError !=
+                                          circleUIConfig:
+                                              (state.pinCodeError !=
                                                   PinCodeErrors.none)
                                               ? CircleUIConfig(
-                                                  fillColor: Theme.of(context)
-                                                      .colorScheme
-                                                      .error,
+                                                  fillColor: Theme.of(
+                                                    context,
+                                                  ).colorScheme.error,
                                                 )
                                               : widget.circleUIConfig,
                                         ),
@@ -196,8 +200,9 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                     cancelCallback: widget.cancelCallback,
                                     allowAction: true,
                                     isNewCode: widget.isNewCode,
-                                    keyboardButton:
-                                        KeyboardButton(widget: widget),
+                                    keyboardButton: KeyboardButton(
+                                      widget: widget,
+                                    ),
                                   ),
                                 widget.bottomWidget ?? Container(),
                               ],
@@ -253,8 +258,9 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                             allowAction: state.allowAction,
                                           ),
                                           Container(
-                                            margin:
-                                                const EdgeInsets.only(top: 20),
+                                            margin: const EdgeInsets.only(
+                                              top: 20,
+                                            ),
                                             height: 40,
                                             child: Row(
                                               mainAxisAlignment:
@@ -268,7 +274,8 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                                   child: Circle(
                                                     allowAction:
                                                         state.allowAction,
-                                                    filled: index <
+                                                    filled:
+                                                        index <
                                                         enteredPasscode.length,
                                                     circleUIConfig:
                                                         widget.circleUIConfig,
@@ -312,8 +319,9 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
                                   passwordDigits: widget.passwordDigits,
                                   cancelCallback: widget.cancelCallback,
                                   allowAction: true,
-                                  keyboardButton:
-                                      KeyboardButton(widget: widget),
+                                  keyboardButton: KeyboardButton(
+                                    widget: widget,
+                                  ),
                                 ),
                               ),
                           ],
@@ -340,10 +348,7 @@ class _PinCodeWidgetState extends State<PinCodeWidget>
 }
 
 class PinCodeErrorMessage extends StatelessWidget {
-  const PinCodeErrorMessage({
-    required this.isConfirmationPage,
-    super.key,
-  });
+  const PinCodeErrorMessage({required this.isConfirmationPage, super.key});
 
   final bool isConfirmationPage;
   @override
@@ -367,10 +372,7 @@ class PinCodeErrorMessage extends StatelessWidget {
             } else {
               errorWidget = PinCodeErrorText(
                 // ignore: lines_longer_than_80_chars
-                '${l10n.userPinIsIncorrect}\n${l10n.codeSecretIncorrectDescription(
-                  state.loginAttemptsRemaining,
-                  state.loginAttemptsRemaining == 1 ? '' : 's',
-                )}',
+                '${l10n.userPinIsIncorrect}\n${l10n.codeSecretIncorrectDescription(state.loginAttemptsRemaining, state.loginAttemptsRemaining == 1 ? '' : 's')}',
               );
             }
         }
@@ -381,10 +383,7 @@ class PinCodeErrorMessage extends StatelessWidget {
 }
 
 class PinCodeErrorText extends StatelessWidget {
-  const PinCodeErrorText(
-    this.errorText, {
-    super.key,
-  });
+  const PinCodeErrorText(this.errorText, {super.key});
 
   final String errorText;
 
@@ -393,18 +392,15 @@ class PinCodeErrorText extends StatelessWidget {
     return Text(
       errorText,
       style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: Theme.of(context).colorScheme.error,
-          ),
+        color: Theme.of(context).colorScheme.error,
+      ),
       textAlign: TextAlign.center,
     );
   }
 }
 
 class KeyboardButton extends StatelessWidget {
-  const KeyboardButton({
-    super.key,
-    required this.widget,
-  });
+  const KeyboardButton({super.key, required this.widget});
 
   final PinCodeWidget widget;
 

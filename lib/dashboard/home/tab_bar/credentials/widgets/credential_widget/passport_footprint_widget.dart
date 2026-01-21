@@ -11,15 +11,16 @@ class PassportFootprintWidget extends StatelessWidget {
     return CredentialBaseWidget(
       cardBackgroundImagePath: ImageStrings.passportFootprint,
       issuerName: credentialModel
-          .credentialPreview.credentialSubjectModel.issuedBy?.name,
+          .credentialPreview
+          .credentialSubjectModel
+          .issuedBy
+          ?.name,
       issuanceDate: UiDate.formatDateForCredentialCard(
         credentialModel.credentialPreview.issuanceDate,
       ),
       expirationDate: credentialModel.expirationDate == null
           ? '--'
-          : UiDate.formatDateForCredentialCard(
-              credentialModel.expirationDate!,
-            ),
+          : UiDate.formatDateForCredentialCard(credentialModel.expirationDate!),
     );
   }
 }

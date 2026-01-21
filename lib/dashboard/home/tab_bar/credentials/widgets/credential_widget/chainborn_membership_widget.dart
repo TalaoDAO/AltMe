@@ -10,9 +10,7 @@ class ChainbornMemberShipWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return const CredentialImage(
       image: ImageStrings.chainbornMemberShip,
-      child: AspectRatio(
-        aspectRatio: Sizes.credentialAspectRatio,
-      ),
+      child: AspectRatio(aspectRatio: Sizes.credentialAspectRatio),
     );
   }
 }

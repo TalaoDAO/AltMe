@@ -16,8 +16,9 @@ void main() {
       final progressWidget = tester.widget<CircularProgressIndicator>(
         find.byType(CircularProgressIndicator),
       );
-      final BuildContext context =
-          tester.element(find.byType(CircularProgressIndicator));
+      final BuildContext context = tester.element(
+        find.byType(CircularProgressIndicator),
+      );
 
       expect(progressWidget.strokeWidth, 3.0);
       expect(

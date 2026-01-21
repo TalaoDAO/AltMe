@@ -4,10 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class KycDialog extends StatelessWidget {
-  const KycDialog({
-    super.key,
-    required this.startVerificationPressed,
-  });
+  const KycDialog({super.key, required this.startVerificationPressed});
 
   final VoidCallback startVerificationPressed;
 
@@ -85,9 +82,7 @@ class KycDialog extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: Sizes.spaceLarge,
-              ),
+              const SizedBox(height: Sizes.spaceLarge),
               MyElevatedButton(
                 text: l10n.kycDialogButton.toUpperCase(),
                 verticalSpacing: 18,
@@ -99,9 +94,7 @@ class KycDialog extends StatelessWidget {
                   startVerificationPressed.call();
                 },
               ),
-              const SizedBox(
-                height: Sizes.spaceSmall,
-              ),
+              const SizedBox(height: Sizes.spaceSmall),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -110,10 +103,9 @@ class KycDialog extends StatelessWidget {
                   Image.asset(
                     IconStrings.lockCircle,
                     width: Sizes.icon,
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withValues(alpha: 0.6),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                   Expanded(
                     child: Text(

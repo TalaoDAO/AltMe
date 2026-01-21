@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoadingProgress extends StatelessWidget {
-  const LoadingProgress({
-    super.key,
-    required this.value,
-  });
+  const LoadingProgress({super.key, required this.value});
 
   final double value;
 

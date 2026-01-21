@@ -50,17 +50,13 @@ class ResetWalletView extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              const SizedBox(
-                height: Sizes.spaceNormal,
-              ),
+              const SizedBox(height: Sizes.spaceNormal),
               Text(
                 l10n.resetWalletSubtitle,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              const SizedBox(
-                height: Sizes.spaceLarge,
-              ),
+              const SizedBox(height: Sizes.spaceLarge),
               Text(
                 l10n.resetWalletSubtitle2,
                 textAlign: TextAlign.center,
@@ -76,9 +72,7 @@ class ResetWalletView extends StatelessWidget {
                       .toggleIsRecoveryPhraseWritten();
                 },
               ),
-              const SizedBox(
-                height: Sizes.spaceSmall,
-              ),
+              const SizedBox(height: Sizes.spaceSmall),
               CheckboxItem(
                 value: state.isBackupCredentialSaved,
                 text: l10n.resetWalletCheckBox2,
@@ -100,17 +94,17 @@ class ResetWalletView extends StatelessWidget {
               text: l10n.resetWallet,
               onPressed:
                   state.isBackupCredentialSaved && state.isRecoveryPhraseWritten
-                      ? () async {
-                          await securityCheck(
-                            context: context,
-                            title: l10n.typeYourPINCodeToAuthenticate,
-                            localAuthApi: LocalAuthApi(),
-                            onSuccess: () async {
-                              await resetWallet(context);
-                            },
-                          );
-                        }
-                      : null,
+                  ? () async {
+                      await securityCheck(
+                        context: context,
+                        title: l10n.typeYourPINCodeToAuthenticate,
+                        localAuthApi: LocalAuthApi(),
+                        onSuccess: () async {
+                          await resetWallet(context);
+                        },
+                      );
+                    }
+                  : null,
             ),
           );
         },

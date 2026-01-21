@@ -42,9 +42,7 @@ class AboutAltmeView extends StatelessWidget {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const BackLeadingButton(
-                padding: EdgeInsets.zero,
-              ),
+              const BackLeadingButton(padding: EdgeInsets.zero),
               const DrawerLogo(),
               const AppVersionDrawer(),
               if (profileModel.profileType == ProfileType.enterprise) ...[
@@ -55,19 +53,21 @@ class AboutAltmeView extends StatelessWidget {
                   ),
                   child: Text(
                     profileSetting.generalOptions.companyName,
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          fontSize: 18,
-                        ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleLarge!.copyWith(fontSize: 18),
                   ),
                 ),
                 const SizedBox(height: Sizes.spaceXSmall),
                 DrawerItem(
-                  title: '${l10n.profileName} :'
+                  title:
+                      '${l10n.profileName} :'
                       ' ${profileSetting.generalOptions.profileName}',
                   trailing: Container(),
                 ),
                 DrawerItem(
-                  title: '${l10n.configFileIdentifier} :'
+                  title:
+                      '${l10n.configFileIdentifier} :'
                       ' ${profileSetting.generalOptions.profileId}',
                   trailing: Container(),
                 ),
@@ -78,9 +78,9 @@ class AboutAltmeView extends StatelessWidget {
                   ),
                   child: Text(
                     l10n.about,
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          fontSize: 18,
-                        ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleLarge!.copyWith(fontSize: 18),
                   ),
                 ),
               ],
@@ -105,8 +105,9 @@ class AboutAltmeView extends StatelessWidget {
               ),
               DrawerItem(
                 title: l10n.softwareLicenses,
-                onTap: () => Navigator.of(context)
-                    .push<void>(SoftwareLicensePage.route()),
+                onTap: () => Navigator.of(
+                  context,
+                ).push<void>(SoftwareLicensePage.route()),
               ),
             ],
           ),

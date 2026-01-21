@@ -7,11 +7,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
 class UploadFile extends StatelessWidget {
-  const UploadFile({
-    super.key,
-    this.filePath,
-    this.onTap,
-  });
+  const UploadFile({super.key, this.filePath, this.onTap});
 
   final String? filePath;
   final VoidCallback? onTap;
@@ -29,8 +25,9 @@ class UploadFile extends StatelessWidget {
           alignment: Alignment.center,
           height: 85,
           decoration: BoxDecoration(
-            color:
-                filePath != null ? Theme.of(context).colorScheme.surface : null,
+            color: filePath != null
+                ? Theme.of(context).colorScheme.surface
+                : null,
             borderRadius: const BorderRadius.all(
               Radius.circular(Sizes.smallRadius),
             ),
