@@ -26,8 +26,8 @@ extension on ProfileType {
         return 'custom';
       case ProfileType.ebsiV3:
         return 'EBSI';
-      case ProfileType.ebsiV4:
-        return 'EBSI_V4';
+      // case ProfileType.ebsiV4:
+      //   return 'EBSI_V4';
       case ProfileType.diipv3:
         return 'DIIP_V3';
       case ProfileType.diipv4:
