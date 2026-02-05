@@ -25,10 +25,10 @@ class MyTab extends StatelessWidget {
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(
           horizontal: Sizes.spaceXSmall,
-          vertical: Sizes.spaceSmall,
+          vertical: Sizes.spaceXSmall,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Sizes.normalRadius),
+          borderRadius: BorderRadius.circular(Sizes.normalButton),
           color: isSelected
               ? Theme.of(context).colorScheme.primaryContainer
               : Theme.of(context).colorScheme.surfaceContainer,
@@ -37,20 +37,10 @@ class MyTab extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            if (isSelected)
-              Image.asset(
-                icon,
-                height: Sizes.icon,
-                colorBlendMode: BlendMode.color,
-                color: Theme.of(context).colorScheme.primaryContainer,
-              )
-            else
-              Image.asset(icon, height: Sizes.icon),
-            const SizedBox(width: Sizes.spaceXSmall),
             Text(
               text,
               maxLines: 1,
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: isSelected
                     ? Theme.of(context).colorScheme.onPrimaryContainer
                     : Theme.of(context).colorScheme.inverseSurface,

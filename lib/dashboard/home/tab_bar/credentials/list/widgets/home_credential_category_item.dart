@@ -68,7 +68,7 @@ class HomeCredentialCategoryItem extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+                crossAxisCount: 1,
                 crossAxisSpacing: 14,
                 mainAxisSpacing: 14,
                 childAspectRatio: Sizes.credentialAspectRatio,

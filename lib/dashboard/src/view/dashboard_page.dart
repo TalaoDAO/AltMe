@@ -241,13 +241,6 @@ class _DashboardViewState extends State<DashboardView> {
                               ],
                             ),
                           ),
-                          Text(
-                            _getTitle(dashboardState.selectedIndex, l10n),
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.headlineSmall!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
                           Expanded(
                             child: PageView(
                               controller: pageController,
@@ -272,69 +265,9 @@ class _DashboardViewState extends State<DashboardView> {
                               ],
                             ),
                           ),
-                          BottomBarDecoration(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                BottomBarItem(
-                                  icon: IconStrings.home,
-                                  text: l10n.home,
-                                  onTap: () => bottomTapped(0),
-                                  isSelected: dashboardState.selectedIndex == 0,
-                                ),
-                                BottomBarItem(
-                                  icon: IconStrings.discover,
-                                  text: l10n.discover,
-                                  onTap: () => bottomTapped(1),
-                                  isSelected: dashboardState.selectedIndex == 1,
-                                ),
-                                const SizedBox(width: 60),
-                                if (Parameters.walletHandlesCrypto)
-                                  BottomBarItem(
-                                    icon: IconStrings.cashInHand,
-                                    text: l10n.buy,
-                                    onTap: () => bottomTapped(2),
-                                    isSelected:
-                                        dashboardState.selectedIndex == 2,
-                                  )
-                                else
-                                  BottomBarItem(
-                                    icon: IconStrings.searchNormal,
-                                    text: l10n.search,
-                                    onTap: () => bottomTapped(2),
-                                    isSelected:
-                                        dashboardState.selectedIndex == 2,
-                                  ),
-                                if (displayChatSupport && isEnterprise) ...[
-                                  StreamBuilder(
-                                    initialData: context
-                                        .read<AltmeChatSupportCubit>()
-                                        .unreadMessageCount,
-                                    stream: context
-                                        .read<AltmeChatSupportCubit>()
-                                        .unreadMessageCountStream,
-                                    builder: (_, snapShot) {
-                                      return BottomBarItem(
-                                        icon: IconStrings.messaging,
-                                        text: l10n.chat,
-                                        badgeCount: snapShot.data ?? 0,
-                                        onTap: () => bottomTapped(3),
-                                        isSelected:
-                                            dashboardState.selectedIndex == 3,
-                                      );
-                                    },
-                                  ),
-                                ] else ...[
-                                  BottomBarItem(
-                                    icon: IconStrings.settings,
-                                    text: l10n.settings,
-                                    onTap: () =>
-                                        scaffoldKey.currentState!.openDrawer(),
-                                    isSelected: false,
-                                  ),
-                                ],
-                              ],
-                            ),
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [],
                           ),
                           const SizedBox(height: 1),
                         ],
