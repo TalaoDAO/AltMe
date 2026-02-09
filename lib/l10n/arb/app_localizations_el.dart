@@ -401,7 +401,7 @@ class AppLocalizationsEl extends AppLocalizations {
       'Ο διακομιστής δεν πληροί μία από τις προϋποθέσεις.';
 
   @override
-  String get networkErrorCreated => '';
+  String get networkErrorCreated => 'Σφάλμα δικτύου';
 
   @override
   String get networkErrorGatewayTimeout =>
@@ -426,7 +426,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get networkErrorNotImplemented => 'Μη υλοποιημένο';
 
   @override
-  String get networkErrorOk => '';
+  String get networkErrorOk => 'Εντάξει';
 
   @override
   String get networkErrorRequestCancelled => 'Το αίτημα ακυρώθηκε';
@@ -2474,19 +2474,19 @@ class AppLocalizationsEl extends AppLocalizations {
       'Λυπούμαστε, η συσκευή σας δεν είναι συμβατή για αυτή τη λειτουργία.';
 
   @override
-  String get tezosProofMessage => '';
+  String get tezosProofMessage => 'Μήνυμα επαλήθευσης Tezos';
 
   @override
-  String get ethereumProofMessage => '';
+  String get ethereumProofMessage => 'Μήνυμα επαλήθευσης Ethereum';
 
   @override
-  String get fantomProofMessage => '';
+  String get fantomProofMessage => 'Μήνυμα επαλήθευσης Fantom';
 
   @override
-  String get polygonProofMessage => '';
+  String get polygonProofMessage => 'Μήνυμα επαλήθευσης Polygon';
 
   @override
-  String get binanceProofMessage => '';
+  String get binanceProofMessage => 'Μήνυμα επαλήθευσης Binance';
 
   @override
   String get yearsOld => 'ετών';
@@ -2555,7 +2555,7 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get socialMediaCredentialsHomeSubtitle =>
-      'Prove your accounts ownership instantly Proof of humanity';
+      'Διαπιστευτήρια social media';
 
   @override
   String get socialMediaCredentialsDiscoverTitle =>
@@ -2762,7 +2762,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get security_level => 'Επίπεδο ασφαλείας';
 
   @override
-  String get userPinTitle => 'User PIN Digits pre-authorized_code Flow';
+  String get userPinTitle => 'PIN χρήστη';
 
   @override
   String get userPinSubtitle =>
@@ -2775,8 +2775,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get invalidRequest => 'Το αίτημα είναι άκυρο';
 
   @override
-  String get subjectSyntaxTypeNotSupported =>
-      'The subject syntax type is not supported.';
+  String get subjectSyntaxTypeNotSupported => 'Μη υποστηριζόμενος τύπος';
 
   @override
   String get accessDenied => 'Άρνηση πρόσβασης';
@@ -3165,7 +3164,7 @@ class AppLocalizationsEl extends AppLocalizations {
       'Ο νέος σας λογαριασμός Etherlink δημιουργήθηκε με επιτυχία.';
 
   @override
-  String get etherlinkProofMessage => '';
+  String get etherlinkProofMessage => 'Μήνυμα επαλήθευσης Etherlink';
 
   @override
   String get notification => 'Ειδοποίηση';
@@ -3364,32 +3363,29 @@ class AppLocalizationsEl extends AppLocalizations {
   String get greek => 'Ελληνικά';
 
   @override
-  String get iaAnalyze =>
-      'Data will be shared with a remote AI engine. Don\'t share personal data.';
+  String get iaAnalyze => 'Ανάλυση';
 
   @override
-  String get iaAnalyzeTitle => 'AI Agent';
+  String get iaAnalyzeTitle => 'Τίτλος ανάλυσης';
 
   @override
-  String get deleteDigit => 'Delete';
+  String get deleteDigit => 'Διαγραφή ψηφίου';
 
   @override
-  String get aiPleaseWait => 'This treatment can take up to 1 min';
+  String get aiPleaseWait => 'Παρακαλώ περιμένετε…';
 
   @override
-  String get trustedList => 'Use trusted list';
+  String get trustedList => 'Αξιόπιστη λίστα';
 
   @override
-  String get trustedListSubtitle =>
-      'List of trusted entities in the current ecosystem. You are warned in case of interaction with non trusted entity.';
+  String get trustedListSubtitle => 'Λίστα αξιόπιστων';
 
   @override
-  String get notTrustedEntity =>
-      'This entity is not in the trusted list. You should be very cautious with untrusted entities.';
+  String get notTrustedEntity => 'Μη αξιόπιστη οντότητα';
 
   @override
-  String get acceptanceRequest => 'Payment request';
+  String get acceptanceRequest => 'Αίτημα αποδοχής';
 
   @override
-  String get pay => 'share and pay';
+  String get pay => 'Πληρωμή';
 }

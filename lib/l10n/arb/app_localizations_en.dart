@@ -771,7 +771,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get version => 'Version';
 
   @override
-  String get cards => 'Cards';
+  String get cards => 'Credentials';
 
   @override
   String get nfts => 'NFTs';

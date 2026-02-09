@@ -1523,7 +1523,7 @@ abstract class AppLocalizations {
   /// No description provided for @cards.
   ///
   /// In en, this message translates to:
-  /// **'Cards'**
+  /// **'Credentials'**
   String get cards;
 
   /// No description provided for @nfts.
