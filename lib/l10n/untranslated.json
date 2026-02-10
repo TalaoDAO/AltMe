@@ -17,7 +17,16 @@
     "trustedListSubtitle",
     "notTrustedEntity",
     "acceptanceRequest",
-    "pay"
+    "pay",
+    "greek"
+  ],
+
+  "el": [
+    "french",
+    "spanish",
+    "catalan",
+    "english",
+    "greek"
   ],
 
   "es": [
@@ -38,6 +47,11 @@
     "trustedListSubtitle",
     "notTrustedEntity",
     "acceptanceRequest",
-    "pay"
+    "pay",
+    "greek"
+  ],
+
+  "fr": [
+    "greek"
   ]
 }
