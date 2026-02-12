@@ -8,7 +8,10 @@ environment:
 
 dependencies:
   bip32: ^2.0.0
-  bip39: ^1.0.6
+  bip39:
+    git:
+      url: git@github.com:hawkbee1/bip39.git
+      ref: master
   crypto_keys: ^0.3.0+1
   equatable: ^2.0.5
   flutter:
