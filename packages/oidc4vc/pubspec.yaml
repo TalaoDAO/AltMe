@@ -43,6 +43,8 @@ dependencies:
 
 dependency_overrides:
   ffi: 2.1.0 #didkit from path which depends on ffi ^1.0.0
+  pointycastle: ^4.0.0 # a library that implements popular crypto algorithms
+
 
 dev_dependencies:
   build_runner: ^2.4.11

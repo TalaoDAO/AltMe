@@ -18,6 +18,9 @@ dependencies:
     sdk: flutter
   json_annotation: ^4.9.0
 
+dependency_overrides:
+  pointycastle: ^4.0.0 # a library that implements popular crypto algorithms
+
 dev_dependencies:
   build_runner: ^2.4.11
   flutter_test:
