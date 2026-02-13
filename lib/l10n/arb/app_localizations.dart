@@ -1655,7 +1655,7 @@ abstract class AppLocalizations {
   /// No description provided for @identityCards.
   ///
   /// In en, this message translates to:
-  /// **'Identity cards'**
+  /// **'My identity cards'**
   String get identityCards;
 
   /// No description provided for @identityDiscoverCards.

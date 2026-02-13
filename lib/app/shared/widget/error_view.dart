@@ -22,8 +22,8 @@ class ErrorView extends StatelessWidget {
           child: Text(message, style: Theme.of(context).textTheme.bodyMedium),
         ),
         const SizedBox(height: Sizes.spaceSmall),
-        SizedBox(
-          width: MediaQuery.of(context).size.width / 2.5,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: MyOutlinedButton(
             text: l10n.tryAgain,
             backgroundColor: Colors.transparent,

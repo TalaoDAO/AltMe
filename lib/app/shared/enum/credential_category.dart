@@ -78,51 +78,51 @@ extension CredentialCategoryX on CredentialCategory {
     switch (this) {
       case CredentialCategory.advantagesCards:
         return CredentialCategoryConfig(
-          homeTitle: '${l10n.my} ${l10n.advantagesCards.toLowerCase()}',
+          homeTitle: l10n.advantagesCards,
           homeSubTitle: l10n.advantagesCredentialHomeSubtitle,
           discoverTitle: l10n.advantagesDiscoverCards,
           discoverSubTitle: l10n.advantagesCredentialDiscoverSubtitle,
         );
       case CredentialCategory.identityCards:
         return CredentialCategoryConfig(
-          homeTitle: '${l10n.my} ${l10n.identityCards.toLowerCase()}',
+          homeTitle: l10n.identityCards,
           homeSubTitle: l10n.identityCredentialHomeSubtitle,
           discoverTitle: l10n.identityDiscoverCards,
           discoverSubTitle: l10n.identityCredentialDiscoverSubtitle,
         );
       case CredentialCategory.professionalCards:
         return CredentialCategoryConfig(
-          homeTitle: '${l10n.my} ${l10n.myProfessionalCards.toLowerCase()}',
+          homeTitle: l10n.myProfessionalCards,
           homeSubTitle: l10n.myProfessionalrCardsSubtitle,
           discoverTitle: l10n.myProfessionalCredentialDiscoverSubtitle,
           discoverSubTitle: l10n.myProfessionalCredentialDiscoverSubtitle,
         );
       case CredentialCategory.contactInfoCredentials:
         return CredentialCategoryConfig(
-          homeTitle: '${l10n.my} ${l10n.contactInfoCredentials.toLowerCase()}',
+          homeTitle: l10n.contactInfoCredentials,
           homeSubTitle: l10n.contactInfoCredentialHomeSubtitle,
           discoverTitle: l10n.contactInfoDiscoverCredentials,
           discoverSubTitle: l10n.contactInfoCredentialDiscoverSubtitle,
         );
       case CredentialCategory.blockchainAccountsCards:
         return CredentialCategoryConfig(
-          homeTitle: '${l10n.my} ${l10n.blockchainAccounts.toLowerCase()}',
+          homeTitle: l10n.blockchainAccounts,
           homeSubTitle: l10n.blockchainAccountsCredentialHomeSubtitle,
           discoverTitle: l10n.blockchainCardsDiscoverTitle,
           discoverSubTitle: l10n.blockchainCardsDiscoverSubtitle,
         );
       case CredentialCategory.educationCards:
         return CredentialCategoryConfig(
-          homeTitle: '${l10n.my} ${l10n.educationCredentials.toLowerCase()}',
+          homeTitle: l10n.educationCredentials,
           homeSubTitle: l10n.educationCredentialHomeSubtitle,
           discoverTitle: l10n.educationDiscoverCredentials,
           discoverSubTitle: l10n.educationCredentialsDiscoverSubtitle,
         );
       case CredentialCategory.othersCards:
         return CredentialCategoryConfig(
-          homeTitle: '${l10n.my} ${l10n.otherCards.toLowerCase()}',
+          homeTitle: l10n.otherCards,
           homeSubTitle: l10n.otherCredentialHomeSubtitle,
-          discoverTitle: '${l10n.get} ${l10n.otherCards.toLowerCase()}',
+          discoverTitle: '${l10n.get} ${l10n.otherCards}',
           discoverSubTitle: l10n.otherCredentialDiscoverSubtitle,
         );
       case CredentialCategory.financeCards:

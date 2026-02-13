@@ -214,10 +214,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get recoveryMnemonicError => 'Εισάγετε μια έγκυρη μνημονική φράση';
 
   @override
-  String get showDialogYes => 'Συνέχεια';
+  String get showDialogYes => 'ΑΚΥΡΩΣΗ';
 
   @override
-  String get showDialogNo => 'Ακύρωση';
+  String get showDialogNo => 'ΣΥΝΕΧΕΙΑ';
 
   @override
   String get supportTitle => 'Βοήθεια';
@@ -688,7 +688,7 @@ class AppLocalizationsEl extends AppLocalizations {
       'Χρειάζεστε άδεια αποθήκευσης για τη φόρτωση αρχείου. Μεταβείτε στις ρυθμίσεις της εφαρμογής και δώστε πρόσβαση στο δικαίωμα αποθήκευσης.';
 
   @override
-  String get cancel => 'Ακύρωση';
+  String get cancel => 'ΑΚΥΡΩΣΗ';
 
   @override
   String get loading => 'Παρακαλούμε περιμένετε...';
@@ -758,7 +758,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get generate => 'Δημιουργία';
 
   @override
-  String get myAssets => 'Τα στοιχεία μου';
+  String get myAssets => 'Τα κρυπτοστοιχεία μου';
 
   @override
   String get search => 'Αναζήτηση';
@@ -830,7 +830,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get changePinCode => 'Αλλαγή κωδικού PIN';
 
   @override
-  String get tryAgain => 'Δοκιμάστε ξανά';
+  String get tryAgain => 'ΔΟΚΙΜΑΣΤΕ ΞΑΝΑ';
 
   @override
   String get credentialSelectionListEmptyError =>
@@ -850,7 +850,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get advantagesDiscoverCards => 'Ξεκλειδώστε αποκλειστικά προνόμια';
 
   @override
-  String get identityCards => 'Δελτία ταυτότητας';
+  String get identityCards => 'Οι κάρτες μου';
 
   @override
   String get identityDiscoverCards => 'Απλοποίηση της επαλήθευσης ταυτότητας';
@@ -1011,10 +1011,10 @@ class AppLocalizationsEl extends AppLocalizations {
       'Θέλετε πραγματικά να επεξεργαστείτε αυτό το όνομα λογαριασμού;';
 
   @override
-  String get cryptoEditConfirmationDialogYes => 'Αποθήκευση';
+  String get cryptoEditConfirmationDialogYes => 'ΑΠΟΘΗΚΕΥΣΗ';
 
   @override
-  String get cryptoEditConfirmationDialogNo => 'Ακύρωση';
+  String get cryptoEditConfirmationDialogNo => 'ΑΚΥΡΩΣΗ';
 
   @override
   String get cryptoEditLabel => 'Όνομα Λογαριασμού';
@@ -1298,7 +1298,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get revealPrivateKey => 'Αποκάλυψη ιδιωτικού κλειδιού';
 
   @override
-  String get share => 'Κοινοποίηση';
+  String get share => 'Σύνδεσμος';
 
   @override
   String get shareWith => 'Κοινοποίηση με';

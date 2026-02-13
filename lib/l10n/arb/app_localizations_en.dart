@@ -840,7 +840,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get advantagesDiscoverCards => 'Unlock exclusive rewards';
 
   @override
-  String get identityCards => 'Identity cards';
+  String get identityCards => 'My identity cards';
 
   @override
   String get identityDiscoverCards => 'Simplify ID verification';
