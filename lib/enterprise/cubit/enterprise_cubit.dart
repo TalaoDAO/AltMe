@@ -33,7 +33,6 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
   Future<void> requestTheConfiguration({
     required Uri uri,
-    required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     try {
       emit(state.loading());
@@ -487,7 +486,6 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
         final uri = Uri.https('example.com', '/path', configurationResponse);
         await requestTheConfiguration(
           uri: uri,
-          qrCodeScanCubit: qrCodeScanCubit,
         );
       }
     }

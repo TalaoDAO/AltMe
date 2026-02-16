@@ -70,10 +70,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     return super.close();
   }
 
-  Future<void> process({
-    required String? scannedResponse,
-    required QRCodeScanCubit qrCodeScanCubit,
-  }) async {
+  Future<void> process({required String? scannedResponse}) async {
     log.i('processing scanned qr code - $scannedResponse');
     goBack();
     await Future<void>.delayed(const Duration(milliseconds: 1000));
@@ -114,10 +111,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         /// enterprise
         final uri = Uri.parse(scannedResponse);
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-        await enterpriseCubit.requestTheConfiguration(
-          uri: uri,
-          qrCodeScanCubit: qrCodeScanCubit,
-        );
+        await enterpriseCubit.requestTheConfiguration(uri: uri);
       } else {
         final uri = Uri.parse(scannedResponse);
         await verify(uri: uri);
@@ -144,17 +138,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     if (deepLinkUrl != '') {
       emit(state.loading(isScan: false));
       deepLinkCubit.resetDeepLink();
-      try {
-        await verify(uri: Uri.parse(deepLinkUrl));
-      } on FormatException {
-        emitError(
-          error: ResponseMessage(
-            message: ResponseString
-                .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
-          ),
-          callToAction: AiRequestAnalysisButton(link: deepLinkUrl),
-        );
-      }
+      await process(scannedResponse: deepLinkUrl);
     }
   }
 
