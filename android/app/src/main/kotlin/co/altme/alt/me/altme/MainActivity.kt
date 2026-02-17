@@ -1,4 +1,4 @@
-package wallet.compellio.com
+package com.compellio.wallet
 
 import io.flutter.embedding.android.FlutterActivity
 
