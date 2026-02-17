@@ -18,7 +18,7 @@ dependencies:
   dart_web3:
     git:
       url: https://github.com/TalaoDAO/dart_web3.git
-      ref: main
+      ref: 9b0a47bb55c3b225aa80b67a133a0527666bf673
   did_kit:
     path: ../did_kit
   dio: ^5.3.2

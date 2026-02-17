@@ -38,8 +38,7 @@ dependencies:
   dart_web3:
     git:
       url: https://github.com/TalaoDAO/dart_web3.git
-
-      ref: main
+      ref: 9b0a47bb55c3b225aa80b67a133a0527666bf673
   decimal: ^2.3.3
   device_info_plus: ^11.2.2
   devicelocale: ^0.7.0
