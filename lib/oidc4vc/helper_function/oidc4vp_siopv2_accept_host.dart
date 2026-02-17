@@ -146,34 +146,37 @@ Future<void> oidc4vpSiopV2AcceptHost({
   } else {
     trustedEntity = null;
   }
-  if (response!.containsKey('transaction_data')) {
-    LoadingView().hide();
-    unawaited(
-      context.read<ScanCubit>().addTransactionData(
-        response['transaction_data'] as List<dynamic>,
-      ),
-    );
+  if (response != null) {
+    if (response.containsKey('transaction_data')) {
+      LoadingView().hide();
+      unawaited(
+        context.read<ScanCubit>().addTransactionData(
+          response['transaction_data'] as List<dynamic>,
+        ),
+      );
 
-    await Navigator.of(context).push<void>(
-      AcceptOidc4VpTransactionPage.route(
-        trustedListEnabled: trustedListEnabled,
-        trustedEntity: trustedEntity,
-        uri: uri,
-        showPrompt: showPrompt,
-        client: client,
-      ),
-    );
-  } else {
-    await Oidc4VpPrompt(
-      context: context,
-      l10n: l10n,
-      trustedListEnabled: trustedListEnabled,
-      trustedEntity: trustedEntity,
-      uri: uri,
-      client: client,
-      showPrompt: showPrompt,
-    ).show();
+      await Navigator.of(context).push<void>(
+        AcceptOidc4VpTransactionPage.route(
+          trustedListEnabled: trustedListEnabled,
+          trustedEntity: trustedEntity,
+          uri: uri,
+          showPrompt: showPrompt,
+          client: client,
+        ),
+      );
+      LoadingView().hide();
+      return;
+    }
   }
+  await Oidc4VpPrompt(
+    context: context,
+    l10n: l10n,
+    trustedListEnabled: trustedListEnabled,
+    trustedEntity: trustedEntity,
+    uri: uri,
+    client: client,
+    showPrompt: showPrompt,
+  ).show();
 
   // Default action if there is no prompt
 
