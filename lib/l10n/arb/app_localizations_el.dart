@@ -844,7 +844,7 @@ class AppLocalizationsEl extends AppLocalizations {
       'Ο κωδικός PIN σας άλλαξε με επιτυχία';
 
   @override
-  String get advantagesCards => 'Κάρτες Προνομίων';
+  String get advantagesCards => 'Κάρτες προνομίων';
 
   @override
   String get advantagesDiscoverCards => 'Ξεκλειδώστε αποκλειστικά προνόμια';
@@ -923,7 +923,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get manageAccounts => 'Διαχείριση λογαριασμών blockchain';
 
   @override
-  String get blockchainAccounts => 'Λογαριασμοί Blockchain';
+  String get blockchainAccounts => 'Λογαριασμοί blockchain';
 
   @override
   String get educationCredentials => 'Πιστοποιητικά εκπαίδευσης';
