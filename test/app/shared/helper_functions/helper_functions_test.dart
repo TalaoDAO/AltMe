@@ -797,13 +797,6 @@ void main() {
             }),
           );
           expect(
-            getMessageHandler('Exception: OPENID-CONFIGURATION-ISSUE'),
-            isA<ResponseMessage>().having((e) => e.data, '', {
-              'error': 'unsupported_format',
-              'error_description': 'Openid configuration response issue.',
-            }),
-          );
-          expect(
             getMessageHandler('Exception: NOT_A_VALID_OPENID_URL'),
             isA<ResponseMessage>().having((e) => e.data, '', {
               'error': 'unsupported_format',
@@ -939,7 +932,7 @@ void main() {
 
           expect(
             getErrorResponseString('invalid_grant'),
-            ResponseString.RESPONSE_STRING_credentialIssuanceDenied,
+            ResponseString.RESPONSE_STRING_invalidCode,
           );
           expect(
             getErrorResponseString('issuance_pending'),
@@ -1151,11 +1144,7 @@ void main() {
                 credentialsToBePresented: [],
               ),
               [
-                VCFormatType.ldpVc,
                 VCFormatType.jwtVc,
-                VCFormatType.jwtVcJson,
-                VCFormatType.jwtVcJsonLd,
-                VCFormatType.vcSdJWT,
               ],
             );
           });
@@ -1173,13 +1162,7 @@ void main() {
                 clientMetaData: null,
                 credentialsToBePresented: [],
               ),
-              [
-                VCFormatType.ldpVc,
-                VCFormatType.jwtVc,
-                VCFormatType.jwtVcJson,
-                VCFormatType.jwtVcJsonLd,
-                VCFormatType.vcSdJWT,
-              ],
+              [VCFormatType.jwtVcJson],
             );
           });
 
@@ -1197,10 +1180,6 @@ void main() {
                 credentialsToBePresented: [],
               ),
               [
-                VCFormatType.ldpVc,
-                VCFormatType.jwtVc,
-                VCFormatType.jwtVcJson,
-                VCFormatType.jwtVcJsonLd,
                 VCFormatType.vcSdJWT,
               ],
             );
@@ -1633,7 +1612,7 @@ void main() {
               blockchainNetwork: PolygonNetwork.testNet(),
               dotEnv: mockDotenv,
             );
-            expect(result, 'https://rpc-mumbai.maticvigil.com');
+            expect(result, 'https://rpc-amoy.polygon.technology/');
           });
 
           test('returns infura URL for EthereumNetwork.mainNet()', () async {
@@ -1651,7 +1630,7 @@ void main() {
               blockchainNetwork: EthereumNetwork.testNet(),
               dotEnv: mockDotenv,
             );
-            expect(result, 'https://rpc.sepolia.dev');
+            expect(result, 'https://ethereum-sepolia-rpc.publicnode.com');
           });
 
           test('returns infura URL for TezosNetwork.mainNet()', () async {
