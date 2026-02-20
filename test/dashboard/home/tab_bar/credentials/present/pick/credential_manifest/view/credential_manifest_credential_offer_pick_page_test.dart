@@ -13,6 +13,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
+import '../../../../../../../../golden_test_config.dart';
+import '../../../../../../../../test_objects.dart';
+
 class MockProfileCubit extends MockCubit<ProfileState>
     implements ProfileCubit {}
 
@@ -83,7 +86,7 @@ class MockProfileState extends Fake implements ProfileState {
 
 void main() {
   // Enable mocking of named constructors
-  setUpAll(() {
+  setUpAll(() async {
     registerFallbackValue(
       const CredentialManifestPickState(filteredCredentialList: []),
     );
@@ -105,10 +108,11 @@ void main() {
       PresentationDefinition(id: 'test', inputDescriptors: []),
     );
     registerFallbackValue(MockQRCodeScanCubit());
+    await loadAppFonts();
   });
 
   group('CredentialManifestOfferPickPage', () {
-    late MockCredentialManifestPickCubit credentialManifestPickCubit;
+    late CredentialManifestPickCubit credentialManifestPickCubit;
     late MockCredentialsCubit credentialsCubit;
     late MockProfileCubit profileCubit;
     late MockScanCubit scanCubit;
@@ -233,15 +237,18 @@ void main() {
       // Set up credential manifest pick cubit state
       when(() => credentialManifestPickCubit.state).thenReturn(
         CredentialManifestPickState(
-          filteredCredentialList: [testCredential],
+          filteredCredentialList: [TEST_CREDENTIAL],
           selected: const [],
           presentationDefinition: presentationDefinition,
-          isButtonEnabled: false,
+          isButtonEnabled: true,
         ),
       );
 
       when(() => credentialsCubit.state).thenReturn(
-        const CredentialsState(status: CredentialsStatus.idle, credentials: []),
+        CredentialsState(
+          status: CredentialsStatus.idle,
+          credentials: [TEST_CREDENTIAL],
+        ),
       );
 
       when(
@@ -279,7 +286,7 @@ void main() {
               ),
             ],
             child: Material(
-              child: CredentialManifestOfferPickPage(
+              child: CredentialManifestOfferPickView(
                 uri: uri,
                 credential: credential,
                 issuer: issuer,
@@ -301,19 +308,64 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
     });
 
-    testWidgets('displays purpose text from input descriptor', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(buildSubject());
-      await tester.pumpAndSettle();
+    for (final device in phoneScreenSizes) {
+      testWidgets(
+        'Displays purpose text from input descriptor on ${device.name}',
+        (WidgetTester tester) async {
+          // Set the surface size for the test
+          await tester.binding.setSurfaceSize(device.size);
+          tester.view.devicePixelRatio = device.devicePixelRatio;
+          addTearDown(() {
+            tester.view.resetPhysicalSize();
+            tester.view.resetDevicePixelRatio();
+          });
+          whenListen(
+            credentialManifestPickCubit,
+            Stream.fromIterable([
+              CredentialManifestPickState(
+                filteredCredentialList: [TEST_CREDENTIAL],
+                selected: const [],
+                presentationDefinition: presentationDefinition,
+                isButtonEnabled: false,
+              ),
+              CredentialManifestPickState(
+                filteredCredentialList: [TEST_CREDENTIAL],
+                selected: const [],
+                presentationDefinition: presentationDefinition,
+                isButtonEnabled: true,
+              ),
+            ]),
+          );
+          await tester.pumpWidget(
+            MediaQuery(
+              data: MediaQueryData(
+                size: device.size,
+                devicePixelRatio: device.devicePixelRatio,
+              ),
+              child: buildSubject(),
+            ),
+          );
+          await tester.pumpAndSettle();
 
-      // Verify that the purpose text is shown somewhere in the widget tree
-      expect(
-        find.text(inputDescriptor.purpose ?? ''),
-        findsOneWidget,
-        reason: 'Purpose text from input descriptor should be displayed',
+          await expectLater(
+            find.byType(CredentialManifestOfferPickView),
+            matchesGoldenFile(
+              'goldens/credential_manifest_offer_pick_page_${device.name}.png',
+            ),
+          );
+
+          // Verify that the purpose text is shown somewhere in the widget tree
+          expect(
+            find.text(inputDescriptor.purpose ?? ''),
+            findsOneWidget,
+            reason: 'Purpose text from input descriptor should be displayed',
+          );
+
+          // Reset the surface size
+          await tester.binding.setSurfaceSize(null);
+        },
       );
-    });
+    }
 
     testWidgets('displays credential list item', (WidgetTester tester) async {
       await tester.pumpWidget(buildSubject());
