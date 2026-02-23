@@ -44,15 +44,15 @@ Future<void> loadAppFonts() async {
 
 /// Device screen configuration for golden testing
 class DeviceScreenSize {
-  final String name;
-  final Size size;
-  final double devicePixelRatio;
 
   const DeviceScreenSize({
     required this.name,
     required this.size,
     this.devicePixelRatio = 1.0,
   });
+  final String name;
+  final Size size;
+  final double devicePixelRatio;
 
   @override
   String toString() => name;

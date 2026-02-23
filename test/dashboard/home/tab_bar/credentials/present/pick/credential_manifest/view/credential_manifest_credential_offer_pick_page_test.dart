@@ -300,15 +300,59 @@ void main() {
       );
     }
 
-    testWidgets('renders without crashing', (WidgetTester tester) async {
-      await tester.pumpWidget(buildSubject());
-      // Initial render should not crash
-      expect(find.byType(CredentialManifestOfferPickPage), findsOneWidget);
-      // Just pump a few frames to get past initial animations
-      await tester.pump(const Duration(seconds: 1));
-    });
-
     for (final device in phoneScreenSizes) {
+      testWidgets('renders without crashing on ${device.name}', (
+        WidgetTester tester,
+      ) async {
+        // Set the surface size for the test
+        await tester.binding.setSurfaceSize(device.size);
+        tester.view.devicePixelRatio = device.devicePixelRatio;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
+        whenListen(
+          credentialManifestPickCubit,
+          Stream.fromIterable([
+            CredentialManifestPickState(
+              filteredCredentialList: [TEST_CREDENTIAL],
+              selected: const [],
+              presentationDefinition: presentationDefinition,
+              isButtonEnabled: false,
+            ),
+            CredentialManifestPickState(
+              filteredCredentialList: [TEST_CREDENTIAL],
+              selected: const [],
+              presentationDefinition: presentationDefinition,
+              isButtonEnabled: true,
+            ),
+          ]),
+        );
+
+        await tester.pumpWidget(
+          MediaQuery(
+            data: MediaQueryData(
+              size: device.size,
+              devicePixelRatio: device.devicePixelRatio,
+            ),
+            child: buildSubject(),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        await expectLater(
+          find.byType(CredentialManifestOfferPickView),
+          matchesGoldenFile(
+            'goldens/credential_manifest_offer_pick_page/renders_without_crashing_${device.name}.png',
+          ),
+        );
+
+        // Initial render should not crash
+        expect(find.byType(CredentialManifestOfferPickView), findsOneWidget);
+        // Reset the surface size
+        await tester.binding.setSurfaceSize(null);
+      });
+
       testWidgets(
         'Displays purpose text from input descriptor on ${device.name}',
         (WidgetTester tester) async {
@@ -350,7 +394,7 @@ void main() {
           await expectLater(
             find.byType(CredentialManifestOfferPickView),
             matchesGoldenFile(
-              'goldens/credential_manifest_offer_pick_page_${device.name}.png',
+              'goldens/credential_manifest_offer_pick_page/display_purpose${device.name}.png',
             ),
           );
 
@@ -358,6 +402,7 @@ void main() {
           expect(
             find.text(inputDescriptor.purpose ?? ''),
             findsOneWidget,
+
             reason: 'Purpose text from input descriptor should be displayed',
           );
 
@@ -365,125 +410,309 @@ void main() {
           await tester.binding.setSurfaceSize(null);
         },
       );
+
+      testWidgets('displays credential list item on ${device.name}', (
+        WidgetTester tester,
+      ) async {
+        // Set the surface size for the test
+        await tester.binding.setSurfaceSize(device.size);
+        tester.view.devicePixelRatio = device.devicePixelRatio;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
+
+        whenListen(
+          credentialManifestPickCubit,
+          Stream.fromIterable([
+            CredentialManifestPickState(
+              filteredCredentialList: [TEST_CREDENTIAL],
+              selected: const [],
+              presentationDefinition: presentationDefinition,
+              isButtonEnabled: false,
+            ),
+            CredentialManifestPickState(
+              filteredCredentialList: [TEST_CREDENTIAL],
+              selected: const [],
+              presentationDefinition: presentationDefinition,
+              isButtonEnabled: true,
+            ),
+          ]),
+        );
+        await tester.pumpWidget(
+          MediaQuery(
+            data: MediaQueryData(
+              size: device.size,
+              devicePixelRatio: device.devicePixelRatio,
+            ),
+            child: buildSubject(),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await expectLater(
+          find.byType(CredentialManifestOfferPickView),
+          matchesGoldenFile(
+            'goldens/credential_manifest_offer_pick_page/display_credential_list_item_${device.name}.png',
+          ),
+        );
+
+        // Check that the page contains the right widget type
+        expect(find.byType(CredentialsListPageItem), findsOneWidget);
+        // Reset the surface size
+        await tester.binding.setSurfaceSize(null);
+      });
+
+      testWidgets(
+        'tapping credential item calls toggle on cubit on ${device.name}',
+        (WidgetTester tester) async {
+          // Set the surface size for the test
+          await tester.binding.setSurfaceSize(device.size);
+          tester.view.devicePixelRatio = device.devicePixelRatio;
+          addTearDown(() {
+            tester.view.resetPhysicalSize();
+            tester.view.resetDevicePixelRatio();
+          });
+
+          whenListen(
+            credentialManifestPickCubit,
+            Stream.fromIterable([
+              CredentialManifestPickState(
+                filteredCredentialList: [TEST_CREDENTIAL],
+                selected: const [],
+                presentationDefinition: presentationDefinition,
+                isButtonEnabled: false,
+              ),
+              CredentialManifestPickState(
+                filteredCredentialList: [TEST_CREDENTIAL],
+                selected: const [],
+                presentationDefinition: presentationDefinition,
+                isButtonEnabled: true,
+              ),
+            ]),
+          );
+          await tester.pumpWidget(
+            MediaQuery(
+              data: MediaQueryData(
+                size: device.size,
+                devicePixelRatio: device.devicePixelRatio,
+              ),
+              child: buildSubject(),
+            ),
+          );
+          await tester.pumpAndSettle();
+          await expectLater(
+            find.byType(CredentialManifestOfferPickView),
+            matchesGoldenFile(
+              'goldens/credential_manifest_offer_pick_page/tap_credential_call_toggle_${device.name}.png',
+            ),
+          );
+
+          // Find and tap the first credential item widget
+          await tester.tap(find.byType(CredentialsListPageItem).first);
+          await tester.pump();
+
+          // Verify toggle was called with the correct parameters
+          verify(
+            () => credentialManifestPickCubit.toggle(
+              index: 0,
+              inputDescriptor: any(named: 'inputDescriptor'),
+              isVcSdJWT: any(named: 'isVcSdJWT'),
+            ),
+          ).called(1);
+          // Reset the surface size
+          await tester.binding.setSurfaceSize(null);
+        },
+      );
+
+      testWidgets(
+        'continue button is initially disabled when no selection on ${device.name}',
+        (WidgetTester tester) async {
+          // Set the surface size for the test
+          await tester.binding.setSurfaceSize(device.size);
+          tester.view.devicePixelRatio = device.devicePixelRatio;
+          addTearDown(() {
+            tester.view.resetPhysicalSize();
+            tester.view.resetDevicePixelRatio();
+          });
+
+          whenListen(
+            credentialManifestPickCubit,
+            Stream.fromIterable([
+              CredentialManifestPickState(
+                filteredCredentialList: [TEST_CREDENTIAL],
+                selected: const [],
+                presentationDefinition: presentationDefinition,
+                isButtonEnabled: false,
+              ),
+              CredentialManifestPickState(
+                filteredCredentialList: [TEST_CREDENTIAL],
+                selected: const [],
+                presentationDefinition: presentationDefinition,
+                isButtonEnabled: true,
+              ),
+            ]),
+          );
+
+          await tester.pumpWidget(
+            MediaQuery(
+              data: MediaQueryData(
+                size: device.size,
+                devicePixelRatio: device.devicePixelRatio,
+              ),
+              child: buildSubject(),
+            ),
+          );
+          await tester.pumpAndSettle();
+          await expectLater(
+            find.byType(CredentialManifestOfferPickView),
+            matchesGoldenFile(
+              'goldens/credential_manifest_offer_pick_page/continue_button_disabled_${device.name}.png',
+            ),
+          );
+
+          // Find the button - first check if it exists
+          final elevatedButtonFinder = find.byType(MyElevatedButton);
+          expect(elevatedButtonFinder, findsOneWidget);
+
+          // Verify the button is disabled (opacity is applied or onPressed is null)
+          final button = tester.widget<MyElevatedButton>(elevatedButtonFinder);
+          expect(button.onPressed, isNull);
+          // Reset the surface size
+          await tester.binding.setSurfaceSize(null);
+        },
+      );
+
+      testWidgets(
+        'continue button is enabled when credential is selected on ${device.name}',
+        (WidgetTester tester) async {
+          // Set the surface size for the test
+          await tester.binding.setSurfaceSize(device.size);
+          tester.view.devicePixelRatio = device.devicePixelRatio;
+          addTearDown(() {
+            tester.view.resetPhysicalSize();
+            tester.view.resetDevicePixelRatio();
+          });
+
+          whenListen(
+            credentialManifestPickCubit,
+            Stream.fromIterable([
+              CredentialManifestPickState(
+                filteredCredentialList: [TEST_CREDENTIAL],
+                selected: const [],
+                presentationDefinition: presentationDefinition,
+                isButtonEnabled: false,
+              ),
+              CredentialManifestPickState(
+                filteredCredentialList: [TEST_CREDENTIAL],
+                selected: const [],
+                presentationDefinition: presentationDefinition,
+                isButtonEnabled: true,
+              ),
+            ]),
+          );
+
+          await tester.pumpWidget(
+            MediaQuery(
+              data: MediaQueryData(
+                size: device.size,
+                devicePixelRatio: device.devicePixelRatio,
+              ),
+              child: buildSubject(),
+            ),
+          );
+          await tester.pumpAndSettle();
+          await expectLater(
+            find.byType(CredentialManifestOfferPickView),
+            matchesGoldenFile(
+              'goldens/credential_manifest_offer_pick_page/continue_button_enabled_${device.name}.png',
+            ),
+          );
+
+          // Find the button
+          final elevatedButtonFinder = find.byType(MyElevatedButton);
+          expect(elevatedButtonFinder, findsOneWidget);
+
+          // Verify the button is enabled
+          final button = tester.widget<MyElevatedButton>(elevatedButtonFinder);
+          expect(button.onPressed, isNotNull);
+          // Reset the surface size
+          await tester.binding.setSurfaceSize(null);
+        },
+      );
+
+      testWidgets(
+        'tapping continue button calls credentialOfferOrPresent on ${device.name}',
+        (WidgetTester tester) async {
+          // Set the surface size for the test
+          await tester.binding.setSurfaceSize(device.size);
+          tester.view.devicePixelRatio = device.devicePixelRatio;
+          addTearDown(() {
+            tester.view.resetPhysicalSize();
+            tester.view.resetDevicePixelRatio();
+          });
+
+          whenListen(
+            credentialManifestPickCubit,
+            Stream.fromIterable([
+              CredentialManifestPickState(
+                filteredCredentialList: [TEST_CREDENTIAL],
+                selected: const [],
+                presentationDefinition: presentationDefinition,
+                isButtonEnabled: false,
+              ),
+              CredentialManifestPickState(
+                filteredCredentialList: [TEST_CREDENTIAL],
+                selected: const [],
+                presentationDefinition: presentationDefinition,
+                isButtonEnabled: true,
+              ),
+            ]),
+          );
+
+          // Set security check to false to skip pin code authentication
+          when(
+            () => profileModel
+                .profileSetting
+                .walletSecurityOptions
+                .secureSecurityAuthenticationWithPinCode,
+          ).thenReturn(false);
+
+          await tester.pumpWidget(
+            MediaQuery(
+              data: MediaQueryData(
+                size: device.size,
+                devicePixelRatio: device.devicePixelRatio,
+              ),
+              child: buildSubject(),
+            ),
+          );
+          await tester.pumpAndSettle();
+
+          // Find and tap the enabled button
+          await tester.tap(find.byType(MyElevatedButton));
+          await tester.pumpAndSettle();
+          await expectLater(
+            find.byType(CredentialManifestOfferPickView),
+            matchesGoldenFile(
+              'goldens/credential_manifest_offer_pick_page/continue_calls_credentialOfferOrPresent_${device.name}.png',
+            ),
+          );
+
+          // Verify credential offer/present method was called
+          verify(
+            () => scanCubit.credentialOfferOrPresent(
+              uri: any(named: 'uri'),
+              credentialModel: any(named: 'credentialModel'),
+              keyId: any(named: 'keyId'),
+              credentialsToBePresented: any(named: 'credentialsToBePresented'),
+              issuer: any(named: 'issuer'),
+              qrCodeScanCubit: any(named: 'qrCodeScanCubit'),
+            ),
+          ).called(1);
+          // Reset the surface size
+          await tester.binding.setSurfaceSize(null);
+        },
+      );
     }
-
-    testWidgets('displays credential list item', (WidgetTester tester) async {
-      await tester.pumpWidget(buildSubject());
-      await tester.pumpAndSettle();
-
-      // Check that the page contains the right widget type
-      expect(find.byType(CredentialsListPageItem), findsOneWidget);
-    });
-
-    testWidgets('tapping credential item calls toggle on cubit', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(buildSubject());
-      await tester.pumpAndSettle();
-
-      // Find and tap the first credential item widget
-      await tester.tap(find.byType(CredentialsListPageItem).first);
-      await tester.pump();
-
-      // Verify toggle was called with the correct parameters
-      verify(
-        () => credentialManifestPickCubit.toggle(
-          index: 0,
-          inputDescriptor: any(named: 'inputDescriptor'),
-          isVcSdJWT: any(named: 'isVcSdJWT'),
-        ),
-      ).called(1);
-    });
-
-    testWidgets('continue button is initially disabled when no selection', (
-      WidgetTester tester,
-    ) async {
-      // Setup state with no selected credential and button disabled
-      when(() => credentialManifestPickCubit.state).thenReturn(
-        CredentialManifestPickState(
-          filteredCredentialList: [testCredential],
-          selected: const [],
-          presentationDefinition: presentationDefinition,
-          isButtonEnabled: false,
-        ),
-      );
-
-      await tester.pumpWidget(buildSubject());
-      await tester.pumpAndSettle();
-
-      // Find the button - first check if it exists
-      final elevatedButtonFinder = find.byType(MyElevatedButton);
-      expect(elevatedButtonFinder, findsOneWidget);
-
-      // Verify the button is disabled (opacity is applied or onPressed is null)
-      final button = tester.widget<MyElevatedButton>(elevatedButtonFinder);
-      expect(button.onPressed, isNull);
-    });
-
-    testWidgets('continue button is enabled when credential is selected', (
-      WidgetTester tester,
-    ) async {
-      // Setup state with a selected credential and button enabled
-      when(() => credentialManifestPickCubit.state).thenReturn(
-        CredentialManifestPickState(
-          filteredCredentialList: [testCredential],
-          selected: const [0],
-          presentationDefinition: presentationDefinition,
-          isButtonEnabled: true,
-        ),
-      );
-
-      await tester.pumpWidget(buildSubject());
-      await tester.pumpAndSettle();
-
-      // Find the button
-      final elevatedButtonFinder = find.byType(MyElevatedButton);
-      expect(elevatedButtonFinder, findsOneWidget);
-
-      // Verify the button is enabled
-      final button = tester.widget<MyElevatedButton>(elevatedButtonFinder);
-      expect(button.onPressed, isNotNull);
-    });
-
-    testWidgets('tapping continue button calls credentialOfferOrPresent', (
-      WidgetTester tester,
-    ) async {
-      // Setup state with a selected credential and button enabled
-      when(() => credentialManifestPickCubit.state).thenReturn(
-        CredentialManifestPickState(
-          filteredCredentialList: [testCredential],
-          selected: const [0],
-          presentationDefinition: presentationDefinition,
-          isButtonEnabled: true,
-        ),
-      );
-
-      // Set security check to false to skip pin code authentication
-      when(
-        () => profileModel
-            .profileSetting
-            .walletSecurityOptions
-            .secureSecurityAuthenticationWithPinCode,
-      ).thenReturn(false);
-
-      await tester.pumpWidget(buildSubject());
-      await tester.pumpAndSettle();
-
-      // Find and tap the enabled button
-      await tester.tap(find.byType(MyElevatedButton));
-      await tester.pumpAndSettle();
-
-      // Verify credential offer/present method was called
-      verify(
-        () => scanCubit.credentialOfferOrPresent(
-          uri: any(named: 'uri'),
-          credentialModel: any(named: 'credentialModel'),
-          keyId: any(named: 'keyId'),
-          credentialsToBePresented: any(named: 'credentialsToBePresented'),
-          issuer: any(named: 'issuer'),
-          qrCodeScanCubit: any(named: 'qrCodeScanCubit'),
-        ),
-      ).called(1);
-    });
   });
 }
