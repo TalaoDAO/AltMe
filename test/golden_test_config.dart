@@ -64,37 +64,37 @@ const phoneScreenSizes = [
   DeviceScreenSize(
     name: 'iPhone_SE_1st_gen',
     size: Size(320, 568),
-    devicePixelRatio: 2.0,
+    devicePixelRatio: 2,
   ),
   // iPhone 8 / iPhone SE (2nd & 3rd gen)
   DeviceScreenSize(
     name: 'iPhone_8_SE',
     size: Size(375, 667),
-    devicePixelRatio: 2.0,
+    devicePixelRatio: 2,
   ),
   // iPhone 12 / 13 / 14
   DeviceScreenSize(
     name: 'iPhone_12_13_14',
     size: Size(390, 844),
-    devicePixelRatio: 3.0,
+    devicePixelRatio: 3,
   ),
   // iPhone 12/13/14 Pro Max
   DeviceScreenSize(
     name: 'iPhone_Pro_Max',
     size: Size(428, 926),
-    devicePixelRatio: 3.0,
+    devicePixelRatio: 3,
   ),
   // iPhone 15 Pro
   DeviceScreenSize(
     name: 'iPhone_15_Pro',
     size: Size(393, 852),
-    devicePixelRatio: 3.0,
+    devicePixelRatio: 3,
   ),
   // Samsung Galaxy S21
   DeviceScreenSize(
     name: 'Samsung_Galaxy_S21',
     size: Size(360, 800),
-    devicePixelRatio: 3.0,
+    devicePixelRatio: 3,
   ),
   // Google Pixel 5
   DeviceScreenSize(
@@ -112,37 +112,37 @@ const phoneScreenSizes = [
   DeviceScreenSize(
     name: 'iPad_Mini',
     size: Size(768, 1024),
-    devicePixelRatio: 2.0,
+    devicePixelRatio: 2,
   ),
   // iPad (10th gen)
   DeviceScreenSize(
     name: 'iPad_10th_gen',
     size: Size(820, 1180),
-    devicePixelRatio: 2.0,
+    devicePixelRatio: 2,
   ),
   // iPad Air
   DeviceScreenSize(
     name: 'iPad_Air',
     size: Size(820, 1180),
-    devicePixelRatio: 2.0,
+    devicePixelRatio: 2,
   ),
   // iPad Pro 11"
   DeviceScreenSize(
     name: 'iPad_Pro_11',
     size: Size(834, 1194),
-    devicePixelRatio: 2.0,
+    devicePixelRatio: 2,
   ),
   // iPad Pro 12.9"
   DeviceScreenSize(
     name: 'iPad_Pro_12_9',
     size: Size(1024, 1366),
-    devicePixelRatio: 2.0,
+    devicePixelRatio: 2,
   ),
   // Samsung Galaxy Tab S8
   DeviceScreenSize(
     name: 'Samsung_Galaxy_Tab_S8',
     size: Size(800, 1280),
-    devicePixelRatio: 2.0,
+    devicePixelRatio: 2,
   ),
   // Android Tablet (common 10" size)
   DeviceScreenSize(
