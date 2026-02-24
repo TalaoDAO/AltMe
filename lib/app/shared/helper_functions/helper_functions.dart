@@ -2378,6 +2378,7 @@ String? getClientIdForPresentation(String? clientId) {
 Future<bool> verifyX509Chain(List<dynamic> x5cChain) async {
   if (x5cChain.isEmpty) return false;
   try {
+    // ignore: unused_local_variable
     final certs = x5cChain.map((certBase64) {
       final der = base64Decode(certBase64.toString());
       final seq = asn1lib.ASN1Sequence.fromBytes(der);
@@ -2385,13 +2386,13 @@ Future<bool> verifyX509Chain(List<dynamic> x5cChain) async {
     }).toList();
 
     // Check each cert is signed by the next (issuer)
-    for (var i = 0; i < certs.length - 1; i++) {
-      final child = certs[i];
-      final issuer = certs[i + 1];
-      // if (!child.verify(issuer.publicKey)) {
-      //   return false;
-      // }
-    }
+    // for (var i = 0; i < certs.length - 1; i++) {
+    //   final child = certs[i];
+    //   final issuer = certs[i + 1];
+    // if (!child.verify(issuer.publicKey)) {
+    //   return false;
+    // }
+    // }
     // Optionally: Check the root is self-signed (not required for all
     // use cases)
     // final root = certs.last;
