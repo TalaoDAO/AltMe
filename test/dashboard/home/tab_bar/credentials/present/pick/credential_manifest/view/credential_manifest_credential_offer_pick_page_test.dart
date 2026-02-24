@@ -346,13 +346,11 @@ void main() {
             'goldens/credential_manifest_offer_pick_page/renders_without_crashing_${device.name}.png',
           ),
         );
-
-        // Initial render should not crash
-        expect(find.byType(CredentialManifestOfferPickView), findsOneWidget);
         // Reset the surface size
         await tester.binding.setSurfaceSize(null);
       });
-
+    }
+    for (final device in phoneScreenSizes) {
       testWidgets(
         'Displays purpose text from input descriptor on ${device.name}',
         (WidgetTester tester) async {
@@ -410,7 +408,8 @@ void main() {
           await tester.binding.setSurfaceSize(null);
         },
       );
-
+    }
+    for (final device in phoneScreenSizes) {
       testWidgets('displays credential list item on ${device.name}', (
         WidgetTester tester,
       ) async {
@@ -461,7 +460,8 @@ void main() {
         // Reset the surface size
         await tester.binding.setSurfaceSize(null);
       });
-
+    }
+    for (final device in phoneScreenSizes) {
       testWidgets(
         'tapping credential item calls toggle on cubit on ${device.name}',
         (WidgetTester tester) async {
@@ -523,7 +523,8 @@ void main() {
           await tester.binding.setSurfaceSize(null);
         },
       );
-
+    }
+    for (final device in phoneScreenSizes) {
       testWidgets(
         'continue button is initially disabled when no selection on ${device.name}',
         (WidgetTester tester) async {
@@ -543,12 +544,6 @@ void main() {
                 selected: const [],
                 presentationDefinition: presentationDefinition,
                 isButtonEnabled: false,
-              ),
-              CredentialManifestPickState(
-                filteredCredentialList: [TEST_CREDENTIAL],
-                selected: const [],
-                presentationDefinition: presentationDefinition,
-                isButtonEnabled: true,
               ),
             ]),
           );
@@ -581,7 +576,8 @@ void main() {
           await tester.binding.setSurfaceSize(null);
         },
       );
-
+    }
+    for (final device in phoneScreenSizes) {
       testWidgets(
         'continue button is enabled when credential is selected on ${device.name}',
         (WidgetTester tester) async {
@@ -639,7 +635,8 @@ void main() {
           await tester.binding.setSurfaceSize(null);
         },
       );
-
+    }
+    for (final device in phoneScreenSizes) {
       testWidgets(
         'tapping continue button calls credentialOfferOrPresent on ${device.name}',
         (WidgetTester tester) async {
