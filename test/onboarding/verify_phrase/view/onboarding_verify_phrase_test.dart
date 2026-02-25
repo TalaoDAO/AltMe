@@ -193,7 +193,7 @@ void main() {
       ).called(1);
     });
 
-    testWidgets('renders ProtectWalletView', (tester) async {
+    testWidgets('renders OnBoardingVerifyPhraseView', (tester) async {
       when(() => flavorCubit.state).thenAnswer((_) => FlavorMode.development);
       when(
         () => secureStorageProvider.get(
@@ -430,7 +430,7 @@ void main() {
               ],
               child: OnBoardingVerifyPhraseView(
                 mnemonic: mnemonicString.split(' '),
-                isFromOnboarding: true,
+                isFromOnboarding: false,
                 onBoardingVerifyPhraseCubit: onBoardingVerifyPhraseCubit,
                 onboardingCubit: onboardingCubit,
               ),
