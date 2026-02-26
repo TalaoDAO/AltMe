@@ -99,7 +99,20 @@ class MockQRCodeScanCubit extends MockCubit<QRCodeScanState>
 class MockWalletConnectCubit extends MockCubit<WalletConnectState>
     implements WalletConnectCubit {}
 
+class MockLogData extends Fake implements LogData {}
+
+class MockMessageHandler extends Fake implements MessageHandler {}
+
+class MockRoute extends Fake implements Route<dynamic> {}
+
 void main() {
+  setUpAll(() {
+    registerFallbackValue(MockLogData());
+    registerFallbackValue(MockMessageHandler());
+    registerFallbackValue(MockRoute());
+    registerFallbackValue(Uri.parse('https://example.com'));
+  });
+
   late MockDIDKitProvider didKitProvider;
   late KeyGenerator keyGenerator;
   late MockHomeCubit homeCubit;
@@ -120,7 +133,7 @@ void main() {
   const mnemonicString =
       'notice photo opera keen climb agent soft parrot best joke field devote';
 
-  setUpAll(() {
+  setUp(() {
     WidgetsFlutterBinding.ensureInitialized();
     didKitProvider = MockDIDKitProvider();
     keyGenerator = KeyGenerator();
@@ -141,8 +154,10 @@ void main() {
   });
 
   group('Onboarding Verify Phrase Test', () {
-    setUpAll(() {
-      when(() => secureStorageProvider.get(any())).thenAnswer((_) async => '');
+    setUp(() {
+      when(
+        () => secureStorageProvider.get(any()),
+      ).thenAnswer((_) async => null);
 
       when(
         () => secureStorageProvider.set(any(), any()),
@@ -156,6 +171,8 @@ void main() {
       when(
         () => navigator.pushReplacement<void, void>(any()),
       ).thenAnswer((_) async {});
+
+      when(() => activityLogManager.saveLog(any())).thenAnswer((_) async {});
     });
 
     testWidgets('is routable', (tester) async {
@@ -234,6 +251,29 @@ void main() {
                 walletConnectCubit: walletConnectCubit,
               ),
             ),
+            BlocProvider<OnBoardingVerifyPhraseCubit>.value(
+              value: OnBoardingVerifyPhraseCubit(
+                didKitProvider: didKitProvider,
+                keyGenerator: keyGenerator,
+                homeCubit: homeCubit,
+                walletCubit: walletCubit,
+                splashCubit: splashCubit,
+                altmeChatSupportCubit: altmeChatSupportCubit,
+                matrixNotificationCubit: matrixNotificationCubit,
+                profileCubit: ProfileCubit(
+                  didKitProvider: didKitProvider,
+                  jwtDecode: JWTDecode(),
+                  oidc4vc: oidc4vc,
+                  secureStorageProvider: secureStorageProvider,
+                  langCubit: MockLangCubit(),
+                ),
+                credentialsCubit: credentialsCubit,
+                qrCodeScanCubit: qrCodeScanCubit,
+                flavorCubit: flavorCubit,
+                activityLogManager: activityLogManager,
+                walletConnectCubit: walletConnectCubit,
+              ),
+            ),
             BlocProvider<HomeCubit>.value(value: homeCubit),
             BlocProvider<WalletCubit>.value(value: walletCubit),
             BlocProvider<MatrixNotificationCubit>.value(
@@ -255,10 +295,34 @@ void main() {
                 langCubit: MockLangCubit(),
               ),
             ),
+            BlocProvider<CredentialsCubit>.value(value: credentialsCubit),
+            BlocProvider<WalletConnectCubit>.value(value: walletConnectCubit),
           ],
-          child: const OnBoardingVerifyPhrasePage(
-            mnemonic: [],
+          child: OnBoardingVerifyPhraseView(
+            mnemonic: const [],
             isFromOnboarding: true,
+            onBoardingVerifyPhraseCubit: OnBoardingVerifyPhraseCubit(
+              didKitProvider: didKitProvider,
+              keyGenerator: keyGenerator,
+              homeCubit: homeCubit,
+              walletCubit: walletCubit,
+              splashCubit: splashCubit,
+              altmeChatSupportCubit: altmeChatSupportCubit,
+              matrixNotificationCubit: matrixNotificationCubit,
+              profileCubit: ProfileCubit(
+                didKitProvider: didKitProvider,
+                jwtDecode: JWTDecode(),
+                oidc4vc: oidc4vc,
+                secureStorageProvider: secureStorageProvider,
+                langCubit: MockLangCubit(),
+              ),
+              credentialsCubit: credentialsCubit,
+              qrCodeScanCubit: qrCodeScanCubit,
+              flavorCubit: flavorCubit,
+              activityLogManager: activityLogManager,
+              walletConnectCubit: walletConnectCubit,
+            ),
+            onboardingCubit: onboardingCubit,
           ),
         ),
       );
@@ -390,7 +454,7 @@ void main() {
 
     testWidgets(
       'emits Success when button is pressed and navigates to correct screen'
-      ' when isFromOnboarding is false',
+      ' when isFromOnboarding is true',
       (tester) async {
         when(() => flavorCubit.state).thenAnswer((_) => FlavorMode.development);
         when(
@@ -430,7 +494,7 @@ void main() {
               ],
               child: OnBoardingVerifyPhraseView(
                 mnemonic: mnemonicString.split(' '),
-                isFromOnboarding: false,
+                isFromOnboarding: true,
                 onBoardingVerifyPhraseCubit: onBoardingVerifyPhraseCubit,
                 onboardingCubit: onboardingCubit,
               ),
