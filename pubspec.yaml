@@ -81,7 +81,7 @@ dependencies:
     path: packages/jwt_decode
   local_auth: ^2.1.6
   markdown: ^7.2.0 #matrix 0.20.2 depends on markdown ^4.0.0
-  matrix: ^0.25.5
+  matrix: ^6.1.1
   mime: ^1.0.4
   mobile_scanner: ^7.1.2
   model_viewer_plus: ^1.7.0
@@ -132,8 +132,8 @@ dev_dependencies:
   http_mock_adapter: ^0.6.0
   json_serializable: ^6.7.0
   mockingjay: ^0.5.0
-  mockito: ^5.4.1
-  mocktail: ^1.0.2
+  mockito: ^5.6.3
+  mocktail: ^1.0.4
   very_good_analysis: ^5.0.0+1
 
 flutter:
