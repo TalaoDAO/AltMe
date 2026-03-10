@@ -35,6 +35,19 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
+  # Bits & Datable are SPM-only, provide local podspecs so CocoaPods can resolve them
+  pod 'Datable', :podspec => 'Datable.podspec'
+  pod 'Bits', :podspec => 'Bits.podspec'
+
+  # Use Git sources for Beacon SDK v4.0.1 (not available on CocoaPods trunk)
+  pod 'BeaconCore', :git => 'https://github.com/TalaoDAO/beacon-ios-sdk.git', :tag => '4.0.1'
+  pod 'BeaconClientDApp', :git => 'https://github.com/TalaoDAO/beacon-ios-sdk.git', :tag => '4.0.1'
+  pod 'BeaconClientWallet', :git => 'https://github.com/TalaoDAO/beacon-ios-sdk.git', :tag => '4.0.1'
+  pod 'BeaconBlockchainSubstrate', :git => 'https://github.com/TalaoDAO/beacon-ios-sdk.git', :tag => '4.0.1'
+  pod 'BeaconBlockchainTezos', :git => 'https://github.com/TalaoDAO/beacon-ios-sdk.git', :tag => '4.0.1'
+  pod 'BeaconTransportP2PMatrix', :git => 'https://github.com/TalaoDAO/beacon-ios-sdk.git', :tag => '4.0.1'
+
+
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 
