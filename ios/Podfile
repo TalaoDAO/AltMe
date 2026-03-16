@@ -35,13 +35,13 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  // specify github pods because there is no up to date cocoapods project for the beacon-ios-sdk
-  pod 'BeaconCore', :git => 'https://github.com/airgap-it/beacon-ios-sdk', :tag => '4.0.0'
-  pod 'BeaconClientDApp', :git => 'https://github.com/airgap-it/beacon-ios-sdk', :tag => '4.0.0'
-  pod 'BeaconClientWallet', :git => 'https://github.com/airgap-it/beacon-ios-sdk', :tag => '4.0.0'
-  pod 'BeaconBlockchainSubstrate', :git => 'https://github.com/airgap-it/beacon-ios-sdk', :tag => '4.0.0'
-  pod 'BeaconBlockchainTezos', :git => 'https://github.com/airgap-it/beacon-ios-sdk', :tag => '4.0.0'
-  pod 'BeaconTransportP2PMatrix', :git => 'https://github.com/airgap-it/beacon-ios-sdk', :tag => '4.0.0'
+pod 'BeaconCore',              :git => 'https://github.com/TalaoDAO/beacon-ios-sdk', :tag => '4.0.4'
+pod 'BeaconClientDApp',        :git => 'https://github.com/TalaoDAO/beacon-ios-sdk', :tag => '4.0.4'
+pod 'BeaconClientWallet',      :git => 'https://github.com/TalaoDAO/beacon-ios-sdk', :tag => '4.0.4'
+pod 'BeaconBlockchainSubstrate',:git => 'https://github.com/TalaoDAO/beacon-ios-sdk', :tag => '4.0.4'
+pod 'BeaconBlockchainTezos',   :git => 'https://github.com/TalaoDAO/beacon-ios-sdk', :tag => '4.0.4'
+pod 'BeaconTransportP2PMatrix',:git => 'https://github.com/TalaoDAO/beacon-ios-sdk', :tag => '4.0.4'
+pod 'Bits',                    :git => 'https://github.com/TalaoDAO/swift-bits.git',  :tag => '1.0.1'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end

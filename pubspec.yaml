@@ -16,7 +16,7 @@ dependencies:
   beacon_flutter:
     git:
       url: https://github.com/TalaoDAO/beacon.git
-      ref: 424d13f74f0dd1ce422f10c92827c0da7ab23519
+      ref: a4b8e2712cf5776f7d3562e85c7ed2a96ca63c05
       
   # beacon_flutter:
   #   path: ../beacon
