@@ -1,0 +1,47 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "FlutterGeneratedPluginSwiftPackage-arm64-apple-macosx15.0-debug.module": ["<FlutterGeneratedPluginSwiftPackage-arm64-apple-macosx15.0-debug.module>"]
+  "PackageStructure": ["<PackageStructure>"]
+  "main": ["<FlutterGeneratedPluginSwiftPackage-arm64-apple-macosx15.0-debug.module>"]
+  "test": ["<FlutterGeneratedPluginSwiftPackage-arm64-apple-macosx15.0-debug.module>"]
+default: "main"
+nodes:
+  "/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Sources/FlutterGeneratedPluginSwiftPackage/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+commands:
+  "/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/FlutterGeneratedPluginSwiftPackage.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Sources/FlutterGeneratedPluginSwiftPackage/FlutterGeneratedPluginSwiftPackage.swift"]
+    outputs: ["/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/FlutterGeneratedPluginSwiftPackage.build/sources"]
+    description: "Write auxiliary file /Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/FlutterGeneratedPluginSwiftPackage.build/sources"
+
+  "/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"]
+    outputs: ["/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+
+  "<FlutterGeneratedPluginSwiftPackage-arm64-apple-macosx15.0-debug.module>":
+    tool: phony
+    inputs: ["/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/Modules/FlutterGeneratedPluginSwiftPackage.swiftmodule"]
+    outputs: ["<FlutterGeneratedPluginSwiftPackage-arm64-apple-macosx15.0-debug.module>"]
+
+  "C.FlutterGeneratedPluginSwiftPackage-arm64-apple-macosx15.0-debug.module":
+    tool: shell
+    inputs: ["/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Sources/FlutterGeneratedPluginSwiftPackage/FlutterGeneratedPluginSwiftPackage.swift","/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt","/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/FlutterGeneratedPluginSwiftPackage.build/sources"]
+    outputs: ["/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/Modules/FlutterGeneratedPluginSwiftPackage.swiftmodule"]
+    description: "Compiling Swift Module 'FlutterGeneratedPluginSwiftPackage' (1 sources)"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-module-name","FlutterGeneratedPluginSwiftPackage","-emit-dependencies","-emit-module","-emit-module-path","/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/Modules/FlutterGeneratedPluginSwiftPackage.swiftmodule","-output-file-map","/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/FlutterGeneratedPluginSwiftPackage.build/output-file-map.json","-parse-as-library","-incremental","@/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/FlutterGeneratedPluginSwiftPackage.build/sources","-I","/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/Modules","-target","arm64-apple-macosx10.13","-incremental","-enable-batch-mode","-serialize-diagnostics","-index-store-path","/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/index/store","-Onone","-enable-testing","-j8","-DSWIFT_PACKAGE","-DDEBUG","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/ModuleCache","-parseable-output","-parse-as-library","-emit-objc-header","-emit-objc-header-path","/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/FlutterGeneratedPluginSwiftPackage.build/include/FlutterGeneratedPluginSwiftPackage-Swift.h","-swift-version","5","-Xfrontend","-experimental-lazy-typecheck","-Xfrontend","-experimental-skip-all-function-bodies","-Xfrontend","-experimental-allow-module-with-compiler-errors","-Xfrontend","-empty-abi-descriptor","-plugin-path","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g","-Xcc","-isysroot","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-Xcc","-fPIC","-Xcc","-g","-package-name","fluttergeneratedpluginswiftpackage"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Sources/FlutterGeneratedPluginSwiftPackage/","/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.swift","/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+

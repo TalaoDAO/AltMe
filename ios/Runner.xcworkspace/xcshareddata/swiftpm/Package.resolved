@@ -1,102 +1,12 @@
 {
   "pins" : [
     {
-      "identity" : "base58swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/keefertaylor/Base58Swift",
-      "state" : {
-        "revision" : "1c13ea6b07f1584660526f8bde3d4cc150e91acd",
-        "version" : "2.1.14"
-      }
-    },
-    {
-      "identity" : "beacon-ios-sdk",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/TalaoDAO/beacon-ios-sdk",
-      "state" : {
-        "revision" : "ec8a15a4dfd7944e5686ecca247d918bc493c8d2",
-        "version" : "4.0.3"
-      }
-    },
-    {
-      "identity" : "bigint",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/attaswift/BigInt.git",
-      "state" : {
-        "revision" : "e07e00fa1fd435143a2dcf8b7eec9a7710b2fdfe",
-        "version" : "5.7.0"
-      }
-    },
-    {
-      "identity" : "dkcamera",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/zhangao0086/DKCamera",
-      "state" : {
-        "branch" : "master",
-        "revision" : "5c691d11014b910aff69f960475d70e65d9dcc96"
-      }
-    },
-    {
-      "identity" : "dkimagepickercontroller",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/zhangao0086/DKImagePickerController",
-      "state" : {
-        "branch" : "4.3.9",
-        "revision" : "0bdfeacefa308545adde07bef86e349186335915"
-      }
-    },
-    {
-      "identity" : "dkphotogallery",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/zhangao0086/DKPhotoGallery",
-      "state" : {
-        "branch" : "master",
-        "revision" : "311c1bc7a94f1538f82773a79c84374b12a2ef3d"
-      }
-    },
-    {
-      "identity" : "sdwebimage",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SDWebImage/SDWebImage",
-      "state" : {
-        "revision" : "2de3a496eaf6df9a1312862adcfd54acd73c39c0",
-        "version" : "5.21.7"
-      }
-    },
-    {
       "identity" : "swift-bits",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/TalaoDAO/swift-bits",
       "state" : {
         "revision" : "3bea5ad75a06111aa0ba9be4c7fc09e7803c3605",
         "version" : "1.0.1"
-      }
-    },
-    {
-      "identity" : "swift-sodium",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jedisct1/swift-sodium.git",
-      "state" : {
-        "revision" : "e7e799cd1eaa4d0f6d3eab56832e7f4b377f4a4f",
-        "version" : "0.10.0"
-      }
-    },
-    {
-      "identity" : "swiftygif",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kirualex/SwiftyGif.git",
-      "state" : {
-        "revision" : "4430cbc148baa3907651d40562d96325426f409a",
-        "version" : "5.4.5"
-      }
-    },
-    {
-      "identity" : "tocropviewcontroller",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/TimOliver/TOCropViewController",
-      "state" : {
-        "revision" : "d4a6d8100f4b886fdbc8ae399bf144ff3e9afb7e",
-        "version" : "2.8.0"
       }
     }
   ],

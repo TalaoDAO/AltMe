@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/FlutterGeneratedPluginSwiftPackage.build/master.swiftdeps"
+  },
+  "/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Sources/FlutterGeneratedPluginSwiftPackage/FlutterGeneratedPluginSwiftPackage.swift": {
+    "dependencies": "/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/FlutterGeneratedPluginSwiftPackage.build/FlutterGeneratedPluginSwiftPackage.d",
+    "object": "/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/FlutterGeneratedPluginSwiftPackage.build/FlutterGeneratedPluginSwiftPackage.swift.o",
+    "swiftmodule": "/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/FlutterGeneratedPluginSwiftPackage.build/FlutterGeneratedPluginSwiftPackage~partial.swiftmodule",
+    "swift-dependencies": "/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/FlutterGeneratedPluginSwiftPackage.build/FlutterGeneratedPluginSwiftPackage.swiftdeps",
+    "diagnostics": "/Users/romualdbarbe/Documents/tmp/spruceid/AltMe/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/.build/index-build/arm64-apple-macosx/debug/FlutterGeneratedPluginSwiftPackage.build/FlutterGeneratedPluginSwiftPackage.dia"
+  }
+}
