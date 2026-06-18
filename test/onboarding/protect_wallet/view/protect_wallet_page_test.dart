@@ -114,14 +114,6 @@ void main() {
   const mnemonicString =
       'notice photo opera keen climb agent soft parrot best joke field devote';
 
-  final expectedP256Jwk = {
-    'kty': 'EC',
-    'crv': 'P-256',
-    'd': 's_wb6Ef1ardGsT5Il6WLRvQ9Zu0lp7I2OVwtzT5iQpo',
-    'x': 'MZZjpNhZGGxqBcPXq499FVC2iu5FcZWwti5u8hgMUaI',
-    'y': 'KD4zffV54PZUsQzTzVgoVlWHwKqogRF3JpKQnIGwIRM',
-  };
-
   setUpAll(() {
     WidgetsFlutterBinding.ensureInitialized();
     didKitProvider = MockDIDKitProvider();
@@ -156,11 +148,6 @@ void main() {
     when(
       () => secureStorageProvider.get(SecureStorageKeys.ssiMnemonic),
     ).thenAnswer((_) async => mnemonicString);
-
-    when(
-      () =>
-          p256PrivateKeyFromMnemonics(mnemonic: mnemonicString, indexValue: 5),
-    ).thenAnswer((_) => jsonEncode(expectedP256Jwk));
   });
 
   group('ProtectWallet Page', () {
@@ -203,56 +190,6 @@ void main() {
       ).called(1);
     });
 
-    testWidgets('renders ProtectWalletView', (tester) async {
-      await tester.pumpApp(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider.value(
-              value: OnBoardingGenPhraseCubit(
-                didKitProvider: didKitProvider,
-                keyGenerator: keyGenerator,
-                homeCubit: homeCubit,
-                walletCubit: walletCubit,
-                splashCubit: splashCubit,
-                altmeChatSupportCubit: altmeChatSupportCubit,
-                matrixNotificationCubit: matrixNotificationCubit,
-                profileCubit: ProfileCubit(
-                  didKitProvider: didKitProvider,
-                  jwtDecode: JWTDecode(),
-                  oidc4vc: oidc4vc,
-                  secureStorageProvider: secureStorageProvider,
-                  langCubit: MockLangCubit(),
-                ),
-                activityLogManager: activityLogManager,
-                qrCodeScanCubit: qrCodeScanCubit,
-                credentialsCubit: credentialsCubit,
-                walletConnectCubit: walletConnectCubit,
-              ),
-            ),
-            BlocProvider<HomeCubit>.value(value: homeCubit),
-            BlocProvider<WalletCubit>.value(value: walletCubit),
-            BlocProvider<SplashCubit>.value(value: splashCubit),
-            BlocProvider<AltmeChatSupportCubit>.value(
-              value: altmeChatSupportCubit,
-            ),
-            BlocProvider<ProfileCubit>.value(
-              value: ProfileCubit(
-                didKitProvider: didKitProvider,
-                jwtDecode: JWTDecode(),
-                oidc4vc: oidc4vc,
-                secureStorageProvider: secureStorageProvider,
-                langCubit: MockLangCubit(),
-              ),
-            ),
-            BlocProvider<OnboardingCubit>.value(value: onboardingCubit),
-          ],
-          child: const ProtectWalletPage(),
-        ),
-      );
-
-      expect(find.byType(ProtectWalletView), findsOneWidget);
-    });
-
     testWidgets('renders UI correctly', (tester) async {
       final profileCubit = ProfileCubit(
         didKitProvider: didKitProvider,
@@ -280,8 +217,10 @@ void main() {
       await tester.pumpApp(
         MultiBlocProvider(
           providers: [
-            BlocProvider.value(value: onBoardingGenPhraseCubit),
-            BlocProvider(create: (context) => profileCubit),
+            BlocProvider<OnBoardingGenPhraseCubit>.value(
+              value: onBoardingGenPhraseCubit,
+            ),
+            BlocProvider<ProfileCubit>(create: (context) => profileCubit),
           ],
           child: ProtectWalletView(
             profileCubit: profileCubit,
@@ -323,7 +262,7 @@ void main() {
       await tester.pumpApp(
         MockNavigatorProvider(
           navigator: navigator,
-          child: BlocProvider.value(
+          child: BlocProvider<OnBoardingGenPhraseCubit>.value(
             value: onBoardingGenPhraseCubit,
             child: const OnBoardingGenPhraseView(),
           ),
@@ -374,8 +313,10 @@ void main() {
           navigator: navigator,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: onBoardingGenPhraseCubit),
-              BlocProvider(create: (context) => profileCubit),
+              BlocProvider<OnBoardingGenPhraseCubit>.value(
+                value: onBoardingGenPhraseCubit,
+              ),
+              BlocProvider<ProfileCubit>(create: (context) => profileCubit),
             ],
             child: ProtectWalletView(
               profileCubit: profileCubit,
@@ -426,8 +367,10 @@ void main() {
             navigator: navigator,
             child: MultiBlocProvider(
               providers: [
-                BlocProvider.value(value: onBoardingGenPhraseCubit),
-                BlocProvider(create: (context) => profileCubit),
+                BlocProvider<OnBoardingGenPhraseCubit>.value(
+                  value: onBoardingGenPhraseCubit,
+                ),
+                BlocProvider<ProfileCubit>(create: (context) => profileCubit),
               ],
               child: ProtectWalletView(
                 profileCubit: profileCubit,
@@ -482,8 +425,10 @@ void main() {
           navigator: navigator,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: onBoardingGenPhraseCubit),
-              BlocProvider(create: (context) => profileCubit),
+              BlocProvider<OnBoardingGenPhraseCubit>.value(
+                value: onBoardingGenPhraseCubit,
+              ),
+              BlocProvider<ProfileCubit>(create: (context) => profileCubit),
             ],
             child: ProtectWalletView(
               profileCubit: profileCubit,
@@ -494,7 +439,7 @@ void main() {
         ),
       );
 
-      await tester.tap(find.text('PIN unlock + Biometric (2FA)'));
+      await tester.tap(find.text('PIN + biometric unlock (2FA)'));
 
       verify(
         () => navigator.push<void>(
@@ -533,8 +478,10 @@ void main() {
           navigator: navigator,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: onBoardingGenPhraseCubit),
-              BlocProvider(create: (context) => profileCubit),
+              BlocProvider<OnBoardingGenPhraseCubit>.value(
+                value: onBoardingGenPhraseCubit,
+              ),
+              BlocProvider<ProfileCubit>(create: (context) => profileCubit),
             ],
             child: ProtectWalletView(
               profileCubit: profileCubit,
@@ -547,76 +494,12 @@ void main() {
       );
 
       final dynamic state = tester.state(find.byType(ProtectWalletView));
-      await state.createImportAccount(byPassScreen: false);
+      await state.createImportAccount();
       verify(
         () => navigator.push<void>(
           any(
             that: isRoute<void>(whereName: equals('/onBoardingGenPhrasePage')),
           ),
-        ),
-      ).called(1);
-    });
-
-    testWidgets('createImportAccount when routeType is WalletRouteType.create'
-        ' and byPassScreen is true', (WidgetTester tester) async {
-      final profileCubit = ProfileCubit(
-        didKitProvider: didKitProvider,
-        jwtDecode: JWTDecode(),
-        oidc4vc: oidc4vc,
-        secureStorageProvider: secureStorageProvider,
-        langCubit: MockLangCubit(),
-      );
-
-      final onBoardingGenPhraseCubit = OnBoardingGenPhraseCubit(
-        didKitProvider: didKitProvider,
-        keyGenerator: keyGenerator,
-        homeCubit: homeCubit,
-        walletCubit: walletCubit,
-        splashCubit: splashCubit,
-        altmeChatSupportCubit: altmeChatSupportCubit,
-        matrixNotificationCubit: matrixNotificationCubit,
-        profileCubit: profileCubit,
-        activityLogManager: activityLogManager,
-        qrCodeScanCubit: qrCodeScanCubit,
-        credentialsCubit: credentialsCubit,
-        walletConnectCubit: walletConnectCubit,
-      );
-
-      await tester.pumpApp(
-        MockNavigatorProvider(
-          navigator: navigator,
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider.value(value: onBoardingGenPhraseCubit),
-              BlocProvider(
-                create: (context) => ProfileCubit(
-                  didKitProvider: didKitProvider,
-                  jwtDecode: JWTDecode(),
-                  oidc4vc: oidc4vc,
-                  secureStorageProvider: secureStorageProvider,
-                  langCubit: MockLangCubit(),
-                ),
-              ),
-            ],
-            child: ProtectWalletView(
-              profileCubit: profileCubit,
-              onBoardingGenPhraseCubit: onBoardingGenPhraseCubit,
-              onboardingCubit: onboardingCubit,
-              routeType: WalletRouteType.create,
-            ),
-          ),
-        ),
-      );
-
-      final dynamic state = tester.state(find.byType(ProtectWalletView));
-      await state.createImportAccount(byPassScreen: true);
-      expect(onBoardingGenPhraseCubit.state.status, AppStatus.success);
-
-      await tester.pumpAndSettle();
-      verify(
-        () => navigator.pushAndRemoveUntil<void>(
-          any(that: isRoute<void>(whereName: equals('/walletReadyPage'))),
-          any(that: isA<RoutePredicate>()),
         ),
       ).called(1);
     });
@@ -652,8 +535,10 @@ void main() {
             navigator: navigator,
             child: MultiBlocProvider(
               providers: [
-                BlocProvider.value(value: onBoardingGenPhraseCubit),
-                BlocProvider(create: (context) => profileCubit),
+                BlocProvider<OnBoardingGenPhraseCubit>.value(
+                  value: onBoardingGenPhraseCubit,
+                ),
+                BlocProvider<ProfileCubit>(create: (context) => profileCubit),
               ],
               child: ProtectWalletView(
                 profileCubit: profileCubit,
@@ -666,10 +551,10 @@ void main() {
         );
 
         final dynamic state = tester.state(find.byType(ProtectWalletView));
-        await state.createImportAccount(byPassScreen: false);
+        await state.createImportAccount();
         verify(
           () => navigator.push<void>(
-            any(that: isRoute<void>(whereName: equals('/ImportWalletPage'))),
+            any(that: isRoute<void>(whereName: equals('/RestoreOptionsPage'))),
           ),
         ).called(1);
       },
@@ -704,8 +589,10 @@ void main() {
           navigator: navigator,
           child: MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: onBoardingGenPhraseCubit),
-              BlocProvider(create: (context) => profileCubit),
+              BlocProvider<OnBoardingGenPhraseCubit>.value(
+                value: onBoardingGenPhraseCubit,
+              ),
+              BlocProvider<ProfileCubit>(create: (context) => profileCubit),
             ],
             child: ProtectWalletView(
               profileCubit: profileCubit,

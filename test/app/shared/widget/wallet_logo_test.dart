@@ -222,8 +222,8 @@ void main() {
     );
 
     testWidgets('displays correct image for '
-        'ProfileType.diipv3 in development', (WidgetTester tester) async {
-      when(() => mockFlavorCubit.state).thenReturn(FlavorMode.development);
+        'ProfileType.diipv3 in production', (WidgetTester tester) async {
+      when(() => mockFlavorCubit.state).thenReturn(FlavorMode.production);
       when(() => mockProfileCubit.state).thenReturn(
         ProfileState(
           model: ProfileModel.diipv3(

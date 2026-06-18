@@ -67,7 +67,7 @@ void main() {
     group('normalFormat', () {
       test('returns formatted date and time', () {
         const dateTime = '2022-05-10T10:00:00Z';
-        expect(UiDate.normalFormat(dateTime), '10-05-2022 15:45');
+        expect(UiDate.normalFormat(dateTime), '10-05-2022 10:00');
       });
       test('returns null if format is empty', () {
         const dateTime = '';

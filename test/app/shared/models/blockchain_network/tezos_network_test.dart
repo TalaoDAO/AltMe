@@ -11,6 +11,8 @@ void main() {
         'title': 'Test Network',
         'subTitle': 'Subtitle',
         'type': 'tezos',
+        'isMainNet': false,
+        'chainId': 0,
         'apiKey': 'apikey',
       };
 
@@ -23,6 +25,8 @@ void main() {
       expect(tezosNetwork.subTitle, 'Subtitle');
       expect(tezosNetwork.type, BlockchainType.tezos);
       expect(tezosNetwork.apiKey, 'apikey');
+      expect(tezosNetwork.isMainNet, false);
+      expect(tezosNetwork.chainId, 0);
     });
 
     test('toJson should convert a TezosNetwork instance to JSON', () {

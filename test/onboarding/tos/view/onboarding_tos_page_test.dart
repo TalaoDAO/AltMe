@@ -109,14 +109,14 @@ void main() {
 
       expect(agreeCheckbox, findsOneWidget);
       expect(readCheckbox, findsOneWidget);
-
+      await tester.ensureVisible(agreeCheckbox);
       await tester.tap(agreeCheckbox);
       await tester.pumpAndSettle();
 
       verify(
         () => onBoardingTosCubit.setAgreeTerms(agreeTerms: true),
       ).called(1);
-
+      await tester.ensureVisible(readCheckbox);
       await tester.tap(readCheckbox);
       await tester.pumpAndSettle();
 

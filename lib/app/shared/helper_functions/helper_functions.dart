@@ -1,15 +1,14 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/models/key_store_model.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/key_generator/key_generator.dart';
-import 'package:altme/app/shared/models/key_store_model.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:asn1lib/asn1lib.dart' as asn1lib;
 import 'package:convert/convert.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:tezart/tezart.dart';
 import 'package:dio/dio.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +18,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:tezart/tezart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:x509_plus/x509.dart' as x509;
 
@@ -2378,6 +2378,7 @@ String? getClientIdForPresentation(String? clientId) {
 Future<bool> verifyX509Chain(List<dynamic> x5cChain) async {
   if (x5cChain.isEmpty) return false;
   try {
+    // ignore: unused_local_variable
     final certs = x5cChain.map((certBase64) {
       final der = base64Decode(certBase64.toString());
       final seq = asn1lib.ASN1Sequence.fromBytes(der);
@@ -2385,13 +2386,13 @@ Future<bool> verifyX509Chain(List<dynamic> x5cChain) async {
     }).toList();
 
     // Check each cert is signed by the next (issuer)
-    for (var i = 0; i < certs.length - 1; i++) {
-      final child = certs[i];
-      final issuer = certs[i + 1];
-      // if (!child.verify(issuer.publicKey)) {
-      //   return false;
-      // }
-    }
+    // for (var i = 0; i < certs.length - 1; i++) {
+    //   final child = certs[i];
+    //   final issuer = certs[i + 1];
+    // if (!child.verify(issuer.publicKey)) {
+    //   return false;
+    // }
+    // }
     // Optionally: Check the root is self-signed (not required for all
     // use cases)
     // final root = certs.last;

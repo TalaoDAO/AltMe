@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "swift-bits",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/TalaoDAO/swift-bits",
+      "state" : {
+        "revision" : "3bea5ad75a06111aa0ba9be4c7fc09e7803c3605",
+        "version" : "1.0.1"
+      }
+    }
+  ],
+  "version" : 2
+}

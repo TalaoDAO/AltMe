@@ -11,6 +11,8 @@ void main() {
         'title': 'Test Network',
         'subTitle': 'Subtitle',
         'type': 'ethereum',
+        'isMainNet': false,
+        'chainId': 1,
         'apiKey': 'apikey',
       };
 
@@ -23,6 +25,8 @@ void main() {
       expect(blockchainNetwork.subTitle, 'Subtitle');
       expect(blockchainNetwork.type, BlockchainType.ethereum);
       expect(blockchainNetwork.apiKey, 'apikey');
+      expect(blockchainNetwork.isMainNet, false);
+      expect(blockchainNetwork.chainId, 1);
     });
 
     test('toJson should convert a BlockchainNetwork instance to JSON', () {

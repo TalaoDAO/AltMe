@@ -8,12 +8,18 @@ environment:
 
 dependencies:
   bip32: ^2.0.0
-  bip39: ^1.0.6
+  bip39:
+    git:
+      url: git@github.com:hawkbee1/bip39.git
+      ref: master
   crypto_keys: ^0.3.0+1
   equatable: ^2.0.5
   flutter:
     sdk: flutter
   json_annotation: ^4.9.0
+
+dependency_overrides:
+  pointycastle: ^4.0.0 # a library that implements popular crypto algorithms
 
 dev_dependencies:
   build_runner: ^2.4.11
