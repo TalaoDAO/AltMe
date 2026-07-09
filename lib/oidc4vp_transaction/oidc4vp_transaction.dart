@@ -6,19 +6,16 @@ import 'package:altme/app/shared/models/blockchain_network/blockchain_network_he
 import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/verify_credential.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:jose_plus/jose.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
 
 /// Represents an OIDC4VP transaction payload and dispatches to the proper
 /// processing path depending on whether the request is a blockchain
 /// transaction or a local document signature request.
-class Oidc4vpTransaction {
-  Oidc4vpTransaction._internal(this.transactionData);
-
+abstract class Oidc4vpTransaction {
   factory Oidc4vpTransaction({required List<dynamic> transactionData}) {
     final bool containsLocalSignatureRequest = _decodeTransactions(
       transactionData,
-    ).whereType<Map<String, dynamic>>().any(isLocalSignatureRequest);
+    ).whereType<Map<String, dynamic>>().any(_isLocalSignatureRequest);
 
     if (containsLocalSignatureRequest) {
       return LocalSignatureOidc4vpTransaction._internal(transactionData);
@@ -27,10 +24,12 @@ class Oidc4vpTransaction {
     return BlockchainOidc4vpTransaction._internal(transactionData);
   }
 
+  Oidc4vpTransaction._internal(this.transactionData);
+
   /// List of base64-encoded transaction data strings.
   final List<dynamic> transactionData;
 
-  static bool isLocalSignatureRequest(Map<String, dynamic> transaction) {
+  static bool _isLocalSignatureRequest(Map<String, dynamic> transaction) {
     return transaction['type'] == 'urn:wallet:local:signature';
   }
 
@@ -48,60 +47,19 @@ class Oidc4vpTransaction {
 
   List<dynamic> decodeTransactions() => _decodeTransactions(transactionData);
 
+  bool get isLocalSignatureTransaction;
+
   Future<List<Uint8List>> getBlockchainSignedTransaction({
     required CryptoAccountData cryptoAccountData,
-  }) async {
-    throw UnsupportedError(
-      'Blockchain transaction signing is not supported for this request type.',
-    );
-  }
-
-  List<Map<String, dynamic>> decodeLocalSignatureRequests() {
-    return decodeTransactions()
-        .whereType<Map<String, dynamic>>()
-        .where(isLocalSignatureRequest)
-        .toList();
-  }
-
-  LocalSignRequest? getFirstLocalSignatureRequest() {
-    final localRequests = decodeLocalSignatureRequests();
-    if (localRequests.isEmpty) {
-      return null;
-    }
-    return LocalSignRequest.fromJson(localRequests.first);
-  }
-
-  bool get isLocalSignatureTransaction => this is LocalSignatureOidc4vpTransaction;
-
-  static String createDetachedDocumentSignature({
-    required String documentDigest,
-    required Map<String, dynamic> privateKey,
-    String? keyId,
-    String alg = 'ES256',
-  }) {
-    final key = JsonWebKey.fromJson(privateKey);
-    final builder = JsonWebSignatureBuilder()
-      ..stringContent = documentDigest
-      ..setProtectedHeader('alg', alg);
-
-    if (keyId != null && keyId.isNotEmpty) {
-      builder.setProtectedHeader('kid', keyId);
-    }
-
-    builder.addRecipient(key, algorithm: alg);
-    final jws = builder.build();
-    final compact = jws.toCompactSerialization();
-    final parts = compact.split('.');
-    if (parts.length != 3) {
-      throw StateError('Unable to create detached JWS signature.');
-    }
-    return '${parts[0]}..${parts[2]}';
-  }
+  });
 }
 
 class BlockchainOidc4vpTransaction extends Oidc4vpTransaction {
   BlockchainOidc4vpTransaction._internal(List<dynamic> transactionData)
-      : super._internal(transactionData);
+    : super._internal(transactionData);
+
+  @override
+  bool get isLocalSignatureTransaction => false;
 
   @override
   Future<List<Uint8List>> getBlockchainSignedTransaction({
@@ -150,7 +108,35 @@ class BlockchainOidc4vpTransaction extends Oidc4vpTransaction {
 
 class LocalSignatureOidc4vpTransaction extends Oidc4vpTransaction {
   LocalSignatureOidc4vpTransaction._internal(List<dynamic> transactionData)
-      : super._internal(transactionData);
+    : super._internal(transactionData);
+
+  @override
+  bool get isLocalSignatureTransaction => true;
+
+  @override
+  Future<List<Uint8List>> getBlockchainSignedTransaction({
+    required CryptoAccountData cryptoAccountData,
+  }) async {
+    throw UnsupportedError(
+      'Blockchain transaction signing is not supported for local '
+      'signature requests.',
+    );
+  }
+
+  List<Map<String, dynamic>> decodeLocalSignatureRequests() {
+    return decodeTransactions()
+        .whereType<Map<String, dynamic>>()
+        .where(Oidc4vpTransaction._isLocalSignatureRequest)
+        .toList();
+  }
+
+  LocalSignRequest? getFirstLocalSignatureRequest() {
+    final localRequests = decodeLocalSignatureRequests();
+    if (localRequests.isEmpty) {
+      return null;
+    }
+    return LocalSignRequest.fromJson(localRequests.first);
+  }
 }
 
 class LocalSignRequest {
@@ -159,10 +145,6 @@ class LocalSignRequest {
     required this.credentialIds,
     required this.signatureRequests,
   });
-
-  final String type;
-  final List<String> credentialIds;
-  final List<SignatureRequest> signatureRequests;
 
   factory LocalSignRequest.fromJson(Map<String, dynamic> json) {
     final rawRequests = json['signatureRequests'] as List<dynamic>?;
@@ -183,6 +165,10 @@ class LocalSignRequest {
           [],
     );
   }
+
+  final String type;
+  final List<String> credentialIds;
+  final List<SignatureRequest> signatureRequests;
 }
 
 class SignatureRequest {
@@ -196,14 +182,6 @@ class SignatureRequest {
     required this.documentInfo,
   });
 
-  final String label;
-  final Map<String, dynamic> access;
-  final String href;
-  final String documentDigest;
-  final String signatureFormat;
-  final String signAlgo;
-  final String? documentInfo;
-
   factory SignatureRequest.fromJson(Map<String, dynamic> json) {
     return SignatureRequest(
       label: json['label']?.toString() ?? '',
@@ -215,4 +193,12 @@ class SignatureRequest {
       documentInfo: json['documentInfo']?.toString(),
     );
   }
+
+  final String label;
+  final Map<String, dynamic> access;
+  final String href;
+  final String documentDigest;
+  final String signatureFormat;
+  final String signAlgo;
+  final String? documentInfo;
 }

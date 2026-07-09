@@ -154,7 +154,9 @@ Future<void> oidc4vpSiopV2AcceptHost({
       final transactionData = response['transaction_data'] as List<dynamic>;
       unawaited(context.read<ScanCubit>().addTransactionData(transactionData));
 
-      final oidcTransaction = Oidc4vpTransaction(transactionData: transactionData);
+      final oidcTransaction = Oidc4vpTransaction(
+        transactionData: transactionData,
+      );
       final bool isLocalSignatureRequest =
           oidcTransaction.isLocalSignatureTransaction;
 
