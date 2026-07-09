@@ -9,23 +9,109 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jose_plus/jose.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
 
-/// Represents a list of blockchain transactions encoded as base64 strings.
+/// Represents an OIDC4VP transaction payload and dispatches to the proper
+/// processing path depending on whether the request is a blockchain
+/// transaction or a local document signature request.
 class Oidc4vpTransaction {
-  Oidc4vpTransaction({required this.transactionData});
+  Oidc4vpTransaction._internal(this.transactionData);
+
+  factory Oidc4vpTransaction({required List<dynamic> transactionData}) {
+    final bool containsLocalSignatureRequest = _decodeTransactions(
+      transactionData,
+    ).whereType<Map<String, dynamic>>().any(isLocalSignatureRequest);
+
+    if (containsLocalSignatureRequest) {
+      return LocalSignatureOidc4vpTransaction._internal(transactionData);
+    }
+
+    return BlockchainOidc4vpTransaction._internal(transactionData);
+  }
 
   /// List of base64-encoded transaction data strings.
   final List<dynamic> transactionData;
 
+  static bool isLocalSignatureRequest(Map<String, dynamic> transaction) {
+    return transaction['type'] == 'urn:wallet:local:signature';
+  }
+
+  static List<dynamic> _decodeTransactions(List<dynamic> transactionData) {
+    final List<dynamic> decodedTransactions = [];
+    for (final tx in transactionData) {
+      if (tx is String) {
+        final decodedString = utf8.decode(decodeEncodedList(tx));
+        final decodedMap = json.decode(decodedString) as Map<String, dynamic>;
+        decodedTransactions.add(decodedMap);
+      }
+    }
+    return decodedTransactions;
+  }
+
+  List<dynamic> decodeTransactions() => _decodeTransactions(transactionData);
+
   Future<List<Uint8List>> getBlockchainSignedTransaction({
     required CryptoAccountData cryptoAccountData,
   }) async {
-    // Decode all transactions
+    throw UnsupportedError(
+      'Blockchain transaction signing is not supported for this request type.',
+    );
+  }
+
+  List<Map<String, dynamic>> decodeLocalSignatureRequests() {
+    return decodeTransactions()
+        .whereType<Map<String, dynamic>>()
+        .where(isLocalSignatureRequest)
+        .toList();
+  }
+
+  LocalSignRequest? getFirstLocalSignatureRequest() {
+    final localRequests = decodeLocalSignatureRequests();
+    if (localRequests.isEmpty) {
+      return null;
+    }
+    return LocalSignRequest.fromJson(localRequests.first);
+  }
+
+  bool get isLocalSignatureTransaction => this is LocalSignatureOidc4vpTransaction;
+
+  static String createDetachedDocumentSignature({
+    required String documentDigest,
+    required Map<String, dynamic> privateKey,
+    String? keyId,
+    String alg = 'ES256',
+  }) {
+    final key = JsonWebKey.fromJson(privateKey);
+    final builder = JsonWebSignatureBuilder()
+      ..stringContent = documentDigest
+      ..setProtectedHeader('alg', alg);
+
+    if (keyId != null && keyId.isNotEmpty) {
+      builder.setProtectedHeader('kid', keyId);
+    }
+
+    builder.addRecipient(key, algorithm: alg);
+    final jws = builder.build();
+    final compact = jws.toCompactSerialization();
+    final parts = compact.split('.');
+    if (parts.length != 3) {
+      throw StateError('Unable to create detached JWS signature.');
+    }
+    return '${parts[0]}..${parts[2]}';
+  }
+}
+
+class BlockchainOidc4vpTransaction extends Oidc4vpTransaction {
+  BlockchainOidc4vpTransaction._internal(List<dynamic> transactionData)
+      : super._internal(transactionData);
+
+  @override
+  Future<List<Uint8List>> getBlockchainSignedTransaction({
+    required CryptoAccountData cryptoAccountData,
+  }) async {
     final decodedTransactions = decodeTransactions();
     final List<Uint8List> signedTransactions = [];
     final dotenv = DotEnv();
 
     for (final tx in decodedTransactions) {
-      // Map tx to TokenModel and extract required fields
       final chainId = int.tryParse(tx['chain_id']?.toString() ?? '1') ?? 1;
       final rpcUrl = await fetchRpcUrl(
         blockchainNetwork: blockchainNetworkFromChainId(chainId)!,
@@ -60,63 +146,11 @@ class Oidc4vpTransaction {
     }
     return signedTransactions;
   }
+}
 
-  /// Decodes the base64 transaction data back to a list of Maps.
-  List<dynamic> decodeTransactions() {
-    final List<dynamic> decodedTransactions = [];
-    for (final tx in transactionData) {
-      if (tx is String) {
-        final decodedString = utf8.decode(decodeEncodedList(tx));
-        final decodedMap = json.decode(decodedString) as Map<String, dynamic>;
-        decodedTransactions.add(decodedMap);
-      }
-    }
-    return decodedTransactions;
-  }
-
-  static bool isLocalSignatureRequest(Map<String, dynamic> transaction) {
-    return transaction['type'] == 'urn:wallet:local:signature';
-  }
-
-  List<Map<String, dynamic>> decodeLocalSignatureRequests() {
-    return decodeTransactions()
-        .whereType<Map<String, dynamic>>()
-        .where(isLocalSignatureRequest)
-        .toList();
-  }
-
-  LocalSignRequest? getFirstLocalSignatureRequest() {
-    final localRequests = decodeLocalSignatureRequests();
-    if (localRequests.isEmpty) {
-      return null;
-    }
-    return LocalSignRequest.fromJson(localRequests.first);
-  }
-
-  static String createDetachedDocumentSignature({
-    required String documentDigest,
-    required Map<String, dynamic> privateKey,
-    String? keyId,
-    String alg = 'ES256',
-  }) {
-    final key = JsonWebKey.fromJson(privateKey);
-    final builder = JsonWebSignatureBuilder()
-      ..stringContent = documentDigest
-      ..setProtectedHeader('alg', alg);
-
-    if (keyId != null && keyId.isNotEmpty) {
-      builder.setProtectedHeader('kid', keyId);
-    }
-
-    builder.addRecipient(key, algorithm: alg);
-    final jws = builder.build();
-    final compact = jws.toCompactSerialization();
-    final parts = compact.split('.');
-    if (parts.length != 3) {
-      throw StateError('Unable to create detached JWS signature.');
-    }
-    return '${parts[0]}..${parts[2]}';
-  }
+class LocalSignatureOidc4vpTransaction extends Oidc4vpTransaction {
+  LocalSignatureOidc4vpTransaction._internal(List<dynamic> transactionData)
+      : super._internal(transactionData);
 }
 
 class LocalSignRequest {

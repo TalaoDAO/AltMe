@@ -154,11 +154,9 @@ Future<void> oidc4vpSiopV2AcceptHost({
       final transactionData = response['transaction_data'] as List<dynamic>;
       unawaited(context.read<ScanCubit>().addTransactionData(transactionData));
 
+      final oidcTransaction = Oidc4vpTransaction(transactionData: transactionData);
       final bool isLocalSignatureRequest =
-          Oidc4vpTransaction(transactionData: transactionData)
-              .decodeTransactions()
-              .whereType<Map<String, dynamic>>()
-              .any(Oidc4vpTransaction.isLocalSignatureRequest);
+          oidcTransaction.isLocalSignatureTransaction;
 
       await Navigator.of(context).push<void>(
         isLocalSignatureRequest
