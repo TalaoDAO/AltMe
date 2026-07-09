@@ -1090,15 +1090,28 @@ class ScanCubit extends Cubit<ScanState> {
     );
   }
 
+  Future<void> addLocalDocumentSignature(
+    Map<String, dynamic> localDocumentSignature,
+  ) async {
+    emit(
+      state.copyWith(
+        localDocumentSignature: localDocumentSignature,
+        status: ScanStatus.init,
+      ),
+    );
+  }
+
   void updateCredentialsToBePresented({
     required CredentialModel credentialPresentation,
     required Issuer presentationIssuer,
     required List<CredentialModel> credentialsToBePresented,
   }) {
-    emit(state.copyWith(
-      credentialPresentation: credentialPresentation,
-      presentationIssuer: presentationIssuer,
-      credentialsToBePresented: credentialsToBePresented,
-    ));
+    emit(
+      state.copyWith(
+        credentialPresentation: credentialPresentation,
+        presentationIssuer: presentationIssuer,
+        credentialsToBePresented: credentialsToBePresented,
+      ),
+    );
   }
 }

@@ -8,6 +8,8 @@ import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vc/helper_function/get_payload.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vp_prompt.dart';
+import 'package:altme/oidc4vp_transaction/oidc4vp_transaction.dart';
+import 'package:altme/oidc4vp_transaction/widget/accept_local_document_signing_page.dart';
 import 'package:altme/oidc4vp_transaction/widget/accept_oidc4_vp_transaction_page.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
@@ -149,20 +151,31 @@ Future<void> oidc4vpSiopV2AcceptHost({
   if (response != null) {
     if (response.containsKey('transaction_data')) {
       LoadingView().hide();
-      unawaited(
-        context.read<ScanCubit>().addTransactionData(
-          response['transaction_data'] as List<dynamic>,
-        ),
-      );
+      final transactionData = response['transaction_data'] as List<dynamic>;
+      unawaited(context.read<ScanCubit>().addTransactionData(transactionData));
+
+      final bool isLocalSignatureRequest =
+          Oidc4vpTransaction(transactionData: transactionData)
+              .decodeTransactions()
+              .whereType<Map<String, dynamic>>()
+              .any(Oidc4vpTransaction.isLocalSignatureRequest);
 
       await Navigator.of(context).push<void>(
-        AcceptOidc4VpTransactionPage.route(
-          trustedListEnabled: trustedListEnabled,
-          trustedEntity: trustedEntity,
-          uri: uri,
-          showPrompt: showPrompt,
-          client: client,
-        ),
+        isLocalSignatureRequest
+            ? AcceptLocalDocumentSigningPage.route(
+                trustedListEnabled: trustedListEnabled,
+                trustedEntity: trustedEntity,
+                uri: uri,
+                showPrompt: showPrompt,
+                client: client,
+              )
+            : AcceptOidc4VpTransactionPage.route(
+                trustedListEnabled: trustedListEnabled,
+                trustedEntity: trustedEntity,
+                uri: uri,
+                showPrompt: showPrompt,
+                client: client,
+              ),
       );
       LoadingView().hide();
       return;

@@ -6,6 +6,7 @@ import 'package:altme/app/shared/models/blockchain_network/blockchain_network_he
 import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/verify_credential.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:jose_plus/jose.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
 
 /// Represents a list of blockchain transactions encoded as base64 strings.
@@ -71,5 +72,113 @@ class Oidc4vpTransaction {
       }
     }
     return decodedTransactions;
+  }
+
+  static bool isLocalSignatureRequest(Map<String, dynamic> transaction) {
+    return transaction['type'] == 'urn:wallet:local:signature';
+  }
+
+  List<Map<String, dynamic>> decodeLocalSignatureRequests() {
+    return decodeTransactions()
+        .whereType<Map<String, dynamic>>()
+        .where(isLocalSignatureRequest)
+        .toList();
+  }
+
+  LocalSignRequest? getFirstLocalSignatureRequest() {
+    final localRequests = decodeLocalSignatureRequests();
+    if (localRequests.isEmpty) {
+      return null;
+    }
+    return LocalSignRequest.fromJson(localRequests.first);
+  }
+
+  static String createDetachedDocumentSignature({
+    required String documentDigest,
+    required Map<String, dynamic> privateKey,
+    String? keyId,
+    String alg = 'ES256',
+  }) {
+    final key = JsonWebKey.fromJson(privateKey);
+    final builder = JsonWebSignatureBuilder()
+      ..stringContent = documentDigest
+      ..setProtectedHeader('alg', alg);
+
+    if (keyId != null && keyId.isNotEmpty) {
+      builder.setProtectedHeader('kid', keyId);
+    }
+
+    builder.addRecipient(key, algorithm: alg);
+    final jws = builder.build();
+    final compact = jws.toCompactSerialization();
+    final parts = compact.split('.');
+    if (parts.length != 3) {
+      throw StateError('Unable to create detached JWS signature.');
+    }
+    return '${parts[0]}..${parts[2]}';
+  }
+}
+
+class LocalSignRequest {
+  LocalSignRequest({
+    required this.type,
+    required this.credentialIds,
+    required this.signatureRequests,
+  });
+
+  final String type;
+  final List<String> credentialIds;
+  final List<SignatureRequest> signatureRequests;
+
+  factory LocalSignRequest.fromJson(Map<String, dynamic> json) {
+    final rawRequests = json['signatureRequests'] as List<dynamic>?;
+    return LocalSignRequest(
+      type: json['type']?.toString() ?? '',
+      credentialIds:
+          (json['credential_ids'] as List<dynamic>?)
+              ?.map((item) => item.toString())
+              .toList() ??
+          [],
+      signatureRequests:
+          rawRequests
+              ?.map(
+                (item) =>
+                    SignatureRequest.fromJson(item as Map<String, dynamic>),
+              )
+              .toList() ??
+          [],
+    );
+  }
+}
+
+class SignatureRequest {
+  SignatureRequest({
+    required this.label,
+    required this.access,
+    required this.href,
+    required this.documentDigest,
+    required this.signatureFormat,
+    required this.signAlgo,
+    required this.documentInfo,
+  });
+
+  final String label;
+  final Map<String, dynamic> access;
+  final String href;
+  final String documentDigest;
+  final String signatureFormat;
+  final String signAlgo;
+  final String? documentInfo;
+
+  factory SignatureRequest.fromJson(Map<String, dynamic> json) {
+    return SignatureRequest(
+      label: json['label']?.toString() ?? '',
+      access: Map<String, dynamic>.from(json['access'] as Map? ?? {}),
+      href: json['href']?.toString() ?? '',
+      documentDigest: json['documentDigest']?.toString() ?? '',
+      signatureFormat: json['signature_format']?.toString() ?? '',
+      signAlgo: json['signAlgo']?.toString() ?? '',
+      documentInfo: json['documentInfo']?.toString(),
+    );
   }
 }

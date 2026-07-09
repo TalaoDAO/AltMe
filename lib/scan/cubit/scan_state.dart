@@ -11,6 +11,7 @@ class ScanState extends Equatable {
     this.done,
     this.transactionData,
     this.blockchainTransactionsSignatures,
+    this.localDocumentSignature,
     this.credentialPresentation,
     this.presentationIssuer,
     this.credentialsToBePresented,
@@ -24,6 +25,7 @@ class ScanState extends Equatable {
   final String? domain;
   final List<dynamic>? transactionData;
   final List<Uint8List>? blockchainTransactionsSignatures;
+  final Map<String, dynamic>? localDocumentSignature;
   final CredentialModel? credentialPresentation;
   final Issuer? presentationIssuer;
   final List<CredentialModel>? credentialsToBePresented;
@@ -79,6 +81,7 @@ class ScanState extends Equatable {
     dynamic Function(String)? done,
     List<dynamic>? transactionData,
     List<Uint8List>? blockchainTransactionsSignatures,
+    Map<String, dynamic>? localDocumentSignature,
     CredentialModel? credentialPresentation,
     Issuer? presentationIssuer,
     List<CredentialModel>? credentialsToBePresented,
@@ -89,6 +92,8 @@ class ScanState extends Equatable {
     var newBlockchainTransactionsSignatures =
         blockchainTransactionsSignatures ??
         this.blockchainTransactionsSignatures;
+    var newLocalDocumentSignature =
+        localDocumentSignature ?? this.localDocumentSignature;
     var newCredentialPresentation =
         credentialPresentation ?? this.credentialPresentation;
     var newPresentationIssuer = presentationIssuer ?? this.presentationIssuer;
@@ -98,6 +103,7 @@ class ScanState extends Equatable {
     if (status == ScanStatus.success || status == ScanStatus.error) {
       newTransactionData = null;
       newBlockchainTransactionsSignatures = null;
+      newLocalDocumentSignature = null;
       newCredentialsToBePresented = null;
       newPresentationIssuer = null;
       newCredentialPresentation = null;
@@ -113,6 +119,7 @@ class ScanState extends Equatable {
       done: done ?? this.done,
       transactionData: newTransactionData,
       blockchainTransactionsSignatures: newBlockchainTransactionsSignatures,
+      localDocumentSignature: newLocalDocumentSignature,
       credentialPresentation: newCredentialPresentation,
       presentationIssuer: newPresentationIssuer,
       credentialsToBePresented: newCredentialsToBePresented,
@@ -130,6 +137,7 @@ class ScanState extends Equatable {
     done,
     transactionData,
     blockchainTransactionsSignatures,
+    localDocumentSignature,
     credentialPresentation,
     presentationIssuer,
     credentialsToBePresented,
