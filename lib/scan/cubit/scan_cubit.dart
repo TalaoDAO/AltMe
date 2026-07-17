@@ -6,8 +6,8 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
-import 'package:altme/oidc4vp_transaction/oidc4vp_signature.dart';
-import 'package:altme/oidc4vp_transaction/oidc4vp_transaction.dart';
+import 'package:altme/oidc4vp_transaction/domain/payment_transaction/payment_signature.dart';
+import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
 import 'package:altme/wallet/wallet.dart';
 
 import 'package:bloc/bloc.dart';
@@ -681,7 +681,7 @@ class ScanCubit extends Cubit<ScanState> {
           /// create list of chain ids from transaction data
           final List<int> chainIds = [];
           final oidc4vpTransaction = Oidc4vpTransaction(
-            transactionData: state.transactionData!,
+            transactionJson: state.transactionData!,
           );
           final decodedTransactions = oidc4vpTransaction.decodeTransactions();
 
@@ -692,7 +692,7 @@ class ScanCubit extends Cubit<ScanState> {
             chainIds.add(chainId);
           }
           final signedTransaction = state.blockchainTransactionsSignatures;
-          await Oidc4vpSignedTransaction(
+          await PaymentSignature(
             signedTransaction: signedTransaction!,
             signedTransactionChainIds: chainIds,
           ).sendToken();

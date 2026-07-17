@@ -18,8 +18,8 @@ import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.da
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vp_transaction/helper/decode_erc20_transfert.dart';
 import 'package:altme/oidc4vp_transaction/helper/get_decoded_transaction.dart';
-import 'package:altme/oidc4vp_transaction/oidc4vp_signature.dart';
-import 'package:altme/oidc4vp_transaction/oidc4vp_transaction.dart';
+import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
+import 'package:altme/oidc4vp_transaction/domain/payment_transaction/payment_signature.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +103,7 @@ class AcceptButton extends StatelessWidget {
               .state
               .currentAccount!;
           final oidc4vpTransaction = Oidc4vpTransaction(
-            transactionData: transactionData!,
+            transactionJson: transactionData!,
           );
           await scanCubit.addBlockchainTransaction(
             await oidc4vpTransaction.getBlockchainSignedTransaction(
@@ -199,7 +199,7 @@ class AcceptButton extends StatelessWidget {
               /// create list of chain ids from transaction data
               final List<int> chainIds = [];
               final oidc4vpTransaction = Oidc4vpTransaction(
-                transactionData: transactionData,
+                transactionJson: transactionData,
               );
               final decodedTransactions = oidc4vpTransaction
                   .decodeTransactions();
@@ -212,8 +212,8 @@ class AcceptButton extends StatelessWidget {
                 chainIds.add(chainId);
               }
 
-              final Oidc4vpSignedTransaction oidc4vpSignedTransaction =
-                  Oidc4vpSignedTransaction(
+              final PaymentSignature oidc4vpSignedTransaction =
+                  PaymentSignature(
                     signedTransaction:
                         scanCubit.state.blockchainTransactionsSignatures!,
                     signedTransactionChainIds: chainIds,

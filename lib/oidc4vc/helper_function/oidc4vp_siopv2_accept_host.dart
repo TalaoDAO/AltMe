@@ -8,7 +8,7 @@ import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vc/helper_function/get_payload.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vp_prompt.dart';
-import 'package:altme/oidc4vp_transaction/oidc4vp_transaction.dart';
+import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
 import 'package:altme/oidc4vp_transaction/widget/accept_local_document_signing_page.dart';
 import 'package:altme/oidc4vp_transaction/widget/accept_oidc4_vp_transaction_page.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
@@ -155,7 +155,7 @@ Future<void> oidc4vpSiopV2AcceptHost({
       unawaited(context.read<ScanCubit>().addTransactionData(transactionData));
 
       final oidcTransaction = Oidc4vpTransaction(
-        transactionData: transactionData,
+        transactionJson: transactionData,
       );
       final bool isLocalSignatureRequest =
           oidcTransaction.isLocalSignatureTransaction;
