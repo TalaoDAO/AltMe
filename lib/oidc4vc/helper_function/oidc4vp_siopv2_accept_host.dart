@@ -8,9 +8,9 @@ import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vc/helper_function/get_payload.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vp_prompt.dart';
-import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
-import 'package:altme/oidc4vp_transaction/widget/accept_local_document_signing_page.dart';
-import 'package:altme/oidc4vp_transaction/widget/accept_oidc4_vp_transaction_page.dart';
+import 'package:altme/oidc4vp_transaction/data/oidc4vp_transaction_factory.dart';
+import 'package:altme/oidc4vp_transaction/domain/transaction_data.dart';
+import 'package:altme/oidc4vp_transaction/presentation/accept_oidc4_vp_transaction_page.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
 import 'package:altme/trusted_list/function/check_presentation_is_trusted.dart';
@@ -151,31 +151,24 @@ Future<void> oidc4vpSiopV2AcceptHost({
   if (response != null) {
     if (response.containsKey('transaction_data')) {
       LoadingView().hide();
-      final transactionData = response['transaction_data'] as List<dynamic>;
-      unawaited(context.read<ScanCubit>().addTransactionData(transactionData));
-
-      final oidcTransaction = Oidc4vpTransaction(
-        transactionJson: transactionData,
+      final transactionData = response['transaction_data'] as List<String>;
+      final transactionObjects = Oidc4vpTransactionFactory(
+        transactionData: transactionData,
       );
-      final bool isLocalSignatureRequest =
-          oidcTransaction.isLocalSignatureTransaction;
+      final transactions = TransactionData(
+        transactionData: transactionData,
+        transactions: transactionObjects.transactionList,
+      );
+      unawaited(context.read<ScanCubit>().addTransactionData(transactions));
 
       await Navigator.of(context).push<void>(
-        isLocalSignatureRequest
-            ? AcceptLocalDocumentSigningPage.route(
-                trustedListEnabled: trustedListEnabled,
-                trustedEntity: trustedEntity,
-                uri: uri,
-                showPrompt: showPrompt,
-                client: client,
-              )
-            : AcceptOidc4VpTransactionPage.route(
-                trustedListEnabled: trustedListEnabled,
-                trustedEntity: trustedEntity,
-                uri: uri,
-                showPrompt: showPrompt,
-                client: client,
-              ),
+        AcceptOidc4VpTransactionPage.route(
+          trustedListEnabled: trustedListEnabled,
+          trustedEntity: trustedEntity,
+          uri: uri,
+          showPrompt: showPrompt,
+          client: client,
+        ),
       );
       LoadingView().hide();
       return;

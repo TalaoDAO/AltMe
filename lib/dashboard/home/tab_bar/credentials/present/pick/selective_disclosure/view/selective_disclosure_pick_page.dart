@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/oidc4vp_transaction/domain/payment_transaction/payment_signature.dart';
 import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
@@ -291,33 +290,22 @@ class _SelectiveDisclosurePickViewState
       final transactionData = scanCubit.state.transactionData;
 
       if (transactionData != null) {
-        /// create list of chain ids from transaction data
-        final List<int> chainIds = [];
-        final oidc4vpTransaction = Oidc4vpTransaction(
-          transactionJson: transactionData,
-        );
-        final decodedTransactions = oidc4vpTransaction.decodeTransactions();
-
-        for (final tx in decodedTransactions) {
-          final decodedMap = tx as Map<String, dynamic>;
-          final chainId =
-              int.tryParse(decodedMap['chain_id']?.toString() ?? '1') ?? 1;
-          chainIds.add(chainId);
+        await transactionData.execute();
+        final List<String> blockchainTransactionHashes = [];
+        for (final transaction in transactionData.transactions) {
+          if (transaction is PaymentTransaction) {
+            blockchainTransactionHashes.addAll(
+              transaction.blockchainTransactionHashes,
+            );
+          }
+        }
+        if (blockchainTransactionHashes.isNotEmpty) {
+          payload['blockchain_transaction_hashes'] =
+              blockchainTransactionHashes;
         }
 
-        final PaymentSignature oidc4vpSignedTransaction = PaymentSignature(
-          signedTransaction: scanCubit.state.blockchainTransactionsSignatures!,
-          signedTransactionChainIds: chainIds,
-        );
-
-        payload['blockchain_transaction_hashes'] = oidc4vpSignedTransaction
-            .getSignedTransactionHashes();
-
-        final List<String> transactionDataHashes = [];
-        for (final element in transactionData) {
-          transactionDataHashes.add(sh256Hash(jsonEncode(element)));
-        }
-        payload['transaction_data_hashes'] = transactionDataHashes;
+        payload['transaction_data_hashes'] =
+            transactionData.transactionDataHashes;
       }
 
       // If there no cnf in the payload, then no need to add signature

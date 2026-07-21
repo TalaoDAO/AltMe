@@ -6,8 +6,9 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
-import 'package:altme/oidc4vp_transaction/domain/payment_transaction/payment_signature.dart';
+import 'package:altme/oidc4vp_transaction/data/Blockchain/payment_signature.dart';
 import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
+import 'package:altme/oidc4vp_transaction/domain/transaction_data.dart';
 import 'package:altme/wallet/wallet.dart';
 
 import 'package:bloc/bloc.dart';
@@ -676,26 +677,10 @@ class ScanCubit extends Cubit<ScanState> {
           issuer: issuer,
           uri: uri,
         );
-        if (state.blockchainTransactionsSignatures != null &&
-            state.transactionData != null) {
-          /// create list of chain ids from transaction data
-          final List<int> chainIds = [];
-          final oidc4vpTransaction = Oidc4vpTransaction(
-            transactionJson: state.transactionData!,
-          );
-          final decodedTransactions = oidc4vpTransaction.decodeTransactions();
-
-          for (final tx in decodedTransactions) {
-            final decodedMap = tx as Map<String, dynamic>;
-            final chainId =
-                int.tryParse(decodedMap['chain_id']?.toString() ?? '1') ?? 1;
-            chainIds.add(chainId);
-          }
-          final signedTransaction = state.blockchainTransactionsSignatures;
-          await PaymentSignature(
-            signedTransaction: signedTransaction!,
-            signedTransactionChainIds: chainIds,
-          ).sendToken();
+        final transactionData = state.transactionData;
+        if (transactionData != null) {
+          // Loop on transactionData
+          await transactionData.execute();
         }
         emit(
           state.copyWith(
@@ -1073,31 +1058,9 @@ class ScanCubit extends Cubit<ScanState> {
     }
   }
 
-  Future<void> addBlockchainTransaction(
-    List<Uint8List> oidc4VpTransaction,
-  ) async {
-    emit(
-      state.copyWith(
-        blockchainTransactionsSignatures: oidc4VpTransaction,
-        status: ScanStatus.init,
-      ),
-    );
-  }
-
-  Future<void> addTransactionData(List<dynamic> transactionData) async {
+  Future<void> addTransactionData(TransactionData transactionData) async {
     emit(
       state.copyWith(transactionData: transactionData, status: ScanStatus.init),
-    );
-  }
-
-  Future<void> addLocalDocumentSignature(
-    Map<String, dynamic> localDocumentSignature,
-  ) async {
-    emit(
-      state.copyWith(
-        localDocumentSignature: localDocumentSignature,
-        status: ScanStatus.init,
-      ),
     );
   }
 

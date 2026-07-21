@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:altme/app/shared/m_web3_client/m_web3_client.dart';
 import 'package:altme/app/shared/models/blockchain_network/blockchain_network_helpers.dart';
+import 'package:altme/oidc4vp_transaction/data/Blockchain/payment_signature.dart';
 import 'package:altme/wallet/model/crypto_account_data.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
@@ -16,10 +17,11 @@ enum TransactionType { cryptoPayment, textSignature }
 sealed class Oidc4vpTransaction {
   Oidc4vpTransaction({required this.transactionJson});
 
-  final Map<String,dynamic> transactionJson;
+  final Map<String, dynamic> transactionJson;
   TransactionType get transactionType;
-  Future<void> accept();
-  Future<void> refuse();
+  Future<void> prepare();
+  Future<void> execute();
+  Future<void> cancel();
 }
 
 class LocalSignRequest {

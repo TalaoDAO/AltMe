@@ -4,13 +4,13 @@ class SignatureTransaction extends Oidc4vpTransaction {
   SignatureTransaction({required super.transactionJson});
 
   @override
-  Future<void> accept() {
+  Future<void> prepare() {
     // TODO: implement accept
     throw UnimplementedError();
   }
 
   @override
-  Future<void> refuse() {
+  Future<void> cancel() {
     // TODO: implement refuse
     throw UnimplementedError();
   }
@@ -18,29 +18,11 @@ class SignatureTransaction extends Oidc4vpTransaction {
   @override
   TransactionType get transactionType => TransactionType.textSignature;
 
-
   @override
-  Future<List<Uint8List>> getBlockchainSignedTransaction({
-    required CryptoAccountData cryptoAccountData,
-  }) async {
-    throw UnsupportedError(
-      'Blockchain transaction signing is not supported for local '
-      'signature requests.',
-    );
+  Future<void> execute() {
+    // TODO: implement execute
+    throw UnimplementedError();
   }
 
-  List<Map<String, dynamic>> decodeLocalSignatureRequests() {
-    return decodeTransactions()
-        .whereType<Map<String, dynamic>>()
-        .where(Oidc4vpTransaction._isLocalSignatureRequest)
-        .toList();
-  }
 
-  LocalSignRequest? getFirstLocalSignatureRequest() {
-    final localRequests = decodeLocalSignatureRequests();
-    if (localRequests.isEmpty) {
-      return null;
-    }
-    return LocalSignRequest.fromJson(localRequests.first);
-  }
 }
