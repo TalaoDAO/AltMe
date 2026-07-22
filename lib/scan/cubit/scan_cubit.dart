@@ -1,13 +1,10 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
-import 'package:altme/oidc4vp_transaction/data/Blockchain/payment_signature.dart';
-import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
 import 'package:altme/oidc4vp_transaction/domain/transaction_data.dart';
 import 'package:altme/wallet/wallet.dart';
 

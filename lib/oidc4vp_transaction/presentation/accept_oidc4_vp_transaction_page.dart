@@ -9,7 +9,6 @@ import 'package:altme/oidc4vp_transaction/presentation/cubit/transaction_data_cu
 import 'package:altme/oidc4vp_transaction/presentation/transaction_presentation.dart';
 import 'package:altme/oidc4vp_transaction/widget/attestation_list.dart';
 import 'package:altme/oidc4vp_transaction/widget/navigation_buttons.dart';
-import 'package:altme/oidc4vp_transaction/widget/select_crypto_account.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/trusted_list/model/trusted_entity.dart';
 import 'package:altme/trusted_list/widget/trusted_entity_details.dart';
@@ -100,8 +99,8 @@ class _AcceptOidc4VpTransactionPageState
 
                     // TransactionPresentation widget displays decoded
                     // transactions
-                    Padding(
-                      padding: const EdgeInsets.all(8),
+                    const Padding(
+                      padding: EdgeInsets.all(8),
                       child: BackgroundCard(
                         child: TransactionPresentation(),
                       ),
