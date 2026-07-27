@@ -7,28 +7,30 @@ import 'package:meta/meta.dart';
 // Create the proper Oidc4vpTransaction from the transaction_data list.
 // Based on factory method
 class Oidc4vpTransactionFactory {
-  Oidc4vpTransactionFactory({required List<String> transactionData}) {
+  Oidc4vpTransactionFactory({required List<dynamic> transactionData}) {
     transactionList = decodeTransactions(transactionData);
   }
 
   late List<Oidc4vpTransaction> transactionList;
 
   @visibleForTesting
-  List<Oidc4vpTransaction> decodeTransactions(List<String> transactionData) {
+  List<Oidc4vpTransaction> decodeTransactions(List<dynamic> transactionData) {
     final List<Oidc4vpTransaction> decodedTransactions = [];
     for (final tx in transactionData) {
-      final decodedString = utf8.decode(decodeEncodedList(tx));
-      final decodedMap = json.decode(decodedString) as Map<String, dynamic>;
-      final type = transactionType(decodedMap);
-      switch (type) {
-        case TransactionType.cryptoPayment:
-          decodedTransactions.add(
-            PaymentTransaction(transactionJson: decodedMap),
-          );
-        case TransactionType.textSignature:
-          decodedTransactions.add(
-            SignatureTransaction(transactionJson: decodedMap),
-          );
+      if (tx is String) {
+        final decodedString = utf8.decode(decodeEncodedList(tx));
+        final decodedMap = json.decode(decodedString) as Map<String, dynamic>;
+        final type = transactionType(decodedMap);
+        switch (type) {
+          case TransactionType.cryptoPayment:
+            decodedTransactions.add(
+              PaymentTransaction(transactionJson: decodedMap),
+            );
+          case TransactionType.textSignature:
+            decodedTransactions.add(
+              SignatureTransaction(transactionJson: decodedMap),
+            );
+        }
       }
     }
     return decodedTransactions;
@@ -36,10 +38,9 @@ class Oidc4vpTransactionFactory {
 
   @visibleForTesting
   TransactionType transactionType(Map<String, dynamic> decodedMap) {
-    try {
-      return TransactionType.values.byName(decodedMap['type'] as String);
-    } catch (_) {
-      return TransactionType.cryptoPayment;
+    if (decodedMap['type'] == 'urn:wallet:local:signature') {
+      return TransactionType.textSignature;
     }
+    return TransactionType.cryptoPayment;
   }
 }

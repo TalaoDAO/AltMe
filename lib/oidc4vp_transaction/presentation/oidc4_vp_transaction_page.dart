@@ -2,7 +2,8 @@ import 'package:altme/app/shared/dio_client/dio_client.dart';
 import 'package:altme/app/shared/helper_functions/helper_functions.dart';
 import 'package:altme/app/shared/widget/widget.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
-import 'package:altme/dashboard/drawer/blockchain_settings/blockchain_settings.dart';
+import 'package:altme/dashboard/drawer/blockchain_settings/manage_accounts/cubit/manage_accounts_cubit.dart';
+import 'package:altme/dashboard/drawer/blockchain_settings/manage_network/cubit/manage_network_cubit.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/selective_disclosure/cubit/selective_disclosure_pick_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vp_transaction/presentation/cubit/transaction_data_cubit.dart';
@@ -16,8 +17,8 @@ import 'package:altme/trusted_list/widget/trusted_entity_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AcceptOidc4VpTransactionPage extends StatefulWidget {
-  const AcceptOidc4VpTransactionPage({
+class Oidc4VpTransactionPage extends StatefulWidget {
+  const Oidc4VpTransactionPage({
     super.key,
     required this.trustedListEnabled,
     required this.trustedEntity,
@@ -40,23 +41,23 @@ class AcceptOidc4VpTransactionPage extends StatefulWidget {
   }) {
     return MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/AcceptOidc4VpTransactionPage'),
-      builder: (_) => AcceptOidc4VpTransactionPage(
-        trustedListEnabled: trustedListEnabled,
-        trustedEntity: trustedEntity,
-        uri: uri,
-        showPrompt: showPrompt,
-        client: client,
-      ),
+      builder: (_) {
+        return Oidc4VpTransactionPage(
+          trustedListEnabled: trustedListEnabled,
+          trustedEntity: trustedEntity,
+          uri: uri,
+          showPrompt: showPrompt,
+          client: client,
+        );
+      },
     );
   }
 
   @override
-  State<AcceptOidc4VpTransactionPage> createState() =>
-      _AcceptOidc4VpTransactionPageState();
+  State<Oidc4VpTransactionPage> createState() => _Oidc4VpTransactionPageState();
 }
 
-class _AcceptOidc4VpTransactionPageState
-    extends State<AcceptOidc4VpTransactionPage> {
+class _Oidc4VpTransactionPageState extends State<Oidc4VpTransactionPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -66,26 +67,25 @@ class _AcceptOidc4VpTransactionPageState
       transactionData != null,
       'This page is never called if transactionData is null',
     );
-    return BasePage(
-      titleLeading: const BackLeadingButton(),
-      scrollView: true,
-      navigation: const NavigationButtons(),
-      body: BlocProvider(
-        create: (context) =>
-            TransactionDataCubit(transactionData: transactionData!),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              child: BlocProvider(
-                create: (context) => ManageAccountsCubit(
-                  credentialsCubit: context.read<CredentialsCubit>(),
-                  manageNetworkCubit: context.read<ManageNetworkCubit>(),
-                ),
-
+    return BlocProvider(
+      create: (context) =>
+          TransactionDataCubit(transactionData: transactionData!),
+      child: BlocProvider(
+        create: (context) => ManageAccountsCubit(
+          credentialsCubit: context.read<CredentialsCubit>(),
+          manageNetworkCubit: context.read<ManageNetworkCubit>(),
+        ),
+        child: BasePage(
+          titleLeading: const BackLeadingButton(),
+          scrollView: true,
+          navigation: const NavigationButtons(),
+          body: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(16),
                       child: BackgroundCard(
                         child: DisplayEntity(
                           trustedListEnabled: widget.trustedListEnabled,
@@ -100,10 +100,8 @@ class _AcceptOidc4VpTransactionPageState
                     // TransactionPresentation widget displays decoded
                     // transactions
                     const Padding(
-                      padding: EdgeInsets.all(8),
-                      child: BackgroundCard(
-                        child: TransactionPresentation(),
-                      ),
+                      padding: EdgeInsets.all(16),
+                      child: BackgroundCard(child: TransactionPresentation()),
                     ),
 
                     Padding(
@@ -118,9 +116,9 @@ class _AcceptOidc4VpTransactionPageState
                     ),
                   ],
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

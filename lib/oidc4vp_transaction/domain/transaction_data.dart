@@ -4,18 +4,14 @@ import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 class TransactionData {
-  TransactionData({
-    required this.transactionData,
-    required this.transactions,
-  }) {
-            for (final element in transactionData) {
-          transactionDataHashes.add(sh256Hash(jsonEncode(element)));
-        }
-
+  TransactionData({required this.transactionData, required this.transactions}) {
+    for (final element in transactionData) {
+      transactionDataHashes.add(sh256Hash(jsonEncode(element)));
+    }
   }
 
   late List<String> transactionDataHashes = [];
-  final List<String> transactionData;
+  final List<dynamic> transactionData;
   final List<Oidc4vpTransaction> transactions;
 
   Future<void> prepare() async {

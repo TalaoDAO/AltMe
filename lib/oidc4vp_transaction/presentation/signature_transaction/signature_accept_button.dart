@@ -23,95 +23,94 @@ class SignatureAcceptButton extends StatelessWidget {
     final l10n = context.l10n;
 
     return MyElevatedButton(
-      text: l10n.pay,
+      text: l10n.sign,
       onPressed: () async {
         /// prepare the transactions with the selected account
         final uri = context.read<QRCodeScanCubit>().state.uri!;
 
-          final scanState = context.read<ScanCubit>().state;
-          final credentialsToBePresented = <CredentialModel>[];
+        final scanState = context.read<ScanCubit>().state;
+        final credentialsToBePresented = <CredentialModel>[];
 
-          /// add the jwtToken to the selectivedisclosureJwt of each credential
-          ///
-          final profileCubit = context.read<ProfileCubit>();
+        /// add the jwtToken to the selectivedisclosureJwt of each credential
+        ///
+        final profileCubit = context.read<ProfileCubit>();
 
-          final customOidc4vcProfile = profileCubit
-              .state
-              .model
-              .profileSetting
-              .selfSovereignIdentityOptions
-              .customOidc4vcProfile;
+        final customOidc4vcProfile = profileCubit
+            .state
+            .model
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile;
 
-          final didKeyType = customOidc4vcProfile.defaultDid;
+        final didKeyType = customOidc4vcProfile.defaultDid;
 
-          final privateKey = await fetchPrivateKey(
-            profileCubit: profileCubit,
-            didKeyType: didKeyType,
+        final privateKey = await fetchPrivateKey(
+          profileCubit: profileCubit,
+          didKeyType: didKeyType,
+        );
+
+        for (final credential in scanState.credentialsToBePresented!) {
+          // Key Binding JWT
+
+          final tokenParameters = TokenParameters(
+            privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
+            did: '', // just added as it is required field
+            mediaType: MediaType.selectiveDisclosure,
+            clientType: ClientType
+                .p256JWKThumprint, // just added as it is required field
+            proofHeaderType: customOidc4vcProfile.proofHeader,
+            clientId: '', // just added as it is required field
           );
 
-          for (final credential in scanState.credentialsToBePresented!) {
-            // Key Binding JWT
+          final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+          var newJwt = credential.selectiveDisclosureJwt!;
+          final sdHash = sh256Hash(newJwt);
 
-            final tokenParameters = TokenParameters(
-              privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
-              did: '', // just added as it is required field
-              mediaType: MediaType.selectiveDisclosure,
-              clientType: ClientType
-                  .p256JWKThumprint, // just added as it is required field
-              proofHeaderType: customOidc4vcProfile.proofHeader,
-              clientId: '', // just added as it is required field
+          final nonce = uri.queryParameters['nonce'] ?? '';
+          final clientId = uri.queryParameters['client_id'] ?? '';
+
+          final payload = {
+            'nonce': nonce,
+            'aud': clientId,
+            'iat': iat,
+            'sd_hash': sdHash,
+          };
+          // In case of OIDC4VP transaction we need to add the hash of each
+          // element of transactiondata into the payload
+
+          // If there no cnf in the payload, then no need to add signature
+          if (credential.data['cnf'] != null) {
+            /// sign and get token
+            final jwtToken = generateToken(
+              payload: payload,
+              tokenParameters: tokenParameters,
+              ignoreProofHeaderType: true,
             );
 
-            final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-            var newJwt = credential.selectiveDisclosureJwt!;
-            final sdHash = sh256Hash(newJwt);
-
-            final nonce = uri.queryParameters['nonce'] ?? '';
-            final clientId = uri.queryParameters['client_id'] ?? '';
-
-            final payload = {
-              'nonce': nonce,
-              'aud': clientId,
-              'iat': iat,
-              'sd_hash': sdHash,
-            };
-            // In case of OIDC4VP transaction we need to add the hash of each
-            // element of transactiondata into the payload
-
-
-            // If there no cnf in the payload, then no need to add signature
-            if (credential.data['cnf'] != null) {
-              /// sign and get token
-              final jwtToken = generateToken(
-                payload: payload,
-                tokenParameters: tokenParameters,
-                ignoreProofHeaderType: true,
-              );
-
-              newJwt = '$newJwt$jwtToken';
-            }
-
-            final CredentialModel newModel = credential.copyWith(
-              selectiveDisclosureJwt: newJwt,
-            );
-
-            final credToBePresented = [newModel];
-
-            credentialsToBePresented.addAll(credToBePresented);
+            newJwt = '$newJwt$jwtToken';
           }
 
-          final qrCodeScanCubit = context.read<QRCodeScanCubit>();
-
-          /// present the credentials and run the transactions
-          await context.read<ScanCubit>().credentialOfferOrPresent(
-            uri: uri,
-            credentialModel: scanState.credentialPresentation!,
-            keyId: SecureStorageKeys.ssiKey,
-            credentialsToBePresented: credentialsToBePresented,
-            issuer: scanState.presentationIssuer!,
-            qrCodeScanCubit: qrCodeScanCubit,
+          final CredentialModel newModel = credential.copyWith(
+            selectiveDisclosureJwt: newJwt,
           );
-          Navigator.of(context).pop();
+
+          final credToBePresented = [newModel];
+
+          credentialsToBePresented.addAll(credToBePresented);
+        }
+
+        final qrCodeScanCubit = context.read<QRCodeScanCubit>();
+
+        /// present the credentials and run the transactions
+        await context.read<ScanCubit>().credentialOfferOrPresent(
+          uri: uri,
+          credentialModel: scanState.credentialPresentation!,
+          keyId: SecureStorageKeys.ssiKey,
+          credentialsToBePresented: credentialsToBePresented,
+          issuer: scanState.presentationIssuer!,
+          qrCodeScanCubit: qrCodeScanCubit,
+        );
+        Navigator.of(context).pop();
       },
     );
   }
