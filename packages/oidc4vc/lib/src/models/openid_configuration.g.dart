@@ -40,7 +40,8 @@ OpenIdConfiguration _$OpenIdConfigurationFromJson(Map<String, dynamic> json) =>
       credentialManifest: json['credential_manifest'] == null
           ? null
           : CredentialManifest.fromJson(
-              json['credential_manifest'] as Map<String, dynamic>),
+              json['credential_manifest'] as Map<String, dynamic>,
+            ),
       credentialManifests: (json['credential_manifests'] as List<dynamic>?)
           ?.map((e) => CredentialManifest.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -54,67 +55,67 @@ OpenIdConfiguration _$OpenIdConfigurationFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$OpenIdConfigurationToJson(
-        OpenIdConfiguration instance) =>
-    <String, dynamic>{
-      'authorization_server': instance.authorizationServer,
-      'authorization_servers': instance.authorizationServers,
-      'credential_endpoint': instance.credentialEndpoint,
-      'credential_issuer': instance.credentialIssuer,
-      'display': instance.display,
-      'subject_syntax_types_supported': instance.subjectSyntaxTypesSupported,
-      'token_endpoint': instance.tokenEndpoint,
-      'nonce_endpoint': instance.nonceEndpoint,
-      'batch_endpoint': instance.batchEndpoint,
-      'authorization_endpoint': instance.authorizationEndpoint,
-      'pushed_authorization_request_endpoint':
-          instance.pushedAuthorizationRequestEndpoint,
-      'subject_trust_frameworks_supported':
-          instance.subjectTrustFrameworksSupported,
-      'credentials_supported': instance.credentialsSupported,
-      'credential_configurations_supported':
-          instance.credentialConfigurationsSupported,
-      'deferred_credential_endpoint': instance.deferredCredentialEndpoint,
-      'service_documentation': instance.serviceDocumentation,
-      'credential_manifest': instance.credentialManifest,
-      'credential_manifests': instance.credentialManifests,
-      'issuer': instance.issuer,
-      'jwks_uri': instance.jwksUri,
-      'jwks': instance.jwks,
-      'require_pushed_authorization_requests':
-          instance.requirePushedAuthorizationRequests,
-      'grant_types_supported': instance.grantTypesSupported,
-      'signed_metadata': instance.signedMetadata,
-    };
+  OpenIdConfiguration instance,
+) => <String, dynamic>{
+  'authorization_server': instance.authorizationServer,
+  'authorization_servers': instance.authorizationServers,
+  'credential_endpoint': instance.credentialEndpoint,
+  'credential_issuer': instance.credentialIssuer,
+  'display': instance.display,
+  'subject_syntax_types_supported': instance.subjectSyntaxTypesSupported,
+  'token_endpoint': instance.tokenEndpoint,
+  'nonce_endpoint': instance.nonceEndpoint,
+  'batch_endpoint': instance.batchEndpoint,
+  'authorization_endpoint': instance.authorizationEndpoint,
+  'pushed_authorization_request_endpoint':
+      instance.pushedAuthorizationRequestEndpoint,
+  'subject_trust_frameworks_supported':
+      instance.subjectTrustFrameworksSupported,
+  'credentials_supported': instance.credentialsSupported,
+  'credential_configurations_supported':
+      instance.credentialConfigurationsSupported,
+  'deferred_credential_endpoint': instance.deferredCredentialEndpoint,
+  'service_documentation': instance.serviceDocumentation,
+  'credential_manifest': instance.credentialManifest,
+  'credential_manifests': instance.credentialManifests,
+  'issuer': instance.issuer,
+  'jwks_uri': instance.jwksUri,
+  'jwks': instance.jwks,
+  'require_pushed_authorization_requests':
+      instance.requirePushedAuthorizationRequests,
+  'grant_types_supported': instance.grantTypesSupported,
+  'signed_metadata': instance.signedMetadata,
+};
 
 CredentialsSupported _$CredentialsSupportedFromJson(
-        Map<String, dynamic> json) =>
-    CredentialsSupported(
-      display: (json['display'] as List<dynamic>?)
-          ?.map((e) => Display.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      format: json['format'] as String?,
-      trustFramework: json['trust_framework'] == null
-          ? null
-          : TrustFramework.fromJson(
-              json['trust_framework'] as Map<String, dynamic>),
-      types:
-          (json['types'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      id: json['id'] as String?,
-      scope: json['scope'] as String?,
-      credentialSubject: json['credentialSubject'],
-    );
+  Map<String, dynamic> json,
+) => CredentialsSupported(
+  display: (json['display'] as List<dynamic>?)
+      ?.map((e) => Display.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  format: json['format'] as String?,
+  trustFramework: json['trust_framework'] == null
+      ? null
+      : TrustFramework.fromJson(
+          json['trust_framework'] as Map<String, dynamic>,
+        ),
+  types: (json['types'] as List<dynamic>?)?.map((e) => e as String).toList(),
+  id: json['id'] as String?,
+  scope: json['scope'] as String?,
+  credentialSubject: json['credentialSubject'],
+);
 
 Map<String, dynamic> _$CredentialsSupportedToJson(
-        CredentialsSupported instance) =>
-    <String, dynamic>{
-      'display': instance.display,
-      'format': instance.format,
-      'trust_framework': instance.trustFramework,
-      'types': instance.types,
-      'id': instance.id,
-      'scope': instance.scope,
-      'credentialSubject': instance.credentialSubject,
-    };
+  CredentialsSupported instance,
+) => <String, dynamic>{
+  'display': instance.display,
+  'format': instance.format,
+  'trust_framework': instance.trustFramework,
+  'types': instance.types,
+  'id': instance.id,
+  'scope': instance.scope,
+  'credentialSubject': instance.credentialSubject,
+};
 
 TrustFramework _$TrustFrameworkFromJson(Map<String, dynamic> json) =>
     TrustFramework(
@@ -131,29 +132,30 @@ Map<String, dynamic> _$TrustFrameworkToJson(TrustFramework instance) =>
     };
 
 Display _$DisplayFromJson(Map<String, dynamic> json) => Display(
-      locale: json['locale'] as String?,
-      name: json['name'] as String?,
-      description: json['description'] as String?,
-      textColor: json['text_color'] as String?,
-      backgroundColor: json['background_color'] as String?,
-      backgroundImage: json['background_image'] == null
-          ? null
-          : DisplayDetails.fromJson(
-              json['background_image'] as Map<String, dynamic>),
-      logo: json['logo'] == null
-          ? null
-          : DisplayDetails.fromJson(json['logo'] as Map<String, dynamic>),
-    );
+  locale: json['locale'] as String?,
+  name: json['name'] as String?,
+  description: json['description'] as String?,
+  textColor: json['text_color'] as String?,
+  backgroundColor: json['background_color'] as String?,
+  backgroundImage: json['background_image'] == null
+      ? null
+      : DisplayDetails.fromJson(
+          json['background_image'] as Map<String, dynamic>,
+        ),
+  logo: json['logo'] == null
+      ? null
+      : DisplayDetails.fromJson(json['logo'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$DisplayToJson(Display instance) => <String, dynamic>{
-      'locale': instance.locale,
-      'name': instance.name,
-      'description': instance.description,
-      'text_color': instance.textColor,
-      'background_color': instance.backgroundColor,
-      'background_image': instance.backgroundImage,
-      'logo': instance.logo,
-    };
+  'locale': instance.locale,
+  'name': instance.name,
+  'description': instance.description,
+  'text_color': instance.textColor,
+  'background_color': instance.backgroundColor,
+  'background_image': instance.backgroundImage,
+  'logo': instance.logo,
+};
 
 DisplayDetails _$DisplayDetailsFromJson(Map<String, dynamic> json) =>
     DisplayDetails(

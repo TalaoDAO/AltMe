@@ -99,10 +99,7 @@ class _Oidc4VpTransactionPageState extends State<Oidc4VpTransactionPage> {
 
                     // TransactionPresentation widget displays decoded
                     // transactions
-                    const Padding(
-                      padding: EdgeInsets.all(16),
-                      child: BackgroundCard(child: TransactionPresentation()),
-                    ),
+                    const TransactionPresentation(),
 
                     Padding(
                       padding: const EdgeInsets.all(16),
