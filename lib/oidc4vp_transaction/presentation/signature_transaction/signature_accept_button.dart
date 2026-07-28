@@ -9,6 +9,7 @@ import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.da
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -69,11 +70,25 @@ class SignatureAcceptButton extends StatelessWidget {
           final nonce = uri.queryParameters['nonce'] ?? '';
           final clientId = uri.queryParameters['client_id'] ?? '';
 
+          final documentDigest = signatureTransaction
+              .transactionJson['signatureRequests'][0]['documentDigest'];
+          final jwt = JWT({'documentDigest': documentDigest});
+
+          final signature = jwt.sign(SecretKey(privateKey));
+          // split the signature with separator .
+          final splitSignature = signature.split('.');
+          final documentSignature = {
+            'format': 'jws-detached',
+            'signature': '${splitSignature[0]}..${splitSignature[2]}',
+            'documentDigest': documentDigest,
+          };
+
           final payload = {
             'nonce': nonce,
             'aud': clientId,
             'iat': iat,
             'sd_hash': sdHash,
+            'document_signature': documentSignature,
           };
           // In case of OIDC4VP transaction we need to add the hash of each
           // element of transactiondata into the payload
