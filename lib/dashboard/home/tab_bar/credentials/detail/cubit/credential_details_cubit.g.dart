@@ -7,30 +7,34 @@ part of 'credential_details_cubit.dart';
 // **************************************************************************
 
 CredentialDetailsState _$CredentialDetailsStateFromJson(
-        Map<String, dynamic> json) =>
-    CredentialDetailsState(
-      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
-          AppStatus.init,
-      message: json['message'] == null
-          ? null
-          : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-      credentialStatus: $enumDecodeNullable(
-          _$CredentialStatusEnumMap, json['credentialStatus']),
-      credentialDetailTabStatus: $enumDecodeNullable(
-              _$CredentialDetailTabStatusEnumMap,
-              json['credentialDetailTabStatus']) ??
-          CredentialDetailTabStatus.informations,
-    );
+  Map<String, dynamic> json,
+) => CredentialDetailsState(
+  status:
+      $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ?? AppStatus.init,
+  message: json['message'] == null
+      ? null
+      : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
+  credentialStatus: $enumDecodeNullable(
+    _$CredentialStatusEnumMap,
+    json['credentialStatus'],
+  ),
+  credentialDetailTabStatus:
+      $enumDecodeNullable(
+        _$CredentialDetailTabStatusEnumMap,
+        json['credentialDetailTabStatus'],
+      ) ??
+      CredentialDetailTabStatus.informations,
+);
 
 Map<String, dynamic> _$CredentialDetailsStateToJson(
-        CredentialDetailsState instance) =>
-    <String, dynamic>{
-      'status': _$AppStatusEnumMap[instance.status]!,
-      'message': instance.message,
-      'credentialStatus': _$CredentialStatusEnumMap[instance.credentialStatus],
-      'credentialDetailTabStatus': _$CredentialDetailTabStatusEnumMap[
-          instance.credentialDetailTabStatus]!,
-    };
+  CredentialDetailsState instance,
+) => <String, dynamic>{
+  'status': _$AppStatusEnumMap[instance.status]!,
+  'message': instance.message,
+  'credentialStatus': _$CredentialStatusEnumMap[instance.credentialStatus],
+  'credentialDetailTabStatus':
+      _$CredentialDetailTabStatusEnumMap[instance.credentialDetailTabStatus]!,
+};
 
 const _$AppStatusEnumMap = {
   AppStatus.init: 'init',

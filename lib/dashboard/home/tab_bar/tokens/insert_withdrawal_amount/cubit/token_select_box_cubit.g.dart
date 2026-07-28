@@ -7,12 +7,8 @@ part of 'token_select_box_cubit.dart';
 // **************************************************************************
 
 TokenSelectBoxState _$TokenSelectBoxStateFromJson(Map<String, dynamic> json) =>
-    TokenSelectBoxState(
-      isLoading: json['isLoading'] as bool? ?? false,
-    );
+    TokenSelectBoxState(isLoading: json['isLoading'] as bool? ?? false);
 
 Map<String, dynamic> _$TokenSelectBoxStateToJson(
-        TokenSelectBoxState instance) =>
-    <String, dynamic>{
-      'isLoading': instance.isLoading,
-    };
+  TokenSelectBoxState instance,
+) => <String, dynamic>{'isLoading': instance.isLoading};

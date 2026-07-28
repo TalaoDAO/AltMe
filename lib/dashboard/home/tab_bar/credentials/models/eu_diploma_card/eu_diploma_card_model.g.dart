@@ -12,54 +12,49 @@ EUDiplomaCardModel _$EUDiplomaCardModelFromJson(Map<String, dynamic> json) =>
       awardingOpportunity: json['awardingOpportunity'] == null
           ? null
           : AwardingOpportunity.fromJson(
-              json['awardingOpportunity'] as Map<String, dynamic>),
+              json['awardingOpportunity'] as Map<String, dynamic>,
+            ),
       dateOfBirth: json['dateOfBirth'] as String? ?? '',
       familyName: json['familyName'] as String? ?? '',
       givenNames: json['givenNames'] as String? ?? '',
       gradingScheme: json['gradingScheme'] == null
           ? null
           : GradingScheme.fromJson(
-              json['gradingScheme'] as Map<String, dynamic>),
+              json['gradingScheme'] as Map<String, dynamic>,
+            ),
       identifier: json['identifier'] as String? ?? '',
       learningAchievement: json['learningAchievement'] == null
           ? null
           : LearningAchievement.fromJson(
-              json['learningAchievement'] as Map<String, dynamic>),
+              json['learningAchievement'] as Map<String, dynamic>,
+            ),
       learningSpecification: json['learningSpecification'] == null
           ? null
           : LearningSpecification.fromJson(
-              json['learningSpecification'] as Map<String, dynamic>),
+              json['learningSpecification'] as Map<String, dynamic>,
+            ),
       id: json['id'] as String?,
       type: json['type'],
       issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
     );
 
-Map<String, dynamic> _$EUDiplomaCardModelToJson(EUDiplomaCardModel instance) {
-  final val = <String, dynamic>{
-    'id': instance.id,
-    'type': instance.type,
-    'issuedBy': instance.issuedBy?.toJson(),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('offeredBy', instance.offeredBy?.toJson());
-  val['expires'] = instance.expires;
-  val['awardingOpportunity'] = instance.awardingOpportunity?.toJson();
-  val['dateOfBirth'] = instance.dateOfBirth;
-  val['familyName'] = instance.familyName;
-  val['givenNames'] = instance.givenNames;
-  val['gradingScheme'] = instance.gradingScheme?.toJson();
-  val['identifier'] = instance.identifier;
-  val['learningAchievement'] = instance.learningAchievement?.toJson();
-  val['learningSpecification'] = instance.learningSpecification?.toJson();
-  return val;
-}
+Map<String, dynamic> _$EUDiplomaCardModelToJson(EUDiplomaCardModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'type': instance.type,
+      'issuedBy': instance.issuedBy?.toJson(),
+      'offeredBy': ?instance.offeredBy?.toJson(),
+      'expires': instance.expires,
+      'awardingOpportunity': instance.awardingOpportunity?.toJson(),
+      'dateOfBirth': instance.dateOfBirth,
+      'familyName': instance.familyName,
+      'givenNames': instance.givenNames,
+      'gradingScheme': instance.gradingScheme?.toJson(),
+      'identifier': instance.identifier,
+      'learningAchievement': instance.learningAchievement?.toJson(),
+      'learningSpecification': instance.learningSpecification?.toJson(),
+    };
 
 AwardingOpportunity _$AwardingOpportunityFromJson(Map<String, dynamic> json) =>
     AwardingOpportunity(
@@ -74,23 +69,23 @@ AwardingOpportunity _$AwardingOpportunityFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$AwardingOpportunityToJson(
-        AwardingOpportunity instance) =>
-    <String, dynamic>{
-      'awardingBody': instance.awardingBody?.toJson(),
-      'endedAtTime': instance.endedAtTime,
-      'id': instance.id,
-      'identifier': instance.identifier,
-      'location': instance.location,
-      'startedAtTime': instance.startedAtTime,
-    };
+  AwardingOpportunity instance,
+) => <String, dynamic>{
+  'awardingBody': instance.awardingBody?.toJson(),
+  'endedAtTime': instance.endedAtTime,
+  'id': instance.id,
+  'identifier': instance.identifier,
+  'location': instance.location,
+  'startedAtTime': instance.startedAtTime,
+};
 
 AwardingBody _$AwardingBodyFromJson(Map<String, dynamic> json) => AwardingBody(
-      eidasLegalIdentifier: json['eidasLegalIdentifier'] as String? ?? '',
-      homepage: json['homepage'] as String? ?? '',
-      id: json['id'] as String? ?? '',
-      preferredName: json['preferredName'] as String? ?? '',
-      registration: json['registration'] as String? ?? '',
-    );
+  eidasLegalIdentifier: json['eidasLegalIdentifier'] as String? ?? '',
+  homepage: json['homepage'] as String? ?? '',
+  id: json['id'] as String? ?? '',
+  preferredName: json['preferredName'] as String? ?? '',
+  registration: json['registration'] as String? ?? '',
+);
 
 Map<String, dynamic> _$AwardingBodyToJson(AwardingBody instance) =>
     <String, dynamic>{
@@ -108,10 +103,7 @@ GradingScheme _$GradingSchemeFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$GradingSchemeToJson(GradingScheme instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'title': instance.title,
-    };
+    <String, dynamic>{'id': instance.id, 'title': instance.title};
 
 LearningAchievement _$LearningAchievementFromJson(Map<String, dynamic> json) =>
     LearningAchievement(
@@ -124,30 +116,30 @@ LearningAchievement _$LearningAchievementFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$LearningAchievementToJson(
-        LearningAchievement instance) =>
-    <String, dynamic>{
-      'additionalNote': instance.additionalNote,
-      'description': instance.description,
-      'id': instance.id,
-      'title': instance.title,
-    };
+  LearningAchievement instance,
+) => <String, dynamic>{
+  'additionalNote': instance.additionalNote,
+  'description': instance.description,
+  'id': instance.id,
+  'title': instance.title,
+};
 
 LearningSpecification _$LearningSpecificationFromJson(
-        Map<String, dynamic> json) =>
-    LearningSpecification(
-      ectsCreditPoints: json['ectsCreditPoints'],
-      eqfLevel: json['eqfLevel'],
-      id: json['id'] as String? ?? '',
-      iscedfCode: json['iscedfCode'] as List<dynamic>?,
-      nqfLevel: json['nqfLevel'] as List<dynamic>?,
-    );
+  Map<String, dynamic> json,
+) => LearningSpecification(
+  ectsCreditPoints: json['ectsCreditPoints'],
+  eqfLevel: json['eqfLevel'],
+  id: json['id'] as String? ?? '',
+  iscedfCode: json['iscedfCode'] as List<dynamic>?,
+  nqfLevel: json['nqfLevel'] as List<dynamic>?,
+);
 
 Map<String, dynamic> _$LearningSpecificationToJson(
-        LearningSpecification instance) =>
-    <String, dynamic>{
-      'ectsCreditPoints': instance.ectsCreditPoints,
-      'eqfLevel': instance.eqfLevel,
-      'id': instance.id,
-      'iscedfCode': instance.iscedfCode,
-      'nqfLevel': instance.nqfLevel,
-    };
+  LearningSpecification instance,
+) => <String, dynamic>{
+  'ectsCreditPoints': instance.ectsCreditPoints,
+  'eqfLevel': instance.eqfLevel,
+  'id': instance.id,
+  'iscedfCode': instance.iscedfCode,
+  'nqfLevel': instance.nqfLevel,
+};

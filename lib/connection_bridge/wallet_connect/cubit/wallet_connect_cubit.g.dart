@@ -10,7 +10,7 @@ WalletConnectState _$WalletConnectStateFromJson(Map<String, dynamic> json) =>
     WalletConnectState(
       status:
           $enumDecodeNullable(_$WalletConnectStatusEnumMap, json['status']) ??
-              WalletConnectStatus.init,
+          WalletConnectStatus.init,
       message: json['message'] == null
           ? null
           : StateMessage.fromJson(json['message'] as Map<String, dynamic>),

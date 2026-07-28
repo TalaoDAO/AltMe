@@ -7,21 +7,21 @@ part of 'confirm_connection_cubit.dart';
 // **************************************************************************
 
 ConfirmConnectionState _$ConfirmConnectionStateFromJson(
-        Map<String, dynamic> json) =>
-    ConfirmConnectionState(
-      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
-          AppStatus.init,
-      message: json['message'] == null
-          ? null
-          : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-    );
+  Map<String, dynamic> json,
+) => ConfirmConnectionState(
+  status:
+      $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ?? AppStatus.init,
+  message: json['message'] == null
+      ? null
+      : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$ConfirmConnectionStateToJson(
-        ConfirmConnectionState instance) =>
-    <String, dynamic>{
-      'status': _$AppStatusEnumMap[instance.status]!,
-      'message': instance.message,
-    };
+  ConfirmConnectionState instance,
+) => <String, dynamic>{
+  'status': _$AppStatusEnumMap[instance.status]!,
+  'message': instance.message,
+};
 
 const _$AppStatusEnumMap = {
   AppStatus.init: 'init',

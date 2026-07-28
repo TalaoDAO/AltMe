@@ -8,7 +8,8 @@ part of 'recovery_key_cubit.dart';
 
 RecoveryKeyState _$RecoveryKeyStateFromJson(Map<String, dynamic> json) =>
     RecoveryKeyState(
-      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+      status:
+          $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
           AppStatus.init,
       message: json['message'] == null
           ? null

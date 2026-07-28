@@ -8,7 +8,8 @@ part of 'import_account_cubit.dart';
 
 ImportAccountState _$ImportAccountStateFromJson(Map<String, dynamic> json) =>
     ImportAccountState(
-      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+      status:
+          $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
           AppStatus.init,
       message: json['message'] == null
           ? null
@@ -17,7 +18,7 @@ ImportAccountState _$ImportAccountStateFromJson(Map<String, dynamic> json) =>
       isMnemonicOrKeyValid: json['isMnemonicOrKeyValid'] as bool? ?? false,
       accountType:
           $enumDecodeNullable(_$AccountTypeEnumMap, json['accountType']) ??
-              AccountType.tezos,
+          AccountType.tezos,
     );
 
 Map<String, dynamic> _$ImportAccountStateToJson(ImportAccountState instance) =>
