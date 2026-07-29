@@ -1,4 +1,5 @@
 import 'package:altme/app/shared/dio_client/dio_client.dart';
+import 'package:altme/app/shared/widget/base/background_card.dart';
 import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -34,42 +35,49 @@ class SignaturePresentation extends StatelessWidget {
     final href = signatureRequest['href'] as String? ?? '';
 
     return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        children: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(
-                label,
-                style: Theme.of(context).textTheme.headlineSmall!.copyWith(),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: FutureBuilder<String>(
-              future: _fetchTextFromHref(href),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const SizedBox.shrink();
-                }
-                return Center(
+      padding: const EdgeInsets.all(16),
+      child: BackgroundCard(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            children: [
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
                   child: Text(
-                    snapshot.data!,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    label,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.headlineSmall!.copyWith(),
                     textAlign: TextAlign.center,
                   ),
-                );
-              },
-            ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: FutureBuilder<String>(
+                  future: _fetchTextFromHref(href),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+                    return Center(
+                      child: Text(
+                        snapshot.data!,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

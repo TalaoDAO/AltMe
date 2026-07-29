@@ -20,7 +20,7 @@ class PaymentPresentation extends StatelessWidget {
     final purpose = uiHints['purpose'] as String? ?? '';
     final image = uiHints['icon_uri'] as String? ?? '';
     return Padding(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           BackgroundCard(
