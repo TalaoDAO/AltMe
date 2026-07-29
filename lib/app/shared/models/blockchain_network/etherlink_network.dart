@@ -43,7 +43,7 @@ class EtherlinkNetwork extends EthereumNetwork {
     apiUrl: 'https://testnet.explorer.etherlink.com/api',
     chain: 'etherlink-testnet',
     chainId: 128123,
-    rpcNodeUrl: 'https://node.ghostnet.etherlink.com',
+    rpcNodeUrl: 'https://node.shadownet.etherlink.com',
     title: 'Etherlink Testnet',
     subTitle:
         'This network is used to test protocol upgrades'
