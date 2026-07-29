@@ -16,18 +16,18 @@ import 'package:altme/dashboard/home/tab_bar/tokens/token_page/cubit/tokens_cubi
 import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
 import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
 import 'package:altme/oidc4vp_transaction/helper/decode_erc20_transfert.dart';
-import 'package:altme/oidc4vp_transaction/helper/get_decoded_transaction.dart';
-import 'package:altme/oidc4vp_transaction/oidc4vp_signature.dart';
-import 'package:altme/oidc4vp_transaction/oidc4vp_transaction.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
-class AcceptButton extends StatelessWidget {
-  const AcceptButton({super.key});
+class PaymentAcceptButton extends StatelessWidget {
+  const PaymentAcceptButton(this.paymentTransaction, {super.key});
+
+  final PaymentTransaction paymentTransaction;
 
   @override
   Widget build(BuildContext context) {
@@ -36,24 +36,19 @@ class AcceptButton extends StatelessWidget {
     return MyElevatedButton(
       text: l10n.pay,
       onPressed: () async {
-        // TODO(hawkbee): Check the balance of the selected account.
-        // for each transaction
-
         /// prepare the transactions with the selected account
         final uri = context.read<QRCodeScanCubit>().state.uri!;
-        final scanCubit = context.read<ScanCubit>();
-        final transactionData = scanCubit.state.transactionData;
-        // check balance of the selected account
-        final List<dynamic> decodedTransactions = getDecodedTransactions(
-          context,
-        );
-        final transaction = decodedTransactions[0] as Map<String, dynamic>;
         final contractAddress =
-            transaction['rpc']['params'][0]['to'] as String? ?? '';
+            paymentTransaction.transactionJson['rpc']['params'][0]['to']
+                as String? ??
+            '';
         final amount = decodeErc20Transfer(
-          txData: transaction['rpc']['params'][0]['data']?.toString() ?? '',
+          txData:
+              paymentTransaction.transactionJson['rpc']['params'][0]['data']
+                  ?.toString() ??
+              '',
         );
-        if (transaction['chain_id'] == 11155111) {
+        if (paymentTransaction.transactionJson['chain_id'] == 11155111) {
           await context.read<ManageNetworkCubit>().setNetwork(
             EthereumNetwork.testNet(),
           );
@@ -102,15 +97,9 @@ class AcceptButton extends StatelessWidget {
               .read<WalletCubit>()
               .state
               .currentAccount!;
-          final oidc4vpTransaction = Oidc4vpTransaction(
-            transactionData: transactionData!,
+          await paymentTransaction.addBlockchainSignedTransaction(
+            cryptoAccountData: cryptoAccountData,
           );
-          await scanCubit.addBlockchainTransaction(
-            await oidc4vpTransaction.getBlockchainSignedTransaction(
-              cryptoAccountData: cryptoAccountData,
-            ),
-          );
-          final qrCodeScanCubit = context.read<QRCodeScanCubit>();
 
           final bool userPINCodeForAuthentication = context
               .read<ProfileCubit>()
@@ -192,42 +181,13 @@ class AcceptButton extends StatelessWidget {
             };
             // In case of OIDC4VP transaction we need to add the hash of each
             // element of transactiondata into the payload
+
+            await paymentTransaction.execute();
+            payload['blockchain_transaction_hashes'] =
+                paymentTransaction.blockchainTransactionHashes;
             final scanCubit = context.read<ScanCubit>();
-            final transactionData = scanCubit.state.transactionData;
-
-            if (transactionData != null) {
-              /// create list of chain ids from transaction data
-              final List<int> chainIds = [];
-              final oidc4vpTransaction = Oidc4vpTransaction(
-                transactionData: transactionData,
-              );
-              final decodedTransactions = oidc4vpTransaction
-                  .decodeTransactions();
-
-              for (final tx in decodedTransactions) {
-                final decodedMap = tx as Map<String, dynamic>;
-                final chainId =
-                    int.tryParse(decodedMap['chain_id']?.toString() ?? '1') ??
-                    1;
-                chainIds.add(chainId);
-              }
-
-              final Oidc4vpSignedTransaction oidc4vpSignedTransaction =
-                  Oidc4vpSignedTransaction(
-                    signedTransaction:
-                        scanCubit.state.blockchainTransactionsSignatures!,
-                    signedTransactionChainIds: chainIds,
-                  );
-
-              payload['blockchain_transaction_hashes'] =
-                  oidc4vpSignedTransaction.getSignedTransactionHashes();
-
-              final List<String> transactionDataHashes = [];
-              for (final element in transactionData) {
-                transactionDataHashes.add(sh256Hash(jsonEncode(element)));
-              }
-              payload['transaction_data_hashes'] = transactionDataHashes;
-            }
+            payload['transaction_data_hashes'] =
+                scanCubit.state.transactionData!.transactionDataHashes;
 
             // If there no cnf in the payload, then no need to add signature
             if (credential.data['cnf'] != null) {
@@ -249,6 +209,8 @@ class AcceptButton extends StatelessWidget {
 
             credentialsToBePresented.addAll(credToBePresented);
           }
+
+          final qrCodeScanCubit = context.read<QRCodeScanCubit>();
 
           /// present the credentials and run the transactions
           await context.read<ScanCubit>().credentialOfferOrPresent(

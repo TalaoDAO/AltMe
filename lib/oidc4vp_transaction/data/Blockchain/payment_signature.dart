@@ -5,8 +5,8 @@ import 'package:altme/app/shared/models/blockchain_network/blockchain_network_he
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Represents a list of blockchain transactions encoded as base64 strings.
-class Oidc4vpSignedTransaction {
-  Oidc4vpSignedTransaction({
+class PaymentSignature {
+  PaymentSignature({
     required this.signedTransaction,
     required this.signedTransactionChainIds,
   });

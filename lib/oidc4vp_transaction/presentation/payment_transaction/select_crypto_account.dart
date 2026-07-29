@@ -1,7 +1,7 @@
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/dashboard/crypto_account_switcher/crypto_bottom_sheet/widgets/crypto_accont_item.dart';
 import 'package:altme/dashboard/drawer/blockchain_settings/manage_accounts/cubit/manage_accounts_cubit.dart';
-import 'package:altme/oidc4vp_transaction/helper/get_decoded_transaction.dart';
+import 'package:altme/oidc4vp_transaction/presentation/cubit/transaction_data_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,15 +26,12 @@ class SelectCryptoAccount extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        final List<dynamic> decodedTransactions = getDecodedTransactions(
-          context,
-        );
+        return BlocBuilder<TransactionDataCubit, TransactionDataState>(
+          builder: (contextTransaction, stateTransaction) {
+                    // Create a list of chain_id from decodedTransactions
+final transactionJson = stateTransaction.currentTransaction.transactionJson;
 
-        // Create a list of chain_id from decodedTransactions
-        final List<dynamic> chainIdList = decodedTransactions
-            .map((tx) => tx['chain_id'])
-            .toList();
-
+        final List<dynamic> chainIdList = [transactionJson['chain_id']];
         return ListView.builder(
           shrinkWrap: true,
           itemCount: state.cryptoAccount.data.length,
@@ -64,6 +61,9 @@ class SelectCryptoAccount extends StatelessWidget {
                     .setCurrentWalletAccount(index);
               },
             );
+          },
+        );
+
           },
         );
       },

@@ -1,56 +1,66 @@
 import 'package:altme/app/shared/constants/urls.dart';
 import 'package:altme/app/shared/dio_client/dio_client.dart';
+import 'package:altme/app/shared/widget/widget.dart';
+import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
 import 'package:altme/oidc4vp_transaction/helper/decode_erc20_transfert.dart';
-import 'package:altme/oidc4vp_transaction/helper/get_decoded_transaction.dart';
+import 'package:altme/oidc4vp_transaction/presentation/payment_transaction/select_crypto_account.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-class TransactionPresentation extends StatelessWidget {
-  const TransactionPresentation({super.key});
+class PaymentPresentation extends StatelessWidget {
+  const PaymentPresentation(this.paymentTransaction, {super.key});
+  final PaymentTransaction paymentTransaction;
 
   @override
   Widget build(BuildContext context) {
-    final List<dynamic> decodedTransactions = getDecodedTransactions(context);
-
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: decodedTransactions.length,
-      separatorBuilder: (context, index) => const Divider(),
-      itemBuilder: (context, index) {
-        final tx = decodedTransactions[index] as Map<String, dynamic>;
-        final uiHints = tx['ui_hints'] ?? <String, dynamic>{};
-        final purpose = uiHints['purpose'] as String? ?? '';
-        final image = uiHints['icon_uri'] as String? ?? '';
-        return Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Image.network(
-                image,
-                height: 80,
-                width: 80,
-                errorBuilder: (context, error, stackTrace) {
-                  return const SizedBox.shrink();
-                },
-              ),
+    final uiHints =
+        paymentTransaction.transactionJson['ui_hints'] ?? <String, dynamic>{};
+    final purpose = uiHints['purpose'] as String? ?? '';
+    final image = uiHints['icon_uri'] as String? ?? '';
+    return Padding(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        children: [
+          BackgroundCard(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Image.network(
+                    image,
+                    height: 80,
+                    width: 80,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    purpose,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.headlineSmall!.copyWith(),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: TokenInfoWidget(
+                    transaction: paymentTransaction.transactionJson,
+                  ),
+                ),
+              ],
             ),
-            Center(
-              child: Text(
-                purpose,
-                style: Theme.of(context).textTheme.headlineSmall!.copyWith(),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: TokenInfoWidget(transaction: tx),
-            ),
-          ],
-        );
-      },
+          ),
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 300),
+            child: const SelectCryptoAccount(),
+          ),
+        ],
+      ),
     );
   }
 }

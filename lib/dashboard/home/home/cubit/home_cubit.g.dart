@@ -7,25 +7,25 @@ part of 'home_cubit.dart';
 // **************************************************************************
 
 HomeState _$HomeStateFromJson(Map<String, dynamic> json) => HomeState(
-      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
-          AppStatus.init,
-      message: json['message'] == null
-          ? null
-          : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-      homeStatus:
-          $enumDecodeNullable(_$HomeStatusEnumMap, json['homeStatus']) ??
-              HomeStatus.hasNoWallet,
-      link: json['link'] as String?,
-      data: json['data'],
-    );
+  status:
+      $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ?? AppStatus.init,
+  message: json['message'] == null
+      ? null
+      : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
+  homeStatus:
+      $enumDecodeNullable(_$HomeStatusEnumMap, json['homeStatus']) ??
+      HomeStatus.hasNoWallet,
+  link: json['link'] as String?,
+  data: json['data'],
+);
 
 Map<String, dynamic> _$HomeStateToJson(HomeState instance) => <String, dynamic>{
-      'status': _$AppStatusEnumMap[instance.status]!,
-      'message': instance.message,
-      'homeStatus': _$HomeStatusEnumMap[instance.homeStatus]!,
-      'link': instance.link,
-      'data': instance.data,
-    };
+  'status': _$AppStatusEnumMap[instance.status]!,
+  'message': instance.message,
+  'homeStatus': _$HomeStatusEnumMap[instance.homeStatus]!,
+  'link': instance.link,
+  'data': instance.data,
+};
 
 const _$AppStatusEnumMap = {
   AppStatus.init: 'init',
