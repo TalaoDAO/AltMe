@@ -35,15 +35,15 @@ class TezosNetwork extends BlockchainNetwork {
 
   factory TezosNetwork.ghostnet() => const TezosNetwork(
     type: BlockchainType.tezos,
-    networkname: 'Ghostnet',
+    networkname: 'Shadownet',
     apiUrl: Urls.tzktGhostnetUrl,
     rpcNodeUrl: Urls.ghostnetRPC,
-    title: 'Tezos Ghostnet',
+    title: 'Tezos Shadownet',
     subTitle:
         'This network is used to test protocol upgrades'
         ' (do not use it unless you are a developer).',
     isMainNet: false,
-    chainId: 0, // Or use a specific numeric ID for Tezos ghostnet
+    chainId: 0, // Or use a specific numeric ID for Tezos shadownet
   );
 
   @override
