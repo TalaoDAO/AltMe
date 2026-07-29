@@ -4,7 +4,7 @@ import 'package:altme/app/shared/alert_message/message_cubit.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/blockchain/blockchain_credential_subject_model/blockchain_credential_subject_model.dart';
-import 'package:altme/oidc4vp_transaction/widget/disclosure_detail.dart';
+import 'package:altme/oidc4vp_transaction/presentation/widget/disclosure_detail.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/helper_functions/selective_disclosure_display_map.dart';
 import 'package:altme/wallet/wallet.dart';

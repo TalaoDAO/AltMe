@@ -8,8 +8,8 @@ import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/selective_
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vp_transaction/presentation/cubit/transaction_data_cubit.dart';
 import 'package:altme/oidc4vp_transaction/presentation/transaction_presentation.dart';
-import 'package:altme/oidc4vp_transaction/widget/attestation_list.dart';
-import 'package:altme/oidc4vp_transaction/widget/navigation_buttons.dart';
+import 'package:altme/oidc4vp_transaction/presentation/widget/attestation_list.dart';
+import 'package:altme/oidc4vp_transaction/presentation/widget/navigation_buttons.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/trusted_list/model/trusted_entity.dart';
 import 'package:altme/trusted_list/widget/trusted_entity_details.dart';

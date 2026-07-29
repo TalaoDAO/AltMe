@@ -2,7 +2,7 @@ import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
 import 'package:altme/oidc4vp_transaction/presentation/cubit/transaction_data_cubit.dart';
 import 'package:altme/oidc4vp_transaction/presentation/payment_transaction/payment_accept_button.dart';
 import 'package:altme/oidc4vp_transaction/presentation/signature_transaction/signature_accept_button.dart';
-import 'package:altme/oidc4vp_transaction/widget/refuse_button.dart';
+import 'package:altme/oidc4vp_transaction/presentation/widget/refuse_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
