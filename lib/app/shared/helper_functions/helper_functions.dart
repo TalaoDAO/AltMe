@@ -15,7 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:jose_plus/jose.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import '../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:tezart/tezart.dart';

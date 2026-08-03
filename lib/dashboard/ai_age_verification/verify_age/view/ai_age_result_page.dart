@@ -4,7 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class AiAgeResultPage extends StatelessWidget {
   const AiAgeResultPage({

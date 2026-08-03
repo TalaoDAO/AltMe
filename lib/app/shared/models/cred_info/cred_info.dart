@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import '../../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class CredInfo {
   CredInfo({required this.credentialType, required this.formatType});

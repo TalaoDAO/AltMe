@@ -1,6 +1,6 @@
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:dio/dio.dart';
-import '../../../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 Future<CredentialManifest> getCredentialManifestFromAltMe({
   required OIDC4VC oidc4vc,

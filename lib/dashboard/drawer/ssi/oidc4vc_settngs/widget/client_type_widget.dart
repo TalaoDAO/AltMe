@@ -3,7 +3,7 @@ import 'package:altme/app/shared/widget/divider_for_radio_list.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class ClientTypeWidget extends StatelessWidget {
   const ClientTypeWidget({super.key});

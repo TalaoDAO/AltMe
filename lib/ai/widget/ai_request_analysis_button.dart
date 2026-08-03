@@ -13,7 +13,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 extension on ProfileType {
