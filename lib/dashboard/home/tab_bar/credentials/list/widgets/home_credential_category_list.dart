@@ -5,7 +5,7 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 
 class HomeCredentialCategoryList extends StatefulWidget {
   const HomeCredentialCategoryList({

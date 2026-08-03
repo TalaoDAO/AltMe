@@ -6,7 +6,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 
 Future<void> addOIDC4VCCredential({
   required dynamic encodedCredentialFromOIDC4VC,

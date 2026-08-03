@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../../../packages/did_kit/lib/oidc4vc/lib/oidc4vc.dart';
 import 'package:test/test.dart';
 
 void main() {

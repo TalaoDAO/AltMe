@@ -4,7 +4,7 @@ import 'package:altme/lang/lang.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 
 class EmailPassWidget extends StatelessWidget {
   const EmailPassWidget({super.key, required this.credentialModel});

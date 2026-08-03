@@ -39,7 +39,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class App extends StatelessWidget {

@@ -18,7 +18,7 @@ import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 import 'package:random_string/random_string.dart';
 
 import 'package:secure_storage/secure_storage.dart';

@@ -1,5 +1,6 @@
 name: altme
 description: AltMe Flutter App
+resolution: workspace
 
 version: 3.5.2+5678
 
@@ -31,11 +32,9 @@ dependencies:
   confetti: ^0.7.0
   connectivity_plus: ^6.1.0
   convert: ^3.1.1
-  credential_manifest:
-    path: packages/credential_manifest
+  credential_manifest: ^1.0.0
   crypto: ^3.0.3
-  cryptocurrency_keys:
-    path: packages/cryptocurrency_keys
+  cryptocurrency_keys: ^1.0.0
   dart_bip32_bip44: ^0.2.0
   dart_jsonwebtoken: ^2.12.1
   dart_web3:
@@ -45,8 +44,7 @@ dependencies:
   decimal: ^2.3.3
   device_info_plus: ^11.2.2
   devicelocale: ^0.7.0
-  did_kit:
-    path: packages/did_kit
+  did_kit: ^1.0.0
   dio: 5.6.0
   dotted_border: ^2.0.0+3
   ed25519_hd_key: ^2.2.0
@@ -77,8 +75,7 @@ dependencies:
   jose_plus: ^0.4.5
   json_annotation: ^4.9.0
   json_path: ^0.7.2
-  jwt_decode:
-    path: packages/jwt_decode
+  jwt_decode: ^1.0.0
   local_auth: ^2.1.6
   markdown: ^7.2.0 #matrix 0.20.2 depends on markdown ^4.0.0
   matrix: ^6.1.1
@@ -87,8 +84,7 @@ dependencies:
   model_viewer_plus: ^1.7.0
   network_image_mock: ^2.1.1
   no_screenshot: ^0.0.1+6
-  oidc4vc:
-    path: packages/oidc4vc
+  oidc4vc: ^1.0.0
   open_file: ^3.5.10
   path: ^1.8.3
   permission_handler: ^11.3.1
@@ -99,8 +95,7 @@ dependencies:
   reown_walletkit: ^1.4.0
   secp256k1: ^0.3.0
   secure_application: ^4.1.0
-  secure_storage:
-    path: packages/secure_storage
+  secure_storage: ^1.0.0
   share_plus: ^7.0.2
   shared_preferences: ^2.5.3
   shimmer: ^3.0.0
@@ -143,7 +138,6 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
-    - .env
     - google_fonts/
     - assets/
     - assets/abi/

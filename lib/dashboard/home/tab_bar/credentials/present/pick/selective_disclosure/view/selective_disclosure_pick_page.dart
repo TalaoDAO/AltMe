@@ -11,7 +11,7 @@ import 'package:altme/selective_disclosure/widget/inject_selective_disclosure_st
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 
 class SelectiveDisclosurePickPage extends StatelessWidget {
   const SelectiveDisclosurePickPage({

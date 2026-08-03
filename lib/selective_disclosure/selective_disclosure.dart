@@ -2,7 +2,7 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model
 import 'package:altme/selective_disclosure/dc_selective_disclosure.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/vc_selective_disclosure.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 
 export 'helper_functions/selective_disclosure_display_map.dart';
 export 'model/model.dart';

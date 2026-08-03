@@ -1,7 +1,7 @@
 import 'package:altme/dashboard/dashboard.dart';
 
 import 'package:flutter/material.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 
 class DisplayWidget extends StatelessWidget {
   const DisplayWidget({super.key, required this.display});

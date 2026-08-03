@@ -1,5 +1,5 @@
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 
 OpenIdConfiguration getIssuerOpenIdConfiguration({
   required OpenIdConfiguration issuerOpenIdConfiguration,

@@ -4,7 +4,7 @@ import 'package:altme/dashboard/dashboard.dart';
 
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 

@@ -12,7 +12,7 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activit
 import 'package:credential_manifest/credential_manifest.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i3;
-import 'package:oidc4vc/oidc4vc.dart' as _i5;
+import '../../../../packages/did_kit/lib/oidc4vc/lib/oidc4vc.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values

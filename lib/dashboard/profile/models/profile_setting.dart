@@ -2,7 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 import 'package:random_string/random_string.dart';
 
 part 'profile_setting.g.dart';

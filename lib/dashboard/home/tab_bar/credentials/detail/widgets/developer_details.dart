@@ -6,7 +6,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:flutter/material.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 
 class DeveloperDetails extends StatelessWidget {
   const DeveloperDetails({

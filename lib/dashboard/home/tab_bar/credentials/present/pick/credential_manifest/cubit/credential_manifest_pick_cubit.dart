@@ -5,7 +5,7 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 
 part 'credential_manifest_pick_state.dart';
 

@@ -10,7 +10,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'credential_details_cubit.g.dart';

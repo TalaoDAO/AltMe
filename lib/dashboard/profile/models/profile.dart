@@ -5,7 +5,7 @@ import 'package:altme/trusted_list/model/trusted_list.dart';
 // import 'package:http/http.dart' as http;
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 
 part 'profile.g.dart';
 

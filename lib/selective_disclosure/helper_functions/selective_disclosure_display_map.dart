@@ -7,7 +7,7 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/selective_disclosure/cubit/selective_disclosure_pick_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:json_path/json_path.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 
 class SelectiveDisclosureDisplayMap {
   const SelectiveDisclosureDisplayMap({

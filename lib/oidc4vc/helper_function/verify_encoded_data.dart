@@ -1,7 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:dio/dio.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import '../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
 
 Future<VerificationType> verifyEncodedData({
   required String issuer,
