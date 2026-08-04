@@ -4,7 +4,7 @@ import 'package:altme/selective_disclosure/vc_selective_disclosure.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import '../../../../packages/did_kit/lib/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 @GenerateMocks([CredentialModel])
 import 'get_picture_test.mocks.dart';

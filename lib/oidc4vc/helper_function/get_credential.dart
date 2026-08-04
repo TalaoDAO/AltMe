@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:dio/dio.dart';
-import '../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 /// Retreive credential_type from url
 // encodedCredentialOrFutureTokens,deferredCredentialEndpoint,

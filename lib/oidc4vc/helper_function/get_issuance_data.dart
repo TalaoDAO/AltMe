@@ -3,7 +3,7 @@ import 'package:altme/app/shared/dio_client/dio_client.dart';
 import 'package:altme/app/shared/message_handler/response_message.dart';
 import 'package:altme/oidc4vc/helper_function/get_credential_offer_json.dart';
 import 'package:dio/dio.dart';
-import '../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 /// OIDC4VCType?, OpenIdConfiguration?, OpenIdConfiguration?,
 /// credentialOfferJson, issuer, pre-authorizedCode

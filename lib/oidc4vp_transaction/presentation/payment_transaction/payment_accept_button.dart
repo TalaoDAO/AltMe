@@ -22,7 +22,7 @@ import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class PaymentAcceptButton extends StatelessWidget {
   const PaymentAcceptButton(this.paymentTransaction, {super.key});

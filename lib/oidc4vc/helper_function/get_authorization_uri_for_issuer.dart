@@ -8,7 +8,7 @@ import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:uuid/uuid.dart';
 
 Future<Uri?> getAuthorizationUriForIssuer({

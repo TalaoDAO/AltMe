@@ -8,7 +8,7 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model
 import 'package:altme/selective_disclosure/model/claims_data.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
-import '../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class VcSelectiveDisclosure {
   VcSelectiveDisclosure(this.credentialModel);

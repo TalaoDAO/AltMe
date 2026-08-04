@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:altme/app/shared/constants/parameters.dart';
 import 'package:altme/app/shared/helper_functions/helper_functions.dart';
 import 'package:altme/dashboard/profile/models/profile.dart';
-import '../../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 

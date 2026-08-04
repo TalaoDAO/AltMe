@@ -4,7 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import '../../../../../../../../../../../packages/did_kit/lib/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class MockCredentialModel extends Mock implements CredentialModel {}
 

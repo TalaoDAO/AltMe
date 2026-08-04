@@ -1,6 +1,6 @@
 import 'package:altme/trusted_list/model/trusted_entity.dart';
 import 'package:altme/trusted_list/model/trusted_list.dart';
-import '../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 TrustedEntity? getIssuerFromTrustedList({
   required OpenIdConfiguration issuerOpenIdConfiguration,

@@ -16,7 +16,7 @@ import 'package:did_kit/did_kit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:mocktail/mocktail.dart';
-import '../../../../../packages/did_kit/lib/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 import 'package:secure_storage/secure_storage.dart';
 

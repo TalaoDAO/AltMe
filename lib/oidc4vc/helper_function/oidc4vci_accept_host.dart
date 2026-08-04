@@ -10,7 +10,7 @@ import 'package:altme/trusted_list/function/is_certificate_valid.dart';
 import 'package:altme/trusted_list/widget/trusted_entity_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 Future<void> oidc4vciAcceptHost({
   required Oidc4vcParameters oidc4vcParameters,

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
-import '../../../../../packages/did_kit/oidc4vc/lib/oidc4vc.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class TransactionData {
   TransactionData({required this.transactionData, required this.transactions}) {

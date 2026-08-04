@@ -23,7 +23,7 @@ import 'package:jwt_decode/jwt_decode.dart' as _i8;
 import 'package:logger/src/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i18;
-import '../../../../../packages/did_kit/lib/oidc4vc/lib/oidc4vc.dart' as _i9;
+import 'package:oidc4vc/oidc4vc.dart' as _i9;
 import 'package:secure_storage/secure_storage.dart' as _i3;
 
 // ignore_for_file: type=lint
