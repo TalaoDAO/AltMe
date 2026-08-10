@@ -143,3 +143,4 @@ app.*.map.json
 doc/api/
 macos/Flutter/ephemeral/flutter_export_environment.sh
 macos/Flutter/ephemeral/Flutter-Generated.xcconfig
+.aider*
