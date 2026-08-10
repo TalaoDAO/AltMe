@@ -37,10 +37,7 @@ dependencies:
   cryptocurrency_keys: ^1.0.0
   dart_bip32_bip44: ^0.2.0
   dart_jsonwebtoken: ^2.12.1
-  dart_web3:
-    git:
-      url: https://github.com/TalaoDAO/dart_web3.git
-      ref: main
+  dart_web3: ^0.0.5
   decimal: ^2.3.3
   device_info_plus: ^11.2.2
   devicelocale: ^0.7.0
