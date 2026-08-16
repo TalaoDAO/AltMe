@@ -334,6 +334,7 @@ const _$OIDC4VCIDraftTypeEnumMap = {
   OIDC4VCIDraftType.draft14: '14',
   OIDC4VCIDraftType.draft15: '15',
   OIDC4VCIDraftType.draft16: '16',
+  OIDC4VCIDraftType.final1: '1.0',
 };
 
 const _$OIDC4VPDraftTypeEnumMap = {
@@ -347,6 +348,7 @@ const _$OIDC4VPDraftTypeEnumMap = {
   OIDC4VPDraftType.draft25: '25',
   OIDC4VPDraftType.draft28: '28',
   OIDC4VPDraftType.draft29: '29',
+  OIDC4VPDraftType.final1: '1.0',
 };
 
 const _$SIOPV2DraftTypeEnumMap = {SIOPV2DraftType.draft12: '12'};
