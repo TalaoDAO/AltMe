@@ -307,7 +307,7 @@ void main() {
 
     test('uses valueTypeIfNull when value_type is missing', () {
       // Arrange
-      const pictureData = '{\"data\":\"base64img\"}'; // JSON string
+      const pictureData = '{"data":"base64img"}'; // JSON string
       when(mockCredentialModel.format).thenReturn(VCFormatType.vcSdJWT.vcValue);
       when(mockCredentialModel.credentialSupported).thenReturn({
         'claims': {
