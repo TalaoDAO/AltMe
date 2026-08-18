@@ -1567,30 +1567,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
   Display? display;
   dynamic credentialSupported;
 
-  if (openIdConfiguration.credentialsSupported != null) {
-    final credentialsSupported = openIdConfiguration.credentialsSupported!;
-    final CredentialsSupported? credSupported = credentialsSupported
-        .firstWhereOrNull(
-          (CredentialsSupported credentialsSupported) =>
-              (credentialsSupported.id != null &&
-                  credentialsSupported.id == credentialType) ||
-              (credentialsSupported.types != null &&
-                  credentialsSupported.types!.contains(credentialType)),
-        );
-
-    if (credSupported != null) {
-      credentialSupported = credSupported.toJson();
-
-      final credSupportedDisplay = credSupported.display;
-
-      if (credSupportedDisplay != null) {
-        display = extractDisplay(
-          credSupportedDisplay,
-          languageCode,
-        ); // if local is not provided
-      }
-    }
-  } else if (openIdConfiguration.credentialConfigurationsSupported != null) {
+  if (openIdConfiguration.credentialConfigurationsSupported != null) {
     final credentialsSupported =
         openIdConfiguration.credentialConfigurationsSupported;
 
@@ -1603,20 +1580,43 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
 
       if (credSupported is Map<String, dynamic>) {
         /// display
-        if (credSupported.containsKey('display')) {
-          final displayData = credSupported['display'];
+        final displayData =
+            credSupported['credential_metadata']['display'] ??
+            credSupported['display'];
 
-          if (displayData is List<dynamic>) {
-            final displays = displayData
-                .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
-                .toList();
+        if (displayData is List<dynamic>) {
+          final displays = displayData
+              .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
+              .toList();
 
-            display = extractDisplay(
-              displays,
-              languageCode,
-            ); // if local is not provided
-          }
+          display = extractDisplay(
+            displays,
+            languageCode,
+          ); // if local is not provided
         }
+      }
+    }
+  } else if (openIdConfiguration.credentialsSupported != null) {
+    final credentialsSupported = openIdConfiguration.credentialsSupported!;
+    final CredentialsSupported? credSupported = credentialsSupported
+        .firstWhereOrNull(
+          (CredentialsSupported credentialsSupported) =>
+              (credentialsSupported.id != null &&
+                  credentialsSupported.id == credentialType) ||
+              (credentialsSupported.types != null &&
+                  credentialsSupported.types!.contains(credentialType)),
+        );
+
+    if (credSupported != null) {
+      credentialSupported = credSupported.toJson();
+      // Prioritize OIDC4VCI final 1.0
+      final credSupportedDisplay = credSupported.display;
+
+      if (credSupportedDisplay != null) {
+        display = extractDisplay(
+          credSupportedDisplay,
+          languageCode,
+        ); // if local is not provided
       }
     }
   }
