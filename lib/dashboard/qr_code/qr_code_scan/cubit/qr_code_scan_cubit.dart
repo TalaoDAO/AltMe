@@ -909,12 +909,25 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           .profileSetting
           .selfSovereignIdentityOptions
           .customOidc4vcProfile;
+      final oidc4vciDraft = customOidc4vcProfile.oidc4vciDraft;
+
+      late OIDC4VC oidc4vc;
+      switch (oidc4vciDraft) {
+        case OIDC4VCIDraftType.draft11:
+        case OIDC4VCIDraftType.draft13:
+        case OIDC4VCIDraftType.draft14:
+        case OIDC4VCIDraftType.draft15:
+          oidc4vc = OIDC4VC();
+        case OIDC4VCIDraftType.draft16:
+        case OIDC4VCIDraftType.final1:
+          oidc4vc = Oidc4vcFinal();
+      }
 
       final oidc4vcParameters = await getIssuanceData(
         url: url,
         client: client,
         oidc4vc: oidc4vc,
-        oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
+        oidc4vciDraftType: oidc4vciDraft,
         useOAuthAuthorizationServerLink: useOauthServerAuthEndPoint(
           profileCubit.state.model,
         ),
@@ -922,20 +935,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       await handleErrorForOidc4Vci(
         oidc4vcParameters: oidc4vcParameters,
-        didKeyType: profileCubit
-            .state
-            .model
-            .profileSetting
-            .selfSovereignIdentityOptions
-            .customOidc4vcProfile
-            .defaultDid,
-        clientType: profileCubit
-            .state
-            .model
-            .profileSetting
-            .selfSovereignIdentityOptions
-            .customOidc4vcProfile
-            .clientType,
+        didKeyType: customOidc4vcProfile.defaultDid,
+        clientType: customOidc4vcProfile.clientType,
       );
 
       await getAndAddDefferedCredential(
