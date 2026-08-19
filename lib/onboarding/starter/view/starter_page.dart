@@ -70,7 +70,7 @@ class StarterView extends StatelessWidget {
                           onPressed: () async {
                             await profileCubit.setProfileSetting(
                               profileSetting: ProfileSetting.initial(),
-                              profileType: ProfileType.diipv3,
+                              profileType: ProfileType.defaultOne,
                               walletType: WalletType.personal,
                             );
                             await Navigator.of(context).push<void>(
@@ -87,7 +87,7 @@ class StarterView extends StatelessWidget {
                           onPressed: () async {
                             await profileCubit.setProfileSetting(
                               profileSetting: ProfileSetting.initial(),
-                              profileType: ProfileType.diipv3,
+                              profileType: ProfileType.defaultOne,
                               walletType: WalletType.personal,
                             );
 

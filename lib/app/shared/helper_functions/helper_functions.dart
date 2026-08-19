@@ -2205,7 +2205,7 @@ bool useOauthServerAuthEndPoint(ProfileModel profileModel) {
   // final bool notEligible = profileModel.profileType == ProfileType.ebsiV3 ||
   //     profileModel.profileType == ProfileType.ebsiV4;
 
-  final bool notEligible = profileModel.profileType == ProfileType.ebsiV3;
+  final bool notEligible = profileModel.profileType == ProfileType.ebsiV4;
 
   if (notEligible) return false;
 

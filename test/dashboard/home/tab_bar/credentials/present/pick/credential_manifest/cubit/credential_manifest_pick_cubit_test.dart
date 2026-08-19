@@ -77,7 +77,7 @@ void main() {
         credentialList: testCredentialList,
         inputDescriptorIndex: 0,
         formatsSupported: formatsSupported,
-        profileType: ProfileType.ebsiV3,
+        profileType: ProfileType.ebsiV4,
       );
 
       expect(cubit.state.selected, isEmpty);
@@ -91,7 +91,7 @@ void main() {
         credentialList: testCredentialList,
         inputDescriptorIndex: 0,
         formatsSupported: formatsSupported,
-        profileType: ProfileType.ebsiV3,
+        profileType: ProfileType.ebsiV4,
       ),
       act: (cubit) => cubit.toggle(
         index: 0,
@@ -116,7 +116,7 @@ void main() {
         credentialList: testCredentialList,
         inputDescriptorIndex: 0,
         formatsSupported: [VCFormatType.vcSdJWT],
-        profileType: ProfileType.ebsiV3,
+        profileType: ProfileType.ebsiV4,
       ),
       act: (cubit) => cubit.toggle(
         index: 1,

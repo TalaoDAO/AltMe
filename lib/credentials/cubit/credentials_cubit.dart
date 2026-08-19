@@ -491,9 +491,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         continue;
       }
       final doNotGenerateProfileType = [
-        ProfileType.ebsiV3,
-        ProfileType.europeanWallet,
-        ProfileType.inji,
+        ProfileType.ebsiV4,
+        ProfileType.EUDIW,
       ];
 
       if (doNotGenerateProfileType.contains(profileType)) {

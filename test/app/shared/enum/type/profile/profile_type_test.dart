@@ -6,31 +6,26 @@ void main() {
     test('Get Title', () {
       expect(ProfileType.custom.getTitle(name: ''), 'Custom');
       expect(
-        ProfileType.ebsiV3.getTitle(name: ''),
+        ProfileType.ebsiV4.getTitle(name: ''),
         'European Blockchain Services Infrastructure (EBSI v3.x)',
       );
       expect(
-        ProfileType.diipv3.getTitle(name: ''),
-        'Decentralized Identity Interop Profile (DIIP v3.0)',
+        ProfileType.diipv5.getTitle(name: ''),
+        'Decentralized Identity Interop Profile (DIIP v5.0)',
       );
       expect(ProfileType.defaultOne.getTitle(name: ''), 'Default');
       expect(ProfileType.enterprise.getTitle(name: ''), 'Enterprise');
       expect(ProfileType.enterprise.getTitle(name: 'Test'), 'Test');
-      expect(
-        ProfileType.europeanWallet.getTitle(name: ''),
-        'Prototype for EWC pilot',
-      );
-      expect(ProfileType.inji.getTitle(name: ''), 'Inji by MOSIP');
+      expect(ProfileType.EUDIW.getTitle(name: ''), 'Prototype for EWC pilot');
     });
 
     test('Get VC ID', () {
       expect(ProfileType.custom.getVCId, 'A7G9B4C');
-      expect(ProfileType.ebsiV3.getVCId, 'Q2X5T8L');
-      expect(ProfileType.diipv3.getVCId, 'M5K8Y2W');
+      expect(ProfileType.ebsiV4.getVCId, 'Q2X5T8L');
+      expect(ProfileType.diipv5.getVCId, 'M5K8Y2W');
       expect(ProfileType.defaultOne.getVCId, 'Z4C7T1X');
       expect(ProfileType.enterprise.getVCId, 'L8F6V3P');
-      expect(ProfileType.europeanWallet.getVCId, 'M3FN2K8');
-      expect(ProfileType.inji.getVCId, 'P9K4H7M');
+      expect(ProfileType.EUDIW.getVCId, 'M3FN2K8');
     });
 
     test('Profile ID matches enum name', () {
