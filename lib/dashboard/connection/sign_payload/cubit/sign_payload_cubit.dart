@@ -3,19 +3,18 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/services/tezos_service.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:convert/convert.dart';
-import 'package:dartez/dartez.dart';
 import 'package:equatable/equatable.dart';
-import 'package:eth_sig_util/eth_sig_util.dart';
+import 'package:eth_sig_util_plus/eth_sig_util_plus.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
 part 'sign_payload_cubit.g.dart';
@@ -29,6 +28,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
     required this.qrCodeScanCubit,
     required this.walletConnectCubit,
     required this.connectedDappRepository,
+    required this.tezosService,
   }) : super(const SignPayloadState());
 
   final WalletCubit walletCubit;
@@ -37,6 +37,7 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
   final QRCodeScanCubit qrCodeScanCubit;
   final WalletConnectCubit walletConnectCubit;
   final ConnectedDappRepository connectedDappRepository;
+  final TezosService tezosService;
 
   final log = getLogger('SignPayloadCubit');
 
@@ -392,12 +393,8 @@ class SignPayloadCubit extends Cubit<SignPayloadState> {
   }
 
   Future<String> tezosSigning(String secretKey) async {
-    final dynamic signer = await Dartez.createSigner(
-      Dartez.writeKeyWithHint(secretKey, 'edsk'),
-    );
-
-    final signature = Dartez.signPayload(
-      signer: signer as SoftSigner,
+    final signature = await tezosService.signPayload(
+      secretKey: secretKey,
       payload: encodedPayloaForTezos,
     );
 

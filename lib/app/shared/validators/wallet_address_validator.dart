@@ -1,4 +1,4 @@
-import 'package:web3dart/web3dart.dart';
+import 'package:wallet/wallet.dart';
 
 mixin WalletAddressValidator {
   bool _validEtherumAddress(String ethereumAddress) {

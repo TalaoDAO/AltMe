@@ -17,8 +17,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart' hide User;
 import 'package:mime/mime.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
 typedef OnMessageCreated = Future<String> Function(Message);
@@ -96,15 +98,16 @@ class MatrixChatImpl extends MatrixChatInterface {
       if (client != null) {
         await dispose();
       }
-      client = Client(
-        'AltMeUser',
-        databaseBuilder: (_) async {
-          final dir = await getApplicationSupportDirectory();
-          final db = HiveCollectionsDatabase('matrix_support_chat', dir.path);
-          await db.open();
-          return db;
-        },
+      final dir = await getApplicationSupportDirectory();
+      final database = await openDatabase(
+        join(dir.path, 'matrix_support_chat.sqlite'),
       );
+      final db = await MatrixSdkDatabase.init(
+        'matrix_support_chat',
+        database: database,
+      );
+
+      client = Client('AltMeUser', database: db);
       client!.homeserver = Uri.parse(Urls.matrixHomeServer);
       await client!.init();
     } catch (e, s) {
@@ -156,8 +159,8 @@ class MatrixChatImpl extends MatrixChatInterface {
   Future<List<Message>> retriveMessagesFromDB(String roomId) async {
     final room = client?.getRoomById(roomId);
     if (room == null) return [];
-    final events = await client!.database?.getEventList(room);
-    if (events == null || events.isEmpty) return [];
+    final events = await client!.database.getEventList(room);
+    if (events.isEmpty) return [];
     final messageEvents =
         events.where((event) => event.type == 'm.room.message').toList()
           ..sort((e1, e2) => e2.originServerTs.compareTo(e1.originServerTs));
@@ -259,10 +262,6 @@ class MatrixChatImpl extends MatrixChatInterface {
     switch (status) {
       case EventStatus.error:
         return Status.error;
-      case EventStatus.removed:
-        return Status.error;
-      case EventStatus.roomState:
-        return Status.delivered;
       case EventStatus.sending:
         return Status.sending;
       case EventStatus.sent:

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/services/tezos_service.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
@@ -39,6 +40,7 @@ class SignPayloadPage extends StatelessWidget {
         connectedDappRepository: ConnectedDappRepository(
           secure_storage.getSecureStorage,
         ),
+        tezosService: TezosService(),
       ),
       child: SignPayloadView(connectionBridgeType: connectionBridgeType),
     );

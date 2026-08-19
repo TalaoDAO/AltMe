@@ -8,7 +8,9 @@ import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vc/helper_function/get_payload.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vp_prompt.dart';
-import 'package:altme/oidc4vp_transaction/widget/accept_oidc4_vp_transaction_page.dart';
+import 'package:altme/oidc4vp_transaction/data/oidc4vp_transaction_factory.dart';
+import 'package:altme/oidc4vp_transaction/domain/transaction_data.dart';
+import 'package:altme/oidc4vp_transaction/presentation/oidc4_vp_transaction_page.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
 import 'package:altme/trusted_list/function/check_presentation_is_trusted.dart';
@@ -146,34 +148,41 @@ Future<void> oidc4vpSiopV2AcceptHost({
   } else {
     trustedEntity = null;
   }
-  if (response!.containsKey('transaction_data')) {
-    LoadingView().hide();
-    unawaited(
-      context.read<ScanCubit>().addTransactionData(
-        response['transaction_data'] as List<dynamic>,
-      ),
-    );
+  if (response != null) {
+    if (response.containsKey('transaction_data')) {
+      LoadingView().hide();
+      final transactionData = response['transaction_data'] as List<dynamic>;
+      final transactionObjects = Oidc4vpTransactionFactory(
+        transactionData: transactionData,
+      );
+      final transactions = TransactionData(
+        transactionData: transactionData,
+        transactions: transactionObjects.transactionList,
+      );
+      unawaited(context.read<ScanCubit>().addTransactionData(transactions));
 
-    await Navigator.of(context).push<void>(
-      AcceptOidc4VpTransactionPage.route(
-        trustedListEnabled: trustedListEnabled,
-        trustedEntity: trustedEntity,
-        uri: uri,
-        showPrompt: showPrompt,
-        client: client,
-      ),
-    );
-  } else {
-    await Oidc4VpPrompt(
-      context: context,
-      l10n: l10n,
-      trustedListEnabled: trustedListEnabled,
-      trustedEntity: trustedEntity,
-      uri: uri,
-      client: client,
-      showPrompt: showPrompt,
-    ).show();
+      await Navigator.of(context).push<void>(
+        Oidc4VpTransactionPage.route(
+          trustedListEnabled: trustedListEnabled,
+          trustedEntity: trustedEntity,
+          uri: uri,
+          showPrompt: showPrompt,
+          client: client,
+        ),
+      );
+      LoadingView().hide();
+      return;
+    }
   }
+  await Oidc4VpPrompt(
+    context: context,
+    l10n: l10n,
+    trustedListEnabled: trustedListEnabled,
+    trustedEntity: trustedEntity,
+    uri: uri,
+    client: client,
+    showPrompt: showPrompt,
+  ).show();
 
   // Default action if there is no prompt
 

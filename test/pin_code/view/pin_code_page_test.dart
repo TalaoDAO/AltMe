@@ -34,7 +34,7 @@ void main() {
     late MockLocalAuthApi localAuthApi;
     late MockFlavorCubit flavorCubit;
 
-    setUpAll(() {
+    setUp(() {
       secureStorageProvider = MockSecureStorageProvider();
 
       pinCodeViewCubit = PinCodeViewCubit(
@@ -52,7 +52,7 @@ void main() {
         () => secureStorageProvider.set(any(), any()),
       ).thenAnswer((_) async => Future<void>.value());
 
-      when(navigator.canPop).thenReturn(true);
+      when(() => navigator.canPop()).thenReturn(true);
       when(() => navigator.push<void>(any())).thenAnswer((_) async {});
       when(
         () => navigator.pushAndRemoveUntil<void>(any(), any()),
@@ -83,6 +83,7 @@ void main() {
           ),
         ),
       );
+      await tester.pumpAndSettle();
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
 
@@ -101,7 +102,7 @@ void main() {
             BlocProvider<PinCodeViewCubit>.value(value: pinCodeViewCubit),
             BlocProvider<FlavorCubit>.value(value: flavorCubit),
           ],
-          child: PinCodePage(
+          child: PinCodeView(
             title: '',
             isValidCallback: () {},
             walletProtectionType: WalletProtectionType.FA2,
@@ -109,6 +110,7 @@ void main() {
           ),
         ),
       );
+      await tester.pumpAndSettle();
       expect(find.byType(PinCodeView), findsOneWidget);
     });
 
@@ -128,6 +130,7 @@ void main() {
           ),
         ),
       );
+      await tester.pumpAndSettle();
       expect(find.byType(BasePage), findsOneWidget);
       expect(find.byType(PinCodeWidget), findsOneWidget);
     });

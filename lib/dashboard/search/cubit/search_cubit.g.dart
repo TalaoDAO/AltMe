@@ -7,16 +7,16 @@ part of 'search_cubit.dart';
 // **************************************************************************
 
 SearchState _$SearchStateFromJson(Map<String, dynamic> json) => SearchState(
-      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
-          AppStatus.init,
-      message: json['message'] == null
-          ? null
-          : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-      searchText: json['searchText'] as String? ?? '',
-      credentials: (json['credentials'] as List<dynamic>?)
-          ?.map((e) => CredentialModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+  status:
+      $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ?? AppStatus.init,
+  message: json['message'] == null
+      ? null
+      : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
+  searchText: json['searchText'] as String? ?? '',
+  credentials: (json['credentials'] as List<dynamic>?)
+      ?.map((e) => CredentialModel.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$SearchStateToJson(SearchState instance) =>
     <String, dynamic>{
@@ -44,5 +44,4 @@ const _$AppStatusEnumMap = {
   AppStatus.successAdd: 'successAdd',
   AppStatus.successUpdate: 'successUpdate',
   AppStatus.addEuropeanProfile: 'addEuropeanProfile',
-  AppStatus.addInjiProfile: 'addInjiProfile',
 };

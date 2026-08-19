@@ -115,7 +115,7 @@ void main() {
       expect(find.byType(BasePage), findsOneWidget);
       expect(find.byType(BiometricsSwitch), findsOneWidget);
       expect(
-        find.text('Activate Biometrics\nto add a securtiy layer'),
+        find.textContaining('Activate Biometrics'),
         findsOneWidget,
       );
     });

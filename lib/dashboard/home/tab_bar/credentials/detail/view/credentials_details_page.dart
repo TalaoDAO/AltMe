@@ -103,8 +103,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final outputDescriptors =
-        widget.credentialModel.credentialManifest?.outputDescriptors;
 
     final profileData = context.read<ProfileCubit>().state.model;
 
@@ -141,10 +139,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         credentialSubjectType == CredentialSubjectType.eudiPid ||
         credentialSubjectType == CredentialSubjectType.identityCredential ||
         credentialSubjectType == CredentialSubjectType.verifiableIdCard;
-
-    final isOver18OfDippV3 =
-        profileData.profileType == ProfileType.diipv3 &&
-        credentialSubjectType == CredentialSubjectType.over18;
 
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {
@@ -284,18 +278,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             CredentialActiveStatus(
                               credentialStatus: state.credentialStatus,
                             ),
-                          ],
-
-                          /// credential manifest details
-                          if (!isOver18OfDippV3) ...[
-                            if (!isDeveloperMode &&
-                                credentialManifestSupport &&
-                                outputDescriptors != null) ...[
-                              CredentialManifestDetails(
-                                outputDescriptor: outputDescriptors.firstOrNull,
-                                credentialModel: widget.credentialModel,
-                              ),
-                            ],
                           ],
 
                           /// display widget
@@ -453,7 +435,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                         IconStrings.qrCode,
                         width: 24,
                         height: 24,
-                        color: Theme.of(context).colorScheme.onPrimary,
+                        colorFilter: ColorFilter.mode(
+                          Theme.of(context).colorScheme.onSurface,
+                          BlendMode.srcIn,
+                        ),
                       ),
                       onPressed: () {
                         Navigator.of(context).push<void>(

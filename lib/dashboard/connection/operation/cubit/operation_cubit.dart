@@ -14,6 +14,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tezart/tezart.dart';
+import 'package:wallet/wallet.dart';
 import 'package:web3dart/web3dart.dart';
 
 part 'operation_cubit.g.dart';
@@ -337,7 +338,7 @@ class OperationCubit extends Cubit<OperationState> {
         if (json['reason'] != null) {
           final reason = json['reason']!;
           late ResponseString responseString;
-          if (reason == 'contract.balance_too_low') {
+          if (reason.contains('contract.balance_too_low')) {
             responseString = ResponseString.RESPONSE_STRING_BALANCE_TOO_LOW;
           } else if (reason.contains('contract.cannot_pay_storage_fee')) {
             responseString =

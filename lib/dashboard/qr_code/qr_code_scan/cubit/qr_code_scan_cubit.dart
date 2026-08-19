@@ -70,10 +70,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     return super.close();
   }
 
-  Future<void> process({
-    required String? scannedResponse,
-    required QRCodeScanCubit qrCodeScanCubit,
-  }) async {
+  Future<void> process({required String? scannedResponse}) async {
     log.i('processing scanned qr code - $scannedResponse');
     goBack();
     await Future<void>.delayed(const Duration(milliseconds: 1000));
@@ -114,10 +111,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         /// enterprise
         final uri = Uri.parse(scannedResponse);
         emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-        await enterpriseCubit.requestTheConfiguration(
-          uri: uri,
-          qrCodeScanCubit: qrCodeScanCubit,
-        );
+        await enterpriseCubit.requestTheConfiguration(uri: uri);
       } else {
         final uri = Uri.parse(scannedResponse);
         await verify(uri: uri);
@@ -144,17 +138,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     if (deepLinkUrl != '') {
       emit(state.loading(isScan: false));
       deepLinkCubit.resetDeepLink();
-      try {
-        await verify(uri: Uri.parse(deepLinkUrl));
-      } on FormatException {
-        emitError(
-          error: ResponseMessage(
-            message: ResponseString
-                .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE,
-          ),
-          callToAction: AiRequestAnalysisButton(link: deepLinkUrl),
-        );
-      }
+      await process(scannedResponse: deepLinkUrl);
     }
   }
 
@@ -925,12 +909,25 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           .profileSetting
           .selfSovereignIdentityOptions
           .customOidc4vcProfile;
+      final oidc4vciDraft = customOidc4vcProfile.oidc4vciDraft;
+
+      late OIDC4VC oidc4vc;
+      switch (oidc4vciDraft) {
+        case OIDC4VCIDraftType.draft11:
+        case OIDC4VCIDraftType.draft13:
+        case OIDC4VCIDraftType.draft14:
+        case OIDC4VCIDraftType.draft15:
+          oidc4vc = OIDC4VC();
+        case OIDC4VCIDraftType.draft16:
+        case OIDC4VCIDraftType.final1:
+          oidc4vc = Oidc4vcFinal();
+      }
 
       final oidc4vcParameters = await getIssuanceData(
         url: url,
         client: client,
         oidc4vc: oidc4vc,
-        oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
+        oidc4vciDraftType: oidc4vciDraft,
         useOAuthAuthorizationServerLink: useOauthServerAuthEndPoint(
           profileCubit.state.model,
         ),
@@ -938,20 +935,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       await handleErrorForOidc4Vci(
         oidc4vcParameters: oidc4vcParameters,
-        didKeyType: profileCubit
-            .state
-            .model
-            .profileSetting
-            .selfSovereignIdentityOptions
-            .customOidc4vcProfile
-            .defaultDid,
-        clientType: profileCubit
-            .state
-            .model
-            .profileSetting
-            .selfSovereignIdentityOptions
-            .customOidc4vcProfile
-            .clientType,
+        didKeyType: customOidc4vcProfile.defaultDid,
+        clientType: customOidc4vcProfile.clientType,
       );
 
       await getAndAddDefferedCredential(

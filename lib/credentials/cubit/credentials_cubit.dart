@@ -16,7 +16,6 @@ import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
-
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -492,9 +491,8 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         continue;
       }
       final doNotGenerateProfileType = [
-        ProfileType.ebsiV3,
-        ProfileType.europeanWallet,
-        ProfileType.inji,
+        ProfileType.ebsiV4,
+        ProfileType.EUDIW,
       ];
 
       if (doNotGenerateProfileType.contains(profileType)) {

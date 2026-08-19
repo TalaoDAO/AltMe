@@ -45,7 +45,7 @@ class Urls {
     'https://rpc.tzstats.com',
   ];
 
-  static const ghostnetRPC = 'https://rpc.tzkt.io/ghostnet';
+  static const ghostnetRPC = 'https://rpc.shadownet.teztnets.com';
 
   static const coinGeckoBase = 'https://api.coingecko.com/api/v3/';
 
@@ -55,7 +55,7 @@ class Urls {
 
   // TZKT
   static const tzktMainnetUrl = 'https://api.tzkt.io';
-  static const tzktGhostnetUrl = 'https://api.ghostnet.tzkt.io';
+  static const tzktGhostnetUrl = 'https://api.shadownet.tzkt.io';
 
   //Moralis
   static const moralisBaseUrl = 'https://deep-index.moralis.io/api/v2.2';

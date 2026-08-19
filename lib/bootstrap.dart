@@ -12,7 +12,7 @@ import 'package:altme/app/shared/enum/flavor.dart';
 import 'package:altme/app/view/app.dart';
 import 'package:altme/theme/theme_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:dartez/dartez.dart';
+
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -53,7 +53,6 @@ Future<void> bootstrap(FlavorMode flavor) async {
     /// Disable Http google font
     GoogleFonts.config.allowRuntimeFetching = true;
 
-    await Dartez().init();
     Bloc.observer = AppBlocObserver();
     runApp(App(flavorMode: flavor, themeRepository: themeRepository));
   }, (error, stackTrace) => log(error.toString(), stackTrace: stackTrace));

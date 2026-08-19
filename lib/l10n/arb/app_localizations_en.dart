@@ -3347,4 +3347,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pay => 'share and pay';
+
+  @override
+  String get greek => 'Ελληνικά';
 }

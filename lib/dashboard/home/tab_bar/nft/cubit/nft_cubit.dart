@@ -195,7 +195,7 @@ class NftCubit extends Cubit<NftState> {
   }) async {
     try {
       final List<dynamic> response =
-          await client.get(
+        await client.get(
                 '${network.apiUrl}/v1/tokens/balances',
                 queryParameters: <String, dynamic>{
                   'account': walletAddress,

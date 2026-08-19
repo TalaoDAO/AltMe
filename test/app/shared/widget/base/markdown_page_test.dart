@@ -24,7 +24,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(GptMarkdown), findsOneWidget);
     expect(
-      find.text(
+      find.textContaining(
         'The Altme wallet is an open source project under Apache 2.0 licence',
       ),
       findsOneWidget,

@@ -7,22 +7,23 @@ part of 'tokens_cubit.dart';
 // **************************************************************************
 
 TokensState _$TokensStateFromJson(Map<String, dynamic> json) => TokensState(
-      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
-          AppStatus.init,
-      message: json['message'] == null
-          ? null
-          : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-      data: (json['data'] as List<dynamic>?)
-              ?.map((e) => TokenModel.fromJson(e as Map<String, dynamic>))
-              .toSet() ??
-          const {},
-      isSecure: json['isSecure'] as bool? ?? false,
-      totalBalanceInUSD: (json['totalBalanceInUSD'] as num?)?.toDouble() ?? 0.0,
-      offset: (json['offset'] as num?)?.toInt() ?? 0,
-      blockchainType: $enumDecodeNullable(
-              _$BlockchainTypeEnumMap, json['blockchainType']) ??
-          BlockchainType.tezos,
-    );
+  status:
+      $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ?? AppStatus.init,
+  message: json['message'] == null
+      ? null
+      : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
+  data:
+      (json['data'] as List<dynamic>?)
+          ?.map((e) => TokenModel.fromJson(e as Map<String, dynamic>))
+          .toSet() ??
+      const {},
+  isSecure: json['isSecure'] as bool? ?? false,
+  totalBalanceInUSD: (json['totalBalanceInUSD'] as num?)?.toDouble() ?? 0.0,
+  offset: (json['offset'] as num?)?.toInt() ?? 0,
+  blockchainType:
+      $enumDecodeNullable(_$BlockchainTypeEnumMap, json['blockchainType']) ??
+      BlockchainType.tezos,
+);
 
 Map<String, dynamic> _$TokensStateToJson(TokensState instance) =>
     <String, dynamic>{
@@ -53,7 +54,6 @@ const _$AppStatusEnumMap = {
   AppStatus.successAdd: 'successAdd',
   AppStatus.successUpdate: 'successUpdate',
   AppStatus.addEuropeanProfile: 'addEuropeanProfile',
-  AppStatus.addInjiProfile: 'addInjiProfile',
 };
 
 const _$BlockchainTypeEnumMap = {

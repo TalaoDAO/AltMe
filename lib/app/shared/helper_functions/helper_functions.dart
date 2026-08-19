@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/models/key_store_model.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
@@ -8,7 +9,6 @@ import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:asn1lib/asn1lib.dart' as asn1lib;
 import 'package:convert/convert.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:dartez/dartez.dart';
 import 'package:dio/dio.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +18,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:tezart/tezart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:x509_plus/x509.dart' as x509;
 
@@ -61,12 +62,12 @@ bool isValidPrivateKey(String value) {
 }
 
 KeyStoreModel getKeysFromSecretKey({required String secretKey}) {
-  final List<String> sourceKeystore = Dartez.getKeysFromSecretKey(secretKey);
+  final keystore = Keystore.fromSecretKey(secretKey);
 
   return KeyStoreModel(
-    secretKey: sourceKeystore[0],
-    publicKey: sourceKeystore[1],
-    publicKeyHash: sourceKeystore[2],
+    secretKey: keystore.secretKey,
+    publicKey: keystore.publicKey,
+    publicKeyHash: keystore.address,
   );
 }
 
@@ -1566,30 +1567,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
   Display? display;
   dynamic credentialSupported;
 
-  if (openIdConfiguration.credentialsSupported != null) {
-    final credentialsSupported = openIdConfiguration.credentialsSupported!;
-    final CredentialsSupported? credSupported = credentialsSupported
-        .firstWhereOrNull(
-          (CredentialsSupported credentialsSupported) =>
-              (credentialsSupported.id != null &&
-                  credentialsSupported.id == credentialType) ||
-              (credentialsSupported.types != null &&
-                  credentialsSupported.types!.contains(credentialType)),
-        );
-
-    if (credSupported != null) {
-      credentialSupported = credSupported.toJson();
-
-      final credSupportedDisplay = credSupported.display;
-
-      if (credSupportedDisplay != null) {
-        display = extractDisplay(
-          credSupportedDisplay,
-          languageCode,
-        ); // if local is not provided
-      }
-    }
-  } else if (openIdConfiguration.credentialConfigurationsSupported != null) {
+  if (openIdConfiguration.credentialConfigurationsSupported != null) {
     final credentialsSupported =
         openIdConfiguration.credentialConfigurationsSupported;
 
@@ -1602,20 +1580,43 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
 
       if (credSupported is Map<String, dynamic>) {
         /// display
-        if (credSupported.containsKey('display')) {
-          final displayData = credSupported['display'];
+        final displayData =
+            credSupported['credential_metadata']['display'] ??
+            credSupported['display'];
 
-          if (displayData is List<dynamic>) {
-            final displays = displayData
-                .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
-                .toList();
+        if (displayData is List<dynamic>) {
+          final displays = displayData
+              .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
+              .toList();
 
-            display = extractDisplay(
-              displays,
-              languageCode,
-            ); // if local is not provided
-          }
+          display = extractDisplay(
+            displays,
+            languageCode,
+          ); // if local is not provided
         }
+      }
+    }
+  } else if (openIdConfiguration.credentialsSupported != null) {
+    final credentialsSupported = openIdConfiguration.credentialsSupported!;
+    final CredentialsSupported? credSupported = credentialsSupported
+        .firstWhereOrNull(
+          (CredentialsSupported credentialsSupported) =>
+              (credentialsSupported.id != null &&
+                  credentialsSupported.id == credentialType) ||
+              (credentialsSupported.types != null &&
+                  credentialsSupported.types!.contains(credentialType)),
+        );
+
+    if (credSupported != null) {
+      credentialSupported = credSupported.toJson();
+      // Prioritize OIDC4VCI final 1.0
+      final credSupportedDisplay = credSupported.display;
+
+      if (credSupportedDisplay != null) {
+        display = extractDisplay(
+          credSupportedDisplay,
+          languageCode,
+        ); // if local is not provided
       }
     }
   }
@@ -2204,7 +2205,7 @@ bool useOauthServerAuthEndPoint(ProfileModel profileModel) {
   // final bool notEligible = profileModel.profileType == ProfileType.ebsiV3 ||
   //     profileModel.profileType == ProfileType.ebsiV4;
 
-  final bool notEligible = profileModel.profileType == ProfileType.ebsiV3;
+  final bool notEligible = profileModel.profileType == ProfileType.ebsiV4;
 
   if (notEligible) return false;
 
@@ -2377,6 +2378,7 @@ String? getClientIdForPresentation(String? clientId) {
 Future<bool> verifyX509Chain(List<dynamic> x5cChain) async {
   if (x5cChain.isEmpty) return false;
   try {
+    // ignore: unused_local_variable
     final certs = x5cChain.map((certBase64) {
       final der = base64Decode(certBase64.toString());
       final seq = asn1lib.ASN1Sequence.fromBytes(der);
@@ -2384,13 +2386,13 @@ Future<bool> verifyX509Chain(List<dynamic> x5cChain) async {
     }).toList();
 
     // Check each cert is signed by the next (issuer)
-    for (var i = 0; i < certs.length - 1; i++) {
-      final child = certs[i];
-      final issuer = certs[i + 1];
-      // if (!child.verify(issuer.publicKey)) {
-      //   return false;
-      // }
-    }
+    // for (var i = 0; i < certs.length - 1; i++) {
+    //   final child = certs[i];
+    //   final issuer = certs[i + 1];
+    // if (!child.verify(issuer.publicKey)) {
+    //   return false;
+    // }
+    // }
     // Optionally: Check the root is self-signed (not required for all
     // use cases)
     // final root = certs.last;
