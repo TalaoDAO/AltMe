@@ -769,6 +769,9 @@ Future<void> handleErrorForOidc4Vci({
             },
           );
         }
+      case ClientType.wiaSub:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   }
 }
@@ -1494,6 +1497,9 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
             clientId = did;
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
+          case ClientType.wiaSub:
+            // TODO: Handle this case.
+            throw UnimplementedError();
         }
 
       ///  only clientId
@@ -1505,6 +1511,9 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
             clientId = did;
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
+          case ClientType.wiaSub:
+            // TODO: Handle this case.
+            throw UnimplementedError();
         }
 
       case ClientAuthentication.clientSecretPost:
@@ -1545,6 +1554,9 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
 
         oAuthClientAttestation = walletAttestationData;
         oAuthClientAttestationPop = jwtProofOfPossession;
+      case ClientAuthentication.wia:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
 
     return (

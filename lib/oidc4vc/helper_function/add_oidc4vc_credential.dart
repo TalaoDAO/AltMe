@@ -103,6 +103,9 @@ Future<void> addOIDC4VCCredential({
         jwtDecode: jwtDecode,
         credentialType: credentialType,
       );
+    case VCFormatType.mdoc:
+      // TODO: Handle this case.
+      throw UnimplementedError();
   }
   final Map<String, dynamic> newCredential = Map<String, dynamic>.from(
     credentialFromOIDC4VC,

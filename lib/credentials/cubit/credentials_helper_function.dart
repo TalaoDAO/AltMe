@@ -278,6 +278,9 @@ Future<CredentialModel?> generateCryptoAccountOwnershipProof({
       case VCFormatType.auto:
         // TODO(all): Handle this case.
         throw UnimplementedError();
+      case VCFormatType.mdoc:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   } catch (e, s) {
     log.e(

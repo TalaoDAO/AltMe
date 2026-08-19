@@ -67,6 +67,9 @@ Future<Uri?> getAuthorizationUriForIssuer({
         oAuthClientAttestationPop: oAuthClientAttestationPop,
         oAuthClientAttestation: oAuthClientAttestation,
       );
+    case ClientAuthentication.wia:
+      // TODO: Handle this case.
+      throw UnimplementedError();
   }
 
   // save the state and give the id for the jwt
