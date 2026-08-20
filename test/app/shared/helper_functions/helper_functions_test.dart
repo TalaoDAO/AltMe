@@ -243,13 +243,7 @@ void main() {
       expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.ebsiv3), 5);
       expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.jwkP256), 6);
       expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.edDSA), 0);
-      expect(
-        getIndexValue(
-          isEBSI: false,
-          didKeyType: DidKeyType.jwtClientAttestation,
-        ),
-        0,
-      );
+      expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.none), 0);
     });
 
     group('getWalletAttestationP256Key', () {
@@ -348,7 +342,7 @@ void main() {
       expect(getDidKeyFromString('DidKeyType.jwkP256'), DidKeyType.jwkP256);
       expect(
         getDidKeyFromString('DidKeyType.jwtClientAttestation'),
-        DidKeyType.jwtClientAttestation,
+        DidKeyType.none,
       );
       expect(getDidKeyFromString('InvalidKeyType'), null);
       expect(getDidKeyFromString(null), null);

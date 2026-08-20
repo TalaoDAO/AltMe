@@ -326,8 +326,7 @@ const _$DidKeyTypeEnumMap = {
   DidKeyType.ebsiv3: 'did:key:ebsi',
   DidKeyType.ebsiv4: 'ebsiv4',
   DidKeyType.jwkP256: 'did:jwk:p-256',
-  DidKeyType.jwtClientAttestation:
-      'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation',
+  DidKeyType.none: 'none',
 };
 
 const _$OIDC4VCIDraftTypeEnumMap = {
