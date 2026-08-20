@@ -95,6 +95,7 @@ const _$VCFormatTypeEnumMap = {
   VCFormatType.jwtVcJsonLd: 'jwt_vc_json-ld',
   VCFormatType.vcSdJWT: 'vc+sd-jwt',
   VCFormatType.dcSdJWT: 'dc+sd-jwt',
+  VCFormatType.mdoc: 'mdoc',
   VCFormatType.auto: 'auto',
 };
 
@@ -315,6 +316,7 @@ const _$ClientAuthenticationEnumMap = {
   ClientAuthentication.clientSecretPost: 'client_secret_post',
   ClientAuthentication.clientId: 'client_id',
   ClientAuthentication.clientSecretJwt: 'client_secret_jwt',
+  ClientAuthentication.wia: 'wia',
 };
 
 const _$DidKeyTypeEnumMap = {
@@ -324,8 +326,7 @@ const _$DidKeyTypeEnumMap = {
   DidKeyType.ebsiv3: 'did:key:ebsi',
   DidKeyType.ebsiv4: 'ebsiv4',
   DidKeyType.jwkP256: 'did:jwk:p-256',
-  DidKeyType.jwtClientAttestation:
-      'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation',
+  DidKeyType.none: 'none',
 };
 
 const _$OIDC4VCIDraftTypeEnumMap = {
@@ -357,6 +358,7 @@ const _$ClientTypeEnumMap = {
   ClientType.p256JWKThumprint: 'urn:ietf:params:oauth:jwk-thumbprint',
   ClientType.did: 'did',
   ClientType.confidential: 'confidential',
+  ClientType.wiaSub: 'wia_sub',
 };
 
 const _$ProofHeaderTypeEnumMap = {

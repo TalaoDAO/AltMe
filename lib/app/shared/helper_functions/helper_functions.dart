@@ -255,7 +255,7 @@ int getIndexValue({required bool isEBSI, required DidKeyType didKeyType}) {
     case DidKeyType.ebsiv4:
       return 7;
     case DidKeyType.edDSA:
-    case DidKeyType.jwtClientAttestation:
+    case DidKeyType.none:
       return 0; // it is not needed, just assigned
   }
 }
@@ -311,7 +311,7 @@ Future<String> getPrivateKey({
 
       return key;
 
-    case DidKeyType.jwtClientAttestation:
+    case DidKeyType.none:
       if (profileCubit.state.model.walletType != WalletType.enterprise) {
         throw ResponseMessage(
           data: {
@@ -556,7 +556,7 @@ Future<(String, String)> getDidAndKid({
         didMethod,
         privateKey,
       );
-    case DidKeyType.jwtClientAttestation:
+    case DidKeyType.none:
       final walletAttestationData = await profileCubit.secureStorageProvider
           .get(SecureStorageKeys.walletAttestationData);
 
@@ -769,6 +769,8 @@ Future<void> handleErrorForOidc4Vci({
             },
           );
         }
+      case ClientType.wiaSub:
+        break;
     }
   }
 }
@@ -1494,6 +1496,9 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
             clientId = did;
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
+          case ClientType.wiaSub:
+            // TODO: Handle this case.getClientDetails
+            throw UnimplementedError();
         }
 
       ///  only clientId
@@ -1505,6 +1510,9 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
             clientId = did;
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
+          case ClientType.wiaSub:
+            // TODO: Handle this case.getClientDetails
+            throw UnimplementedError();
         }
 
       case ClientAuthentication.clientSecretPost:
@@ -1545,6 +1553,9 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
 
         oAuthClientAttestation = walletAttestationData;
         oAuthClientAttestationPop = jwtProofOfPossession;
+      case ClientAuthentication.wia:
+        // TODO: Handle this case.getClientDetails
+        throw UnimplementedError();
     }
 
     return (

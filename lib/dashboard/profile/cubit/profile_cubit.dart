@@ -808,8 +808,8 @@ class ProfileCubit extends Cubit<ProfileState> {
         );
       case ProfileType.EUDIW:
         final profileSetting = await _setupWalletProfile(
-          email: 'guest@EWC',
-          password: 'guest',
+          email: 'eudiw|guest@eudiw.local',
+          password: 'guest-password',
           storageKey: SecureStorageKeys.europeanWalletProfileSetting,
           loggerTag: 'loadEuropeanWallet',
         );
@@ -821,7 +821,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           status: status,
         );
         emit(state.copyWith(status: AppStatus.addEuropeanProfile));
-
     }
   }
 
@@ -880,7 +879,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   }) async {
     late ProfileSetting profileSetting;
     try {
-      const url = 'https://wallet-provider.com/distribution/guest/15';
+      const url = 'https://wallet-provider.com';
       final walletAttestationData = await getWalletAttestationData(
         url: url,
         secureStorageProvider: secureStorageProvider,

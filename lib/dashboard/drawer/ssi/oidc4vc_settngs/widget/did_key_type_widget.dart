@@ -23,7 +23,7 @@ class KeyIdentifierAndKeyTypeWidget extends StatelessWidget {
             itemBuilder: (context, index) {
               final didKeyType = DidKeyType.values[index];
 
-              if (didKeyType == DidKeyType.jwtClientAttestation) {
+              if (didKeyType == DidKeyType.none) {
                 return Container();
               }
 
