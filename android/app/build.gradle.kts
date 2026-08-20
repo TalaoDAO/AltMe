@@ -18,12 +18,6 @@ android {
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
-    packagingOptions {
-      jniLibs.pickFirsts += "lib/x86/libsodium.so"
-      jniLibs.pickFirsts += "lib/x86_64/libsodium.so"
-      jniLibs.pickFirsts += "lib/armeabi-v7a/libsodium.so"
-      jniLibs.pickFirsts += "lib/arm64-v8a/libsodium.so"
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
