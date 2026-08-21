@@ -197,7 +197,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Please give us access to your camera, to complete the verification.</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Why is my app authenticating using face id?</string>
+	<string>User can login with Face ID, pin code or both.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Please give us access to your photo library to verify you.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
