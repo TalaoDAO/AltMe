@@ -1,10 +1,8 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/alert_message/exception_message.dart';
 import 'package:altme/app/shared/alert_message/message_cubit.dart';
-import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/enterprise/enterprise.dart';
@@ -13,11 +11,9 @@ import 'package:altme/oidc4vc/helper_function/get_issuance_data.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vci_accept_host.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vp_siopv2_accept_host.dart';
 import 'package:altme/onboarding/onboarding.dart';
-import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
-import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -144,10 +140,6 @@ final walletBlocAccountChangeListener = BlocListener<WalletCubit, WalletState>(
   listener: (context, state) async {
     try {
       await context.read<ManageNetworkCubit>().loadNetwork();
-      if (Parameters.walletHandlesCrypto) {
-        unawaited(context.read<TokensCubit>().fetchFromZero());
-        unawaited(context.read<NftCubit>().fetchFromZero());
-      }
     } catch (e, s) {
       getLogger('BlocListeners: e: $e , s: $s');
     }
@@ -518,153 +510,6 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
     }
   },
 );
-
-final beaconBlocListener = BlocListener<BeaconCubit, BeaconState>(
-  listener: (BuildContext context, BeaconState state) {
-    final log = getLogger('beaconBlocListener');
-    try {
-      final BeaconRequest? beaconRequest = state.beaconRequest;
-
-      if (beaconRequest == null) return;
-
-      final Beacon beacon = Beacon();
-      final String currenRouteName = context.read<RouteCubit>().state ?? '';
-
-      //signPayload is not network sensitive
-      if (state.status != BeaconStatus.signPayload) {
-        final manageNetworkCubit = context.read<ManageNetworkCubit>();
-
-        final incomingNetworkType = beaconRequest.request!.network!.type!.name;
-        final currentNetworkType = manageNetworkCubit.state.network.networkname
-            .toLowerCase();
-
-        // if network type does not match
-        if (incomingNetworkType != currentNetworkType) {
-          AlertMessage.showStateMessage(
-            context: context,
-            stateMessage: StateMessage.error(
-              stringMessage: '$incomingNetworkType.',
-              messageHandler: ResponseMessage(
-                message: ResponseString.RESPONSE_STRING_SWITCH_NETWORK_MESSAGE,
-              ),
-            ),
-          );
-
-          final requestId = beaconRequest.request!.id!;
-
-          if (state.status == BeaconStatus.permission) {
-            beacon.permissionResponse(
-              id: requestId,
-              publicKey: null,
-              address: null,
-            );
-            if (currenRouteName == CONFIRM_CONNECTION_PAGE) {
-              Navigator.pop(context);
-            }
-          }
-
-          if (state.status == BeaconStatus.operation) {
-            beacon.operationResponse(id: requestId, transactionHash: null);
-          }
-
-          return;
-        }
-      }
-
-      if (state.status == BeaconStatus.permission) {
-        sensibleRoute(
-          context: context,
-          route: ConfirmConnectionPage.route(
-            connectionBridgeType: ConnectionBridgeType.beacon,
-          ),
-          isSameRoute: currenRouteName == CONFIRM_CONNECTION_PAGE,
-        );
-      }
-
-      if (state.status == BeaconStatus.signPayload) {
-        sensibleRoute(
-          context: context,
-          route: SignPayloadPage.route(
-            connectionBridgeType: ConnectionBridgeType.beacon,
-          ),
-          isSameRoute: currenRouteName == SIGN_PAYLOAD_PAGE,
-        );
-      }
-
-      if (state.status == BeaconStatus.operation) {
-        if (beaconRequest.operationDetails != null &&
-            beaconRequest.operationDetails!.isEmpty) {
-          beacon.operationResponse(
-            id: beaconRequest.request!.id!,
-            transactionHash: null,
-          );
-
-          return AlertMessage.showStateMessage(
-            context: context,
-            stateMessage: StateMessage.info(
-              messageHandler: ResponseMessage(
-                message: ResponseString
-                    .RESPONSE_STRING_thisFeatureIsNotSupportedMessage,
-              ),
-            ),
-          );
-        }
-
-        sensibleRoute(
-          context: context,
-          route: OperationPage.route(
-            connectionBridgeType: ConnectionBridgeType.beacon,
-          ),
-          isSameRoute: currenRouteName == OPERATION_PAGE,
-        );
-      }
-    } catch (e) {
-      log.e(e);
-    }
-  },
-);
-
-final walletConnectBlocListener =
-    BlocListener<WalletConnectCubit, WalletConnectState>(
-      listener: (BuildContext context, WalletConnectState state) async {
-        final log = getLogger('walletConnectStateBlocListener');
-
-        try {
-          if (state.status == WalletConnectStatus.permission) {
-            await Navigator.of(context).push<void>(
-              ConfirmConnectionPage.route(
-                connectionBridgeType: ConnectionBridgeType.walletconnect,
-              ),
-            );
-          }
-
-          if (state.status == WalletConnectStatus.signPayload) {
-            await Navigator.of(context).push<void>(
-              SignPayloadPage.route(
-                connectionBridgeType: ConnectionBridgeType.walletconnect,
-              ),
-            );
-          }
-
-          if (state.status == WalletConnectStatus.operation) {
-            await Navigator.of(context).push<void>(
-              OperationPage.route(
-                connectionBridgeType: ConnectionBridgeType.walletconnect,
-              ),
-            );
-          }
-
-          if (state.message != null) {
-            AlertMessage.showStateMessage(
-              context: context,
-              stateMessage: state.message!,
-            );
-          }
-        } catch (e) {
-          log.e(e);
-        }
-      },
-    );
 
 final enterpriseBlocListener = BlocListener<EnterpriseCubit, EnterpriseState>(
   listener: (BuildContext context, EnterpriseState state) async {

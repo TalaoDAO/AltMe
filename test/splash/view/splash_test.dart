@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/alert_message/exception_message.dart';
 import 'package:altme/app/shared/alert_message/message_cubit.dart';
-import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
@@ -72,17 +71,6 @@ class MockScanCubit extends MockCubit<ScanState> implements ScanCubit {
   final state = const ScanState();
 }
 
-class MockBeaconCubit extends MockCubit<BeaconState> implements BeaconCubit {
-  @override
-  final state = const BeaconState();
-}
-
-class MockWalletConnectCubit extends MockCubit<WalletConnectState>
-    implements WalletConnectCubit {
-  @override
-  final state = const WalletConnectState();
-}
-
 class MockEnterpriseCubit extends MockCubit<EnterpriseState>
     implements EnterpriseCubit {
   @override
@@ -114,25 +102,6 @@ class MockAdvanceSettingsCubit extends MockCubit<AdvanceSettingsState>
   Future<void> setState(AdvanceSettingsState newState) async {}
 }
 
-class MockManageNetworkCubit extends MockCubit<ManageNetworkState>
-    implements ManageNetworkCubit {
-  @override
-  final state = ManageNetworkState(network: TezosNetwork.mainNet());
-
-  @override
-  Future<void> loadNetwork() async {}
-}
-
-class MockTokensCubit extends MockCubit<TokensState> implements TokensCubit {
-  @override
-  Future<void> fetchFromZero() async {}
-}
-
-class MockNftCubit extends MockCubit<NftState> implements NftCubit {
-  @override
-  Future<void> fetchFromZero() async {}
-}
-
 class MockDeepLinkCubit extends MockCubit<String> implements DeepLinkCubit {}
 
 class MockMessageCubit extends MockCubit<ExceptionMessage>
@@ -149,12 +118,7 @@ void main() {
   late CredentialsCubit credentialsCubit;
   late ScanCubit scanCubit;
   late QRCodeScanCubit qRCodeScanCubit;
-  late BeaconCubit beaconCubit;
-  late WalletConnectCubit walletConnectCubit;
   late EnterpriseCubit enterpriseCubit;
-  late ManageNetworkCubit manageNetworkCubit;
-  late TokensCubit tokensCubit;
-  late NftCubit nftCubit;
   late DeepLinkCubit deepLinkCubit;
   late MessageCubit messageCubit;
   late RouteCubit routeCubit;
@@ -168,12 +132,7 @@ void main() {
     credentialsCubit = MockCredentialsCubit();
     scanCubit = MockScanCubit();
     qRCodeScanCubit = MockQRCodeScanCubit();
-    beaconCubit = MockBeaconCubit();
-    walletConnectCubit = MockWalletConnectCubit();
     enterpriseCubit = MockEnterpriseCubit();
-    manageNetworkCubit = MockManageNetworkCubit();
-    tokensCubit = MockTokensCubit();
-    nftCubit = MockNftCubit();
     deepLinkCubit = MockDeepLinkCubit();
     messageCubit = MockMessageCubit();
     routeCubit = MockRouteCubit();
@@ -194,10 +153,6 @@ void main() {
     return MultiBlocProvider(
       providers: [
         BlocProvider<FlavorCubit>(create: (context) => flavorCubit),
-        BlocProvider<BeaconCubit>(create: (context) => beaconCubit),
-        BlocProvider<WalletConnectCubit>(
-          create: (context) => walletConnectCubit,
-        ),
         BlocProvider<ProfileCubit>(create: (context) => profileCubit),
         BlocProvider<AdvanceSettingsCubit>(
           create: (context) => advanceSettingsCubit,
@@ -208,11 +163,6 @@ void main() {
         BlocProvider<ScanCubit>(create: (context) => scanCubit),
         BlocProvider<QRCodeScanCubit>(create: (context) => qRCodeScanCubit),
         BlocProvider<SplashCubit>(create: (context) => splashCubit),
-        BlocProvider<ManageNetworkCubit>(
-          create: (context) => manageNetworkCubit,
-        ),
-        BlocProvider<TokensCubit>(create: (context) => tokensCubit),
-        BlocProvider<NftCubit>(create: (context) => nftCubit),
         BlocProvider<DeepLinkCubit>(create: (context) => deepLinkCubit),
         BlocProvider<MessageCubit>(create: (context) => messageCubit),
         BlocProvider<RouteCubit>(create: (context) => routeCubit),

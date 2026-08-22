@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
@@ -44,7 +43,6 @@ class _DashboardViewState extends State<DashboardView> {
       Future.delayed(Duration.zero, () {
         /// If there is a deepLink we give do as if it coming from QRCode
         context.read<QRCodeScanCubit>().deepLink();
-        context.read<BeaconCubit>().startBeacon();
 
         // check if enterprise account is suspended or not
         if (context.read<ProfileCubit>().state.model.profileType ==

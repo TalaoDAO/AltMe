@@ -1,6 +1,5 @@
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
-import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/flavor/flavor.dart';
@@ -53,7 +52,6 @@ class OnBoardingVerifyPhrasePage extends StatelessWidget {
         credentialsCubit: context.read<CredentialsCubit>(),
         walletCubit: context.read<WalletCubit>(),
         profileCubit: context.read<ProfileCubit>(),
-        walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
       child: Builder(
         builder: (context) {

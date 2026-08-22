@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/matrix_notification/cubit/matrix_notification_cubit.dart';
@@ -26,7 +25,6 @@ class SplashCubit extends Cubit<SplashState> {
     required this.profileCubit,
     required this.altmeChatSupportCubit,
     required this.matrixNotificationCubit,
-    required this.walletConnectCubit,
     required this.client,
     this.packageInfo,
   }) : super(const SplashState()) {
@@ -38,7 +36,6 @@ class SplashCubit extends Cubit<SplashState> {
   final WalletCubit walletCubit;
   final CredentialsCubit credentialsCubit;
   final QRCodeScanCubit qrCodeScanCubit;
-  final WalletConnectCubit walletConnectCubit;
   final AltmeChatSupportCubit altmeChatSupportCubit;
   final MatrixNotificationCubit matrixNotificationCubit;
   final ProfileCubit profileCubit;
@@ -59,7 +56,6 @@ class SplashCubit extends Cubit<SplashState> {
           qrCodeScanCubit: qrCodeScanCubit,
           credentialsCubit: credentialsCubit,
           walletCubit: walletCubit,
-          walletConnectCubit: walletConnectCubit,
         );
 
         if (hasWallet) {

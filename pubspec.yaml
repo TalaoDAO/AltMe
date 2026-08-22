@@ -14,13 +14,6 @@ dependencies:
   async: ^2.11.0
   auto_size_text: ^3.0.0
   badges: ^3.1.1
-  beacon_flutter:
-    git:
-      url: https://github.com/TalaoDAO/beacon.git
-      ref: 04da13a02595cca9316b15ea160fa10d810ff249
-      
-  # beacon_flutter:
-  #   path: ../beacon
   bip32: ^2.0.0
   bip39:
     git:
@@ -88,7 +81,6 @@ dependencies:
   pretty_qr_code: ^3.1.0
   qr_flutter: ^4.1.0
   random_string: ^2.3.1
-  reown_walletkit: ^1.4.0
   secp256k1: ^0.3.0
   secure_application: ^4.1.0
   secure_storage: ^1.0.0

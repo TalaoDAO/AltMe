@@ -7,6 +7,11 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
+import 'package:eudi_wallet/app/app.dart';
+import 'package:eudi_wallet/credentials/credentials.dart';
+import 'package:eudi_wallet/dashboard/dashboard.dart';
+import 'package:eudi_wallet/key_generator/key_generator.dart';
+import 'package:eudi_wallet/wallet/wallet.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -24,7 +29,6 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
     required this.qrCodeScanCubit,
     required this.walletCubit,
     required this.credentialsCubit,
-    required this.walletConnectCubit,
   }) : super(const ImportAccountState());
 
   final DIDKitProvider didKitProvider;
@@ -34,7 +38,6 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
   final QRCodeScanCubit qrCodeScanCubit;
   final WalletCubit walletCubit;
   final CredentialsCubit credentialsCubit;
-  final WalletConnectCubit walletConnectCubit;
 
   void isMnemonicsOrKeyValid(String value) {
     //different type of tezos private keys start with 'edsk' ,
@@ -84,7 +87,6 @@ class ImportAccountCubit extends Cubit<ImportAccountState> {
         isFromOnboarding: false,
         qrCodeScanCubit: qrCodeScanCubit,
         credentialsCubit: credentialsCubit,
-        walletConnectCubit: walletConnectCubit,
         onComplete:
             ({
               required CryptoAccount cryptoAccount,

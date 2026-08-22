@@ -1,6 +1,5 @@
 import 'package:altme/activity_log/activity_log_manager.dart';
 import 'package:altme/app/app.dart';
-import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/key_generator/key_generator.dart';
@@ -39,7 +38,6 @@ class OnBoardingGenPhrasePage extends StatelessWidget {
         qrCodeScanCubit: context.read<QRCodeScanCubit>(),
         activityLogManager: ActivityLogManager(getSecureStorage),
         credentialsCubit: context.read<CredentialsCubit>(),
-        walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
       child: const OnBoardingGenPhraseView(),
     );

@@ -7,8 +7,6 @@ import 'dart:async' as _i16;
 
 import 'package:altme/activity_log/activity_log.dart' as _i11;
 import 'package:altme/app/app.dart' as _i15;
-import 'package:altme/connection_bridge/wallet_connect/cubit/wallet_connect_cubit.dart'
-    as _i20;
 import 'package:altme/credentials/credentials.dart' as _i12;
 import 'package:altme/dashboard/dashboard.dart' as _i5;
 import 'package:altme/key_generator/key_generator.dart' as _i7;
@@ -1299,7 +1297,6 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
     required bool? isFromOnboarding,
     required _i5.QRCodeScanCubit? qrCodeScanCubit,
     required _i12.CredentialsCubit? credentialsCubit,
-    required _i20.WalletConnectCubit? walletConnectCubit,
     _i15.BlockchainType? blockchainType,
     bool? showStatus = true,
     void Function({
@@ -1316,7 +1313,6 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
               #isFromOnboarding: isFromOnboarding,
               #qrCodeScanCubit: qrCodeScanCubit,
               #credentialsCubit: credentialsCubit,
-              #walletConnectCubit: walletConnectCubit,
               #blockchainType: blockchainType,
               #showStatus: showStatus,
               #onComplete: onComplete,

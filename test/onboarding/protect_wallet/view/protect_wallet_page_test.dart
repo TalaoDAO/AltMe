@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:altme/activity_log/activity_log_manager.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
-import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/key_generator/key_generator.dart';
@@ -56,7 +55,6 @@ class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {
     required bool isFromOnboarding,
     required QRCodeScanCubit qrCodeScanCubit,
     required CredentialsCubit credentialsCubit,
-    required WalletConnectCubit walletConnectCubit,
     BlockchainType? blockchainType,
     bool showStatus = true,
     void Function({
@@ -92,9 +90,6 @@ class MockCredentialsCubit extends MockCubit<CredentialsState>
 class MockQRCodeScanCubit extends MockCubit<QRCodeScanState>
     implements QRCodeScanCubit {}
 
-class MockWalletConnectCubit extends MockCubit<WalletConnectState>
-    implements WalletConnectCubit {}
-
 void main() {
   late DIDKitProvider didKitProvider;
   late KeyGenerator keyGenerator;
@@ -109,7 +104,6 @@ void main() {
   late MockActivityLogManager activityLogManager;
   late MockQRCodeScanCubit qrCodeScanCubit;
   late MockCredentialsCubit credentialsCubit;
-  late MockWalletConnectCubit walletConnectCubit;
 
   const mnemonicString =
       'notice photo opera keen climb agent soft parrot best joke field devote';
@@ -129,7 +123,6 @@ void main() {
     activityLogManager = MockActivityLogManager();
     credentialsCubit = MockCredentialsCubit();
     qrCodeScanCubit = MockQRCodeScanCubit();
-    walletConnectCubit = MockWalletConnectCubit();
     when(() => secureStorageProvider.get(any())).thenAnswer((_) async => '');
 
     when(
@@ -211,7 +204,6 @@ void main() {
         activityLogManager: activityLogManager,
         qrCodeScanCubit: qrCodeScanCubit,
         credentialsCubit: credentialsCubit,
-        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -256,7 +248,6 @@ void main() {
         activityLogManager: activityLogManager,
         qrCodeScanCubit: qrCodeScanCubit,
         credentialsCubit: credentialsCubit,
-        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -305,7 +296,6 @@ void main() {
         activityLogManager: activityLogManager,
         qrCodeScanCubit: qrCodeScanCubit,
         credentialsCubit: credentialsCubit,
-        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -359,7 +349,6 @@ void main() {
           activityLogManager: activityLogManager,
           qrCodeScanCubit: qrCodeScanCubit,
           credentialsCubit: credentialsCubit,
-          walletConnectCubit: walletConnectCubit,
         );
 
         await tester.pumpApp(
@@ -417,7 +406,6 @@ void main() {
         activityLogManager: activityLogManager,
         qrCodeScanCubit: qrCodeScanCubit,
         credentialsCubit: credentialsCubit,
-        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -470,7 +458,6 @@ void main() {
         activityLogManager: activityLogManager,
         qrCodeScanCubit: qrCodeScanCubit,
         credentialsCubit: credentialsCubit,
-        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(
@@ -527,7 +514,6 @@ void main() {
           activityLogManager: activityLogManager,
           qrCodeScanCubit: qrCodeScanCubit,
           credentialsCubit: credentialsCubit,
-          walletConnectCubit: walletConnectCubit,
         );
 
         await tester.pumpApp(
@@ -581,7 +567,6 @@ void main() {
         activityLogManager: activityLogManager,
         qrCodeScanCubit: qrCodeScanCubit,
         credentialsCubit: credentialsCubit,
-        walletConnectCubit: walletConnectCubit,
       );
 
       await tester.pumpApp(

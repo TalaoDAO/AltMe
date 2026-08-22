@@ -1,6 +1,5 @@
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
-import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/key_generator/key_generator.dart';
@@ -29,7 +28,6 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
     required this.activityLogManager,
     required this.qrCodeScanCubit,
     required this.credentialsCubit,
-    required this.walletConnectCubit,
   }) : super(const OnBoardingGenPhraseState());
 
   final KeyGenerator keyGenerator;
@@ -44,7 +42,6 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
   final ActivityLogManager activityLogManager;
   final QRCodeScanCubit qrCodeScanCubit;
   final CredentialsCubit credentialsCubit;
-  final WalletConnectCubit walletConnectCubit;
 
   final log = getLogger('OnBoardingGenPhraseCubit');
 
@@ -64,7 +61,6 @@ class OnBoardingGenPhraseCubit extends Cubit<OnBoardingGenPhraseState> {
         credentialsCubit: credentialsCubit,
         walletCubit: walletCubit,
         profileCubit: profileCubit,
-        walletConnectCubit: walletConnectCubit,
       );
 
       await profileCubit.secureStorageProvider.set(

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/enterprise.dart';
@@ -65,8 +64,6 @@ class _SplashViewState extends State<SplashView> {
   String? _deeplink;
 
   Future<void> processIncomingUri(Uri? uri) async {
-    String beaconData = '';
-    bool isBeaconRequest = false;
     late Uri? newUri;
     if (uri.toString().startsWith('${Parameters.universalLink}/oidc4vc?uri=')) {
       newUri = Uri.parse(
@@ -122,17 +119,8 @@ class _SplashViewState extends State<SplashView> {
           return;
         }
       }
-      if (key == 'type' && value == 'tzip10') {
-        isBeaconRequest = true;
-      }
-      if (key == 'data') {
-        beaconData = value;
-      }
     });
 
-    if (isBeaconRequest && beaconData != '') {
-      unawaited(context.read<BeaconCubit>().peerFromDeepLink(beaconData));
-    }
     if (isOIDC4VCIUrl(newUri) ||
         isSiopV2OrOidc4VpUrl(newUri) ||
         newUri.toString().startsWith(Parameters.universalLink)) {
@@ -151,8 +139,6 @@ class _SplashViewState extends State<SplashView> {
         walletBlocAccountChangeListener,
         scanBlocListener,
         qrCodeBlocListener,
-        beaconBlocListener,
-        walletConnectBlocListener,
         enterpriseBlocListener,
         ProfileCubitListener,
         messageCubitListener,

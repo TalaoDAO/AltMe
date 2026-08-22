@@ -5,6 +5,10 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:eudi_wallet/app/shared/shared.dart';
+import 'package:eudi_wallet/credentials/credentials.dart';
+import 'package:eudi_wallet/dashboard/dashboard.dart';
+import 'package:eudi_wallet/wallet/wallet.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -16,13 +20,11 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
     required this.walletCubit,
     required this.credentialsCubit,
     required this.qrCodeScanCubit,
-    required this.walletConnectCubit,
   }) : super(const CreateAccountState());
 
   final WalletCubit walletCubit;
   final CredentialsCubit credentialsCubit;
   final QRCodeScanCubit qrCodeScanCubit;
-  final WalletConnectCubit walletConnectCubit;
 
   Future<void> createCryptoAccount({
     String? accountName,
@@ -42,7 +44,6 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
       showStatus: false,
       qrCodeScanCubit: qrCodeScanCubit,
       credentialsCubit: credentialsCubit,
-      walletConnectCubit: walletConnectCubit,
       onComplete:
           ({
             required CryptoAccount cryptoAccount,

@@ -1,7 +1,6 @@
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
-import 'package:altme/connection_bridge/wallet_connect/cubit/wallet_connect_cubit.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/key_generator/key_generator.dart';
@@ -51,7 +50,6 @@ class MockWalletCubit extends MockCubit<WalletState> implements WalletCubit {
     required bool isFromOnboarding,
     required QRCodeScanCubit qrCodeScanCubit,
     required CredentialsCubit credentialsCubit,
-    required WalletConnectCubit walletConnectCubit,
     BlockchainType? blockchainType,
     bool showStatus = true,
     void Function({
@@ -86,9 +84,6 @@ class MockCredentialsCubit extends MockCubit<CredentialsState>
   Future<void> loadAllCredentials() async {}
 }
 
-class MockWalletConnectCubit extends MockCubit<WalletConnectState>
-    implements WalletConnectCubit {}
-
 void main() {
   late DIDKitProvider didKitProvider;
   late KeyGenerator keyGenerator;
@@ -102,7 +97,6 @@ void main() {
   late MockActivityLogManager activityLogManager;
   late MockQRCodeScanCubit qrCodeScanCubit;
   late MockCredentialsCubit credentialsCubit;
-  late MockWalletConnectCubit walletConnectCubit;
 
   setUpAll(() {
     WidgetsFlutterBinding.ensureInitialized();
@@ -118,7 +112,6 @@ void main() {
     activityLogManager = MockActivityLogManager();
     qrCodeScanCubit = MockQRCodeScanCubit();
     credentialsCubit = MockCredentialsCubit();
-    walletConnectCubit = MockWalletConnectCubit();
   });
 
   group('OnBoarding GenPhrase Page', () {
@@ -139,7 +132,6 @@ void main() {
         activityLogManager: activityLogManager,
         credentialsCubit: credentialsCubit,
         qrCodeScanCubit: qrCodeScanCubit,
-        walletConnectCubit: walletConnectCubit,
       );
       navigator = MockNavigator();
       when(navigator.canPop).thenReturn(true);

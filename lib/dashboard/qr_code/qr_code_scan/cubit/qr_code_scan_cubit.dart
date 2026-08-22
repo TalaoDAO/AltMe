@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:bloc/bloc.dart';
+import 'package:credential_manifest/credential_manifest.dart';
+import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
+import 'package:equatable/equatable.dart';
 import 'package:altme/ai/widget/ai_request_analysis_button.dart';
 import 'package:altme/app/app.dart';
-import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/credential_manifest/helpers/apply_submission_requirements.dart';
@@ -14,12 +18,6 @@ import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:beacon_flutter/beacon_flutter.dart';
-import 'package:bloc/bloc.dart';
-import 'package:credential_manifest/credential_manifest.dart';
-import 'package:did_kit/did_kit.dart';
-import 'package:dio/dio.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
@@ -38,8 +36,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.queryByExampleCubit,
     required this.deepLinkCubit,
     required this.jwtDecode,
-    required this.beacon,
-    required this.walletConnectCubit,
     required this.secureStorageProvider,
     required this.didKitProvider,
     required this.oidc4vc,
@@ -54,8 +50,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final QueryByExampleCubit queryByExampleCubit;
   final DeepLinkCubit deepLinkCubit;
   final JWTDecode jwtDecode;
-  final Beacon beacon;
-  final WalletConnectCubit walletConnectCubit;
   final SecureStorageProvider secureStorageProvider;
   final DIDKitProvider didKitProvider;
   final OIDC4VC oidc4vc;
@@ -87,19 +81,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         throw ResponseMessage(
           message: ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
         );
-      } else if (scannedResponse.startsWith('tezos://')) {
-        /// beacon
-        final String pairingRequest = Uri.parse(
-          scannedResponse,
-        ).queryParameters['data'].toString();
-
-        await beacon.pair(pairingRequest: pairingRequest);
-        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
-      } else if (scannedResponse.startsWith('wc:') ||
-          scannedResponse.startsWith('wc-altme:')) {
-        /// wallet connect
-        await walletConnectCubit.connect(scannedResponse);
-        emit(state.copyWith(qrScanStatus: QrScanStatus.goBack));
       } else if (scannedResponse.startsWith(
         '${Parameters.universalLink}?uri=',
       )) {

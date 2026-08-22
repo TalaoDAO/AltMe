@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/connection_bridge/wallet_connect/cubit/wallet_connect_cubit.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/key_generator/key_generator.dart';
@@ -46,7 +45,6 @@ class WalletCubit extends Cubit<WalletState> {
     required bool isFromOnboarding,
     required QRCodeScanCubit qrCodeScanCubit,
     required CredentialsCubit credentialsCubit,
-    required WalletConnectCubit walletConnectCubit,
     BlockchainType? blockchainType,
     bool showStatus = true,
     void Function({
@@ -213,8 +211,6 @@ class WalletCubit extends Cubit<WalletState> {
 
     final updatedCryptoAccount = CryptoAccount(data: cryptoAccountDataList);
     await _saveCryptoAccountDataInStorage(updatedCryptoAccount);
-
-    await walletConnectCubit.initialise();
 
     /// set new account as current
     await setCurrentWalletAccount(cryptoAccountDataList.length - 1);

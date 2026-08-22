@@ -7,6 +7,13 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:eudi_wallet/app/app.dart';
+import 'package:eudi_wallet/credentials/cubit/credentials_cubit.dart';
+import 'package:eudi_wallet/dashboard/dashboard.dart';
+import 'package:eudi_wallet/key_generator/key_generator.dart';
+import 'package:eudi_wallet/l10n/l10n.dart';
+import 'package:eudi_wallet/onboarding/onboarding.dart';
+import 'package:eudi_wallet/wallet/cubit/wallet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -33,7 +40,6 @@ class ImportAccountStep3Page extends StatelessWidget {
         qrCodeScanCubit: context.read<QRCodeScanCubit>(),
         credentialsCubit: context.read<CredentialsCubit>(),
         walletCubit: context.read<WalletCubit>(),
-        walletConnectCubit: context.read<WalletConnectCubit>(),
       ),
       child: ImportAccountStep3View(accountType: accountType),
     );
