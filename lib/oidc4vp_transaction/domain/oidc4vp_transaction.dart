@@ -1,16 +1,8 @@
-import 'dart:typed_data';
 
-import 'package:altme/app/shared/m_web3_client/m_web3_client.dart';
-import 'package:altme/app/shared/models/blockchain_network/blockchain_network_helpers.dart';
-import 'package:altme/oidc4vp_transaction/data/Blockchain/payment_signature.dart';
-import 'package:altme/wallet/model/crypto_account_data.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:reown_walletkit/reown_walletkit.dart';
 
-part 'payment_transaction/payment_transaction.dart';
 part 'signature_transaction/signature_transaction.dart';
 
-enum TransactionType { cryptoPayment, textSignature }
+enum TransactionType { textSignature }
 
 /// each type of transaction we get from transaction_data has an extension
 /// of  Oidc4vpTransaction

@@ -32,7 +32,7 @@ dependencies:
   dart_jsonwebtoken: ^2.12.1
   dart_web3: ^0.0.5
   decimal: ^2.3.3
-  device_info_plus: ^11.2.2
+  device_info_plus: ^13.2.0
   devicelocale: ^0.7.0
   did_kit: ^1.0.0
   dio: 5.6.0
@@ -41,7 +41,7 @@ dependencies:
   equatable: ^2.0.5
   eth_sig_util_plus: ^0.0.10
   fast_base58: ^0.2.1
-  file_picker: ^8.3.1
+  file_picker: ^12.0.0
   file_saver: ^0.2.4
   flutter:
     sdk: flutter
@@ -64,17 +64,18 @@ dependencies:
   image_picker: ^1.0.7
   jose_plus: ^0.4.5
   json_annotation: ^4.12.0
-  json_path: ^0.7.2
+  json_path: ^0.9.0
   jwt_decode: ^1.0.0
   local_auth: ^2.1.6
   markdown: ^7.2.0 #matrix 0.20.2 depends on markdown ^4.0.0
   matrix: ^6.1.1
-  mime: ^1.0.4
+  mime: ^2.0.0
   mobile_scanner: ^7.1.2
   network_image_mock: ^2.1.1
   no_screenshot: ^0.0.1+6
   oidc4vc: ^1.0.0
   open_file: ^3.5.10
+  package_info_plus: ^10.2.1
   path: ^1.8.3
   permission_handler: ^11.3.1
   pinenacl: ^0.6.0
@@ -84,7 +85,7 @@ dependencies:
   secp256k1: ^0.3.0
   secure_application: ^4.1.0
   secure_storage: ^1.0.0
-  share_plus: ^7.0.2
+  share_plus: ^13.3.0
   shared_preferences: ^2.5.3
   shimmer: ^3.0.0
   sqflite: ^2.4.2

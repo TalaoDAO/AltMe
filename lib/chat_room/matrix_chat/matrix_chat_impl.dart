@@ -305,18 +305,18 @@ class MatrixChatImpl extends MatrixChatInterface {
   Future<void> handleFileSelection({
     required OnMessageCreated onMessageCreated,
   }) async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.any);
+    final result = await FilePicker.pickFile(type: FileType.any);
 
-    if (result != null && result.files.single.path != null) {
+    if (result != null && result.path != null) {
       final messageId = const Uuid().v4();
       final message = FileMessage(
         author: user!,
         createdAt: DateTime.now().millisecondsSinceEpoch,
         id: messageId,
-        mimeType: lookupMimeType(result.files.single.path!),
-        name: result.files.single.name,
-        size: result.files.single.size,
-        uri: result.files.single.path!,
+        mimeType: lookupMimeType(result.path!),
+        name: result.name,
+        size: await result.length(),
+        uri: result.path!,
         status: Status.sending,
       );
       final roomId = await onMessageCreated.call(message);
@@ -329,8 +329,8 @@ class MatrixChatImpl extends MatrixChatInterface {
           .getRoomById(roomId)
           ?.sendFileEvent(
             MatrixFile(
-              bytes: File(result.files.single.path!).readAsBytesSync(),
-              name: result.files.single.name,
+              bytes: File(result.path!).readAsBytesSync(),
+              name: result.name,
             ),
             txid: messageId,
           );

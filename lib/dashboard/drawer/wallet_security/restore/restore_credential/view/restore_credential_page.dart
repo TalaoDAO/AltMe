@@ -184,9 +184,9 @@ class _RestoreCredentialViewState extends State<RestoreCredentialView> {
   }
 
   Future<void> _pickRestoreFile() async {
-    final pickedFile = await FilePicker.platform.pickFiles();
+    final pickedFile = await FilePicker.pickFile();
     context.read<RestoreCredentialCubit>().setFilePath(
-      filePath: pickedFile?.files.first.path,
+      filePath: pickedFile?.path,
     );
   }
 }

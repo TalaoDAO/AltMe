@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/inject_selective_disclosure_state.dart';
@@ -292,13 +291,6 @@ class _SelectiveDisclosurePickViewState
       if (transactionData != null) {
         await transactionData.execute();
         final List<String> blockchainTransactionHashes = [];
-        for (final transaction in transactionData.transactions) {
-          if (transaction is PaymentTransaction) {
-            blockchainTransactionHashes.addAll(
-              transaction.blockchainTransactionHashes,
-            );
-          }
-        }
         if (blockchainTransactionHashes.isNotEmpty) {
           payload['blockchain_transaction_hashes'] =
               blockchainTransactionHashes;

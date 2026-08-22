@@ -1,19 +1,14 @@
 import 'package:altme/app/shared/shared.dart';
-import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:eudi_wallet/app/shared/shared.dart';
-import 'package:eudi_wallet/credentials/credentials.dart';
-import 'package:eudi_wallet/dashboard/dashboard.dart';
-import 'package:eudi_wallet/wallet/wallet.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
 
-part 'create_account_state.dart';
 part 'create_account_cubit.g.dart';
+part 'create_account_state.dart';
 
 class CreateAccountCubit extends Cubit<CreateAccountState> {
   CreateAccountCubit({

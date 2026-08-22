@@ -1,9 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BlockchainSettingsMenu extends StatelessWidget {
   const BlockchainSettingsMenu({super.key});
@@ -42,20 +40,6 @@ class BlockchainSettingsView extends StatelessWidget {
             title: l10n.manageAccounts,
             onTap: () {
               Navigator.of(context).push<void>(ManageAccountsPage.route());
-            },
-          ),
-          DrawerItem(
-            title: l10n.manageConnectedApps,
-            onTap: () {
-              Navigator.of(context).push<void>(
-                ConnectedDappsPage.route(
-                  walletAddress: context
-                      .read<WalletCubit>()
-                      .state
-                      .currentAccount!
-                      .walletAddress,
-                ),
-              );
             },
           ),
           DrawerItem(

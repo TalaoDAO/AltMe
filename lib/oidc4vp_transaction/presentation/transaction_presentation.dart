@@ -1,6 +1,5 @@
 import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
 import 'package:altme/oidc4vp_transaction/presentation/cubit/transaction_data_cubit.dart';
-import 'package:altme/oidc4vp_transaction/presentation/payment_transaction/payment_presentation.dart';
 import 'package:altme/oidc4vp_transaction/presentation/signature_transaction/signature_presentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,9 +12,6 @@ class TransactionPresentation extends StatelessWidget {
     return BlocBuilder<TransactionDataCubit, TransactionDataState>(
       builder: (context, state) {
         return switch (state.currentTransaction) {
-          final PaymentTransaction paymentTransaction => PaymentPresentation(
-            paymentTransaction,
-          ),
           final SignatureTransaction signatureTransaction =>
             SignaturePresentation(signatureTransaction),
         };

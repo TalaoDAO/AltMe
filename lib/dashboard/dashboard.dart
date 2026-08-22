@@ -1,6 +1,5 @@
 export 'add_account/add_account.dart';
 export 'ai_age_verification/ai_age_verificatioin.dart';
-export 'connection/connection.dart';
 export 'crypto_account_switcher/crypto_account_switcher.dart';
 export 'discover/discover.dart';
 export 'drawer/drawer.dart';
@@ -10,7 +9,6 @@ export 'mnemonic_verification/mnemonic_verification.dart';
 export 'profile/profile.dart';
 export 'qr_code/qr_code.dart';
 export 'search/search.dart';
-export 'select_network_fee_bottom_sheet/select_network_fee_bottom_sheet.dart';
 export 'src/src.dart';
 export 'user_pin/user_pin.dart';
 export 'wert/wert.dart';

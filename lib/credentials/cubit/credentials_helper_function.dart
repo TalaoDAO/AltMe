@@ -260,7 +260,7 @@ Future<CredentialModel?> generateCryptoAccountOwnershipProof({
             );
           }
         }
-        return _createCredential(
+        return await _createCredential(
           vc: vc,
           oldId: oldId,
           credentialManifest: credentialManifest,

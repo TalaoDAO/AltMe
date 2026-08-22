@@ -1,9 +1,9 @@
-import 'package:eudi_wallet/app/app.dart';
-import 'package:eudi_wallet/credentials/credentials.dart';
-import 'package:eudi_wallet/dashboard/dashboard.dart';
-import 'package:eudi_wallet/key_generator/key_generator.dart';
-import 'package:eudi_wallet/l10n/l10n.dart';
-import 'package:eudi_wallet/onboarding/widgets/m_stepper.dart';
+import 'package:altme/app/app.dart';
+import 'package:altme/credentials/credentials.dart';
+import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/key_generator/key_generator.dart';
+import 'package:altme/l10n/l10n.dart';
+import 'package:altme/onboarding/widgets/m_stepper.dart';
 
 import 'package:altme/wallet/wallet.dart';
 import 'package:flutter/material.dart';

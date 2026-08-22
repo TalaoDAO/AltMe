@@ -1,6 +1,5 @@
 import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
 import 'package:altme/oidc4vp_transaction/presentation/cubit/transaction_data_cubit.dart';
-import 'package:altme/oidc4vp_transaction/presentation/payment_transaction/payment_accept_button.dart';
 import 'package:altme/oidc4vp_transaction/presentation/signature_transaction/signature_accept_button.dart';
 import 'package:altme/oidc4vp_transaction/presentation/widget/refuse_button.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +21,6 @@ class NavigationButtons extends StatelessWidget {
               builder: (context, state) {
                 final currentTransaction = state.currentTransaction;
                 switch (currentTransaction) {
-                  case final PaymentTransaction paymentTransaction:
-                   return PaymentAcceptButton(paymentTransaction);
                   case final SignatureTransaction signatureTransaction:
                     return SignatureAcceptButton(
                       signatureTransaction,
@@ -38,4 +35,3 @@ class NavigationButtons extends StatelessWidget {
     );
   }
 }
-

@@ -22,10 +22,6 @@ class Oidc4vpTransactionFactory {
         final decodedMap = json.decode(decodedString) as Map<String, dynamic>;
         final type = transactionType(decodedMap);
         switch (type) {
-          case TransactionType.cryptoPayment:
-            decodedTransactions.add(
-              PaymentTransaction(transactionJson: decodedMap),
-            );
           case TransactionType.textSignature:
             decodedTransactions.add(
               SignatureTransaction(transactionJson: decodedMap),
@@ -41,6 +37,6 @@ class Oidc4vpTransactionFactory {
     if (decodedMap['type'] == 'urn:wallet:local:signature') {
       return TransactionType.textSignature;
     }
-    return TransactionType.cryptoPayment;
+    throw Exception('Unknown transaction type: ${decodedMap['type']}');
   }
 }

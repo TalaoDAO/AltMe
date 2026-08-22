@@ -5,33 +5,33 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
+import 'package:altme/activity_log/activity_log.dart';
+import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/alert_message/message_cubit.dart';
+import 'package:altme/chat_room/chat_room.dart';
+import 'package:altme/credentials/credentials.dart';
+import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/src/view/page_not_found.dart';
+import 'package:altme/deep_link/deep_link.dart';
+import 'package:altme/enterprise/enterprise.dart';
+import 'package:altme/flavor/cubit/flavor_cubit.dart';
+import 'package:altme/key_generator/key_generator.dart';
+import 'package:altme/kyc_verification/cubit/kyc_verification_cubit.dart';
+import 'package:altme/l10n/l10n.dart';
+import 'package:altme/lang/cubit/lang_cubit.dart';
+import 'package:altme/lang/cubit/lang_state.dart';
+import 'package:altme/matrix_notification/cubit/matrix_notification_cubit.dart';
+import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
+import 'package:altme/query_by_example/query_by_example.dart';
+import 'package:altme/route/route.dart';
+import 'package:altme/scan/scan.dart';
+import 'package:altme/splash/splash.dart';
+import 'package:altme/theme/app_theme/app_theme.dart';
+import 'package:altme/theme/theme_cubit.dart';
+import 'package:altme/theme/theme_repository.dart';
+import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
-import 'package:eudi_wallet/activity_log/activity_log.dart';
-import 'package:eudi_wallet/app/app.dart';
-import 'package:eudi_wallet/app/shared/alert_message/message_cubit.dart';
-import 'package:eudi_wallet/chat_room/chat_room.dart';
-import 'package:eudi_wallet/credentials/credentials.dart';
-import 'package:eudi_wallet/dashboard/dashboard.dart';
-import 'package:eudi_wallet/dashboard/src/view/page_not_found.dart';
-import 'package:eudi_wallet/deep_link/deep_link.dart';
-import 'package:eudi_wallet/enterprise/enterprise.dart';
-import 'package:eudi_wallet/flavor/cubit/flavor_cubit.dart';
-import 'package:eudi_wallet/key_generator/key_generator.dart';
-import 'package:eudi_wallet/kyc_verification/cubit/kyc_verification_cubit.dart';
-import 'package:eudi_wallet/l10n/l10n.dart';
-import 'package:eudi_wallet/lang/cubit/lang_cubit.dart';
-import 'package:eudi_wallet/lang/cubit/lang_state.dart';
-import 'package:eudi_wallet/matrix_notification/cubit/matrix_notification_cubit.dart';
-import 'package:eudi_wallet/onboarding/cubit/onboarding_cubit.dart';
-import 'package:eudi_wallet/query_by_example/query_by_example.dart';
-import 'package:eudi_wallet/route/route.dart';
-import 'package:eudi_wallet/scan/scan.dart';
-import 'package:eudi_wallet/splash/splash.dart';
-import 'package:eudi_wallet/theme/app_theme/app_theme.dart';
-import 'package:eudi_wallet/theme/theme_cubit.dart';
-import 'package:eudi_wallet/theme/theme_repository.dart';
-import 'package:eudi_wallet/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -211,51 +211,7 @@ class App extends StatelessWidget {
               enterpriseCubit: context.read<EnterpriseCubit>(),
             ),
           ),
-          BlocProvider(
-            create: (context) => AllTokensCubit(
-              secureStorageProvider: secureStorageProvider,
-              client: DioClient(
-                baseUrl: Urls.coinGeckoBase,
-                secureStorageProvider: secureStorageProvider,
-                dio: Dio(),
-              ),
-            ),
-          ),
           BlocProvider(create: (_) => MnemonicNeedVerificationCubit()),
-          BlocProvider<TokensCubit>(
-            create: (context) => TokensCubit(
-              allTokensCubit: context.read<AllTokensCubit>(),
-              networkCubit: context.read<ManageNetworkCubit>(),
-              mnemonicNeedVerificationCubit: context
-                  .read<MnemonicNeedVerificationCubit>(),
-              secureStorageProvider: secureStorageProvider,
-              client: DioClient(
-                baseUrl: context
-                    .read<ManageNetworkCubit>()
-                    .state
-                    .network
-                    .apiUrl,
-                secureStorageProvider: secureStorageProvider,
-                dio: Dio(),
-              ),
-              walletCubit: context.read<WalletCubit>(),
-            ),
-          ),
-          BlocProvider<NftCubit>(
-            create: (context) => NftCubit(
-              client: DioClient(
-                baseUrl: context
-                    .read<ManageNetworkCubit>()
-                    .state
-                    .network
-                    .apiUrl,
-                secureStorageProvider: secureStorageProvider,
-                dio: Dio(),
-              ),
-              walletCubit: context.read<WalletCubit>(),
-              manageNetworkCubit: context.read<ManageNetworkCubit>(),
-            ),
-          ),
           BlocProvider(
             create: (context) => SplashCubit(
               secureStorageProvider: secureStorageProvider,
