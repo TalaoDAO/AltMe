@@ -19,10 +19,10 @@ function env {
 
 function pub {
   flutter clean
-  for d in `ls packages`;
+  for d in `ls ../../packages`;
   do
     (
-      cd "packages/$d"
+      cd "../../packages/$d"
       flutter clean
       flutter pub get
       flutter pub upgrade
@@ -36,11 +36,11 @@ function pub {
 
 function buildRunner {
   echo "build_runner"
-  for d in `ls packages`;
+  for d in `ls ../../packages`;
   do
     (
       echo "$d"
-      cd "packages/$d"
+      cd "../../packages/$d"
       dart run build_runner build --delete-conflicting-outputs
     )
   done 
