@@ -5,13 +5,13 @@ class SignatureTransaction extends Oidc4vpTransaction {
 
   @override
   Future<void> prepare() {
-    // TODO: implement accept
+    // TODO(hawkbee): implement accept
     throw UnimplementedError();
   }
 
   @override
   Future<void> cancel() {
-    // TODO: implement refuse
+    // TODO(hawkbee): implement refuse
     throw UnimplementedError();
   }
 
@@ -20,9 +20,7 @@ class SignatureTransaction extends Oidc4vpTransaction {
 
   @override
   Future<void> execute() {
-    // TODO: implement execute
+    // TODO(hawkbee): implement execute
     throw UnimplementedError();
   }
-
-
 }

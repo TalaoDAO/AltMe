@@ -104,7 +104,7 @@ Future<void> addOIDC4VCCredential({
         credentialType: credentialType,
       );
     case VCFormatType.mdoc:
-      // TODO: Handle this case. mdoc
+      // TODO(hawkbee): Handle this case. mdoc
       throw UnimplementedError();
   }
   final Map<String, dynamic> newCredential = Map<String, dynamic>.from(

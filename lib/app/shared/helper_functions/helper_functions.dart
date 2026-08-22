@@ -1497,7 +1497,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
           case ClientType.wiaSub:
-            // TODO: Handle this case.getClientDetails
+            // TODO(hawkbee): Handle this case.getClientDetails
             throw UnimplementedError();
         }
 
@@ -1511,7 +1511,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
           case ClientType.wiaSub:
-            // TODO: Handle this case.getClientDetails
+            // TODO(hawkbee): Handle this case.getClientDetails
             throw UnimplementedError();
         }
 
@@ -1554,7 +1554,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
         oAuthClientAttestation = walletAttestationData;
         oAuthClientAttestationPop = jwtProofOfPossession;
       case ClientAuthentication.wia:
-        // TODO: Handle this case.getClientDetails
+        // TODO(hawkbee): Handle this case.getClientDetails
         throw UnimplementedError();
     }
 
