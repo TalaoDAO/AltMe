@@ -988,6 +988,8 @@ bool isURL(String input) {
 }
 
 MessageHandler getMessageHandler(dynamic e) {
+  unawaited(Sentry.captureMessage(e.toString()));
+
   if (e is MessageHandler) {
     return e;
   } else if (e is DioException) {
