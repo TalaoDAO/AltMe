@@ -16,6 +16,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppBlocObserver extends BlocObserver {
@@ -54,6 +55,16 @@ Future<void> bootstrap(FlavorMode flavor) async {
     GoogleFonts.config.allowRuntimeFetching = true;
 
     Bloc.observer = AppBlocObserver();
-    runApp(App(flavorMode: flavor, themeRepository: themeRepository));
+    await SentryFlutter.init(
+      (options) => options
+        ..dsn =
+            'https://b1e6ffd0c1224d64bcaaadd46ea4f24e@o586691.ingest.us.sentry.io/4504605041688576',
+      appRunner: () {
+        runApp(App(flavorMode: flavor, themeRepository: themeRepository));
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          unawaited(Sentry.captureMessage('AltMe app launched'));
+        });
+      },
+    );
   }, (error, stackTrace) => log(error.toString(), stackTrace: stackTrace));
 }
