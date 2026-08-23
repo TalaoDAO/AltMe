@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
@@ -11,6 +13,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'import_wallet_cubit.g.dart';
 part 'import_wallet_state.dart';
@@ -129,6 +132,7 @@ class ImportWalletCubit extends Cubit<ImportWalletState> {
 
       emit(state.success());
     } catch (e, s) {
+      unawaited(Sentry.captureException(e, stackTrace: s));
       log.e(
         'something went wrong when generating a key',
         error: e,

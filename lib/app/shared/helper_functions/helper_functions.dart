@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
@@ -18,6 +19,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:tezart/tezart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:x509_plus/x509.dart' as x509;
@@ -1136,6 +1138,7 @@ MessageHandler getMessageHandler(dynamic e) {
         },
       );
     } else {
+      unawaited(Sentry.captureMessage('helper_functions.dart'));
       return ResponseMessage(
         message:
             ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,

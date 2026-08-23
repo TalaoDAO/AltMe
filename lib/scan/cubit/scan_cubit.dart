@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/activity_log/activity_log.dart';
@@ -18,6 +19,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
@@ -495,6 +497,7 @@ class ScanCubit extends Cubit<ScanState> {
         );
       }
     } catch (e, s) {
+      unawaited(Sentry.captureException(e, stackTrace: s));
       log.e('something went wrong', error: e, stackTrace: s);
       emitError(e);
     }
@@ -741,6 +744,7 @@ class ScanCubit extends Cubit<ScanState> {
         );
       }
     } catch (e, s) {
+      unawaited(Sentry.captureException(e, stackTrace: s));
       log.e('something went wrong - $e', error: e, stackTrace: s);
       emitError(e);
     }

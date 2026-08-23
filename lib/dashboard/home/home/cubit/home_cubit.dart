@@ -15,6 +15,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'home_cubit.g.dart';
 part 'home_state.dart';
@@ -121,6 +122,7 @@ class HomeCubit extends Cubit<HomeState> {
     } catch (e) {
       final logger = getLogger('HomeCubit - AISelfiValidation');
       logger.e('error: $e');
+      unawaited(Sentry.captureException(e));
 
       logger.e(e);
       String? message;

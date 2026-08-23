@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class CredentialsRepository {
   CredentialsRepository(SecureStorageProvider secureStorageProvider)
@@ -15,6 +17,7 @@ class CredentialsRepository {
     try {
       data = await _secureStorageProvider.getAllValues();
     } catch (e) {
+      unawaited(Sentry.captureException(e));
       throw ResponseMessage(
         message:
             ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,

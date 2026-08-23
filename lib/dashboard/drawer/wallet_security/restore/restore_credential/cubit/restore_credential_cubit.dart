@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -11,6 +12,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'restore_credential_cubit.g.dart';
 part 'restore_credential_state.dart';
@@ -47,6 +49,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
     );
 
     if (ssiMnemonic == null) {
+      unawaited(Sentry.captureMessage('restore_credential_cubit.dart'));
       throw ResponseMessage(
         message:
             ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
