@@ -1467,12 +1467,14 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
       didKeyType: didKeyType,
     );
 
-    final (did, _) = await fetchDidAndKid(
-      privateKey: privateKey,
-      isEBSI: isEBSI,
-      profileCubit: profileCubit,
-      didKeyType: didKeyType,
-    );
+    // final (did, _) = await fetchDidAndKid(
+    //   privateKey: privateKey,
+    //   isEBSI: isEBSI,
+    //   profileCubit: profileCubit,
+    //   didKeyType: didKeyType,
+    // );
+
+    const did = '';
 
     final tokenParameters = TokenParameters(
       privateKey: jsonDecode(privateKey) as Map<String, dynamic>,

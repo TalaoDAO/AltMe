@@ -27,12 +27,14 @@ Future<(List<dynamic>?, String?, String?)?> getCredential({
     profileCubit: profileCubit,
   );
 
-  final (did, kid) = await fetchDidAndKid(
-    isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
-    privateKey: privateKey,
-    didKeyType: didKeyType,
-    profileCubit: profileCubit,
-  );
+  // final (did, kid) = await fetchDidAndKid(
+  //   isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
+  //   privateKey: privateKey,
+  //   didKeyType: didKeyType,
+  //   profileCubit: profileCubit,
+  // );
+  const did = '';
+  const kid = '';
 
   final customOidc4vcProfile = profileCubit
       .state
