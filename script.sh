@@ -91,7 +91,6 @@ then
 elif [[ "$*" == *-ios* ]]; 
 then 
   pub
-  buildRunner
   podUpdate
   echo "deploy ios"
   echo "Make sure you are in right branch"
