@@ -16,7 +16,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart' hide User;
 import 'package:mime/mime.dart';
-import 'package:oidc4vc/oidc4vc.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -31,7 +30,6 @@ class MatrixChatImpl extends MatrixChatInterface {
       didKitProvider: DIDKitProvider(),
       dioClient: DioClient(secureStorageProvider: getSecureStorage, dio: Dio()),
       secureStorageProvider: getSecureStorage,
-      oidc4vc: OIDC4VC(),
     );
     return _instance!;
   }
@@ -40,7 +38,6 @@ class MatrixChatImpl extends MatrixChatInterface {
     required this.didKitProvider,
     required this.dioClient,
     required this.secureStorageProvider,
-    required this.oidc4vc,
   });
 
   static MatrixChatImpl? _instance;
@@ -48,7 +45,6 @@ class MatrixChatImpl extends MatrixChatInterface {
   final DIDKitProvider didKitProvider;
   final DioClient dioClient;
   final SecureStorageProvider secureStorageProvider;
-  final OIDC4VC oidc4vc;
 
   @override
   Future<User> init(ProfileCubit profileCubit) async {
