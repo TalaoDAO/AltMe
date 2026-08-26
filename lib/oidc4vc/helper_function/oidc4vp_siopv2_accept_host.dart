@@ -38,8 +38,7 @@ Future<void> oidc4vpSiopV2AcceptHost({
 
   if (requestUri != null || request != null) {
     encodedData = await getPayload(client, requestUri, request);
-    response = decodePayload(
-      jwtDecode: JWTDecode(),
+    response = JWTDecode().decodePayload(
       token: encodedData as String,
     );
   }

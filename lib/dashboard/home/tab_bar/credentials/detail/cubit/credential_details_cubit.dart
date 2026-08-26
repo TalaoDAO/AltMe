@@ -219,10 +219,7 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
 
       if (item.jwt != null) {
         final jwt = item.jwt!;
-        final Map<String, dynamic> header = decodeHeader(
-          jwtDecode: jwtDecode,
-          token: jwt,
-        );
+        final Map<String, dynamic> header = jwtDecode.decodeHeader(token: jwt);
 
         Map<String, dynamic>? publicKeyJwk;
 

@@ -32,15 +32,9 @@ class DeveloperDetails extends StatelessWidget {
     String? data;
 
     if (credentialModel.jwt != null) {
-      final jsonheader = decodeHeader(
-        jwtDecode: jwtDecode,
-        token: credentialModel.jwt!,
-      );
+      final jsonheader = jwtDecode.decodeHeader(token: credentialModel.jwt!);
       header = const JsonEncoder.withIndent('  ').convert(jsonheader);
-      final jsonPayload = decodePayload(
-        jwtDecode: jwtDecode,
-        token: credentialModel.jwt!,
-      );
+      final jsonPayload = jwtDecode.decodePayload(token: credentialModel.jwt!);
       payload = const JsonEncoder.withIndent(
         '  ',
       ).convert(Map.of(jsonPayload)..removeWhere((key, value) => key == 'jwt'));
