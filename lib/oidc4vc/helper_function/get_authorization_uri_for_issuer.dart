@@ -85,7 +85,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
 
   late Uri authorizationUri;
 
-  final authorizationRequestParemeters = OIDC4VC()
+  final authorizationRequestParemeters = profileCubit.oidc4vc
       .getAuthorizationRequestParemeters(
         selectedCredentials: selectedCredentials,
         clientId: clientId,

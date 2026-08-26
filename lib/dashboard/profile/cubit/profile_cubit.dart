@@ -39,7 +39,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   final SecureStorageProvider secureStorageProvider;
-  final OIDC4VC oidc4vc;
+  OIDC4VC oidc4vc;
   final DIDKitProvider didKitProvider;
   final LangCubit langCubit;
   final JWTDecode jwtDecode;
@@ -239,27 +239,6 @@ class ProfileCubit extends Cubit<ProfileState> {
             enterpriseWalletName: enterpriseWalletName,
           );
 
-        // case ProfileType.ebsiV4:
-        //   final privateKey = await getPrivateKey(
-        //     didKeyType: Parameters.didKeyTypeForEbsiV4,
-        //     profileCubit: this,
-        //   );
-
-        //   final (did, _) = await getDidAndKid(
-        //     didKeyType: Parameters.didKeyTypeForEbsiV4,
-        //     privateKey: privateKey,
-        //     profileCubit: this,
-        //   );
-
-        //   profileModel = ProfileModel.ebsiV4(
-        //     walletType: walletType,
-        //     walletProtectionType: walletProtectionType,
-        //     isDeveloperMode: isDeveloperMode,
-        //     clientId: did,
-        //     clientSecret: randomString(12),
-        //     enterpriseWalletName: enterpriseWalletName,
-        //   );
-
         case ProfileType.diipv5:
           final privateKey = await getPrivateKey(
             didKeyType: Parameters.didKeyTypeForOwfBaselineProfile,
@@ -414,7 +393,20 @@ class ProfileCubit extends Cubit<ProfileState> {
         SecureStorageKeys.profileType,
         profileModel.profileType.toString(),
       );
-
+      switch (profileModel
+          .profileSetting
+          .selfSovereignIdentityOptions
+          .customOidc4vcProfile
+          .oidc4vciDraft) {
+        case OIDC4VCIDraftType.draft11:
+        case OIDC4VCIDraftType.draft13:
+        case OIDC4VCIDraftType.draft14:
+        case OIDC4VCIDraftType.draft15:
+          break;
+        case OIDC4VCIDraftType.draft16:
+        case OIDC4VCIDraftType.final1:
+          oidc4vc = Oidc4vcFinal();
+      }
       emit(
         state.copyWith(
           model: profileModel,
