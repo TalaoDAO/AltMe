@@ -423,38 +423,6 @@ Future<String> fetchPrivateKey({
   return privateKey;
 }
 
-Map<String, dynamic> decodePayload({
-  required JWTDecode jwtDecode,
-  required String token,
-}) {
-  final log = getLogger('QRCodeScanCubit - jwtDecode');
-  late final Map<String, dynamic> data;
-
-  try {
-    final payload = jwtDecode.parseJwt(token);
-    data = payload;
-  } catch (e, s) {
-    log.e('An error occurred while decoding.', error: e, stackTrace: s);
-  }
-  return data;
-}
-
-Map<String, dynamic> decodeHeader({
-  required JWTDecode jwtDecode,
-  required String token,
-}) {
-  final log = getLogger('QRCodeScanCubit - jwtDecode');
-  late final Map<String, dynamic> data;
-
-  try {
-    final header = jwtDecode.parseJwtHeader(token);
-    data = header;
-  } catch (e, s) {
-    log.e('An error occurred while decoding.', error: e, stackTrace: s);
-  }
-  return data;
-}
-
 String birthDateFormater(int birthData) {
   final String birthdate = birthData.toString();
 
@@ -959,8 +927,7 @@ Future<String> getHost({required Uri uri, required DioClient client}) async {
     /// check if request uri is provided or not
     if (requestUri != null) {
       final dynamic response = await client.get(requestUri);
-      final Map<String, dynamic> decodedResponse = decodePayload(
-        jwtDecode: JWTDecode(),
+      final Map<String, dynamic> decodedResponse = JWTDecode().decodePayload(
         token: response as String,
       );
 

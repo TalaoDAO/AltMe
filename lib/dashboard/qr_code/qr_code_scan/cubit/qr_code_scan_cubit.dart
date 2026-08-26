@@ -646,8 +646,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       /// verifier side (oidc4vp) or (siopv2 oidc4vc) with request_uri
       /// afer verification process
-      final Map<String, dynamic> response = decodePayload(
-        jwtDecode: jwtDecode,
+      final Map<String, dynamic> response = jwtDecode.decodePayload(
         token: encodedData as String,
       );
 
@@ -1098,8 +1097,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         }
 
         if (clientIdScheme != null) {
-          final Map<String, dynamic> header = decodeHeader(
-            jwtDecode: jwtDecode,
+          final Map<String, dynamic> header = jwtDecode.decodeHeader(
             token: encodedData,
           );
 

@@ -1,4 +1,3 @@
-import 'package:altme/app/app.dart';
 import 'package:dio/dio.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -21,10 +20,7 @@ Future<VerificationType> verifyEncodedData({
     updateJwt = jwt.split('~').first;
   }
 
-  final Map<String, dynamic> header = decodeHeader(
-    jwtDecode: jwtDecode,
-    token: updateJwt,
-  );
+  final Map<String, dynamic> header = jwtDecode.decodeHeader(token: updateJwt);
 
   String? issuerKid;
 
