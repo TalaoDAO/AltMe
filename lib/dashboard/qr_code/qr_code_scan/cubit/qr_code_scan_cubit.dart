@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_query_pick_page.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
@@ -52,7 +53,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final JWTDecode jwtDecode;
   final SecureStorageProvider secureStorageProvider;
   final DIDKitProvider didKitProvider;
-  final OIDC4VC oidc4vc;
+  OIDC4VC oidc4vc;
   final WalletCubit walletCubit;
   final EnterpriseCubit enterpriseCubit;
 
@@ -995,19 +996,33 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }) async {
     final (CredentialModel credentialPreview, String host) =
         await prepareOIDC4VPFlow(keys: keys, uri: uri);
-
-    emit(
-      state.copyWith(
-        qrScanStatus: QrScanStatus.success,
-        route: CredentialManifestOfferPickPage.route(
-          uri: uri,
-          credential: credentialPreview,
-          issuer: Issuer.emptyIssuer(host),
-          inputDescriptorIndex: 0,
-          credentialsToBePresented: [],
+    if (oidc4vc is Oidc4vcFinal) {
+      emit(
+        state.copyWith(
+          qrScanStatus: QrScanStatus.success,
+          route: DcqlQueryOfferPickPage.route(
+            uri: uri,
+            credential: credentialPreview,
+            issuer: Issuer.emptyIssuer(host),
+            inputDescriptorIndex: 0,
+            credentialsToBePresented: [],
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      emit(
+        state.copyWith(
+          qrScanStatus: QrScanStatus.success,
+          route: CredentialManifestOfferPickPage.route(
+            uri: uri,
+            credential: credentialPreview,
+            issuer: Issuer.emptyIssuer(host),
+            inputDescriptorIndex: 0,
+            credentialsToBePresented: [],
+          ),
+        ),
+      );
+    }
   }
 
   /// verify jwt
@@ -1842,7 +1857,22 @@ ${state.uri}
     required List<String> keys,
     required Uri uri,
   }) async {
-    if (!keys.contains('presentation_definition') &&
+    if (oidc4vc is Oidc4vcFinal) {
+      final dcqlQuery = await oidc4vc.getDcqlQueryFromUri(uri: uri);
+      final CredentialModel credentialPreview = CredentialModel(
+        id: 'id',
+        image: 'image',
+        credentialPreview: Credential.dummy(),
+        shareLink: 'shareLink',
+        data: const {},
+        jwt: dcqlQuery,
+        profileLinkedId: profileCubit.state.model.profileType.getVCId,
+      );
+
+      final host = await getHost(uri: uri, client: client);
+
+      return (credentialPreview, host);
+    } else if (!keys.contains('presentation_definition') &&
         !keys.contains('presentation_definition_uri')) {
       final error = {
         'error': 'invalid_request',

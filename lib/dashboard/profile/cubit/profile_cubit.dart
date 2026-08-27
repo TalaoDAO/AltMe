@@ -835,7 +835,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (key == null) {
       return null;
     }
-    final jwt = decodePayload(jwtDecode: JWTDecode(), token: key);
+    final jwt = JWTDecode().decodePayload(token: key);
     final challenge = jwt['challenge'] as String;
     return getOidc4VCIState(challenge);
   }

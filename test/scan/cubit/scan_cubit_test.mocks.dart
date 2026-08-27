@@ -959,6 +959,12 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
           as int);
 
   @override
+  set oidc4vc(_i9.OIDC4VC? value) => super.noSuchMethod(
+    Invocation.setter(#oidc4vc, value),
+    returnValueForMissingStub: null,
+  );
+
+  @override
   set loginAttemptCount(int? value) => super.noSuchMethod(
     Invocation.setter(#loginAttemptCount, value),
     returnValueForMissingStub: null,
@@ -2209,6 +2215,19 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
             ),
           )
           as _i16.Future<_i9.OpenIdConfiguration>);
+
+  @override
+  _i16.Future<String> getDcqlQueryFromUri({required Uri? uri}) =>
+      (super.noSuchMethod(
+            Invocation.method(#getDcqlQueryFromUri, [], {#uri: uri}),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#getDcqlQueryFromUri, [], {#uri: uri}),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 }
 
 /// A class which mocks [JWTDecode].
@@ -2231,6 +2250,22 @@ class MockJWTDecode extends _i1.Mock implements _i8.JWTDecode {
   Map<String, dynamic> parseJwtHeader(String? token) =>
       (super.noSuchMethod(
             Invocation.method(#parseJwtHeader, [token]),
+            returnValue: <String, dynamic>{},
+          )
+          as Map<String, dynamic>);
+
+  @override
+  Map<String, dynamic> decodeHeader({required String? token}) =>
+      (super.noSuchMethod(
+            Invocation.method(#decodeHeader, [], {#token: token}),
+            returnValue: <String, dynamic>{},
+          )
+          as Map<String, dynamic>);
+
+  @override
+  Map<String, dynamic> decodePayload({required String? token}) =>
+      (super.noSuchMethod(
+            Invocation.method(#decodePayload, [], {#token: token}),
             returnValue: <String, dynamic>{},
           )
           as Map<String, dynamic>);

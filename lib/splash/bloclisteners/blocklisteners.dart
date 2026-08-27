@@ -61,6 +61,11 @@ final ProfileCubitListener = BlocListener<ProfileCubit, ProfileState>(
         profileLinkedId: ProfileType.EUDIW.getVCId,
       );
     }
+
+    // TODO(hawkbee): QRCodeScanCubit should be immutable
+    context.read<QRCodeScanCubit>().oidc4vc = context
+        .read<ProfileCubit>()
+        .oidc4vc;
   },
 );
 
