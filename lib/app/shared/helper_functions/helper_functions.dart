@@ -1592,7 +1592,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
       if (credSupported is Map<String, dynamic>) {
         /// display
         final displayData =
-            credSupported['credential_metadata']['display'] ??
+            credSupported['credential_metadata']?['display'] ??
             credSupported['display'];
 
         if (displayData is List<dynamic>) {
