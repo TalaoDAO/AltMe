@@ -80,7 +80,6 @@ then
 elif [[ "$*" == *-android* ]]; 
 then 
   pub
-  buildRunner
   echo "deploy android"
   echo "Make sure you are in right branch"
   flutter build appbundle --flavor "production" --target "lib/main_production.dart"
@@ -91,7 +90,6 @@ then
 elif [[ "$*" == *-ios* ]]; 
 then 
   pub
-  buildRunner
   podUpdate
   echo "deploy ios"
   echo "Make sure you are in right branch"
