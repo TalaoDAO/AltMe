@@ -1,6 +1,7 @@
 // Generated code, do not modify. Run `build_runner build` to re-generate!
 // @dart=2.12
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+
 import 'package:dart_web3/dart_web3.dart' as _i1;
 
 final _contractAbi = _i1.ContractAbi.fromJson(

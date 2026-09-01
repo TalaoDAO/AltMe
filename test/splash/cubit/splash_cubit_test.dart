@@ -1,16 +1,9 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/app/app.dart';
-import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/credentials/credentials.dart';
-import 'package:altme/credentials/credentials.dart';
-import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/matrix_notification/cubit/matrix_notification_cubit.dart';
-import 'package:altme/matrix_notification/cubit/matrix_notification_cubit.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
-import 'package:altme/splash/cubit/splash_cubit.dart';
-import 'package:altme/wallet/wallet.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dio/dio.dart';
