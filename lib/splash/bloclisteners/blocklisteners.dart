@@ -66,6 +66,10 @@ final ProfileCubitListener = BlocListener<ProfileCubit, ProfileState>(
     context.read<QRCodeScanCubit>().oidc4vc = context
         .read<ProfileCubit>()
         .oidc4vc;
+    // TODO(hawkbee): ScanCubit should be immutable
+    context.read<ScanCubit>().oidc4vc = context
+        .read<ProfileCubit>()
+        .oidc4vc;
   },
 );
 
