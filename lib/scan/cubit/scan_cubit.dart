@@ -1104,7 +1104,6 @@ class ScanCubit extends Cubit<ScanState> {
         final String responseOrRedirectUri =
             uri.queryParameters['redirect_uri'] ??
             uri.queryParameters['response_uri']!;
-        final clientMetaData = await getClientMetada(client: client, uri: uri);
 
         final nonce = uri.queryParameters['nonce'] ?? '';
 
@@ -1196,8 +1195,29 @@ class ScanCubit extends Cubit<ScanState> {
             payload: responseData,
             tokenParameters: tokenParameters,
           );
+          final clientMetaDataJson = await getClientMetada(
+            client: client,
+            uri: uri,
+          );
 
-          body = {'response': jwtProofOfPossession};
+          final clientMetaData = clientMetaDataJson != null
+              ? ClientMetadata.fromJson(clientMetaDataJson)
+              : null;
+          if (responseMode == 'direct_post.jwt') {
+            if (clientMetaData == null) {
+              throw StateError(
+                'Client metadata is required for direct_post.jwt',
+              );
+            }
+            final encryptedResponse =
+                await DirectPostJwtEncrypter.encryptDirectPostJwt(
+                  jwt: jwtProofOfPossession,
+                  clientMetadata: clientMetaData,
+                );
+            body = {'response': encryptedResponse};
+          } else {
+            body = {'response': jwtProofOfPossession};
+          }
           if (profileCubit.state.model.isDeveloperMode) {
             final value = await qrCodeScanCubit.showDataBeforeSending(
               title: 'RESPONSE REQUEST',
