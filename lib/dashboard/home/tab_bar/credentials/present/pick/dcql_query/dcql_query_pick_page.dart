@@ -1,12 +1,12 @@
-import 'dart:async';
-
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_helper.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 
-import 'package:credential_manifest/credential_manifest.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:dcql/dcql.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -93,389 +93,304 @@ class DcqlQueryOfferPickView extends StatefulWidget {
   final List<CredentialModel> credentialsToBePresented;
 
   @override
-  State<DcqlQueryOfferPickView> createState() =>
-      _DcqlQueryOfferPickViewState();
+  State<DcqlQueryOfferPickView> createState() => _DcqlQueryOfferPickViewState();
 }
 
-class _DcqlQueryOfferPickViewState
-    extends State<DcqlQueryOfferPickView> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final isVcSdJWT =
-          context
-                  .read<CredentialManifestPickCubit>()
-                  .state
-                  .filteredCredentialList
-                  .firstOrNull
-                  ?.getFormat ==
-              VCFormatType.vcSdJWT.vcValue ||
-          context
-                  .read<CredentialManifestPickCubit>()
-                  .state
-                  .filteredCredentialList
-                  .firstOrNull
-                  ?.getFormat ==
-              VCFormatType.dcSdJWT.vcValue;
-      if (isVcSdJWT) {
-        final element = context
-            .read<CredentialManifestPickCubit>()
-            .state
-            .filteredCredentialList;
-        final containsSingleElement = element.isNotEmpty && element.length == 1;
-        if (containsSingleElement) {
-          final PresentationDefinition? presentationDefinition = context
-              .read<CredentialManifestPickCubit>()
-              .state
-              .presentationDefinition;
-          if (presentationDefinition != null) {
-            context.read<CredentialManifestPickCubit>().toggle(
-              index: 0,
-              inputDescriptor: presentationDefinition
-                  .inputDescriptors[widget.inputDescriptorIndex],
-              isVcSdJWT: isVcSdJWT,
-            );
-
-            final credentialManifestState = context
-                .read<CredentialManifestPickCubit>()
-                .state;
-            final firstOne = credentialManifestState
-                .filteredCredentialList[credentialManifestState.selected.first];
-
-            Navigator.of(context).pushReplacement<void, void>(
-              SelectiveDisclosurePickPage.route(
-                uri: widget.uri,
-                issuer: widget.issuer,
-                credential: widget.credential,
-                inputDescriptorIndex: widget.inputDescriptorIndex,
-                credentialsToBePresented: widget.credentialsToBePresented,
-                presentationDefinition: presentationDefinition,
-                selectedCredential: firstOne,
-              ),
-            );
-          }
-        }
-      }
-    });
-  }
-
+class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    assert(widget.credential.jwt != null, 'Credential must have a JWT');
+    final jwt = widget.credential.jwt!;
+    final toto = JWT.decode(jwt);
+    if (toto.payload['dcql_query'] == null) {
+      throw Exception('dcql_query is null');
+    }
+    final rawQuery = toto.payload['dcql_query'] as Map<String, dynamic>;
+    final query = DcqlCredentialQuery.fromJson(rawQuery);
+    final credentials = context.read<CredentialsCubit>().state.credentials;
+    final candidates = credentials
+        .where((e) => e.format == VCFormatType.dcSdJWT.vpValue)
+        .toList();
+    // create a list of SdJwtDigitalCredential from the credentials that have
+    // the format dcSdJwt and the constructor is
+    // SdJwtDigitalCredential.fromSdJwt(sdJwtToken: e.jwt!)
 
-    return BlocConsumer<
-      CredentialManifestPickCubit,
-      CredentialManifestPickState
-    >(
-      listener: (context, state) {
-        if (state.message != null) {
-          AlertMessage.showStateMessage(
-            context: context,
-            stateMessage: state.message!,
-          );
-        }
-      },
-      builder: (context, credentialManifestState) {
-        final PresentationDefinition? presentationDefinition =
-            credentialManifestState.presentationDefinition;
+    final packageFormatCredentials = candidates
+        .map((e) => SdJwtDigitalCredential.fromSdJwt(sdJwtToken: e.jwt!))
+        .toList();
+    final result = query.query(packageFormatCredentials);
 
-        final isVcSdJWT =
-            credentialManifestState
-                    .filteredCredentialList
-                    .firstOrNull
-                    ?.getFormat ==
-                VCFormatType.vcSdJWT.vcValue ||
-            credentialManifestState
-                    .filteredCredentialList
-                    .firstOrNull
-                    ?.getFormat ==
-                VCFormatType.dcSdJWT.vcValue;
+    final vpToken = buildVpToken(result, packageFormatCredentials, credentials);
 
-        return BlocListener<ScanCubit, ScanState>(
-          listener: (context, scanState) {
-            if (scanState.status == ScanStatus.loading) {
-              LoadingView().show(context: context);
-            } else {
-              LoadingView().hide();
-            }
-            if (scanState.message != null) {
-              AlertMessage.showStateMessage(
-                context: context,
-                stateMessage: scanState.message!,
-              );
-            }
-          },
-          child: credentialManifestState.filteredCredentialList.isEmpty
-              ? RequiredCredentialNotFound(uri: widget.uri)
-              : BasePage(
-                  title: l10n.credentialShareTitle,
-                  titleAlignment: Alignment.topCenter,
-                  titleTrailing: const WhiteCloseButton(),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 24,
-                    horizontal: 16,
-                  ),
-                  body: presentationDefinition == null
-                      ? Container()
-                      : Column(
-                          children: <Widget>[
-                            Text(
-                              '${widget.inputDescriptorIndex + 1}/${presentationDefinition.inputDescriptors.length}',
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            const SizedBox(height: 10),
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Text(
-                                presentationDefinition
-                                        .inputDescriptors[widget
-                                            .inputDescriptorIndex]
-                                        .purpose ??
-                                    l10n.credentialPickSelect,
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            ...List.generate(
-                              credentialManifestState
-                                  .filteredCredentialList
-                                  .length,
-                              (index) {
-                                final credentialModel = credentialManifestState
-                                    .filteredCredentialList[index];
-
-                                return CredentialsListPageItem(
-                                  credentialModel: credentialModel,
-                                  selected: credentialManifestState.selected
-                                      .contains(index),
-                                  isDiscover: false,
-                                  onTap: () {
-                                    context
-                                        .read<CredentialManifestPickCubit>()
-                                        .toggle(
-                                          index: index,
-                                          inputDescriptor:
-                                              presentationDefinition
-                                                  .inputDescriptors[widget
-                                                  .inputDescriptorIndex],
-                                          isVcSdJWT: isVcSdJWT,
-                                        );
-                                  },
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                  navigation:
-                      credentialManifestState.filteredCredentialList.isNotEmpty
-                      ? SafeArea(
-                          child: Container(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Builder(
-                                  builder: (context) {
-                                    final inputDescriptor =
-                                        presentationDefinition!
-                                            .inputDescriptors[widget
-                                            .inputDescriptorIndex];
-
-                                    final bool isOptional =
-                                        inputDescriptor
-                                            .constraints
-                                            ?.fields
-                                            ?.first
-                                            .optional ??
-                                        false;
-
-                                    final bool isOngoingStep =
-                                        widget.inputDescriptorIndex + 1 !=
-                                        presentationDefinition
-                                            .inputDescriptors
-                                            .length;
-
-                                    var buttonText = l10n.credentialPickShare;
-
-                                    if (isOngoingStep) buttonText = l10n.next;
-
-                                    if (isOptional) {
-                                      if (credentialManifestState
-                                          .selected
-                                          .isEmpty) {
-                                        buttonText = l10n.skip;
-                                      }
-
-                                      if (isVcSdJWT) {
-                                        /// skip is dont in next step
-                                        buttonText = l10n.next;
-                                      }
-
-                                      return MyElevatedButton(
-                                        onPressed: () => present(
-                                          context: context,
-                                          credentialManifestState:
-                                              credentialManifestState,
-                                          presentationDefinition:
-                                              presentationDefinition,
-                                          skip: credentialManifestState
-                                              .selected
-                                              .isEmpty,
-                                          isVcSdJWT: isVcSdJWT,
-                                        ),
-                                        text: buttonText,
-                                      );
-                                    } else {
-                                      const skip = false;
-
-                                      /// always next for vcsdjwt, since we are
-                                      /// further processing in next step
-                                      if (isVcSdJWT) buttonText = l10n.next;
-
-                                      return MyElevatedButton(
-                                        onPressed:
-                                            !credentialManifestState
-                                                .isButtonEnabled
-                                            ? null
-                                            : () => present(
-                                                context: context,
-                                                credentialManifestState:
-                                                    credentialManifestState,
-                                                presentationDefinition:
-                                                    presentationDefinition,
-                                                skip: skip,
-                                                isVcSdJWT: isVcSdJWT,
-                                              ),
-                                        text: buttonText,
-                                      );
-                                    }
-                                  },
-                                ),
-                                const SizedBox(height: 8),
-                                MyOutlinedButton(
-                                  text: l10n.cancel,
-                                  onPressed: () {
-                                    unawaited(
-                                      context
-                                          .read<ScanCubit>()
-                                          .sendErrorToServer(
-                                            uri: widget.uri,
-                                            data: {'error': 'access_denied'},
-                                          ),
-                                    );
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                ),
-        );
-      },
+    return BasePage(
+      title: l10n.credentialShareTitle,
+      titleAlignment: Alignment.topCenter,
+      titleTrailing: const WhiteCloseButton(),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+      body: VerifiableCredentialsColumn(result: result),
+      navigation: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Builder(
+                builder: (context) {
+                  return MyElevatedButton(
+                    onPressed: () {
+                      present(
+                        context: context,
+                        uri: widget.uri,
+                        vpToken: vpToken,
+                      );
+                    },
+                    text: 'buttonText',
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
   Future<void> present({
     required BuildContext context,
-    required CredentialManifestPickState credentialManifestState,
-    required PresentationDefinition presentationDefinition,
-    required bool skip,
-    required bool isVcSdJWT,
+    required Uri uri,
+    required Map<String, List<String>> vpToken,
   }) async {
-    if (isVcSdJWT) {
-      /// for sd-jwt we only support single credentials right now
-      /// skip is not considered for sd-jwt right now
-      final firstOne = credentialManifestState
-          .filteredCredentialList[credentialManifestState.selected.first];
+    await context.read<ScanCubit>().presentOidc4vpFinal(
+      uri: uri,
+      credentialModel: widget.credential,
+      keyId: SecureStorageKeys.ssiKey,
+      vpToken: vpToken,
+      issuer: widget.issuer,
+      qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+    );
+  }
 
-      return Navigator.of(context).pushReplacement<void, void>(
-        SelectiveDisclosurePickPage.route(
-          uri: widget.uri,
-          issuer: widget.issuer,
-          credential: widget.credential,
+  // Future<CredentialModel> presentationJwt(CredentialModel e) async {
+  //   // Implementation for generating presentation JWT
+  //   final encryptedValues = e.jwt
+  //       ?.split('~')
+  //       .where((element) => element.isNotEmpty)
+  //       .toList();
 
-          /// inputDescriptorIndex incremented in next step
-          inputDescriptorIndex: widget.inputDescriptorIndex,
-          selectedCredential: firstOne,
-          presentationDefinition: presentationDefinition,
-          credentialsToBePresented: widget.credentialsToBePresented,
-        ),
+  //   if (encryptedValues != null) {
+  //     var newJwt = '${encryptedValues[0]}~';
+
+  //     for (final index in selectedSDIndexInJWT) {
+  //       newJwt = '$newJwt${encryptedValues[index + 1]}~';
+  //     }
+
+  //     // Key Binding JWT
+
+  //     final profileCubit = context.read<ProfileCubit>();
+
+  //     final customOidc4vcProfile = profileCubit
+  //         .state
+  //         .model
+  //         .profileSetting
+  //         .selfSovereignIdentityOptions
+  //         .customOidc4vcProfile;
+
+  //     final didKeyType = customOidc4vcProfile.defaultDid;
+
+  //     final privateKey = await fetchPrivateKey(
+  //       profileCubit: profileCubit,
+  //       didKeyType: didKeyType,
+  //     );
+
+  //     final tokenParameters = TokenParameters(
+  //       privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
+  //       did: '', // just added as it is required field
+  //       mediaType: MediaType.selectiveDisclosure,
+  //       clientType:
+  //           ClientType.p256JWKThumprint, // just added as it is required field
+  //       proofHeaderType: customOidc4vcProfile.proofHeader,
+  //       clientId: '', // just added as it is required field
+  //     );
+
+  //     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+  //     final sdHash = sh256Hash(newJwt);
+
+  //     final nonce = uri.queryParameters['nonce'] ?? '';
+  //     final clientId = uri.queryParameters['client_id'] ?? '';
+
+  //     final payload = {
+  //       'nonce': nonce,
+  //       'aud': clientId,
+  //       'iat': iat,
+  //       'sd_hash': sdHash,
+  //     };
+  //     // In case of OIDC4VP transaction we need to add the hash of each element
+  //     // of transactiondata into the payload
+  //     final scanCubit = context.read<ScanCubit>();
+  //     final transactionData = scanCubit.state.transactionData;
+
+  //     if (transactionData != null) {
+  //       await transactionData.execute();
+  //       final List<String> blockchainTransactionHashes = [];
+  //       if (blockchainTransactionHashes.isNotEmpty) {
+  //         payload['blockchain_transaction_hashes'] =
+  //             blockchainTransactionHashes;
+  //       }
+
+  //       payload['transaction_data_hashes'] =
+  //           transactionData.transactionDataHashes;
+  //     }
+
+  //     // If there no cnf in the payload, then no need to add signature
+  //     if (e.data['cnf'] != null) {
+  //       /// sign and get token
+  //       final jwtToken = generateToken(
+  //         payload: payload,
+  //         tokenParameters: tokenParameters,
+  //         ignoreProofHeaderType: true,
+  //       );
+
+  //       newJwt = '$newJwt$jwtToken';
+  //     }
+
+  //     final CredentialModel newModel = e.copyWith(
+  //       selectiveDisclosureJwt: newJwt,
+  //     );
+
+  //     final credToBePresented = [newModel];
+
+  //     final updatedCredentials = List.of(widget.credentialsToBePresented)
+  //       ..addAll(credToBePresented);
+
+  //     if (isOngoingStep) {
+  //       await Navigator.of(context).pushReplacement<void, void>(
+  //         CredentialManifestOfferPickPage.route(
+  //           uri: widget.uri,
+  //           credential: widget.credential,
+  //           issuer: widget.issuer,
+  //           inputDescriptorIndex: widget.inputDescriptorIndex + 1,
+  //           credentialsToBePresented: updatedCredentials,
+  //         ),
+  //       );
+  //     } else {
+  //       final bool userPINCodeForAuthentication = context
+  //           .read<ProfileCubit>()
+  //           .state
+  //           .model
+  //           .profileSetting
+  //           .walletSecurityOptions
+  //           .secureSecurityAuthenticationWithPinCode;
+
+  //       if (userPINCodeForAuthentication) {
+  //         /// Authenticate
+  //         bool authenticated = false;
+  //         await securityCheck(
+  //           context: context,
+  //           title: context.l10n.typeYourPINCodeToShareTheData,
+  //           localAuthApi: LocalAuthApi(),
+  //           onSuccess: () {
+  //             authenticated = true;
+  //           },
+  //         );
+
+  //         if (!authenticated) {
+  //           unawaited(
+  //             context.read<ScanCubit>().sendErrorToServer(
+  //               uri: widget.uri,
+  //               data: {'error': 'access_denied'},
+  //             ),
+  //           );
+  //           return;
+  //         }
+  //       }
+
+  // }}
+}
+
+class VerifiableCredentialsColumn extends StatelessWidget {
+  final DcqlQueryResult result;
+
+  const VerifiableCredentialsColumn({super.key, required this.result});
+
+  @override
+  Widget build(BuildContext context) {
+    final entries = result.verifiableCredentials.entries.toList();
+
+    if (entries.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.all(16),
+        child: Text('No matching credentials.'),
       );
     }
 
-    late List<CredentialModel> updatedCredentials;
-
-    if (skip) {
-      updatedCredentials = List.of(widget.credentialsToBePresented);
-    } else {
-      final selectedCredentials = credentialManifestState.selected
-          .map(
-            (selectedIndex) =>
-                credentialManifestState.filteredCredentialList[selectedIndex],
-          )
-          .toList();
-
-      updatedCredentials = List.of(widget.credentialsToBePresented)
-        ..addAll(selectedCredentials);
-    }
-
-    getLogger(
-      'present',
-    ).i('credential to presented - ${updatedCredentials.length}');
-
-    if (widget.inputDescriptorIndex + 1 !=
-        presentationDefinition.inputDescriptors.length) {
-      await Navigator.of(context).pushReplacement<void, void>(
-        DcqlQueryOfferPickPage.route(
-          uri: widget.uri,
-          credential: widget.credential,
-          issuer: widget.issuer,
-          inputDescriptorIndex: widget.inputDescriptorIndex + 1,
-          credentialsToBePresented: updatedCredentials,
-        ),
-      );
-    } else {
-      final bool userPINCodeForAuthentication = context
-          .read<ProfileCubit>()
-          .state
-          .model
-          .profileSetting
-          .walletSecurityOptions
-          .secureSecurityAuthenticationWithPinCode;
-
-      if (userPINCodeForAuthentication) {
-        /// Authenticate
-        bool authenticated = false;
-        await securityCheck(
-          context: context,
-          title: context.l10n.typeYourPINCodeToShareTheData,
-          localAuthApi: LocalAuthApi(),
-          onSuccess: () {
-            authenticated = true;
-          },
-        );
-
-        if (!authenticated) {
-          unawaited(
-            context.read<ScanCubit>().sendErrorToServer(
-              uri: widget.uri,
-              data: {'error': 'access_denied'},
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (final entry in entries) ...[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(4, 12, 4, 4),
+            child: Text(
+              entry.key, // the DCQL credential query id, e.g. "pid"
+              style: Theme.of(context).textTheme.titleMedium,
             ),
-          );
-          return;
-        }
-      }
-      await context.read<ScanCubit>().credentialOfferOrPresent(
-        uri: widget.uri,
-        credentialModel: widget.credential,
-        keyId: SecureStorageKeys.ssiKey,
-        credentialsToBePresented: updatedCredentials,
-        issuer: widget.issuer,
-        qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-      );
-    }
+          ),
+          for (final credential in entry.value)
+            _CredentialTile(
+              credential: credential,
+              requestedPaths: result.query.credentials
+                  .firstWhere((c) => c.id == entry.key)
+                  .claims!
+                  .map((c) => c.path)
+                  .toList(),
+            ),
+        ],
+      ],
+    );
+  }
+}
+
+class _CredentialTile extends StatelessWidget {
+  final DigitalCredential credential;
+  final List<List<dynamic>> requestedPaths;
+
+  const _CredentialTile({
+    required this.credential,
+    required this.requestedPaths,
+  });
+
+  static String _pathLabel(List<dynamic> path) =>
+      path.map((s) => s == null ? '*' : s.toString()).join(' › ');
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              credential.format.name,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const Divider(height: 16),
+            for (final path in requestedPaths)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: Text(
+                  '${_pathLabel(path)}: '
+                  '${credential.getValueByPath(path) ?? '—'}',
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -176,7 +176,6 @@ void main() {
             did: did,
             kid: kid,
             uri: uri,
-            clientMetaData: null,
             profileSetting: profileSetting,
             formatFromPresentationSubmission: VCFormatType.vcSdJWT,
           );
@@ -204,7 +203,6 @@ void main() {
             did: did,
             kid: kid,
             uri: uri,
-            clientMetaData: null,
             profileSetting: profileSetting,
             formatFromPresentationSubmission: VCFormatType.vcSdJWT,
           );
@@ -256,7 +254,6 @@ void main() {
             did: did,
             kid: kid,
             uri: uri,
-            clientMetaData: null,
             profileSetting: profileSetting,
             formatFromPresentationSubmission: VCFormatType.jwtVc,
           );
@@ -306,7 +303,6 @@ void main() {
             did: did,
             kid: kid,
             uri: uri,
-            clientMetaData: null,
             profileSetting: profileSetting,
             formatFromPresentationSubmission: VCFormatType.ldpVc,
           );
@@ -343,7 +339,6 @@ void main() {
               did: did,
               kid: kid,
               uri: uri,
-              clientMetaData: null,
               profileSetting: profileSetting,
               formatFromPresentationSubmission: null,
             ),
