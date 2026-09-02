@@ -5928,7 +5928,7 @@ abstract class AppLocalizations {
   /// No description provided for @credentialShareTitle.
   ///
   /// In en, this message translates to:
-  /// **'Choose the credential(s) to share'**
+  /// **'Share information'**
   String get credentialShareTitle;
 
   /// No description provided for @enterYourSecretCode.

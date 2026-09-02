@@ -4,6 +4,7 @@
     "keyBindingHeader",
     "keyBindingPayload",
     "ebsiV4DecentralizedId",
+    "credentialShareTitle",
     "reject",
     "operation",
     "chooseYourSSIProfileOrCustomizeYourOwn",
@@ -26,6 +27,7 @@
     "spanish",
     "catalan",
     "english",
+    "credentialShareTitle",
     "greek"
   ],
 
@@ -34,6 +36,7 @@
     "keyBindingHeader",
     "keyBindingPayload",
     "ebsiV4DecentralizedId",
+    "credentialShareTitle",
     "reject",
     "operation",
     "chooseYourSSIProfileOrCustomizeYourOwn",

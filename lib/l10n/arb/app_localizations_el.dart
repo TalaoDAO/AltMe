@@ -3292,8 +3292,7 @@ class AppLocalizationsEl extends AppLocalizations {
       'Επιλέξτε τα πιστοποιητικά που θέλετε να αποκτήσετε';
 
   @override
-  String get credentialShareTitle =>
-      'Επιλέξτε τα πιστοποιητικά προς κοινή χρήση';
+  String get credentialShareTitle => 'Share information';
 
   @override
   String get enterYourSecretCode => 'Εισάγετε τον μυστικό σας κωδικό.';

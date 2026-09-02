@@ -1138,7 +1138,6 @@
   },
   "credentialPickShare": "Compartir",
   "credentialPickTitle": "Elige la(s) credencial(es) que quieres obtener",
-  "credentialShareTitle": "Elige la(s) credencial(es) para compartir",
   "enterYourSecretCode": "Introduce tu código secreto.",
   "jwk": "JWK",
   "typeYourPINCodeToOpenTheWallet": "Introduce tu código PIN para abrir la billetera",

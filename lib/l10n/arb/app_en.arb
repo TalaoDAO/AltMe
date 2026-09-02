@@ -1136,7 +1136,7 @@
   },
   "credentialPickShare": "Share",
   "credentialPickTitle": "Choose the credential(s) to get",
-  "credentialShareTitle": "Choose the credential(s) to share",
+  "credentialShareTitle": "Share information",
   "enterYourSecretCode": "Enter your secret code.",
   "jwk": "JWK",
   "typeYourPINCodeToOpenTheWallet": "Type your PIN code to open the wallet",

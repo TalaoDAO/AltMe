@@ -1136,7 +1136,6 @@
   },
   "credentialPickShare": "Compartir",
   "credentialPickTitle": "Escull la(es) credencial(s) que vols obtenir",
-  "credentialShareTitle": "Escull la(es) credencial(s) per compartir",
   "enterYourSecretCode": "Introdueix el teu codi secret.",
   "jwk": "JWK",
   "typeYourPINCodeToOpenTheWallet": "Introdueix el teu codi PIN per obrir la cartera",

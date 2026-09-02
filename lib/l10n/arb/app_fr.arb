@@ -1103,7 +1103,7 @@
   "restoreAnAppBackup": "Restaurer une sauvegarde de {appName}",
   "credentialPickShare": "Partager",
   "credentialPickTitle": "Choisissez une ou plusieurs attestation(s)",
-  "credentialShareTitle": "Choisissez une ou plusieurs attestation(s)",
+  "credentialShareTitle": "Partager les données",
   "enterYourSecretCode": "Entrez votre code secret.",
   "jwk": "JWK",
   "typeYourPINCodeToOpenTheWallet": "Entrez votre code PIN pour ouvrir le wallet",
