@@ -2297,7 +2297,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Vous ne pouvez pas obtenir cette attestation car certaines conditions ne sont pas remplies.';
 
   @override
-  String get youAreMissing => 'Vous êtes absent';
+  String get youAreMissing => 'Vous n\'avez pas les données demandées';
 
   @override
   String get credentialsRequestedBy => 'informations demandées par';

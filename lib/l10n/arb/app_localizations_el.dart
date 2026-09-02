@@ -2301,7 +2301,7 @@ class AppLocalizationsEl extends AppLocalizations {
       'Δεν μπορείτε να λάβετε αυτή την κάρτα επειδή δεν πληρούνται ορισμένες προϋποθέσεις.';
 
   @override
-  String get youAreMissing => 'Σας λείπει';
+  String get youAreMissing => 'You don\'t have the requested information';
 
   @override
   String get credentialsRequestedBy => 'πιστοποιητικά';

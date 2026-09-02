@@ -2280,7 +2280,7 @@ class AppLocalizationsCa extends AppLocalizations {
       'No pots obtenir aquesta targeta perquè no es compleixen algunes condicions.';
 
   @override
-  String get youAreMissing => 'Falten';
+  String get youAreMissing => 'You don\'t have the requested information';
 
   @override
   String get credentialsRequestedBy => 'credencials demanades per';

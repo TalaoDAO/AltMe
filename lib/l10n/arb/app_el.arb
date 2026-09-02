@@ -1491,8 +1491,6 @@
   "@myetherwallet": {},
   "skip": "Παράλειψη",
   "@skip": {},
-  "youAreMissing": "Σας λείπει",
-  "@youAreMissing": {},
   "credentialsRequestedBy": "πιστοποιητικά",
   "@credentialsRequestedBy": {},
   "transactionIsLikelyToFail": "Η συναλλαγή είναι πιθανό να αποτύχει.",

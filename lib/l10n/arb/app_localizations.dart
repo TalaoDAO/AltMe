@@ -4187,7 +4187,7 @@ abstract class AppLocalizations {
   /// No description provided for @youAreMissing.
   ///
   /// In en, this message translates to:
-  /// **'You are missing'**
+  /// **'You don\'t have the requested information'**
   String get youAreMissing;
 
   /// No description provided for @credentialsRequestedBy.

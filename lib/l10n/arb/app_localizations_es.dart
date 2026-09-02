@@ -2282,7 +2282,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'No puede obtener esta tarjeta: no se cumplen algunas condiciones.';
 
   @override
-  String get youAreMissing => 'Le faltan';
+  String get youAreMissing => 'You don\'t have the requested information';
 
   @override
   String get credentialsRequestedBy => 'credenciales solicitadas por';

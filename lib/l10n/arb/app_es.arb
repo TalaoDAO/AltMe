@@ -746,7 +746,6 @@
   "myetherwallet": "Cartera MyEther",
   "skip": "Omitir",
   "userNotFitErrorMessage": "No puede obtener esta tarjeta: no se cumplen algunas condiciones.",
-  "youAreMissing": "Le faltan",
   "credentialsRequestedBy": "credenciales solicitadas por",
   "transactionIsLikelyToFail": "Es probable que falle la transacción.",
   "buy": "Comprar",

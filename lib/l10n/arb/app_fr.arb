@@ -756,7 +756,7 @@
   "myetherwallet": "MyEtherWallet",
   "skip": "Ignorer",
   "userNotFitErrorMessage": "Vous ne pouvez pas obtenir cette attestation car certaines conditions ne sont pas remplies.",
-  "youAreMissing": "Vous êtes absent",
+  "youAreMissing": "Vous n'avez pas les données demandées",
   "credentialsRequestedBy": "informations demandées par",
   "transactionIsLikelyToFail": "La transaction est susceptible d'échouer.",
   "buy": "Acheter",

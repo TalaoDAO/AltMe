@@ -743,7 +743,7 @@
   "myetherwallet": "MyEther Wallet",
   "skip": "Skip",
   "userNotFitErrorMessage": "You are unable to get this card because some conditions are not fulfilled.",
-  "youAreMissing": "You are missing",
+  "youAreMissing": "You don't have the requested information",
   "credentialsRequestedBy": "credentials",
   "transactionIsLikelyToFail": "Transaction is likely to fail.",
   "buy": "Buy coins",
