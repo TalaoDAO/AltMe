@@ -6,6 +6,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_helper.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
+import 'package:altme/selective_disclosure/selective_disclosure.dart';
 
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dcql/dcql.dart';
@@ -128,7 +129,11 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       titleAlignment: Alignment.topCenter,
       titleTrailing: const WhiteCloseButton(),
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-      body: VerifiableCredentialsColumn(result: result),
+      body: VerifiableCredentialsColumn(
+        result: result,
+        packageFormatCredentials: packageFormatCredentials,
+        candidates: candidates,
+      ),
       navigation: SafeArea(
         child: Container(
           padding: const EdgeInsets.all(16),
@@ -196,148 +201,19 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       qrCodeScanCubit: context.read<QRCodeScanCubit>(),
     );
   }
-
-  // Future<CredentialModel> presentationJwt(CredentialModel e) async {
-  //   // Implementation for generating presentation JWT
-  //   final encryptedValues = e.jwt
-  //       ?.split('~')
-  //       .where((element) => element.isNotEmpty)
-  //       .toList();
-
-  //   if (encryptedValues != null) {
-  //     var newJwt = '${encryptedValues[0]}~';
-
-  //     for (final index in selectedSDIndexInJWT) {
-  //       newJwt = '$newJwt${encryptedValues[index + 1]}~';
-  //     }
-
-  //     // Key Binding JWT
-
-  //     final profileCubit = context.read<ProfileCubit>();
-
-  //     final customOidc4vcProfile = profileCubit
-  //         .state
-  //         .model
-  //         .profileSetting
-  //         .selfSovereignIdentityOptions
-  //         .customOidc4vcProfile;
-
-  //     final didKeyType = customOidc4vcProfile.defaultDid;
-
-  //     final privateKey = await fetchPrivateKey(
-  //       profileCubit: profileCubit,
-  //       didKeyType: didKeyType,
-  //     );
-
-  //     final tokenParameters = TokenParameters(
-  //       privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
-  //       did: '', // just added as it is required field
-  //       mediaType: MediaType.selectiveDisclosure,
-  //       clientType:
-  //           ClientType.p256JWKThumprint, // just added as it is required field
-  //       proofHeaderType: customOidc4vcProfile.proofHeader,
-  //       clientId: '', // just added as it is required field
-  //     );
-
-  //     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-  //     final sdHash = sh256Hash(newJwt);
-
-  //     final nonce = uri.queryParameters['nonce'] ?? '';
-  //     final clientId = uri.queryParameters['client_id'] ?? '';
-
-  //     final payload = {
-  //       'nonce': nonce,
-  //       'aud': clientId,
-  //       'iat': iat,
-  //       'sd_hash': sdHash,
-  //     };
-  //     // In case of OIDC4VP transaction we need to add the hash of each element
-  //     // of transactiondata into the payload
-  //     final scanCubit = context.read<ScanCubit>();
-  //     final transactionData = scanCubit.state.transactionData;
-
-  //     if (transactionData != null) {
-  //       await transactionData.execute();
-  //       final List<String> blockchainTransactionHashes = [];
-  //       if (blockchainTransactionHashes.isNotEmpty) {
-  //         payload['blockchain_transaction_hashes'] =
-  //             blockchainTransactionHashes;
-  //       }
-
-  //       payload['transaction_data_hashes'] =
-  //           transactionData.transactionDataHashes;
-  //     }
-
-  //     // If there no cnf in the payload, then no need to add signature
-  //     if (e.data['cnf'] != null) {
-  //       /// sign and get token
-  //       final jwtToken = generateToken(
-  //         payload: payload,
-  //         tokenParameters: tokenParameters,
-  //         ignoreProofHeaderType: true,
-  //       );
-
-  //       newJwt = '$newJwt$jwtToken';
-  //     }
-
-  //     final CredentialModel newModel = e.copyWith(
-  //       selectiveDisclosureJwt: newJwt,
-  //     );
-
-  //     final credToBePresented = [newModel];
-
-  //     final updatedCredentials = List.of(widget.credentialsToBePresented)
-  //       ..addAll(credToBePresented);
-
-  //     if (isOngoingStep) {
-  //       await Navigator.of(context).pushReplacement<void, void>(
-  //         CredentialManifestOfferPickPage.route(
-  //           uri: widget.uri,
-  //           credential: widget.credential,
-  //           issuer: widget.issuer,
-  //           inputDescriptorIndex: widget.inputDescriptorIndex + 1,
-  //           credentialsToBePresented: updatedCredentials,
-  //         ),
-  //       );
-  //     } else {
-  //       final bool userPINCodeForAuthentication = context
-  //           .read<ProfileCubit>()
-  //           .state
-  //           .model
-  //           .profileSetting
-  //           .walletSecurityOptions
-  //           .secureSecurityAuthenticationWithPinCode;
-
-  //       if (userPINCodeForAuthentication) {
-  //         /// Authenticate
-  //         bool authenticated = false;
-  //         await securityCheck(
-  //           context: context,
-  //           title: context.l10n.typeYourPINCodeToShareTheData,
-  //           localAuthApi: LocalAuthApi(),
-  //           onSuccess: () {
-  //             authenticated = true;
-  //           },
-  //         );
-
-  //         if (!authenticated) {
-  //           unawaited(
-  //             context.read<ScanCubit>().sendErrorToServer(
-  //               uri: widget.uri,
-  //               data: {'error': 'access_denied'},
-  //             ),
-  //           );
-  //           return;
-  //         }
-  //       }
-
-  // }}
 }
 
 class VerifiableCredentialsColumn extends StatelessWidget {
-  final DcqlQueryResult result;
+  const VerifiableCredentialsColumn({
+    super.key,
+    required this.result,
+    required this.packageFormatCredentials,
+    required this.candidates,
+  });
 
-  const VerifiableCredentialsColumn({super.key, required this.result});
+  final DcqlQueryResult result;
+  final List<SdJwtDigitalCredential> packageFormatCredentials;
+  final List<CredentialModel> candidates;
 
   @override
   Widget build(BuildContext context) {
@@ -350,20 +226,24 @@ class VerifiableCredentialsColumn extends StatelessWidget {
       );
     }
 
+    final profileSetting = context
+        .read<ProfileCubit>()
+        .state
+        .model
+        .profileSetting;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         for (final entry in entries) ...[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(4, 12, 4, 4),
-            child: Text(
-              entry.key, // the DCQL credential query id, e.g. "pid"
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          ),
           for (final credential in entry.value)
             _CredentialTile(
+              credentialModel:
+                  candidates[packageFormatCredentials.indexOf(
+                    findOriginal(credential, packageFormatCredentials)!,
+                  )],
+              profileSetting: profileSetting,
               credential: credential,
               requestedPaths: result.query.credentials
                   .firstWhere((c) => c.id == entry.key)
@@ -378,19 +258,57 @@ class VerifiableCredentialsColumn extends StatelessWidget {
 }
 
 class _CredentialTile extends StatelessWidget {
-  final DigitalCredential credential;
-  final List<List<dynamic>> requestedPaths;
-
   const _CredentialTile({
+    required this.credentialModel,
+    required this.profileSetting,
     required this.credential,
     required this.requestedPaths,
   });
 
+  final CredentialModel credentialModel;
+  final ProfileSetting profileSetting;
+  final DigitalCredential credential;
+  final List<List<dynamic>> requestedPaths;
+
+  // Registered/technical JWT and SD-JWT claims — never shown to the user.
+  static const _technicalClaims = {
+    'iss', 'sub', 'aud', 'exp', 'nbf', 'iat', 'jti',
+    'cnf', 'vct', 'vct#integrity', 'status', '_sd', '_sd_alg', //
+  };
+
   static String _pathLabel(List<dynamic> path) =>
       path.map((s) => s == null ? '*' : s.toString()).join(' › ');
 
+  static String _valueLabel(dynamic value) =>
+      value is Map || value is List ? jsonEncode(value) : value.toString();
+
   @override
   Widget build(BuildContext context) {
+    final selectiveDisclosure = SelectiveDisclosure(credentialModel);
+    final credentialImage = selectiveDisclosure.getPicture;
+
+    // Top-level keys already covered by the DCQL-disclosed claims below,
+    // so they aren't duplicated among the "not in a disclosure" claims.
+    final disclosedKeys = requestedPaths
+        .map((path) => path.isNotEmpty ? path.first?.toString() : null)
+        .whereType<String>()
+        .toSet();
+
+    final plainClaims = <MapEntry<String, dynamic>>[];
+    selectiveDisclosure.payload.forEach((key, value) {
+      if (_technicalClaims.contains(key) || disclosedKeys.contains(key)) {
+        return;
+      }
+      // A Map holding `_sd` is a selective-disclosure group container, not
+      // a plain always-visible value.
+      if (value is Map && value.containsKey('_sd')) {
+        return;
+      }
+      plainClaims.add(MapEntry(key, value));
+    });
+
+    final onSurface = Theme.of(context).colorScheme.onSurface;
+
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: Padding(
@@ -399,20 +317,31 @@ class _CredentialTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              credential.format.name,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const Divider(height: 16),
+            if (credentialImage != null)
+              PictureDisplay(credentialImage: credentialImage)
+            else
+              CredentialDisplay(
+                credentialModel: credentialModel,
+                credDisplayType: CredDisplayType.List,
+                profileSetting: profileSetting,
+                isDiscover: false,
+              ),
+            const SizedBox(height: 20),
             for (final path in requestedPaths)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: Text(
-                  '${_pathLabel(path)}: '
-                  '${credential.getValueByPath(path) ?? '—'}',
-                ),
+              CredentialField(
+                title: _pathLabel(path),
+                value: _valueLabel(credential.getValueByPath(path) ?? '—'),
+                titleColor: onSurface,
+                valueColor: onSurface,
+                showVertically: true,
+              ),
+            for (final entry in plainClaims)
+              CredentialField(
+                title: entry.key,
+                value: _valueLabel(entry.value),
+                titleColor: onSurface,
+                valueColor: onSurface,
+                showVertically: true,
               ),
           ],
         ),
