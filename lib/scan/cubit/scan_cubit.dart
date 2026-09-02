@@ -1074,18 +1074,6 @@ class ScanCubit extends Cubit<ScanState> {
     required QRCodeScanCubit qrCodeScanCubit,
   }) async {
     try {
-      final didKeyType = profileCubit
-          .state
-          .model
-          .profileSetting
-          .selfSovereignIdentityOptions
-          .customOidc4vcProfile
-          .defaultDid;
-
-      final privateKey = await fetchPrivateKey(
-        profileCubit: profileCubit,
-        didKeyType: didKeyType,
-      );
       final responseType = uri.queryParameters['response_type'] ?? '';
       if (isIDTokenOnly(responseType)) {
         /// verifier side (siopv2) with request uri as value
@@ -1105,96 +1093,11 @@ class ScanCubit extends Cubit<ScanState> {
             uri.queryParameters['redirect_uri'] ??
             uri.queryParameters['response_uri']!;
 
-        final nonce = uri.queryParameters['nonce'] ?? '';
-
-        final customOidc4vcProfile = profileCubit
-            .state
-            .model
-            .profileSetting
-            .selfSovereignIdentityOptions
-            .customOidc4vcProfile;
-
-        final clientId = uri.queryParameters['client_id'];
-
-        final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-        final presentationId = 'urn:uuid:${const Uuid().v4()}';
-
-        final private = jsonDecode(privateKey) as Map<String, dynamic>;
-
-        final tokenParameters = VerifierTokenParameters(
-          privateKey: private,
-          did: '',
-          audience: clientId!,
-          credentials: [],
-          nonce: nonce,
-          mediaType: MediaType.basic,
-          clientType: ClientType.did,
-          proofHeaderType: customOidc4vcProfile.proofHeader,
-          clientId: clientId,
-        );
-
-        final vpTokenPayload = {
-          'iat': iat,
-          'jti': presentationId,
-          'nbf': iat - 10,
-          'aud': tokenParameters.audience,
-          'exp': iat + 1000,
-          'sub': tokenParameters.did,
-          'iss': tokenParameters.did,
-          'vp': vpToken,
-          'nonce': tokenParameters.nonce!,
-        };
-
-        final verifierVpJwt = generateToken(
-          payload: vpTokenPayload,
-          tokenParameters: tokenParameters,
-        );
-
         Map<String, dynamic> body;
 
         final String? responseMode = uri.queryParameters['response_mode'];
 
         if (responseMode == 'direct_post.jwt') {
-          final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-
-          final customOidc4vcProfile = profileCubit
-              .state
-              .model
-              .profileSetting
-              .selfSovereignIdentityOptions
-              .customOidc4vcProfile;
-
-          final clientId = uri.queryParameters['client_id'];
-
-          final didKeyType = customOidc4vcProfile.defaultDid;
-
-          final (did, _) = await getDidAndKid(
-            didKeyType: didKeyType,
-            privateKey: privateKey,
-            profileCubit: profileCubit,
-          );
-
-          final responseData = {
-            'iss': did,
-            'aud': clientId,
-            'exp': iat + 1000,
-            'vp_token': vpToken,
-          };
-
-          final tokenParameters = TokenParameters(
-            privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
-            did: did, // just added as it is required field
-            mediaType: MediaType.basic, // just added as it is required field
-            clientType: ClientType
-                .p256JWKThumprint, // just added as it is required field
-            proofHeaderType: customOidc4vcProfile.proofHeader,
-            clientId: '', // just added as it is required field
-          );
-
-          final jwtProofOfPossession = generateToken(
-            payload: responseData,
-            tokenParameters: tokenParameters,
-          );
           final clientMetaDataJson = await getClientMetada(
             client: client,
             uri: uri,
@@ -1203,21 +1106,26 @@ class ScanCubit extends Cubit<ScanState> {
           final clientMetaData = clientMetaDataJson != null
               ? ClientMetadata.fromJson(clientMetaDataJson)
               : null;
-          if (responseMode == 'direct_post.jwt') {
-            if (clientMetaData == null) {
-              throw StateError(
-                'Client metadata is required for direct_post.jwt',
-              );
-            }
-            final encryptedResponse =
-                await DirectPostJwtEncrypter.encryptDirectPostJwt(
-                  jwt: jwtProofOfPossession,
-                  clientMetadata: clientMetaData,
-                );
-            body = {'response': encryptedResponse};
-          } else {
-            body = {'response': jwtProofOfPossession};
+          if (clientMetaData == null) {
+            throw StateError(
+              'Client metadata is required for direct_post.jwt',
+            );
           }
+
+          // Per OpenID4VP ("Encrypted Responses"): the JWE plaintext MUST be
+          // an *unsigned* JWT containing the response parameters as
+          // top-level JSON members — it must not be a JWS-signed token.
+          final responseData = <String, dynamic>{'vp_token': vpToken};
+          final stateValue = uri.queryParameters['state'];
+          if (stateValue != null) {
+            responseData['state'] = stateValue;
+          }
+
+          final encryptedResponse = await directPostJwtEncrypter(
+            jwt: jsonEncode(responseData),
+            clientMetadata: clientMetaData,
+          );
+          body = {'response': encryptedResponse};
           if (profileCubit.state.model.isDeveloperMode) {
             final value = await qrCodeScanCubit.showDataBeforeSending(
               title: 'RESPONSE REQUEST',
