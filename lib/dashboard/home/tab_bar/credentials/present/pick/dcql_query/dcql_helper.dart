@@ -1,6 +1,7 @@
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:dcql/dcql.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 import 'package:selective_disclosure_jwt/selective_disclosure_jwt.dart';
 
 // Map the DCQL-matched DigitalCredential objects back to your original
@@ -49,10 +50,13 @@ DisclosurePath buildDisclosurePath(List<dynamic> concretePath) {
   return p;
 }
 
-String buildPresentation({
+Future<String> buildPresentation({
   required CredentialModel credential,
   required List<List<dynamic>> requestedPaths, // from DcqlClaim.path
-}) {
+  required Uri uri,
+  required Map<String, dynamic> privateKey,
+  required ProofHeaderType proofHeaderType,
+}) async {
   final sdJwt = SelectiveDisclosure(credential);
 
   final encryptedValues = credential.jwt
@@ -66,21 +70,49 @@ String buildPresentation({
     if (disclosure != null) newJwt = '$newJwt$disclosure~';
   }
 
-  // final presented = await SdJwtHandlerV1().present(
-  //   sdJwt: SdJwt.parse(credential.jwt!),
-  //   disclosuresToKeep: disclosuresToKeep,
-  //   // presentWithKbJwtInput: PresentWithKbJwtInput(audience, signer, holderPublicKey),
-  // );
+  // A Key Binding JWT is REQUIRED by the SD-JWT VC presentation format
+  // whenever the credential carries a holder-binding key (`cnf`).
+  if (credential.data['cnf'] != null) {
+    final tokenParameters = TokenParameters(
+      privateKey: privateKey,
+      did: '', // not used for the embedded-jwk KB-JWT header
+      mediaType: MediaType.selectiveDisclosure,
+      clientType: ClientType.p256JWKThumprint,
+      proofHeaderType: proofHeaderType,
+      clientId: '', // not used for the embedded-jwk KB-JWT header
+    );
+
+    final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+    final sdHash = sh256Hash(newJwt);
+
+    final kbPayload = {
+      'nonce': uri.queryParameters['nonce'] ?? '',
+      'aud': uri.queryParameters['client_id'] ?? '',
+      'iat': iat,
+      'sd_hash': sdHash,
+    };
+
+    final kbJwt = generateToken(
+      payload: kbPayload,
+      tokenParameters: tokenParameters,
+      ignoreProofHeaderType: true,
+    );
+
+    newJwt = '$newJwt$kbJwt';
+  }
 
   return newJwt;
 }
 
 // --- Build the vp_token itself ---
-Map<String, List<String>> buildVpToken(
+Future<Map<String, List<String>>> buildVpToken(
   DcqlQueryResult result,
   List<SdJwtDigitalCredential> packageFormatCredentials,
   List<CredentialModel> candidates, // your wallet-side objects, same order
-) {
+  Uri uri,
+  Map<String, dynamic> privateKey,
+  ProofHeaderType proofHeaderType,
+) async {
   final vpToken = <String, List<String>>{};
 
   for (final entry in result.verifiableCredentials.entries) {
@@ -100,9 +132,12 @@ Map<String, List<String>> buildVpToken(
       final index = packageFormatCredentials.indexOf(original);
 
       presentations.add(
-        buildPresentation(
+        await buildPresentation(
           credential: candidates[index],
           requestedPaths: requestedPaths,
+          uri: uri,
+          privateKey: privateKey,
+          proofHeaderType: proofHeaderType,
         ),
       );
     }

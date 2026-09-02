@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
@@ -121,8 +123,6 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
         .toList();
     final result = query.query(packageFormatCredentials);
 
-    final vpToken = buildVpToken(result, packageFormatCredentials, credentials);
-
     return BasePage(
       title: l10n.credentialShareTitle,
       titleAlignment: Alignment.topCenter,
@@ -142,7 +142,9 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
                       present(
                         context: context,
                         uri: widget.uri,
-                        vpToken: vpToken,
+                        result: result,
+                        packageFormatCredentials: packageFormatCredentials,
+                        candidates: candidates,
                       );
                     },
                     text: 'buttonText',
@@ -159,8 +161,32 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
   Future<void> present({
     required BuildContext context,
     required Uri uri,
-    required Map<String, List<String>> vpToken,
+    required DcqlQueryResult result,
+    required List<SdJwtDigitalCredential> packageFormatCredentials,
+    required List<CredentialModel> candidates,
   }) async {
+    final profileCubit = context.read<ProfileCubit>();
+    final customOidc4vcProfile = profileCubit
+        .state
+        .model
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile;
+
+    final privateKeyString = await fetchPrivateKey(
+      profileCubit: profileCubit,
+      didKeyType: customOidc4vcProfile.defaultDid,
+    );
+
+    final vpToken = await buildVpToken(
+      result,
+      packageFormatCredentials,
+      candidates,
+      uri,
+      jsonDecode(privateKeyString) as Map<String, dynamic>,
+      customOidc4vcProfile.proofHeader,
+    );
+
     await context.read<ScanCubit>().presentOidc4vpFinal(
       uri: uri,
       credentialModel: widget.credential,
