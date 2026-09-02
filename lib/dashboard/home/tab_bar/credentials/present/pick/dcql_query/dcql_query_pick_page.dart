@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/helper_functions/get_display.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_helper.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 
@@ -282,8 +284,41 @@ class _CredentialTile extends StatelessWidget {
   static String _valueLabel(dynamic value) =>
       value is Map || value is List ? jsonEncode(value) : value.toString();
 
+  static bool _pathEquals(List<dynamic> claimPath, List<dynamic> path) {
+    if (claimPath.length != path.length) return false;
+    for (var i = 0; i < path.length; i++) {
+      if (claimPath[i]?.toString() != path[i]?.toString()) return false;
+    }
+    return true;
+  }
+
+  // Same lookup used to build the titles passed to DisclosureLine: find the
+  // claim's display metadata (credential_metadata.claims[].display) and
+  // resolve the localized name for the current language, falling back to
+  // the raw path when no translation is defined.
+  String _translatedTitle(List<dynamic> path, String languageCode) {
+    final credentialSupported = credentialModel.credentialSupported;
+    final claimsList =
+        credentialSupported?['credential_metadata']?['claims'] ??
+        credentialSupported?['claims'];
+    if (claimsList is List) {
+      for (final claim in claimsList) {
+        if (claim is Map<String, dynamic> &&
+            claim['path'] is List &&
+            _pathEquals(claim['path'] as List, path)) {
+          final display = getDisplay(claim, languageCode);
+          if (display is Map && display['name'] != null) {
+            return display['name'].toString();
+          }
+        }
+      }
+    }
+    return _pathLabel(path);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final languageCode = context.read<LangCubit>().state.locale.languageCode;
     final selectiveDisclosure = SelectiveDisclosure(credentialModel);
     final credentialImage = selectiveDisclosure.getPicture;
 
@@ -329,7 +364,7 @@ class _CredentialTile extends StatelessWidget {
             const SizedBox(height: 20),
             for (final path in requestedPaths)
               CredentialField(
-                title: _pathLabel(path),
+                title: _translatedTitle(path, languageCode),
                 value: _valueLabel(credential.getValueByPath(path) ?? '—'),
                 titleColor: onSurface,
                 valueColor: onSurface,
@@ -337,7 +372,7 @@ class _CredentialTile extends StatelessWidget {
               ),
             for (final entry in plainClaims)
               CredentialField(
-                title: entry.key,
+                title: _translatedTitle([entry.key], languageCode),
                 value: _valueLabel(entry.value),
                 titleColor: onSurface,
                 valueColor: onSurface,
