@@ -145,16 +145,19 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
               Builder(
                 builder: (context) {
                   return MyElevatedButton(
-                    onPressed: () {
-                      present(
-                        context: context,
-                        uri: widget.uri,
-                        result: result,
-                        packageFormatCredentials: packageFormatCredentials,
-                        candidates: candidates,
-                      );
-                    },
-                    text: 'buttonText',
+                    onPressed: result.fulfilled
+                        ? () {
+                            present(
+                              context: context,
+                              uri: widget.uri,
+                              result: result,
+                              packageFormatCredentials:
+                                  packageFormatCredentials,
+                              candidates: candidates,
+                            );
+                          }
+                        : null,
+                    text: l10n.confirm,
                   );
                 },
               ),
@@ -217,11 +220,33 @@ class VerifiableCredentialsColumn extends StatelessWidget {
   final List<SdJwtDigitalCredential> packageFormatCredentials;
   final List<CredentialModel> candidates;
 
+  // Label a missing (zero-match) credential-query requirement: the claims
+  // it asked for when it specified any, else the credential type it asked
+  // for (vct_values), else the raw DCQL id as a last resort.
+  static String _missingCredentialLabel(DcqlCredential missing) {
+    final claims = missing.claims;
+    if (claims != null && claims.isNotEmpty) {
+      return claims
+          .map(
+            (c) =>
+                c.path.map((s) => s == null ? '*' : s.toString()).join(' › '),
+          )
+          .join(', ');
+    }
+    final vctValues = missing.meta?.vctValues;
+    if (vctValues != null && vctValues.isNotEmpty) {
+      return vctValues.join(', ');
+    }
+    return missing.id;
+  }
+
   @override
   Widget build(BuildContext context) {
     final entries = result.verifiableCredentials.entries.toList();
+    final missingCredentials = result.unsatisfiedQueryCredentialSets.toList();
+    final l10n = context.l10n;
 
-    if (entries.isEmpty) {
+    if (entries.isEmpty && missingCredentials.isEmpty) {
       return const Padding(
         padding: EdgeInsets.all(16),
         child: Text('No matching credentials.'),
@@ -234,10 +259,35 @@ class VerifiableCredentialsColumn extends StatelessWidget {
         .model
         .profileSetting;
 
+    final errorColor = Theme.of(context).colorScheme.error;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (!result.fulfilled)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (missingCredentials.isNotEmpty)
+                  for (final missing in missingCredentials)
+                    Center(
+                      child: Text(
+                        '${l10n.youAreMissing}: '
+                        '${_missingCredentialLabel(missing)}',
+                        style: TextStyle(color: errorColor),
+                      ),
+                    )
+                else
+                  Text(
+                    l10n.userNotFitErrorMessage,
+                    style: TextStyle(color: errorColor),
+                  ),
+              ],
+            ),
+          ),
         for (final entry in entries) ...[
           for (final credential in entry.value)
             _CredentialTile(

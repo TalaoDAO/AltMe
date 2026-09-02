@@ -1,5 +1,6 @@
 {
   "ca": [
+    "youAreMissing",
     "payload",
     "keyBindingHeader",
     "keyBindingPayload",
@@ -23,6 +24,7 @@
   ],
 
   "el": [
+    "youAreMissing",
     "french",
     "spanish",
     "catalan",
@@ -32,6 +34,7 @@
   ],
 
   "es": [
+    "youAreMissing",
     "payload",
     "keyBindingHeader",
     "keyBindingPayload",
