@@ -3264,8 +3264,7 @@ class AppLocalizationsCa extends AppLocalizations {
       'Escull la(es) credencial(s) que vols obtenir';
 
   @override
-  String get credentialShareTitle =>
-      'Escull la(es) credencial(s) per compartir';
+  String get credentialShareTitle => 'Share information';
 
   @override
   String get enterYourSecretCode => 'Introdueix el teu codi secret.';

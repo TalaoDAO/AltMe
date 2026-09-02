@@ -3296,8 +3296,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Choisissez une ou plusieurs attestation(s)';
 
   @override
-  String get credentialShareTitle =>
-      'Choisissez une ou plusieurs attestation(s)';
+  String get credentialShareTitle => 'Partager les données';
 
   @override
   String get enterYourSecretCode => 'Entrez votre code secret.';

@@ -3253,7 +3253,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get credentialPickTitle => 'Choose the credential(s) to get';
 
   @override
-  String get credentialShareTitle => 'Choose the credential(s) to share';
+  String get credentialShareTitle => 'Share information';
 
   @override
   String get enterYourSecretCode => 'Enter your secret code.';

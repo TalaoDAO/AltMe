@@ -2000,8 +2000,6 @@
   },
   "credentialPickShare": "Μοιραστείτε το",
   "@credentialPickShare": {},
-  "credentialShareTitle": "Επιλέξτε τα πιστοποιητικά προς κοινή χρήση",
-  "@credentialShareTitle": {},
   "pincodeDifferent": "Λανθασμένος κωδικός.\nΟι δύο κωδικοί δεν είναι ίδιοι.",
   "@pincodeDifferent": {},
   "themeSettingsDescription": "Επιλέξτε το θέμα σας",
