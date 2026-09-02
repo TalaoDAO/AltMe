@@ -156,7 +156,7 @@ class ProfileModel extends Equatable {
         customOidc4vcProfile: CustomOidc4VcProfile(
           pushAuthorizationRequest: false,
           statusListCache: true,
-          clientAuthentication: ClientAuthentication.none,
+          clientAuthentication: ClientAuthentication.clientId,
           credentialManifestSupport: false,
           cryptoHolderBinding: true,
           defaultDid: DidKeyType.p256,
