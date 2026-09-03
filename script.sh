@@ -19,16 +19,6 @@ function env {
 
 function pub {
   flutter clean
-  for d in `ls ../../packages`;
-  do
-    (
-      cd "../../packages/$d"
-      flutter clean
-      flutter pub get
-      flutter pub upgrade
-      flutter packages upgrade
-    )
-  done 
   flutter pub get
   flutter pub upgrade
   flutter packages upgrade
@@ -36,15 +26,7 @@ function pub {
 
 function buildRunner {
   echo "build_runner"
-  for d in `ls ../../packages`;
-  do
-    (
-      echo "$d"
-      cd "../../packages/$d"
-      dart run build_runner build --delete-conflicting-outputs
-    )
-  done 
-  dart run build_runner build --delete-conflicting-outputs
+  melos run gen
   flutter pub get
 }
 
