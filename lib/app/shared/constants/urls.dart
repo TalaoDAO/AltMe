@@ -24,7 +24,7 @@ class Urls {
       'https://issuer.talao.co/tezotopia/membershipcard/';
 
   /// id360 url
-  static const String id360Url = 'https://talao.co/id360/oidc4vc';
+  static const String id360Url = 'https://talao.co/id360';
 
   /// chainborn membership
   static const String chainbornMembershipCardUrl =

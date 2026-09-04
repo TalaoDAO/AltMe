@@ -824,11 +824,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
           type = 'individualverifiableattestation';
         }
 
-        link =
-            '${Urls.id360Url}'
-            '?draft=${oidc4vcDraftType.numbering}'
-            '&format=$format'
-            '&type=$type';
+        link = Urls.id360Url;
 
         whyGetThisCard =
             ResponseString.RESPONSE_STRING_verifiableIdCardWhyGetThisCard;
