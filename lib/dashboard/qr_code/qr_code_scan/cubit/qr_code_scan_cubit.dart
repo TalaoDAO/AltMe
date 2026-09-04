@@ -758,20 +758,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
     }
 
-    /// contain id_token but may or may not contain vp_token
-    if (hasIDToken(responseType)) {
-      final scope = state.uri!.queryParameters['scope'];
-      if (scope == null || !scope.contains('openid')) {
-        final error = {
-          'error': 'invalid_request',
-          'error_description':
-              'The openid scope is required in the scope list.',
-        };
-        unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
-        throw ResponseMessage(data: error);
-      }
-    }
-
     /// contain vp_token but may or may not contain id_token
     if (hasVPToken(responseType)) {
       if (!keys.contains('nonce')) {
