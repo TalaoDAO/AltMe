@@ -12,7 +12,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   local_auth_windows
   permission_handler_windows
   secure_application
-  sentry_flutter
   share_plus
   url_launcher_windows
 )
