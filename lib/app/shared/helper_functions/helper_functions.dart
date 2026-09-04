@@ -633,6 +633,8 @@ bool isSiopV2OrOidc4VpUrl(Uri uri) {
       uri.toString().startsWith('openid-vc://?') ||
       uri.toString().startsWith(Parameters.walletPresentationDeepLink) ||
       uri.toString().startsWith('openid4vp://') ||
+      uri.toString().startsWith('av://') ||
+      uri.toString().startsWith('haip-vp://') ||
       uri.toString().startsWith('eudi-openid4vp://') ||
       uri.toString().startsWith('openid-hedera://?') ||
       uri.toString().startsWith('haip://?') &&
