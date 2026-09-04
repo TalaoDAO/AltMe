@@ -131,7 +131,7 @@ void main() {
           homeCubit: homeCubit,
           walletCubit: walletCubit,
           client: DioClient(
-            baseUrl: Urls.checkIssuerTalaoUrl,
+            baseUrl: '',
             secureStorageProvider: mockSecureStorage,
             dio: Dio(),
           ),
@@ -160,7 +160,7 @@ void main() {
           homeCubit: homeCubit,
           walletCubit: walletCubit,
           client: DioClient(
-            baseUrl: Urls.checkIssuerTalaoUrl,
+            baseUrl: '',
             secureStorageProvider: mockSecureStorage,
             dio: Dio(),
           ),
@@ -212,7 +212,7 @@ void main() {
             homeCubit: homeCubit,
             walletCubit: walletCubit,
             client: DioClient(
-              baseUrl: Urls.checkIssuerTalaoUrl,
+              baseUrl: '',
               secureStorageProvider: mockSecureStorage,
               dio: Dio(),
             ),
@@ -245,7 +245,7 @@ void main() {
             homeCubit: homeCubit,
             walletCubit: walletCubit,
             client: DioClient(
-              baseUrl: Urls.checkIssuerTalaoUrl,
+              baseUrl: '',
               secureStorageProvider: mockSecureStorage,
               dio: Dio(),
             ),
@@ -279,7 +279,7 @@ void main() {
             homeCubit: homeCubit,
             walletCubit: walletCubit,
             client: DioClient(
-              baseUrl: Urls.checkIssuerTalaoUrl,
+              baseUrl: '',
               secureStorageProvider: mockSecureStorage,
               dio: Dio(),
             ),
