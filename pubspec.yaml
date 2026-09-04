@@ -139,6 +139,7 @@ flutter:
     - assets/terms/
     - assets/notices/
     - assets/faq.json
+    - .env
 
 flutter_icons:
   android: "ic_launcher"
