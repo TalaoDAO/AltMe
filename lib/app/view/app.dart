@@ -147,7 +147,7 @@ class App extends StatelessWidget {
           BlocProvider<ScanCubit>(
             create: (context) => ScanCubit(
               client: DioClient(
-                baseUrl: Urls.checkIssuerTalaoUrl,
+                baseUrl: '',
                 secureStorageProvider: secureStorageProvider,
                 dio: Dio(),
               ),
@@ -194,7 +194,7 @@ class App extends StatelessWidget {
           BlocProvider<QRCodeScanCubit>(
             create: (context) => QRCodeScanCubit(
               client: DioClient(
-                baseUrl: Urls.checkIssuerTalaoUrl,
+                baseUrl: '',
                 secureStorageProvider: secureStorageProvider,
                 dio: Dio(),
               ),
@@ -217,7 +217,7 @@ class App extends StatelessWidget {
               secureStorageProvider: secureStorageProvider,
               homeCubit: context.read<HomeCubit>(),
               client: DioClient(
-                baseUrl: Urls.checkIssuerTalaoUrl,
+                baseUrl: '',
                 secureStorageProvider: secureStorageProvider,
                 dio: Dio(),
               ),

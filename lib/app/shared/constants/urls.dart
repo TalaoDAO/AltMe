@@ -1,7 +1,5 @@
 class Urls {
   static const String appContactWebsiteUrl = 'https://talao.co';
-  static const String checkIssuerTalaoUrl =
-      'https://talao.co/trusted-issuers-registry/v1/issuers';
 
   static const String checkIssuerEbsiUrl =
       'https://api.conformance.intebsi.xyz/trusted-issuers-registry/v2/issuers';
