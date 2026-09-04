@@ -382,7 +382,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                     text: l10n.credentialDetailDeleteCard,
                   ),
                   const SizedBox(height: 8),
-                  if (widget.credentialModel.pendingInfo == null) ...[
+                  if (isDeveloperMode)
                     MyOutlinedButton(
                       text: l10n.download,
                       onPressed: () {
@@ -414,8 +414,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               box!.localToGlobal(Offset.zero) & box.size,
                         );
                       },
-                    ),
-                  ] else ...[
+                    )
+                  else
+                    const SizedBox.shrink(),
+                  if (widget.credentialModel.pendingInfo != null)
                     MyOutlinedButton(
                       text: l10n.getItNow,
                       onPressed: () {
@@ -427,8 +429,9 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               qrCodeScanCubit: context.read<QRCodeScanCubit>(),
                             );
                       },
-                    ),
-                  ],
+                    )
+                  else
+                    const SizedBox.shrink(),
                   if (widget.credentialModel.shareLink != '')
                     MyOutlinedButton.icon(
                       icon: SvgPicture.asset(
