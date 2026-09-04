@@ -140,7 +140,7 @@ void main() {
         ),
       );
       when(() => profileModel.isDeveloperMode).thenReturn(false);
-      when(() => profileModel.profileType).thenReturn(ProfileType.ebsiV4);
+      when(() => profileModel.profileType).thenReturn(ProfileType.diipv5);
       profileState = MockProfileState(model: profileModel);
       when(() => profileCubit.state).thenReturn(profileState);
 

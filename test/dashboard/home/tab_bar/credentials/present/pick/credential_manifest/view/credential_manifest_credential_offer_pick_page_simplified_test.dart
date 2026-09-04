@@ -109,7 +109,7 @@ void main() {
           version: '1.0.0',
         ),
       );
-      when(() => profileModel.profileType).thenReturn(ProfileType.ebsiV4);
+      when(() => profileModel.profileType).thenReturn(ProfileType.diipv5);
 
       // Set up profile cubit
       when(
