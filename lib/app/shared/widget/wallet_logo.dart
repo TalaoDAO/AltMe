@@ -33,9 +33,6 @@ class WalletLogo extends StatelessWidget {
                 : flavorCubit.state == FlavorMode.staging
                 ? ImageStrings.appLogoStage
                 : ImageStrings.appLogo;
-          case ProfileType.ebsiV4:
-            // case ProfileType.ebsiV4:
-            image = ImageStrings.ebsiLogo;
           case ProfileType.EUDIW:
           case ProfileType.enterprise:
             final isLightTheme =

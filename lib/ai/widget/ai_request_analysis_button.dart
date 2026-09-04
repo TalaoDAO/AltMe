@@ -23,8 +23,6 @@ extension on ProfileType {
       case ProfileType.enterprise:
       case ProfileType.custom:
         return 'custom';
-      case ProfileType.ebsiV4:
-        return 'EBSI';
       case ProfileType.diipv5:
         return 'DIIP_V5';
       case ProfileType.EUDIW:

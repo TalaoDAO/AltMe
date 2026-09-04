@@ -6,10 +6,6 @@ void main() {
     test('Get Title', () {
       expect(ProfileType.custom.getTitle(name: ''), 'Custom');
       expect(
-        ProfileType.ebsiV4.getTitle(name: ''),
-        'European Blockchain Services Infrastructure (EBSI v3.x)',
-      );
-      expect(
         ProfileType.diipv5.getTitle(name: ''),
         'Decentralized Identity Interop Profile (DIIP v5.0)',
       );
@@ -21,7 +17,6 @@ void main() {
 
     test('Get VC ID', () {
       expect(ProfileType.custom.getVCId, 'A7G9B4C');
-      expect(ProfileType.ebsiV4.getVCId, 'Q2X5T8L');
       expect(ProfileType.diipv5.getVCId, 'M5K8Y2W');
       expect(ProfileType.defaultOne.getVCId, 'Z4C7T1X');
       expect(ProfileType.enterprise.getVCId, 'L8F6V3P');

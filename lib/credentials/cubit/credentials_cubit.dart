@@ -491,7 +491,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         continue;
       }
       final doNotGenerateProfileType = [
-        ProfileType.ebsiV4,
         ProfileType.EUDIW,
       ];
 
