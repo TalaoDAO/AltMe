@@ -4190,6 +4190,30 @@ abstract class AppLocalizations {
   /// **'You don\'t have the requested information'**
   String get youAreMissing;
 
+  /// No description provided for @dcqlInformationNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Information not available'**
+  String get dcqlInformationNotAvailable;
+
+  /// No description provided for @dcqlInformationNotAvailableDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t find all the information requested in your wallet.'**
+  String get dcqlInformationNotAvailableDescription;
+
+  /// No description provided for @dcqlMissingInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing information'**
+  String get dcqlMissingInformation;
+
+  /// No description provided for @dcqlCannotContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t continue with this request.'**
+  String get dcqlCannotContinue;
+
   /// No description provided for @credentialsRequestedBy.
   ///
   /// In en, this message translates to:

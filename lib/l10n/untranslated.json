@@ -1,6 +1,10 @@
 {
   "ca": [
     "youAreMissing",
+    "dcqlInformationNotAvailable",
+    "dcqlInformationNotAvailableDescription",
+    "dcqlMissingInformation",
+    "dcqlCannotContinue",
     "payload",
     "keyBindingHeader",
     "keyBindingPayload",
@@ -25,6 +29,10 @@
 
   "el": [
     "youAreMissing",
+    "dcqlInformationNotAvailable",
+    "dcqlInformationNotAvailableDescription",
+    "dcqlMissingInformation",
+    "dcqlCannotContinue",
     "french",
     "spanish",
     "catalan",
@@ -35,6 +43,10 @@
 
   "es": [
     "youAreMissing",
+    "dcqlInformationNotAvailable",
+    "dcqlInformationNotAvailableDescription",
+    "dcqlMissingInformation",
+    "dcqlCannotContinue",
     "payload",
     "keyBindingHeader",
     "keyBindingPayload",
@@ -58,6 +70,10 @@
   ],
 
   "fr": [
+    "dcqlInformationNotAvailable",
+    "dcqlInformationNotAvailableDescription",
+    "dcqlMissingInformation",
+    "dcqlCannotContinue",
     "greek"
   ]
 }

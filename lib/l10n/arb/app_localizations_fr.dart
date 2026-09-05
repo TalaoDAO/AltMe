@@ -2300,6 +2300,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String get youAreMissing => 'Vous n\'avez pas les données demandées';
 
   @override
+  String get dcqlInformationNotAvailable => 'Information not available';
+
+  @override
+  String get dcqlInformationNotAvailableDescription =>
+      'We couldn\'t find all the information requested in your wallet.';
+
+  @override
+  String get dcqlMissingInformation => 'Missing information';
+
+  @override
+  String get dcqlCannotContinue => 'You can\'t continue with this request.';
+
+  @override
   String get credentialsRequestedBy => 'informations demandées par';
 
   @override
