@@ -106,66 +106,65 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     assert(widget.credential.jwt != null, 'Credential must have a JWT');
-    final jwt = widget.credential.jwt!;
-    final toto = JWT.decode(jwt);
-    if (toto.payload['dcql_query'] == null) {
-      throw Exception('dcql_query is null');
-    }
-    final rawQuery = toto.payload['dcql_query'] as Map<String, dynamic>;
-    final query = DcqlCredentialQuery.fromJson(rawQuery);
-    final credentials = context.read<CredentialsCubit>().state.credentials;
-    final candidates = credentials
-        .where((e) => e.format == VCFormatType.dcSdJWT.vpValue)
-        .toList();
-    // create a list of SdJwtDigitalCredential from the credentials that have
-    // the format dcSdJwt and the constructor is
-    // SdJwtDigitalCredential.fromSdJwt(sdJwtToken: e.jwt!)
+    try {
+      final jwt = widget.credential.jwt!;
+      final token = JWT.decode(jwt);
+      if (token.payload['dcql_query'] == null) {
+        throw Exception('dcql_query is null');
+      }
 
-    final packageFormatCredentials = candidates
-        .map((e) => SdJwtDigitalCredential.fromSdJwt(sdJwtToken: e.jwt!))
-        .toList();
-    final result = query.query(packageFormatCredentials);
+      final rawQuery = token.payload['dcql_query'];
+      if (rawQuery is! Map<String, dynamic>) {
+        throw Exception('dcql_query is not a Map<String, dynamic>');
+      }
+      final query = DcqlCredentialQuery.fromJson(rawQuery);
+      final credentials = context.read<CredentialsCubit>().state.credentials;
+      final candidates = credentials
+          .where((e) => e.format == VCFormatType.dcSdJWT.vpValue)
+          .toList();
+      final packageFormatCredentials = candidates
+          .map((e) => SdJwtDigitalCredential.fromSdJwt(sdJwtToken: e.jwt!))
+          .toList();
+      final result = query.query(packageFormatCredentials);
 
-    return BasePage(
-      title: l10n.credentialShareTitle,
-      titleAlignment: Alignment.topCenter,
-      titleTrailing: const WhiteCloseButton(),
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-      body: VerifiableCredentialsColumn(
-        result: result,
-        packageFormatCredentials: packageFormatCredentials,
-        candidates: candidates,
-      ),
-      navigation: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Builder(
-                builder: (context) {
-                  return MyElevatedButton(
-                    onPressed: result.fulfilled
-                        ? () {
-                            present(
-                              context: context,
-                              uri: widget.uri,
-                              result: result,
-                              packageFormatCredentials:
-                                  packageFormatCredentials,
-                              candidates: candidates,
-                            );
-                          }
-                        : null,
-                    text: l10n.confirm,
-                  );
-                },
-              ),
-            ],
+      if (!result.fulfilled) {
+        return _DcqlQueryFailureView(
+          missingCredentials: result.unsatisfiedQueryCredentialSets.toList(),
+          credentialModels: candidates,
+        );
+      }
+
+      return BasePage(
+        title: l10n.credentialShareTitle,
+        titleAlignment: Alignment.topCenter,
+        titleTrailing: const WhiteCloseButton(),
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+        body: VerifiableCredentialsColumn(
+          result: result,
+          packageFormatCredentials: packageFormatCredentials,
+          candidates: candidates,
+        ),
+        navigation: SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            child: MyElevatedButton(
+              onPressed: () {
+                present(
+                  context: context,
+                  uri: widget.uri,
+                  result: result,
+                  packageFormatCredentials: packageFormatCredentials,
+                  candidates: candidates,
+                );
+              },
+              text: l10n.confirm,
+            ),
           ),
         ),
-      ),
-    );
+      );
+    } catch (_) {
+      return const _DcqlQueryFailureView();
+    }
   }
 
   Future<void> present({
@@ -206,6 +205,156 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       qrCodeScanCubit: context.read<QRCodeScanCubit>(),
     );
   }
+}
+
+class _DcqlQueryFailureView extends StatelessWidget {
+  const _DcqlQueryFailureView({
+    this.missingCredentials = const [],
+    this.credentialModels = const [],
+  });
+
+  final List<DcqlCredential> missingCredentials;
+  final List<CredentialModel> credentialModels;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final languageCode = context.read<LangCubit>().state.locale.languageCode;
+    final labels = missingCredentials
+        .expand(
+          (credential) =>
+              _missingLabels(credential, languageCode, credentialModels),
+        )
+        .toSet()
+        .toList();
+    final l10n = context.l10n;
+    return BasePage(
+      scrollView: false,
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+      body: Align(
+        alignment: Alignment.topLeft,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Text(
+                l10n.dcqlInformationNotAvailable,
+                style: textTheme.headlineSmall!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l10n.dcqlInformationNotAvailableDescription,
+              style: textTheme.titleMedium!.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 28),
+            Text(
+              '${l10n.dcqlMissingInformation}:',
+              style: textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 12),
+            if (labels.isEmpty)
+              Text(l10n.userNotFitErrorMessage, style: textTheme.bodyMedium)
+            else
+              for (final label in labels)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Text('\u2022  $label', style: textTheme.bodyMedium),
+                ),
+            const SizedBox(height: 18),
+            Text(l10n.dcqlCannotContinue, style: textTheme.bodyMedium),
+          ],
+        ),
+      ),
+      navigation: MyElevatedButton(
+        text: l10n.close,
+        onPressed: () => Navigator.of(context).pop(),
+      ),
+    );
+  }
+
+  static Iterable<String> _missingLabels(
+    DcqlCredential credential,
+    String languageCode,
+    List<CredentialModel> credentialModels,
+  ) {
+    final claims = credential.claims;
+    if (claims != null && claims.isNotEmpty) {
+      return claims.map((claim) {
+        final path = claim.path.whereType<String>().toList();
+        final credentialModel = credentialModels
+            .cast<CredentialModel?>()
+            .firstWhere(
+              (model) =>
+                  model != null &&
+                  model.credentialSupported?['credential_metadata']?['claims']
+                      is List &&
+                  (model.credentialSupported?['credential_metadata']?['claims']
+                          as List)
+                      .any(
+                        (item) =>
+                            item is Map<String, dynamic> &&
+                            item['path'] is List &&
+                            _pathEquals(item['path'] as List, claim.path),
+                      ),
+              orElse: () => null,
+            );
+        if (credentialModel != null) {
+          return _translatedTitle(credentialModel, claim.path, languageCode);
+        }
+        final value = path.isEmpty ? credential.id : path.last;
+        return value
+            .replaceAll(RegExp('([a-z])([A-Z])'), r'$1 $2')
+            .replaceAll(RegExp('[_-]+'), ' ')
+            .split(' ')
+            .map(
+              (word) => word.isEmpty
+                  ? word
+                  : '${word[0].toUpperCase()}${word.substring(1)}',
+            )
+            .join(' ');
+      });
+    }
+    return [credential.meta?.vctValues?.join(', ') ?? credential.id];
+  }
+}
+
+bool _pathEquals(List<dynamic> first, List<dynamic> second) {
+  if (first.length != second.length) return false;
+  for (var i = 0; i < first.length; i++) {
+    if (first[i]?.toString() != second[i]?.toString()) return false;
+  }
+  return true;
+}
+
+String _translatedTitle(
+  CredentialModel credentialModel,
+  List<dynamic> path,
+  String languageCode,
+) {
+  final credentialSupported = credentialModel.credentialSupported;
+  final claimsList =
+      credentialSupported?['credential_metadata']?['claims'] ??
+      credentialSupported?['claims'];
+  if (claimsList is List) {
+    for (final claim in claimsList) {
+      if (claim is Map<String, dynamic> &&
+          claim['path'] is List &&
+          _pathEquals(claim['path'] as List, path)) {
+        final display = getDisplay(claim, languageCode);
+        if (display is Map && display['name'] != null) {
+          return display['name'].toString();
+        }
+      }
+    }
+  }
+  return path.map((item) => item == null ? '*' : item.toString()).join(' > ');
 }
 
 class VerifiableCredentialsColumn extends StatelessWidget {
@@ -328,43 +477,8 @@ class _CredentialTile extends StatelessWidget {
     'cnf', 'vct', 'vct#integrity', 'status', '_sd', '_sd_alg', //
   };
 
-  static String _pathLabel(List<dynamic> path) =>
-      path.map((s) => s == null ? '*' : s.toString()).join(' › ');
-
   static String _valueLabel(dynamic value) =>
       value is Map || value is List ? jsonEncode(value) : value.toString();
-
-  static bool _pathEquals(List<dynamic> claimPath, List<dynamic> path) {
-    if (claimPath.length != path.length) return false;
-    for (var i = 0; i < path.length; i++) {
-      if (claimPath[i]?.toString() != path[i]?.toString()) return false;
-    }
-    return true;
-  }
-
-  // Same lookup used to build the titles passed to DisclosureLine: find the
-  // claim's display metadata (credential_metadata.claims[].display) and
-  // resolve the localized name for the current language, falling back to
-  // the raw path when no translation is defined.
-  String _translatedTitle(List<dynamic> path, String languageCode) {
-    final credentialSupported = credentialModel.credentialSupported;
-    final claimsList =
-        credentialSupported?['credential_metadata']?['claims'] ??
-        credentialSupported?['claims'];
-    if (claimsList is List) {
-      for (final claim in claimsList) {
-        if (claim is Map<String, dynamic> &&
-            claim['path'] is List &&
-            _pathEquals(claim['path'] as List, path)) {
-          final display = getDisplay(claim, languageCode);
-          if (display is Map && display['name'] != null) {
-            return display['name'].toString();
-          }
-        }
-      }
-    }
-    return _pathLabel(path);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -414,7 +528,7 @@ class _CredentialTile extends StatelessWidget {
             const SizedBox(height: 20),
             for (final path in requestedPaths)
               CredentialField(
-                title: _translatedTitle(path, languageCode),
+                title: _translatedTitle(credentialModel, path, languageCode),
                 value: _valueLabel(credential.getValueByPath(path) ?? '—'),
                 titleColor: onSurface,
                 valueColor: onSurface,
@@ -422,7 +536,9 @@ class _CredentialTile extends StatelessWidget {
               ),
             for (final entry in plainClaims)
               CredentialField(
-                title: _translatedTitle([entry.key], languageCode),
+                title: _translatedTitle(credentialModel, [
+                  entry.key,
+                ], languageCode),
                 value: _valueLabel(entry.value),
                 titleColor: onSurface,
                 valueColor: onSurface,
