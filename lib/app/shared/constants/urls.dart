@@ -36,11 +36,10 @@ class Urls {
 
   /// main tezos rpc
   static const mainnetRPC = [
-    'https://mainnet.ecadinfra.com',
-    'https://mainnet.api.tez.ie',
     'https://rpc.tzbeta.net',
-    'https://mainnet.tezos.marigold.dev',
-    'https://rpc.tzstats.com',
+    'https://mainnet.smartpy.io',
+    'https://prod.tcinfra.net/rpc/mainnet',
+    'https://rpc.tzkt.io/mainnet',
   ];
 
   static const ghostnetRPC = 'https://rpc.shadownet.teztnets.com';
