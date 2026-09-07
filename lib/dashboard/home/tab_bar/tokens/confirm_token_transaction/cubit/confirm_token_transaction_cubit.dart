@@ -359,7 +359,12 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       contractAddress: state.selectedToken.contractAddress,
       rpcInterface: client.rpcInterface,
     );
-    final amount = (double.parse(state.tokenAmount) * 1000000).toInt();
+    // Use the token's own decimals, as the real transfer does, so the
+    // estimate reflects the operation that will actually be sent.
+    final amount =
+        (double.parse(state.tokenAmount) *
+                pow(10, int.parse(state.selectedToken.decimals)))
+            .toInt();
     final parameters = _buildTransferParams(
       isFA1: state.selectedToken.isFA1,
       from: keystore.address,
@@ -376,6 +381,15 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       source: keystore,
       publicKey: keystore.publicKey,
     );
+
+    // callOperation only *builds* the operation list; every Operation still
+    // has its initial `fee`/`totalFee` of 0 until the list is estimated.
+    // Without this the fee shown to the user, and the customFee handed to the
+    // send below, were both zero -- and a zero-fee operation is refused by
+    // the mempool, so it was injected, never included, and the account
+    // counter never moved.
+    await finalOperationList.estimate();
+
     return finalOperationList;
   }
 
@@ -642,16 +656,13 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         'amountInDecimal: $tokenAmount tokenSymbol: ${token.symbol}',
       );
 
-      // fee calculated by XTZ
-      final customFee = int.parse(
-        Decimal.parse(state.networkFee!.totalFee)
-            .toDouble()
-            .toStringAsFixed(
-              6,
-            ) // 6 is because the deciaml of XTZ is alway 6 (mutez)
-            .replaceAll('.', '')
-            .replaceAll(',', ''),
-      );
+      // The baker fee is what the operation's `fee` field must carry.
+      // `totalFee` also includes the storage burn, which the protocol charges
+      // separately, so using it here would overpay.
+      final feeInXtz = state.networkFee?.bakerFee ?? state.networkFee?.totalFee;
+      final customFee = feeInXtz == null
+          ? 0
+          : (Decimal.parse(feeInXtz).toDouble() * 1000000).round();
 
       final operationList = await contract.callOperation(
         entrypoint: 'transfer',
@@ -660,7 +671,9 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         params: parameters,
         source: keystore,
         publicKey: keystore.publicKey,
-        customFee: customFee,
+        // A zero customFee would override tezart's own minimal-fee
+        // computation and produce an operation the mempool refuses.
+        customFee: customFee > 0 ? customFee : null,
       );
 
       await operationList.executeAndMonitor(null);
