@@ -9,7 +9,7 @@ import app_links
 import connectivity_plus
 import device_info_plus
 import devicelocale
-import file_picker
+import file_picker_darwin
 import file_saver
 import file_selector_macos
 import flutter_image_compress_macos
