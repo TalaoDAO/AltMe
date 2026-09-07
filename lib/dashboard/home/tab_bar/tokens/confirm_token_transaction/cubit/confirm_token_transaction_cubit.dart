@@ -319,6 +319,38 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     }
   }
 
+  /// Builds `transfer` entrypoint parameters as the native Dart structures
+  /// tezart's MichelineEncoder expects (a Map keyed by the type's annotations,
+  /// or a List for a Michelson `list`). Passing a Michelson source string
+  /// instead fails with
+  /// "type 'String' is not a subtype of type 'List<dynamic>'".
+  ///
+  /// FA1.2 (TZIP-7):
+  ///   (pair (address %from) (pair (address %to) (nat %value)))
+  /// FA2 (TZIP-12):
+  ///   list (pair (address %from_)
+  ///              (list %txs (pair (address %to_)
+  ///                               (pair (nat %token_id) (nat %amount)))))
+  dynamic _buildTransferParams({
+    required bool isFA1,
+    required String from,
+    required String to,
+    required int amount,
+    required int tokenId,
+  }) {
+    if (isFA1) {
+      return <String, dynamic>{'from': from, 'to': to, 'value': amount};
+    }
+    return <dynamic>[
+      <String, dynamic>{
+        'from_': from,
+        'txs': <dynamic>[
+          <String, dynamic>{'to_': to, 'token_id': tokenId, 'amount': amount},
+        ],
+      },
+    ];
+  }
+
   Future<OperationsList> tezosContract(
     TezartClient client,
     Keystore keystore,
@@ -328,13 +360,18 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       rpcInterface: client.rpcInterface,
     );
     final amount = (double.parse(state.tokenAmount) * 1000000).toInt();
-    final parameters = state.selectedToken.isFA1
-        ? '''(Pair "${keystore.address}" (Pair "${state.withdrawalAddress}" $amount))'''
-        : '''{Pair "${keystore.address}" {Pair "${state.withdrawalAddress}" (Pair ${int.parse(state.selectedToken.tokenId ?? '0')} $amount)}}''';
+    final parameters = _buildTransferParams(
+      isFA1: state.selectedToken.isFA1,
+      from: keystore.address,
+      to: state.withdrawalAddress,
+      amount: amount,
+      tokenId: int.parse(state.selectedToken.tokenId ?? '0'),
+    );
 
     final finalOperationList = await contract.callOperation(
       entrypoint: 'transfer',
-      amount: amount,
+      // A token transfer carries no XTZ; the value moves inside `params`.
+      amount: 0,
       params: parameters,
       source: keystore,
       publicKey: keystore.publicKey,
@@ -591,9 +628,13 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
                   ))
               .toInt();
 
-      final parameters = token.isFA1
-          ? '''(Pair "${keystore.address}" (Pair "${state.withdrawalAddress}" $amount))'''
-          : '''{Pair "${keystore.address}" {Pair "${state.withdrawalAddress}" (Pair ${int.parse(token.tokenId ?? '0')} $amount)}}''';
+      final parameters = _buildTransferParams(
+        isFA1: token.isFA1,
+        from: keystore.address,
+        to: state.withdrawalAddress,
+        amount: amount,
+        tokenId: int.parse(token.tokenId ?? '0'),
+      );
 
       getLogger('sendContractInvocationOperation').i(
         'sending from: ${keystore.address}'
@@ -614,7 +655,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
       final operationList = await contract.callOperation(
         entrypoint: 'transfer',
-        amount: amount,
+        // A token transfer carries no XTZ; the value moves inside `params`.
+        amount: 0,
         params: parameters,
         source: keystore,
         publicKey: keystore.publicKey,
