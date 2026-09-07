@@ -167,6 +167,27 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
   late String rpcNodeUrlForTransaction;
 
+  /// Endpoints already tried for the current transaction, so a retry never
+  /// hits the same unreachable node again.
+  final Set<String> _triedRpcNodeUrls = <String>{};
+
+  /// Moves [rpcNodeUrlForTransaction] onto an endpoint that has not been tried
+  /// yet for this transaction. Returns false when every endpoint was tried.
+  bool _advanceRpcNodeUrl() {
+    final dynamic rpcNodeUrl = manageNetworkCubit.state.network.rpcNodeUrl;
+    if (rpcNodeUrl is! List<String>) return false;
+
+    final remaining = rpcNodeUrl
+        .where((url) => !_triedRpcNodeUrls.contains(url))
+        .toList();
+    if (remaining.isEmpty) return false;
+
+    rpcNodeUrlForTransaction = remaining[Random().nextInt(remaining.length)];
+    _triedRpcNodeUrls.add(rpcNodeUrlForTransaction);
+    logger.i('retrying on a different rpcNodeUrl: $rpcNodeUrlForTransaction');
+    return true;
+  }
+
   Future<void> _calculateFeeTezos() async {
     int retryCount = 0;
     const maxRetries = Parameters.maxEntries;
@@ -185,6 +206,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         }
 
         logger.i('rpcNodeUrl: $rpcNodeUrlForTransaction');
+        _triedRpcNodeUrls.add(rpcNodeUrlForTransaction);
         final client = TezartClient(rpcNodeUrlForTransaction);
         final keystore = KeyGenerator().getKeystore(
           secretKey: state.selectedAccountSecretKey,
@@ -307,8 +329,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     );
     final amount = (double.parse(state.tokenAmount) * 1000000).toInt();
     final parameters = state.selectedToken.isFA1
-        ? '''(Pair "${keystore.publicKey}" (Pair "${state.withdrawalAddress}" $amount))'''
-        : '''{Pair "${keystore.publicKey}" {Pair "${state.withdrawalAddress}" (Pair ${int.parse(state.selectedToken.tokenId ?? '0')} $amount)}}''';
+        ? '''(Pair "${keystore.address}" (Pair "${state.withdrawalAddress}" $amount))'''
+        : '''{Pair "${keystore.address}" {Pair "${state.withdrawalAddress}" (Pair ${int.parse(state.selectedToken.tokenId ?? '0')} $amount)}}''';
 
     final finalOperationList = await contract.callOperation(
       entrypoint: 'transfer',
@@ -461,6 +483,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
   void resetTransactionAttemptCount() {
     transactionAttemptCount = 0;
+    _triedRpcNodeUrls.clear();
   }
 
   Future<void> sendContractInvocationOperation() async {
@@ -497,6 +520,9 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       }
     } catch (e, s) {
       if (transactionAttemptCount < 3) {
+        // Failover: a retry against the same unreachable node would fail
+        // identically, so move to an endpoint we have not tried yet.
+        _advanceRpcNodeUrl();
         await Future<void>.delayed(const Duration(milliseconds: 500));
         await sendContractInvocationOperation();
         return;
@@ -566,11 +592,11 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
               .toInt();
 
       final parameters = token.isFA1
-          ? '''(Pair "${keystore.publicKey}" (Pair "${state.withdrawalAddress}" $amount))'''
-          : '''{Pair "${keystore.publicKey}" {Pair "${state.withdrawalAddress}" (Pair ${int.parse(token.tokenId ?? '0')} $amount)}}''';
+          ? '''(Pair "${keystore.address}" (Pair "${state.withdrawalAddress}" $amount))'''
+          : '''{Pair "${keystore.address}" {Pair "${state.withdrawalAddress}" (Pair ${int.parse(token.tokenId ?? '0')} $amount)}}''';
 
       getLogger('sendContractInvocationOperation').i(
-        'sending from: ${keystore.publicKey}'
+        'sending from: ${keystore.address}'
         ',to: ${state.withdrawalAddress} ,amountInInt: $amount '
         'amountInDecimal: $tokenAmount tokenSymbol: ${token.symbol}',
       );
