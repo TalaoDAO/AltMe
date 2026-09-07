@@ -626,6 +626,9 @@ class OperationCubit extends Cubit<OperationState> {
   }) async {
     int retryCount = 0;
     const maxRetries = Parameters.maxEntries;
+    // Endpoints already tried for this call, so a retry never hits the same
+    // unreachable node again.
+    final Set<String> triedRpcNodeUrls = {};
     while (retryCount < maxRetries) {
       try {
         log.i('getOperationList');
@@ -646,9 +649,17 @@ class OperationCubit extends Cubit<OperationState> {
           baseUrl = TezosNetwork.mainNet().apiUrl;
           final rpcNodeUrlList =
               TezosNetwork.mainNet().rpcNodeUrl as List<String>;
+          final untried = rpcNodeUrlList
+              .where((url) => !triedRpcNodeUrls.contains(url))
+              .toList();
+          // Every endpoint already failed this call: retry the full list
+          // rather than give up, since a transient failure may have cleared.
+          final candidates = untried.isNotEmpty ? untried : rpcNodeUrlList;
 
-          rpcNodeUrlForTransaction ??=
-              rpcNodeUrlList[Random().nextInt(rpcNodeUrlList.length)];
+          rpcNodeUrlForTransaction =
+              candidates[Random().nextInt(candidates.length)];
+          triedRpcNodeUrls.add(rpcNodeUrlForTransaction!);
+          log.i('rpcNodeUrl: $rpcNodeUrlForTransaction');
         } else if (networkType == NetworkType.ghostnet) {
           baseUrl = TezosNetwork.ghostnet().apiUrl;
           rpcNodeUrlForTransaction =

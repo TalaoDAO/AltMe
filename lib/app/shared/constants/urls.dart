@@ -35,11 +35,13 @@ class Urls {
   static const String ipfsGateway = 'https://ipfs.io/ipfs/';
 
   /// main tezos rpc
+  // Sourced from Taquito's documented public RPC node list:
+  // https://taquito.io/docs/rpc_nodes
   static const mainnetRPC = [
-    'https://rpc.tzbeta.net',
-    'https://mainnet.smartpy.io',
-    'https://prod.tcinfra.net/rpc/mainnet',
-    'https://rpc.tzkt.io/mainnet',
+    'https://rpc.tzbeta.net', // Tezos Foundation (operated by Blockscale)
+    'https://mainnet.smartpy.io', // SmartPy
+    'https://tezos-mainnet.octez.io', // Trilitech
+    'https://rpc.tzkt.io/mainnet', // TzKT
   ];
 
   static const ghostnetRPC = 'https://rpc.shadownet.teztnets.com';
