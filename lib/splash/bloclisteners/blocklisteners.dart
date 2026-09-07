@@ -62,13 +62,7 @@ final ProfileCubitListener = BlocListener<ProfileCubit, ProfileState>(
     if (state.status == AppStatus.addEuropeanProfile) {
       context.read<CredentialsCubit>().addWalletCredential(
         qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-        profileLinkedId: ProfileType.europeanWallet.getVCId,
-      );
-    }
-    if (state.status == AppStatus.addInjiProfile) {
-      context.read<CredentialsCubit>().addWalletCredential(
-        qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-        profileLinkedId: ProfileType.inji.getVCId,
+        profileLinkedId: ProfileType.EUDIW.getVCId,
       );
     }
   },
@@ -240,12 +234,26 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         LoadingView().show(context: context);
         if (state.uri != null) {
           final profileCubit = context.read<ProfileCubit>();
-          final oidc4vc = OIDC4VC();
+          final profileSetting = profileCubit.state.model.profileSetting;
+          final oidc4vciDraft = profileSetting
+              .selfSovereignIdentityOptions
+              .customOidc4vcProfile
+              .oidc4vciDraft;
+
+          late OIDC4VC oidc4vc;
+          switch (oidc4vciDraft) {
+            case OIDC4VCIDraftType.draft11:
+            case OIDC4VCIDraftType.draft13:
+            case OIDC4VCIDraftType.draft14:
+            case OIDC4VCIDraftType.draft15:
+              oidc4vc = OIDC4VC();
+            case OIDC4VCIDraftType.draft16:
+            case OIDC4VCIDraftType.final1:
+              oidc4vc = Oidc4vcFinal();
+          }
 
           var acceptHost = true;
           final approvedIssuer = Issuer.emptyIssuer(state.uri!.host);
-
-          final profileSetting = profileCubit.state.model.profileSetting;
 
           final walletSecurityOptions = profileSetting.walletSecurityOptions;
 
@@ -288,10 +296,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               url: state.uri.toString(),
               client: client,
               oidc4vc: oidc4vc,
-              oidc4vciDraftType: profileSetting
-                  .selfSovereignIdentityOptions
-                  .customOidc4vcProfile
-                  .oidc4vciDraft,
+              oidc4vciDraftType: oidc4vciDraft,
               useOAuthAuthorizationServerLink: useOauthServerAuthEndPoint(
                 profileCubit.state.model,
               ),

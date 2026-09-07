@@ -5,7 +5,11 @@ class DcSelectiveDisclosure extends VcSelectiveDisclosure {
   @override
   Map<String, dynamic> get claims {
     final credentialSupported = credentialModel.credentialSupported;
-    final claimsList = credentialSupported?['claims'];
+    // we prioritize OIDC4VP final in wich claims are in
+    // credentialSupported?['credential_metadata']['claims']
+    final claimsList =
+        credentialSupported?['credential_metadata']?['claims'] ??
+        credentialSupported?['claims'];
     if (claimsList == null || claimsList is! List<dynamic>) {
       return <String, dynamic>{};
     }

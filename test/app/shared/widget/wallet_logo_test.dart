@@ -182,7 +182,7 @@ void main() {
         when(() => mockFlavorCubit.state).thenReturn(FlavorMode.development);
         when(() => mockProfileCubit.state).thenReturn(
           ProfileState(
-            model: ProfileModel.ebsiV3(
+            model: ProfileModel.ebsiV4(
               walletType: WalletType.personal,
               walletProtectionType: WalletProtectionType.FA2,
               isDeveloperMode: true,
@@ -226,7 +226,7 @@ void main() {
       when(() => mockFlavorCubit.state).thenReturn(FlavorMode.production);
       when(() => mockProfileCubit.state).thenReturn(
         ProfileState(
-          model: ProfileModel.diipv3(
+          model: ProfileModel.diipv5(
             walletType: WalletType.personal,
             walletProtectionType: WalletProtectionType.FA2,
             isDeveloperMode: true,

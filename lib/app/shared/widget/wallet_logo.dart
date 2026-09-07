@@ -27,18 +27,16 @@ class WalletLogo extends StatelessWidget {
         switch (profileModel.profileType) {
           case ProfileType.custom:
           case ProfileType.defaultOne:
-          case ProfileType.diipv3:
-          case ProfileType.diipv4:
+          case ProfileType.diipv5:
             image = flavorCubit.state == FlavorMode.development
                 ? ImageStrings.appLogoDev
                 : flavorCubit.state == FlavorMode.staging
                 ? ImageStrings.appLogoStage
                 : ImageStrings.appLogo;
-          case ProfileType.ebsiV3:
+          case ProfileType.ebsiV4:
             // case ProfileType.ebsiV4:
             image = ImageStrings.ebsiLogo;
-          case ProfileType.europeanWallet:
-          case ProfileType.inji:
+          case ProfileType.EUDIW:
           case ProfileType.enterprise:
             final isLightTheme =
                 Theme.of(context).brightness == Brightness.light;

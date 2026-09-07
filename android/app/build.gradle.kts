@@ -18,12 +18,6 @@ android {
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
-    packagingOptions {
-      jniLibs.pickFirsts += "lib/x86/libsodium.so"
-      jniLibs.pickFirsts += "lib/x86_64/libsodium.so"
-      jniLibs.pickFirsts += "lib/armeabi-v7a/libsodium.so"
-      jniLibs.pickFirsts += "lib/arm64-v8a/libsodium.so"
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -34,7 +28,7 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        // TODO(hawkbee): Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "co.altme.alt.me.altme"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.

@@ -255,7 +255,7 @@ int getIndexValue({required bool isEBSI, required DidKeyType didKeyType}) {
     case DidKeyType.ebsiv4:
       return 7;
     case DidKeyType.edDSA:
-    case DidKeyType.jwtClientAttestation:
+    case DidKeyType.none:
       return 0; // it is not needed, just assigned
   }
 }
@@ -311,7 +311,7 @@ Future<String> getPrivateKey({
 
       return key;
 
-    case DidKeyType.jwtClientAttestation:
+    case DidKeyType.none:
       if (profileCubit.state.model.walletType != WalletType.enterprise) {
         throw ResponseMessage(
           data: {
@@ -556,7 +556,7 @@ Future<(String, String)> getDidAndKid({
         didMethod,
         privateKey,
       );
-    case DidKeyType.jwtClientAttestation:
+    case DidKeyType.none:
       final walletAttestationData = await profileCubit.secureStorageProvider
           .get(SecureStorageKeys.walletAttestationData);
 
@@ -769,6 +769,8 @@ Future<void> handleErrorForOidc4Vci({
             },
           );
         }
+      case ClientType.wiaSub:
+        break;
     }
   }
 }
@@ -1494,6 +1496,9 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
             clientId = did;
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
+          case ClientType.wiaSub:
+            // TODO(hawkbee): Handle this case.getClientDetails
+            throw UnimplementedError();
         }
 
       ///  only clientId
@@ -1505,6 +1510,9 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
             clientId = did;
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
+          case ClientType.wiaSub:
+            // TODO(hawkbee): Handle this case.getClientDetails
+            throw UnimplementedError();
         }
 
       case ClientAuthentication.clientSecretPost:
@@ -1545,6 +1553,9 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
 
         oAuthClientAttestation = walletAttestationData;
         oAuthClientAttestationPop = jwtProofOfPossession;
+      case ClientAuthentication.wia:
+        // TODO(hawkbee): Handle this case.getClientDetails
+        throw UnimplementedError();
     }
 
     return (
@@ -1567,30 +1578,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
   Display? display;
   dynamic credentialSupported;
 
-  if (openIdConfiguration.credentialsSupported != null) {
-    final credentialsSupported = openIdConfiguration.credentialsSupported!;
-    final CredentialsSupported? credSupported = credentialsSupported
-        .firstWhereOrNull(
-          (CredentialsSupported credentialsSupported) =>
-              (credentialsSupported.id != null &&
-                  credentialsSupported.id == credentialType) ||
-              (credentialsSupported.types != null &&
-                  credentialsSupported.types!.contains(credentialType)),
-        );
-
-    if (credSupported != null) {
-      credentialSupported = credSupported.toJson();
-
-      final credSupportedDisplay = credSupported.display;
-
-      if (credSupportedDisplay != null) {
-        display = extractDisplay(
-          credSupportedDisplay,
-          languageCode,
-        ); // if local is not provided
-      }
-    }
-  } else if (openIdConfiguration.credentialConfigurationsSupported != null) {
+  if (openIdConfiguration.credentialConfigurationsSupported != null) {
     final credentialsSupported =
         openIdConfiguration.credentialConfigurationsSupported;
 
@@ -1603,20 +1591,43 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
 
       if (credSupported is Map<String, dynamic>) {
         /// display
-        if (credSupported.containsKey('display')) {
-          final displayData = credSupported['display'];
+        final displayData =
+            credSupported['credential_metadata']['display'] ??
+            credSupported['display'];
 
-          if (displayData is List<dynamic>) {
-            final displays = displayData
-                .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
-                .toList();
+        if (displayData is List<dynamic>) {
+          final displays = displayData
+              .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
+              .toList();
 
-            display = extractDisplay(
-              displays,
-              languageCode,
-            ); // if local is not provided
-          }
+          display = extractDisplay(
+            displays,
+            languageCode,
+          ); // if local is not provided
         }
+      }
+    }
+  } else if (openIdConfiguration.credentialsSupported != null) {
+    final credentialsSupported = openIdConfiguration.credentialsSupported!;
+    final CredentialsSupported? credSupported = credentialsSupported
+        .firstWhereOrNull(
+          (CredentialsSupported credentialsSupported) =>
+              (credentialsSupported.id != null &&
+                  credentialsSupported.id == credentialType) ||
+              (credentialsSupported.types != null &&
+                  credentialsSupported.types!.contains(credentialType)),
+        );
+
+    if (credSupported != null) {
+      credentialSupported = credSupported.toJson();
+      // Prioritize OIDC4VCI final 1.0
+      final credSupportedDisplay = credSupported.display;
+
+      if (credSupportedDisplay != null) {
+        display = extractDisplay(
+          credSupportedDisplay,
+          languageCode,
+        ); // if local is not provided
       }
     }
   }
@@ -2205,7 +2216,7 @@ bool useOauthServerAuthEndPoint(ProfileModel profileModel) {
   // final bool notEligible = profileModel.profileType == ProfileType.ebsiV3 ||
   //     profileModel.profileType == ProfileType.ebsiV4;
 
-  final bool notEligible = profileModel.profileType == ProfileType.ebsiV3;
+  final bool notEligible = profileModel.profileType == ProfileType.ebsiV4;
 
   if (notEligible) return false;
 

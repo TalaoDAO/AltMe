@@ -9,7 +9,7 @@ void main() {
       expect(DidKeyType.p256.formattedString, 'did:key P-256');
       expect(DidKeyType.ebsiv3.formattedString, 'did:key EBSI-V3');
       expect(DidKeyType.jwkP256.formattedString, 'did:jwk P-256');
-      expect(DidKeyType.jwtClientAttestation.formattedString, '');
+      expect(DidKeyType.none.formattedString, '');
     });
 
     test('Support Crypto Credential', () {
@@ -18,7 +18,7 @@ void main() {
       expect(DidKeyType.p256.supportCryptoCredential, true);
       expect(DidKeyType.ebsiv3.supportCryptoCredential, false);
       expect(DidKeyType.jwkP256.supportCryptoCredential, true);
-      expect(DidKeyType.jwtClientAttestation.supportCryptoCredential, true);
+      expect(DidKeyType.none.supportCryptoCredential, true);
     });
   });
 }

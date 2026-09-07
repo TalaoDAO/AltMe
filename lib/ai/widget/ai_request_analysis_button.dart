@@ -20,17 +20,14 @@ extension on ProfileType {
   String get aiProfile {
     switch (this) {
       case ProfileType.defaultOne:
-      case ProfileType.inji:
       case ProfileType.enterprise:
       case ProfileType.custom:
         return 'custom';
-      case ProfileType.ebsiV3:
+      case ProfileType.ebsiV4:
         return 'EBSI';
-      case ProfileType.diipv3:
-        return 'DIIP_V3';
-      case ProfileType.diipv4:
-        return 'DIIP_V4';
-      case ProfileType.europeanWallet:
+      case ProfileType.diipv5:
+        return 'DIIP_V5';
+      case ProfileType.EUDIW:
         return 'EWC';
     }
   }
