@@ -22,14 +22,15 @@ Future<void> oidc4vciAcceptHost({
   required bool showPrompt,
   required Issuer approvedIssuer,
 }) async {
+  var updatedOidc4vcParameters = oidc4vcParameters;
   final l10n = context.l10n;
   var acceptHost = true;
 
   if (isDeveloperMode) {
     /// issuance case
     final formattedData = getFormattedStringOIDC4VCI(
-      url: oidc4vcParameters.initialUri.toString(),
-      oidc4vcParameters: oidc4vcParameters,
+      url: updatedOidc4vcParameters.initialUri.toString(),
+      oidc4vcParameters: updatedOidc4vcParameters,
     );
 
     LoadingView().hide();
@@ -38,7 +39,7 @@ Future<void> oidc4vciAcceptHost({
           context: context,
           builder: (_) {
             return DeveloperModeDialog(
-              uri: oidc4vcParameters.initialUri,
+              uri: updatedOidc4vcParameters.initialUri,
               onDisplay: () async {
                 final returnedValue = await Navigator.of(context).push<dynamic>(
                   JsonViewerPage.route(
@@ -66,7 +67,7 @@ Future<void> oidc4vciAcceptHost({
 
   /// if dev mode is ON show some dialog to show data
   await handleErrorForOidc4Vci(
-    oidc4vcParameters: oidc4vcParameters,
+    oidc4vcParameters: updatedOidc4vcParameters,
     didKeyType: context
         .read<ProfileCubit>()
         .state
@@ -104,11 +105,11 @@ Future<void> oidc4vciAcceptHost({
       // unsigned open id configuration
 
       final issuerOpenIdConfiguration =
-          oidc4vcParameters.issuerOpenIdConfiguration;
+          updatedOidc4vcParameters.issuerOpenIdConfiguration;
 
       final signedMetadata = issuerOpenIdConfiguration.signedMetadata;
 
-      oidc4vcParameters = oidc4vcParameters.copyWith(
+      updatedOidc4vcParameters = updatedOidc4vcParameters.copyWith(
         issuerOpenIdConfiguration: getIssuerOpenIdConfiguration(
           issuerOpenIdConfiguration: issuerOpenIdConfiguration,
         ),
@@ -125,7 +126,8 @@ Future<void> oidc4vciAcceptHost({
         // in trustedEntity.vcTypes
 
         final credentialConfigurationIds =
-            oidc4vcParameters.credentialOffer['credential_configuration_ids'];
+            updatedOidc4vcParameters
+                .credentialOffer['credential_configuration_ids'];
         if (credentialConfigurationIds != null &&
             credentialConfigurationIds is List) {
           for (final credentialConfigurationId in credentialConfigurationIds) {
@@ -204,10 +206,13 @@ Future<void> oidc4vciAcceptHost({
     final String title = l10n.scanPromptHost;
 
     String subtitle = (approvedIssuer.did.isEmpty)
-        ? oidc4vcParameters.initialUri.host
+        ? updatedOidc4vcParameters.initialUri.host
         : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
 
-    subtitle = await getHost(uri: oidc4vcParameters.initialUri, client: client);
+    subtitle = await getHost(
+      uri: updatedOidc4vcParameters.initialUri,
+      client: client,
+    );
 
     LoadingView().hide();
     acceptHost =
@@ -229,7 +234,7 @@ Future<void> oidc4vciAcceptHost({
   if (acceptHost) {
     await context.read<QRCodeScanCubit>().acceptOidc4vci(
       approvedIssuer: approvedIssuer,
-      oidc4vcParameters: oidc4vcParameters,
+      oidc4vcParameters: updatedOidc4vcParameters,
       qrCodeScanCubit: context.read<QRCodeScanCubit>(),
     );
   } else {
