@@ -1,12 +1,14 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/json_viewer/view/json_viewer_page.dart';
 import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
+import 'package:altme/dashboard/profile/models/profile.dart';
 import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.dart';
 import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
 import 'package:altme/trusted_list/function/get_issuer_open_id_configuration.dart';
 import 'package:altme/trusted_list/function/is_certificate_valid.dart';
+import 'package:altme/trusted_list/model/trusted_list.dart';
 import 'package:altme/trusted_list/widget/trusted_entity_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -82,14 +84,21 @@ Future<void> oidc4vciAcceptHost({
         .customOidc4vcProfile
         .clientType,
   );
-  final profile = context.read<ProfileCubit>().state.model;
+  ProfileModel profile = context.read<ProfileCubit>().state.model;
   final trustedListEnabled =
       profile.profileSetting.walletSecurityOptions.trustedList;
-  final trustedList = profile.trustedList;
+  final trustedListUrl =
+      profile.profileSetting.walletSecurityOptions.trustedListUrl ??
+      Parameters.trustedListUrl;
+  TrustedList? trustedList = profile.trustedList;
   if (trustedListEnabled) {
     try {
       if (trustedList == null) {
-        throw Exception('Missing trusted list.');
+        profile = await context.read<ProfileCubit>().addTrustedList(
+          trustedListUrl,
+          profile,
+        );
+        trustedList = profile.trustedList;
       }
       // issuer open id configuration from signed metadata is used instead of
       // unsigned open id configuration
@@ -108,7 +117,7 @@ Future<void> oidc4vciAcceptHost({
       // get new issuer open id configuration from signed metadata
       final trustedEntity = getIssuerFromTrustedList(
         issuerOpenIdConfiguration: issuerOpenIdConfiguration,
-        trustedList: trustedList,
+        trustedList: trustedList!,
       );
       if (trustedEntity != null) {
         // check if each element of
