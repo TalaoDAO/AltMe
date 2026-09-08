@@ -6122,6 +6122,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ελληνικά'**
   String get greek;
+
+  /// No description provided for @issuerConnectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect to credential issuer?'**
+  String get issuerConnectTitle;
+
+  /// Subtitle on the issuer-connect confirmation screen
+  ///
+  /// In en, this message translates to:
+  /// **'{issuerName} wants to issue a credential to your wallet.'**
+  String issuerConnectSubtitle(Object issuerName);
+
+  /// No description provided for @trustedIssuerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Trusted issuer'**
+  String get trustedIssuerLabel;
+
+  /// No description provided for @issuerNotVerifiedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Issuer not verified'**
+  String get issuerNotVerifiedLabel;
+
+  /// No description provided for @issuerNotVerifiedDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The identity of this issuer could not be verified.'**
+  String get issuerNotVerifiedDescription;
+
+  /// No description provided for @onlyContinueIfTrustIssuer.
+  ///
+  /// In en, this message translates to:
+  /// **'Only continue if you recognise and trust this issuer.'**
+  String get onlyContinueIfTrustIssuer;
+
+  /// No description provided for @continueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueLabel;
+
+  /// No description provided for @continueAnywayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue anyway'**
+  String get continueAnywayLabel;
+
+  /// No description provided for @credentialAcceptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add credential to your wallet?'**
+  String get credentialAcceptTitle;
+
+  /// No description provided for @issuedByLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Issued by'**
+  String get issuedByLabel;
+
+  /// No description provided for @informationIncludedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Information included'**
+  String get informationIncludedLabel;
+
+  /// No description provided for @addToWalletLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to wallet'**
+  String get addToWalletLabel;
+
+  /// No description provided for @addAnywayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Add anyway'**
+  String get addAnywayLabel;
+
+  /// Title on the verifier-connect confirmation screen
+  ///
+  /// In en, this message translates to:
+  /// **'Connect to {verifierName}?'**
+  String verifierConnectTitle(Object verifierName);
+
+  /// Subtitle on the verifier-connect confirmation screen
+  ///
+  /// In en, this message translates to:
+  /// **'{verifierName} wants to request information from your wallet.'**
+  String verifierConnectSubtitle(Object verifierName);
+
+  /// No description provided for @verifiedOrganisationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified organisation'**
+  String get verifiedOrganisationLabel;
+
+  /// No description provided for @organisationNotVerifiedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Organisation not verified'**
+  String get organisationNotVerifiedLabel;
+
+  /// No description provided for @organisationNotVerifiedDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The identity of this organisation could not be verified.'**
+  String get organisationNotVerifiedDescription;
+
+  /// No description provided for @onlyContinueIfTrustOrganisation.
+  ///
+  /// In en, this message translates to:
+  /// **'Only continue if you recognise and trust this organisation.'**
+  String get onlyContinueIfTrustOrganisation;
+
+  /// No description provided for @purposeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Purpose'**
+  String get purposeLabel;
+
+  /// No description provided for @reviewRequestLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Review request'**
+  String get reviewRequestLabel;
+
+  /// No description provided for @shareInformationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your information?'**
+  String get shareInformationTitle;
+
+  /// Subtitle on the share-information confirmation screen
+  ///
+  /// In en, this message translates to:
+  /// **'{verifierName} is requesting the following information from your wallet.'**
+  String shareInformationSubtitle(Object verifierName);
+
+  /// No description provided for @onlyShareIfTrustOrganisation.
+  ///
+  /// In en, this message translates to:
+  /// **'Only share this information if you recognise and trust this organisation.'**
+  String get onlyShareIfTrustOrganisation;
+
+  /// No description provided for @informationRequestedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Information requested'**
+  String get informationRequestedLabel;
+
+  /// No description provided for @sharedWithLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared with'**
+  String get sharedWithLabel;
+
+  /// No description provided for @notVerifiedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Not verified'**
+  String get notVerifiedLabel;
+
+  /// No description provided for @onlyInformationShownWillBeShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the information shown above will be shared.'**
+  String get onlyInformationShownWillBeShared;
+
+  /// No description provided for @shareInformationButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Share information'**
+  String get shareInformationButtonLabel;
+
+  /// No description provided for @shareAnywayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Share anyway'**
+  String get shareAnywayLabel;
+
+  /// No description provided for @dontShareLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t share'**
+  String get dontShareLabel;
 }
 
 class _AppLocalizationsDelegate

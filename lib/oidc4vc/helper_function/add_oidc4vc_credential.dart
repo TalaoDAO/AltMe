@@ -4,6 +4,10 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
+import 'package:altme/oidc4vc/helper_function/flatten_claims_for_display.dart';
+import 'package:altme/oidc4vc/helper_function/resolve_issuer_display.dart';
+import 'package:altme/oidc4vc/model/credential_acceptance_data.dart';
+import 'package:altme/trusted_list/function/is_issuer_trusted.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -162,6 +166,37 @@ Future<void> addOIDC4VCCredential({
     profileType: qrCodeScanCubit.profileCubit.state.model.profileType,
   );
 
+  final profileModel = credentialsCubit.profileCubit.state.model;
+  final languageCode =
+      credentialsCubit.profileCubit.langCubit.state.locale.languageCode;
+  final fallbackHost = Uri.tryParse(issuer ?? '')?.host ?? issuer ?? '';
+
+  final issuerName = openIdConfiguration != null
+      ? resolveIssuerDisplay(
+          issuerOpenIdConfiguration: openIdConfiguration,
+          locale: languageCode,
+          fallbackHost: fallbackHost,
+        ).name
+      : fallbackHost;
+
+  final isTrusted =
+      openIdConfiguration != null &&
+      isIssuerTrusted(
+        issuerOpenIdConfiguration: openIdConfiguration,
+        trustedList: profileModel.trustedList,
+        trustedListEnabled:
+            profileModel.profileSetting.walletSecurityOptions.trustedList,
+      );
+
+  final accepted = await qrCodeScanCubit.showCredentialAcceptance(
+    data: CredentialAcceptanceData(
+      credentialDisplayName: display?.name ?? credentialType,
+      issuerName: issuerName,
+      isTrusted: isTrusted,
+      claims: flattenClaimsForDisplay(credentialFromOIDC4VC),
+    ),
+  );
+
   if (credentialIdToBeDeleted != null) {
     ///delete pending dummy credential
     await credentialsCubit.deleteById(
@@ -169,6 +204,8 @@ Future<void> addOIDC4VCCredential({
       showMessage: false,
     );
   }
+
+  if (!accepted) return;
 
   // insert the credential in the wallet
   await credentialsCubit.insertCredential(

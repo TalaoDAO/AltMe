@@ -11,6 +11,7 @@ import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/oidc4vc/helper_function/get_issuance_data.dart';
+import 'package:altme/oidc4vc/model/credential_acceptance_data.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
@@ -1654,6 +1655,26 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       resetNonceAndAccessTokenAndAuthorizationDetails();
       emitError(error: e);
     }
+  }
+
+  /// Shows the "Add credential to your wallet?" confirmation screen and
+  /// waits for the user's decision. Used because the credential fetch
+  /// happens outside of any widget context.
+  Future<bool> showCredentialAcceptance({
+    required CredentialAcceptanceData data,
+  }) async {
+    completer = Completer<bool>();
+
+    emit(
+      state.copyWith(
+        qrScanStatus: QrScanStatus.pauseForCredentialAcceptance,
+        credentialAcceptanceData: data,
+      ),
+    );
+
+    final value = await completer!.future;
+
+    return value;
   }
 
   Future<bool> showDataBeforeSending({

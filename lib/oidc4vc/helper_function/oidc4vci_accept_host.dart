@@ -5,11 +5,12 @@ import 'package:altme/dashboard/profile/models/profile.dart';
 import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.dart';
 import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/oidc4vc/helper_function/resolve_issuer_display.dart';
+import 'package:altme/oidc4vc/widget/issuer_connect_dialog.dart';
 import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
 import 'package:altme/trusted_list/function/get_issuer_open_id_configuration.dart';
 import 'package:altme/trusted_list/function/is_certificate_valid.dart';
 import 'package:altme/trusted_list/model/trusted_list.dart';
-import 'package:altme/trusted_list/widget/trusted_entity_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -92,6 +93,23 @@ Future<void> oidc4vciAcceptHost({
       profile.profileSetting.walletSecurityOptions.trustedListUrl ??
       Parameters.trustedListUrl;
   TrustedList? trustedList = profile.trustedList;
+
+  // issuer open id configuration from signed metadata is used instead of
+  // unsigned open id configuration, when available
+  final issuerOpenIdConfiguration =
+      updatedOidc4vcParameters.issuerOpenIdConfiguration;
+  final signedMetadata = issuerOpenIdConfiguration.signedMetadata;
+
+  if (signedMetadata != null) {
+    updatedOidc4vcParameters = updatedOidc4vcParameters.copyWith(
+      issuerOpenIdConfiguration: getIssuerOpenIdConfiguration(
+        issuerOpenIdConfiguration: issuerOpenIdConfiguration,
+      ),
+    );
+  }
+
+  var isTrusted = false;
+
   if (trustedListEnabled) {
     try {
       if (trustedList == null) {
@@ -101,21 +119,7 @@ Future<void> oidc4vciAcceptHost({
         );
         trustedList = profile.trustedList;
       }
-      // issuer open id configuration from signed metadata is used instead of
-      // unsigned open id configuration
 
-      final issuerOpenIdConfiguration =
-          updatedOidc4vcParameters.issuerOpenIdConfiguration;
-
-      final signedMetadata = issuerOpenIdConfiguration.signedMetadata;
-
-      updatedOidc4vcParameters = updatedOidc4vcParameters.copyWith(
-        issuerOpenIdConfiguration: getIssuerOpenIdConfiguration(
-          issuerOpenIdConfiguration: issuerOpenIdConfiguration,
-        ),
-      );
-
-      // get new issuer open id configuration from signed metadata
       final trustedEntity = getIssuerFromTrustedList(
         issuerOpenIdConfiguration: issuerOpenIdConfiguration,
         trustedList: trustedList!,
@@ -151,84 +155,45 @@ Future<void> oidc4vciAcceptHost({
           trustedEntity: trustedEntity,
           signedMetadata: signedMetadata!,
         );
-        // check certificate is trusted
-
-        LoadingView().hide();
-        acceptHost =
-            await showDialog<bool>(
-              context: context,
-              builder: (BuildContext context) {
-                return SafeArea(
-                  child: ConfirmDialog(
-                    title: l10n.scanPromptHost,
-                    content: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxHeight: MediaQuery.of(context).size.height * 0.6,
-                      ),
-                      child: SingleChildScrollView(
-                        child: TrustedEntityDetails(
-                          trustedEntity: trustedEntity,
-                        ),
-                      ),
-                    ),
-                    yes: l10n.communicationHostAllow,
-                    no: l10n.communicationHostDeny,
-                  ),
-                );
-              },
-            ) ??
-            false;
-      } else {
-        LoadingView().hide();
-        acceptHost =
-            await showDialog<bool>(
-              context: context,
-              builder: (BuildContext context) {
-                return ConfirmDialog(
-                  title: l10n.scanPromptHost,
-                  subtitle: l10n.notTrustedEntity,
-                  yes: l10n.communicationHostAllow,
-                  no: l10n.communicationHostDeny,
-                  invertedCallToAction: true,
-                );
-              },
-            ) ??
-            false;
+        isTrusted = true;
       }
     } catch (e) {
       context.read<QRCodeScanCubit>().emitError(error: e);
       return;
     }
   }
-  if (showPrompt && !trustedListEnabled) {
-    /// OIDC4VCI Case
 
-    final String title = l10n.scanPromptHost;
-
-    String subtitle = (approvedIssuer.did.isEmpty)
-        ? updatedOidc4vcParameters.initialUri.host
-        : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
-
-    subtitle = await getHost(
+  if (showPrompt || trustedListEnabled) {
+    final languageCode = context
+        .read<ProfileCubit>()
+        .langCubit
+        .state
+        .locale
+        .languageCode;
+    final fallbackHost = await getHost(
       uri: updatedOidc4vcParameters.initialUri,
       client: client,
     );
 
+    final issuerDisplay = resolveIssuerDisplay(
+      issuerOpenIdConfiguration: issuerOpenIdConfiguration,
+      locale: languageCode,
+      fallbackHost: fallbackHost,
+    );
+
+    final credentialDisplayName = resolveOfferedCredentialDisplayName(
+      oidc4vcParameters: updatedOidc4vcParameters,
+      languageCode: languageCode,
+    );
+
     LoadingView().hide();
-    acceptHost =
-        await showDialog<bool>(
-          context: context,
-          builder: (BuildContext context) {
-            return ConfirmDialog(
-              title: title,
-              subtitle: subtitle,
-              yes: l10n.communicationHostAllow,
-              no: l10n.communicationHostDeny,
-              //lock: state.uri!.scheme == 'http',
-            );
-          },
-        ) ??
-        false;
+    acceptHost = await IssuerConnectDialog.show(
+      context: context,
+      issuerName: issuerDisplay.name,
+      logoUri: issuerDisplay.logoUri,
+      isTrusted: isTrusted,
+      credentialDisplayName: credentialDisplayName,
+    );
   }
   LoadingView().hide();
   if (acceptHost) {

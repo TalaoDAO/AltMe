@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/json_viewer/view/json_viewer_page.dart';
@@ -35,12 +36,36 @@ Future<void> oidc4vpSiopV2AcceptHost({
   final String? request = uri.queryParameters['request'];
   late dynamic encodedData;
   Map<String, dynamic>? response;
+  Map<String, dynamic>? jwtHeader;
 
   if (requestUri != null || request != null) {
     encodedData = await getPayload(client, requestUri, request);
     response = JWTDecode().decodePayload(
       token: encodedData as String,
     );
+    jwtHeader = JWTDecode().decodeHeader(token: encodedData as String);
+  }
+
+  /// purpose, taken from the presentation_definition when it is embedded
+  /// directly in the request (no extra network round-trip)
+  String? purpose;
+  try {
+    final presentationDefinitionParam =
+        uri.queryParameters['presentation_definition'];
+    if (presentationDefinitionParam != null) {
+      final pd =
+          jsonDecode(presentationDefinitionParam) as Map<String, dynamic>;
+      purpose = pd['purpose'] as String?;
+    } else {
+      final pd = response?['presentation_definition'];
+      if (pd is Map<String, dynamic>) {
+        purpose = pd['purpose'] as String?;
+      } else if (pd is String) {
+        purpose = (jsonDecode(pd) as Map<String, dynamic>)['purpose'] as String?;
+      }
+    }
+  } catch (_) {
+    purpose = null;
   }
 
   if (isDeveloperMode) {

@@ -12,6 +12,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vc/helper_function/get_issuance_data.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vci_accept_host.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vp_siopv2_accept_host.dart';
+import 'package:altme/oidc4vc/widget/credential_acceptance_dialog.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
@@ -506,6 +507,25 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         }
 
         context.read<QRCodeScanCubit>().completer?.complete(moveAhead);
+        LoadingView().show(context: context);
+      }
+
+      if (state.status == QrScanStatus.pauseForCredentialAcceptance) {
+        LoadingView().hide();
+
+        final data = state.credentialAcceptanceData;
+
+        final bool accepted = data == null
+            ? true
+            : await CredentialAcceptanceDialog.show(
+                context: context,
+                credentialDisplayName: data.credentialDisplayName,
+                issuerName: data.issuerName,
+                isTrusted: data.isTrusted,
+                claims: data.claims,
+              );
+
+        context.read<QRCodeScanCubit>().completer?.complete(accepted);
         LoadingView().show(context: context);
       }
 

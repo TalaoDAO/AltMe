@@ -10,4 +10,5 @@ enum QrScanStatus {
   goBack,
   pauseForDialog,
   pauseForDisplay,
+  pauseForCredentialAcceptance,
 }

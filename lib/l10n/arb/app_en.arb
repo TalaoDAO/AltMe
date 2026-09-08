@@ -1182,5 +1182,60 @@
   "notTrustedEntity": "This entity is not in the trusted list. You should be very cautious with untrusted entities.",
   "acceptanceRequest": "Payment request",
   "pay": "share and pay",
-  "greek": "Ελληνικά"
+  "greek": "Ελληνικά",
+  "issuerConnectTitle": "Connect to credential issuer?",
+  "issuerConnectSubtitle": "{issuerName} wants to issue a credential to your wallet.",
+  "@issuerConnectSubtitle": {
+    "description": "Subtitle on the issuer-connect confirmation screen",
+    "placeholders": {
+      "issuerName": {}
+    }
+  },
+  "trustedIssuerLabel": "Trusted issuer",
+  "issuerNotVerifiedLabel": "Issuer not verified",
+  "issuerNotVerifiedDescription": "The identity of this issuer could not be verified.",
+  "onlyContinueIfTrustIssuer": "Only continue if you recognise and trust this issuer.",
+  "continueLabel": "Continue",
+  "continueAnywayLabel": "Continue anyway",
+  "credentialAcceptTitle": "Add credential to your wallet?",
+  "issuedByLabel": "Issued by",
+  "informationIncludedLabel": "Information included",
+  "addToWalletLabel": "Add to wallet",
+  "addAnywayLabel": "Add anyway",
+  "verifierConnectTitle": "Connect to {verifierName}?",
+  "@verifierConnectTitle": {
+    "description": "Title on the verifier-connect confirmation screen",
+    "placeholders": {
+      "verifierName": {}
+    }
+  },
+  "verifierConnectSubtitle": "{verifierName} wants to request information from your wallet.",
+  "@verifierConnectSubtitle": {
+    "description": "Subtitle on the verifier-connect confirmation screen",
+    "placeholders": {
+      "verifierName": {}
+    }
+  },
+  "verifiedOrganisationLabel": "Verified organisation",
+  "organisationNotVerifiedLabel": "Organisation not verified",
+  "organisationNotVerifiedDescription": "The identity of this organisation could not be verified.",
+  "onlyContinueIfTrustOrganisation": "Only continue if you recognise and trust this organisation.",
+  "purposeLabel": "Purpose",
+  "reviewRequestLabel": "Review request",
+  "shareInformationTitle": "Share your information?",
+  "shareInformationSubtitle": "{verifierName} is requesting the following information from your wallet.",
+  "@shareInformationSubtitle": {
+    "description": "Subtitle on the share-information confirmation screen",
+    "placeholders": {
+      "verifierName": {}
+    }
+  },
+  "onlyShareIfTrustOrganisation": "Only share this information if you recognise and trust this organisation.",
+  "informationRequestedLabel": "Information requested",
+  "sharedWithLabel": "Shared with",
+  "notVerifiedLabel": "Not verified",
+  "onlyInformationShownWillBeShared": "Only the information shown above will be shared.",
+  "shareInformationButtonLabel": "Share information",
+  "shareAnywayLabel": "Share anyway",
+  "dontShareLabel": "Don't share"
 }
