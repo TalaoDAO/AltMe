@@ -1,3 +1,4 @@
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/widget/claim_list.dart';
 
 const _excludedTopLevelClaimKeys = {
@@ -27,6 +28,33 @@ List<ClaimEntry> flattenClaimsForDisplay(Map<String, dynamic> data) {
     return _flatten(subject, excludeTopLevel: {'id', 'type'});
   }
   return _flatten(data, excludeTopLevel: _excludedTopLevelClaimKeys);
+}
+
+/// Flattens the claim name/value pairs of one or more credentials about to
+/// be shared with a verifier. Claim labels are prefixed with the
+/// credential's type when more than one credential is presented, to avoid
+/// ambiguity.
+List<ClaimEntry> flattenCredentialsForDisplay(
+  List<CredentialModel> credentials,
+) {
+  final multiple = credentials.length > 1;
+  final entries = <ClaimEntry>[];
+
+  for (final credentialModel in credentials) {
+    final type = credentialModel.credentialPreview.type;
+    final prefix = multiple && type.isNotEmpty ? type.last : '';
+
+    for (final claim in flattenClaimsForDisplay(credentialModel.data)) {
+      entries.add(
+        ClaimEntry(
+          label: prefix.isEmpty ? claim.label : '$prefix: ${claim.label}',
+          value: claim.value,
+        ),
+      );
+    }
+  }
+
+  return entries;
 }
 
 List<ClaimEntry> _flatten(

@@ -515,15 +515,16 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
         final data = state.credentialAcceptanceData;
 
-        final bool accepted = data == null
-            ? true
-            : await CredentialAcceptanceDialog.show(
-                context: context,
-                credentialDisplayName: data.credentialDisplayName,
-                issuerName: data.issuerName,
-                isTrusted: data.isTrusted,
-                claims: data.claims,
-              );
+        var accepted = true;
+        if (data != null) {
+          accepted = await CredentialAcceptanceDialog.show(
+            context: context,
+            credentialDisplayName: data.credentialDisplayName,
+            issuerName: data.issuerName,
+            isTrusted: data.isTrusted,
+            claims: data.claims,
+          );
+        }
 
         context.read<QRCodeScanCubit>().completer?.complete(accepted);
         LoadingView().show(context: context);

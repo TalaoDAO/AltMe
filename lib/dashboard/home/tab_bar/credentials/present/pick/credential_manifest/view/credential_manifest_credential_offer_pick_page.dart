@@ -4,6 +4,9 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/oidc4vc/helper_function/flatten_claims_for_display.dart';
+import 'package:altme/oidc4vc/model/verifier_trust_info.dart';
+import 'package:altme/oidc4vc/widget/share_information_dialog.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 
 import 'package:credential_manifest/credential_manifest.dart';
@@ -19,6 +22,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
     required this.issuer,
     required this.inputDescriptorIndex,
     required this.credentialsToBePresented,
+    this.verifierTrustInfo,
   });
 
   final Uri uri;
@@ -26,6 +30,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
   final Issuer issuer;
   final int inputDescriptorIndex;
   final List<CredentialModel> credentialsToBePresented;
+  final VerifierTrustInfo? verifierTrustInfo;
 
   static Route<dynamic> route({
     required Uri uri,
@@ -33,6 +38,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
     required Issuer issuer,
     required int inputDescriptorIndex,
     required List<CredentialModel> credentialsToBePresented,
+    VerifierTrustInfo? verifierTrustInfo,
   }) {
     return MaterialPageRoute<void>(
       builder: (context) => CredentialManifestOfferPickPage(
@@ -41,6 +47,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
         issuer: issuer,
         inputDescriptorIndex: inputDescriptorIndex,
         credentialsToBePresented: credentialsToBePresented,
+        verifierTrustInfo: verifierTrustInfo,
       ),
       settings: const RouteSettings(name: '/CredentialManifestOfferPickPage'),
     );
@@ -71,6 +78,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
         issuer: issuer,
         inputDescriptorIndex: inputDescriptorIndex,
         credentialsToBePresented: credentialsToBePresented,
+        verifierTrustInfo: verifierTrustInfo,
       ),
     );
   }
@@ -84,6 +92,7 @@ class CredentialManifestOfferPickView extends StatefulWidget {
     required this.issuer,
     required this.inputDescriptorIndex,
     required this.credentialsToBePresented,
+    this.verifierTrustInfo,
   });
 
   final Uri uri;
@@ -91,6 +100,7 @@ class CredentialManifestOfferPickView extends StatefulWidget {
   final Issuer issuer;
   final int inputDescriptorIndex;
   final List<CredentialModel> credentialsToBePresented;
+  final VerifierTrustInfo? verifierTrustInfo;
 
   @override
   State<CredentialManifestOfferPickView> createState() =>
@@ -152,6 +162,7 @@ class _CredentialManifestOfferPickViewState
                 credentialsToBePresented: widget.credentialsToBePresented,
                 presentationDefinition: presentationDefinition,
                 selectedCredential: firstOne,
+                verifierTrustInfo: widget.verifierTrustInfo,
               ),
             );
           }
@@ -402,6 +413,7 @@ class _CredentialManifestOfferPickViewState
           selectedCredential: firstOne,
           presentationDefinition: presentationDefinition,
           credentialsToBePresented: widget.credentialsToBePresented,
+          verifierTrustInfo: widget.verifierTrustInfo,
         ),
       );
     }
@@ -435,9 +447,26 @@ class _CredentialManifestOfferPickViewState
           issuer: widget.issuer,
           inputDescriptorIndex: widget.inputDescriptorIndex + 1,
           credentialsToBePresented: updatedCredentials,
+          verifierTrustInfo: widget.verifierTrustInfo,
         ),
       );
     } else {
+      final trustInfo =
+          widget.verifierTrustInfo ??
+          VerifierTrustInfo(
+            name: widget.issuer.organizationInfo.website,
+            isTrusted: false,
+          );
+
+      final accepted = await ShareInformationDialog.show(
+        context: context,
+        verifierName: trustInfo.name,
+        isTrusted: trustInfo.isTrusted,
+        purpose: trustInfo.purpose,
+        claims: flattenCredentialsForDisplay(updatedCredentials),
+      );
+      if (!accepted) return;
+
       final bool userPINCodeForAuthentication = context
           .read<ProfileCubit>()
           .state

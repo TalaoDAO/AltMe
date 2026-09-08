@@ -43,7 +43,7 @@ Future<void> oidc4vpSiopV2AcceptHost({
     response = JWTDecode().decodePayload(
       token: encodedData as String,
     );
-    jwtHeader = JWTDecode().decodeHeader(token: encodedData as String);
+    jwtHeader = JWTDecode().decodeHeader(token: encodedData);
   }
 
   /// purpose, taken from the presentation_definition when it is embedded
@@ -61,7 +61,8 @@ Future<void> oidc4vpSiopV2AcceptHost({
       if (pd is Map<String, dynamic>) {
         purpose = pd['purpose'] as String?;
       } else if (pd is String) {
-        purpose = (jsonDecode(pd) as Map<String, dynamic>)['purpose'] as String?;
+        final decodedPd = jsonDecode(pd) as Map<String, dynamic>;
+        purpose = decodedPd['purpose'] as String?;
       }
     }
   } catch (_) {
@@ -206,6 +207,8 @@ Future<void> oidc4vpSiopV2AcceptHost({
     uri: uri,
     client: client,
     showPrompt: showPrompt,
+    jwtHeader: jwtHeader,
+    purpose: purpose,
   ).show();
 
   // Default action if there is no prompt

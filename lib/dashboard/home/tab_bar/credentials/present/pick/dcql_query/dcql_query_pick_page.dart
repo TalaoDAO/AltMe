@@ -7,6 +7,9 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_helper.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
+import 'package:altme/oidc4vc/model/verifier_trust_info.dart';
+import 'package:altme/oidc4vc/widget/claim_list.dart';
+import 'package:altme/oidc4vc/widget/share_information_dialog.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 
@@ -24,6 +27,7 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
     required this.issuer,
     required this.inputDescriptorIndex,
     required this.credentialsToBePresented,
+    this.verifierTrustInfo,
   });
 
   final Uri uri;
@@ -31,6 +35,7 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
   final Issuer issuer;
   final int inputDescriptorIndex;
   final List<CredentialModel> credentialsToBePresented;
+  final VerifierTrustInfo? verifierTrustInfo;
 
   static Route<dynamic> route({
     required Uri uri,
@@ -38,6 +43,7 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
     required Issuer issuer,
     required int inputDescriptorIndex,
     required List<CredentialModel> credentialsToBePresented,
+    VerifierTrustInfo? verifierTrustInfo,
   }) {
     return MaterialPageRoute<void>(
       builder: (context) => DcqlQueryOfferPickPage(
@@ -46,6 +52,7 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
         issuer: issuer,
         inputDescriptorIndex: inputDescriptorIndex,
         credentialsToBePresented: credentialsToBePresented,
+        verifierTrustInfo: verifierTrustInfo,
       ),
       settings: const RouteSettings(name: '/DcqlQueryOfferPickPage'),
     );
@@ -76,6 +83,7 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
         issuer: issuer,
         inputDescriptorIndex: inputDescriptorIndex,
         credentialsToBePresented: credentialsToBePresented,
+        verifierTrustInfo: verifierTrustInfo,
       ),
     );
   }
@@ -89,6 +97,7 @@ class DcqlQueryOfferPickView extends StatefulWidget {
     required this.issuer,
     required this.inputDescriptorIndex,
     required this.credentialsToBePresented,
+    this.verifierTrustInfo,
   });
 
   final Uri uri;
@@ -96,6 +105,7 @@ class DcqlQueryOfferPickView extends StatefulWidget {
   final Issuer issuer;
   final int inputDescriptorIndex;
   final List<CredentialModel> credentialsToBePresented;
+  final VerifierTrustInfo? verifierTrustInfo;
 
   @override
   State<DcqlQueryOfferPickView> createState() => _DcqlQueryOfferPickViewState();
@@ -174,6 +184,22 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
     required List<SdJwtDigitalCredential> packageFormatCredentials,
     required List<CredentialModel> candidates,
   }) async {
+    final trustInfo =
+        widget.verifierTrustInfo ??
+        VerifierTrustInfo(
+          name: widget.issuer.organizationInfo.website,
+          isTrusted: false,
+        );
+
+    final accepted = await ShareInformationDialog.show(
+      context: context,
+      verifierName: trustInfo.name,
+      isTrusted: trustInfo.isTrusted,
+      purpose: trustInfo.purpose,
+      claims: _buildShareClaims(result),
+    );
+    if (!accepted) return;
+
     final profileCubit = context.read<ProfileCubit>();
     final customOidc4vcProfile = profileCubit
         .state
@@ -204,6 +230,29 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       issuer: widget.issuer,
       qrCodeScanCubit: context.read<QRCodeScanCubit>(),
     );
+  }
+
+  /// The exact claim name/value pairs that will be disclosed, mirroring the
+  /// paths [VerifiableCredentialsColumn] renders on this same page.
+  List<ClaimEntry> _buildShareClaims(DcqlQueryResult result) {
+    final claims = <ClaimEntry>[];
+    for (final entry in result.verifiableCredentials.entries) {
+      final paths = result.query.credentials
+          .firstWhere((c) => c.id == entry.key)
+          .claims!
+          .map((c) => c.path)
+          .toList();
+      for (final credential in entry.value) {
+        for (final path in paths) {
+          final label = path
+              .map((s) => s == null ? '*' : s.toString())
+              .join(' › ');
+          final value = credential.getValueByPath(path);
+          claims.add(ClaimEntry(label: label, value: value?.toString() ?? '—'));
+        }
+      }
+    }
+    return claims;
   }
 }
 

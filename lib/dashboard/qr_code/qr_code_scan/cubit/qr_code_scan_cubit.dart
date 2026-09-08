@@ -12,6 +12,7 @@ import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/oidc4vc/helper_function/get_issuance_data.dart';
 import 'package:altme/oidc4vc/model/credential_acceptance_data.dart';
+import 'package:altme/oidc4vc/model/verifier_trust_info.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
@@ -31,6 +32,14 @@ import 'package:secure_storage/secure_storage.dart';
 
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
+
+/// Client_id schemes accepted for presentation requests under OpenID4VP
+/// Final 1.0 - per ticket #3516, every other scheme is rejected.
+const finalClientIdSchemes = {
+  'decentralized_identifier',
+  'x509_san_dns',
+  'x509_hash',
+};
 
 class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   QRCodeScanCubit({
@@ -857,7 +866,10 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     return (responseType, keys);
   }
 
-  Future<void> startSIOPV2OIDC4VPProcess(Uri oldUri) async {
+  Future<void> startSIOPV2OIDC4VPProcess(
+    Uri oldUri, {
+    VerifierTrustInfo? verifierTrustInfo,
+  }) async {
     final (responseType, keys) = await preparePresentationProcess(oldUri);
     log.i('responseType - $responseType');
     if (isIDTokenOnly(responseType)) {
@@ -870,7 +882,11 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       /// responseType == 'id_token vp_token' => verifier side (oidc4vp)
       /// or (oidc4vp and siopv2)
 
-      await launchOIDC4VPFlow(keys: keys, uri: state.uri!);
+      await launchOIDC4VPFlow(
+        keys: keys,
+        uri: state.uri!,
+        verifierTrustInfo: verifierTrustInfo,
+      );
     } else {
       final error = {
         'error': 'invalid_request',
@@ -1000,9 +1016,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   Future<void> launchOIDC4VPFlow({
     required List<String> keys,
     required Uri uri,
+    VerifierTrustInfo? verifierTrustInfo,
   }) async {
     final (CredentialModel credentialPreview, String host) =
         await prepareOIDC4VPFlow(keys: keys, uri: uri);
+    final trustInfo =
+        verifierTrustInfo ?? VerifierTrustInfo(name: host, isTrusted: false);
     if (oidc4vc is Oidc4vcFinal) {
       emit(
         state.copyWith(
@@ -1013,6 +1032,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             issuer: Issuer.emptyIssuer(host),
             inputDescriptorIndex: 0,
             credentialsToBePresented: [],
+            verifierTrustInfo: trustInfo,
           ),
         ),
       );
@@ -1026,6 +1046,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             issuer: Issuer.emptyIssuer(host),
             inputDescriptorIndex: 0,
             credentialsToBePresented: [],
+            verifierTrustInfo: trustInfo,
           ),
         ),
       );
@@ -1052,52 +1073,90 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         .selfSovereignIdentityOptions
         .customOidc4vcProfile;
     final isSecurityEnabled = customOidc4vcProfile.securityLevel;
-    if (isSecurityEnabled) {
-      final Map<String, dynamic> payload = jwtDecode.parseJwt(
-        encodedData as String,
-      );
-      var clientId = payload['client_id'].toString();
-      //check Signature
-      try {
-        /// client_id_scheme = did, you need tio use the universal resolver
-        ///
-        /// client_id_scheme = redirect_uri
-        /// (default case if no client_id_scheme)c you need to use the jwks
-        ///
-        /// client_id_scheme =  x509_san_dns, you need the key from the
-        /// certificate
-        ///
-        /// client_id_scheme = verifier_attestation, the key will be in a
-        /// jwt inside teh header
-        ///
-        /// if client_id starts with "did:" lets consider it is
-        /// client_id_scheme n= did, universal resolver
-        ///
-        /// if client_id starts with http, lets consider it is
-        /// client_id_scheme = redirect_uri, fetch jwks
 
-        Map<String, dynamic>? publicKeyJwk;
+    /// OpenID4VP Final 1.0 tightens the accepted client_id schemes to only
+    /// decentralized_identifier, x509_san_dns and x509_hash, and this is
+    /// enforced regardless of the securityLevel setting.
+    final isFinal1 =
+        customOidc4vcProfile.oidc4vpDraft == OIDC4VPDraftType.final1;
 
-        var clientIdScheme = payload['client_id_scheme'];
+    if (!isSecurityEnabled && !isFinal1) {
+      emit(state.acceptHost());
+      return;
+    }
 
-        /// With OIDC4VP Draft 22 and above the client_id_scheme is removed
-        /// from the authorization request but the value is added to the
-        /// client_id to be the new client_id value
-        ///
-        /// in the client_id Authorization Request parameter and other places
-        /// where the Client Identifier is used, the Client Identifier Schemes
-        /// are prefixed to the usual Client Identifier, separated by a :
-        /// (colon) character: <client_id_scheme>:<orig_client_id>
+    final Map<String, dynamic> payload = jwtDecode.parseJwt(
+      encodedData as String,
+    );
 
-        if (clientIdScheme == null) {
-          final draft22AndAbove = profileCubit
-              .state
-              .model
-              .profileSetting
-              .selfSovereignIdentityOptions
-              .customOidc4vcProfile
-              .oidc4vpDraft
-              .draft22AndAbove;
+    if (isFinal1) {
+      final rawClientId = payload['client_id'];
+      if (rawClientId == null || rawClientId.toString().isEmpty) {
+        final error = {
+          'error': 'invalid_request',
+          'error_description': 'The client_id is missing.',
+        };
+        unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
+        throw ResponseMessage(data: error);
+      }
+    }
+
+    var clientId = payload['client_id'].toString();
+    //check Signature
+    try {
+      /// client_id_scheme = did, you need tio use the universal resolver
+      ///
+      /// client_id_scheme = redirect_uri
+      /// (default case if no client_id_scheme)c you need to use the jwks
+      ///
+      /// client_id_scheme =  x509_san_dns, you need the key from the
+      /// certificate
+      ///
+      /// client_id_scheme = verifier_attestation, the key will be in a
+      /// jwt inside teh header
+      ///
+      /// if client_id starts with "did:" lets consider it is
+      /// client_id_scheme n= did, universal resolver
+      ///
+      /// if client_id starts with http, lets consider it is
+      /// client_id_scheme = redirect_uri, fetch jwks
+
+      Map<String, dynamic>? publicKeyJwk;
+
+      var clientIdScheme = payload['client_id_scheme'] as String?;
+
+      /// With OIDC4VP Draft 22 and above the client_id_scheme is removed
+      /// from the authorization request but the value is added to the
+      /// client_id to be the new client_id value
+      ///
+      /// in the client_id Authorization Request parameter and other places
+      /// where the Client Identifier is used, the Client Identifier Schemes
+      /// are prefixed to the usual Client Identifier, separated by a :
+      /// (colon) character: <client_id_scheme>:<orig_client_id>
+
+      if (clientIdScheme == null) {
+        if (isFinal1) {
+          final separatorIndex = clientId.indexOf(':');
+          final scheme = separatorIndex == -1
+              ? null
+              : clientId.substring(0, separatorIndex);
+
+          if (scheme == null || !finalClientIdSchemes.contains(scheme)) {
+            final error = {
+              'error': 'invalid_request',
+              'error_description': 'Invalid client_id_scheme',
+            };
+            unawaited(
+              scanCubit.sendErrorToServer(uri: state.uri!, data: error),
+            );
+            throw ResponseMessage(data: error);
+          }
+
+          clientIdScheme = scheme;
+          clientId = clientId.substring(separatorIndex + 1);
+        } else {
+          final draft22AndAbove =
+              customOidc4vcProfile.oidc4vpDraft.draft22AndAbove;
 
           if (draft22AndAbove) {
             final parts = clientId.split(':');
@@ -1117,68 +1176,79 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             }
           }
         }
+      } else if (isFinal1 && !finalClientIdSchemes.contains(clientIdScheme)) {
+        final error = {
+          'error': 'invalid_request',
+          'error_description': 'Invalid client_id_scheme',
+        };
+        unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
+        throw ResponseMessage(data: error);
+      }
 
-        if (clientIdScheme != null) {
-          final Map<String, dynamic> header = jwtDecode.decodeHeader(
-            token: encodedData,
+      if (clientIdScheme != null) {
+        final Map<String, dynamic> header = jwtDecode.decodeHeader(
+          token: encodedData,
+        );
+
+        if (clientIdScheme == 'x509_san_dns') {
+          publicKeyJwk = await checkX509(
+            clientId: clientId,
+            encodedData: encodedData,
+            header: header,
           );
-
-          if (clientIdScheme == 'x509_san_dns') {
-            publicKeyJwk = await checkX509(
-              clientId: clientId,
-              encodedData: encodedData,
-              header: header,
-            );
-          } else if (clientIdScheme == 'verifier_attestation') {
-            publicKeyJwk = await checkVerifierAttestation(
-              clientId: clientId,
-              header: header,
-              jwtDecode: jwtDecode,
-            );
-          } else if (clientIdScheme == 'redirect_uri') {
-            /// no need to verify
-            return emit(state.acceptHost());
-          } else if (clientIdScheme == 'did') {
-            /// bypass
-          } else {
-            /// if client_id_scheme is not in the list -> did, redirect_uri,
-            /// verifier_attestation, x509_san_dns
-            final error = {
-              'error': 'invalid_request',
-              'error_description': 'Invalid client_id_scheme',
-            };
-            unawaited(
-              scanCubit.sendErrorToServer(uri: state.uri!, data: error),
-            );
-            throw ResponseMessage(data: error);
-          }
-
-          final VerificationType isVerified = await verifyEncodedData(
-            issuer: clientId,
+        } else if (clientIdScheme == 'x509_hash') {
+          publicKeyJwk = await checkX509Hash(
+            header: header,
+            clientId: clientId,
+          );
+        } else if (clientIdScheme == 'decentralized_identifier' ||
+            clientIdScheme == 'did') {
+          /// bypass, resolved via universal resolver downstream
+        } else if (!isFinal1 && clientIdScheme == 'verifier_attestation') {
+          publicKeyJwk = await checkVerifierAttestation(
+            clientId: clientId,
+            header: header,
             jwtDecode: jwtDecode,
-            jwt: encodedData,
-            publicKeyJwk: publicKeyJwk,
-            useOAuthAuthorizationServerLink: useOauthServerAuthEndPoint(
-              profileCubit.state.model,
-            ),
           );
-
-          if (isVerified != VerificationType.verified) {
-            return emitError(
-              error: ResponseMessage(
-                message: ResponseString.RESPONSE_STRING_invalidRequest,
-              ),
-              callToAction: AiRequestAnalysisButton(link: state.uri.toString()),
-            );
-          }
+        } else if (!isFinal1 && clientIdScheme == 'redirect_uri') {
+          /// no need to verify
+          return emit(state.acceptHost());
+        } else {
+          /// if client_id_scheme is not in the accepted list for the
+          /// current draft
+          final error = {
+            'error': 'invalid_request',
+            'error_description': 'Invalid client_id_scheme',
+          };
+          unawaited(
+            scanCubit.sendErrorToServer(uri: state.uri!, data: error),
+          );
+          throw ResponseMessage(data: error);
         }
 
-        emit(state.acceptHost());
-      } catch (e) {
-        rethrow;
+        final VerificationType isVerified = await verifyEncodedData(
+          issuer: clientId,
+          jwtDecode: jwtDecode,
+          jwt: encodedData,
+          publicKeyJwk: publicKeyJwk,
+          useOAuthAuthorizationServerLink: useOauthServerAuthEndPoint(
+            profileCubit.state.model,
+          ),
+        );
+
+        if (isVerified != VerificationType.verified) {
+          return emitError(
+            error: ResponseMessage(
+              message: ResponseString.RESPONSE_STRING_invalidRequest,
+            ),
+            callToAction: AiRequestAnalysisButton(link: state.uri.toString()),
+          );
+        }
       }
-    } else {
+
       emit(state.acceptHost());
+    } catch (e) {
+      rethrow;
     }
   }
 

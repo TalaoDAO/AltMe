@@ -2129,7 +2129,9 @@ Future<Map<String, dynamic>?> checkX509Hash({
   final certificate = x5c.first.toString();
   final decoded = base64Decode(certificate);
 
-  final computedHash = base64Url.encode(sha256.convert(decoded).bytes).replaceAll('=', '');
+  final computedHash = base64Url
+      .encode(sha256.convert(decoded).bytes)
+      .replaceAll('=', '');
 
   if (computedHash != clientId) {
     throw ResponseMessage(
