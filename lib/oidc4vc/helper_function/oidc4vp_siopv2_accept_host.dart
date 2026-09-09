@@ -2,10 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/json_viewer/view/json_viewer_page.dart';
-import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
-import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.dart';
-import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vc/helper_function/get_payload.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vp_prompt.dart';
@@ -17,6 +14,7 @@ import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
 import 'package:altme/trusted_list/function/check_presentation_is_trusted.dart';
 import 'package:altme/trusted_list/function/is_certificate_valid.dart';
 import 'package:altme/trusted_list/model/trusted_entity.dart';
+import 'package:altme/trusted_list/model/trusted_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -40,9 +38,7 @@ Future<void> oidc4vpSiopV2AcceptHost({
 
   if (requestUri != null || request != null) {
     encodedData = await getPayload(client, requestUri, request);
-    response = JWTDecode().decodePayload(
-      token: encodedData as String,
-    );
+    response = JWTDecode().decodePayload(token: encodedData as String);
     jwtHeader = JWTDecode().decodeHeader(token: encodedData);
   }
 
@@ -138,20 +134,27 @@ Future<void> oidc4vpSiopV2AcceptHost({
         true;
     if (!moveAhead) return;
   }
-  final profile = context.read<ProfileCubit>().state.model;
+  ProfileModel profile = context.read<ProfileCubit>().state.model;
   final trustedListEnabled =
       profile.profileSetting.walletSecurityOptions.trustedList;
-  final trustedList = profile.trustedList;
+  final trustedListUrl =
+      profile.profileSetting.walletSecurityOptions.trustedListUrl ??
+      Parameters.trustedListUrl;
+  TrustedList? trustedList = profile.trustedList;
   late TrustedEntity? trustedEntity;
   if (trustedListEnabled) {
     try {
       if (trustedList == null) {
-        throw Exception('Missing trusted list.');
+        profile = await context.read<ProfileCubit>().addTrustedList(
+          trustedListUrl,
+          profile,
+        );
+        trustedList = profile.trustedList;
       }
 
       // get new issuer open id configuration from signed metadata
       trustedEntity = getEntityFromTrustedList(
-        trustedList,
+        trustedList!,
         uri.queryParameters['client_id'],
         TrustedEntityType.verifier,
       );
