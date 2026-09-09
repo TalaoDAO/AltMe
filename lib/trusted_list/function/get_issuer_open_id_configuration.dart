@@ -5,13 +5,10 @@ OpenIdConfiguration getIssuerOpenIdConfiguration({
   required OpenIdConfiguration issuerOpenIdConfiguration,
 }) {
   late OpenIdConfiguration newIssuerOpenIdConfiguration;
-  if (issuerOpenIdConfiguration.signedMetadata != null) {
     final signedMetadata = issuerOpenIdConfiguration.signedMetadata;
+  if (signedMetadata != null) {
     // signedMetadata is a JWT containing the issuer's OpenID configuration in
     // the payload and an x509 certificate in the header.
-    if (signedMetadata == null) {
-      throw Exception('Signed metadata is null');
-    }
     // check jwt signature
 
     try {
