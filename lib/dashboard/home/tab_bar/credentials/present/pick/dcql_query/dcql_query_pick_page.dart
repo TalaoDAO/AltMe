@@ -119,12 +119,21 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       }
       final query = DcqlCredentialQuery.fromJson(rawQuery);
       final credentials = context.read<CredentialsCubit>().state.credentials;
-      final candidates = credentials
-          .where((e) => e.format == VCFormatType.dcSdJWT.vpValue)
-          .toList();
-      final packageFormatCredentials = candidates
-          .map((e) => SdJwtDigitalCredential.fromSdJwt(sdJwtToken: e.jwt!))
-          .toList();
+      final candidates = <CredentialModel>[];
+      final packageFormatCredentials = <SdJwtDigitalCredential>[];
+      for (final e in credentials.where(
+        (e) => e.format == VCFormatType.dcSdJWT.vpValue,
+      )) {
+        try {
+          packageFormatCredentials.add(
+            SdJwtDigitalCredential.fromSdJwt(sdJwtToken: e.jwt!),
+          );
+          candidates.add(e);
+        } catch (_) {
+          // skip candidates that fail to parse rather than aborting the
+          // whole screen
+        }
+      }
       final result = query.query(packageFormatCredentials);
 
       if (!result.fulfilled) {
