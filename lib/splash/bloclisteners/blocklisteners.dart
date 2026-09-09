@@ -72,9 +72,7 @@ final ProfileCubitListener = BlocListener<ProfileCubit, ProfileState>(
         .read<ProfileCubit>()
         .oidc4vc;
     // TODO(hawkbee): ScanCubit should be immutable
-    context.read<ScanCubit>().oidc4vc = context
-        .read<ProfileCubit>()
-        .oidc4vc;
+    context.read<ScanCubit>().oidc4vc = context.read<ProfileCubit>().oidc4vc;
   },
 );
 
@@ -515,18 +513,27 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
 
         final data = state.credentialAcceptanceData;
 
-        var accepted = true;
         if (data != null) {
-          accepted = await CredentialAcceptanceDialog.show(
+          final accepted = await CredentialAcceptanceDialog.show(
             context: context,
             credentialDisplayName: data.credentialDisplayName,
             issuerName: data.issuerName,
             isTrusted: data.isTrusted,
             claims: data.claims,
           );
+
+          if (accepted) {
+            await context.read<CredentialsCubit>().insertCredential(
+              credential: data.credentialModel,
+              showStatus: true,
+              showMessage: data.showMessage,
+              uri: data.uri,
+            );
+          }
         }
 
-        context.read<QRCodeScanCubit>().completer?.complete(accepted);
+        // closes the credential pick screen
+        Navigator.of(context).pop();
         LoadingView().show(context: context);
       }
 

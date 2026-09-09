@@ -63,8 +63,9 @@ class CredentialAcceptanceDialog extends StatelessWidget {
                   isTrusted: isTrusted,
                   trustedLabel: l10n.trustedIssuerLabel,
                   notTrustedLabel: l10n.issuerNotVerifiedLabel,
-                  notTrustedDescription:
-                      isTrusted ? null : l10n.issuerNotVerifiedDescription,
+                  notTrustedDescription: isTrusted
+                      ? null
+                      : l10n.issuerNotVerifiedDescription,
                 ),
                 if (claims.isNotEmpty) ...[
                   const SizedBox(height: 16),
@@ -79,7 +80,7 @@ class CredentialAcceptanceDialog extends StatelessWidget {
             ),
           ),
         ),
-        yes: isTrusted ? l10n.addToWalletLabel : l10n.addAnywayLabel,
+        yes: isTrusted ? l10n.addToWalletLabel : l10n.addLabel,
         no: l10n.decline,
         invertedCallToAction: !isTrusted,
       ),

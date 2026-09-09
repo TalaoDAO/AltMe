@@ -188,15 +188,6 @@ Future<void> addOIDC4VCCredential({
             profileModel.profileSetting.walletSecurityOptions.trustedList,
       );
 
-  final accepted = await qrCodeScanCubit.showCredentialAcceptance(
-    data: CredentialAcceptanceData(
-      credentialDisplayName: display?.name ?? credentialType,
-      issuerName: issuerName,
-      isTrusted: isTrusted,
-      claims: flattenClaimsForDisplay(credentialFromOIDC4VC),
-    ),
-  );
-
   if (credentialIdToBeDeleted != null) {
     ///delete pending dummy credential
     await credentialsCubit.deleteById(
@@ -205,13 +196,17 @@ Future<void> addOIDC4VCCredential({
     );
   }
 
-  if (!accepted) return;
-
-  // insert the credential in the wallet
-  await credentialsCubit.insertCredential(
-    credential: credentialModel,
-    showStatus: true,
-    showMessage: isLastCall,
-    uri: Uri.parse(issuer ?? ''),
+  // the blocListener shows the consent screen and inserts the credential
+  // itself once the user accepts
+  qrCodeScanCubit.showCredentialAcceptance(
+    data: CredentialAcceptanceData(
+      credentialDisplayName: display?.name ?? credentialType,
+      issuerName: issuerName,
+      isTrusted: isTrusted,
+      claims: flattenClaimsForDisplay(credentialFromOIDC4VC),
+      credentialModel: credentialModel,
+      showMessage: isLastCall,
+      uri: Uri.parse(issuer ?? ''),
+    ),
   );
 }

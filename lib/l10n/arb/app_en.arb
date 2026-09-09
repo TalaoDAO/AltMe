@@ -1200,7 +1200,7 @@
   "issuedByLabel": "Issued by",
   "informationIncludedLabel": "Information included",
   "addToWalletLabel": "Add to wallet",
-  "addAnywayLabel": "Add anyway",
+  "addLabel": "Add",
   "verifierConnectTitle": "Connect to {verifierName}?",
   "@verifierConnectTitle": {
     "description": "Title on the verifier-connect confirmation screen",

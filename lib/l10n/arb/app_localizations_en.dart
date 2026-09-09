@@ -3402,7 +3402,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addToWalletLabel => 'Add to wallet';
 
   @override
-  String get addAnywayLabel => 'Add anyway';
+  String get addLabel => 'Add';
 
   @override
   String verifierConnectTitle(Object verifierName) {

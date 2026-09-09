@@ -1718,31 +1718,25 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
 
       resetNonceAndAccessTokenAndAuthorizationDetails();
-      goBack();
+      // the credential-acceptance popup closes the pick-credential screen
+      // itself once the user answers, so no goBack() here.
     } catch (e) {
       resetNonceAndAccessTokenAndAuthorizationDetails();
       emitError(error: e);
     }
   }
 
-  /// Shows the "Add credential to your wallet?" confirmation screen and
-  /// waits for the user's decision. Used because the credential fetch
-  /// happens outside of any widget context.
-  Future<bool> showCredentialAcceptance({
-    required CredentialAcceptanceData data,
-  }) async {
-    completer = Completer<bool>();
-
+  /// Triggers the "Add credential to your wallet?" confirmation screen.
+  /// The blocListener shows the dialog and, on acceptance, inserts
+  /// [CredentialAcceptanceData.credentialModel] itself - this cubit doesn't
+  /// wait for the user's decision.
+  void showCredentialAcceptance({required CredentialAcceptanceData data}) {
     emit(
       state.copyWith(
         qrScanStatus: QrScanStatus.pauseForCredentialAcceptance,
         credentialAcceptanceData: data,
       ),
     );
-
-    final value = await completer!.future;
-
-    return value;
   }
 
   Future<bool> showDataBeforeSending({

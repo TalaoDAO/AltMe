@@ -6189,11 +6189,11 @@ abstract class AppLocalizations {
   /// **'Add to wallet'**
   String get addToWalletLabel;
 
-  /// No description provided for @addAnywayLabel.
+  /// No description provided for @addLabel.
   ///
   /// In en, this message translates to:
-  /// **'Add anyway'**
-  String get addAnywayLabel;
+  /// **'Add'**
+  String get addLabel;
 
   /// Title on the verifier-connect confirmation screen
   ///
