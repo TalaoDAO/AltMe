@@ -98,15 +98,6 @@ Future<void> oidc4vciAcceptHost({
   // unsigned open id configuration, when available
   final issuerOpenIdConfiguration =
       updatedOidc4vcParameters.issuerOpenIdConfiguration;
-  final signedMetadata = issuerOpenIdConfiguration.signedMetadata;
-
-  if (signedMetadata != null) {
-    updatedOidc4vcParameters = updatedOidc4vcParameters.copyWith(
-      issuerOpenIdConfiguration: getIssuerOpenIdConfiguration(
-        issuerOpenIdConfiguration: issuerOpenIdConfiguration,
-      ),
-    );
-  }
 
   var isTrusted = false;
 
@@ -119,6 +110,16 @@ Future<void> oidc4vciAcceptHost({
         );
         trustedList = profile.trustedList;
       }
+      final signedMetadata = issuerOpenIdConfiguration.signedMetadata;
+      // signed_metadata does not exist in OIDC4VC final 1.0,
+      // it's only for old OIDC4VC drafts
+      if (signedMetadata != null) {
+        updatedOidc4vcParameters = updatedOidc4vcParameters.copyWith(
+          issuerOpenIdConfiguration: getIssuerOpenIdConfiguration(
+            issuerOpenIdConfiguration: issuerOpenIdConfiguration,
+          ),
+        );
+      }
 
       final trustedEntity = getIssuerFromTrustedList(
         issuerOpenIdConfiguration: issuerOpenIdConfiguration,
@@ -129,9 +130,8 @@ Future<void> oidc4vciAcceptHost({
         // oidc4vcParameters.credentialOffer['credential_configuration_ids'] are
         // in trustedEntity.vcTypes
 
-        final credentialConfigurationIds =
-            updatedOidc4vcParameters
-                .credentialOffer['credential_configuration_ids'];
+        final credentialConfigurationIds = updatedOidc4vcParameters
+            .credentialOffer['credential_configuration_ids'];
         if (credentialConfigurationIds != null &&
             credentialConfigurationIds is List) {
           for (final credentialConfigurationId in credentialConfigurationIds) {
