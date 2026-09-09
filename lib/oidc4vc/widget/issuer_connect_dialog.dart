@@ -74,7 +74,7 @@ class IssuerConnectDialog extends StatelessWidget {
             Text(credentialDisplayName, style: textTheme.titleMedium),
           ],
         ),
-        yes: isTrusted ? l10n.continueLabel : l10n.continueAnywayLabel,
+        yes: isTrusted ? l10n.continueLabel : l10n.continueLabel,
         no: l10n.cancel,
         invertedCallToAction: !isTrusted,
       ),

@@ -1196,7 +1196,6 @@
   "issuerNotVerifiedDescription": "The identity of this issuer could not be verified.",
   "onlyContinueIfTrustIssuer": "Only continue if you recognise and trust this issuer.",
   "continueLabel": "Continue",
-  "continueAnywayLabel": "Continue anyway",
   "credentialAcceptTitle": "Add credential to your wallet?",
   "issuedByLabel": "Issued by",
   "informationIncludedLabel": "Information included",

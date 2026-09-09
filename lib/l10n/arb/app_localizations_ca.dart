@@ -3402,9 +3402,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get continueLabel => 'Continue';
 
   @override
-  String get continueAnywayLabel => 'Continue anyway';
-
-  @override
   String get credentialAcceptTitle => 'Add credential to your wallet?';
 
   @override

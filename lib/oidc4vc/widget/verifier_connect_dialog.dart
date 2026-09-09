@@ -53,7 +53,7 @@ class VerifierConnectDialog extends StatelessWidget {
               notTrustedDescription: isTrusted
                   ? null
                   : '${l10n.organisationNotVerifiedDescription}\n\n'
-                      '${l10n.onlyContinueIfTrustOrganisation}',
+                        '${l10n.onlyContinueIfTrustOrganisation}',
             ),
             if (purpose != null && purpose!.isNotEmpty) ...[
               const SizedBox(height: 16),
@@ -62,7 +62,7 @@ class VerifierConnectDialog extends StatelessWidget {
             ],
           ],
         ),
-        yes: isTrusted ? l10n.reviewRequestLabel : l10n.continueAnywayLabel,
+        yes: isTrusted ? l10n.reviewRequestLabel : l10n.continueLabel,
         no: l10n.cancel,
         invertedCallToAction: !isTrusted,
       ),

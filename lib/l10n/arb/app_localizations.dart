@@ -6165,12 +6165,6 @@ abstract class AppLocalizations {
   /// **'Continue'**
   String get continueLabel;
 
-  /// No description provided for @continueAnywayLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue anyway'**
-  String get continueAnywayLabel;
-
   /// No description provided for @credentialAcceptTitle.
   ///
   /// In en, this message translates to:
