@@ -12,7 +12,6 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vc/helper_function/get_issuance_data.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vci_accept_host.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vp_siopv2_accept_host.dart';
-import 'package:altme/oidc4vc/widget/credential_acceptance_dialog.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
@@ -505,38 +504,6 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         }
 
         context.read<QRCodeScanCubit>().completer?.complete(moveAhead);
-        LoadingView().show(context: context);
-      }
-
-      if (state.status == QrScanStatus.pauseForCredentialAcceptance) {
-        LoadingView().hide();
-
-        final data = state.credentialAcceptanceData;
-
-        if (data != null) {
-          final selected = await CredentialAcceptanceDialog.show(
-            context: context,
-            issuerName: data.issuerName,
-            isTrusted: data.isTrusted,
-            items: data.items,
-          );
-
-          if (selected.isNotEmpty) {
-            final lastSelected = selected.reduce((a, b) => a > b ? a : b);
-            for (var i = 0; i < data.items.length; i++) {
-              if (!selected.contains(i)) continue;
-              await context.read<CredentialsCubit>().insertCredential(
-                credential: data.items[i].credentialModel,
-                showStatus: true,
-                showMessage: i == lastSelected,
-                uri: data.uri,
-              );
-            }
-          }
-        }
-
-        // closes the credential pick screen
-        Navigator.of(context).pop();
         LoadingView().show(context: context);
       }
 

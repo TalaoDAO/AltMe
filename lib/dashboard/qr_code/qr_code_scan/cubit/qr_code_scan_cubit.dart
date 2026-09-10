@@ -994,19 +994,23 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     return true;
   }
 
+  /// Shows the fetched-but-not-yet-recorded credentials for the user to
+  /// pick which ones to keep.
   void navigateToOidc4vcCredentialPickPage({
-    required List<dynamic> credentials,
-    required String? userPin,
-    required String? txCode,
+    required List<CredentialAcceptanceItem> items,
+    required String issuerName,
+    required bool isTrusted,
+    required Uri uri,
     required Oidc4vcParameters oidc4vcParameters,
   }) {
     emit(
       state.copyWith(
         qrScanStatus: QrScanStatus.success,
         route: Oidc4vcCredentialPickPage.route(
-          credentials: credentials,
-          userPin: userPin,
-          txCode: txCode,
+          items: items,
+          issuerName: issuerName,
+          isTrusted: isTrusted,
+          uri: uri,
           oidc4vcParameters: oidc4vcParameters,
         ),
       ),
@@ -1752,32 +1756,17 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             .trustedList,
       );
 
-      // the credential-acceptance popup closes the pick-credential screen
-      // itself once the user answers, so no goBack() here.
-      showCredentialAcceptance(
-        data: CredentialAcceptanceData(
-          issuerName: issuerName,
-          isTrusted: isTrusted,
-          items: allItems,
-          uri: Uri.parse(oidc4vcParameters.issuer),
-        ),
+      navigateToOidc4vcCredentialPickPage(
+        items: allItems,
+        issuerName: issuerName,
+        isTrusted: isTrusted,
+        uri: Uri.parse(oidc4vcParameters.issuer),
+        oidc4vcParameters: oidc4vcParameters,
       );
     } catch (e) {
       resetNonceAndAccessTokenAndAuthorizationDetails();
       emitError(error: e);
     }
-  }
-
-  /// Triggers the "Add credential to your wallet?" confirmation screen.
-  /// The blocListener shows the dialog and inserts the credentials the user
-  /// selects itself - this cubit doesn't wait for the user's decision.
-  void showCredentialAcceptance({required CredentialAcceptanceData data}) {
-    emit(
-      state.copyWith(
-        qrScanStatus: QrScanStatus.pauseForCredentialAcceptance,
-        credentialAcceptanceData: data,
-      ),
-    );
   }
 
   Future<bool> showDataBeforeSending({

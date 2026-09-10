@@ -221,15 +221,12 @@ Future<void> addOIDC4VCCredential({
       showMessage: false,
     );
   }
-
-  // the blocListener shows the consent screen and inserts the credential
-  // itself once the user accepts
-  qrCodeScanCubit.showCredentialAcceptance(
-    data: CredentialAcceptanceData(
-      issuerName: issuerName,
-      isTrusted: isTrusted,
-      items: [item],
-      uri: Uri.parse(issuer ?? ''),
-    ),
-  );
+  // TODO(hawkbee): Pick the old process for defered credential.
+  // the pick page inserts the credential itself once the user accepts
+  // qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
+  //   items: [item],
+  //   issuerName: issuerName,
+  //   isTrusted: isTrusted,
+  //   uri: Uri.parse(issuer ?? ''),
+  // );
 }

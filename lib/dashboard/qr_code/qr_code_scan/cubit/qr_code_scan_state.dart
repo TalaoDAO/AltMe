@@ -9,7 +9,6 @@ class QRCodeScanState extends Equatable {
     this.isScan = false,
     this.message,
     this.dialogData,
-    this.credentialAcceptanceData,
   });
 
   factory QRCodeScanState.fromJson(Map<String, dynamic> json) =>
@@ -23,8 +22,6 @@ class QRCodeScanState extends Equatable {
 
   final StateMessage? message;
   final String? dialogData;
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  final CredentialAcceptanceData? credentialAcceptanceData;
 
   Map<String, dynamic> toJson() => _$QRCodeScanStateToJson(this);
 
@@ -60,7 +57,6 @@ class QRCodeScanState extends Equatable {
     Uri? uri,
     bool? isScan,
     String? dialogData,
-    CredentialAcceptanceData? credentialAcceptanceData,
   }) {
     late Uri? newUri;
     if (uri.toString().startsWith('${Parameters.universalLink}/oidc4vc?uri=')) {
@@ -81,7 +77,6 @@ class QRCodeScanState extends Equatable {
       uri: newUri ?? this.uri,
       route: route, // route should be cleared when one route is done
       dialogData: dialogData,
-      credentialAcceptanceData: credentialAcceptanceData,
     );
   }
 
@@ -93,6 +88,5 @@ class QRCodeScanState extends Equatable {
     isScan,
     message,
     dialogData,
-    credentialAcceptanceData,
   ];
 }
