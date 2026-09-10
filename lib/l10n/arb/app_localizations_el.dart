@@ -3427,7 +3427,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get continueLabel => 'Continue';
 
   @override
-  String get credentialAcceptTitle => 'Add credential to your wallet?';
+  String get credentialAcceptTitle => 'Add attestation to your wallet?';
 
   @override
   String get issuedByLabel => 'Issued by';

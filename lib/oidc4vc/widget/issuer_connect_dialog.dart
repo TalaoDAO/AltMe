@@ -52,11 +52,7 @@ class IssuerConnectDialog extends StatelessWidget {
           children: [
             if (logoUri != null) ...[
               Center(
-                child: CachedImageFromNetwork(
-                  logoUri!,
-                  height: 48,
-                  width: 48,
-                ),
+                child: CachedImageFromNetwork(logoUri!, height: 48, width: 48),
               ),
               const SizedBox(height: 16),
             ],
@@ -67,14 +63,14 @@ class IssuerConnectDialog extends StatelessWidget {
               notTrustedDescription: isTrusted
                   ? null
                   : '${l10n.issuerNotVerifiedDescription}\n\n'
-                      '${l10n.onlyContinueIfTrustIssuer}',
+                        '${l10n.onlyContinueIfTrustIssuer}',
             ),
             const SizedBox(height: 16),
-            Text(l10n.credential, style: textTheme.bodySmall),
+            Text(l10n.credential, style: textTheme.bodyMedium),
             Text(credentialDisplayName, style: textTheme.titleMedium),
           ],
         ),
-        yes: isTrusted ? l10n.continueLabel : l10n.continueLabel,
+        yes: l10n.continueLabel,
         no: l10n.cancel,
         invertedCallToAction: !isTrusted,
       ),

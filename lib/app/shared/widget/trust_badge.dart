@@ -26,21 +26,23 @@ class TrustBadge extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.warning, size: 30, color: color),
-            const SizedBox(width: Sizes.spaceSmall),
-            Flexible(
-              child: Text(
-                isTrusted ? trustedLabel : notTrustedLabel,
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: color,
-                  fontWeight: FontWeight.bold,
+        Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.warning, size: 30, color: color),
+              const SizedBox(width: Sizes.spaceSmall),
+              Flexible(
+                child: Text(
+                  isTrusted ? trustedLabel : notTrustedLabel,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: color,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         if (!isTrusted && notTrustedDescription != null) ...[
           const SizedBox(height: 4),

@@ -56,7 +56,7 @@ class CredentialAcceptanceDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(l10n.issuedByLabel, style: textTheme.bodySmall),
+                Text(l10n.issuedByLabel, style: textTheme.bodyMedium),
                 Text(issuerName, style: textTheme.titleMedium),
                 const SizedBox(height: 8),
                 TrustBadge(

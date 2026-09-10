@@ -797,7 +797,7 @@ abstract class AppLocalizations {
   /// No description provided for @credential.
   ///
   /// In en, this message translates to:
-  /// **'Credential'**
+  /// **'Attestations'**
   String get credential;
 
   /// No description provided for @issuanceDate.
@@ -6168,7 +6168,7 @@ abstract class AppLocalizations {
   /// No description provided for @credentialAcceptTitle.
   ///
   /// In en, this message translates to:
-  /// **'Add credential to your wallet?'**
+  /// **'Add attestation to your wallet?'**
   String get credentialAcceptTitle;
 
   /// No description provided for @issuedByLabel.

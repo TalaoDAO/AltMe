@@ -371,7 +371,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get to => 'To';
 
   @override
-  String get credential => 'Credential';
+  String get credential => 'Attestations';
 
   @override
   String get issuanceDate => 'Issuance date';
@@ -3390,7 +3390,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get continueLabel => 'Continue';
 
   @override
-  String get credentialAcceptTitle => 'Add credential to your wallet?';
+  String get credentialAcceptTitle => 'Add attestation to your wallet?';
 
   @override
   String get issuedByLabel => 'Issued by';
