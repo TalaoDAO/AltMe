@@ -6126,13 +6126,13 @@ abstract class AppLocalizations {
   /// No description provided for @issuerConnectTitle.
   ///
   /// In en, this message translates to:
-  /// **'Connect to credential issuer?'**
+  /// **'Connect to attestation issuer?'**
   String get issuerConnectTitle;
 
   /// Subtitle on the issuer-connect confirmation screen
   ///
   /// In en, this message translates to:
-  /// **'{issuerName} wants to issue a credential to your wallet.'**
+  /// **'{issuerName} wants to issue an attestation to your wallet.'**
   String issuerConnectSubtitle(Object issuerName);
 
   /// No description provided for @trustedIssuerLabel.

@@ -29,20 +29,15 @@ class TrustBadge extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(
-              isTrusted ? IconStrings.shieldTick : IconStrings.alertWarningIcon,
-              width: 20,
-              height: 20,
-              color: color,
-            ),
+            Icon(Icons.warning, size: 30, color: color),
             const SizedBox(width: Sizes.spaceSmall),
             Flexible(
               child: Text(
                 isTrusted ? trustedLabel : notTrustedLabel,
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: color,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  color: color,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
@@ -51,7 +46,7 @@ class TrustBadge extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             notTrustedDescription!,
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
       ],

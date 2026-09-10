@@ -3409,11 +3409,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get greek => 'Ελληνικά';
 
   @override
-  String get issuerConnectTitle => 'Connect to credential issuer?';
+  String get issuerConnectTitle => 'Connect to attestation issuer?';
 
   @override
   String issuerConnectSubtitle(Object issuerName) {
-    return '$issuerName wants to issue a credential to your wallet.';
+    return '$issuerName wants to issue an attestation to your wallet.';
   }
 
   @override

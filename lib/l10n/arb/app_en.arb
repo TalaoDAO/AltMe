@@ -1183,8 +1183,8 @@
   "acceptanceRequest": "Payment request",
   "pay": "share and pay",
   "greek": "Ελληνικά",
-  "issuerConnectTitle": "Connect to credential issuer?",
-  "issuerConnectSubtitle": "{issuerName} wants to issue a credential to your wallet.",
+  "issuerConnectTitle": "Connect to attestation issuer?",
+  "issuerConnectSubtitle": "{issuerName} wants to issue an attestation to your wallet.",
   "@issuerConnectSubtitle": {
     "description": "Subtitle on the issuer-connect confirmation screen",
     "placeholders": {
