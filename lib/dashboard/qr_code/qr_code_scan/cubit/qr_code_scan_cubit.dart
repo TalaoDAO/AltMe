@@ -11,11 +11,13 @@ import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/oidc4vc/helper_function/get_issuance_data.dart';
+import 'package:altme/oidc4vc/helper_function/resolve_issuer_display.dart';
 import 'package:altme/oidc4vc/model/credential_acceptance_data.dart';
 import 'package:altme/oidc4vc/model/verifier_trust_info.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
+import 'package:altme/trusted_list/function/is_issuer_trusted.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
@@ -1453,6 +1455,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     String? oAuthClientAttestation,
     String? oAuthClientAttestationPop,
   }) async {
+    final allItems = <CredentialAcceptanceItem>[];
     try {
       for (int i = 0; i < selectedCredentials.length; i++) {
         emit(state.loading());
@@ -1601,38 +1604,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             savedNonce = nonce;
           }
 
-          /// get credentials
+          /// get credentials - a credential type we can't fetch (even after
+          /// the nonce retry below) is skipped rather than blocking the
+          /// others
           (List<dynamic>?, String?, String?)? result;
           try {
-            result = await getCredential(
-              credential: selectedCredentials[i],
-              cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
-              didKeyType: customOidc4vcProfile.defaultDid,
-              clientId: tokenData?['client_id'] != null ? clientId : null,
-              profileCubit: profileCubit,
-              accessToken: savedAccessToken!,
-              cnonce: savedNonce,
-              authorizationDetails: savedAuthorizationDetails,
-              qrCodeScanCubit: this,
-              publicKeyForDPop: publicKeyForDPop,
-              oidc4vcParameters: oidc4vcParameters,
-            );
-          } catch (e) {
-            if (count == 1) {
-              count = 0;
-              rethrow;
-            }
-
-            if (e is DioException &&
-                e.response != null &&
-                e.response!.data is Map<String, dynamic> &&
-                (e.response!.data as Map<String, dynamic>).containsKey(
-                  'c_nonce',
-                )) {
-              count++;
-
-              final nonce = e.response!.data['c_nonce'].toString();
-              savedNonce = nonce;
+            try {
               result = await getCredential(
                 credential: selectedCredentials[i],
                 cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
@@ -1640,22 +1617,44 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 clientId: tokenData?['client_id'] != null ? clientId : null,
                 profileCubit: profileCubit,
                 accessToken: savedAccessToken!,
-                cnonce: nonce,
+                cnonce: savedNonce,
                 authorizationDetails: savedAuthorizationDetails,
                 qrCodeScanCubit: this,
                 publicKeyForDPop: publicKeyForDPop,
                 oidc4vcParameters: oidc4vcParameters,
               );
-              count = 0;
-            } else {
-              count = 0;
-              rethrow;
+            } catch (e) {
+              if (e is DioException &&
+                  e.response != null &&
+                  e.response!.data is Map<String, dynamic> &&
+                  (e.response!.data as Map<String, dynamic>).containsKey(
+                    'c_nonce',
+                  )) {
+                final nonce = e.response!.data['c_nonce'].toString();
+                savedNonce = nonce;
+                result = await getCredential(
+                  credential: selectedCredentials[i],
+                  cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
+                  didKeyType: customOidc4vcProfile.defaultDid,
+                  clientId: tokenData?['client_id'] != null ? clientId : null,
+                  profileCubit: profileCubit,
+                  accessToken: savedAccessToken!,
+                  cnonce: nonce,
+                  authorizationDetails: savedAuthorizationDetails,
+                  qrCodeScanCubit: this,
+                  publicKeyForDPop: publicKeyForDPop,
+                  oidc4vcParameters: oidc4vcParameters,
+                );
+              } else {
+                rethrow;
+              }
             }
+          } catch (e) {
+            log.e('Failed to fetch credential ${selectedCredentials[i]}: $e');
+            continue;
           }
 
-          if (result == null) {
-            return emit(state.copyWith(qrScanStatus: QrScanStatus.idle));
-          }
+          if (result == null) continue;
 
           final (
             encodedCredentialOrFutureTokens,
@@ -1689,14 +1688,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             }
           }
 
-          /// add credentials
-          await addCredentialData(
+          /// build credentials - accumulated, not inserted yet
+          final items = await addCredentialData(
             scannedResponse: state.uri.toString(),
             accessToken: savedAccessToken!,
             credentialsCubit: credentialsCubit,
             secureStorageProvider: getSecureStorage,
             credential: selectedCredentials[i],
-            isLastCall: i + 1 == selectedCredentials.length,
             issuer: oidc4vcParameters.issuer,
             jwtDecode: jwtDecode,
             deferredCredentialEndpoint: deferredCredentialEndpoint,
@@ -1705,6 +1703,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             qrCodeScanCubit: this,
             openIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
           );
+          allItems.addAll(items);
         } else {
           throw ResponseMessage(
             data: {
@@ -1718,8 +1717,51 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
 
       resetNonceAndAccessTokenAndAuthorizationDetails();
+
+      if (allItems.isEmpty) {
+        emitError(
+          error: ResponseMessage(
+            data: {
+              'error': 'invalid_request',
+              'error_description': 'No credential could be retrieved.',
+            },
+          ),
+        );
+        return;
+      }
+
+      final languageCode = profileCubit.langCubit.state.locale.languageCode;
+      final fallbackHost =
+          Uri.tryParse(oidc4vcParameters.issuer)?.host ??
+          oidc4vcParameters.issuer;
+
+      final issuerName = resolveIssuerDisplay(
+        issuerOpenIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
+        locale: languageCode,
+        fallbackHost: fallbackHost,
+      ).name;
+
+      final isTrusted = isIssuerTrusted(
+        issuerOpenIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
+        trustedList: profileCubit.state.model.trustedList,
+        trustedListEnabled: profileCubit
+            .state
+            .model
+            .profileSetting
+            .walletSecurityOptions
+            .trustedList,
+      );
+
       // the credential-acceptance popup closes the pick-credential screen
       // itself once the user answers, so no goBack() here.
+      showCredentialAcceptance(
+        data: CredentialAcceptanceData(
+          issuerName: issuerName,
+          isTrusted: isTrusted,
+          items: allItems,
+          uri: Uri.parse(oidc4vcParameters.issuer),
+        ),
+      );
     } catch (e) {
       resetNonceAndAccessTokenAndAuthorizationDetails();
       emitError(error: e);
@@ -1727,9 +1769,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   /// Triggers the "Add credential to your wallet?" confirmation screen.
-  /// The blocListener shows the dialog and, on acceptance, inserts
-  /// [CredentialAcceptanceData.credentialModel] itself - this cubit doesn't
-  /// wait for the user's decision.
+  /// The blocListener shows the dialog and inserts the credentials the user
+  /// selects itself - this cubit doesn't wait for the user's decision.
   void showCredentialAcceptance({required CredentialAcceptanceData data}) {
     emit(
       state.copyWith(

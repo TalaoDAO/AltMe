@@ -514,21 +514,24 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
         final data = state.credentialAcceptanceData;
 
         if (data != null) {
-          final accepted = await CredentialAcceptanceDialog.show(
+          final selected = await CredentialAcceptanceDialog.show(
             context: context,
-            credentialDisplayName: data.credentialDisplayName,
             issuerName: data.issuerName,
             isTrusted: data.isTrusted,
-            claims: data.claims,
+            items: data.items,
           );
 
-          if (accepted) {
-            await context.read<CredentialsCubit>().insertCredential(
-              credential: data.credentialModel,
-              showStatus: true,
-              showMessage: data.showMessage,
-              uri: data.uri,
-            );
+          if (selected.isNotEmpty) {
+            final lastSelected = selected.reduce((a, b) => a > b ? a : b);
+            for (var i = 0; i < data.items.length; i++) {
+              if (!selected.contains(i)) continue;
+              await context.read<CredentialsCubit>().insertCredential(
+                credential: data.items[i].credentialModel,
+                showStatus: true,
+                showMessage: i == lastSelected,
+                uri: data.uri,
+              );
+            }
           }
         }
 

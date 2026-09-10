@@ -12,17 +12,16 @@ import 'package:credential_manifest/credential_manifest.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
-Future<void> addOIDC4VCCredential({
+/// Decodes and builds a [CredentialAcceptanceItem] from a fetched OIDC4VCI
+/// credential response, without inserting it or showing any confirmation -
+/// callers decide when/whether to record it.
+Future<CredentialAcceptanceItem> buildCredentialAcceptanceItem({
   required dynamic encodedCredentialFromOIDC4VC,
   required CredentialsCubit credentialsCubit,
   required String credentialType,
-  required bool isLastCall,
   required String format,
   required OpenIdConfiguration? openIdConfiguration,
   required JWTDecode jwtDecode,
-  required QRCodeScanCubit qrCodeScanCubit,
-  String? credentialIdToBeDeleted,
-  String? issuer,
 }) async {
   late Map<String, dynamic> credentialFromOIDC4VC;
   late VCFormatType vcFormatType;
@@ -118,13 +117,6 @@ Future<void> addOIDC4VCCredential({
   newCredential['format'] = format;
   newCredential['credentialPreview'] = credentialFromOIDC4VC;
 
-  // if(newCredential['credentialPreview']['credentialSubject']['type']==null) {
-  //   /// added id as type to recognise the card
-  //   /// for ebsiv2 only
-  //   newCredential['credentialPreview']['credentialSubject']['type'] =
-  //       credentialFromOIDC4VC['credentialSchema']['id'];
-  // }
-
   if (openIdConfiguration != null) {
     final openidConfigurationJson =
         jsonDecode(jsonEncode(openIdConfiguration)) as Map<String, dynamic>;
@@ -144,13 +136,14 @@ Future<void> addOIDC4VCCredential({
   }
 
   Display? display;
+  final languageCode =
+      credentialsCubit.profileCubit.langCubit.state.locale.languageCode;
 
   if (openIdConfiguration != null) {
     final (Display? displayData, dynamic credentialSupported) = fetchDisplay(
       openIdConfiguration: openIdConfiguration,
       credentialType: credentialType,
-      languageCode:
-          credentialsCubit.profileCubit.langCubit.state.locale.languageCode,
+      languageCode: languageCode,
     );
     display = displayData;
     newCredential['credentialSupported'] = credentialSupported;
@@ -163,7 +156,40 @@ Future<void> addOIDC4VCCredential({
     newData: credentialFromOIDC4VC,
     activities: [Activity(acquisitionAt: DateTime.now())],
     display: display,
-    profileType: qrCodeScanCubit.profileCubit.state.model.profileType,
+    profileType: credentialsCubit.profileCubit.state.model.profileType,
+  );
+
+  return CredentialAcceptanceItem(
+    credentialDisplayName: display?.name ?? credentialType,
+    claims: buildTranslatedClaims(
+      credentialModel: credentialModel,
+      languageCode: languageCode,
+    ),
+    credentialModel: credentialModel,
+  );
+}
+
+/// Used by the deferred-credential path, where exactly one credential is
+/// fetched at a time: builds it and triggers the same confirmation screen
+/// (with a single item) as the main issuance flow.
+Future<void> addOIDC4VCCredential({
+  required dynamic encodedCredentialFromOIDC4VC,
+  required CredentialsCubit credentialsCubit,
+  required String credentialType,
+  required String format,
+  required OpenIdConfiguration? openIdConfiguration,
+  required JWTDecode jwtDecode,
+  required QRCodeScanCubit qrCodeScanCubit,
+  String? credentialIdToBeDeleted,
+  String? issuer,
+}) async {
+  final item = await buildCredentialAcceptanceItem(
+    encodedCredentialFromOIDC4VC: encodedCredentialFromOIDC4VC,
+    credentialsCubit: credentialsCubit,
+    credentialType: credentialType,
+    format: format,
+    openIdConfiguration: openIdConfiguration,
+    jwtDecode: jwtDecode,
   );
 
   final profileModel = credentialsCubit.profileCubit.state.model;
@@ -200,12 +226,9 @@ Future<void> addOIDC4VCCredential({
   // itself once the user accepts
   qrCodeScanCubit.showCredentialAcceptance(
     data: CredentialAcceptanceData(
-      credentialDisplayName: display?.name ?? credentialType,
       issuerName: issuerName,
       isTrusted: isTrusted,
-      claims: flattenClaimsForDisplay(credentialFromOIDC4VC),
-      credentialModel: credentialModel,
-      showMessage: isLastCall,
+      items: [item],
       uri: Uri.parse(issuer ?? ''),
     ),
   );

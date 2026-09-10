@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:altme/app/shared/helper_functions/get_display.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/widget/claim_list.dart';
 
@@ -55,6 +58,69 @@ List<ClaimEntry> flattenCredentialsForDisplay(
   }
 
   return entries;
+}
+
+/// Builds translated claim name/value pairs for a single OIDC4VCI-issued
+/// credential, using its `credentialSupported` metadata (`credential_metadata
+/// .claims` / `claims`, each entry with a `path` and localized `display`).
+/// Falls back to raw-key flattening when no such metadata is available.
+List<ClaimEntry> buildTranslatedClaims({
+  required CredentialModel credentialModel,
+  required String languageCode,
+}) {
+  final credentialSupported = credentialModel.credentialSupported;
+  final claimsList =
+      credentialSupported?['credential_metadata']?['claims'] ??
+      credentialSupported?['claims'];
+
+  if (claimsList is! List || claimsList.isEmpty) {
+    return flattenClaimsForDisplay(credentialModel.data);
+  }
+
+  final entries = <ClaimEntry>[];
+  for (final claim in claimsList) {
+    if (claim is! Map<String, dynamic>) continue;
+    final path = claim['path'];
+    if (path is! List) continue;
+
+    final value = _valueAtPath(credentialModel.data, path);
+    if (value == null) continue;
+
+    final display = getDisplay(claim, languageCode);
+    final label = (display is Map && display['name'] != null)
+        ? display['name'].toString()
+        : path.map((s) => s == null ? '*' : s.toString()).join(' > ');
+
+    entries.add(
+      ClaimEntry(
+        label: label,
+        value: value is Map || value is List
+            ? jsonEncode(value)
+            : value.toString(),
+      ),
+    );
+  }
+
+  return entries.isEmpty
+      ? flattenClaimsForDisplay(credentialModel.data)
+      : entries;
+}
+
+dynamic _valueAtPath(dynamic data, List<dynamic> path) {
+  dynamic current = data;
+  for (final segment in path) {
+    if (current is Map) {
+      current = current[segment];
+    } else if (current is List && segment is int) {
+      current = (segment >= 0 && segment < current.length)
+          ? current[segment]
+          : null;
+    } else {
+      return null;
+    }
+    if (current == null) return null;
+  }
+  return current;
 }
 
 List<ClaimEntry> _flatten(
