@@ -4,9 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/oidc4vc/helper_function/flatten_claims_for_display.dart';
 import 'package:altme/oidc4vc/model/verifier_trust_info.dart';
-import 'package:altme/oidc4vc/widget/share_information_dialog.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 
 import 'package:credential_manifest/credential_manifest.dart';
@@ -451,22 +449,6 @@ class _CredentialManifestOfferPickViewState
         ),
       );
     } else {
-      final trustInfo =
-          widget.verifierTrustInfo ??
-          VerifierTrustInfo(
-            name: widget.issuer.organizationInfo.website,
-            isTrusted: false,
-          );
-
-      final accepted = await ShareInformationDialog.show(
-        context: context,
-        verifierName: trustInfo.name,
-        isTrusted: trustInfo.isTrusted,
-        purpose: trustInfo.purpose,
-        claims: flattenCredentialsForDisplay(updatedCredentials),
-      );
-      if (!accepted) return;
-
       final bool userPINCodeForAuthentication = context
           .read<ProfileCubit>()
           .state
