@@ -30,7 +30,7 @@ class MockQRCodeScanCubit extends Mock implements QRCodeScanCubit {}
 
 class MockLocalAuthApi extends Mock implements LocalAuthApi {}
 
-class MockOIDC4VC extends Mock implements OIDC4VC {}
+class MockOIDC4VC extends Mock implements OIDC4VCIClient {}
 
 class MockCredentialModel extends Mock implements CredentialModel {}
 
@@ -203,7 +203,7 @@ void main() {
               RepositoryProvider<LocalAuthApi>(
                 create: (_) => MockLocalAuthApi(),
               ),
-              RepositoryProvider<OIDC4VC>(create: (_) => MockOIDC4VC()),
+              RepositoryProvider<OIDC4VCIClient>(create: (_) => MockOIDC4VC()),
             ],
             child: MultiBlocProvider(
               providers: [

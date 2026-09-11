@@ -825,7 +825,7 @@ Future<Map<String, dynamic>?> getClientMetada({
 
 Future<bool?> isEBSIForVerifiers({
   required Uri uri,
-  required OIDC4VC oidc4vc,
+  required OIDC4VCIClient oidc4vc,
   required OIDC4VCIDraftType oidc4vciDraftType,
 }) async {
   try {

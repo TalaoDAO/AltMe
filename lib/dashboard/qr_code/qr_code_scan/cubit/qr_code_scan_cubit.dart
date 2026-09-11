@@ -72,7 +72,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   final WalletConnectCubit walletConnectCubit;
   final SecureStorageProvider secureStorageProvider;
   final DIDKitProvider didKitProvider;
-  OIDC4VC oidc4vc;
+  OIDC4VCIClient oidc4vc;
   final WalletCubit walletCubit;
   final EnterpriseCubit enterpriseCubit;
 
@@ -917,17 +917,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           .customOidc4vcProfile;
       final oidc4vciDraft = customOidc4vcProfile.oidc4vciDraft;
 
-      late OIDC4VC oidc4vc;
-      switch (oidc4vciDraft) {
-        case OIDC4VCIDraftType.draft11:
-        case OIDC4VCIDraftType.draft13:
-        case OIDC4VCIDraftType.draft14:
-        case OIDC4VCIDraftType.draft15:
-          oidc4vc = OIDC4VC();
-        case OIDC4VCIDraftType.draft16:
-        case OIDC4VCIDraftType.final1:
-          oidc4vc = Oidc4vcFinal();
-      }
+      final oidc4vc = Oidc4vciClientFactory.create(oidc4vciDraft);
 
       final oidc4vcParameters = await getIssuanceData(
         url: url,
@@ -952,7 +942,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         oidc4vc: oidc4vc,
         jwtDecode: jwtDecode,
         blockchainType: walletCubit.state.currentAccount?.blockchainType,
-        oidc4vciDraftType: customOidc4vcProfile.oidc4vciDraft,
         qrCodeScanCubit: qrCodeScanCubit,
         profileCubit: profileCubit,
       );
@@ -1028,7 +1017,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         await prepareOIDC4VPFlow(keys: keys, uri: uri);
     final trustInfo =
         verifierTrustInfo ?? VerifierTrustInfo(name: host, isTrusted: false);
-    if (oidc4vc is Oidc4vcFinal) {
+    if (oidc4vc is Oidc4vciClientFinal) {
       emit(
         state.copyWith(
           qrScanStatus: QrScanStatus.success,
@@ -1976,7 +1965,7 @@ ${state.uri}
     required List<String> keys,
     required Uri uri,
   }) async {
-    if (oidc4vc is Oidc4vcFinal) {
+    if (oidc4vc is Oidc4vciClientFinal) {
       final dcqlQuery = await oidc4vc.getDcqlQueryFromUri(uri: uri);
       final CredentialModel credentialPreview = CredentialModel(
         id: 'id',
