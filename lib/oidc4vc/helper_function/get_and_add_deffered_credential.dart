@@ -85,7 +85,6 @@ Future<void> getAndAddDefferedCredential({
     credentialsCubit: credentialsCubit,
     issuer: issuer,
     credentialType: credentialModel.credentialPreview.type[0],
-    isLastCall: true,
     format: credentialModel.pendingInfo!.format,
     credentialIdToBeDeleted: credentialModel.id,
     openIdConfiguration: null,

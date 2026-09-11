@@ -57,51 +57,44 @@ Future<void> initiateOIDC4VCCredentialIssuance({
       oidc4vcParameters.initialUri.queryParameters['state'],
     );
 
-    if (oidc4vcParameters.preAuthorizedCode != null) {
-      /// full phase flow of preAuthorized
-      qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
-        credentials: credentials,
+    if (codeForAuthorisedFlow != null && state != null) {
+      /// second phase flow of authorised - fetch the credentials that were
+      /// requested before the redirect
+      final String oidc4vciDraft = state.oidc4vciDraft;
+
+      final OIDC4VCIDraftType? oidc4vciDraftType = OIDC4VCIDraftType.values
+          .firstWhereOrNull((ele) => ele.numbering == oidc4vciDraft);
+
+      if (oidc4vciDraftType == null) {
+        throw Exception();
+      }
+
+      await qrCodeScanCubit.addCredentialsInLoop(
+        selectedCredentials: state.selectedCredentials,
         userPin: userPin,
         txCode: txCode,
+        codeForAuthorisedFlow: codeForAuthorisedFlow,
+        codeVerifier: state.codeVerifier,
+        authorization: state.authorization,
+        clientId: state.clientId,
+        clientSecret: state.clientSecret,
+        oAuthClientAttestation: state.oAuthClientAttestation,
+        oAuthClientAttestationPop: state.oAuthClientAttestationPop,
+        publicKeyForDPop: state.publicKeyForDPo,
         oidc4vcParameters: oidc4vcParameters,
       );
+      await profileCubit.deleteOidc4VCIState(state.challenge);
     } else {
-      if (codeForAuthorisedFlow == null || state == null) {
-        /// first phase flow of authorised
-        qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
-          credentials: credentials,
-          userPin: userPin,
-          txCode: txCode,
-          oidc4vcParameters: oidc4vcParameters,
-        );
-      } else {
-        /// second phase flow of authorised
-
-        final String oidc4vciDraft = state.oidc4vciDraft;
-
-        final OIDC4VCIDraftType? oidc4vciDraftType = OIDC4VCIDraftType.values
-            .firstWhereOrNull((ele) => ele.numbering == oidc4vciDraft);
-
-        if (oidc4vciDraftType == null) {
-          throw Exception();
-        }
-
-        await qrCodeScanCubit.addCredentialsInLoop(
-          selectedCredentials: state.selectedCredentials,
-          userPin: userPin,
-          txCode: txCode,
-          codeForAuthorisedFlow: codeForAuthorisedFlow,
-          codeVerifier: state.codeVerifier,
-          authorization: state.authorization,
-          clientId: state.clientId,
-          clientSecret: state.clientSecret,
-          oAuthClientAttestation: state.oAuthClientAttestation,
-          oAuthClientAttestationPop: state.oAuthClientAttestationPop,
-          publicKeyForDPop: state.publicKeyForDPo,
-          oidc4vcParameters: oidc4vcParameters,
-        );
-        await profileCubit.deleteOidc4VCIState(state.challenge);
-      }
+      /// full phase flow of preAuthorized, or first phase of the
+      /// authorization_code flow - request/fetch every credential offered,
+      /// with no pre-selection; the user picks which fetched ones to keep
+      /// once they're back with real data (see Oidc4vcCredentialPickPage)
+      await qrCodeScanCubit.processSelectedCredentials(
+        userPin: userPin,
+        txCode: txCode,
+        selectedCredentials: credentials,
+        oidc4vcParameters: oidc4vcParameters,
+      );
     }
   } else {
     // full phase flow of preAuthorized

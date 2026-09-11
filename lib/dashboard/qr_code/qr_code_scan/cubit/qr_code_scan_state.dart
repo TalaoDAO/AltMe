@@ -81,5 +81,12 @@ class QRCodeScanState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [status, uri, route, isScan, message, dialogData];
+  List<Object?> get props => [
+    status,
+    uri,
+    route,
+    isScan,
+    message,
+    dialogData,
+  ];
 }
