@@ -6237,12 +6237,6 @@ abstract class AppLocalizations {
   /// **'Purpose'**
   String get purposeLabel;
 
-  /// No description provided for @reviewRequestLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Review request'**
-  String get reviewRequestLabel;
-
   /// No description provided for @shareInformationTitle.
   ///
   /// In en, this message translates to:

@@ -1220,7 +1220,6 @@
   "organisationNotVerifiedDescription": "The identity of this organisation could not be verified.",
   "onlyContinueIfTrustOrganisation": "Only continue if you recognise and trust this organisation.",
   "purposeLabel": "Purpose",
-  "reviewRequestLabel": "Review request",
   "shareInformationTitle": "Share your information?",
   "shareInformationSubtitle": "{verifierName} is requesting the following information from your wallet.",
   "@shareInformationSubtitle": {

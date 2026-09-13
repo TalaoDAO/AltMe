@@ -62,7 +62,7 @@ class VerifierConnectDialog extends StatelessWidget {
             ],
           ],
         ),
-        yes: isTrusted ? l10n.reviewRequestLabel : l10n.continueLabel,
+        yes: l10n.continueLabel,
         no: l10n.cancel,
         invertedCallToAction: !isTrusted,
       ),

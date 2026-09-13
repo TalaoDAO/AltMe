@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
+import 'package:altme/trusted_list/model/trusted_entity.dart';
 import 'package:altme/trusted_list/model/trusted_list.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -71,5 +72,40 @@ void main() {
         expect(trustedEntity, isNull);
       },
     );
+  });
+
+  group('getEntityFromTrustedListByX5c', () {
+    late TrustedList trustedList;
+
+    setUp(() {
+      trustedList = TrustedList.fromJson(
+        jsonDecode(trustedListJson) as Map<String, dynamic>,
+      );
+    });
+
+    test(
+      'finds the verifier when x5c is the leaf certificate signed by the '
+      'trusted root',
+      () {
+        final trustedEntity = getEntityFromTrustedListByX5c(
+          x5c: [leafCertificateSignedByRoot],
+          trustedList: trustedList,
+          type: TrustedEntityType.verifier,
+        );
+
+        expect(trustedEntity, isNotNull);
+        expect(trustedEntity!.id, 'https://talao.co');
+      },
+    );
+
+    test('does not match an entity of a different type', () {
+      final trustedEntity = getEntityFromTrustedListByX5c(
+        x5c: [leafCertificateSignedByRoot],
+        trustedList: trustedList,
+        type: TrustedEntityType.walletProvider,
+      );
+
+      expect(trustedEntity, isNull);
+    });
   });
 }

@@ -3458,9 +3458,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get purposeLabel => 'Purpose';
 
   @override
-  String get reviewRequestLabel => 'Review request';
-
-  @override
   String get shareInformationTitle => 'Share your information?';
 
   @override

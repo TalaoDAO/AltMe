@@ -18,6 +18,7 @@ import 'package:altme/trusted_list/model/trusted_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 Future<void> oidc4vpSiopV2AcceptHost({
   required Uri uri,
@@ -152,22 +153,55 @@ Future<void> oidc4vpSiopV2AcceptHost({
         trustedList = profile.trustedList;
       }
 
-      // get new issuer open id configuration from signed metadata
-      trustedEntity = getEntityFromTrustedList(
-        trustedList!,
-        uri.queryParameters['client_id'],
-        TrustedEntityType.verifier,
-      );
+      final isOidc4vpFinal1 =
+          context
+              .read<ProfileCubit>()
+              .state
+              .model
+              .profileSetting
+              .selfSovereignIdentityOptions
+              .customOidc4vcProfile
+              .oidc4vpDraft ==
+          OIDC4VPDraftType.final1;
+
+      // OIDC4VP final-1.0 has no domain to reliably match the verifier by
+      // (client_id may be a DID or an x509 hash rather than a URL), so
+      // the verifier is instead looked up directly by its x5c root
+      // certificate, same as OIDC4VCI final-1.0 issuers.
+      if (isOidc4vpFinal1) {
+        final x5c = (jwtHeader?['x5c'] as List?)
+            ?.map((e) => e.toString())
+            .toList();
+        if (x5c == null || x5c.isEmpty) {
+          throw Exception('No x509 certificate found for verifier request');
+        }
+        trustedEntity = getEntityFromTrustedListByX5c(
+          x5c: x5c,
+          trustedList: trustedList!,
+          type: TrustedEntityType.verifier,
+        );
+      } else {
+        trustedEntity = getEntityFromTrustedList(
+          trustedList!,
+          uri.queryParameters['client_id'],
+          TrustedEntityType.verifier,
+        );
+      }
       if (trustedEntity != null) {
-        checkPresentationIsTrusted(
-          trustedEntity: trustedEntity,
-          encodedPresentation: encodedData as String,
-        );
-        isCertificateValid(
-          trustedEntity: trustedEntity,
-          signedMetadata: encodedData,
-        );
-        // issuer has passed the trusted list checks
+        // For final-1.0, getEntityFromTrustedListByX5c above already
+        // only returns an entity whose rootCertificates matched the
+        // verifier's x5c, so there's nothing further to verify there.
+        if (!isOidc4vpFinal1) {
+          checkPresentationIsTrusted(
+            trustedEntity: trustedEntity,
+            encodedPresentation: encodedData as String,
+          );
+          isCertificateValid(
+            trustedEntity: trustedEntity,
+            signedMetadata: encodedData,
+          );
+        }
+        // verifier has passed the trusted list checks
       }
     } catch (e) {
       context.read<QRCodeScanCubit>().emitError(error: e);
