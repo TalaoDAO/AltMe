@@ -131,9 +131,7 @@ Future<void> oidc4vciAcceptHost({
           : () {
               final x5c = issuerOpenIdConfiguration.x5c;
               if (x5c == null || x5c.isEmpty) {
-                throw Exception(
-                  'No x509 certificate found for issuer metadata',
-                );
+                return null;
               }
               return getIssuerFromTrustedListByX5c(
                 x5c: x5c,
@@ -182,6 +180,13 @@ Future<void> oidc4vciAcceptHost({
       return;
     }
   }
+
+  // Cache the result: it's a cryptographic check against every trusted
+  // -list entry, and later screens (e.g. the credential pick page) would
+  // otherwise recompute it from scratch for the same issuer.
+  updatedOidc4vcParameters = updatedOidc4vcParameters.copyWith(
+    isIssuerTrusted: isTrusted,
+  );
 
   if (showPrompt || trustedListEnabled) {
     final languageCode = context
