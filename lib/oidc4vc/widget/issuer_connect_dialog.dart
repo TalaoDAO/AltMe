@@ -1,6 +1,9 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
+import 'package:altme/dashboard/profile/models/profile.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// "Connect to credential issuer?" - shown before starting the interaction
 /// with the Issuer, per ticket #3506.
@@ -41,6 +44,9 @@ class IssuerConnectDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
+    final profile = context.read<ProfileCubit>().state.model;
+    final trustedListEnabled =
+        profile.profileSetting.walletSecurityOptions.trustedList;
 
     return SafeArea(
       child: ConfirmDialog(
@@ -56,15 +62,16 @@ class IssuerConnectDialog extends StatelessWidget {
               ),
               const SizedBox(height: 16),
             ],
-            TrustBadge(
-              isTrusted: isTrusted,
-              trustedLabel: l10n.trustedIssuerLabel,
-              notTrustedLabel: l10n.issuerNotVerifiedLabel,
-              notTrustedDescription: isTrusted
-                  ? null
-                  : '${l10n.issuerNotVerifiedDescription}\n\n'
-                        '${l10n.onlyContinueIfTrustIssuer}',
-            ),
+            if (trustedListEnabled)
+              TrustBadge(
+                isTrusted: isTrusted,
+                trustedLabel: l10n.trustedIssuerLabel,
+                notTrustedLabel: l10n.issuerNotVerifiedLabel,
+                notTrustedDescription: isTrusted
+                    ? null
+                    : '${l10n.issuerNotVerifiedDescription}\n\n'
+                          '${l10n.onlyContinueIfTrustIssuer}',
+              ),
             const SizedBox(height: 16),
             Text(l10n.credential, style: textTheme.bodyMedium),
             Text(credentialDisplayName, style: textTheme.titleMedium),

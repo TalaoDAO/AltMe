@@ -21,10 +21,15 @@ TrustedEntity? getEntityFromTrustedList(
   String? issuerFromOpenIdConfiguration,
   TrustedEntityType type,
 ) {
+  final domainFromConfiguration = issuerFromOpenIdConfiguration != null
+      ? Uri.tryParse(issuerFromOpenIdConfiguration)?.host
+      : null;
+
   final entities = List<TrustedEntity>.from(trustedList.entities);
   entities.removeWhere(
     (entity) =>
-        entity.id != issuerFromOpenIdConfiguration || entity.type != type,
+        Uri.tryParse(entity.id)?.host != domainFromConfiguration ||
+        entity.type != type,
   );
   if (entities.isNotEmpty) {
     return entities.first;
