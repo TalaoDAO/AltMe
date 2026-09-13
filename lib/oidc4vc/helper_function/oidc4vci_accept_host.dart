@@ -121,10 +121,25 @@ Future<void> oidc4vciAcceptHost({
         );
       }
 
-      final trustedEntity = getIssuerFromTrustedList(
-        issuerOpenIdConfiguration: issuerOpenIdConfiguration,
-        trustedList: trustedList!,
-      );
+      // OIDC4VC final-1.0 has no domain / signed_metadata to match the
+      // issuer by, so it's instead looked up by its x5c root certificate.
+      final trustedEntity = signedMetadata != null
+          ? getIssuerFromTrustedList(
+              issuerOpenIdConfiguration: issuerOpenIdConfiguration,
+              trustedList: trustedList!,
+            )
+          : () {
+              final x5c = issuerOpenIdConfiguration.x5c;
+              if (x5c == null || x5c.isEmpty) {
+                throw Exception(
+                  'No x509 certificate found for issuer metadata',
+                );
+              }
+              return getIssuerFromTrustedListByX5c(
+                x5c: x5c,
+                trustedList: trustedList!,
+              );
+            }();
       if (trustedEntity != null) {
         // check if each element of
         // oidc4vcParameters.credentialOffer['credential_configuration_ids'] are
@@ -151,10 +166,15 @@ Future<void> oidc4vciAcceptHost({
           );
         }
 
-        isCertificateValid(
-          trustedEntity: trustedEntity,
-          signedMetadata: signedMetadata!,
-        );
+        // For final-1.0, getIssuerFromTrustedListByX5c above already only
+        // returns an entity whose rootCertificates matched the issuer's
+        // x5c, so there's nothing further to verify there.
+        if (signedMetadata != null) {
+          isCertificateValid(
+            trustedEntity: trustedEntity,
+            signedMetadata: signedMetadata,
+          );
+        }
         isTrusted = true;
       }
     } catch (e) {
