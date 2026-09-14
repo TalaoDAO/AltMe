@@ -1734,16 +1734,24 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         fallbackHost: fallbackHost,
       ).name;
 
-      final isTrusted = isIssuerTrusted(
-        issuerOpenIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
-        trustedList: profileCubit.state.model.trustedList,
-        trustedListEnabled: profileCubit
-            .state
-            .model
-            .profileSetting
-            .walletSecurityOptions
-            .trustedList,
-      );
+      // Reuse the value already computed in oidc4vciAcceptHost when it's
+      // available, rather than repeating the trusted-list certificate
+      // check. Falls back to computing it here for flows that never went
+      // through that cache (e.g. resuming authorization_code after the
+      // browser redirect).
+      final isTrusted =
+          oidc4vcParameters.isIssuerTrusted ??
+          isIssuerTrusted(
+            issuerOpenIdConfiguration:
+                oidc4vcParameters.issuerOpenIdConfiguration,
+            trustedList: profileCubit.state.model.trustedList,
+            trustedListEnabled: profileCubit
+                .state
+                .model
+                .profileSetting
+                .walletSecurityOptions
+                .trustedList,
+          );
 
       navigateToOidc4vcCredentialPickPage(
         items: allItems,
