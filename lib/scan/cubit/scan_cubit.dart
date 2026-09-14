@@ -50,7 +50,7 @@ class ScanCubit extends Cubit<ScanState> {
   final SecureStorageProvider secureStorageProvider;
   final ProfileCubit profileCubit;
   final WalletCubit walletCubit;
-  final OIDC4VC oidc4vc;
+  OIDC4VCIClient oidc4vc;
   final JWTDecode jwtDecode;
   final ActivityLogManager activityLogManager;
 
@@ -504,7 +504,7 @@ class ScanCubit extends Cubit<ScanState> {
     required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
     required Issuer issuer,
-    required OIDC4VC oidc4vc,
+    required OIDC4VCIClient oidc4vc,
     required String privateKey,
     required String did,
     required String kid,
@@ -536,19 +536,12 @@ class ScanCubit extends Cubit<ScanState> {
         );
       }
 
-      Map<String, dynamic>? clientMetaData;
-
-      if (presentationDefinition.format == null) {
-        clientMetaData = await getClientMetada(client: client, uri: uri);
-      }
-
       final (
         presentationSubmission,
         formatFromPresentationSubmission,
       ) = await getPresentationSubmission(
         credentialsToBePresented: credentialsToBePresented,
         presentationDefinition: presentationDefinition,
-        clientMetaData: clientMetaData,
         profileSetting: profileCubit.state.model.profileSetting,
       );
 
@@ -560,7 +553,6 @@ class ScanCubit extends Cubit<ScanState> {
         presentationDefinition: presentationDefinition,
         privateKey: privateKey,
         uri: uri,
-        clientMetaData: clientMetaData,
         profileSetting: profileCubit.state.model.profileSetting,
         formatFromPresentationSubmission: formatFromPresentationSubmission,
       );
@@ -768,7 +760,6 @@ class ScanCubit extends Cubit<ScanState> {
   Future<(Map<String, dynamic>, VCFormatType)> getPresentationSubmission({
     required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
-    required Map<String, dynamic>? clientMetaData,
     required ProfileSetting profileSetting,
   }) async {
     final uuid1 = const Uuid().v4();
@@ -877,12 +868,11 @@ class ScanCubit extends Cubit<ScanState> {
   Future<dynamic> createVpToken({
     required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
-    required OIDC4VC oidc4vc,
+    required OIDC4VCIClient oidc4vc,
     required String privateKey,
     required String did,
     required String kid,
     required Uri uri,
-    required Map<String, dynamic>? clientMetaData,
     required ProfileSetting profileSetting,
     VCFormatType? formatFromPresentationSubmission,
   }) async {
@@ -978,7 +968,7 @@ class ScanCubit extends Cubit<ScanState> {
 
   Future<String> createIdToken({
     required List<CredentialModel> credentialsToBePresented,
-    required OIDC4VC oidc4vc,
+    required OIDC4VCIClient oidc4vc,
     required String privateKey,
     required String did,
     required String kid,
@@ -1073,5 +1063,192 @@ class ScanCubit extends Cubit<ScanState> {
         credentialsToBePresented: credentialsToBePresented,
       ),
     );
+  }
+
+  Future<void> presentOidc4vpFinal({
+    required Uri uri,
+    required CredentialModel credentialModel,
+    required String keyId,
+    required Map<String, List<String>> vpToken,
+    required Issuer issuer,
+    required QRCodeScanCubit qrCodeScanCubit,
+  }) async {
+    try {
+      final responseType = uri.queryParameters['response_type'] ?? '';
+      if (isIDTokenOnly(responseType)) {
+        /// verifier side (siopv2) with request uri as value
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description':
+                'The verifier side must not contain id_token only.',
+          },
+        );
+      }
+
+      if (hasVPToken(responseType)) {
+        /// verifier side (oidc4vp) with request uri as value
+
+        final String responseOrRedirectUri =
+            uri.queryParameters['redirect_uri'] ??
+            uri.queryParameters['response_uri']!;
+
+        Map<String, dynamic> body;
+
+        final String? responseMode = uri.queryParameters['response_mode'];
+
+        if (responseMode == 'direct_post.jwt') {
+          final clientMetaDataJson = await getClientMetada(
+            client: client,
+            uri: uri,
+          );
+
+          final clientMetaData = clientMetaDataJson != null
+              ? ClientMetadata.fromJson(clientMetaDataJson)
+              : null;
+          if (clientMetaData == null) {
+            throw StateError(
+              'Client metadata is required for direct_post.jwt',
+            );
+          }
+
+          // Per OpenID4VP ("Encrypted Responses"): the JWE plaintext MUST be
+          // an *unsigned* JWT containing the response parameters as
+          // top-level JSON members — it must not be a JWS-signed token.
+          final responseData = <String, dynamic>{'vp_token': vpToken};
+          final stateValue = uri.queryParameters['state'];
+          if (stateValue != null) {
+            responseData['state'] = stateValue;
+          }
+
+          final encryptedResponse = await directPostJwtEncrypter(
+            jwt: jsonEncode(responseData),
+            clientMetadata: clientMetaData,
+          );
+          body = {'response': encryptedResponse};
+          if (profileCubit.state.model.isDeveloperMode) {
+            final value = await qrCodeScanCubit.showDataBeforeSending(
+              title: 'RESPONSE REQUEST',
+              data: body,
+            );
+            if (value) {
+              qrCodeScanCubit.completer = null;
+            } else {
+              qrCodeScanCubit.completer = null;
+              qrCodeScanCubit.resetNonceAndAccessTokenAndAuthorizationDetails();
+              qrCodeScanCubit.goBack();
+              return;
+            }
+          }
+          await Future<void>.delayed(const Duration(seconds: 1));
+          final response = await client.dio.post<dynamic>(
+            responseOrRedirectUri,
+            data: body,
+            options: Options(
+              headers: <String, dynamic>{
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              followRedirects: false,
+              validateStatus: (status) {
+                return status != null && status < 400;
+              },
+            ),
+          );
+
+          if (response.statusCode == 200) {
+            await presentationActivity(
+              credentialModels: [],
+              issuer: issuer,
+              uri: uri,
+            );
+            final transactionData = state.transactionData;
+            if (transactionData != null) {
+              // Loop on transactionData
+              await transactionData.execute();
+            }
+            emit(
+              state.copyWith(
+                status: ScanStatus.success,
+                message: StateMessage.success(
+                  messageHandler: ResponseMessage(
+                    message: ResponseString
+                        .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
+                  ),
+                ),
+              ),
+            );
+            final data = response.data;
+            if (data is Map) {
+              String url = '';
+              if (data.containsKey('redirect_uri')) {
+                url = data['redirect_uri'].toString();
+              }
+              if (url.isNotEmpty && data.containsKey('response_code')) {
+                url = '$url?response_code=${data['response_code']}';
+              }
+              if (url.isNotEmpty) {
+                await LaunchUrl.launch(
+                  url,
+                  launchMode: LaunchMode.externalApplication,
+                );
+              }
+            }
+          } else if (response.statusCode == 302) {
+            await presentationActivity(
+              credentialModels: [],
+              issuer: issuer,
+              uri: uri,
+            );
+
+            String? url;
+
+            if (response.headers.map.containsKey('location') &&
+                response.headers.map['location'] != null &&
+                response.headers.map['location'] is List<dynamic> &&
+                (response.headers.map['location']!).isNotEmpty) {
+              url = response.headers.map['location']![0];
+            }
+
+            if (url != null) {
+              final uri = Uri.parse(url);
+              if (uri.toString().startsWith(Parameters.redirectUri)) {
+                emit(state.copyWith(status: ScanStatus.goBack));
+                await qrCodeScanCubit.authorizedFlowStart(uri);
+                return;
+              }
+            } else {
+              throw ResponseMessage(
+                message:
+                    ResponseString.RESPONSE_STRING_thisRequestIsNotSupported,
+              );
+            }
+          } else {
+            throw ResponseMessage(
+              message: ResponseString
+                  .RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,
+            );
+          }
+        }
+        return;
+      } else {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description':
+                // ignore: lines_longer_than_80_chars
+                'The response type should contain id_token, vp_token or both.',
+          },
+        );
+      }
+    } catch (e, s) {
+      final log = getLogger('ScanCubit - presentOidc4vpFinal');
+      log.e('something went wrong - $e', error: e, stackTrace: s);
+      throw ResponseMessage(
+        data: {
+          'error': 'something went wrong during presentation',
+          'error_description': '$e /n $s',
+        },
+      );
+    }
   }
 }

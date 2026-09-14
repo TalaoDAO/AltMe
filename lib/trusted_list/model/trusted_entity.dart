@@ -12,6 +12,7 @@ enum TrustedEntityType {
   verifier,
   @JsonValue('wallet-provider')
   walletProvider,
+  signer,
 }
 
 @JsonSerializable(explicitToJson: true)

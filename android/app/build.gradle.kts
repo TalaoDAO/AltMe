@@ -28,7 +28,7 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        // TODO(hawkbee): Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "co.talao.wallet"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
@@ -84,6 +84,16 @@ android {
         debug {
             signingConfig = signingConfigs.getByName("debug")
         }
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        // beacon-android-sdk pulls com.goterl:lazysodium-android:5.0.2, whose
+        // x86/x86_64/armeabi-v7a libsodium.so are built with 4 KB page alignment and
+        // trip Play's "Does not support 16 KB" check. 5.2.0 ships 16 KB-aligned
+        // (p_align 0x4000) libs for every ABI and drops the obsolete armeabi one.
+        force("com.goterl:lazysodium-android:5.2.0")
     }
 }
 

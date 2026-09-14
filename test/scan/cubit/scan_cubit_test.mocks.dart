@@ -3,6 +3,7 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+
 import 'dart:async' as _i16;
 
 import 'package:altme/activity_log/activity_log.dart' as _i11;
@@ -89,8 +90,9 @@ class _FakeProfileCubit_8 extends _i1.SmartFake implements _i5.ProfileCubit {
     : super(parent, parentInvocation);
 }
 
-class _FakeOIDC4VC_9 extends _i1.SmartFake implements _i9.OIDC4VC {
-  _FakeOIDC4VC_9(Object parent, Invocation parentInvocation)
+class _FakeOIDC4VCIClient_9 extends _i1.SmartFake
+    implements _i9.OIDC4VCIClient {
+  _FakeOIDC4VCIClient_9(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -154,14 +156,14 @@ class _FakeOidc4vcParameters_20 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
-class _FakeResponse_21<T> extends _i1.SmartFake implements _i4.Response<T> {
-  _FakeResponse_21(Object parent, Invocation parentInvocation)
+class _FakeOpenIdConfiguration_21 extends _i1.SmartFake
+    implements _i9.OpenIdConfiguration {
+  _FakeOpenIdConfiguration_21(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeOpenIdConfiguration_22 extends _i1.SmartFake
-    implements _i9.OpenIdConfiguration {
-  _FakeOpenIdConfiguration_22(Object parent, Invocation parentInvocation)
+class _FakeResponse_22<T> extends _i1.SmartFake implements _i4.Response<T> {
+  _FakeResponse_22(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -370,12 +372,15 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
           as _i5.ProfileCubit);
 
   @override
-  _i9.OIDC4VC get oidc4vc =>
+  _i9.OIDC4VCIClient get oidc4vc =>
       (super.noSuchMethod(
             Invocation.getter(#oidc4vc),
-            returnValue: _FakeOIDC4VC_9(this, Invocation.getter(#oidc4vc)),
+            returnValue: _FakeOIDC4VCIClient_9(
+              this,
+              Invocation.getter(#oidc4vc),
+            ),
           )
-          as _i9.OIDC4VC);
+          as _i9.OIDC4VCIClient);
 
   @override
   _i10.WalletCubit get walletCubit =>
@@ -919,12 +924,15 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
           as _i3.SecureStorageProvider);
 
   @override
-  _i9.OIDC4VC get oidc4vc =>
+  _i9.OIDC4VCIClient get oidc4vc =>
       (super.noSuchMethod(
             Invocation.getter(#oidc4vc),
-            returnValue: _FakeOIDC4VC_9(this, Invocation.getter(#oidc4vc)),
+            returnValue: _FakeOIDC4VCIClient_9(
+              this,
+              Invocation.getter(#oidc4vc),
+            ),
           )
-          as _i9.OIDC4VC);
+          as _i9.OIDC4VCIClient);
 
   @override
   _i6.DIDKitProvider get didKitProvider =>
@@ -957,6 +965,12 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
   int get loginAttemptCount =>
       (super.noSuchMethod(Invocation.getter(#loginAttemptCount), returnValue: 0)
           as int);
+
+  @override
+  set oidc4vc(_i9.OIDC4VCIClient? value) => super.noSuchMethod(
+    Invocation.setter(#oidc4vc, value),
+    returnValueForMissingStub: null,
+  );
 
   @override
   set loginAttemptCount(int? value) => super.noSuchMethod(
@@ -1451,23 +1465,21 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
           as _i16.Future<void>);
 }
 
-/// A class which mocks [OIDC4VC].
+/// A class which mocks [OIDC4VCIClient].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
-  MockOIDC4VC() {
+class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
+  MockOIDC4VCIClient() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  int get count =>
-      (super.noSuchMethod(Invocation.getter(#count), returnValue: 0) as int);
-
-  @override
-  set count(int? value) => super.noSuchMethod(
-    Invocation.setter(#count, value),
-    returnValueForMissingStub: null,
-  );
+  _i9.OIDC4VCIDraftType get draftType =>
+      (super.noSuchMethod(
+            Invocation.getter(#draftType),
+            returnValue: _i9.OIDC4VCIDraftType.draft11,
+          )
+          as _i9.OIDC4VCIDraftType);
 
   @override
   Map<String, dynamic> getAuthorizationRequestParemeters({
@@ -1502,6 +1514,22 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
               #secureAuthorizedFlow: secureAuthorizedFlow,
               #isEBSIProfile: isEBSIProfile,
               #walletIssuer: walletIssuer,
+            }),
+            returnValue: <String, dynamic>{},
+          )
+          as Map<String, dynamic>);
+
+  @override
+  Map<String, dynamic> buildAuthorizationDetailEntry({
+    required Map<String, dynamic>? baseEntry,
+    required Map<String, dynamic>? credentialSupported,
+    required _i9.VCFormatType? credentialSupportedType,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#buildAuthorizationDetailEntry, [], {
+              #baseEntry: baseEntry,
+              #credentialSupported: credentialSupported,
+              #credentialSupportedType: credentialSupportedType,
             }),
             returnValue: <String, dynamic>{},
           )
@@ -1667,40 +1695,6 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
           as Map<String, dynamic>);
 
   @override
-  _i16.Future<Map<String, dynamic>> getOpenIdConfiguration({
-    required String? didKey,
-    required bool? fromStatusList,
-    required bool? isCachingEnabled,
-    required _i4.Dio? dio,
-    required bool? useOAuthAuthorizationServerLink,
-    required bool? isSdJwtVc,
-    _i3.SecureStorageProvider? secureStorage,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(#getOpenIdConfiguration, [], {
-              #didKey: didKey,
-              #fromStatusList: fromStatusList,
-              #isCachingEnabled: isCachingEnabled,
-              #dio: dio,
-              #useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
-              #isSdJwtVc: isSdJwtVc,
-              #secureStorage: secureStorage,
-            }),
-            returnValue: _i16.Future<Map<String, dynamic>>.value(
-              <String, dynamic>{},
-            ),
-          )
-          as _i16.Future<Map<String, dynamic>>);
-
-  @override
-  bool isURL(String? input) =>
-      (super.noSuchMethod(
-            Invocation.method(#isURL, [input]),
-            returnValue: false,
-          )
-          as bool);
-
-  @override
   _i16.Future<String> readTokenEndPoint({
     required _i9.OpenIdConfiguration? openIdConfiguration,
     required String? issuer,
@@ -1758,33 +1752,40 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
           as _i16.Future<_i9.Oidc4vcParameters>);
 
   @override
-  String readIssuerDid(
-    _i4.Response<Map<String, dynamic>>? openidConfigurationResponse,
-  ) =>
-      (super.noSuchMethod(
-            Invocation.method(#readIssuerDid, [openidConfigurationResponse]),
-            returnValue: _i18.dummyValue<String>(
-              this,
-              Invocation.method(#readIssuerDid, [openidConfigurationResponse]),
-            ),
-          )
-          as String);
-
-  @override
-  Map<String, dynamic> readPublicKeyJwk({
-    required String? issuer,
-    required String? holderKid,
-    required Map<String, dynamic>? didDocument,
+  _i16.Future<_i9.Oidc4vcParameters> finalizeAuthorizationParameters({
+    required _i9.Oidc4vcParameters? oidc4vcParameters,
+    required _i4.Dio? dio,
+    required String? authorizationEndpoint,
+    required String? tokenEndpoint,
+    required String? nonceEndpoint,
+    required _i9.OpenIdConfiguration? authorizationServerConfiguration,
   }) =>
       (super.noSuchMethod(
-            Invocation.method(#readPublicKeyJwk, [], {
-              #issuer: issuer,
-              #holderKid: holderKid,
-              #didDocument: didDocument,
+            Invocation.method(#finalizeAuthorizationParameters, [], {
+              #oidc4vcParameters: oidc4vcParameters,
+              #dio: dio,
+              #authorizationEndpoint: authorizationEndpoint,
+              #tokenEndpoint: tokenEndpoint,
+              #nonceEndpoint: nonceEndpoint,
+              #authorizationServerConfiguration:
+                  authorizationServerConfiguration,
             }),
-            returnValue: <String, dynamic>{},
+            returnValue: _i16.Future<_i9.Oidc4vcParameters>.value(
+              _FakeOidc4vcParameters_20(
+                this,
+                Invocation.method(#finalizeAuthorizationParameters, [], {
+                  #oidc4vcParameters: oidc4vcParameters,
+                  #dio: dio,
+                  #authorizationEndpoint: authorizationEndpoint,
+                  #tokenEndpoint: tokenEndpoint,
+                  #nonceEndpoint: nonceEndpoint,
+                  #authorizationServerConfiguration:
+                      authorizationServerConfiguration,
+                }),
+              ),
+            ),
           )
-          as Map<String, dynamic>);
+          as _i16.Future<_i9.Oidc4vcParameters>);
 
   @override
   _i16.Future<Map<String, dynamic>> buildCredentialData({
@@ -1833,6 +1834,38 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
           as _i16.Future<Map<String, dynamic>>);
 
   @override
+  Map<String, dynamic> buildJwtProofEntry(String? vcJwt) =>
+      (super.noSuchMethod(
+            Invocation.method(#buildJwtProofEntry, [vcJwt]),
+            returnValue: <String, dynamic>{},
+          )
+          as Map<String, dynamic>);
+
+  @override
+  Map<String, dynamic> buildCredentialRequestBody({
+    required _i9.Oidc4vcParameters? oidc4vcParameters,
+    required String? credentialType,
+    required List<String>? types,
+    required String? format,
+    required _i9.VCFormatType? vcFormatType,
+    required Map<String, dynamic>? credentialDefinition,
+    required String? vct,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#buildCredentialRequestBody, [], {
+              #oidc4vcParameters: oidc4vcParameters,
+              #credentialType: credentialType,
+              #types: types,
+              #format: format,
+              #vcFormatType: vcFormatType,
+              #credentialDefinition: credentialDefinition,
+              #vct: vct,
+            }),
+            returnValue: <String, dynamic>{},
+          )
+          as Map<String, dynamic>);
+
+  @override
   _i16.Future<(String, List<String>?, Map<String, dynamic>?, String?, String)>
   getCredentialData({
     required _i9.OpenIdConfiguration? openIdConfiguration,
@@ -1875,6 +1908,138 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
           as _i16.Future<
             (String, List<String>?, Map<String, dynamic>?, String?, String)
           >);
+
+  @override
+  String readCredentialEndpoint(_i9.OpenIdConfiguration? openIdConfiguration) =>
+      (super.noSuchMethod(
+            Invocation.method(#readCredentialEndpoint, [openIdConfiguration]),
+            returnValue: _i18.dummyValue<String>(
+              this,
+              Invocation.method(#readCredentialEndpoint, [openIdConfiguration]),
+            ),
+          )
+          as String);
+
+  @override
+  _i16.Future<String> getIssuerJwt({
+    required _i9.IssuerTokenParameters? tokenParameters,
+    required _i9.ClientAuthentication? clientAuthentication,
+    required String? iss,
+    String? cnonce,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#getIssuerJwt, [], {
+              #tokenParameters: tokenParameters,
+              #clientAuthentication: clientAuthentication,
+              #iss: iss,
+              #cnonce: cnonce,
+            }),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#getIssuerJwt, [], {
+                  #tokenParameters: tokenParameters,
+                  #clientAuthentication: clientAuthentication,
+                  #iss: iss,
+                  #cnonce: cnonce,
+                }),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
+
+  @override
+  ({Map<String, dynamic>? body, Map<String, dynamic> headers})
+  buildDeferredCredentialRequest({
+    required String? acceptanceToken,
+    required String? pendingAccessToken,
+    required String? transactionId,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#buildDeferredCredentialRequest, [], {
+              #acceptanceToken: acceptanceToken,
+              #pendingAccessToken: pendingAccessToken,
+              #transactionId: transactionId,
+            }),
+            returnValue: (body: null, headers: <String, dynamic>{}),
+          )
+          as ({Map<String, dynamic>? body, Map<String, dynamic> headers}));
+
+  @override
+  _i16.Future<String> getDcqlQueryFromUri({required Uri? uri}) =>
+      (super.noSuchMethod(
+            Invocation.method(#getDcqlQueryFromUri, [], {#uri: uri}),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#getDcqlQueryFromUri, [], {#uri: uri}),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
+
+  @override
+  _i16.Future<Map<String, dynamic>> getOpenIdConfiguration({
+    required String? didKey,
+    required bool? fromStatusList,
+    required bool? isCachingEnabled,
+    required _i4.Dio? dio,
+    required bool? useOAuthAuthorizationServerLink,
+    required bool? isSdJwtVc,
+    _i3.SecureStorageProvider? secureStorage,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#getOpenIdConfiguration, [], {
+              #didKey: didKey,
+              #fromStatusList: fromStatusList,
+              #isCachingEnabled: isCachingEnabled,
+              #dio: dio,
+              #useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+              #isSdJwtVc: isSdJwtVc,
+              #secureStorage: secureStorage,
+            }),
+            returnValue: _i16.Future<Map<String, dynamic>>.value(
+              <String, dynamic>{},
+            ),
+          )
+          as _i16.Future<Map<String, dynamic>>);
+
+  @override
+  bool isURL(String? input) =>
+      (super.noSuchMethod(
+            Invocation.method(#isURL, [input]),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  Map<String, dynamic> readPublicKeyJwk({
+    required String? issuer,
+    required String? holderKid,
+    required Map<String, dynamic>? didDocument,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#readPublicKeyJwk, [], {
+              #issuer: issuer,
+              #holderKid: holderKid,
+              #didDocument: didDocument,
+            }),
+            returnValue: <String, dynamic>{},
+          )
+          as Map<String, dynamic>);
+
+  @override
+  String readIssuerDid(
+    _i4.Response<Map<String, dynamic>>? openidConfigurationResponse,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#readIssuerDid, [openidConfigurationResponse]),
+            returnValue: _i18.dummyValue<String>(
+              this,
+              Invocation.method(#readIssuerDid, [openidConfigurationResponse]),
+            ),
+          )
+          as String);
 
   @override
   _i16.Future<_i9.VerificationType> verifyEncodedData({
@@ -1921,45 +2086,6 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
           as bool);
 
   @override
-  String readCredentialEndpoint(_i9.OpenIdConfiguration? openIdConfiguration) =>
-      (super.noSuchMethod(
-            Invocation.method(#readCredentialEndpoint, [openIdConfiguration]),
-            returnValue: _i18.dummyValue<String>(
-              this,
-              Invocation.method(#readCredentialEndpoint, [openIdConfiguration]),
-            ),
-          )
-          as String);
-
-  @override
-  _i16.Future<String> getIssuerJwt({
-    required _i9.IssuerTokenParameters? tokenParameters,
-    required _i9.ClientAuthentication? clientAuthentication,
-    required String? iss,
-    String? cnonce,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(#getIssuerJwt, [], {
-              #tokenParameters: tokenParameters,
-              #clientAuthentication: clientAuthentication,
-              #iss: iss,
-              #cnonce: cnonce,
-            }),
-            returnValue: _i16.Future<String>.value(
-              _i18.dummyValue<String>(
-                this,
-                Invocation.method(#getIssuerJwt, [], {
-                  #tokenParameters: tokenParameters,
-                  #clientAuthentication: clientAuthentication,
-                  #iss: iss,
-                  #cnonce: cnonce,
-                }),
-              ),
-            ),
-          )
-          as _i16.Future<String>);
-
-  @override
   _i16.Future<Map<String, dynamic>> getToken({
     required String? tokenEndPoint,
     required Map<String, dynamic>? tokenData,
@@ -1984,6 +2110,69 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
             ),
           )
           as _i16.Future<Map<String, dynamic>>);
+
+  @override
+  _i16.Future<_i9.OpenIdConfiguration> getAuthorizationServerMetaData({
+    required String? baseUrl,
+    required bool? useOAuthAuthorizationServerLink,
+    required _i4.Dio? dio,
+    bool? isCachingEnabled = false,
+    _i3.SecureStorageProvider? secureStorage,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#getAuthorizationServerMetaData, [], {
+              #baseUrl: baseUrl,
+              #useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
+              #dio: dio,
+              #isCachingEnabled: isCachingEnabled,
+              #secureStorage: secureStorage,
+            }),
+            returnValue: _i16.Future<_i9.OpenIdConfiguration>.value(
+              _FakeOpenIdConfiguration_21(
+                this,
+                Invocation.method(#getAuthorizationServerMetaData, [], {
+                  #baseUrl: baseUrl,
+                  #useOAuthAuthorizationServerLink:
+                      useOAuthAuthorizationServerLink,
+                  #dio: dio,
+                  #isCachingEnabled: isCachingEnabled,
+                  #secureStorage: secureStorage,
+                }),
+              ),
+            ),
+          )
+          as _i16.Future<_i9.OpenIdConfiguration>);
+
+  @override
+  _i16.Future<_i9.OpenIdConfiguration> getIssuerMetaData({
+    required String? baseUrl,
+    required _i4.Dio? dio,
+    bool? isCachingEnabled = false,
+    bool? isSdJwtVc = false,
+    _i3.SecureStorageProvider? secureStorage,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#getIssuerMetaData, [], {
+              #baseUrl: baseUrl,
+              #dio: dio,
+              #isCachingEnabled: isCachingEnabled,
+              #isSdJwtVc: isSdJwtVc,
+              #secureStorage: secureStorage,
+            }),
+            returnValue: _i16.Future<_i9.OpenIdConfiguration>.value(
+              _FakeOpenIdConfiguration_21(
+                this,
+                Invocation.method(#getIssuerMetaData, [], {
+                  #baseUrl: baseUrl,
+                  #dio: dio,
+                  #isCachingEnabled: isCachingEnabled,
+                  #isSdJwtVc: isSdJwtVc,
+                  #secureStorage: secureStorage,
+                }),
+              ),
+            ),
+          )
+          as _i16.Future<_i9.OpenIdConfiguration>);
 
   @override
   _i16.Future<String> extractVpToken({
@@ -2105,7 +2294,7 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
               #responseData: responseData,
             }),
             returnValue: _i16.Future<_i4.Response<dynamic>>.value(
-              _FakeResponse_21<dynamic>(
+              _FakeResponse_22<dynamic>(
                 this,
                 Invocation.method(#siopv2Flow, [], {
                   #redirectUri: redirectUri,
@@ -2209,6 +2398,19 @@ class MockOIDC4VC extends _i1.Mock implements _i9.OIDC4VC {
             ),
           )
           as _i16.Future<_i9.OpenIdConfiguration>);
+
+  @override
+  _i16.Future<String> getDcqlQueryFromUri({required Uri? uri}) =>
+      (super.noSuchMethod(
+            Invocation.method(#getDcqlQueryFromUri, [], {#uri: uri}),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#getDcqlQueryFromUri, [], {#uri: uri}),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
 }
 
 /// A class which mocks [JWTDecode].
@@ -2231,6 +2433,22 @@ class MockJWTDecode extends _i1.Mock implements _i8.JWTDecode {
   Map<String, dynamic> parseJwtHeader(String? token) =>
       (super.noSuchMethod(
             Invocation.method(#parseJwtHeader, [token]),
+            returnValue: <String, dynamic>{},
+          )
+          as Map<String, dynamic>);
+
+  @override
+  Map<String, dynamic> decodeHeader({required String? token}) =>
+      (super.noSuchMethod(
+            Invocation.method(#decodeHeader, [], {#token: token}),
+            returnValue: <String, dynamic>{},
+          )
+          as Map<String, dynamic>);
+
+  @override
+  Map<String, dynamic> decodePayload({required String? token}) =>
+      (super.noSuchMethod(
+            Invocation.method(#decodePayload, [], {#token: token}),
             returnValue: <String, dynamic>{},
           )
           as Map<String, dynamic>);

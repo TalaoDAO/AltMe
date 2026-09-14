@@ -1,12 +1,12 @@
-enum ProfileType { defaultOne, ebsiV4, diipv5, EUDIW, custom, enterprise }
+// to enable ebsi profile again revert commit with label: 
+// Remove EBSI from profile list #3504
+enum ProfileType { defaultOne, diipv5, EUDIW, custom, enterprise }
 
 extension ProfileTypeX on ProfileType {
   String getTitle({required String name}) {
     switch (this) {
       case ProfileType.custom:
         return 'Custom';
-      case ProfileType.ebsiV4:
-        return 'European Blockchain Services Infrastructure (EBSI v4.x)';
       case ProfileType.enterprise:
         return name.isEmpty ? 'Enterprise' : name;
       case ProfileType.diipv5:
@@ -24,8 +24,6 @@ extension ProfileTypeX on ProfileType {
     switch (this) {
       case ProfileType.custom:
         return 'A7G9B4C';
-      case ProfileType.ebsiV4:
-        return 'Q2X5T8L';
       case ProfileType.diipv5:
         return 'R4D8F2H';
       case ProfileType.defaultOne:

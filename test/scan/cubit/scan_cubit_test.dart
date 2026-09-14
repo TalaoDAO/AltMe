@@ -29,7 +29,7 @@ import 'package:uuid/uuid.dart';
   SecureStorageProvider,
   ProfileCubit,
   WalletCubit,
-  OIDC4VC,
+  OIDC4VCIClient,
   JWTDecode,
   ActivityLogManager,
 ])
@@ -72,7 +72,7 @@ void main() {
     late MockSecureStorageProvider mockSecureStorageProvider;
     late MockProfileCubit mockProfileCubit;
     late MockWalletCubit mockWalletCubit;
-    late MockOIDC4VC mockOIDC4VC;
+    late MockOIDC4VCIClient mockOIDC4VC;
     late MockJWTDecode mockJWTDecode;
     late ScanCubit scanCubit;
     late MockActivityLogManager mockActivityLogManager;
@@ -84,7 +84,7 @@ void main() {
       mockSecureStorageProvider = MockSecureStorageProvider();
       mockProfileCubit = MockProfileCubit();
       mockWalletCubit = MockWalletCubit();
-      mockOIDC4VC = MockOIDC4VC();
+      mockOIDC4VC = MockOIDC4VCIClient();
       mockJWTDecode = MockJWTDecode();
       mockActivityLogManager = MockActivityLogManager();
 
@@ -176,7 +176,6 @@ void main() {
             did: did,
             kid: kid,
             uri: uri,
-            clientMetaData: null,
             profileSetting: profileSetting,
             formatFromPresentationSubmission: VCFormatType.vcSdJWT,
           );
@@ -204,7 +203,6 @@ void main() {
             did: did,
             kid: kid,
             uri: uri,
-            clientMetaData: null,
             profileSetting: profileSetting,
             formatFromPresentationSubmission: VCFormatType.vcSdJWT,
           );
@@ -256,7 +254,6 @@ void main() {
             did: did,
             kid: kid,
             uri: uri,
-            clientMetaData: null,
             profileSetting: profileSetting,
             formatFromPresentationSubmission: VCFormatType.jwtVc,
           );
@@ -306,7 +303,6 @@ void main() {
             did: did,
             kid: kid,
             uri: uri,
-            clientMetaData: null,
             profileSetting: profileSetting,
             formatFromPresentationSubmission: VCFormatType.ldpVc,
           );
@@ -343,7 +339,6 @@ void main() {
               did: did,
               kid: kid,
               uri: uri,
-              clientMetaData: null,
               profileSetting: profileSetting,
               formatFromPresentationSubmission: null,
             ),

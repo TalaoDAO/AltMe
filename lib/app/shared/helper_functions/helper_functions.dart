@@ -9,6 +9,7 @@ import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:asn1lib/asn1lib.dart' as asn1lib;
 import 'package:convert/convert.dart';
 import 'package:credential_manifest/credential_manifest.dart';
+import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:intl/intl.dart';
@@ -24,6 +25,7 @@ import 'package:x509_plus/x509.dart' as x509;
 
 export 'is_connected_to_internet.dart';
 export 'test_platform.dart';
+export 'x509_subject_fields.dart';
 
 String generateDefaultAccountName(
   int accountIndex,
@@ -423,38 +425,6 @@ Future<String> fetchPrivateKey({
   return privateKey;
 }
 
-Map<String, dynamic> decodePayload({
-  required JWTDecode jwtDecode,
-  required String token,
-}) {
-  final log = getLogger('QRCodeScanCubit - jwtDecode');
-  late final Map<String, dynamic> data;
-
-  try {
-    final payload = jwtDecode.parseJwt(token);
-    data = payload;
-  } catch (e, s) {
-    log.e('An error occurred while decoding.', error: e, stackTrace: s);
-  }
-  return data;
-}
-
-Map<String, dynamic> decodeHeader({
-  required JWTDecode jwtDecode,
-  required String token,
-}) {
-  final log = getLogger('QRCodeScanCubit - jwtDecode');
-  late final Map<String, dynamic> data;
-
-  try {
-    final header = jwtDecode.parseJwtHeader(token);
-    data = header;
-  } catch (e, s) {
-    log.e('An error occurred while decoding.', error: e, stackTrace: s);
-  }
-  return data;
-}
-
 String birthDateFormater(int birthData) {
   final String birthdate = birthData.toString();
 
@@ -665,6 +635,8 @@ bool isSiopV2OrOidc4VpUrl(Uri uri) {
       uri.toString().startsWith('openid-vc://?') ||
       uri.toString().startsWith(Parameters.walletPresentationDeepLink) ||
       uri.toString().startsWith('openid4vp://') ||
+      uri.toString().startsWith('av://') ||
+      uri.toString().startsWith('haip-vp://') ||
       uri.toString().startsWith('eudi-openid4vp://') ||
       uri.toString().startsWith('openid-hedera://?') ||
       uri.toString().startsWith('haip://?') &&
@@ -853,7 +825,7 @@ Future<Map<String, dynamic>?> getClientMetada({
 
 Future<bool?> isEBSIForVerifiers({
   required Uri uri,
-  required OIDC4VC oidc4vc,
+  required OIDC4VCIClient oidc4vc,
   required OIDC4VCIDraftType oidc4vciDraftType,
 }) async {
   try {
@@ -959,8 +931,7 @@ Future<String> getHost({required Uri uri, required DioClient client}) async {
     /// check if request uri is provided or not
     if (requestUri != null) {
       final dynamic response = await client.get(requestUri);
-      final Map<String, dynamic> decodedResponse = decodePayload(
-        jwtDecode: JWTDecode(),
+      final Map<String, dynamic> decodedResponse = JWTDecode().decodePayload(
         token: response as String,
       );
 
@@ -1497,7 +1468,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
           case ClientType.wiaSub:
-            // TODO: Handle this case.getClientDetails
+            // TODO(hawkbee): Handle this case.getClientDetails
             throw UnimplementedError();
         }
 
@@ -1511,7 +1482,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
           case ClientType.wiaSub:
-            // TODO: Handle this case.getClientDetails
+            // TODO(hawkbee): Handle this case.getClientDetails
             throw UnimplementedError();
         }
 
@@ -1554,7 +1525,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
         oAuthClientAttestation = walletAttestationData;
         oAuthClientAttestationPop = jwtProofOfPossession;
       case ClientAuthentication.wia:
-        // TODO: Handle this case.getClientDetails
+        // TODO(hawkbee): Handle this case.getClientDetails
         throw UnimplementedError();
     }
 
@@ -2104,31 +2075,77 @@ Future<Map<String, dynamic>?> checkX509({
       }
     }
 
-    final publicKey = cert.publicKey;
-    if (publicKey is x509.RsaPublicKey) {
-      final BigInt modulus = BigInt.parse(publicKey.modulus.toString());
-      final n = base64Encode(modulus.toBytes);
-      final publicKeyJwk = {
-        'e': 'AQAB',
-        'kty': 'RSA',
-        'n': n.replaceAll('=', ''),
-      };
-      return publicKeyJwk;
-    } else if (publicKey is x509.EcPublicKey) {
-      final BigInt xModulus = BigInt.parse(publicKey.xCoordinate.toString());
-      final BigInt yModulus = BigInt.parse(publicKey.yCoordinate.toString());
-      final x = base64Encode(xModulus.toBytes);
-      final y = base64Encode(yModulus.toBytes);
-      final publicKeyJwk = {
-        'kty': 'EC',
-        'crv': 'P-256',
-        'x': x.replaceAll('=', ''),
-        'y': y.replaceAll('=', ''),
-      };
-      return publicKeyJwk;
-    }
+    return x509PublicKeyJwk(cert);
   }
   return null;
+}
+
+/// Converts an x509 certificate's public key into a JWK, supporting RSA and
+/// EC (P-256) keys. Shared by the `x509_san_dns` and `x509_hash` client_id
+/// scheme checks.
+Map<String, dynamic>? x509PublicKeyJwk(x509.X509Certificate cert) {
+  final publicKey = cert.publicKey;
+  if (publicKey is x509.RsaPublicKey) {
+    final BigInt modulus = BigInt.parse(publicKey.modulus.toString());
+    final n = base64Encode(modulus.toBytes);
+    return {
+      'e': 'AQAB',
+      'kty': 'RSA',
+      'n': n.replaceAll('=', ''),
+    };
+  } else if (publicKey is x509.EcPublicKey) {
+    final BigInt xModulus = BigInt.parse(publicKey.xCoordinate.toString());
+    final BigInt yModulus = BigInt.parse(publicKey.yCoordinate.toString());
+    final x = base64Encode(xModulus.toBytes);
+    final y = base64Encode(yModulus.toBytes);
+    return {
+      'kty': 'EC',
+      'crv': 'P-256',
+      'x': x.replaceAll('=', ''),
+      'y': y.replaceAll('=', ''),
+    };
+  }
+  return null;
+}
+
+/// Verifies the `x509_hash` client_id scheme (OpenID4VP Final 1.0): the
+/// client_id must equal the base64url-encoded (no padding) SHA-256 hash of
+/// the leaf certificate (`x5c[0]`) found in the JWT header.
+Future<Map<String, dynamic>?> checkX509Hash({
+  required Map<String, dynamic> header,
+  required String clientId,
+}) async {
+  final x5c = header['x5c'];
+
+  if (x5c == null || x5c is! List || x5c.isEmpty) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_format',
+        'error_description': 'x509_hash scheme error',
+      },
+    );
+  }
+
+  final certificate = x5c.first.toString();
+  final decoded = base64Decode(certificate);
+
+  final computedHash = base64Url
+      .encode(sha256.convert(decoded).bytes)
+      .replaceAll('=', '');
+
+  if (computedHash != clientId) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_format',
+        'error_description': 'x509_hash scheme error',
+      },
+    );
+  }
+
+  final seq = asn1lib.ASN1Sequence.fromBytes(decoded);
+  final cert = x509.X509Certificate.fromAsn1(seq);
+
+  return x509PublicKeyJwk(cert);
 }
 
 Future<Map<String, dynamic>?> checkVerifierAttestation({
@@ -2215,10 +2232,6 @@ bool useOauthServerAuthEndPoint(ProfileModel profileModel) {
   // Commenting while EBSI V4 is not live
   // final bool notEligible = profileModel.profileType == ProfileType.ebsiV3 ||
   //     profileModel.profileType == ProfileType.ebsiV4;
-
-  final bool notEligible = profileModel.profileType == ProfileType.ebsiV4;
-
-  if (notEligible) return false;
 
   final bool greaterThanDraft13 =
       customOidc4vcProfile.oidc4vciDraft != OIDC4VCIDraftType.draft11;
@@ -2369,8 +2382,25 @@ bool isContract(String reciever) {
   return false;
 }
 
+/// client_id scheme prefixes that, per OpenID4VP, are followed by a value
+/// which may itself contain further ':' characters (e.g. a DID). For these,
+/// only the scheme prefix itself must be stripped, not split on every ':'.
+const _clientIdSchemePrefixes = [
+  'decentralized_identifier',
+  'x509_san_dns',
+  'x509_hash',
+  'did',
+  'redirect_uri',
+  'verifier_attestation',
+];
+
 String? getClientIdForPresentation(String? clientId) {
   if (clientId == null) return '';
+  final index = clientId.indexOf(':');
+  if (index != -1 &&
+      _clientIdSchemePrefixes.contains(clientId.substring(0, index))) {
+    return clientId.substring(index + 1);
+  }
   if (clientId.contains(':')) {
     final parts = clientId.split(':');
     if (parts.length == 2) {

@@ -2301,7 +2301,20 @@ class AppLocalizationsEl extends AppLocalizations {
       'Δεν μπορείτε να λάβετε αυτή την κάρτα επειδή δεν πληρούνται ορισμένες προϋποθέσεις.';
 
   @override
-  String get youAreMissing => 'Σας λείπει';
+  String get youAreMissing => 'You don\'t have the requested information';
+
+  @override
+  String get dcqlInformationNotAvailable => 'Information not available';
+
+  @override
+  String get dcqlInformationNotAvailableDescription =>
+      'We couldn\'t find all the information requested in your wallet.';
+
+  @override
+  String get dcqlMissingInformation => 'Missing information';
+
+  @override
+  String get dcqlCannotContinue => 'You can\'t continue with this request.';
 
   @override
   String get credentialsRequestedBy => 'πιστοποιητικά';
@@ -3292,8 +3305,7 @@ class AppLocalizationsEl extends AppLocalizations {
       'Επιλέξτε τα πιστοποιητικά που θέλετε να αποκτήσετε';
 
   @override
-  String get credentialShareTitle =>
-      'Επιλέξτε τα πιστοποιητικά προς κοινή χρήση';
+  String get credentialShareTitle => 'Share information';
 
   @override
   String get enterYourSecretCode => 'Εισάγετε τον μυστικό σας κωδικό.';
@@ -3388,4 +3400,105 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get greek => 'Ελληνικά';
+
+  @override
+  String get issuerConnectTitle => 'Connect to attestation issuer?';
+
+  @override
+  String issuerConnectSubtitle(Object issuerName) {
+    return '$issuerName wants to issue an attestation to your wallet.';
+  }
+
+  @override
+  String get trustedIssuerLabel => 'Trusted issuer';
+
+  @override
+  String get issuerNotVerifiedLabel => 'Issuer not verified';
+
+  @override
+  String get issuerNotVerifiedDescription =>
+      'The identity of this issuer could not be verified.';
+
+  @override
+  String get onlyContinueIfTrustIssuer =>
+      'Only continue if you recognise and trust this issuer.';
+
+  @override
+  String get continueLabel => 'Continue';
+
+  @override
+  String get credentialAcceptTitle => 'Add attestation to your wallet?';
+
+  @override
+  String get issuedByLabel => 'Issued by';
+
+  @override
+  String get informationIncludedLabel => 'Information included';
+
+  @override
+  String get addToWalletLabel => 'Add to wallet';
+
+  @override
+  String get addLabel => 'Add';
+
+  @override
+  String verifierConnectTitle(Object verifierName) {
+    return 'Connect to $verifierName?';
+  }
+
+  @override
+  String verifierConnectSubtitle(Object verifierName) {
+    return '$verifierName wants to request information from your wallet.';
+  }
+
+  @override
+  String get verifiedOrganisationLabel => 'Verified organisation';
+
+  @override
+  String get organisationNotVerifiedLabel => 'Organisation not verified';
+
+  @override
+  String get organisationNotVerifiedDescription =>
+      'The identity of this organisation could not be verified.';
+
+  @override
+  String get onlyContinueIfTrustOrganisation =>
+      'Only continue if you recognise and trust this organisation.';
+
+  @override
+  String get purposeLabel => 'Purpose';
+
+  @override
+  String get shareInformationTitle => 'Share your information?';
+
+  @override
+  String shareInformationSubtitle(Object verifierName) {
+    return '$verifierName is requesting the following information from your wallet.';
+  }
+
+  @override
+  String get onlyShareIfTrustOrganisation =>
+      'Only share this information if you recognise and trust this organisation.';
+
+  @override
+  String get informationRequestedLabel => 'Information requested';
+
+  @override
+  String get sharedWithLabel => 'Shared with';
+
+  @override
+  String get notVerifiedLabel => 'Not verified';
+
+  @override
+  String get onlyInformationShownWillBeShared =>
+      'Only the information shown above will be shared.';
+
+  @override
+  String get shareInformationButtonLabel => 'Share information';
+
+  @override
+  String get shareAnywayLabel => 'Share anyway';
+
+  @override
+  String get dontShareLabel => 'Don\'t share';
 }

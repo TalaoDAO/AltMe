@@ -35,7 +35,7 @@ class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 class MockLocalAuthApi extends Mock implements LocalAuthApi {}
 
-class MockOIDC4VC extends Mock implements OIDC4VC {}
+class MockOIDC4VC extends Mock implements OIDC4VCIClient {}
 
 // Mock classes for testing
 class MockCredentialModel extends Mock implements CredentialModel {}
@@ -140,7 +140,7 @@ void main() {
         ),
       );
       when(() => profileModel.isDeveloperMode).thenReturn(false);
-      when(() => profileModel.profileType).thenReturn(ProfileType.ebsiV4);
+      when(() => profileModel.profileType).thenReturn(ProfileType.diipv5);
       profileState = MockProfileState(model: profileModel);
       when(() => profileCubit.state).thenReturn(profileState);
 
@@ -272,7 +272,7 @@ void main() {
         home: MultiRepositoryProvider(
           providers: [
             RepositoryProvider<LocalAuthApi>(create: (_) => localAuthApi),
-            RepositoryProvider<OIDC4VC>(create: (_) => MockOIDC4VC()),
+            RepositoryProvider<OIDC4VCIClient>(create: (_) => MockOIDC4VC()),
           ],
           child: MultiBlocProvider(
             providers: [

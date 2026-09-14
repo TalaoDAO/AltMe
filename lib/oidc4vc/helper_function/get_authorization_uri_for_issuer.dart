@@ -68,7 +68,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
         oAuthClientAttestation: oAuthClientAttestation,
       );
     case ClientAuthentication.wia:
-      // TODO: Handle this case. Important ?
+      // TODO(hawkbee): Handle this case. Important ?
       throw UnimplementedError();
   }
 
@@ -85,7 +85,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
 
   late Uri authorizationUri;
 
-  final authorizationRequestParemeters = OIDC4VC()
+  final authorizationRequestParemeters = profileCubit.oidc4vc
       .getAuthorizationRequestParemeters(
         selectedCredentials: selectedCredentials,
         clientId: clientId,

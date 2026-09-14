@@ -357,7 +357,7 @@ void main() {
           'AU7_OUNLXQqtwI';
 
       test('decodePayload correctly decodes a JWT token', () {
-        final decodedData = decodePayload(jwtDecode: jwtDecode, token: jwt);
+        final decodedData = jwtDecode.decodePayload(token: jwt);
         final expectedData = {
           'sub': '1234567890',
           'name': 'Bibash',
@@ -367,7 +367,7 @@ void main() {
       });
 
       test('decodeHeader correctly decodes a JWT token', () {
-        final decodedData = decodeHeader(jwtDecode: jwtDecode, token: jwt);
+        final decodedData = jwtDecode.decodeHeader(token: jwt);
         final expectedData = {'alg': 'HS256', 'typ': 'JWT'};
         expect(decodedData, expectedData);
       });

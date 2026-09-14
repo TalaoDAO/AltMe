@@ -48,4 +48,5 @@ const _$TrustedEntityTypeEnumMap = {
   TrustedEntityType.issuer: 'issuer',
   TrustedEntityType.verifier: 'verifier',
   TrustedEntityType.walletProvider: 'wallet-provider',
+  TrustedEntityType.signer: 'signer',
 };
