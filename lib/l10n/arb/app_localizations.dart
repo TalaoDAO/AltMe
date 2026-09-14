@@ -6285,12 +6285,6 @@ abstract class AppLocalizations {
   /// **'Share information'**
   String get shareInformationButtonLabel;
 
-  /// No description provided for @shareAnywayLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Share anyway'**
-  String get shareAnywayLabel;
-
   /// No description provided for @dontShareLabel.
   ///
   /// In en, this message translates to:

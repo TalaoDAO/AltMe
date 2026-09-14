@@ -1145,5 +1145,62 @@
   "trustedListSubtitle": "List of trusted entities in the current ecosystem. You are warned in case of interaction with non trusted entity.",
   "notTrustedEntity": "This entity is not in the trusted list. You should be very cautious with untrusted entities.",
   "acceptanceRequest": "Payment request",
-  "pay": "share and pay"
+  "pay": "share and pay",
+  "dcqlInformationNotAvailable": "Information non disponible",
+  "dcqlInformationNotAvailableDescription": "Nous n'avons pas pu trouver toutes les informations demandées dans votre wallet.",
+  "dcqlMissingInformation": "Information manquante",
+  "dcqlCannotContinue": "Vous ne pouvez pas continuer avec cette demande.",
+  "greek": "Ελληνικά",
+  "issuerConnectTitle": "Se connecter à l'émetteur de l'attestation ?",
+  "issuerConnectSubtitle": "{issuerName} souhaite émettre une attestation dans votre wallet.",
+  "@issuerConnectSubtitle": {
+    "description": "Subtitle on the issuer-connect confirmation screen",
+    "placeholders": {
+      "issuerName": {}
+    }
+  },
+  "trustedIssuerLabel": "Émetteur de confiance",
+  "issuerNotVerifiedLabel": "Émetteur non vérifié",
+  "issuerNotVerifiedDescription": "L'identité de cet émetteur n'a pas pu être vérifiée.",
+  "onlyContinueIfTrustIssuer": "Continuez uniquement si vous reconnaissez et faites confiance à cet émetteur.",
+  "continueLabel": "Continuer",
+  "credentialAcceptTitle": "Ajouter cette attestation à votre wallet ?",
+  "issuedByLabel": "Émis par",
+  "informationIncludedLabel": "Informations incluses",
+  "addToWalletLabel": "Ajouter au wallet",
+  "addLabel": "Ajouter",
+  "verifierConnectTitle": "Se connecter à {verifierName} ?",
+  "@verifierConnectTitle": {
+    "description": "Title on the verifier-connect confirmation screen",
+    "placeholders": {
+      "verifierName": {}
+    }
+  },
+  "verifierConnectSubtitle": "{verifierName} souhaite demander des informations à votre wallet.",
+  "@verifierConnectSubtitle": {
+    "description": "Subtitle on the verifier-connect confirmation screen",
+    "placeholders": {
+      "verifierName": {}
+    }
+  },
+  "verifiedOrganisationLabel": "Organisation vérifiée",
+  "organisationNotVerifiedLabel": "Organisation non vérifiée",
+  "organisationNotVerifiedDescription": "L'identité de cette organisation n'a pas pu être vérifiée.",
+  "onlyContinueIfTrustOrganisation": "Continuez uniquement si vous reconnaissez et faites confiance à cette organisation.",
+  "purposeLabel": "Objet",
+  "shareInformationTitle": "Partager vos informations ?",
+  "shareInformationSubtitle": "{verifierName} demande les informations suivantes à votre wallet.",
+  "@shareInformationSubtitle": {
+    "description": "Subtitle on the share-information confirmation screen",
+    "placeholders": {
+      "verifierName": {}
+    }
+  },
+  "onlyShareIfTrustOrganisation": "Ne partagez ces informations que si vous reconnaissez et faites confiance à cette organisation.",
+  "informationRequestedLabel": "Informations demandées",
+  "sharedWithLabel": "Partagé avec",
+  "notVerifiedLabel": "Non vérifié",
+  "onlyInformationShownWillBeShared": "Seules les informations affichées ci-dessus seront partagées.",
+  "shareInformationButtonLabel": "Partager les informations",
+  "dontShareLabel": "Ne pas partager"
 }

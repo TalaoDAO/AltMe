@@ -2301,20 +2301,22 @@ class AppLocalizationsEl extends AppLocalizations {
       'Δεν μπορείτε να λάβετε αυτή την κάρτα επειδή δεν πληρούνται ορισμένες προϋποθέσεις.';
 
   @override
-  String get youAreMissing => 'You don\'t have the requested information';
+  String get youAreMissing => 'Δεν έχετε τις πληροφορίες που ζητήθηκαν';
 
   @override
-  String get dcqlInformationNotAvailable => 'Information not available';
+  String get dcqlInformationNotAvailable =>
+      'Οι πληροφορίες δεν είναι διαθέσιμες';
 
   @override
   String get dcqlInformationNotAvailableDescription =>
-      'We couldn\'t find all the information requested in your wallet.';
+      'Δεν μπορέσαμε να βρούμε όλες τις πληροφορίες που ζητήθηκαν στο πορτοφόλι σας.';
 
   @override
-  String get dcqlMissingInformation => 'Missing information';
+  String get dcqlMissingInformation => 'Λείπουν πληροφορίες';
 
   @override
-  String get dcqlCannotContinue => 'You can\'t continue with this request.';
+  String get dcqlCannotContinue =>
+      'Δεν μπορείτε να συνεχίσετε με αυτό το αίτημα.';
 
   @override
   String get credentialsRequestedBy => 'πιστοποιητικά';
@@ -3305,7 +3307,7 @@ class AppLocalizationsEl extends AppLocalizations {
       'Επιλέξτε τα πιστοποιητικά που θέλετε να αποκτήσετε';
 
   @override
-  String get credentialShareTitle => 'Share information';
+  String get credentialShareTitle => 'Κοινοποίηση πληροφοριών';
 
   @override
   String get enterYourSecretCode => 'Εισάγετε τον μυστικό σας κωδικό.';
@@ -3402,103 +3404,102 @@ class AppLocalizationsEl extends AppLocalizations {
   String get greek => 'Ελληνικά';
 
   @override
-  String get issuerConnectTitle => 'Connect to attestation issuer?';
+  String get issuerConnectTitle => 'Σύνδεση με τον εκδότη πιστοποιητικού;';
 
   @override
   String issuerConnectSubtitle(Object issuerName) {
-    return '$issuerName wants to issue an attestation to your wallet.';
+    return 'Ο $issuerName θέλει να εκδώσει ένα πιστοποιητικό στο πορτοφόλι σας.';
   }
 
   @override
-  String get trustedIssuerLabel => 'Trusted issuer';
+  String get trustedIssuerLabel => 'Αξιόπιστος εκδότης';
 
   @override
-  String get issuerNotVerifiedLabel => 'Issuer not verified';
+  String get issuerNotVerifiedLabel => 'Μη επαληθευμένος εκδότης';
 
   @override
   String get issuerNotVerifiedDescription =>
-      'The identity of this issuer could not be verified.';
+      'Δεν ήταν δυνατή η επαλήθευση της ταυτότητας αυτού του εκδότη.';
 
   @override
   String get onlyContinueIfTrustIssuer =>
-      'Only continue if you recognise and trust this issuer.';
+      'Συνεχίστε μόνο αν αναγνωρίζετε και εμπιστεύεστε αυτόν τον εκδότη.';
 
   @override
-  String get continueLabel => 'Continue';
+  String get continueLabel => 'Συνέχεια';
 
   @override
-  String get credentialAcceptTitle => 'Add attestation to your wallet?';
+  String get credentialAcceptTitle =>
+      'Προσθήκη πιστοποιητικού στο πορτοφόλι σας;';
 
   @override
-  String get issuedByLabel => 'Issued by';
+  String get issuedByLabel => 'Εκδόθηκε από';
 
   @override
-  String get informationIncludedLabel => 'Information included';
+  String get informationIncludedLabel => 'Πληροφορίες που περιλαμβάνονται';
 
   @override
-  String get addToWalletLabel => 'Add to wallet';
+  String get addToWalletLabel => 'Προσθήκη στο πορτοφόλι';
 
   @override
-  String get addLabel => 'Add';
+  String get addLabel => 'Προσθήκη';
 
   @override
   String verifierConnectTitle(Object verifierName) {
-    return 'Connect to $verifierName?';
+    return 'Σύνδεση με τον $verifierName;';
   }
 
   @override
   String verifierConnectSubtitle(Object verifierName) {
-    return '$verifierName wants to request information from your wallet.';
+    return 'Ο $verifierName θέλει να ζητήσει πληροφορίες από το πορτοφόλι σας.';
   }
 
   @override
-  String get verifiedOrganisationLabel => 'Verified organisation';
+  String get verifiedOrganisationLabel => 'Επαληθευμένος οργανισμός';
 
   @override
-  String get organisationNotVerifiedLabel => 'Organisation not verified';
+  String get organisationNotVerifiedLabel => 'Μη επαληθευμένος οργανισμός';
 
   @override
   String get organisationNotVerifiedDescription =>
-      'The identity of this organisation could not be verified.';
+      'Δεν ήταν δυνατή η επαλήθευση της ταυτότητας αυτού του οργανισμού.';
 
   @override
   String get onlyContinueIfTrustOrganisation =>
-      'Only continue if you recognise and trust this organisation.';
+      'Συνεχίστε μόνο αν αναγνωρίζετε και εμπιστεύεστε αυτόν τον οργανισμό.';
 
   @override
-  String get purposeLabel => 'Purpose';
+  String get purposeLabel => 'Σκοπός';
 
   @override
-  String get shareInformationTitle => 'Share your information?';
+  String get shareInformationTitle =>
+      'Θέλετε να μοιραστείτε τις πληροφορίες σας;';
 
   @override
   String shareInformationSubtitle(Object verifierName) {
-    return '$verifierName is requesting the following information from your wallet.';
+    return 'Ο $verifierName ζητά τις παρακάτω πληροφορίες από το πορτοφόλι σας.';
   }
 
   @override
   String get onlyShareIfTrustOrganisation =>
-      'Only share this information if you recognise and trust this organisation.';
+      'Μοιραστείτε αυτές τις πληροφορίες μόνο αν αναγνωρίζετε και εμπιστεύεστε αυτόν τον οργανισμό.';
 
   @override
-  String get informationRequestedLabel => 'Information requested';
+  String get informationRequestedLabel => 'Πληροφορίες που ζητήθηκαν';
 
   @override
-  String get sharedWithLabel => 'Shared with';
+  String get sharedWithLabel => 'Κοινοποιήθηκε με';
 
   @override
-  String get notVerifiedLabel => 'Not verified';
+  String get notVerifiedLabel => 'Μη επαληθευμένο';
 
   @override
   String get onlyInformationShownWillBeShared =>
-      'Only the information shown above will be shared.';
+      'Θα κοινοποιηθούν μόνο οι πληροφορίες που εμφανίζονται παραπάνω.';
 
   @override
-  String get shareInformationButtonLabel => 'Share information';
+  String get shareInformationButtonLabel => 'Κοινοποίηση πληροφοριών';
 
   @override
-  String get shareAnywayLabel => 'Share anyway';
-
-  @override
-  String get dontShareLabel => 'Don\'t share';
+  String get dontShareLabel => 'Μην κοινοποιήσετε';
 }

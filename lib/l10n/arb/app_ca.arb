@@ -1165,5 +1165,82 @@
       "domain": {}
     }
   },
-  "deleteDigit": "Esborrar"
+  "deleteDigit": "Esborrar",
+  "youAreMissing": "No tens la informació sol·licitada",
+  "dcqlInformationNotAvailable": "Informació no disponible",
+  "dcqlInformationNotAvailableDescription": "No hem pogut trobar tota la informació sol·licitada a la teva cartera.",
+  "dcqlMissingInformation": "Informació que falta",
+  "dcqlCannotContinue": "No pots continuar amb aquesta sol·licitud.",
+  "payload": "Càrrega útil",
+  "keyBindingHeader": "Encapçalament de vinculació de clau",
+  "keyBindingPayload": "Càrrega útil de vinculació de clau",
+  "ebsiV4DecentralizedId": "ID descentralitzada de la v4 d'EBSI",
+  "credentialShareTitle": "Compartir informació",
+  "reject": "Rebutjar",
+  "operation": "Operació",
+  "chooseYourSSIProfileOrCustomizeYourOwn": "Tria el perfil de la teva cartera o personalitza el teu propi",
+  "recoveryPhraseIncorrectErrorMessage": "Torna-ho a provar amb l'ordre correcte.",
+  "invalidCode": "Codi no vàlid",
+  "back": "Enrere",
+  "iaAnalyze": "Les dades es compartiran amb un motor d'IA remot. No comparteixis dades personals.",
+  "iaAnalyzeTitle": "Agent d'IA",
+  "aiPleaseWait": "Aquest processament pot trigar fins a 1 minut",
+  "trustedList": "Utilitza la llista de confiança",
+  "trustedListSubtitle": "Llista d'entitats de confiança de l'ecosistema actual. Se t'avisarà en cas d'interacció amb una entitat no fiable.",
+  "notTrustedEntity": "Aquesta entitat no és a la llista de confiança. Hauries de ser molt prudent amb entitats no fiables.",
+  "acceptanceRequest": "Sol·licitud de pagament",
+  "pay": "compartir i pagar",
+  "greek": "Ελληνικά",
+  "issuerConnectTitle": "Vols connectar amb l'emissor de l'atestació?",
+  "issuerConnectSubtitle": "{issuerName} vol emetre una atestació a la teva cartera.",
+  "@issuerConnectSubtitle": {
+    "description": "Subtitle on the issuer-connect confirmation screen",
+    "placeholders": {
+      "issuerName": {}
+    }
+  },
+  "trustedIssuerLabel": "Emissor de confiança",
+  "issuerNotVerifiedLabel": "Emissor no verificat",
+  "issuerNotVerifiedDescription": "No s'ha pogut verificar la identitat d'aquest emissor.",
+  "onlyContinueIfTrustIssuer": "Continua només si reconeixes i confies en aquest emissor.",
+  "continueLabel": "Continua",
+  "credentialAcceptTitle": "Vols afegir aquesta atestació a la teva cartera?",
+  "issuedByLabel": "Emès per",
+  "informationIncludedLabel": "Informació inclosa",
+  "addToWalletLabel": "Afegeix a la cartera",
+  "addLabel": "Afegeix",
+  "verifierConnectTitle": "Vols connectar amb {verifierName}?",
+  "@verifierConnectTitle": {
+    "description": "Title on the verifier-connect confirmation screen",
+    "placeholders": {
+      "verifierName": {}
+    }
+  },
+  "verifierConnectSubtitle": "{verifierName} vol sol·licitar informació de la teva cartera.",
+  "@verifierConnectSubtitle": {
+    "description": "Subtitle on the verifier-connect confirmation screen",
+    "placeholders": {
+      "verifierName": {}
+    }
+  },
+  "verifiedOrganisationLabel": "Organització verificada",
+  "organisationNotVerifiedLabel": "Organització no verificada",
+  "organisationNotVerifiedDescription": "No s'ha pogut verificar la identitat d'aquesta organització.",
+  "onlyContinueIfTrustOrganisation": "Continua només si reconeixes i confies en aquesta organització.",
+  "purposeLabel": "Finalitat",
+  "shareInformationTitle": "Vols compartir la teva informació?",
+  "shareInformationSubtitle": "{verifierName} sol·licita la següent informació de la teva cartera.",
+  "@shareInformationSubtitle": {
+    "description": "Subtitle on the share-information confirmation screen",
+    "placeholders": {
+      "verifierName": {}
+    }
+  },
+  "onlyShareIfTrustOrganisation": "Comparteix aquesta informació només si reconeixes i confies en aquesta organització.",
+  "informationRequestedLabel": "Informació sol·licitada",
+  "sharedWithLabel": "Compartit amb",
+  "notVerifiedLabel": "No verificat",
+  "onlyInformationShownWillBeShared": "Només es compartirà la informació mostrada a dalt.",
+  "shareInformationButtonLabel": "Compartir informació",
+  "dontShareLabel": "No comparteixis"
 }

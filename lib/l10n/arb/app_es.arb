@@ -1167,5 +1167,82 @@
       "domain": {}
     }
   },
-  "deleteDigit": "Eliminar"
+  "deleteDigit": "Eliminar",
+  "youAreMissing": "No tienes la información solicitada",
+  "dcqlInformationNotAvailable": "Información no disponible",
+  "dcqlInformationNotAvailableDescription": "No hemos podido encontrar toda la información solicitada en tu cartera.",
+  "dcqlMissingInformation": "Información que falta",
+  "dcqlCannotContinue": "No puedes continuar con esta solicitud.",
+  "payload": "Carga útil",
+  "keyBindingHeader": "Encabezado de vinculación de clave",
+  "keyBindingPayload": "Carga útil de vinculación de clave",
+  "ebsiV4DecentralizedId": "Identidad descentralizada de EBSI V4",
+  "credentialShareTitle": "Compartir información",
+  "reject": "Rechazar",
+  "operation": "Operación",
+  "chooseYourSSIProfileOrCustomizeYourOwn": "Elige el perfil de tu cartera o personaliza el tuyo",
+  "recoveryPhraseIncorrectErrorMessage": "Inténtalo de nuevo con el orden correcto.",
+  "invalidCode": "Código no válido",
+  "back": "Atrás",
+  "iaAnalyze": "Los datos se compartirán con un motor de IA remoto. No compartas datos personales.",
+  "iaAnalyzeTitle": "Agente de IA",
+  "aiPleaseWait": "Este procesamiento puede tardar hasta 1 minuto",
+  "trustedList": "Usar lista de confianza",
+  "trustedListSubtitle": "Lista de entidades de confianza del ecosistema actual. Se te avisará en caso de interacción con una entidad no confiable.",
+  "notTrustedEntity": "Esta entidad no está en la lista de confianza. Debes tener mucha precaución con entidades no confiables.",
+  "acceptanceRequest": "Solicitud de pago",
+  "pay": "compartir y pagar",
+  "greek": "Ελληνικά",
+  "issuerConnectTitle": "¿Conectar con el emisor de la credencial?",
+  "issuerConnectSubtitle": "{issuerName} quiere emitir una credencial a tu cartera.",
+  "@issuerConnectSubtitle": {
+    "description": "Subtitle on the issuer-connect confirmation screen",
+    "placeholders": {
+      "issuerName": {}
+    }
+  },
+  "trustedIssuerLabel": "Emisor de confianza",
+  "issuerNotVerifiedLabel": "Emisor no verificado",
+  "issuerNotVerifiedDescription": "No se ha podido verificar la identidad de este emisor.",
+  "onlyContinueIfTrustIssuer": "Continúa solo si reconoces y confías en este emisor.",
+  "continueLabel": "Continuar",
+  "credentialAcceptTitle": "¿Añadir esta credencial a tu cartera?",
+  "issuedByLabel": "Emitido por",
+  "informationIncludedLabel": "Información incluida",
+  "addToWalletLabel": "Añadir a la cartera",
+  "addLabel": "Añadir",
+  "verifierConnectTitle": "¿Conectar con {verifierName}?",
+  "@verifierConnectTitle": {
+    "description": "Title on the verifier-connect confirmation screen",
+    "placeholders": {
+      "verifierName": {}
+    }
+  },
+  "verifierConnectSubtitle": "{verifierName} quiere solicitar información de tu cartera.",
+  "@verifierConnectSubtitle": {
+    "description": "Subtitle on the verifier-connect confirmation screen",
+    "placeholders": {
+      "verifierName": {}
+    }
+  },
+  "verifiedOrganisationLabel": "Organización verificada",
+  "organisationNotVerifiedLabel": "Organización no verificada",
+  "organisationNotVerifiedDescription": "No se ha podido verificar la identidad de esta organización.",
+  "onlyContinueIfTrustOrganisation": "Continúa solo si reconoces y confías en esta organización.",
+  "purposeLabel": "Finalidad",
+  "shareInformationTitle": "¿Quieres compartir tu información?",
+  "shareInformationSubtitle": "{verifierName} está solicitando la siguiente información de tu cartera.",
+  "@shareInformationSubtitle": {
+    "description": "Subtitle on the share-information confirmation screen",
+    "placeholders": {
+      "verifierName": {}
+    }
+  },
+  "onlyShareIfTrustOrganisation": "Comparte esta información solo si reconoces y confías en esta organización.",
+  "informationRequestedLabel": "Información solicitada",
+  "sharedWithLabel": "Compartido con",
+  "notVerifiedLabel": "No verificado",
+  "onlyInformationShownWillBeShared": "Solo se compartirá la información mostrada arriba.",
+  "shareInformationButtonLabel": "Compartir información",
+  "dontShareLabel": "No compartir"
 }
