@@ -1378,17 +1378,29 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       final publicKeyForDPop = generateP256KeyForDPop();
 
       if (oidc4vcParameters.preAuthorizedCode != null) {
+        /// per OIDC4VCI, when the Authorization Server advertises
+        /// `pre-authorized_grant_anonymous_access_supported: true`, the
+        /// wallet must omit client_id from the Token Request and skip
+        /// client authentication at the Token Endpoint. This must not
+        /// apply to the Authorization Code Flow.
+        final isAnonymousPreAuthorizedFlow = oidc4vcParameters
+            .authorizationServerOpenIdConfiguration
+            .preAuthorizedGrantAnonymousAccessSupported;
+
         await addCredentialsInLoop(
           selectedCredentials: selectedCredentials,
           userPin: userPin,
           txCode: txCode,
           codeForAuthorisedFlow: null,
           codeVerifier: null,
-          authorization: authorization,
-          clientId: clientId,
-          clientSecret: clientSecret,
-          oAuthClientAttestation: oAuthClientAttestation,
-          oAuthClientAttestationPop: oAuthClientAttestationPop,
+          authorization: isAnonymousPreAuthorizedFlow ? null : authorization,
+          clientId: isAnonymousPreAuthorizedFlow ? null : clientId,
+          clientSecret: isAnonymousPreAuthorizedFlow ? null : clientSecret,
+          oAuthClientAttestation:
+              isAnonymousPreAuthorizedFlow ? null : oAuthClientAttestation,
+          oAuthClientAttestationPop: isAnonymousPreAuthorizedFlow
+              ? null
+              : oAuthClientAttestationPop,
           publicKeyForDPop: publicKeyForDPop,
           oidc4vcParameters: oidc4vcParameters,
         );
