@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/oidc4vc/model/verifier_trust_info.dart';
+import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/inject_selective_disclosure_state.dart';
@@ -22,6 +24,7 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
     required this.selectedCredential,
     required this.presentationDefinition,
     required this.credentialsToBePresented,
+    this.verifierTrustInfo,
   });
 
   final Uri uri;
@@ -31,6 +34,7 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
   final CredentialModel selectedCredential;
   final PresentationDefinition? presentationDefinition;
   final List<CredentialModel> credentialsToBePresented;
+  final VerifierTrustInfo? verifierTrustInfo;
 
   static Route<dynamic> route({
     required Uri uri,
@@ -40,6 +44,7 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
     required CredentialModel selectedCredential,
     required PresentationDefinition? presentationDefinition,
     required List<CredentialModel> credentialsToBePresented,
+    VerifierTrustInfo? verifierTrustInfo,
   }) {
     return MaterialPageRoute<void>(
       builder: (context) => SelectiveDisclosurePickPage(
@@ -50,6 +55,7 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
         selectedCredential: selectedCredential,
         presentationDefinition: presentationDefinition,
         credentialsToBePresented: credentialsToBePresented,
+        verifierTrustInfo: verifierTrustInfo,
       ),
       settings: const RouteSettings(name: '/SelectiveDisclosurePickPage'),
     );
@@ -67,6 +73,7 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
         selectedCredential: selectedCredential,
         presentationDefinition: presentationDefinition,
         credentialsToBePresented: credentialsToBePresented,
+        verifierTrustInfo: verifierTrustInfo,
       ),
     );
   }
@@ -82,6 +89,7 @@ class SelectiveDisclosurePickView extends StatefulWidget {
     required this.selectedCredential,
     required this.presentationDefinition,
     required this.credentialsToBePresented,
+    this.verifierTrustInfo,
   });
 
   final Uri uri;
@@ -91,6 +99,7 @@ class SelectiveDisclosurePickView extends StatefulWidget {
   final CredentialModel selectedCredential;
   final PresentationDefinition? presentationDefinition;
   final List<CredentialModel> credentialsToBePresented;
+  final VerifierTrustInfo? verifierTrustInfo;
 
   @override
   State<SelectiveDisclosurePickView> createState() =>
@@ -329,6 +338,7 @@ class _SelectiveDisclosurePickViewState
             issuer: widget.issuer,
             inputDescriptorIndex: widget.inputDescriptorIndex + 1,
             credentialsToBePresented: updatedCredentials,
+            verifierTrustInfo: widget.verifierTrustInfo,
           ),
         );
       } else {

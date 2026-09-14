@@ -67,9 +67,7 @@ final ProfileCubitListener = BlocListener<ProfileCubit, ProfileState>(
         .read<ProfileCubit>()
         .oidc4vc;
     // TODO(hawkbee): ScanCubit should be immutable
-    context.read<ScanCubit>().oidc4vc = context
-        .read<ProfileCubit>()
-        .oidc4vc;
+    context.read<ScanCubit>().oidc4vc = context.read<ProfileCubit>().oidc4vc;
   },
 );
 
@@ -241,17 +239,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               .customOidc4vcProfile
               .oidc4vciDraft;
 
-          late OIDC4VC oidc4vc;
-          switch (oidc4vciDraft) {
-            case OIDC4VCIDraftType.draft11:
-            case OIDC4VCIDraftType.draft13:
-            case OIDC4VCIDraftType.draft14:
-            case OIDC4VCIDraftType.draft15:
-              oidc4vc = OIDC4VC();
-            case OIDC4VCIDraftType.draft16:
-            case OIDC4VCIDraftType.final1:
-              oidc4vc = Oidc4vcFinal();
-          }
+          final oidc4vc = Oidc4vciClientFactory.create(oidc4vciDraft);
 
           var acceptHost = true;
           final approvedIssuer = Issuer.emptyIssuer(state.uri!.host);

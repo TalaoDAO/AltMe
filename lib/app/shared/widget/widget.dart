@@ -30,4 +30,5 @@ export 'shimmer_widget.dart';
 export 'spinner.dart';
 export 'tooltip_text.dart';
 export 'transparent_ink_well.dart';
+export 'trust_badge.dart';
 export 'wallet_logo.dart';

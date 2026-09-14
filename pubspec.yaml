@@ -1,8 +1,7 @@
 name: altme
 description: AltMe Flutter App
 resolution: workspace
-
-version: 3.6.0+5700
+version: 3.6.4+5704
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 environment:
@@ -19,7 +18,7 @@ dependencies:
     git:
       url: git@github.com:hawkbee1/bip39.git
       ref: master
-  bloc: ^8.1.2  
+  bloc: ^8.1.2
   cached_network_image: ^3.2.3
   camera: ^0.10.5+2
   confetti: ^0.7.0
@@ -98,10 +97,9 @@ dependencies:
   timezone: ^0.9.2
   url_launcher: ^6.1.11
   visibility_detector: ^0.4.0+2
-  webview_flutter: ^4.2.1
-  webview_flutter_android: ^3.7.1
-  webview_flutter_wkwebview: ^3.4.4
-
+  webview_flutter: ^4.14.1
+  webview_flutter_android: ^4.14.1
+  webview_flutter_wkwebview: ^3.26.1
 dev_dependencies:
   bloc_test: ^9.1.2
   build_runner: ^2.4.11

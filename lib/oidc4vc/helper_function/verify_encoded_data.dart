@@ -12,7 +12,7 @@ Future<VerificationType> verifyEncodedData({
   bool isCachingEnabled = false,
   bool isSdJwtVc = false,
 }) async {
-  final OIDC4VC oidc4vc = OIDC4VC();
+  final oidc4vc = Oidc4vciClientFactory.create(OIDC4VCIDraftType.final1);
 
   var updateJwt = jwt;
 

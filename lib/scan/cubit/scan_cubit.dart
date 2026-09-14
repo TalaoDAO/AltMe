@@ -50,7 +50,7 @@ class ScanCubit extends Cubit<ScanState> {
   final SecureStorageProvider secureStorageProvider;
   final ProfileCubit profileCubit;
   final WalletCubit walletCubit;
-  OIDC4VC oidc4vc;
+  OIDC4VCIClient oidc4vc;
   final JWTDecode jwtDecode;
   final ActivityLogManager activityLogManager;
 
@@ -504,7 +504,7 @@ class ScanCubit extends Cubit<ScanState> {
     required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
     required Issuer issuer,
-    required OIDC4VC oidc4vc,
+    required OIDC4VCIClient oidc4vc,
     required String privateKey,
     required String did,
     required String kid,
@@ -868,7 +868,7 @@ class ScanCubit extends Cubit<ScanState> {
   Future<dynamic> createVpToken({
     required List<CredentialModel> credentialsToBePresented,
     required PresentationDefinition presentationDefinition,
-    required OIDC4VC oidc4vc,
+    required OIDC4VCIClient oidc4vc,
     required String privateKey,
     required String did,
     required String kid,
@@ -968,7 +968,7 @@ class ScanCubit extends Cubit<ScanState> {
 
   Future<String> createIdToken({
     required List<CredentialModel> credentialsToBePresented,
-    required OIDC4VC oidc4vc,
+    required OIDC4VCIClient oidc4vc,
     required String privateKey,
     required String did,
     required String kid,

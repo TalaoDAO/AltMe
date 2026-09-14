@@ -7,7 +7,7 @@ Future<CredentialModel?> generateCryptoAccountOwnershipProof({
   required KeyGenerator keyGenerator,
   required String did,
   required CustomOidc4VcProfile customOidc4vcProfile,
-  required OIDC4VC oidc4vc,
+  required OIDC4VCIClient oidc4vc,
   required Map<String, dynamic> privateKey,
   required ProfileType profileType,
   required VCFormatType vcFormatType,
@@ -279,7 +279,7 @@ Future<CredentialModel?> generateCryptoAccountOwnershipProof({
         // TODO(all): Handle this case.
         throw UnimplementedError();
       case VCFormatType.mdoc:
-        // TODO: Handle this case. pour crypto account ownership proof
+        // TODO(hawkbee): Handle this case. pour crypto account ownership proof
         throw UnimplementedError();
     }
   } catch (e, s) {
@@ -296,7 +296,7 @@ Future<CredentialModel> _createCredential({
   required String vc,
   required CredentialManifest credentialManifest,
   required CustomOidc4VcProfile customOidc4vcProfile,
-  required OIDC4VC oidc4vc,
+  required OIDC4VCIClient oidc4vc,
   required Map<String, dynamic> privateKey,
   required String did,
   required String kid,

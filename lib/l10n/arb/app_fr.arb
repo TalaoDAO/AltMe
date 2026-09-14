@@ -168,7 +168,7 @@
   "signedBy": "Signé par",
   "from": "De",
   "to": "À",
-  "credential": "Attestations digitales",
+  "credential": "Attestations",
   "issuanceDate": "Date d'émission",
   "appContactWebsite": "Site web",
   "trustFrameworkDescription": "Le cadre de confiance repose sur un ensemble de registres fiables qui permettent aux entités du système de se faire confiance et d'interagir ensemble.",

@@ -47,7 +47,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   final AdvanceSettingsCubit advanceSettingsCubit;
   final JWTDecode jwtDecode;
   final ProfileCubit profileCubit;
-  final OIDC4VC oidc4vc;
+  final OIDC4VCIClient oidc4vc;
   final WalletCubit walletCubit;
   final ActivityLogManager activityLogManager;
 

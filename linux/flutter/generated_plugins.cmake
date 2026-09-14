@@ -6,7 +6,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   devicelocale
   file_saver
   file_selector_linux
-  flutter_js
   flutter_secure_storage_linux
   gtk
   open_file_linux

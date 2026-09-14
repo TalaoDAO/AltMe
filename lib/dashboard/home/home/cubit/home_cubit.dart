@@ -30,7 +30,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   final DioClient client;
   final SecureStorageProvider secureStorageProvider;
-  final OIDC4VC oidc4vc;
+  final OIDC4VCIClient oidc4vc;
   final ProfileCubit profileCubit;
   final DIDKitProvider didKitProvider;
 

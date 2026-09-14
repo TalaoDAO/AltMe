@@ -77,7 +77,7 @@ class MockSecureStorageProvider extends Mock implements SecureStorageProvider {}
 
 class MockLangCubit extends MockCubit<LangState> implements LangCubit {}
 
-class MockOIDC4VC extends Mock implements OIDC4VC {}
+class MockOIDC4VC extends Mock implements OIDC4VCIClient {}
 
 class MockActivityLogManager extends Mock implements ActivityLogManager {}
 

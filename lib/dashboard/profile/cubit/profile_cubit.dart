@@ -39,7 +39,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   final SecureStorageProvider secureStorageProvider;
-  OIDC4VC oidc4vc;
+  OIDC4VCIClient oidc4vc;
   final DIDKitProvider didKitProvider;
   final LangCubit langCubit;
   final JWTDecode jwtDecode;
@@ -372,20 +372,13 @@ class ProfileCubit extends Cubit<ProfileState> {
         SecureStorageKeys.profileType,
         profileModel.profileType.toString(),
       );
-      switch (profileModel
-          .profileSetting
-          .selfSovereignIdentityOptions
-          .customOidc4vcProfile
-          .oidc4vciDraft) {
-        case OIDC4VCIDraftType.draft11:
-        case OIDC4VCIDraftType.draft13:
-        case OIDC4VCIDraftType.draft14:
-        case OIDC4VCIDraftType.draft15:
-          break;
-        case OIDC4VCIDraftType.draft16:
-        case OIDC4VCIDraftType.final1:
-          oidc4vc = Oidc4vcFinal();
-      }
+      oidc4vc = Oidc4vciClientFactory.create(
+        profileModel
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile
+            .oidc4vciDraft,
+      );
       emit(
         state.copyWith(
           model: profileModel,

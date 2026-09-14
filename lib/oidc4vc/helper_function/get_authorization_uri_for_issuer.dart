@@ -68,7 +68,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
         oAuthClientAttestation: oAuthClientAttestation,
       );
     case ClientAuthentication.wia:
-      // TODO: Handle this case. Important ?
+      // TODO(hawkbee): Handle this case. Important ?
       throw UnimplementedError();
   }
 
