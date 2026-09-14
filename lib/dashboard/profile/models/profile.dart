@@ -164,7 +164,7 @@ class ProfileModel extends Equatable {
           clientAuthentication: ClientAuthentication.clientId,
           credentialManifestSupport: true,
           cryptoHolderBinding: true,
-          defaultDid: DidKeyType.p256,
+          defaultDid: DidKeyType.jwkP256,
           oidc4vciDraft: OIDC4VCIDraftType.final1,
           oidc4vpDraft: OIDC4VPDraftType.final1,
           scope: true,
@@ -178,6 +178,7 @@ class ProfileModel extends Equatable {
 
           /// pas ldp_vc
           proofType: ProofType.jwt,
+          pushAuthorizationRequest: true,
           formatsSupported: const [
             VCFormatType.jwtVcJson,
             VCFormatType.jwtVcJsonLd,

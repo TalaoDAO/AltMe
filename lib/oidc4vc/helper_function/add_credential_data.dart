@@ -2,13 +2,19 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 
+import 'package:altme/oidc4vc/model/credential_acceptance_data.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
-Future<void> addCredentialData({
+/// Builds a [CredentialAcceptanceItem] for every fetched, non-deferred token
+/// in [encodedCredentialOrFutureTokens] - a token that fails to decode is
+/// skipped rather than aborting the others. Deferred/pending tokens are
+/// still inserted immediately as placeholder cards, since there's nothing
+/// to review yet.
+Future<List<CredentialAcceptanceItem>> addCredentialData({
   required List<dynamic> encodedCredentialOrFutureTokens,
   required String accessToken,
   required String? deferredCredentialEndpoint,
@@ -19,11 +25,12 @@ Future<void> addCredentialData({
   required String scannedResponse,
   required dynamic credential,
   required String issuer,
-  required bool isLastCall,
   required JWTDecode jwtDecode,
   required QRCodeScanCubit qrCodeScanCubit,
 }) async {
   final profileModel = credentialsCubit.profileCubit.state.model;
+  final items = <CredentialAcceptanceItem>[];
+
   for (int i = 0; i < encodedCredentialOrFutureTokens.length; i++) {
     final data = encodedCredentialOrFutureTokens[i];
     final String credentialName = getCredentialData(credential);
@@ -85,27 +92,30 @@ Future<void> addCredentialData({
         ),
         profileLinkedId: profileModel.profileType.getVCId,
       );
-      // insert the credential in the wallet
+      // insert the pending placeholder immediately - nothing to review yet
       await credentialsCubit.insertCredential(
         credential: credentialModel,
-        showMessage:
-            isLastCall && i + 1 == encodedCredentialOrFutureTokens.length,
+        showMessage: false,
         isPendingCredential: true,
         uri: Uri.parse(issuer),
       );
     } else {
-      await addOIDC4VCCredential(
-        encodedCredentialFromOIDC4VC: data,
-        credentialsCubit: credentialsCubit,
-        issuer: issuer,
-        credentialType: credentialName,
-        isLastCall:
-            isLastCall && i + 1 == encodedCredentialOrFutureTokens.length,
-        format: format,
-        openIdConfiguration: openIdConfiguration,
-        jwtDecode: jwtDecode,
-        qrCodeScanCubit: qrCodeScanCubit,
-      );
+      try {
+        final item = await buildCredentialAcceptanceItem(
+          encodedCredentialFromOIDC4VC: data,
+          credentialsCubit: credentialsCubit,
+          credentialType: credentialName,
+          format: format,
+          openIdConfiguration: openIdConfiguration,
+          jwtDecode: jwtDecode,
+        );
+        items.add(item);
+      } catch (_) {
+        // skip credentials that fail to fetch/decode rather than blocking
+        // the others
+      }
     }
   }
+
+  return items;
 }

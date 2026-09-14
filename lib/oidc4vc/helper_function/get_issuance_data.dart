@@ -10,7 +10,7 @@ import 'package:oidc4vc/oidc4vc.dart';
 Future<Oidc4vcParameters> getIssuanceData({
   required String url,
   required DioClient client,
-  required OIDC4VC oidc4vc,
+  required OIDC4VCIClient oidc4vc,
   required OIDC4VCIDraftType oidc4vciDraftType,
   required bool useOAuthAuthorizationServerLink,
 }) async {
