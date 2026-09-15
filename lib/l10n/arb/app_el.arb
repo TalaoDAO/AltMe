@@ -2081,5 +2081,68 @@
   "trustedListSubtitle": "Λίστα αξιόπιστων",
   "notTrustedEntity": "Μη αξιόπιστη οντότητα",
   "acceptanceRequest": "Αίτημα αποδοχής",
-  "pay": "Πληρωμή"
+  "pay": "Πληρωμή",
+  "youAreMissing": "Δεν έχετε τις πληροφορίες που ζητήθηκαν",
+  "dcqlInformationNotAvailable": "Οι πληροφορίες δεν είναι διαθέσιμες",
+  "dcqlInformationNotAvailableDescription": "Δεν μπορέσαμε να βρούμε όλες τις πληροφορίες που ζητήθηκαν στο πορτοφόλι σας.",
+  "dcqlMissingInformation": "Λείπουν πληροφορίες",
+  "dcqlCannotContinue": "Δεν μπορείτε να συνεχίσετε με αυτό το αίτημα.",
+  "french": "Français",
+  "spanish": "Español",
+  "catalan": "Català",
+  "english": "English",
+  "credentialShareTitle": "Κοινοποίηση πληροφοριών",
+  "greek": "Ελληνικά",
+  "issuerConnectTitle": "Σύνδεση με τον εκδότη πιστοποιητικού;",
+  "issuerConnectSubtitle": "Ο {issuerName} θέλει να εκδώσει ένα πιστοποιητικό στο πορτοφόλι σας.",
+  "@issuerConnectSubtitle": {
+    "description": "Subtitle on the issuer-connect confirmation screen",
+    "placeholders": {
+      "issuerName": {}
+    }
+  },
+  "trustedIssuerLabel": "Αξιόπιστος εκδότης",
+  "issuerNotVerifiedLabel": "Μη επαληθευμένος εκδότης",
+  "issuerNotVerifiedDescription": "Δεν ήταν δυνατή η επαλήθευση της ταυτότητας αυτού του εκδότη.",
+  "onlyContinueIfTrustIssuer": "Συνεχίστε μόνο αν αναγνωρίζετε και εμπιστεύεστε αυτόν τον εκδότη.",
+  "continueLabel": "Συνέχεια",
+  "credentialAcceptTitle": "Προσθήκη πιστοποιητικού στο πορτοφόλι σας;",
+  "issuedByLabel": "Εκδόθηκε από",
+  "informationIncludedLabel": "Πληροφορίες που περιλαμβάνονται",
+  "addToWalletLabel": "Προσθήκη στο πορτοφόλι",
+  "addLabel": "Προσθήκη",
+  "verifierConnectTitle": "Σύνδεση με τον {verifierName};",
+  "@verifierConnectTitle": {
+    "description": "Title on the verifier-connect confirmation screen",
+    "placeholders": {
+      "verifierName": {}
+    }
+  },
+  "verifierConnectSubtitle": "Ο {verifierName} θέλει να ζητήσει πληροφορίες από το πορτοφόλι σας.",
+  "@verifierConnectSubtitle": {
+    "description": "Subtitle on the verifier-connect confirmation screen",
+    "placeholders": {
+      "verifierName": {}
+    }
+  },
+  "verifiedOrganisationLabel": "Επαληθευμένος οργανισμός",
+  "organisationNotVerifiedLabel": "Μη επαληθευμένος οργανισμός",
+  "organisationNotVerifiedDescription": "Δεν ήταν δυνατή η επαλήθευση της ταυτότητας αυτού του οργανισμού.",
+  "onlyContinueIfTrustOrganisation": "Συνεχίστε μόνο αν αναγνωρίζετε και εμπιστεύεστε αυτόν τον οργανισμό.",
+  "purposeLabel": "Σκοπός",
+  "shareInformationTitle": "Θέλετε να μοιραστείτε τις πληροφορίες σας;",
+  "shareInformationSubtitle": "Ο {verifierName} ζητά τις παρακάτω πληροφορίες από το πορτοφόλι σας.",
+  "@shareInformationSubtitle": {
+    "description": "Subtitle on the share-information confirmation screen",
+    "placeholders": {
+      "verifierName": {}
+    }
+  },
+  "onlyShareIfTrustOrganisation": "Μοιραστείτε αυτές τις πληροφορίες μόνο αν αναγνωρίζετε και εμπιστεύεστε αυτόν τον οργανισμό.",
+  "informationRequestedLabel": "Πληροφορίες που ζητήθηκαν",
+  "sharedWithLabel": "Κοινοποιήθηκε με",
+  "notVerifiedLabel": "Μη επαληθευμένο",
+  "onlyInformationShownWillBeShared": "Θα κοινοποιηθούν μόνο οι πληροφορίες που εμφανίζονται παραπάνω.",
+  "shareInformationButtonLabel": "Κοινοποίηση πληροφοριών",
+  "dontShareLabel": "Μην κοινοποιήσετε"
 }

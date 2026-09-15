@@ -1850,6 +1850,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
     required _i9.VCFormatType? vcFormatType,
     required Map<String, dynamic>? credentialDefinition,
     required String? vct,
+    required String? credentialIdentifier,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#buildCredentialRequestBody, [], {
@@ -1860,6 +1861,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #vcFormatType: vcFormatType,
               #credentialDefinition: credentialDefinition,
               #vct: vct,
+              #credentialIdentifier: credentialIdentifier,
             }),
             returnValue: <String, dynamic>{},
           )

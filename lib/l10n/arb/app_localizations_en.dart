@@ -3460,8 +3460,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shareInformationButtonLabel => 'Share information';
 
   @override
-  String get shareAnywayLabel => 'Share anyway';
-
-  @override
   String get dontShareLabel => 'Don\'t share';
 }
