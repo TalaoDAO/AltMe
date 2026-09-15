@@ -42,7 +42,6 @@ Future<(List<dynamic>?, String?, String?)?> getCredential({
       .customOidc4vcProfile;
 
   var nonce = cnonce;
-  print('nonce: $nonce');
 
   final (
     credentialType,
@@ -68,6 +67,48 @@ Future<(List<dynamic>?, String?, String?)?> getCredential({
     clientId: clientId ?? '',
   );
 
+  /// OIDC4VCI draft >= 14 (including final1) never returns a c_nonce from
+  /// the token endpoint: a fresh nonce has to be obtained from the nonce
+  /// endpoint for every single Credential Request. Reusing one nonce across
+  /// several credential_identifier requests for the same
+  /// credential_configuration_id gets every request but the first rejected
+  /// by the issuer as a nonce replay.
+  Future<String> fetchFreshNonce() async {
+    late String nonceEndpoint;
+    if (oidc4vcParameters.nonceEndpoint.isNotEmpty) {
+      nonceEndpoint = oidc4vcParameters.nonceEndpoint;
+    } else if (oidc4vcParameters.issuerOpenIdConfiguration.nonceEndpoint !=
+        null) {
+      nonceEndpoint =
+          oidc4vcParameters.issuerOpenIdConfiguration.nonceEndpoint!;
+    } else {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description':
+              'Nonce endpoint is not provided in the issuer OpenID '
+              'configuration.',
+        },
+      );
+    }
+
+    final freshNonce = await profileCubit.oidc4vc.getNonceReponse(
+      dio: Dio(),
+      nonceEndpoint: nonceEndpoint,
+    );
+
+    if (freshNonce == null) {
+      throw ResponseMessage(
+        data: {
+          'error': 'invalid_request',
+          'error_description': 'c_nonce is not avaiable.',
+        },
+      );
+    }
+
+    return freshNonce;
+  }
+
   /// Builds the Credential Request for a single credential_identifier (or
   /// none, when the Token Response did not return any for this credential)
   /// and sends it. Returns false when the developer-mode preview was
@@ -75,6 +116,10 @@ Future<(List<dynamic>?, String?, String?)?> getCredential({
   Future<bool> sendCredentialRequest({
     required String? credentialIdentifier,
   }) async {
+    if (oidc4vcParameters.oidc4vciDraftType.getNonce) {
+      nonce = await fetchFreshNonce();
+    }
+
     final credentialData = await profileCubit.oidc4vc.buildCredentialData(
       nonce: nonce,
       issuerTokenParameters: issuerTokenParameters,
@@ -126,7 +171,6 @@ Future<(List<dynamic>?, String?, String?)?> getCredential({
         nonce = credentialResponseDataValue['c_nonce'].toString();
       }
     }
-  print('nonce_update: $nonce');
 
     credentialResponseData.add(credentialResponseDataValue);
     return true;
