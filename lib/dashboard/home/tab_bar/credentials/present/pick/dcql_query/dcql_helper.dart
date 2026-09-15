@@ -4,6 +4,28 @@ import 'package:dcql/dcql.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:selective_disclosure_jwt/selective_disclosure_jwt.dart';
 
+// A single DCQL credential query can match several wallet credentials of
+// the same type (e.g. the user holds more than one instance of the
+// requested vct). Only one is ever presented, so trim every match list
+// down to its first entry before it reaches the UI or the vp_token builder.
+DcqlQueryResult keepFirstMatchPerCredential(DcqlQueryResult result) {
+  final trimmedVerifiableCredentials = {
+    for (final entry in result.verifiableCredentials.entries)
+      entry.key: entry.value.take(1),
+  };
+
+  return DcqlQueryResult(
+    query: result.query,
+    verifiableCredentials: trimmedVerifiableCredentials,
+    satisfiedClaimsByCredential: result.satisfiedClaimsByCredential,
+    unsatisfiedClaimsByCredential: result.unsatisfiedClaimsByCredential,
+    unsatisfiedQueryCredentialSets: result.unsatisfiedQueryCredentialSets,
+    satisfiedMeta: result.satisfiedMeta,
+    unsatisfiedMeta: result.unsatisfiedMeta,
+    matchedCredentialSets: result.matchedCredentialSets,
+  );
+}
+
 // Map the DCQL-matched DigitalCredential objects back to your original
 // candidate (which still has the raw jwt string), using identity equality
 // — same trick you already use.

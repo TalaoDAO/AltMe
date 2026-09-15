@@ -142,7 +142,9 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
           // whole screen
         }
       }
-      final result = query.query(packageFormatCredentials);
+      final result = keepFirstMatchPerCredential(
+        query.query(packageFormatCredentials),
+      );
 
       if (!result.fulfilled) {
         return _DcqlQueryFailureView(
