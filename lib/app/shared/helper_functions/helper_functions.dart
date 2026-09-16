@@ -1406,10 +1406,16 @@ String getUpdatedUrlForSIOPV2OIC4VP({
 // authorization,
 // oAuthClientAttestation,
 // oAuthClientAttestationPop
+///
+/// [attestationProvider] supplies the client attestation pair. It defaults to
+/// [LegacyWalletAttestationProvider], the enterprise wallet provider's scheme,
+/// so existing callers behave exactly as before; a wallet whose provider uses
+/// another scheme passes its own.
 Future<(String?, String?, String?, String?, String?)> getClientDetails({
   required ProfileCubit profileCubit,
   required bool isEBSI,
   required String issuer,
+  WalletAttestationProvider? attestationProvider,
 }) async {
   try {
     String? clientId;
@@ -1449,6 +1455,15 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
       proofHeaderType: customOidc4vcProfile.proofHeader,
       clientId: '', // just added as it is required field
     );
+
+    final provider =
+        attestationProvider ??
+        LegacyWalletAttestationProvider(
+          secureStorageProvider: profileCubit.secureStorageProvider,
+          walletType: profileCubit.state.model.walletType,
+          did: did,
+          tokenParameters: tokenParameters,
+        );
 
     switch (customOidc4vcProfile.clientAuthentication) {
       ///  none
@@ -1491,39 +1506,14 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
         clientSecret = customOidc4vcProfile.clientSecret;
 
       case ClientAuthentication.clientSecretJwt:
-        if (profileCubit.state.model.walletType != WalletType.enterprise) {
-          throw ResponseMessage(
-            data: {
-              'error': 'invalid_request',
-              'error_description': 'Please switch to enterprise account',
-            },
-          );
-        }
-
-        final walletAttestationData = await profileCubit.secureStorageProvider
-            .get(SecureStorageKeys.walletAttestationData);
-
         clientId = did;
 
-        final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-        final nbf = iat - 10;
-
-        final payload = {
-          'iss': clientId,
-          'aud': issuer,
-          'nbf': nbf,
-          'exp': nbf + 60,
-          'jti': const Uuid().v4(),
-        };
-
-        final jwtProofOfPossession = generateToken(
-          payload: payload,
-          tokenParameters: tokenParameters,
-          ignoreProofHeaderType: true,
+        final attestation = await provider.attestationFor(
+          credentialIssuer: issuer,
         );
 
-        oAuthClientAttestation = walletAttestationData;
-        oAuthClientAttestationPop = jwtProofOfPossession;
+        oAuthClientAttestation = attestation?.attestation;
+        oAuthClientAttestationPop = attestation?.proofOfPossession;
       case ClientAuthentication.wia:
         // TODO(hawkbee): Handle this case.getClientDetails
         throw UnimplementedError();
