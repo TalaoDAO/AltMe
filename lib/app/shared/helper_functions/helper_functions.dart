@@ -930,7 +930,13 @@ Future<String> getHost({required Uri uri, required DioClient client}) async {
 
     /// check if request uri is provided or not
     if (requestUri != null) {
-      final dynamic response = await client.get(requestUri);
+      final String? requestUriMethod =
+          uri.queryParameters['request_uri_method'];
+      final dynamic response = await fetchRequestUriPayload(
+        url: requestUri,
+        client: client,
+        requestUriMethod: requestUriMethod,
+      );
       final Map<String, dynamic> decodedResponse = JWTDecode().decodePayload(
         token: response as String,
       );
@@ -1287,12 +1293,36 @@ String getSchemeFromUrl(String url) {
 Future<dynamic> fetchRequestUriPayload({
   required String url,
   required DioClient client,
+  String? requestUriMethod,
+  Map<String, dynamic>? walletMetadata,
 }) async {
   final log = getLogger('QRCodeScanCubit - fetchRequestUriPayload');
   late final dynamic data;
 
   try {
-    final dynamic response = await client.get(url);
+    final dynamic response;
+
+    /// OpenID4VP 1.0 request_uri_method=post (section 5.10): fetch the
+    /// Request Object with a POST carrying a fresh wallet_nonce instead of
+    /// the RFC9101 default GET.
+    if (requestUriMethod == 'post') {
+      response = await client.post(
+        url,
+        data: <String, dynamic>{
+          'wallet_nonce': generateWalletNonce(),
+          if (walletMetadata != null)
+            'wallet_metadata': jsonEncode(walletMetadata),
+        },
+        options: Options(
+          contentType: Headers.formUrlEncodedContentType,
+          headers: const <String, dynamic>{
+            'Accept': 'application/oauth-authz-req+jwt',
+          },
+        ),
+      );
+    } else {
+      response = await client.get(url);
+    }
     data = response.toString();
   } catch (e, s) {
     log.e(

@@ -37,8 +37,27 @@ Future<void> oidc4vpSiopV2AcceptHost({
   Map<String, dynamic>? response;
   Map<String, dynamic>? jwtHeader;
 
+  // request_uri_method=post is an OpenID4VP 1.0-only capability.
+  final isOidc4vpFinal1 =
+      context
+          .read<ProfileCubit>()
+          .state
+          .model
+          .profileSetting
+          .selfSovereignIdentityOptions
+          .customOidc4vcProfile
+          .oidc4vpDraft ==
+      OIDC4VPDraftType.final1;
+
   if (requestUri != null || request != null) {
-    encodedData = await getPayload(client, requestUri, request);
+    encodedData = await getPayload(
+      client,
+      requestUri,
+      request,
+      requestUriMethod: isOidc4vpFinal1
+          ? uri.queryParameters['request_uri_method']
+          : null,
+    );
     response = JWTDecode().decodePayload(token: encodedData as String);
     jwtHeader = JWTDecode().decodeHeader(token: encodedData);
   }
@@ -152,17 +171,6 @@ Future<void> oidc4vpSiopV2AcceptHost({
         );
         trustedList = profile.trustedList;
       }
-
-      final isOidc4vpFinal1 =
-          context
-              .read<ProfileCubit>()
-              .state
-              .model
-              .profileSetting
-              .selfSovereignIdentityOptions
-              .customOidc4vcProfile
-              .oidc4vpDraft ==
-          OIDC4VPDraftType.final1;
 
       // OIDC4VP final-1.0 has no domain to reliably match the verifier by
       // (client_id may be a DID or an x509 hash rather than a URL), so

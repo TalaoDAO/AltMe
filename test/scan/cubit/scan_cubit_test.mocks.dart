@@ -1972,13 +1972,22 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
           as ({Map<String, dynamic>? body, Map<String, dynamic> headers}));
 
   @override
-  _i16.Future<String> getDcqlQueryFromUri({required Uri? uri}) =>
+  _i16.Future<String> getDcqlQueryFromUri({
+    required Uri? uri,
+    Map<String, dynamic>? walletMetadata,
+  }) =>
       (super.noSuchMethod(
-            Invocation.method(#getDcqlQueryFromUri, [], {#uri: uri}),
+            Invocation.method(#getDcqlQueryFromUri, [], {
+              #uri: uri,
+              #walletMetadata: walletMetadata,
+            }),
             returnValue: _i16.Future<String>.value(
               _i18.dummyValue<String>(
                 this,
-                Invocation.method(#getDcqlQueryFromUri, [], {#uri: uri}),
+                Invocation.method(#getDcqlQueryFromUri, [], {
+                  #uri: uri,
+                  #walletMetadata: walletMetadata,
+                }),
               ),
             ),
           )

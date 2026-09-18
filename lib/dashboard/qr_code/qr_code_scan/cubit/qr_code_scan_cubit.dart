@@ -668,12 +668,26 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     if (requestUri != null || request != null) {
       late dynamic encodedData;
 
+      // request_uri_method=post is an OpenID4VP 1.0-only capability.
+      final isFinal1 =
+          profileCubit
+              .state
+              .model
+              .profileSetting
+              .selfSovereignIdentityOptions
+              .customOidc4vcProfile
+              .oidc4vpDraft ==
+          OIDC4VPDraftType.final1;
+
       if (request != null) {
         encodedData = request;
       } else if (requestUri != null) {
         encodedData = await fetchRequestUriPayload(
           url: requestUri,
           client: client,
+          requestUriMethod: isFinal1
+              ? oldUri.queryParameters['request_uri_method']
+              : null,
         );
       }
 
@@ -1052,15 +1066,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   Future<void> verifyJWTBeforeLaunchingOIDC4VPANDSIOPV2Flow() async {
     final String? requestUri = state.uri?.queryParameters['request_uri'];
     final String? request = state.uri?.queryParameters['request'];
-    late dynamic encodedData;
-    if (request != null) {
-      encodedData = request;
-    } else if (requestUri != null) {
-      encodedData = await fetchRequestUriPayload(
-        url: requestUri,
-        client: client,
-      );
-    }
+
     final customOidc4vcProfile = profileCubit
         .state
         .model
@@ -1074,6 +1080,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     /// enforced regardless of the securityLevel setting.
     final isFinal1 =
         customOidc4vcProfile.oidc4vpDraft == OIDC4VPDraftType.final1;
+
+    late dynamic encodedData;
+    if (request != null) {
+      encodedData = request;
+    } else if (requestUri != null) {
+      encodedData = await fetchRequestUriPayload(
+        url: requestUri,
+        client: client,
+        requestUriMethod: isFinal1
+            ? state.uri?.queryParameters['request_uri_method']
+            : null,
+      );
+    }
 
     if (!isSecurityEnabled && !isFinal1) {
       emit(state.acceptHost());
