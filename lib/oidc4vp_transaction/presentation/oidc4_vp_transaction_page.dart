@@ -5,6 +5,7 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/drawer/blockchain_settings/manage_accounts/cubit/manage_accounts_cubit.dart';
 import 'package:altme/dashboard/drawer/blockchain_settings/manage_network/cubit/manage_network_cubit.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/selective_disclosure/cubit/selective_disclosure_pick_cubit.dart';
+import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vp_transaction/presentation/cubit/transaction_data_cubit.dart';
 import 'package:altme/oidc4vp_transaction/presentation/transaction_presentation.dart';
@@ -143,7 +144,11 @@ class DisplayEntity extends StatelessWidget {
     if (!trustedListEnabled) {
       final l10n = context.l10n;
       return FutureBuilder<String>(
-        future: host,
+        future: getHost(
+          uri: uri,
+          client: client,
+          oidc4vc: context.read<QRCodeScanCubit>().oidc4vc,
+        ),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData) {
@@ -166,9 +171,5 @@ class DisplayEntity extends StatelessWidget {
         child: Text(notTrustedText),
       );
     }
-  }
-
-  Future<String> get host async {
-    return getHost(uri: uri, client: client);
   }
 }

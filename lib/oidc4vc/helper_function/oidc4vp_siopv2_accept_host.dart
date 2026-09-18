@@ -37,26 +37,16 @@ Future<void> oidc4vpSiopV2AcceptHost({
   Map<String, dynamic>? response;
   Map<String, dynamic>? jwtHeader;
 
-  // request_uri_method=post is an OpenID4VP 1.0-only capability.
-  final isOidc4vpFinal1 =
-      context
-          .read<ProfileCubit>()
-          .state
-          .model
-          .profileSetting
-          .selfSovereignIdentityOptions
-          .customOidc4vcProfile
-          .oidc4vpDraft ==
-      OIDC4VPDraftType.final1;
+  final oidc4vc = context.read<QRCodeScanCubit>().oidc4vc;
+  final isOidc4vpFinal1 = oidc4vc is Oidc4vciClientFinal;
 
   if (requestUri != null || request != null) {
     encodedData = await getPayload(
       client,
+      oidc4vc,
       requestUri,
       request,
-      requestUriMethod: isOidc4vpFinal1
-          ? uri.queryParameters['request_uri_method']
-          : null,
+      requestUriMethod: uri.queryParameters['request_uri_method'],
     );
     response = JWTDecode().decodePayload(token: encodedData as String);
     jwtHeader = JWTDecode().decodeHeader(token: encodedData);

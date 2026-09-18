@@ -668,26 +668,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     if (requestUri != null || request != null) {
       late dynamic encodedData;
 
-      // request_uri_method=post is an OpenID4VP 1.0-only capability.
-      final isFinal1 =
-          profileCubit
-              .state
-              .model
-              .profileSetting
-              .selfSovereignIdentityOptions
-              .customOidc4vcProfile
-              .oidc4vpDraft ==
-          OIDC4VPDraftType.final1;
-
       if (request != null) {
         encodedData = request;
       } else if (requestUri != null) {
         encodedData = await fetchRequestUriPayload(
           url: requestUri,
           client: client,
-          requestUriMethod: isFinal1
-              ? oldUri.queryParameters['request_uri_method']
-              : null,
+          oidc4vc: oidc4vc,
+          requestUriMethod: oldUri.queryParameters['request_uri_method'],
         );
       }
 
@@ -1088,9 +1076,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       encodedData = await fetchRequestUriPayload(
         url: requestUri,
         client: client,
-        requestUriMethod: isFinal1
-            ? state.uri?.queryParameters['request_uri_method']
-            : null,
+        oidc4vc: oidc4vc,
+        requestUriMethod: state.uri?.queryParameters['request_uri_method'],
       );
     }
 
@@ -2016,7 +2003,7 @@ ${state.uri}
         profileLinkedId: profileCubit.state.model.profileType.getVCId,
       );
 
-      final host = await getHost(uri: uri, client: client);
+      final host = await getHost(uri: uri, client: client, oidc4vc: oidc4vc);
 
       return (credentialPreview, host);
     } else if (!keys.contains('presentation_definition') &&
@@ -2114,7 +2101,7 @@ ${state.uri}
       profileLinkedId: profileCubit.state.model.profileType.getVCId,
     );
 
-    final host = await getHost(uri: uri, client: client);
+    final host = await getHost(uri: uri, client: client, oidc4vc: oidc4vc);
 
     return (credentialPreview, host);
   }

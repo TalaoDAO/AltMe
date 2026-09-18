@@ -891,7 +891,11 @@ String getCredentialData(dynamic credential) {
   return cred;
 }
 
-Future<String> getHost({required Uri uri, required DioClient client}) async {
+Future<String> getHost({
+  required Uri uri,
+  required DioClient client,
+  required OIDC4VCIClient oidc4vc,
+}) async {
   final keys = <String>[];
   uri.queryParameters.forEach((key, value) => keys.add(key));
 
@@ -935,6 +939,7 @@ Future<String> getHost({required Uri uri, required DioClient client}) async {
       final dynamic response = await fetchRequestUriPayload(
         url: requestUri,
         client: client,
+        oidc4vc: oidc4vc,
         requestUriMethod: requestUriMethod,
       );
       final Map<String, dynamic> decodedResponse = JWTDecode().decodePayload(
@@ -1293,6 +1298,7 @@ String getSchemeFromUrl(String url) {
 Future<dynamic> fetchRequestUriPayload({
   required String url,
   required DioClient client,
+  required OIDC4VCIClient oidc4vc,
   String? requestUriMethod,
   Map<String, dynamic>? walletMetadata,
 }) async {
@@ -1300,30 +1306,15 @@ Future<dynamic> fetchRequestUriPayload({
   late final dynamic data;
 
   try {
-    final dynamic response;
-
-    /// OpenID4VP 1.0 request_uri_method=post (section 5.10): fetch the
-    /// Request Object with a POST carrying a fresh wallet_nonce instead of
-    /// the RFC9101 default GET.
-    if (requestUriMethod == 'post') {
-      response = await client.post(
-        url,
-        data: <String, dynamic>{
-          'wallet_nonce': generateWalletNonce(),
-          if (walletMetadata != null)
-            'wallet_metadata': jsonEncode(walletMetadata),
-        },
-        options: Options(
-          contentType: Headers.formUrlEncodedContentType,
-          headers: const <String, dynamic>{
-            'Accept': 'application/oauth-authz-req+jwt',
-          },
-        ),
-      );
-    } else {
-      response = await client.get(url);
-    }
-    data = response.toString();
+    /// GET vs. POST (OpenID4VP 1.0 request_uri_method=post, section 5.10)
+    /// is decided by [oidc4vc]: only the OIDC4VP final-1.0 client honors
+    /// `post`, every earlier generation keeps the RFC9101 default GET.
+    data = await oidc4vc.fetchRequestObject(
+      requestUri: url,
+      dio: client.dio,
+      requestUriMethod: requestUriMethod,
+      walletMetadata: walletMetadata,
+    );
   } catch (e, s) {
     log.e(
       'An error occurred while connecting to the server.',

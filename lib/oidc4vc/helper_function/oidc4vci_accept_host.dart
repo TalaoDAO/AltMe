@@ -198,6 +198,7 @@ Future<void> oidc4vciAcceptHost({
     final fallbackHost = await getHost(
       uri: updatedOidc4vcParameters.initialUri,
       client: client,
+      oidc4vc: context.read<QRCodeScanCubit>().oidc4vc,
     );
 
     final issuerDisplay = resolveIssuerDisplay(
