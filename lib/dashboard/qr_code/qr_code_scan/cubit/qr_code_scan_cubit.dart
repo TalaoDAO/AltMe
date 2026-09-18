@@ -1402,8 +1402,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           authorization: isAnonymousPreAuthorizedFlow ? null : authorization,
           clientId: isAnonymousPreAuthorizedFlow ? null : clientId,
           clientSecret: isAnonymousPreAuthorizedFlow ? null : clientSecret,
-          oAuthClientAttestation:
-              isAnonymousPreAuthorizedFlow ? null : oAuthClientAttestation,
+          oAuthClientAttestation: isAnonymousPreAuthorizedFlow
+              ? null
+              : oAuthClientAttestation,
           oAuthClientAttestationPop: isAnonymousPreAuthorizedFlow
               ? null
               : oAuthClientAttestationPop,
