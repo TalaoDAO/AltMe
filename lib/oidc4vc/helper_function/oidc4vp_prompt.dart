@@ -38,7 +38,11 @@ class Oidc4VpPrompt {
     late bool promptResult;
 
     if (showPrompt || trustedListEnabled) {
-      final fallbackHost = await getHost(uri: uri, client: client);
+      final fallbackHost = await getHost(
+        uri: uri,
+        client: client,
+        oidc4vc: context.read<QRCodeScanCubit>().oidc4vc,
+      );
       final verifierDisplay = resolveVerifierDisplay(
         jwtHeader: jwtHeader,
         trustedEntity: trustedEntity,

@@ -891,7 +891,11 @@ String getCredentialData(dynamic credential) {
   return cred;
 }
 
-Future<String> getHost({required Uri uri, required DioClient client}) async {
+Future<String> getHost({
+  required Uri uri,
+  required DioClient client,
+  required OIDC4VCIClient oidc4vc,
+}) async {
   final keys = <String>[];
   uri.queryParameters.forEach((key, value) => keys.add(key));
 
@@ -930,7 +934,14 @@ Future<String> getHost({required Uri uri, required DioClient client}) async {
 
     /// check if request uri is provided or not
     if (requestUri != null) {
-      final dynamic response = await client.get(requestUri);
+      final String? requestUriMethod =
+          uri.queryParameters['request_uri_method'];
+      final dynamic response = await fetchRequestUriPayload(
+        url: requestUri,
+        client: client,
+        oidc4vc: oidc4vc,
+        requestUriMethod: requestUriMethod,
+      );
       final Map<String, dynamic> decodedResponse = JWTDecode().decodePayload(
         token: response as String,
       );
@@ -1287,13 +1298,23 @@ String getSchemeFromUrl(String url) {
 Future<dynamic> fetchRequestUriPayload({
   required String url,
   required DioClient client,
+  required OIDC4VCIClient oidc4vc,
+  String? requestUriMethod,
+  Map<String, dynamic>? walletMetadata,
 }) async {
   final log = getLogger('QRCodeScanCubit - fetchRequestUriPayload');
   late final dynamic data;
 
   try {
-    final dynamic response = await client.get(url);
-    data = response.toString();
+    /// GET vs. POST (OpenID4VP 1.0 request_uri_method=post, section 5.10)
+    /// is decided by [oidc4vc]: only the OIDC4VP final-1.0 client honors
+    /// `post`, every earlier generation keeps the RFC9101 default GET.
+    data = await oidc4vc.fetchRequestObject(
+      requestUri: url,
+      dio: client.dio,
+      requestUriMethod: requestUriMethod,
+      walletMetadata: walletMetadata,
+    );
   } catch (e, s) {
     log.e(
       'An error occurred while connecting to the server.',

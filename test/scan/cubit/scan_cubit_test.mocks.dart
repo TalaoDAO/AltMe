@@ -1968,13 +1968,50 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
           as ({Map<String, dynamic>? body, Map<String, dynamic> headers}));
 
   @override
-  _i16.Future<String> getDcqlQueryFromUri({required Uri? uri}) =>
+  _i16.Future<String> getDcqlQueryFromUri({
+    required Uri? uri,
+    Map<String, dynamic>? walletMetadata,
+  }) =>
       (super.noSuchMethod(
-            Invocation.method(#getDcqlQueryFromUri, [], {#uri: uri}),
+            Invocation.method(#getDcqlQueryFromUri, [], {
+              #uri: uri,
+              #walletMetadata: walletMetadata,
+            }),
             returnValue: _i16.Future<String>.value(
               _i18.dummyValue<String>(
                 this,
-                Invocation.method(#getDcqlQueryFromUri, [], {#uri: uri}),
+                Invocation.method(#getDcqlQueryFromUri, [], {
+                  #uri: uri,
+                  #walletMetadata: walletMetadata,
+                }),
+              ),
+            ),
+          )
+          as _i16.Future<String>);
+
+  @override
+  _i16.Future<String> fetchRequestObject({
+    required String? requestUri,
+    required _i4.Dio? dio,
+    String? requestUriMethod,
+    Map<String, dynamic>? walletMetadata,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#fetchRequestObject, [], {
+              #requestUri: requestUri,
+              #dio: dio,
+              #requestUriMethod: requestUriMethod,
+              #walletMetadata: walletMetadata,
+            }),
+            returnValue: _i16.Future<String>.value(
+              _i18.dummyValue<String>(
+                this,
+                Invocation.method(#fetchRequestObject, [], {
+                  #requestUri: requestUri,
+                  #dio: dio,
+                  #requestUriMethod: requestUriMethod,
+                  #walletMetadata: walletMetadata,
+                }),
               ),
             ),
           )

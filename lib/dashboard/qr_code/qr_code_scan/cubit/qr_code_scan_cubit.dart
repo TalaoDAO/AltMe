@@ -655,6 +655,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         encodedData = await fetchRequestUriPayload(
           url: requestUri,
           client: client,
+          oidc4vc: oidc4vc,
+          requestUriMethod: oldUri.queryParameters['request_uri_method'],
         );
       }
 
@@ -1033,15 +1035,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   Future<void> verifyJWTBeforeLaunchingOIDC4VPANDSIOPV2Flow() async {
     final String? requestUri = state.uri?.queryParameters['request_uri'];
     final String? request = state.uri?.queryParameters['request'];
-    late dynamic encodedData;
-    if (request != null) {
-      encodedData = request;
-    } else if (requestUri != null) {
-      encodedData = await fetchRequestUriPayload(
-        url: requestUri,
-        client: client,
-      );
-    }
+
     final customOidc4vcProfile = profileCubit
         .state
         .model
@@ -1055,6 +1049,18 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     /// enforced regardless of the securityLevel setting.
     final isFinal1 =
         customOidc4vcProfile.oidc4vpDraft == OIDC4VPDraftType.final1;
+
+    late dynamic encodedData;
+    if (request != null) {
+      encodedData = request;
+    } else if (requestUri != null) {
+      encodedData = await fetchRequestUriPayload(
+        url: requestUri,
+        client: client,
+        oidc4vc: oidc4vc,
+        requestUriMethod: state.uri?.queryParameters['request_uri_method'],
+      );
+    }
 
     if (!isSecurityEnabled && !isFinal1) {
       emit(state.acceptHost());
@@ -1377,8 +1383,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           authorization: isAnonymousPreAuthorizedFlow ? null : authorization,
           clientId: isAnonymousPreAuthorizedFlow ? null : clientId,
           clientSecret: isAnonymousPreAuthorizedFlow ? null : clientSecret,
-          oAuthClientAttestation:
-              isAnonymousPreAuthorizedFlow ? null : oAuthClientAttestation,
+          oAuthClientAttestation: isAnonymousPreAuthorizedFlow
+              ? null
+              : oAuthClientAttestation,
           oAuthClientAttestationPop: isAnonymousPreAuthorizedFlow
               ? null
               : oAuthClientAttestationPop,
@@ -1553,42 +1560,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             );
           }
 
-          if (oidc4vcParameters.oidc4vciDraftType.getNonce) {
-            late String nonceEnpoint;
-            if (oidc4vcParameters.nonceEndpoint.isNotEmpty) {
-              nonceEnpoint = oidc4vcParameters.nonceEndpoint;
-            } else {
-              if (oidc4vcParameters.issuerOpenIdConfiguration.nonceEndpoint ==
-                  null) {
-                throw ResponseMessage(
-                  data: {
-                    'error': 'invalid_request',
-                    'error_description':
-                        'Nonce endpoint is not provided in the issuer OpenID '
-                        'configuration.',
-                  },
-                );
-              } else {
-                nonceEnpoint =
-                    oidc4vcParameters.issuerOpenIdConfiguration.nonceEndpoint!;
-              }
-            }
-            final nonce = await oidc4vc.getNonceReponse(
-              dio: client.dio,
-              nonceEndpoint: nonceEnpoint,
-            );
-
-            if (nonce == null) {
-              throw ResponseMessage(
-                data: {
-                  'error': 'invalid_request',
-                  'error_description': 'c_nonce is not avaiable.',
-                },
-              );
-            }
-
-            savedNonce = nonce;
-          }
 
           /// get credentials - a credential type we can't fetch (even after
           /// the nonce retry below) is skipped rather than blocking the
@@ -1600,7 +1571,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 credential: selectedCredentials[i],
                 cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
                 didKeyType: customOidc4vcProfile.defaultDid,
-                clientId: tokenData?['client_id'] != null ? clientId : null,
+                clientId: clientId,
                 profileCubit: profileCubit,
                 accessToken: savedAccessToken!,
                 cnonce: savedNonce,
@@ -1622,7 +1593,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                   credential: selectedCredentials[i],
                   cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
                   didKeyType: customOidc4vcProfile.defaultDid,
-                  clientId: tokenData?['client_id'] != null ? clientId : null,
+                  clientId: clientId,
                   profileCubit: profileCubit,
                   accessToken: savedAccessToken!,
                   cnonce: nonce,
@@ -1978,7 +1949,7 @@ ${state.uri}
         profileLinkedId: profileCubit.state.model.profileType.getVCId,
       );
 
-      final host = await getHost(uri: uri, client: client);
+      final host = await getHost(uri: uri, client: client, oidc4vc: oidc4vc);
 
       return (credentialPreview, host);
     } else if (!keys.contains('presentation_definition') &&
@@ -2076,7 +2047,7 @@ ${state.uri}
       profileLinkedId: profileCubit.state.model.profileType.getVCId,
     );
 
-    final host = await getHost(uri: uri, client: client);
+    final host = await getHost(uri: uri, client: client, oidc4vc: oidc4vc);
 
     return (credentialPreview, host);
   }
