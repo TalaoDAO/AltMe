@@ -1579,42 +1579,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             );
           }
 
-          if (oidc4vcParameters.oidc4vciDraftType.getNonce) {
-            late String nonceEnpoint;
-            if (oidc4vcParameters.nonceEndpoint.isNotEmpty) {
-              nonceEnpoint = oidc4vcParameters.nonceEndpoint;
-            } else {
-              if (oidc4vcParameters.issuerOpenIdConfiguration.nonceEndpoint ==
-                  null) {
-                throw ResponseMessage(
-                  data: {
-                    'error': 'invalid_request',
-                    'error_description':
-                        'Nonce endpoint is not provided in the issuer OpenID '
-                        'configuration.',
-                  },
-                );
-              } else {
-                nonceEnpoint =
-                    oidc4vcParameters.issuerOpenIdConfiguration.nonceEndpoint!;
-              }
-            }
-            final nonce = await oidc4vc.getNonceReponse(
-              dio: client.dio,
-              nonceEndpoint: nonceEnpoint,
-            );
-
-            if (nonce == null) {
-              throw ResponseMessage(
-                data: {
-                  'error': 'invalid_request',
-                  'error_description': 'c_nonce is not avaiable.',
-                },
-              );
-            }
-
-            savedNonce = nonce;
-          }
 
           /// get credentials - a credential type we can't fetch (even after
           /// the nonce retry below) is skipped rather than blocking the
