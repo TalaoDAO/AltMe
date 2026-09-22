@@ -195,11 +195,16 @@ Future<void> oidc4vciAcceptHost({
         .state
         .locale
         .languageCode;
-    final fallbackHost = await getHost(
-      uri: updatedOidc4vcParameters.initialUri,
-      client: client,
-      oidc4vc: context.read<QRCodeScanCubit>().oidc4vc,
-    );
+    // the credential offer has already been fetched by getIssuanceData, don't
+    // fetch it again just to get the issuer host.
+    final issuerHost = Uri.tryParse(updatedOidc4vcParameters.issuer)?.host;
+    final fallbackHost = (issuerHost != null && issuerHost.isNotEmpty)
+        ? issuerHost
+        : await getHost(
+            uri: updatedOidc4vcParameters.initialUri,
+            client: client,
+            oidc4vc: context.read<QRCodeScanCubit>().oidc4vc,
+          );
 
     final issuerDisplay = resolveIssuerDisplay(
       issuerOpenIdConfiguration: issuerOpenIdConfiguration,
