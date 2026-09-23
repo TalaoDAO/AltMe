@@ -109,6 +109,34 @@ Future<(List<dynamic>?, String?, String?)?> getCredential({
     return freshNonce;
   }
 
+  /// Who attests this issuance's credential-binding keys, or `null` when this
+  /// credential takes no key attestation proof (Wallet Provider Protocol
+  /// §12.10, OIDC4VCI Appendix D).
+  ///
+  /// Two things have to hold before a key attestation is even asked for. The
+  /// credential must be device-bound, because §12.1 forbids sending one for a
+  /// credential that is not. And the issuer must list `attestation` among this
+  /// credential configuration's `proof_types_supported`, because that is where
+  /// §12.4 publishes it. Failing either, or with a wallet whose provider does
+  /// not attest keys at all — the enterprise scheme does not — the wallet keeps
+  /// sending the `jwt` proof it sends today.
+  final keyAttestationProvider =
+      cryptoHolderBinding &&
+          profileCubit.oidc4vc.supportsProofType(
+            oidc4vcParameters.issuerOpenIdConfiguration,
+            credentialConfigurationId: credentialType,
+            proofType: 'attestation',
+          )
+      ? profileCubit.walletAttestationProvider
+      : null;
+
+  /// §12.4 and §12.12: ask for exactly the batch the issuer publishes and no
+  /// more. Keys attested beyond what the issuance uses are burned with the
+  /// batch and may remain permanently unused.
+  final batchSize = profileCubit.oidc4vc.readBatchSize(
+    oidc4vcParameters.issuerOpenIdConfiguration,
+  );
+
   /// Builds the Credential Request for a single credential_identifier (or
   /// none, when the Token Response did not return any for this credential)
   /// and sends it. Returns false when the developer-mode preview was
@@ -120,8 +148,39 @@ Future<(List<dynamic>?, String?, String?)?> getCredential({
       nonce = await fetchFreshNonce();
     }
 
+    List<String>? keyAttestationProofs;
+    if (keyAttestationProvider != null) {
+      final cNonce = nonce;
+
+      /// §12.10 step 1: the wallet obtains a nonce from the credential issuer,
+      /// and the wallet provider signs it into the attestation as `c_nonce`.
+      /// Without one there is nothing binding the attestation to this issuance,
+      /// and the issuer rejects it.
+      if (cNonce == null) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_request',
+            'error_description':
+                'A c_nonce from the credential issuer is required to request '
+                'a key attestation.',
+          },
+        );
+      }
+
+      keyAttestationProofs = await keyAttestationProvider
+          .keyAttestationProofsFor(
+            credentialIssuer: oidc4vcParameters.issuer,
+            cNonce: cNonce,
+            batchSize: batchSize,
+            credentialConfigurationId: credentialType,
+            issuerMetadata:
+                oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
+          );
+    }
+
     final credentialData = await profileCubit.oidc4vc.buildCredentialData(
       nonce: nonce,
+      keyAttestationProofs: keyAttestationProofs,
       issuerTokenParameters: issuerTokenParameters,
       credentialType: credentialType,
       types: types,
@@ -156,14 +215,26 @@ Future<(List<dynamic>?, String?, String?)?> getCredential({
       }
     }
 
-    final credentialResponseDataValue = await getSingleCredentialData(
-      profileCubit: profileCubit,
-      openIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
-      accessToken: accessToken,
-      dio: Dio(),
-      credentialData: credentialData,
-      publicKeyForDPop: publicKeyForDPop,
-    );
+    final dynamic credentialResponseDataValue;
+    try {
+      credentialResponseDataValue = await getSingleCredentialData(
+        profileCubit: profileCubit,
+        openIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
+        accessToken: accessToken,
+        dio: Dio(),
+        credentialData: credentialData,
+        publicKeyForDPop: publicKeyForDPop,
+      );
+    } finally {
+      /// Wallet Provider Protocol §12.11: a key attestation is spent on the
+      /// issuance attempt, not on its outcome, so it is marked consumed
+      /// whether the request returned a credential or threw.
+      if (keyAttestationProofs != null) {
+        await keyAttestationProvider?.markKeyAttestationsConsumed(
+          credentialIssuer: oidc4vcParameters.issuer,
+        );
+      }
+    }
 
     /// update nonce value
     if (credentialResponseDataValue is Map<String, dynamic>) {

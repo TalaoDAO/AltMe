@@ -34,6 +34,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     required this.didKitProvider,
     required this.langCubit,
     required this.jwtDecode,
+    this.walletAttestationProvider,
   }) : super(ProfileState(model: ProfileModel.empty())) {
     load();
   }
@@ -43,6 +44,18 @@ class ProfileCubit extends Cubit<ProfileState> {
   final DIDKitProvider didKitProvider;
   final LangCubit langCubit;
   final JWTDecode jwtDecode;
+
+  /// The wallet provider's client attestation scheme, when this wallet has one
+  /// that outlives a single request.
+  ///
+  /// The OpenID4VCI call sites reach their attestation through here rather than
+  /// building one themselves, because a scheme that keeps per-issuer state -
+  /// the Wallet Provider Protocol caches an attestation per credential issuer
+  /// (§11) and spends each key attestation once (§12.11) - cannot be rebuilt
+  /// per call without losing that state. Left `null`, every call site falls
+  /// back to the request-scoped [LegacyWalletAttestationProvider] exactly as
+  /// before.
+  final WalletAttestationProvider? walletAttestationProvider;
 
   Timer? _timer;
 

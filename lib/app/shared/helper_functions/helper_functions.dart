@@ -742,6 +742,11 @@ Future<void> handleErrorForOidc4Vci({
           );
         }
       case ClientType.wiaSub:
+
+        /// Wallet Provider Protocol §3: the OAuth Client Identifier is the
+        /// `sub` of the Wallet Instance Attestation, which is a URI rather
+        /// than a DID, so `subject_syntax_types_supported` says nothing
+        /// about it.
         break;
     }
   }
@@ -1429,14 +1434,22 @@ String getUpdatedUrlForSIOPV2OIC4VP({
 // oAuthClientAttestationPop
 ///
 /// [attestationProvider] supplies the client attestation pair. It defaults to
+/// the wallet-wide provider on [profileCubit] and then to
 /// [LegacyWalletAttestationProvider], the enterprise wallet provider's scheme,
 /// so existing callers behave exactly as before; a wallet whose provider uses
 /// another scheme passes its own.
+///
+/// [issuerMetadata] is the credential issuer's OpenID4VCI metadata, when the
+/// caller already holds it. An attestation scheme that reads the issuer's
+/// published preferences needs it: the Wallet Provider Protocol reads
+/// `preferred_client_status_period` (§9) before deciding whether a cached
+/// attestation still satisfies this issuer.
 Future<(String?, String?, String?, String?, String?)> getClientDetails({
   required ProfileCubit profileCubit,
   required bool isEBSI,
   required String issuer,
   WalletAttestationProvider? attestationProvider,
+  Map<String, dynamic>? issuerMetadata,
 }) async {
   try {
     String? clientId;
@@ -1479,11 +1492,23 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
 
     final provider =
         attestationProvider ??
+        profileCubit.walletAttestationProvider ??
         LegacyWalletAttestationProvider(
           secureStorageProvider: profileCubit.secureStorageProvider,
           walletType: profileCubit.state.model.walletType,
           did: did,
           tokenParameters: tokenParameters,
+        );
+
+    /// The attestation pair, fetched at most once however many of the branches
+    /// below need it. A Wallet Provider Protocol attestation costs a network
+    /// round trip when the §11 cache misses, and the `client_id` and the two
+    /// headers all come out of the same one.
+    ClientAttestationPair? attestationPair;
+    Future<ClientAttestationPair?> clientAttestation() async =>
+        attestationPair ??= await provider.attestationFor(
+          credentialIssuer: issuer,
+          issuerMetadata: issuerMetadata,
         );
 
     switch (customOidc4vcProfile.clientAuthentication) {
@@ -1504,8 +1529,12 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
           case ClientType.wiaSub:
-            // TODO(hawkbee): Handle this case.getClientDetails
-            throw UnimplementedError();
+
+            /// Wallet Provider Protocol §3: the wallet never chooses its own
+            /// OAuth Client Identifier. It is the `sub` claim of the Wallet
+            /// Instance Attestation, and §8 has the authorization server
+            /// reject any request whose `client_id` differs from it.
+            clientId = (await clientAttestation())?.clientId;
         }
 
       ///  only clientId
@@ -1518,8 +1547,12 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
           case ClientType.wiaSub:
-            // TODO(hawkbee): Handle this case.getClientDetails
-            throw UnimplementedError();
+
+            /// Wallet Provider Protocol §3: the wallet never chooses its own
+            /// OAuth Client Identifier. It is the `sub` claim of the Wallet
+            /// Instance Attestation, and §8 has the authorization server
+            /// reject any request whose `client_id` differs from it.
+            clientId = (await clientAttestation())?.clientId;
         }
 
       case ClientAuthentication.clientSecretPost:
@@ -1529,15 +1562,22 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
       case ClientAuthentication.clientSecretJwt:
         clientId = did;
 
-        final attestation = await provider.attestationFor(
-          credentialIssuer: issuer,
-        );
+        final attestation = await clientAttestation();
 
         oAuthClientAttestation = attestation?.attestation;
         oAuthClientAttestationPop = attestation?.proofOfPossession;
+
+      /// Wallet Provider Protocol §8: the Wallet Instance Attestation and a
+      /// proof of possession signed with the key in its `cnf.jwk` — the Wallet
+      /// Device Key — authenticate the wallet on the Pushed Authorization
+      /// Request and the Token Request, and `client_id` is the attestation's
+      /// `sub` (§3). The attestation is not sent on the Credential Request.
       case ClientAuthentication.wia:
-        // TODO(hawkbee): Handle this case.getClientDetails
-        throw UnimplementedError();
+        final attestation = await clientAttestation();
+
+        clientId = attestation?.clientId;
+        oAuthClientAttestation = attestation?.attestation;
+        oAuthClientAttestationPop = attestation?.proofOfPossession;
     }
 
     return (

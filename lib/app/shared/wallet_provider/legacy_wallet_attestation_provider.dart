@@ -50,9 +50,12 @@ class LegacyWalletAttestationProvider implements WalletAttestationProvider {
   /// The key material the proof of possession is signed with.
   final TokenParameters tokenParameters;
 
+  /// [issuerMetadata] is ignored: the enterprise scheme publishes nothing in
+  /// the credential issuer's metadata and reads nothing out of it.
   @override
   Future<ClientAttestationPair?> attestationFor({
     required String credentialIssuer,
+    Map<String, dynamic>? issuerMetadata,
   }) async {
     if (walletType != WalletType.enterprise) {
       throw ResponseMessage(
@@ -97,5 +100,14 @@ class LegacyWalletAttestationProvider implements WalletAttestationProvider {
     required String credentialIssuer,
     required String cNonce,
     required int batchSize,
+    String? credentialConfigurationId,
+    Map<String, dynamic>? issuerMetadata,
   }) async => null;
+
+  /// Does nothing: with no key attestations to spend there is no single-use
+  /// bookkeeping to keep.
+  @override
+  Future<void> markKeyAttestationsConsumed({
+    required String credentialIssuer,
+  }) async {}
 }

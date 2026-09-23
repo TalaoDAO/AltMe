@@ -67,9 +67,16 @@ Future<Uri?> getAuthorizationUriForIssuer({
         oAuthClientAttestationPop: oAuthClientAttestationPop,
         oAuthClientAttestation: oAuthClientAttestation,
       );
+    /// Wallet Provider Protocol §8: the same three values as
+    /// `clientSecretJwt` — the `client_id` is the Wallet Instance
+    /// Attestation's `sub` (§3) and the attestation travels in the
+    /// `OAuth-Client-Attestation` header of the Pushed Authorization Request.
     case ClientAuthentication.wia:
-      // TODO(hawkbee): Handle this case. Important ?
-      throw UnimplementedError();
+      oidc4VCIState = initialOidc4VCIState.copyWith(
+        clientId: clientId,
+        oAuthClientAttestationPop: oAuthClientAttestationPop,
+        oAuthClientAttestation: oAuthClientAttestation,
+      );
   }
 
   // save the state and give the id for the jwt

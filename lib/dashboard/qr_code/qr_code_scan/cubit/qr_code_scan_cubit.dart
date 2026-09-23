@@ -1372,6 +1372,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         profileCubit: profileCubit,
         isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
         issuer: oidc4vcParameters.issuer,
+        issuerMetadata:
+            oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
       );
 
       final customOidc4vcProfile = profileCubit
@@ -1491,6 +1493,31 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           /// get openid configuration
           Map<String, dynamic>? tokenData;
           if (savedAccessToken == null) {
+            var tokenAttestation = oAuthClientAttestation;
+            var tokenAttestationPop = oAuthClientAttestationPop;
+
+            /// Wallet Provider Protocol §8: the attestation and its proof of
+            /// possession are presented on the Token Request as well as on the
+            /// Pushed Authorization Request. A fresh pair is fetched for this
+            /// leg rather than replaying the one stored at PAR time, because
+            /// the authorization code flow puts a whole browser round trip in
+            /// between and a proof of possession is short-lived. The §11 cache
+            /// answers from memory, so this costs a signature, not a request.
+            if (customOidc4vcProfile.clientAuthentication ==
+                ClientAuthentication.wia) {
+              final (_, _, _, freshAttestation, freshAttestationPop) =
+                  await getClientDetails(
+                    profileCubit: profileCubit,
+                    isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
+                    issuer: oidc4vcParameters.issuer,
+                    issuerMetadata: oidc4vcParameters
+                        .issuerOpenIdConfiguration
+                        .rawConfiguration,
+                  );
+              tokenAttestation = freshAttestation ?? tokenAttestation;
+              tokenAttestationPop = freshAttestationPop ?? tokenAttestationPop;
+            }
+
             /// get tokendata
             tokenData = oidc4vc.buildTokenData(
               preAuthorizedCode: oidc4vcParameters.preAuthorizedCode,
@@ -1502,8 +1529,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               clientSecret: clientSecret,
               authorization: authorization,
               redirectUri: Parameters.redirectUri,
-              oAuthClientAttestation: oAuthClientAttestation,
-              oAuthClientAttestationPop: oAuthClientAttestationPop,
+              oAuthClientAttestation: tokenAttestation,
+              oAuthClientAttestationPop: tokenAttestationPop,
             );
 
             if (profileCubit.state.model.isDeveloperMode) {
@@ -1541,8 +1568,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             ) = await oidc4vc.getTokenResponse(
               authorization: authorization,
               tokenEndPoint: oidc4vcParameters.tokenEndpoint,
-              oAuthClientAttestation: oAuthClientAttestation,
-              oAuthClientAttestationPop: oAuthClientAttestationPop,
+              oAuthClientAttestation: tokenAttestation,
+              oAuthClientAttestationPop: tokenAttestationPop,
               dio: client.dio,
               tokenData: tokenData,
               dPop: dPop,
