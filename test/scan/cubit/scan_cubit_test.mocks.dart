@@ -1810,6 +1810,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
     required String? privateKey,
     required List<_i9.VCFormatType>? formatsSupported,
     required String? clientId,
+    List<String>? keyAttestationProofs,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#buildCredentialData, [], {
@@ -1830,6 +1831,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #privateKey: privateKey,
               #formatsSupported: formatsSupported,
               #clientId: clientId,
+              #keyAttestationProofs: keyAttestationProofs,
             }),
             returnValue: _i16.Future<Map<String, dynamic>>.value(
               <String, dynamic>{},
@@ -1841,6 +1843,14 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
   Map<String, dynamic> buildJwtProofEntry(String? vcJwt) =>
       (super.noSuchMethod(
             Invocation.method(#buildJwtProofEntry, [vcJwt]),
+            returnValue: <String, dynamic>{},
+          )
+          as Map<String, dynamic>);
+
+  @override
+  Map<String, dynamic> buildAttestationProofEntry(List<String>? attestations) =>
+      (super.noSuchMethod(
+            Invocation.method(#buildAttestationProofEntry, [attestations]),
             returnValue: <String, dynamic>{},
           )
           as Map<String, dynamic>);
@@ -1925,6 +1935,33 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
             ),
           )
           as String);
+
+  @override
+  int readBatchSize(_i9.OpenIdConfiguration? openIdConfiguration) =>
+      (super.noSuchMethod(
+            Invocation.method(#readBatchSize, [openIdConfiguration]),
+            returnValue: 0,
+          )
+          as int);
+
+  @override
+  bool supportsProofType(
+    _i9.OpenIdConfiguration? openIdConfiguration, {
+    required String? credentialConfigurationId,
+    required String? proofType,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #supportsProofType,
+              [openIdConfiguration],
+              {
+                #credentialConfigurationId: credentialConfigurationId,
+                #proofType: proofType,
+              },
+            ),
+            returnValue: false,
+          )
+          as bool);
 
   @override
   _i16.Future<String> getIssuerJwt({
