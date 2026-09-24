@@ -43,7 +43,7 @@ class SecureStorageKeys {
 
   /// used only with wallet providers
   static const String p256PrivateKeyForIntegrityToken =
-      'p256PrivateKeyToGetAndPresentVC';
+      'p256PrivateKeyForIntegrityToken';
 
   static const String cryptoAccount = 'cryptoAccount';
   static const String cryptoAccounTrackingIndex = 'cryptoAccounTrackingIndex';
