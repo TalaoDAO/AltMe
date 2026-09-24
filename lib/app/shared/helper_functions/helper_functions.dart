@@ -365,6 +365,21 @@ Future<String> getP256KeyToGetAndPresentVC(
 ) async {
   const storageKey = SecureStorageKeys.p256PrivateKeyToGetAndPresentVC;
 
+  return getP256Key(secureStorage, storageKey);
+}
+
+Future<String> getP256KeyForIntegrityToken(
+  SecureStorageProvider secureStorage,
+) async {
+  const storageKey = SecureStorageKeys.p256PrivateKeyForIntegrityToken;
+
+  return getP256Key(secureStorage, storageKey);
+}
+
+Future<String> getP256Key(
+  SecureStorageProvider secureStorage,
+  String storageKey,
+) async {
   /// return key if it is already created
   final String? p256PrivateKey = await secureStorage.get(storageKey);
   if (p256PrivateKey != null) return p256PrivateKey.replaceAll('=', '');
@@ -2139,11 +2154,7 @@ Map<String, dynamic>? x509PublicKeyJwk(x509.X509Certificate cert) {
   if (publicKey is x509.RsaPublicKey) {
     final BigInt modulus = BigInt.parse(publicKey.modulus.toString());
     final n = base64Encode(modulus.toBytes);
-    return {
-      'e': 'AQAB',
-      'kty': 'RSA',
-      'n': n.replaceAll('=', ''),
-    };
+    return {'e': 'AQAB', 'kty': 'RSA', 'n': n.replaceAll('=', '')};
   } else if (publicKey is x509.EcPublicKey) {
     final BigInt xModulus = BigInt.parse(publicKey.xCoordinate.toString());
     final BigInt yModulus = BigInt.parse(publicKey.yCoordinate.toString());
