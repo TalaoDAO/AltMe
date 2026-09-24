@@ -34,6 +34,17 @@ class ProfileSetting extends Equatable {
     walletSecurityOptions: WalletSecurityOptions.initial(),
   );
 
+  factory ProfileSetting.provider() => ProfileSetting(
+    blockchainOptions: BlockchainOptions.initial(),
+    discoverCardsOptions: DiscoverCardsOptions.initial(),
+    generalOptions: GeneralOptions.empty(),
+    helpCenterOptions: HelpCenterOptions.initial(),
+    selfSovereignIdentityOptions: SelfSovereignIdentityOptions.provider(),
+    settingsMenu: SettingsMenu.initial(),
+    version: '',
+    walletSecurityOptions: WalletSecurityOptions.provider(),
+  );
+
   final BlockchainOptions? blockchainOptions;
   final DiscoverCardsOptions? discoverCardsOptions;
   final GeneralOptions generalOptions;
@@ -659,6 +670,12 @@ class SelfSovereignIdentityOptions extends Equatable {
   factory SelfSovereignIdentityOptions.initial() =>
       SelfSovereignIdentityOptions(
         customOidc4vcProfile: CustomOidc4VcProfile.initial(),
+        displayManageDecentralizedId: true,
+      );
+
+  factory SelfSovereignIdentityOptions.provider() =>
+      SelfSovereignIdentityOptions(
+        customOidc4vcProfile: CustomOidc4VcProfile.provider(),
         displayManageDecentralizedId: true,
       );
 
