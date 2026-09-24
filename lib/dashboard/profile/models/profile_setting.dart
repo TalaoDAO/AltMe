@@ -724,6 +724,32 @@ class CustomOidc4VcProfile extends Equatable {
     displayMode: false,
   );
 
+  factory CustomOidc4VcProfile.provider() => CustomOidc4VcProfile(
+    pushAuthorizationRequest: false,
+    statusListCache: true,
+    clientAuthentication: ClientAuthentication.clientId,
+    credentialManifestSupport: false,
+    cryptoHolderBinding: true,
+    defaultDid: DidKeyType.p256,
+    dpopSupport: false,
+    oidc4vciDraft: OIDC4VCIDraftType.final1,
+    oidc4vpDraft: OIDC4VPDraftType.final1,
+    scope: true,
+    securityLevel: false,
+    proofHeader: ProofHeaderType.jwk, // N/A
+    siopv2Draft: SIOPV2DraftType.draft12,
+    clientType: ClientType.p256JWKThumprint,
+    clientSecret: randomString(12),
+    vcFormatType: VCFormatType.dcSdJWT,
+    proofType: ProofType.jwt,
+    formatsSupported: const [
+      VCFormatType.jwtVcJson,
+      VCFormatType.dcSdJWT,
+      VCFormatType.ldpVc,
+    ],
+    displayMode: false,
+  );
+
   factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) {
     final profileFromJson = _$CustomOidc4VcProfileFromJson(json);
     if (profileFromJson.formatsSupported!.isEmpty) {
@@ -900,6 +926,14 @@ class WalletSecurityOptions extends Equatable {
       _$WalletSecurityOptionsFromJson(json);
 
   factory WalletSecurityOptions.initial() => const WalletSecurityOptions(
+    confirmSecurityVerifierAccess: false,
+    displaySecurityAdvancedSettings: true,
+    secureSecurityAuthenticationWithPinCode: false,
+    verifySecurityIssuerWebsiteIdentity: false,
+    trustedList: false,
+  );
+
+  factory WalletSecurityOptions.provider() => const WalletSecurityOptions(
     confirmSecurityVerifierAccess: false,
     displaySecurityAdvancedSettings: true,
     secureSecurityAuthenticationWithPinCode: false,
