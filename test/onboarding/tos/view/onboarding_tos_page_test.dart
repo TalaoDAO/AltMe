@@ -200,6 +200,7 @@ void main() {
 
     testWidgets('navigated to DashboardPage when Start is pressed'
         ' when agreeTerms and readTerms are true.', (tester) async {
+      ignoreListTileInkWarning();
       when(
         () => onBoardingTosCubit.state,
       ).thenReturn(const OnBoardingTosState(agreeTerms: true, readTerms: true));
