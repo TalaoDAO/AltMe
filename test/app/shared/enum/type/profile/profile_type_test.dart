@@ -5,14 +5,11 @@ void main() {
   group('ProfileType Extension', () {
     test('Get Title', () {
       expect(ProfileType.custom.getTitle(name: ''), 'Custom');
-      expect(
-        ProfileType.diipv5.getTitle(name: ''),
-        'Decentralized Identity Interop Profile (DIIP v5.0)',
-      );
+      expect(ProfileType.diipv5.getTitle(name: ''), 'DIIP V5.0');
       expect(ProfileType.defaultOne.getTitle(name: ''), 'Default');
       expect(ProfileType.enterprise.getTitle(name: ''), 'Enterprise');
       expect(ProfileType.enterprise.getTitle(name: 'Test'), 'Test');
-      expect(ProfileType.EUDIW.getTitle(name: ''), 'Prototype for EWC pilot');
+      expect(ProfileType.EUDIW.getTitle(name: ''), 'EUDI Wallet');
     });
 
     test('Get VC ID', () {
