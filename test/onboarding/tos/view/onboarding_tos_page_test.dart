@@ -184,6 +184,7 @@ void main() {
     });
 
     testWidgets('renders DisplayTerms', (tester) async {
+      ignoreListTileInkWarning();
       when(
         () => onBoardingTosCubit.state,
       ).thenReturn(const OnBoardingTosState());
