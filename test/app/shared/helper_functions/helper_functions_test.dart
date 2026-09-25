@@ -1635,7 +1635,7 @@ void main() {
               blockchainNetwork: TezosNetwork.ghostnet(),
               dotEnv: mockDotenv,
             );
-            expect(result, 'https://rpc.tzkt.io/ghostnet');
+            expect(result, 'https://rpc.shadownet.teztnets.com');
           });
         });
       });
