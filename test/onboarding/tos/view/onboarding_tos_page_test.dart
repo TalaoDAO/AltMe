@@ -11,6 +11,21 @@ import '../../../helpers/helpers.dart';
 class MockOnBoardingTosCubit extends MockCubit<OnBoardingTosState>
     implements OnBoardingTosCubit {}
 
+/// Flutter reports (does not throw) a diagnostic when a ListTile is wrapped in
+/// a DecoratedBox that has a background colour, which is how the terms list is
+/// built. It has no bearing on what these tests verify, so drop that one
+/// diagnostic and let any other error through. The test binding restores
+/// FlutterError.onError after every testWidgets.
+void ignoreListTileInkWarning() {
+  final previous = FlutterError.onError;
+  FlutterError.onError = (details) {
+    const ignored =
+        'ListTile background color or ink splashes may be invisible';
+    if (details.exceptionAsString().contains(ignored)) return;
+    previous?.call(details);
+  };
+}
+
 void main() {
   group('OnBoarding Terms Page', () {
     late MockOnBoardingTosCubit onBoardingTosCubit;
@@ -52,6 +67,7 @@ void main() {
     });
 
     testWidgets('renders OnBoardingTosPage', (tester) async {
+      ignoreListTileInkWarning();
       when(
         () => onBoardingTosCubit.state,
       ).thenReturn(const OnBoardingTosState());
