@@ -144,6 +144,7 @@ void main() {
     testWidgets('blocks going back from OnBoardingTosPage start page', (
       tester,
     ) async {
+      ignoreListTileInkWarning();
       when(
         () => onBoardingTosCubit.state,
       ).thenReturn(const OnBoardingTosState());
