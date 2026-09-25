@@ -163,6 +163,7 @@ void main() {
     testWidgets('MyElevatedButton press calls onAcceptancePressed', (
       WidgetTester tester,
     ) async {
+      ignoreListTileInkWarning();
       when(
         () => onBoardingTosCubit.state,
       ).thenReturn(const OnBoardingTosState());
