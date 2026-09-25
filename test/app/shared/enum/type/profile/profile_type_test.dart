@@ -14,7 +14,7 @@ void main() {
 
     test('Get VC ID', () {
       expect(ProfileType.custom.getVCId, 'A7G9B4C');
-      expect(ProfileType.diipv5.getVCId, 'M5K8Y2W');
+      expect(ProfileType.diipv5.getVCId, 'R4D8F2H');
       expect(ProfileType.defaultOne.getVCId, 'Z4C7T1X');
       expect(ProfileType.enterprise.getVCId, 'L8F6V3P');
       expect(ProfileType.EUDIW.getVCId, 'M3FN2K8');
