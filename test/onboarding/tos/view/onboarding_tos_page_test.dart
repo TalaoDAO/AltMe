@@ -100,6 +100,7 @@ void main() {
     });
 
     testWidgets('checkboxes toggle state', (WidgetTester tester) async {
+      ignoreListTileInkWarning();
       when(
         () => onBoardingTosCubit.state,
       ).thenReturn(const OnBoardingTosState());
