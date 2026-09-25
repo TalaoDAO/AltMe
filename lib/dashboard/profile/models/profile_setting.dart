@@ -744,11 +744,11 @@ class CustomOidc4VcProfile extends Equatable {
   factory CustomOidc4VcProfile.provider() => CustomOidc4VcProfile(
     pushAuthorizationRequest: false,
     statusListCache: true,
-    clientAuthentication: ClientAuthentication.clientId,
+    clientAuthentication: ClientAuthentication.wia,
     credentialManifestSupport: false,
     cryptoHolderBinding: true,
     defaultDid: DidKeyType.p256,
-    dpopSupport: false,
+    dpopSupport: true,
     oidc4vciDraft: OIDC4VCIDraftType.final1,
     oidc4vpDraft: OIDC4VPDraftType.final1,
     scope: true,
