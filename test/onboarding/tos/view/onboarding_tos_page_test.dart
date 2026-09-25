@@ -82,6 +82,7 @@ void main() {
     });
 
     testWidgets('nothing happens when button is pressed', (tester) async {
+      ignoreListTileInkWarning();
       when(
         () => onBoardingTosCubit.state,
       ).thenReturn(const OnBoardingTosState());
