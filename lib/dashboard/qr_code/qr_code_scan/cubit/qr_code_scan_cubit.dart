@@ -17,7 +17,6 @@ import 'package:altme/oidc4vc/model/verifier_trust_info.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
-import 'package:altme/trusted_list/function/is_issuer_trusted.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
@@ -1579,7 +1578,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             );
           }
 
-
           /// get credentials - a credential type we can't fetch (even after
           /// the nonce retry below) is skipped rather than blocking the
           /// others
@@ -1724,17 +1722,27 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       // browser redirect).
       final isTrusted =
           oidc4vcParameters.isIssuerTrusted ??
-          isIssuerTrusted(
-            issuerOpenIdConfiguration:
-                oidc4vcParameters.issuerOpenIdConfiguration,
-            trustedList: profileCubit.state.model.trustedList,
-            trustedListEnabled: profileCubit
+          () {
+            final trustedList = profileCubit.state.model.trustedList;
+            final trustedListEnabled = profileCubit
                 .state
                 .model
                 .profileSetting
                 .walletSecurityOptions
-                .trustedList,
-          );
+                .trustedList;
+            if (!trustedListEnabled || trustedList == null) return false;
+            try {
+              return findTrustedIssuer(
+                    issuerOpenIdConfiguration:
+                        oidc4vcParameters.issuerOpenIdConfiguration,
+                    trustedList: trustedList,
+                    oidc4vciDraft: oidc4vcParameters.oidc4vciDraftType,
+                  ) !=
+                  null;
+            } catch (_) {
+              return false;
+            }
+          }();
 
       navigateToOidc4vcCredentialPickPage(
         items: allItems,

@@ -1,5 +1,5 @@
-import 'package:altme/trusted_list/model/postal_address.dart';
 import 'package:flutter/material.dart';
+import 'package:trusted_list/trusted_list.dart';
 
 class TrustedEntityPostalAddress extends StatelessWidget {
   const TrustedEntityPostalAddress({

@@ -10,7 +10,6 @@ import 'package:altme/dashboard/profile/profile_provider/get_wallet_attestation_
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/oidc4vc/model/oidc4vci_stack.dart';
 import 'package:altme/oidc4vc/model/oidc4vci_state.dart';
-import 'package:altme/trusted_list/model/trusted_list.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
@@ -22,6 +21,7 @@ import 'package:oidc4vc/oidc4vc.dart';
 import 'package:random_string/random_string.dart';
 
 import 'package:secure_storage/secure_storage.dart';
+import 'package:trusted_list/trusted_list.dart';
 
 part 'profile_cubit.g.dart';
 

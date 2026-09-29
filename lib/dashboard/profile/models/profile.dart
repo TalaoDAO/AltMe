@@ -1,11 +1,11 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/profile/models/profile_setting.dart';
 import 'package:altme/oidc4vc/model/oidc4vci_stack.dart';
-import 'package:altme/trusted_list/model/trusted_list.dart';
 // import 'package:http/http.dart' as http;
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:trusted_list/trusted_list.dart';
 
 part 'profile.g.dart';
 

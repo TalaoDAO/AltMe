@@ -12,11 +12,11 @@ import 'package:altme/oidc4vp_transaction/presentation/transaction_presentation.
 import 'package:altme/oidc4vp_transaction/presentation/widget/attestation_list.dart';
 import 'package:altme/oidc4vp_transaction/presentation/widget/navigation_buttons.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
-import 'package:altme/trusted_list/model/trusted_entity.dart';
 import 'package:altme/trusted_list/widget/trusted_entity_details.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trusted_list/trusted_list.dart';
 
 class Oidc4VpTransactionPage extends StatefulWidget {
   const Oidc4VpTransactionPage({

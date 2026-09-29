@@ -104,6 +104,8 @@ dependencies:
     git:
       url: https://github.com/TalaoDAO/tezart.git
   timezone: ^0.9.2
+  trusted_list:
+    path: ../../packages/trusted_list
   url_launcher: ^6.1.11
   visibility_detector: ^0.4.0+2
   webview_flutter: ^4.14.1

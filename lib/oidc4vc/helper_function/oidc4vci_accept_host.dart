@@ -7,13 +7,10 @@ import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vc/helper_function/resolve_issuer_display.dart';
 import 'package:altme/oidc4vc/widget/issuer_connect_dialog.dart';
-import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
-import 'package:altme/trusted_list/function/get_issuer_open_id_configuration.dart';
-import 'package:altme/trusted_list/function/is_certificate_valid.dart';
-import 'package:altme/trusted_list/model/trusted_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:trusted_list/trusted_list.dart';
 
 Future<void> oidc4vciAcceptHost({
   required Oidc4vcParameters oidc4vcParameters,
@@ -110,10 +107,10 @@ Future<void> oidc4vciAcceptHost({
         );
         trustedList = profile.trustedList;
       }
-      final signedMetadata = issuerOpenIdConfiguration.signedMetadata;
+      final oidc4vciDraft = updatedOidc4vcParameters.oidc4vciDraftType;
       // signed_metadata does not exist in OIDC4VC final 1.0,
       // it's only for old OIDC4VC drafts
-      if (signedMetadata != null) {
+      if (oidc4vciDraft != OIDC4VCIDraftType.final1) {
         updatedOidc4vcParameters = updatedOidc4vcParameters.copyWith(
           issuerOpenIdConfiguration: getIssuerOpenIdConfiguration(
             issuerOpenIdConfiguration: issuerOpenIdConfiguration,
@@ -121,23 +118,11 @@ Future<void> oidc4vciAcceptHost({
         );
       }
 
-      // OIDC4VC final-1.0 has no domain / signed_metadata to match the
-      // issuer by, so it's instead looked up by its x5c root certificate.
-      final trustedEntity = signedMetadata != null
-          ? getIssuerFromTrustedList(
-              issuerOpenIdConfiguration: issuerOpenIdConfiguration,
-              trustedList: trustedList!,
-            )
-          : () {
-              final x5c = issuerOpenIdConfiguration.x5c;
-              if (x5c == null || x5c.isEmpty) {
-                return null;
-              }
-              return getIssuerFromTrustedListByX5c(
-                x5c: x5c,
-                trustedList: trustedList!,
-              );
-            }();
+      final trustedEntity = findTrustedIssuer(
+        issuerOpenIdConfiguration: issuerOpenIdConfiguration,
+        trustedList: trustedList!,
+        oidc4vciDraft: oidc4vciDraft,
+      );
       if (trustedEntity != null) {
         // check if each element of
         // oidc4vcParameters.credentialOffer['credential_configuration_ids'] are
@@ -164,15 +149,8 @@ Future<void> oidc4vciAcceptHost({
           );
         }
 
-        // For final-1.0, getIssuerFromTrustedListByX5c above already only
-        // returns an entity whose rootCertificates matched the issuer's
-        // x5c, so there's nothing further to verify there.
-        if (signedMetadata != null) {
-          isCertificateValid(
-            trustedEntity: trustedEntity,
-            signedMetadata: signedMetadata,
-          );
-        }
+        // findTrustedIssuer already validated the certificate (pre-final)
+        // or matched by x5c root (final-1.0) before returning trustedEntity.
         isTrusted = true;
       }
     } catch (e) {

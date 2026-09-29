@@ -10,15 +10,11 @@ import 'package:altme/oidc4vp_transaction/data/oidc4vp_transaction_factory.dart'
 import 'package:altme/oidc4vp_transaction/domain/transaction_data.dart';
 import 'package:altme/oidc4vp_transaction/presentation/oidc4_vp_transaction_page.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
-import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
-import 'package:altme/trusted_list/function/check_presentation_is_trusted.dart';
-import 'package:altme/trusted_list/function/is_certificate_valid.dart';
-import 'package:altme/trusted_list/model/trusted_entity.dart';
-import 'package:altme/trusted_list/model/trusted_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:trusted_list/trusted_list.dart';
 
 Future<void> oidc4vpSiopV2AcceptHost({
   required Uri uri,
@@ -162,45 +158,16 @@ Future<void> oidc4vpSiopV2AcceptHost({
         trustedList = profile.trustedList;
       }
 
-      // OIDC4VP final-1.0 has no domain to reliably match the verifier by
-      // (client_id may be a DID or an x509 hash rather than a URL), so
-      // the verifier is instead looked up directly by its x5c root
-      // certificate, same as OIDC4VCI final-1.0 issuers.
-      if (isOidc4vpFinal1) {
-        final x5c = (jwtHeader?['x5c'] as List?)
-            ?.map((e) => e.toString())
-            .toList();
-        if (x5c == null || x5c.isEmpty) {
-          throw Exception('No x509 certificate found for verifier request');
-        }
-        trustedEntity = getEntityFromTrustedListByX5c(
-          x5c: x5c,
-          trustedList: trustedList!,
-          type: TrustedEntityType.verifier,
-        );
-      } else {
-        trustedEntity = getEntityFromTrustedList(
-          trustedList!,
-          uri.queryParameters['client_id'],
-          TrustedEntityType.verifier,
-        );
-      }
-      if (trustedEntity != null) {
-        // For final-1.0, getEntityFromTrustedListByX5c above already
-        // only returns an entity whose rootCertificates matched the
-        // verifier's x5c, so there's nothing further to verify there.
-        if (!isOidc4vpFinal1) {
-          checkPresentationIsTrusted(
-            trustedEntity: trustedEntity,
-            encodedPresentation: encodedData as String,
-          );
-          isCertificateValid(
-            trustedEntity: trustedEntity,
-            signedMetadata: encodedData,
-          );
-        }
-        // verifier has passed the trusted list checks
-      }
+      // findTrustedVerifier validates the certificate (pre-final) or
+      // matches by x5c root (final-1.0) before returning trustedEntity -
+      // see its doc for why OIDC4VP final-1.0 needs the x5c route.
+      trustedEntity = findTrustedVerifier(
+        trustedList: trustedList!,
+        isFinal1: isOidc4vpFinal1,
+        jwtHeader: jwtHeader,
+        clientId: uri.queryParameters['client_id'],
+        encodedPresentation: encodedData as String?,
+      );
     } catch (e) {
       context.read<QRCodeScanCubit>().emitError(error: e);
       return;

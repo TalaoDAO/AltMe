@@ -1,5 +1,5 @@
 import 'package:altme/app/app.dart';
-import 'package:altme/trusted_list/model/trusted_entity.dart';
+import 'package:trusted_list/trusted_list.dart';
 
 class VerifierDisplayInfo {
   const VerifierDisplayInfo({required this.name});

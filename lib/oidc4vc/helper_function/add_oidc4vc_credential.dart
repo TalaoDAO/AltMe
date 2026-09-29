@@ -7,7 +7,6 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activit
 import 'package:altme/oidc4vc/helper_function/flatten_claims_for_display.dart';
 import 'package:altme/oidc4vc/helper_function/resolve_issuer_display.dart';
 import 'package:altme/oidc4vc/model/credential_acceptance_data.dart';
-import 'package:altme/trusted_list/function/is_issuer_trusted.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -205,14 +204,29 @@ Future<void> addOIDC4VCCredential({
         ).name
       : fallbackHost;
 
-  final isTrusted =
-      openIdConfiguration != null &&
-      isIssuerTrusted(
-        issuerOpenIdConfiguration: openIdConfiguration,
-        trustedList: profileModel.trustedList,
-        trustedListEnabled:
-            profileModel.profileSetting.walletSecurityOptions.trustedList,
-      );
+  final trustedList = profileModel.trustedList;
+  final trustedListEnabled =
+      profileModel.profileSetting.walletSecurityOptions.trustedList;
+  var isTrusted = false;
+  if (openIdConfiguration != null &&
+      trustedListEnabled &&
+      trustedList != null) {
+    try {
+      isTrusted =
+          findTrustedIssuer(
+            issuerOpenIdConfiguration: openIdConfiguration,
+            trustedList: trustedList,
+            oidc4vciDraft: profileModel
+                .profileSetting
+                .selfSovereignIdentityOptions
+                .customOidc4vcProfile
+                .oidc4vciDraft,
+          ) !=
+          null;
+    } catch (_) {
+      isTrusted = false;
+    }
+  }
 
   if (credentialIdToBeDeleted != null) {
     ///delete pending dummy credential
