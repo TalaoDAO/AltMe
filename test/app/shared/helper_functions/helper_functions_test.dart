@@ -340,10 +340,7 @@ void main() {
       expect(getDidKeyFromString('DidKeyType.p256'), DidKeyType.p256);
       expect(getDidKeyFromString('DidKeyType.ebsiv3'), DidKeyType.ebsiv3);
       expect(getDidKeyFromString('DidKeyType.jwkP256'), DidKeyType.jwkP256);
-      expect(
-        getDidKeyFromString('DidKeyType.jwtClientAttestation'),
-        DidKeyType.none,
-      );
+      expect(getDidKeyFromString('DidKeyType.jwtClientAttestation'), null);
       expect(getDidKeyFromString('InvalidKeyType'), null);
       expect(getDidKeyFromString(null), null);
     });
@@ -1638,7 +1635,7 @@ void main() {
               blockchainNetwork: TezosNetwork.ghostnet(),
               dotEnv: mockDotenv,
             );
-            expect(result, 'https://rpc.tzkt.io/ghostnet');
+            expect(result, 'https://rpc.shadownet.teztnets.com');
           });
         });
       });

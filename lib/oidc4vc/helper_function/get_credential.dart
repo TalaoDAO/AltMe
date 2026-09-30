@@ -144,7 +144,7 @@ Future<(List<dynamic>?, String?, String?)?> getCredential({
   Future<bool> sendCredentialRequest({
     required String? credentialIdentifier,
   }) async {
-    if (oidc4vcParameters.oidc4vciDraftType.getNonce) {
+    if (profileCubit.oidc4vc.needsNonceRequest) {
       nonce = await fetchFreshNonce();
     }
 

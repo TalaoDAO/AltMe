@@ -11,6 +11,21 @@ import '../../../helpers/helpers.dart';
 class MockOnBoardingTosCubit extends MockCubit<OnBoardingTosState>
     implements OnBoardingTosCubit {}
 
+/// Flutter reports (does not throw) a diagnostic when a ListTile is wrapped in
+/// a DecoratedBox that has a background colour, which is how the terms list is
+/// built. It has no bearing on what these tests verify, so drop that one
+/// diagnostic and let any other error through. The test binding restores
+/// FlutterError.onError after every testWidgets.
+void ignoreListTileInkWarning() {
+  final previous = FlutterError.onError;
+  FlutterError.onError = (details) {
+    const ignored =
+        'ListTile background color or ink splashes may be invisible';
+    if (details.exceptionAsString().contains(ignored)) return;
+    previous?.call(details);
+  };
+}
+
 void main() {
   group('OnBoarding Terms Page', () {
     late MockOnBoardingTosCubit onBoardingTosCubit;
@@ -52,6 +67,7 @@ void main() {
     });
 
     testWidgets('renders OnBoardingTosPage', (tester) async {
+      ignoreListTileInkWarning();
       when(
         () => onBoardingTosCubit.state,
       ).thenReturn(const OnBoardingTosState());
@@ -66,6 +82,7 @@ void main() {
     });
 
     testWidgets('nothing happens when button is pressed', (tester) async {
+      ignoreListTileInkWarning();
       when(
         () => onBoardingTosCubit.state,
       ).thenReturn(const OnBoardingTosState());
@@ -83,6 +100,7 @@ void main() {
     });
 
     testWidgets('checkboxes toggle state', (WidgetTester tester) async {
+      ignoreListTileInkWarning();
       when(
         () => onBoardingTosCubit.state,
       ).thenReturn(const OnBoardingTosState());
@@ -126,6 +144,7 @@ void main() {
     testWidgets('blocks going back from OnBoardingTosPage start page', (
       tester,
     ) async {
+      ignoreListTileInkWarning();
       when(
         () => onBoardingTosCubit.state,
       ).thenReturn(const OnBoardingTosState());
@@ -144,6 +163,7 @@ void main() {
     testWidgets('MyElevatedButton press calls onAcceptancePressed', (
       WidgetTester tester,
     ) async {
+      ignoreListTileInkWarning();
       when(
         () => onBoardingTosCubit.state,
       ).thenReturn(const OnBoardingTosState());
@@ -164,6 +184,7 @@ void main() {
     });
 
     testWidgets('renders DisplayTerms', (tester) async {
+      ignoreListTileInkWarning();
       when(
         () => onBoardingTosCubit.state,
       ).thenReturn(const OnBoardingTosState());
@@ -179,6 +200,7 @@ void main() {
 
     testWidgets('navigated to DashboardPage when Start is pressed'
         ' when agreeTerms and readTerms are true.', (tester) async {
+      ignoreListTileInkWarning();
       when(
         () => onBoardingTosCubit.state,
       ).thenReturn(const OnBoardingTosState(agreeTerms: true, readTerms: true));

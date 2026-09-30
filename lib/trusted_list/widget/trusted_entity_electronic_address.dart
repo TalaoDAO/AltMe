@@ -2,8 +2,8 @@ import 'package:altme/app/shared/alert_message/alert_message.dart';
 import 'package:altme/app/shared/launch_url/launch_url.dart';
 import 'package:altme/app/shared/models/state_message/state_message.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/trusted_list/model/electronic_address.dart';
 import 'package:flutter/material.dart';
+import 'package:trusted_list/trusted_list.dart';
 
 class TrustedEntityElectronicAddress extends StatelessWidget {
   const TrustedEntityElectronicAddress({
