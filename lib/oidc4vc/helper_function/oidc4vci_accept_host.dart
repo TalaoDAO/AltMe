@@ -119,7 +119,7 @@ Future<void> oidc4vciAcceptHost({
       // those it has to check.
       isTrusted =
           oidc4vc.findTrustedIssuer(
-            trustedList: trustedList!,
+            trustedList: trustedList,
             issuerOpenIdConfiguration: issuerOpenIdConfiguration,
             vcTypes: oidc4vc.offeredVcTypes(updatedOidc4vcParameters),
           ) !=
