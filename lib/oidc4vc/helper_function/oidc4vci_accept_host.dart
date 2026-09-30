@@ -22,6 +22,7 @@ Future<void> oidc4vciAcceptHost({
 }) async {
   var updatedOidc4vcParameters = oidc4vcParameters;
   final l10n = context.l10n;
+  final oidc4vc = context.read<QRCodeScanCubit>().oidc4vc;
   var acceptHost = true;
 
   if (isDeveloperMode) {
@@ -107,52 +108,28 @@ Future<void> oidc4vciAcceptHost({
         );
         trustedList = profile.trustedList;
       }
-      final oidc4vciDraft = updatedOidc4vcParameters.oidc4vciDraftType;
-      // signed_metadata does not exist in OIDC4VC final 1.0,
-      // it's only for old OIDC4VC drafts
-      if (oidc4vciDraft != OIDC4VCIDraftType.final1) {
-        updatedOidc4vcParameters = updatedOidc4vcParameters.copyWith(
-          issuerOpenIdConfiguration: getIssuerOpenIdConfiguration(
+      // Looked up before the metadata is replaced below: up to draft16 the
+      // issuer's certificate chain travels in the header of its
+      // `signed_metadata` JWT, which the payload replacing it drops.
+      //
+      // A null entry is the verdict "not trusted", not an error - the
+      // issuer may be unlisted, registered for another role, unable to
+      // prove its chain against a listed root, or not registered for the
+      // credentials it is offering. The client generation knows which of
+      // those it has to check.
+      isTrusted =
+          oidc4vc.findTrustedIssuer(
+            trustedList: trustedList!,
             issuerOpenIdConfiguration: issuerOpenIdConfiguration,
-          ),
-        );
-      }
+            vcTypes: oidc4vc.offeredVcTypes(updatedOidc4vcParameters),
+          ) !=
+          null;
 
-      final trustedEntity = findTrustedIssuer(
-        issuerOpenIdConfiguration: issuerOpenIdConfiguration,
-        trustedList: trustedList!,
-        oidc4vciDraft: oidc4vciDraft,
+      updatedOidc4vcParameters = updatedOidc4vcParameters.copyWith(
+        issuerOpenIdConfiguration: oidc4vc.resolveIssuerMetadata(
+          issuerOpenIdConfiguration,
+        ),
       );
-      if (trustedEntity != null) {
-        // check if each element of
-        // oidc4vcParameters.credentialOffer['credential_configuration_ids'] are
-        // in trustedEntity.vcTypes
-
-        final credentialConfigurationIds = updatedOidc4vcParameters
-            .credentialOffer['credential_configuration_ids'];
-        if (credentialConfigurationIds != null &&
-            credentialConfigurationIds is List) {
-          for (final credentialConfigurationId in credentialConfigurationIds) {
-            final vct = issuerOpenIdConfiguration
-                // ignore: lines_longer_than_80_chars
-                .credentialConfigurationsSupported[credentialConfigurationId]['vct'];
-            if (!trustedEntity.vcTypes!.contains(vct)) {
-              throw Exception(
-                // ignore: lines_longer_than_80_chars
-                "$credentialConfigurationId is not in the trusted entity's vcTypes",
-              );
-            }
-          }
-        } else {
-          throw Exception(
-            'credential_configuration_ids from credential offer is not valid',
-          );
-        }
-
-        // findTrustedIssuer already validated the certificate (pre-final)
-        // or matched by x5c root (final-1.0) before returning trustedEntity.
-        isTrusted = true;
-      }
     } catch (e) {
       context.read<QRCodeScanCubit>().emitError(error: e);
       return;
@@ -181,7 +158,7 @@ Future<void> oidc4vciAcceptHost({
         : await getHost(
             uri: updatedOidc4vcParameters.initialUri,
             client: client,
-            oidc4vc: context.read<QRCodeScanCubit>().oidc4vc,
+            oidc4vc: oidc4vc,
           );
 
     final issuerDisplay = resolveIssuerDisplay(

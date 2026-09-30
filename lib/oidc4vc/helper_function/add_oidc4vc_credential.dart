@@ -211,21 +211,20 @@ Future<void> addOIDC4VCCredential({
   if (openIdConfiguration != null &&
       trustedListEnabled &&
       trustedList != null) {
-    try {
-      isTrusted =
-          findTrustedIssuer(
+    // No credential offer to read here - this runs once the credential has
+    // been issued - so the issuer is checked against the one credential at
+    // hand rather than against a whole offer.
+    final oidc4vc = credentialsCubit.profileCubit.oidc4vc;
+    isTrusted =
+        oidc4vc.findTrustedIssuer(
+          trustedList: trustedList,
+          issuerOpenIdConfiguration: openIdConfiguration,
+          vcTypes: oidc4vc.vcTypesOfCredentials(
+            credentials: [credentialType],
             issuerOpenIdConfiguration: openIdConfiguration,
-            trustedList: trustedList,
-            oidc4vciDraft: profileModel
-                .profileSetting
-                .selfSovereignIdentityOptions
-                .customOidc4vcProfile
-                .oidc4vciDraft,
-          ) !=
-          null;
-    } catch (_) {
-      isTrusted = false;
-    }
+          ),
+        ) !=
+        null;
   }
 
   if (credentialIdToBeDeleted != null) {

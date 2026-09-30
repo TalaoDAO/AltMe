@@ -34,7 +34,16 @@ Future<void> oidc4vpSiopV2AcceptHost({
   Map<String, dynamic>? jwtHeader;
 
   final oidc4vc = context.read<QRCodeScanCubit>().oidc4vc;
-  final isOidc4vpFinal1 = oidc4vc is Oidc4vciClientFinal;
+  final oidc4vp = Oidc4vpClientFactory.create(
+    context
+        .read<ProfileCubit>()
+        .state
+        .model
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile
+        .oidc4vpDraft,
+  );
 
   if (requestUri != null || request != null) {
     encodedData = await getPayload(
@@ -158,13 +167,14 @@ Future<void> oidc4vpSiopV2AcceptHost({
         trustedList = profile.trustedList;
       }
 
-      // findTrustedVerifier validates the certificate (pre-final) or
-      // matches by x5c root (final-1.0) before returning trustedEntity -
-      // see its doc for why OIDC4VP final-1.0 needs the x5c route.
-      trustedEntity = findTrustedVerifier(
+      // A null entry is the verdict "not trusted", not an error - the
+      // verifier may be unlisted, unable to prove its certificate chain
+      // against a listed root, or not registered for the credentials it
+      // is asking for. The OIDC4VP generation knows which of those apply:
+      // final-1.0 has no domain to match the verifier by, so it rests on
+      // the request object's x5c alone.
+      trustedEntity = oidc4vp.findTrustedVerifier(
         trustedList: trustedList!,
-        isFinal1: isOidc4vpFinal1,
-        jwtHeader: jwtHeader,
         clientId: uri.queryParameters['client_id'],
         encodedPresentation: encodedData as String?,
       );

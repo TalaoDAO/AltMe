@@ -34,14 +34,6 @@ import 'package:secure_storage/secure_storage.dart';
 part 'qr_code_scan_cubit.g.dart';
 part 'qr_code_scan_state.dart';
 
-/// Client_id schemes accepted for presentation requests under OpenID4VP
-/// Final 1.0 - per ticket #3516, every other scheme is rejected.
-const finalClientIdSchemes = {
-  'decentralized_identifier',
-  'x509_san_dns',
-  'x509_hash',
-};
-
 class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   QRCodeScanCubit({
     required this.client,
@@ -1062,11 +1054,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         .customOidc4vcProfile;
     final isSecurityEnabled = customOidc4vcProfile.securityLevel;
 
-    /// OpenID4VP Final 1.0 tightens the accepted client_id schemes to only
-    /// decentralized_identifier, x509_san_dns and x509_hash, and this is
-    /// enforced regardless of the securityLevel setting.
-    final isFinal1 =
-        customOidc4vcProfile.oidc4vpDraft == OIDC4VPDraftType.final1;
+    /// Which generation's rules this request is read under: which
+    /// client_id schemes are accepted, whether client_id is required, and
+    /// whether the Request Object is verified regardless of the
+    /// securityLevel setting.
+    final oidc4vp = Oidc4vpClientFactory.create(
+      customOidc4vcProfile.oidc4vpDraft,
+    );
 
     late dynamic encodedData;
     if (request != null) {
@@ -1080,7 +1074,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       );
     }
 
-    if (!isSecurityEnabled && !isFinal1) {
+    if (!isSecurityEnabled && !oidc4vp.alwaysVerifiesRequest) {
       emit(state.acceptHost());
       return;
     }
@@ -1089,7 +1083,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       encodedData as String,
     );
 
-    if (isFinal1) {
+    if (oidc4vp.requiresClientId) {
       final rawClientId = payload['client_id'];
       if (rawClientId == null || rawClientId.toString().isEmpty) {
         final error = {
@@ -1135,48 +1129,20 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       /// (colon) character: <client_id_scheme>:<orig_client_id>
 
       if (clientIdScheme == null) {
-        if (isFinal1) {
-          final separatorIndex = clientId.indexOf(':');
-          final scheme = separatorIndex == -1
-              ? null
-              : clientId.substring(0, separatorIndex);
+        final clientIdentifier = oidc4vp.readClientIdentifier(clientId);
 
-          if (scheme == null || !finalClientIdSchemes.contains(scheme)) {
-            final error = {
-              'error': 'invalid_request',
-              'error_description': 'Invalid client_id_scheme',
-            };
-            unawaited(
-              scanCubit.sendErrorToServer(uri: state.uri!, data: error),
-            );
-            throw ResponseMessage(data: error);
-          }
-
-          clientIdScheme = scheme;
-          clientId = clientId.substring(separatorIndex + 1);
-        } else {
-          final draft22AndAbove =
-              customOidc4vcProfile.oidc4vpDraft.draft22AndAbove;
-
-          if (draft22AndAbove) {
-            final parts = clientId.split(':');
-            if (parts.length == 2) {
-              clientIdScheme = parts[0];
-              clientId = parts[1];
-            } else if (parts[0].startsWith('did') && parts.length == 3) {
-            } else {
-              final error = {
-                'error': 'invalid_request',
-                'error_description': 'Invalid client_id',
-              };
-              unawaited(
-                scanCubit.sendErrorToServer(uri: state.uri!, data: error),
-              );
-              throw ResponseMessage(data: error);
-            }
-          }
+        if (clientIdentifier == null) {
+          final error = {
+            'error': 'invalid_request',
+            'error_description': oidc4vp.unreadableClientIdentifierDescription,
+          };
+          unawaited(scanCubit.sendErrorToServer(uri: state.uri!, data: error));
+          throw ResponseMessage(data: error);
         }
-      } else if (isFinal1 && !finalClientIdSchemes.contains(clientIdScheme)) {
+
+        clientIdScheme = clientIdentifier.scheme;
+        clientId = clientIdentifier.clientId;
+      } else if (!oidc4vp.acceptsClientIdScheme(clientIdScheme)) {
         final error = {
           'error': 'invalid_request',
           'error_description': 'Invalid client_id_scheme',
@@ -1204,13 +1170,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         } else if (clientIdScheme == 'decentralized_identifier' ||
             clientIdScheme == 'did') {
           /// bypass, resolved via universal resolver downstream
-        } else if (!isFinal1 && clientIdScheme == 'verifier_attestation') {
+        } else if (clientIdScheme == 'verifier_attestation' &&
+            oidc4vp.acceptsClientIdScheme(clientIdScheme)) {
           publicKeyJwk = await checkVerifierAttestation(
             clientId: clientId,
             header: header,
             jwtDecode: jwtDecode,
           );
-        } else if (!isFinal1 && clientIdScheme == 'redirect_uri') {
+        } else if (clientIdScheme == 'redirect_uri' &&
+            oidc4vp.acceptsClientIdScheme(clientIdScheme)) {
           /// no need to verify
           return emit(state.acceptHost());
         } else {
@@ -1731,17 +1699,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 .walletSecurityOptions
                 .trustedList;
             if (!trustedListEnabled || trustedList == null) return false;
-            try {
-              return findTrustedIssuer(
-                    issuerOpenIdConfiguration:
-                        oidc4vcParameters.issuerOpenIdConfiguration,
-                    trustedList: trustedList,
-                    oidc4vciDraft: oidc4vcParameters.oidc4vciDraftType,
-                  ) !=
-                  null;
-            } catch (_) {
-              return false;
-            }
+            return oidc4vc.findTrustedIssuer(
+                  trustedList: trustedList,
+                  issuerOpenIdConfiguration:
+                      oidc4vcParameters.issuerOpenIdConfiguration,
+                  vcTypes: oidc4vc.offeredVcTypes(oidc4vcParameters),
+                ) !=
+                null;
           }();
 
       navigateToOidc4vcCredentialPickPage(

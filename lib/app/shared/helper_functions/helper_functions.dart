@@ -2245,21 +2245,24 @@ String getDidMethod(BlockchainType blockchainType) {
   return didMethod;
 }
 
+/// Whether the Authorization Server's metadata is resolved through the
+/// issuer's `authorization_servers` link, which every generation after
+/// draft11 does.
+///
+/// The answer belongs to the OIDC4VCI generation, so it is the client that
+/// gives it - see [OIDC4VCIClient.usesOAuthAuthorizationServerLink].
 bool useOauthServerAuthEndPoint(ProfileModel profileModel) {
-  final profileSetting = profileModel.profileSetting;
-  final customOidc4vcProfile =
-      profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
-
   // Commenting while EBSI V4 is not live
   // final bool notEligible = profileModel.profileType == ProfileType.ebsiV3 ||
   //     profileModel.profileType == ProfileType.ebsiV4;
 
-  final bool greaterThanDraft13 =
-      customOidc4vcProfile.oidc4vciDraft != OIDC4VCIDraftType.draft11;
-
-  if (greaterThanDraft13) return true;
-
-  return false;
+  return Oidc4vciClientFactory.create(
+    profileModel
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile
+        .oidc4vciDraft,
+  ).usesOAuthAuthorizationServerLink;
 }
 
 Future<String> getDPopJwt({
