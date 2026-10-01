@@ -1470,20 +1470,29 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             /// the authorization code flow puts a whole browser round trip in
             /// between and a proof of possession is short-lived. The §11 cache
             /// answers from memory, so this costs a signature, not a request.
-            if (customOidc4vcProfile.clientAuthentication ==
-                ClientAuthentication.wia) {
-              final (_, _, _, freshAttestation, freshAttestationPop) =
-                  await getClientDetails(
-                    profileCubit: profileCubit,
-                    isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
-                    issuer: oidc4vcParameters.issuer,
-                    issuerMetadata: oidc4vcParameters
-                        .issuerOpenIdConfiguration
-                        .rawConfiguration,
-                  );
+            final fetchesClientAttestation =
+                customOidc4vcProfile.clientAuthentication ==
+                ClientAuthentication.wia;
+            Future<void> fetchClientAttestation() async {
+              final (
+                _,
+                _,
+                _,
+                freshAttestation,
+                freshAttestationPop,
+              ) = await getClientDetails(
+                profileCubit: profileCubit,
+                isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
+                issuer: oidc4vcParameters.issuer,
+                issuerMetadata: oidc4vcParameters
+                    .issuerOpenIdConfiguration
+                    .rawConfiguration,
+              );
               tokenAttestation = freshAttestation ?? tokenAttestation;
               tokenAttestationPop = freshAttestationPop ?? tokenAttestationPop;
             }
+
+            if (fetchesClientAttestation) await fetchClientAttestation();
 
             /// get tokendata
             tokenData = oidc4vc.buildTokenData(
@@ -1526,22 +1535,47 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               );
             }
 
-            /// get token response
-            final (
-              Map<String, dynamic>? tokenResponse,
-              String? accessToken,
-              String? cnonce,
-              List<dynamic>? authorizationDetails,
-            ) = await oidc4vc.getTokenResponse(
+            final requestTokenData = tokenData;
+            Future<(Map<String, dynamic>?, String?, String?, List<dynamic>?)>
+            requestToken(String? dPop) => oidc4vc.getTokenResponse(
               authorization: authorization,
               tokenEndPoint: oidc4vcParameters.tokenEndpoint,
               oAuthClientAttestation: tokenAttestation,
               oAuthClientAttestationPop: tokenAttestationPop,
               dio: client.dio,
-              tokenData: tokenData,
+              tokenData: requestTokenData,
               dPop: dPop,
               issuer: oidc4vcParameters.issuer,
             );
+
+            /// get token response - retried once with a fresh proof when the
+            /// authorization server asks for a DPoP nonce (RFC 9449 §8). The
+            /// client attestation PoP is replaced too: the server has already
+            /// consumed its `jti` on the first attempt and would reject it as
+            /// replayed.
+            (Map<String, dynamic>?, String?, String?, List<dynamic>?)
+            tokenResult;
+            try {
+              tokenResult = await requestToken(dPop);
+            } on DioException catch (e) {
+              final dpopNonce = dpopNonceChallenge(e);
+              if (dPop == null || dpopNonce == null) rethrow;
+              if (fetchesClientAttestation) await fetchClientAttestation();
+              tokenResult = await requestToken(
+                await getDPopJwt(
+                  url: oidc4vcParameters.tokenEndpoint,
+                  accessToken: savedAccessToken,
+                  publicKey: publicKeyForDPop,
+                  dpopNonce: dpopNonce,
+                ),
+              );
+            }
+            final (
+              Map<String, dynamic>? tokenResponse,
+              String? accessToken,
+              String? cnonce,
+              List<dynamic>? authorizationDetails,
+            ) = tokenResult;
             savedAccessToken = accessToken;
             savedNonce = cnonce;
             savedAuthorizationDetails = authorizationDetails;

@@ -5,10 +5,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class NetworkException with MessageHandler {
-  NetworkException({this.message, this.data});
+  NetworkException({this.message, this.data, this.headers});
 
   final NetworkError? message;
   final dynamic data;
+
+  /// Headers of the error response, e.g. a `DPoP-Nonce` challenge.
+  final Headers? headers;
 
   static NetworkException handleResponse(int? statusCode, DioException? error) {
     switch (statusCode) {
@@ -18,71 +21,85 @@ class NetworkException with MessageHandler {
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_BAD_REQUEST,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
       case 401:
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_UNAUTHENTICATED,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
       case 403:
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
       case 404:
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_NOT_FOUND,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
       case 408:
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
       case 409:
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_CONFLICT,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
       case 410:
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_NOT_READY,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
       case 412:
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_PRECONDITION_FAILED,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
       case 429:
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
       case 500:
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
       case 501:
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
       case 503:
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
       case 504:
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
       default:
         return NetworkException(
           message: NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
     }
   }

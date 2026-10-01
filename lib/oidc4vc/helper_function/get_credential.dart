@@ -338,16 +338,33 @@ Future<dynamic> getSingleCredentialData({
       );
     }
 
-    final credentialResponseDataValue = await profileCubit.oidc4vc
-        .getSingleCredential(
+    try {
+      return await profileCubit.oidc4vc.getSingleCredential(
+        accessToken: accessToken,
+        dio: Dio(),
+        credentialData: credentialData,
+        credentialEndpoint: credentialEndpoint,
+        dPop: dPop,
+      );
+    } on DioException catch (e) {
+      // RFC 9449 §9: a resource server that wants a nonce in the proof answers
+      // 401 `use_dpop_nonce` with the nonce in a `DPoP-Nonce` header, and the
+      // client retries once with a proof that carries it.
+      final dpopNonce = dpopNonceChallenge(e);
+      if (dPop == null || dpopNonce == null) rethrow;
+      return await profileCubit.oidc4vc.getSingleCredential(
+        accessToken: accessToken,
+        dio: Dio(),
+        credentialData: credentialData,
+        credentialEndpoint: credentialEndpoint,
+        dPop: await getDPopJwt(
+          url: credentialEndpoint,
           accessToken: accessToken,
-          dio: Dio(),
-          credentialData: credentialData,
-          credentialEndpoint: credentialEndpoint,
-          dPop: dPop,
-        );
-
-    return credentialResponseDataValue;
+          publicKey: publicKeyForDPop,
+          dpopNonce: dpopNonce,
+        ),
+      );
+    }
   } catch (e) {
     rethrow;
   }

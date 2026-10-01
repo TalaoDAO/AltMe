@@ -2306,11 +2306,18 @@ bool useOauthServerAuthEndPoint(ProfileModel profileModel) {
   ).usesOAuthAuthorizationServerLink;
 }
 
+/// A DPoP proof (RFC 9449) for a POST to [url].
+///
+/// [dpopNonce] is a nonce the server supplied in a `DPoP-Nonce` response
+/// header (§8, §9), carried as the proof's `nonce` claim. It is not
+/// [nonce]: that one is the OpenID4VCI `c_nonce`, which has no place in a DPoP
+/// proof and is deliberately left out.
 Future<String> getDPopJwt({
   required String url,
   required String publicKey,
   String? accessToken,
   String? nonce,
+  String? dpopNonce,
 }) async {
   final tokenParameters = TokenParameters(
     privateKey: jsonDecode(publicKey) as Map<String, dynamic>,
@@ -2333,6 +2340,7 @@ Future<String> getDPopJwt({
   }
 
   // if (nonce != null) payload['nonce'] = nonce;
+  if (dpopNonce != null) payload['nonce'] = dpopNonce;
 
   final jwtToken = generateToken(
     payload: payload,
@@ -2340,6 +2348,28 @@ Future<String> getDPopJwt({
     ignoreProofHeaderType: false,
   );
   return jwtToken;
+}
+
+/// The nonce of an RFC 9449 `use_dpop_nonce` challenge in [error], or null
+/// when it is not one. The server wants a DPoP proof that carries this nonce
+/// and expects the client to retry once: an authorization server (token, PAR)
+/// answers 400 with the error in the body (§8), a resource server 401 with it
+/// in `WWW-Authenticate` (§9); both put the nonce in a `DPoP-Nonce` header.
+/// [error] is a [DioException], or the [NetworkException] `DioClient` makes
+/// of one.
+String? dpopNonceChallenge(Object error) {
+  final (data, headers) = switch (error) {
+    DioException(:final response) => (response?.data, response?.headers),
+    NetworkException(:final data, :final headers) => (data, headers),
+    _ => (null, null),
+  };
+  final dpopNonce = headers?.value('dpop-nonce');
+  if (dpopNonce == null) return null;
+
+  final isChallenge =
+      (data is Map && data['error'] == 'use_dpop_nonce') ||
+      (headers?.value('www-authenticate')?.contains('use_dpop_nonce') ?? false);
+  return isChallenge ? dpopNonce : null;
 }
 
 String generateP256KeyForDPop() {
