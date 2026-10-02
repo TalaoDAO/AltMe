@@ -53,7 +53,6 @@ const _$WalletProtectionTypeEnumMap = {
 const _$ProfileTypeEnumMap = {
   ProfileType.defaultOne: 'defaultOne',
   ProfileType.diipv5: 'diipv5',
-  ProfileType.EUDIW: 'EUDIW',
   ProfileType.custom: 'custom',
   ProfileType.enterprise: 'enterprise',
 };

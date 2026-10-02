@@ -73,20 +73,11 @@ class HomeCredentialCategoryItem extends StatelessWidget {
                 mainAxisSpacing: 14,
                 childAspectRatio: Sizes.credentialAspectRatio,
               ),
-              itemCount: sortedCredentials.length + 1,
+              itemCount: sortedCredentials.length,
               itemBuilder: (_, index) {
-                if (index == sortedCredentials.length) {
-                  if (credentialCategory == CredentialCategory.pendingCards) {
-                    return Container();
-                  }
-                  return AddCredentialButton(
-                    credentialCategory: credentialCategory,
-                  );
-                } else {
-                  return HomeCredentialItem(
-                    credentialModel: sortedCredentials[index],
-                  );
-                }
+                return HomeCredentialItem(
+                  credentialModel: sortedCredentials[index],
+                );
               },
             ),
           ),
