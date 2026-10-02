@@ -21,6 +21,7 @@ Future<CredentialAcceptanceItem> buildCredentialAcceptanceItem({
   required String format,
   required OpenIdConfiguration? openIdConfiguration,
   required JWTDecode jwtDecode,
+  String? keyId,
 }) async {
   late Map<String, dynamic> credentialFromOIDC4VC;
   late VCFormatType vcFormatType;
@@ -156,7 +157,7 @@ Future<CredentialAcceptanceItem> buildCredentialAcceptanceItem({
     activities: [Activity(acquisitionAt: DateTime.now())],
     display: display,
     profileType: credentialsCubit.profileCubit.state.model.profileType,
-  );
+  ).copyWith(keyId: keyId);
 
   final credentialAcceptanceItem = CredentialAcceptanceItem(
     credentialDisplayName: display?.name ?? credentialType,

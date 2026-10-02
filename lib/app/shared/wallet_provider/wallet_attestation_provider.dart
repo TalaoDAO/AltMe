@@ -38,6 +38,30 @@ class ClientAttestationPair extends Equatable {
   List<Object?> get props => [attestation, proofOfPossession, clientId];
 }
 
+/// Proofs covering a batch of fresh credential-binding keys (Wallet Provider
+/// Protocol §12.10), together with the local handle of each key.
+///
+/// [keyIds] is in the same order the issuer's batch credential request
+/// expects: `keyIds[i]` is the key the i-th credential of the batch ends up
+/// bound to, so it is also the key a presentation of that credential must
+/// sign its Key Binding JWT with. A wallet that does not attest its own keys
+/// has no handle to give — see
+/// [WalletAttestationProvider.keyAttestationProofsFor].
+class KeyAttestationProofs extends Equatable {
+  /// Creates a key attestation proofs value.
+  const KeyAttestationProofs({required this.proofs, required this.keyIds});
+
+  /// The proof(s) sent as `proofs.attestation` in the Credential Request.
+  final List<String> proofs;
+
+  /// The local key-store handle of each credential-binding key the proof(s)
+  /// cover.
+  final List<String> keyIds;
+
+  @override
+  List<Object?> get props => [proofs, keyIds];
+}
+
 /// Where a wallet gets the attestations it presents to a credential issuer.
 ///
 /// The seam between the wallet's OpenID4VCI code and whatever scheme its
@@ -78,7 +102,7 @@ abstract class WalletAttestationProvider {
   /// this issuance is for. The Wallet Provider Protocol reads
   /// `preferred_key_storage_status_period` and, per credential configuration,
   /// the key-storage requirements out of them (§12.4).
-  Future<List<String>?> keyAttestationProofsFor({
+  Future<KeyAttestationProofs?> keyAttestationProofsFor({
     required String credentialIssuer,
     required String cNonce,
     required int batchSize,

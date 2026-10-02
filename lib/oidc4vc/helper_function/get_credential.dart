@@ -8,7 +8,7 @@ import 'package:oidc4vc/oidc4vc.dart';
 /// Retreive credential_type from url
 // encodedCredentialOrFutureTokens,deferredCredentialEndpoint,
 // format
-Future<(List<dynamic>?, String?, String?)?> getCredential({
+Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
   required Oidc4vcParameters oidc4vcParameters,
   required dynamic credential,
   required ProfileCubit profileCubit,
@@ -55,6 +55,10 @@ Future<(List<dynamic>?, String?, String?)?> getCredential({
   );
 
   final credentialResponseData = <dynamic>[];
+  // Parallel to credentialResponseData: credentialKeyIds[i] is the key
+  // credentialResponseData[i] is bound to, when it was issued with a Wallet
+  // Key Attestation, or null for every other credential.
+  final credentialKeyIds = <String?>[];
 
   final issuerTokenParameters = IssuerTokenParameters(
     privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
@@ -148,7 +152,7 @@ Future<(List<dynamic>?, String?, String?)?> getCredential({
       nonce = await fetchFreshNonce();
     }
 
-    List<String>? keyAttestationProofs;
+    KeyAttestationProofs? keyAttestation;
     if (keyAttestationProvider != null) {
       final cNonce = nonce;
 
@@ -167,20 +171,19 @@ Future<(List<dynamic>?, String?, String?)?> getCredential({
         );
       }
 
-      keyAttestationProofs = await keyAttestationProvider
-          .keyAttestationProofsFor(
-            credentialIssuer: oidc4vcParameters.issuer,
-            cNonce: cNonce,
-            batchSize: batchSize,
-            credentialConfigurationId: credentialType,
-            issuerMetadata:
-                oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
-          );
+      keyAttestation = await keyAttestationProvider.keyAttestationProofsFor(
+        credentialIssuer: oidc4vcParameters.issuer,
+        cNonce: cNonce,
+        batchSize: batchSize,
+        credentialConfigurationId: credentialType,
+        issuerMetadata:
+            oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
+      );
     }
 
     final credentialData = await profileCubit.oidc4vc.buildCredentialData(
       nonce: nonce,
-      keyAttestationProofs: keyAttestationProofs,
+      keyAttestationProofs: keyAttestation?.proofs,
       issuerTokenParameters: issuerTokenParameters,
       credentialType: credentialType,
       types: types,
@@ -229,7 +232,7 @@ Future<(List<dynamic>?, String?, String?)?> getCredential({
       /// Wallet Provider Protocol §12.11: a key attestation is spent on the
       /// issuance attempt, not on its outcome, so it is marked consumed
       /// whether the request returned a credential or threw.
-      if (keyAttestationProofs != null) {
+      if (keyAttestation != null) {
         await keyAttestationProvider?.markKeyAttestationsConsumed(
           credentialIssuer: oidc4vcParameters.issuer,
         );
@@ -244,6 +247,10 @@ Future<(List<dynamic>?, String?, String?)?> getCredential({
     }
 
     credentialResponseData.add(credentialResponseDataValue);
+    // Only the first credential of a batch response is ever turned into a
+    // CredentialModel (see buildCredentialAcceptanceItem's dcSdJWT branch),
+    // so the first attested key is the one that credential needs correlated.
+    credentialKeyIds.add(keyAttestation?.keyIds.firstOrNull);
     return true;
   }
 
@@ -304,7 +311,12 @@ Future<(List<dynamic>?, String?, String?)?> getCredential({
         oidc4vcParameters.issuerOpenIdConfiguration,
       );
 
-  return (credentialResponseData, deferredCredentialEndpoint, format);
+  return (
+    credentialResponseData,
+    deferredCredentialEndpoint,
+    format,
+    credentialKeyIds,
+  );
 }
 
 int count = 0;

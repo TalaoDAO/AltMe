@@ -215,6 +215,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       uri,
       jsonDecode(privateKeyString) as Map<String, dynamic>,
       customOidc4vcProfile.proofHeader,
+      credentialKeySigner: profileCubit.credentialKeySigner,
     );
 
     await context.read<ScanCubit>().presentOidc4vpFinal(

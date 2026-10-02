@@ -97,7 +97,7 @@ class LegacyWalletAttestationProvider implements WalletAttestationProvider {
   /// Always `null`: this wallet provider does not attest credential-binding
   /// keys, so credential requests carry no key proofs.
   @override
-  Future<List<String>?> keyAttestationProofsFor({
+  Future<KeyAttestationProofs?> keyAttestationProofsFor({
     required String credentialIssuer,
     required String cNonce,
     required int batchSize,

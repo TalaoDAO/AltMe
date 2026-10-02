@@ -35,6 +35,7 @@ class CredentialModel extends Equatable {
     this.pendingInfo,
     this.credentialSupported,
     this.aiCredentialAnalysis,
+    this.keyId,
   });
 
   factory CredentialModel.fromJson(Map<String, dynamic> json) {
@@ -86,6 +87,7 @@ class CredentialModel extends Equatable {
       credentialSupported: oldCredentialModel.credentialSupported,
       pendingInfo: oldCredentialModel.pendingInfo,
       profileLinkedId: profileType.getVCId,
+      keyId: oldCredentialModel.keyId,
     );
     return credentialModel;
   }
@@ -115,6 +117,12 @@ class CredentialModel extends Equatable {
   final String? profileLinkedId;
   final String? aiCredentialAnalysis;
 
+  /// The local handle of the key this credential is bound to, when it was
+  /// issued with a Wallet Key Attestation (Wallet Provider Protocol §12)
+  /// rather than the wallet's own proof-of-possession key. `null` for every
+  /// other credential, which presents with the wallet's usual key instead.
+  final String? keyId;
+
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
   CredentialModel copyWith({
@@ -138,6 +146,7 @@ class CredentialModel extends Equatable {
     Map<String, dynamic>? credentialSupported,
     String? profileLinkedId,
     String? aiCredentialAnalysis,
+    String? keyId,
   }) {
     final credentialModel = CredentialModel(
       id: id ?? this.id,
@@ -160,6 +169,7 @@ class CredentialModel extends Equatable {
       credentialSupported: credentialSupported ?? this.credentialSupported,
       profileLinkedId: profileLinkedId ?? this.profileLinkedId,
       aiCredentialAnalysis: aiCredentialAnalysis ?? this.aiCredentialAnalysis,
+      keyId: keyId ?? this.keyId,
     );
     return credentialModel;
   }
@@ -314,5 +324,6 @@ class CredentialModel extends Equatable {
     pendingInfo,
     format,
     credentialSupported,
+    keyId,
   ];
 }

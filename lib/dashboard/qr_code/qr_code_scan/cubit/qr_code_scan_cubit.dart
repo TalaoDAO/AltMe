@@ -1611,7 +1611,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           /// get credentials - a credential type we can't fetch (even after
           /// the nonce retry below) is skipped rather than blocking the
           /// others
-          (List<dynamic>?, String?, String?)? result;
+          (List<dynamic>?, String?, String?, List<String?>)? result;
           try {
             try {
               result = await getCredential(
@@ -1664,6 +1664,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             encodedCredentialOrFutureTokens,
             deferredCredentialEndpoint,
             format,
+            credentialKeyIds,
           ) = result;
 
           final lastElement = encodedCredentialOrFutureTokens!.last;
@@ -1706,6 +1707,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             format: format!,
             qrCodeScanCubit: this,
             openIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
+            credentialKeyIds: credentialKeyIds,
           );
           allItems.addAll(items);
         } else {

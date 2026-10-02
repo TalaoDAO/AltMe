@@ -84,6 +84,7 @@ Future<String> buildPresentation({
   required Uri uri,
   required Map<String, dynamic> privateKey,
   required ProofHeaderType proofHeaderType,
+  JwtSigner Function(String keyId)? credentialKeySigner,
 }) async {
   final sdJwt = SelectiveDisclosure(credential);
 
@@ -101,15 +102,6 @@ Future<String> buildPresentation({
   // A Key Binding JWT is REQUIRED by the SD-JWT VC presentation format
   // whenever the credential carries a holder-binding key (`cnf`).
   if (credential.data['cnf'] != null) {
-    final tokenParameters = TokenParameters(
-      privateKey: privateKey,
-      did: '', // not used for the embedded-jwk KB-JWT header
-      mediaType: MediaType.selectiveDisclosure,
-      clientType: ClientType.p256JWKThumprint,
-      proofHeaderType: proofHeaderType,
-      clientId: '', // not used for the embedded-jwk KB-JWT header
-    );
-
     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     final sdHash = sh256Hash(newJwt);
 
@@ -120,10 +112,27 @@ Future<String> buildPresentation({
       'sd_hash': sdHash,
     };
 
-    final kbJwt = generateToken(
+    // A credential issued with a Wallet Key Attestation is bound to a key
+    // this wallet's usual private key never signs with (Wallet Provider
+    // Protocol §12) - its key store signs the Key Binding JWT directly,
+    // instead of handing out a raw key to sign locally.
+    final keyId = credential.keyId;
+    final signer = keyId != null ? credentialKeySigner?.call(keyId) : null;
+
+    final kbJwt = await signKeyBindingJwt(
       payload: kbPayload,
-      tokenParameters: tokenParameters,
-      ignoreProofHeaderType: true,
+      mediaType: MediaType.selectiveDisclosure,
+      signer: signer,
+      tokenParameters: signer == null
+          ? TokenParameters(
+              privateKey: privateKey,
+              did: '', // not used for the embedded-jwk KB-JWT header
+              mediaType: MediaType.selectiveDisclosure,
+              clientType: ClientType.p256JWKThumprint,
+              proofHeaderType: proofHeaderType,
+              clientId: '', // not used for the embedded-jwk KB-JWT header
+            )
+          : null,
     );
 
     newJwt = '$newJwt$kbJwt';
@@ -139,8 +148,9 @@ Future<Map<String, List<String>>> buildVpToken(
   List<CredentialModel> candidates, // your wallet-side objects, same order
   Uri uri,
   Map<String, dynamic> privateKey,
-  ProofHeaderType proofHeaderType,
-) async {
+  ProofHeaderType proofHeaderType, {
+  JwtSigner Function(String keyId)? credentialKeySigner,
+}) async {
   final vpToken = <String, List<String>>{};
 
   for (final entry in result.verifiableCredentials.entries) {
@@ -166,6 +176,7 @@ Future<Map<String, List<String>>> buildVpToken(
           uri: uri,
           privateKey: privateKey,
           proofHeaderType: proofHeaderType,
+          credentialKeySigner: credentialKeySigner,
         ),
       );
     }

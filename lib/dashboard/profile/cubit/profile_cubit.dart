@@ -35,6 +35,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     required this.langCubit,
     required this.jwtDecode,
     this.walletAttestationProvider,
+    this.credentialKeySigner,
   }) : super(ProfileState(model: ProfileModel.empty())) {
     load();
   }
@@ -56,6 +57,15 @@ class ProfileCubit extends Cubit<ProfileState> {
   /// back to the request-scoped [LegacyWalletAttestationProvider] exactly as
   /// before.
   final WalletAttestationProvider? walletAttestationProvider;
+
+  /// Resolves a signer for a credential-binding key by its local handle, for
+  /// a credential issued with a Wallet Key Attestation (Wallet Provider
+  /// Protocol §12) rather than the wallet's own proof-of-possession key.
+  ///
+  /// Left `null`, a credential never carries a [CredentialModel.keyId] either
+  /// (there is nothing to resolve), so every call site keeps presenting with
+  /// the wallet's usual key exactly as before.
+  final JwtSigner Function(String keyId)? credentialKeySigner;
 
   Timer? _timer;
 
