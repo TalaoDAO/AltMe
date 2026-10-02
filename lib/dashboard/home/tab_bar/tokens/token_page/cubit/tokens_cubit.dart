@@ -161,7 +161,7 @@ class TokensCubit extends Cubit<TokensState> {
         final icon =
             (json['token_instance']
                 as Map<String, dynamic>)['metadata']['image_url'];
-        return TokenModel(
+        final token = TokenModel(
           contractAddress:
               (json['token_instance'] as Map<String, dynamic>)['owner']['hash']
                   as String,
@@ -182,6 +182,7 @@ class TokensCubit extends Cubit<TokensState> {
           icon: icon.toString(),
           decimalsToShow: 2,
         );
+        return token;
       }).toList();
     }
 
@@ -249,7 +250,7 @@ class TokensCubit extends Cubit<TokensState> {
         final icon = (json['logo'] == null && json['symbol'] == 'TALAO')
             ? IconStrings.talaoIcon
             : json['logo'] as String?;
-        return TokenModel(
+        final token = TokenModel(
           contractAddress: json['token_address'] as String,
           name: (json['name'] as String?) ?? '',
           symbol: (json['symbol'] as String?) ?? '',
@@ -260,6 +261,7 @@ class TokensCubit extends Cubit<TokensState> {
           icon: icon,
           decimalsToShow: 2,
         );
+        return token;
       }).toList();
     }
 
@@ -351,9 +353,10 @@ class TokensCubit extends Cubit<TokensState> {
     if (tokensBalancesJsonArray.isNotEmpty) {
       newData = tokensBalancesJsonArray.map((dynamic json) {
         final token = TokenModel.fromJson(json as Map<String, dynamic>);
-        return token.copyWith(
+        final updatedToken = token.copyWith(
           decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
         );
+        return updatedToken;
       }).toList();
     }
 
@@ -538,7 +541,7 @@ class TokensCubit extends Cubit<TokensState> {
 
       final coinBalance = response['coin_balance'].toString().convertTo1e18;
 
-      return TokenModel(
+      final token = TokenModel(
         contractAddress: '',
         name: 'Etherlink',
         symbol: 'XTZ',
@@ -548,10 +551,11 @@ class TokensCubit extends Cubit<TokensState> {
         standard: 'ERC20',
         decimalsToShow: 5,
       );
+      return token;
     } catch (e, s) {
       if (e is NetworkException &&
           e.message == NetworkError.NETWORK_ERROR_NOT_FOUND) {
-        return TokenModel(
+        final token = TokenModel(
           contractAddress: '',
           name: 'Etherlink',
           symbol: 'XTZ',
@@ -561,6 +565,7 @@ class TokensCubit extends Cubit<TokensState> {
           standard: 'ERC20',
           decimalsToShow: 5,
         );
+        return token;
       }
 
       getLogger(toString()).e('error: $e, stack: $s');
@@ -584,7 +589,7 @@ class TokensCubit extends Cubit<TokensState> {
               )
               as Map<String, dynamic>;
 
-      return TokenModel(
+      final token = TokenModel(
         contractAddress: '',
         name: ethereumNetwork.mainTokenName,
         symbol: ethereumNetwork.mainTokenSymbol,
@@ -594,6 +599,7 @@ class TokensCubit extends Cubit<TokensState> {
         standard: 'ERC20',
         decimalsToShow: 5,
       );
+      return token;
     } catch (e, s) {
       getLogger(toString()).e('error: $e, stack: $s');
       return null;
@@ -673,11 +679,12 @@ class TokensCubit extends Cubit<TokensState> {
       // get usd balance
       final xtzUSDPrice = await _getTezosCurrentPriceInUsd() ?? 0;
 
-      return token.copyWith(
+      final updatedToken = token.copyWith(
         tokenUSDPrice: xtzUSDPrice,
         balanceInUSD: token.calculatedBalanceInDouble * xtzUSDPrice,
         decimalsToShow: token.calculatedBalanceInDouble < 1.0 ? 5 : 2,
       );
+      return updatedToken;
     } catch (e, s) {
       getLogger(toString()).e('unable to get usd balance of XTZ, e: $e, s: $s');
       return token;

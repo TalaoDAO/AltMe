@@ -43,21 +43,33 @@ class NftModel extends Equatable {
     if (displayUri?.isEmpty ?? true) {
       return null;
     }
-    return displayUri?.replaceAll('ipfs://', Urls.ipfsGateway);
+    final resolvedDisplayUrl = displayUri?.replaceAll(
+      'ipfs://',
+      Urls.ipfsGateway,
+    );
+    return resolvedDisplayUrl;
   }
 
   String? get thumbnailUrl {
     if (thumbnailUri?.isEmpty ?? true) {
       return null;
     }
-    return thumbnailUri?.replaceAll('ipfs://', Urls.ipfsGateway);
+    final resolvedThumbnailUrl = thumbnailUri?.replaceAll(
+      'ipfs://',
+      Urls.ipfsGateway,
+    );
+    return resolvedThumbnailUrl;
   }
 
   String? get artifactUrl {
     if (artifactUri == '') {
       return null;
     }
-    return artifactUri.replaceAll('ipfs://', Urls.ipfsGateway);
+    final resolvedArtifactUrl = artifactUri.replaceAll(
+      'ipfs://',
+      Urls.ipfsGateway,
+    );
+    return resolvedArtifactUrl;
   }
 
   Map<String, dynamic> toJson() => _$NftModelToJson(this);

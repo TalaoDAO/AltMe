@@ -114,7 +114,8 @@ class MatrixChatImpl extends MatrixChatInterface {
 
   @override
   Future<String?> getRoomIdFromStorage(String roomIdStoredKey) async {
-    return secureStorageProvider.get(roomIdStoredKey);
+    final roomId = secureStorageProvider.get(roomIdStoredKey);
+    return roomId;
   }
 
   @override
@@ -161,7 +162,8 @@ class MatrixChatImpl extends MatrixChatInterface {
         events.where((event) => event.type == 'm.room.message').toList()
           ..sort((e1, e2) => e2.originServerTs.compareTo(e1.originServerTs));
 
-    return messageEvents.map(mapEventToMessage).toList();
+    final messages = messageEvents.map(mapEventToMessage).toList();
+    return messages;
   }
 
   @override
@@ -424,10 +426,11 @@ class MatrixChatImpl extends MatrixChatInterface {
           } catch (_) {
             final millisecondsSinceEpoch =
                 DateTime.now().millisecondsSinceEpoch;
-            return createRoomAndInviteSupport(
+            final newRoomId = createRoomAndInviteSupport(
               '$roomName-updated-$millisecondsSinceEpoch',
               invites,
             );
+            return newRoomId;
           }
         } else {
           await client!.joinRoom(result.first.id);
@@ -467,7 +470,8 @@ class MatrixChatImpl extends MatrixChatInterface {
     final Uri uri = Uri.parse(
       url,
     ).getThumbnail(client!, height: height, width: width, animated: false);
-    return uri.toString();
+    final thumbnailUrl = uri.toString();
+    return thumbnailUrl;
   }
 
   @override

@@ -426,6 +426,64 @@ void main() {
         expect(isOIDC4VCIUrl(Uri.parse('haip://another/path')), true);
       });
 
+      group('isSiopV2OrOidc4VpUrl', () {
+        test('returns true for scheme-based presentation URLs', () {
+          expect(
+            isSiopV2OrOidc4VpUrl(Uri.parse('openid4vp://?request_uri=foo')),
+            true,
+          );
+          expect(
+            isSiopV2OrOidc4VpUrl(Uri.parse('siopv2://?request_uri=foo')),
+            true,
+          );
+        });
+
+        test('returns true for a wallet provider universal link carrying '
+            'client_id and request_uri, at any path', () {
+          expect(
+            isSiopV2OrOidc4VpUrl(
+              Uri.parse(
+                'https://app.altme.io/'
+                '?client_id=x509_hash%3Aabc'
+                '&request_uri=https%3A%2F%2Fverifier.example%2Freq%2F1'
+                '&request_uri_method=post',
+              ),
+            ),
+            true,
+          );
+          expect(
+            isSiopV2OrOidc4VpUrl(
+              Uri.parse(
+                'https://app.altme.io/app/download'
+                '?client_id=x509_hash%3Aabc'
+                '&request_uri=https%3A%2F%2Fverifier.example%2Freq%2F1'
+                '&request_uri_method=post',
+              ),
+            ),
+            true,
+          );
+        });
+
+        test('returns false for a wallet provider universal link missing '
+            'client_id or request_uri', () {
+          expect(
+            isSiopV2OrOidc4VpUrl(
+              Uri.parse('https://app.altme.io/app/download/callback?code=abc'),
+            ),
+            false,
+          );
+        });
+
+        test('returns false for an unrelated https URL', () {
+          expect(
+            isSiopV2OrOidc4VpUrl(
+              Uri.parse('https://example.com/?client_id=foo&request_uri=bar'),
+            ),
+            false,
+          );
+        });
+      });
+
       group('handleErrorForOID4VCI throws correct errors', () {
         // test('Test tokenEndpoint is null', () {
         //   expect(

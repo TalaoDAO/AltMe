@@ -14,10 +14,11 @@ class BackupCredentialPage extends StatelessWidget {
   const BackupCredentialPage({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/BackupCredentialPage'),
       builder: (_) => const BackupCredentialPage(),
     );
+    return route;
   }
 
   @override

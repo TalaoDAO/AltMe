@@ -36,7 +36,8 @@ Uint8List decodeEncodedList(String lst) {
     // ignore: use_string_buffers
     output += '=';
   }
-  return base64Url.decode(output);
+  final decoded = base64Url.decode(output);
+  return decoded;
 }
 
 List<int> decodeAndGzibDecompress(String lst) {

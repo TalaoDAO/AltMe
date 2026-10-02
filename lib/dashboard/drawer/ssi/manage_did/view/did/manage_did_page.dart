@@ -10,10 +10,11 @@ class ManageDidPage extends StatefulWidget {
   final DidKeyType didKeyType;
 
   static Route<dynamic> route({required DidKeyType didKeyType}) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => ManageDidPage(didKeyType: didKeyType),
       settings: const RouteSettings(name: '/ManageDidPage'),
     );
+    return route;
   }
 
   @override

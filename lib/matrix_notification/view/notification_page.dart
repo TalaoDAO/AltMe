@@ -13,10 +13,11 @@ class NotificationPage extends StatelessWidget {
   const NotificationPage({super.key});
 
   static Route<void> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => const NotificationPage(),
       settings: const RouteSettings(name: '/NotificationPage'),
     );
+    return route;
   }
 
   @override

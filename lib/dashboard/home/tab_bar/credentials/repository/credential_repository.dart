@@ -41,7 +41,10 @@ class CredentialsRepository {
     }
     if (data.isEmpty) return null;
 
-    return CredentialModel.fromJson(json.decode(data) as Map<String, dynamic>);
+    final credentialModel = CredentialModel.fromJson(
+      json.decode(data) as Map<String, dynamic>,
+    );
+    return credentialModel;
   }
 
   Future<int> deleteAll() async {

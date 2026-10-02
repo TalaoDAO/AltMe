@@ -24,10 +24,11 @@ class ProtectWalletPage extends StatelessWidget {
   final WalletRouteType? routeType;
 
   static Route<dynamic> route({WalletRouteType? routeType}) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => ProtectWalletPage(routeType: routeType),
       settings: const RouteSettings(name: '/ProtectWalletPage'),
     );
+    return route;
   }
 
   @override

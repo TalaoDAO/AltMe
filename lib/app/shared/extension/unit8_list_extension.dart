@@ -16,6 +16,7 @@ extension Uint8ListExtension on Uint8List {
       return this;
     }
 
-    return sublist(6);
+    final filtered = sublist(6);
+    return filtered;
   }
 }

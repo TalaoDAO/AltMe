@@ -9,6 +9,7 @@ extension DoubleExtension on double {
     }
 
     final twoDecimalNumber = (this * number).floor() / number;
-    return twoDecimalNumber.toString();
+    final decimalString = twoDecimalNumber.toString();
+    return decimalString;
   }
 }

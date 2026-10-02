@@ -14,9 +14,10 @@ class SendToState extends Equatable {
     CryptoAccountData? selectedAccount,
     bool? isOtherAccountTab,
   }) {
-    return SendToState(
+    final state = SendToState(
       withdrawalAddress: withdrawalAddress ?? this.withdrawalAddress,
     );
+    return state;
   }
 
   Map<String, dynamic> toJson() => _$SendToStateToJson(this);

@@ -10,10 +10,11 @@ class WalletSettingsMenu extends StatelessWidget {
   const WalletSettingsMenu({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/WalletSettingsMenu'),
       builder: (_) => const WalletSettingsMenu(),
     );
+    return route;
   }
 
   @override

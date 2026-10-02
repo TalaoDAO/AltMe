@@ -45,7 +45,10 @@ class ConnectedDappRepository {
     }
     if (data.isEmpty) return null;
 
-    return BeaconRequest.fromJson(json.decode(data) as Map<String, dynamic>);
+    final beaconRequest = BeaconRequest.fromJson(
+      json.decode(data) as Map<String, dynamic>,
+    );
+    return beaconRequest;
   }
 
   Future<int> deleteAll() async {

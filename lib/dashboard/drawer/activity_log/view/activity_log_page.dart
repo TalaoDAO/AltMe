@@ -10,10 +10,11 @@ class ActivityLogPage extends StatelessWidget {
   const ActivityLogPage({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => const ActivityLogPage(),
       settings: const RouteSettings(name: '/ActivityLogPage'),
     );
+    return route;
   }
 
   @override

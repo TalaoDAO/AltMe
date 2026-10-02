@@ -24,43 +24,49 @@ class TokensState extends Equatable {
   final BlockchainType blockchainType;
 
   TokensState fetching() {
-    return copyWith(status: AppStatus.fetching);
+    final state = copyWith(status: AppStatus.fetching);
+    return state;
   }
 
   TokensState errorWhileFetching({required MessageHandler messageHandler}) {
-    return copyWith(
+    final state = copyWith(
       status: AppStatus.errorWhileFetching,
       message: StateMessage.error(messageHandler: messageHandler),
     );
+    return state;
   }
 
   TokensState loading() {
-    return copyWith(status: AppStatus.loading);
+    final state = copyWith(status: AppStatus.loading);
+    return state;
   }
 
   TokensState error({required MessageHandler messageHandler}) {
-    return copyWith(
+    final state = copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
     );
+    return state;
   }
 
   TokensState populate({Set<TokenModel>? data}) {
-    return copyWith(status: AppStatus.populate, data: data);
+    final state = copyWith(status: AppStatus.populate, data: data);
+    return state;
   }
 
   TokensState success({MessageHandler? messageHandler, Set<TokenModel>? data}) {
-    return copyWith(
+    final state = copyWith(
       status: AppStatus.success,
       data: data,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
     );
+    return state;
   }
 
   TokensState reset({required BlockchainType blockchainType}) {
-    return TokensState(
+    final state = TokensState(
       status: AppStatus.init,
       message: null,
       data: const {},
@@ -69,6 +75,7 @@ class TokensState extends Equatable {
       offset: 0,
       blockchainType: blockchainType,
     );
+    return state;
   }
 
   TokensState copyWith({
@@ -80,7 +87,7 @@ class TokensState extends Equatable {
     int? offset,
     BlockchainType? blockchainType,
   }) {
-    return TokensState(
+    final state = TokensState(
       status: status ?? this.status,
       message: message,
       data: data ?? this.data,
@@ -89,6 +96,7 @@ class TokensState extends Equatable {
       offset: offset ?? this.offset,
       blockchainType: blockchainType ?? this.blockchainType,
     );
+    return state;
   }
 
   Map<String, dynamic> toJson() => _$TokensStateToJson(this);

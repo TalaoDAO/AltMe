@@ -10,10 +10,11 @@ class RestoreOptionsPage extends StatelessWidget {
   const RestoreOptionsPage({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => const RestoreOptionsPage(),
       settings: const RouteSettings(name: '/RestoreOptionsPage'),
     );
+    return route;
   }
 
   @override

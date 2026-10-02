@@ -36,7 +36,7 @@ class CredentialsDetailsPage extends StatelessWidget {
     CardChatSupportCubit? cardChatSupportCubit,
     bool readOnly = false,
   }) {
-    return MaterialPageRoute<void>(
+    final pageRoute = MaterialPageRoute<void>(
       builder: (context) => CredentialsDetailsPage(
         credentialModel: credentialModel,
         readOnly: readOnly,
@@ -44,6 +44,7 @@ class CredentialsDetailsPage extends StatelessWidget {
       ),
       settings: const RouteSettings(name: '/credentialsDetailsPages'),
     );
+    return pageRoute;
   }
 
   @override

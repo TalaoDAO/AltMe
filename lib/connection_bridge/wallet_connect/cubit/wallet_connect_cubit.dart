@@ -811,10 +811,11 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   }
 
   OperationKind stringToEnum(String operation) {
-    return OperationKind.values.firstWhere(
+    final operationKind = OperationKind.values.firstWhere(
       (e) => e.toString().split('.').last == operation,
       orElse: () => OperationKind.transaction,
     );
+    return operationKind;
   }
 
   Future<void> disconnectSession(String topic) async {

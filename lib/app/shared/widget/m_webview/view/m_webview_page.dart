@@ -107,7 +107,8 @@ class _MWebViewState extends State<MWebView>
           onNavigationRequest: (NavigationRequest request) {
             log.i('navigate - ${request.url}');
             if (widget.onNavigationRequest != null) {
-              return widget.onNavigationRequest!.call(request);
+              final decision = widget.onNavigationRequest!.call(request);
+              return decision;
             } else {
               return NavigationDecision.navigate;
             }

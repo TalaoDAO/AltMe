@@ -16,11 +16,13 @@ class EnterpriseState extends Equatable {
   final String? profileSettingJson;
 
   EnterpriseState loading() {
-    return copyWith(status: AppStatus.loading, message: null);
+    final enterpriseState = copyWith(status: AppStatus.loading, message: null);
+    return enterpriseState;
   }
 
   EnterpriseState error({required StateMessage message}) {
-    return copyWith(status: AppStatus.error, message: message);
+    final enterpriseState = copyWith(status: AppStatus.error, message: message);
+    return enterpriseState;
   }
 
   EnterpriseState copyWith({
@@ -28,11 +30,12 @@ class EnterpriseState extends Equatable {
     AppStatus? status,
     String? profileSettingJson,
   }) {
-    return EnterpriseState(
+    final enterpriseState = EnterpriseState(
       status: status ?? this.status,
       message: message,
       profileSettingJson: profileSettingJson ?? this.profileSettingJson,
     );
+    return enterpriseState;
   }
 
   Map<String, dynamic> toJson() => _$EnterpriseStateToJson(this);

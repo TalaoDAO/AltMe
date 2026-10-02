@@ -79,15 +79,18 @@ class SearchCubit extends Cubit<SearchState> {
       }
     }
 
-    return str.replaceAllMapped(RegExp('[^\u0000-\u007E]', multiLine: true), (
-      a,
-    ) {
-      if (diacriticsMap[a.group(0)] != null) {
-        return diacriticsMap[a.group(0)] as String;
-      } else {
-        // ignore: cast_nullable_to_non_nullable
-        return a.group(0) as String;
-      }
-    });
+    final cleanedStr = str.replaceAllMapped(
+      RegExp('[^\u0000-\u007E]', multiLine: true),
+      (a) {
+        if (diacriticsMap[a.group(0)] != null) {
+          return diacriticsMap[a.group(0)] as String;
+        } else {
+          // ignore: cast_nullable_to_non_nullable
+          final group = a.group(0) as String;
+          return group;
+        }
+      },
+    );
+    return cleanedStr;
   }
 }

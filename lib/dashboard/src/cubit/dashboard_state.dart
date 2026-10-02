@@ -16,18 +16,20 @@ class DashboardState extends Equatable {
   final StateMessage? message;
 
   DashboardState loading() {
-    return DashboardState(
+    final loadingState = DashboardState(
       status: AppStatus.loading,
       selectedIndex: selectedIndex,
     );
+    return loadingState;
   }
 
   DashboardState error({required MessageHandler messageHandler}) {
-    return DashboardState(
+    final errorState = DashboardState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       selectedIndex: selectedIndex,
     );
+    return errorState;
   }
 
   DashboardState copyWith({
@@ -35,13 +37,14 @@ class DashboardState extends Equatable {
     MessageHandler? messageHandler,
     int? selectedIndex,
   }) {
-    return DashboardState(
+    final dashboardState = DashboardState(
       status: appStatus,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
       selectedIndex: selectedIndex ?? this.selectedIndex,
     );
+    return dashboardState;
   }
 
   Map<String, dynamic> toJson() => _$DashboardStateToJson(this);

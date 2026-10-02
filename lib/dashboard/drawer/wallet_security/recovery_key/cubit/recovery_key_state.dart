@@ -18,15 +18,17 @@ class RecoveryKeyState extends Equatable {
   final bool hasVerifiedMnemonics;
 
   RecoveryKeyState loading() {
-    return copyWith(status: AppStatus.loading);
+    final loadingState = copyWith(status: AppStatus.loading);
+    return loadingState;
   }
 
   RecoveryKeyState error({required MessageHandler messageHandler}) {
-    return copyWith(
+    final errorState = copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       mnemonics: mnemonics,
     );
+    return errorState;
   }
 
   RecoveryKeyState copyWith({
@@ -35,11 +37,12 @@ class RecoveryKeyState extends Equatable {
     List<String>? mnemonics,
     bool? hasVerifiedMnemonics,
   }) {
-    return RecoveryKeyState(
+    final updatedState = RecoveryKeyState(
       status: status ?? this.status,
       mnemonics: mnemonics ?? this.mnemonics,
       hasVerifiedMnemonics: hasVerifiedMnemonics ?? this.hasVerifiedMnemonics,
     );
+    return updatedState;
   }
 
   Map<String, dynamic> toJson() => _$RecoveryKeyStateToJson(this);

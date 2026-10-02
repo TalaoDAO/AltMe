@@ -199,6 +199,7 @@ const _$WalletAppTypeEnumMap = {
   WalletAppType.altme: 'altme',
   WalletAppType.talao: 'talao',
   WalletAppType.talao4eu: 'talao4eu',
+  WalletAppType.istec: 'istec',
 };
 
 HelpCenterOptions _$HelpCenterOptionsFromJson(Map<String, dynamic> json) =>

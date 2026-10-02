@@ -19,25 +19,35 @@ extension BlockchainNetworkTypeX on BlockchainNetworkType {
   BlockchainNetwork get network {
     switch (this) {
       case BlockchainNetworkType.tezosMainnet:
-        return TezosNetwork.mainNet();
+        final network = TezosNetwork.mainNet();
+        return network;
       case BlockchainNetworkType.tezosGhostnet:
-        return TezosNetwork.ghostnet();
+        final network = TezosNetwork.ghostnet();
+        return network;
       case BlockchainNetworkType.ethereumMainnet:
-        return EthereumNetwork.mainNet();
+        final network = EthereumNetwork.mainNet();
+        return network;
       case BlockchainNetworkType.ethereumTestnet:
-        return EthereumNetwork.testNet();
+        final network = EthereumNetwork.testNet();
+        return network;
       case BlockchainNetworkType.polygonMainnet:
-        return PolygonNetwork.mainNet();
+        final network = PolygonNetwork.mainNet();
+        return network;
       case BlockchainNetworkType.polygonTestnet:
-        return PolygonNetwork.testNet();
+        final network = PolygonNetwork.testNet();
+        return network;
       case BlockchainNetworkType.binanceMainnet:
-        return BinanceNetwork.mainNet();
+        final network = BinanceNetwork.mainNet();
+        return network;
       case BlockchainNetworkType.binanceTestnet:
-        return BinanceNetwork.testNet();
+        final network = BinanceNetwork.testNet();
+        return network;
       case BlockchainNetworkType.fantomMainnet:
-        return FantomNetwork.mainNet();
+        final network = FantomNetwork.mainNet();
+        return network;
       case BlockchainNetworkType.fantomTestnet:
-        return FantomNetwork.testNet();
+        final network = FantomNetwork.testNet();
+        return network;
     }
   }
 }

@@ -4,7 +4,6 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/verify_credential.dart';
-import 'package:altme/dashboard/profile/profile_provider/get_profile_from_provider.dart';
 import 'package:altme/dashboard/profile/profile_provider/get_wallet_attestation_data.dart';
 import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:dio/dio.dart';
@@ -31,9 +30,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
   final AltmeChatSupportCubit altmeChatSupportCubit;
   final MatrixNotificationCubit matrixNotificationCubit;
 
-  Future<void> requestTheConfiguration({
-    required Uri uri,
-  }) async {
+  Future<void> requestTheConfiguration({required Uri uri}) async {
     try {
       emit(state.loading());
 
@@ -89,13 +86,14 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
     required String url,
   }) async {
     /// request the configuration
-    final profileSettingJson = await getProfileFromProvider(
+    final profileSettingJson = await EnterpriseWalletConfigurationSource(
+      profileCubit: profileCubit,
+      client: client,
       email: email,
       password: password,
-      jwtVc: jwtVc,
+      walletAttestationData: jwtVc,
       url: url,
-      client: client,
-    );
+    ).fetchConfigurationJson();
 
     final savedEmail = await profileCubit.secureStorageProvider.get(
       SecureStorageKeys.enterpriseEmail,
@@ -146,21 +144,15 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
 
     final setting = state.profileSettingJson;
     if (setting != null) {
-      await profileCubit.secureStorageProvider.set(
-        SecureStorageKeys.enterpriseProfileSetting,
-        setting,
-      );
+      /// persist it and put it into force
+      await EnterpriseWalletConfigurationSource.applyOnly(
+        profileCubit: profileCubit,
+      ).applyConfiguration(setting);
 
       final profileSetting = ProfileSetting.fromJson(
         jsonDecode(setting) as Map<String, dynamic>,
       );
 
-      ///save to profileCubit
-      await profileCubit.setProfileSetting(
-        profileSetting: profileSetting,
-        profileType: ProfileType.enterprise,
-        walletType: WalletType.enterprise,
-      );
       final helpCenterOptions = profileSetting.helpCenterOptions;
 
       if (helpCenterOptions.customChatSupport &&
@@ -210,13 +202,14 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
   }
 
   Future<String> fetchWalletAttestationData(String url) async {
-    return getWalletAttestationData(
+    final walletAttestationData = await getWalletAttestationData(
       url: url,
       client: client,
       secureStorageProvider: profileCubit.secureStorageProvider,
       profileModel: profileCubit.state.model,
       jwtDecode: profileCubit.jwtDecode,
     );
+    return walletAttestationData;
   }
 
   Future<void> getWalletAttestationBitStatus() async {
@@ -484,9 +477,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
           configurationResponse['password'] != null &&
           configurationResponse['wallet-provider'] != null) {
         final uri = Uri.https('example.com', '/path', configurationResponse);
-        await requestTheConfiguration(
-          uri: uri,
-        );
+        await requestTheConfiguration(uri: uri);
       }
     }
   }

@@ -20,7 +20,7 @@ class LoyaltyCardSupportChatPage extends StatelessWidget {
     String? chatWelcomeMessage,
     required CardChatSupportCubit cardChatSupportCubit,
   }) {
-    return MaterialPageRoute<void>(
+    final pageRoute = MaterialPageRoute<void>(
       builder: (_) => LoyaltyCardSupportChatPage(
         appBarTitle: appBarTitle,
         chatWelcomeMessage: chatWelcomeMessage,
@@ -28,6 +28,7 @@ class LoyaltyCardSupportChatPage extends StatelessWidget {
       ),
       settings: const RouteSettings(name: '/loyaltyCardSupportChatPage'),
     );
+    return pageRoute;
   }
 
   @override

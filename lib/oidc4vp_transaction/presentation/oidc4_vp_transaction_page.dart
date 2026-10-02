@@ -40,7 +40,7 @@ class Oidc4VpTransactionPage extends StatefulWidget {
     required bool showPrompt,
     required DioClient client,
   }) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/AcceptOidc4VpTransactionPage'),
       builder: (_) {
         return Oidc4VpTransactionPage(
@@ -52,6 +52,7 @@ class Oidc4VpTransactionPage extends StatefulWidget {
         );
       },
     );
+    return route;
   }
 
   @override

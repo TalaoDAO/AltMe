@@ -8,10 +8,11 @@ class PickProfileMenu extends StatelessWidget {
   const PickProfileMenu({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/PickProfileMenu'),
       builder: (_) => const PickProfileMenu(),
     );
+    return route;
   }
 
   @override

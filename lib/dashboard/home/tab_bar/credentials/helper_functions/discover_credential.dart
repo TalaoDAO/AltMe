@@ -51,12 +51,13 @@ Future<void> discoverCredential({
     if (dummyCredential.credentialSubjectType == CredentialSubjectType.over18) {
       LoadingView().hide();
       // start verification by Yoti AI
-      return Navigator.of(context).push<void>(
+      final verifyAgeNavigation = Navigator.of(context).push<void>(
         VerifyAgePage.route(
           credentialSubjectType: dummyCredential.credentialSubjectType,
           vcFormatType: dummyCredential.vcFormatType,
         ),
       );
+      return verifyAgeNavigation;
     }
 
     /// here check for over18, over15, age range and over13 to take photo for
@@ -68,10 +69,13 @@ Future<void> discoverCredential({
               CredentialSubjectType.defiCompliance ||
           dummyCredential.credentialSubjectType ==
               CredentialSubjectType.livenessCard) {
-        return context.read<KycVerificationCubit>().getVcByKycVerification(
-          vcType: dummyCredential.credentialSubjectType.getKycVcType,
-          link: dummyCredential.link!,
-        );
+        final kycVerification = context
+            .read<KycVerificationCubit>()
+            .getVcByKycVerification(
+              vcType: dummyCredential.credentialSubjectType.getKycVcType,
+              link: dummyCredential.link!,
+            );
+        return kycVerification;
       }
 
       if (profileCubit.state.model.profileType == ProfileType.enterprise) {

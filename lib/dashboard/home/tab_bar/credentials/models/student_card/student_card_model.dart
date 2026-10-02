@@ -33,10 +33,12 @@ class StudentCardModel extends CredentialSubjectModel {
   static ProfessionalStudentCardRecipient
   _fromJsonProfessionalStudentCardRecipient(dynamic json) {
     if (json == null || json == '') {
-      return ProfessionalStudentCardRecipient.empty();
+      final empty = ProfessionalStudentCardRecipient.empty();
+      return empty;
     }
-    return ProfessionalStudentCardRecipient.fromJson(
+    final recipient = ProfessionalStudentCardRecipient.fromJson(
       json as Map<String, dynamic>,
     );
+    return recipient;
   }
 }

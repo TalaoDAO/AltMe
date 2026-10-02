@@ -6,10 +6,11 @@ class LanguageSettings extends StatelessWidget {
   const LanguageSettings({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/LanguageSettings'),
       builder: (_) => const LanguageSettings(),
     );
+    return route;
   }
 
   @override

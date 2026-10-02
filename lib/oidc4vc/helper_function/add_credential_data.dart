@@ -27,6 +27,7 @@ Future<List<CredentialAcceptanceItem>> addCredentialData({
   required String issuer,
   required JWTDecode jwtDecode,
   required QRCodeScanCubit qrCodeScanCubit,
+  List<String?>? credentialKeyIds,
 }) async {
   final profileModel = credentialsCubit.profileCubit.state.model;
   final items = <CredentialAcceptanceItem>[];
@@ -108,6 +109,9 @@ Future<List<CredentialAcceptanceItem>> addCredentialData({
           format: format,
           openIdConfiguration: openIdConfiguration,
           jwtDecode: jwtDecode,
+          keyId: credentialKeyIds != null && i < credentialKeyIds.length
+              ? credentialKeyIds[i]
+              : null,
         );
         items.add(item);
       } catch (_) {

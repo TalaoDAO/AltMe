@@ -312,7 +312,8 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     Keystore keystore,
   ) async {
     try {
-      return await tezosContract(client, keystore);
+      final operationsList = await tezosContract(client, keystore);
+      return operationsList;
     } catch (e) {
       logger.e('Michelson contract fee estimation error: $e');
       return null;

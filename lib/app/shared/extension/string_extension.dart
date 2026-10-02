@@ -28,16 +28,18 @@ extension StringExtension on String {
       final double intPart = double.parse(
         splits.first.isEmpty ? '0' : splits.first,
       );
-      return formatter.format(intPart);
+      final formattedNumber = formatter.format(intPart);
+      return formattedNumber;
     } else {
       return this;
     }
   }
 
   bool isValidEmail() {
-    return RegExp(
+    final isMatch = RegExp(
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
     ).hasMatch(this);
+    return isMatch;
   }
 
   Characters get characters => Characters(this);
@@ -72,7 +74,8 @@ extension StringExtension on String {
     final twoDecimalNumber =
         (Decimal.parse(this) * Decimal.parse(number.toString())).floor() /
         Decimal.parse(number.toString());
-    return twoDecimalNumber.toDecimal().toString();
+    final decimalString = twoDecimalNumber.toDecimal().toString();
+    return decimalString;
   }
 
   BigInt get convertTo1e18 {

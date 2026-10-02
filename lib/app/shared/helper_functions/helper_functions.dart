@@ -365,6 +365,21 @@ Future<String> getP256KeyToGetAndPresentVC(
 ) async {
   const storageKey = SecureStorageKeys.p256PrivateKeyToGetAndPresentVC;
 
+  return getP256Key(secureStorage, storageKey);
+}
+
+Future<String> getP256KeyForIntegrityToken(
+  SecureStorageProvider secureStorage,
+) async {
+  const storageKey = SecureStorageKeys.p256PrivateKeyForIntegrityToken;
+
+  return getP256Key(secureStorage, storageKey);
+}
+
+Future<String> getP256Key(
+  SecureStorageProvider secureStorage,
+  String storageKey,
+) async {
   /// return key if it is already created
   final String? p256PrivateKey = await secureStorage.get(storageKey);
   if (p256PrivateKey != null) return p256PrivateKey.replaceAll('=', '');
@@ -648,7 +663,22 @@ bool isSiopV2OrOidc4VpUrl(Uri uri) {
       uri.toString().startsWith(Parameters.authorizationEndPoint) ||
       uri.toString().startsWith('haip://authorize?');
 
-  return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;
+  // Wallet-provider-mediated cross-device presentation: a universal link on
+  // the wallet provider's own domain carrying `client_id` + `request_uri`
+  // (optionally `request_uri_method`), regardless of path. Checked by host
+  // rather than by a path prefix like Parameters.universalLink, because the
+  // verifier's request can be relayed at the domain root as well as under
+  // `/app/download`.
+  final isWalletProviderPresentationLink =
+      uri.scheme == 'https' &&
+      uri.host == Uri.parse(Parameters.universalLink).host &&
+      uri.queryParameters['client_id'] != null &&
+      uri.queryParameters['request_uri'] != null;
+
+  return isOpenIdUrl ||
+      isAuthorizeEndPoint ||
+      isSiopv2Url ||
+      isWalletProviderPresentationLink;
 }
 
 Future<void> handleErrorForOidc4Vci({
@@ -742,6 +772,11 @@ Future<void> handleErrorForOidc4Vci({
           );
         }
       case ClientType.wiaSub:
+
+        /// Wallet Provider Protocol §3: the OAuth Client Identifier is the
+        /// `sub` of the Wallet Instance Attestation, which is a URI rather
+        /// than a DID, so `subject_syntax_types_supported` says nothing
+        /// about it.
         break;
     }
   }
@@ -1427,10 +1462,24 @@ String getUpdatedUrlForSIOPV2OIC4VP({
 // authorization,
 // oAuthClientAttestation,
 // oAuthClientAttestationPop
+///
+/// [attestationProvider] supplies the client attestation pair. It defaults to
+/// the wallet-wide provider on [profileCubit] and then to
+/// [LegacyWalletAttestationProvider], the enterprise wallet provider's scheme,
+/// so existing callers behave exactly as before; a wallet whose provider uses
+/// another scheme passes its own.
+///
+/// [issuerMetadata] is the credential issuer's OpenID4VCI metadata, when the
+/// caller already holds it. An attestation scheme that reads the issuer's
+/// published preferences needs it: the Wallet Provider Protocol reads
+/// `preferred_client_status_period` (§9) before deciding whether a cached
+/// attestation still satisfies this issuer.
 Future<(String?, String?, String?, String?, String?)> getClientDetails({
   required ProfileCubit profileCubit,
   required bool isEBSI,
   required String issuer,
+  WalletAttestationProvider? attestationProvider,
+  Map<String, dynamic>? issuerMetadata,
 }) async {
   try {
     String? clientId;
@@ -1471,6 +1520,27 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
       clientId: '', // just added as it is required field
     );
 
+    final provider =
+        attestationProvider ??
+        profileCubit.walletAttestationProvider ??
+        LegacyWalletAttestationProvider(
+          secureStorageProvider: profileCubit.secureStorageProvider,
+          walletType: profileCubit.state.model.walletType,
+          did: did,
+          tokenParameters: tokenParameters,
+        );
+
+    /// The attestation pair, fetched at most once however many of the branches
+    /// below need it. A Wallet Provider Protocol attestation costs a network
+    /// round trip when the §11 cache misses, and the `client_id` and the two
+    /// headers all come out of the same one.
+    ClientAttestationPair? attestationPair;
+    Future<ClientAttestationPair?> clientAttestation() async =>
+        attestationPair ??= await provider.attestationFor(
+          credentialIssuer: issuer,
+          issuerMetadata: issuerMetadata,
+        );
+
     switch (customOidc4vcProfile.clientAuthentication) {
       ///  none
       case ClientAuthentication.none:
@@ -1489,8 +1559,12 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
           case ClientType.wiaSub:
-            // TODO(hawkbee): Handle this case.getClientDetails
-            throw UnimplementedError();
+
+            /// Wallet Provider Protocol §3: the wallet never chooses its own
+            /// OAuth Client Identifier. It is the `sub` claim of the Wallet
+            /// Instance Attestation, and §8 has the authorization server
+            /// reject any request whose `client_id` differs from it.
+            clientId = (await clientAttestation())?.clientId;
         }
 
       ///  only clientId
@@ -1503,8 +1577,12 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
           case ClientType.wiaSub:
-            // TODO(hawkbee): Handle this case.getClientDetails
-            throw UnimplementedError();
+
+            /// Wallet Provider Protocol §3: the wallet never chooses its own
+            /// OAuth Client Identifier. It is the `sub` claim of the Wallet
+            /// Instance Attestation, and §8 has the authorization server
+            /// reject any request whose `client_id` differs from it.
+            clientId = (await clientAttestation())?.clientId;
         }
 
       case ClientAuthentication.clientSecretPost:
@@ -1512,42 +1590,24 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
         clientSecret = customOidc4vcProfile.clientSecret;
 
       case ClientAuthentication.clientSecretJwt:
-        if (profileCubit.state.model.walletType != WalletType.enterprise) {
-          throw ResponseMessage(
-            data: {
-              'error': 'invalid_request',
-              'error_description': 'Please switch to enterprise account',
-            },
-          );
-        }
-
-        final walletAttestationData = await profileCubit.secureStorageProvider
-            .get(SecureStorageKeys.walletAttestationData);
-
         clientId = did;
 
-        final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-        final nbf = iat - 10;
+        final attestation = await clientAttestation();
 
-        final payload = {
-          'iss': clientId,
-          'aud': issuer,
-          'nbf': nbf,
-          'exp': nbf + 60,
-          'jti': const Uuid().v4(),
-        };
+        oAuthClientAttestation = attestation?.attestation;
+        oAuthClientAttestationPop = attestation?.proofOfPossession;
 
-        final jwtProofOfPossession = generateToken(
-          payload: payload,
-          tokenParameters: tokenParameters,
-          ignoreProofHeaderType: true,
-        );
-
-        oAuthClientAttestation = walletAttestationData;
-        oAuthClientAttestationPop = jwtProofOfPossession;
+      /// Wallet Provider Protocol §8: the Wallet Instance Attestation and a
+      /// proof of possession signed with the key in its `cnf.jwk` — the Wallet
+      /// Device Key — authenticate the wallet on the Pushed Authorization
+      /// Request and the Token Request, and `client_id` is the attestation's
+      /// `sub` (§3). The attestation is not sent on the Credential Request.
       case ClientAuthentication.wia:
-        // TODO(hawkbee): Handle this case.getClientDetails
-        throw UnimplementedError();
+        final attestation = await clientAttestation();
+
+        clientId = attestation?.clientId;
+        oAuthClientAttestation = attestation?.attestation;
+        oAuthClientAttestationPop = attestation?.proofOfPossession;
     }
 
     return (
@@ -2109,11 +2169,7 @@ Map<String, dynamic>? x509PublicKeyJwk(x509.X509Certificate cert) {
   if (publicKey is x509.RsaPublicKey) {
     final BigInt modulus = BigInt.parse(publicKey.modulus.toString());
     final n = base64Encode(modulus.toBytes);
-    return {
-      'e': 'AQAB',
-      'kty': 'RSA',
-      'n': n.replaceAll('=', ''),
-    };
+    return {'e': 'AQAB', 'kty': 'RSA', 'n': n.replaceAll('=', '')};
   } else if (publicKey is x509.EcPublicKey) {
     final BigInt xModulus = BigInt.parse(publicKey.xCoordinate.toString());
     final BigInt yModulus = BigInt.parse(publicKey.yCoordinate.toString());
@@ -2265,11 +2321,18 @@ bool useOauthServerAuthEndPoint(ProfileModel profileModel) {
   ).usesOAuthAuthorizationServerLink;
 }
 
+/// A DPoP proof (RFC 9449) for a POST to [url].
+///
+/// [dpopNonce] is a nonce the server supplied in a `DPoP-Nonce` response
+/// header (§8, §9), carried as the proof's `nonce` claim. It is not
+/// [nonce]: that one is the OpenID4VCI `c_nonce`, which has no place in a DPoP
+/// proof and is deliberately left out.
 Future<String> getDPopJwt({
   required String url,
   required String publicKey,
   String? accessToken,
   String? nonce,
+  String? dpopNonce,
 }) async {
   final tokenParameters = TokenParameters(
     privateKey: jsonDecode(publicKey) as Map<String, dynamic>,
@@ -2292,6 +2355,7 @@ Future<String> getDPopJwt({
   }
 
   // if (nonce != null) payload['nonce'] = nonce;
+  if (dpopNonce != null) payload['nonce'] = dpopNonce;
 
   final jwtToken = generateToken(
     payload: payload,
@@ -2299,6 +2363,28 @@ Future<String> getDPopJwt({
     ignoreProofHeaderType: false,
   );
   return jwtToken;
+}
+
+/// The nonce of an RFC 9449 `use_dpop_nonce` challenge in [error], or null
+/// when it is not one. The server wants a DPoP proof that carries this nonce
+/// and expects the client to retry once: an authorization server (token, PAR)
+/// answers 400 with the error in the body (§8), a resource server 401 with it
+/// in `WWW-Authenticate` (§9); both put the nonce in a `DPoP-Nonce` header.
+/// [error] is a [DioException], or the [NetworkException] `DioClient` makes
+/// of one.
+String? dpopNonceChallenge(Object error) {
+  final (data, headers) = switch (error) {
+    DioException(:final response) => (response?.data, response?.headers),
+    NetworkException(:final data, :final headers) => (data, headers),
+    _ => (null, null),
+  };
+  final dpopNonce = headers?.value('dpop-nonce');
+  if (dpopNonce == null) return null;
+
+  final isChallenge =
+      (data is Map && data['error'] == 'use_dpop_nonce') ||
+      (headers?.value('www-authenticate')?.contains('use_dpop_nonce') ?? false);
+  return isChallenge ? dpopNonce : null;
 }
 
 String generateP256KeyForDPop() {

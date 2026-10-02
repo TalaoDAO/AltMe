@@ -28,9 +28,11 @@ const _excludedTopLevelClaimKeys = {
 List<ClaimEntry> flattenClaimsForDisplay(Map<String, dynamic> data) {
   final subject = data['credentialSubject'];
   if (subject is Map<String, dynamic>) {
-    return _flatten(subject, excludeTopLevel: {'id', 'type'});
+    final subjectClaims = _flatten(subject, excludeTopLevel: {'id', 'type'});
+    return subjectClaims;
   }
-  return _flatten(data, excludeTopLevel: _excludedTopLevelClaimKeys);
+  final claims = _flatten(data, excludeTopLevel: _excludedTopLevelClaimKeys);
+  return claims;
 }
 
 /// Flattens the claim name/value pairs of one or more credentials about to
@@ -74,7 +76,8 @@ List<ClaimEntry> buildTranslatedClaims({
       credentialSupported?['claims'];
 
   if (claimsList is! List || claimsList.isEmpty) {
-    return flattenClaimsForDisplay(credentialModel.data);
+    final claims = flattenClaimsForDisplay(credentialModel.data);
+    return claims;
   }
 
   final entries = <ClaimEntry>[];

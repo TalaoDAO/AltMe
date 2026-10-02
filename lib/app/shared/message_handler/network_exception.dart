@@ -5,85 +5,116 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class NetworkException with MessageHandler {
-  NetworkException({this.message, this.data});
+  NetworkException({this.message, this.data, this.headers});
 
   final NetworkError? message;
   final dynamic data;
+
+  /// Headers of the error response, e.g. a `DPoP-Nonce` challenge.
+  final Headers? headers;
 
   static NetworkException handleResponse(int? statusCode, DioException? error) {
     switch (statusCode) {
       // case 200: //No Error
       // case 201: //No Error
       case 400:
-        return NetworkException(
+        final networkException = NetworkException(
           message: NetworkError.NETWORK_ERROR_BAD_REQUEST,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
+        return networkException;
       case 401:
-        return NetworkException(
+        final networkException = NetworkException(
           message: NetworkError.NETWORK_ERROR_UNAUTHENTICATED,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
+        return networkException;
       case 403:
-        return NetworkException(
+        final networkException = NetworkException(
           message: NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
+        return networkException;
       case 404:
-        return NetworkException(
+        final networkException = NetworkException(
           message: NetworkError.NETWORK_ERROR_NOT_FOUND,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
+        return networkException;
       case 408:
-        return NetworkException(
+        final networkException = NetworkException(
           message: NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
+        return networkException;
       case 409:
-        return NetworkException(
+        final networkException = NetworkException(
           message: NetworkError.NETWORK_ERROR_CONFLICT,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
+        return networkException;
       case 410:
-        return NetworkException(
+        final networkException = NetworkException(
           message: NetworkError.NETWORK_ERROR_NOT_READY,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
+        return networkException;
       case 412:
-        return NetworkException(
+        final networkException = NetworkException(
           message: NetworkError.NETWORK_ERROR_PRECONDITION_FAILED,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
+        return networkException;
       case 429:
-        return NetworkException(
+        final networkException = NetworkException(
           message: NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
+        return networkException;
       case 500:
-        return NetworkException(
+        final networkException = NetworkException(
           message: NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
+        return networkException;
       case 501:
-        return NetworkException(
+        final networkException = NetworkException(
           message: NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
+        return networkException;
       case 503:
-        return NetworkException(
+        final networkException = NetworkException(
           message: NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
+        return networkException;
       case 504:
-        return NetworkException(
+        final networkException = NetworkException(
           message: NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
+        return networkException;
       default:
-        return NetworkException(
+        final networkException = NetworkException(
           message: NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR,
           data: error?.response?.data,
+          headers: error?.response?.headers,
         );
+        return networkException;
     }
   }
 
@@ -145,13 +176,15 @@ class NetworkException with MessageHandler {
       return networkException;
     } else {
       if (error.toString().contains('is not a subtype of')) {
-        return NetworkException(
+        final networkException = NetworkException(
           message: NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS,
         );
+        return networkException;
       } else {
-        return NetworkException(
+        final networkException = NetworkException(
           message: NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR,
         );
+        return networkException;
       }
     }
   }
@@ -165,57 +198,97 @@ class NetworkException with MessageHandler {
     if (messageHandler is NetworkException && messageHandler.message != null) {
       switch (messageHandler.message!) {
         case NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED:
-          return NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED.localise(context);
+          final message = NetworkError.NETWORK_ERROR_NOT_IMPLEMENTED.localise(
+            context,
+          );
+          return message;
         case NetworkError.NETWORK_ERROR_REQUEST_CANCELLED:
-          return NetworkError.NETWORK_ERROR_REQUEST_CANCELLED.localise(context);
+          final message = NetworkError.NETWORK_ERROR_REQUEST_CANCELLED.localise(
+            context,
+          );
+          return message;
         case NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR:
-          return NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR.localise(
-            context,
-          );
+          final message = NetworkError.NETWORK_ERROR_INTERNAL_SERVER_ERROR
+              .localise(context);
+          return message;
         case NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE:
-          return NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE.localise(
-            context,
-          );
+          final message = NetworkError.NETWORK_ERROR_SERVICE_UNAVAILABLE
+              .localise(context);
+          return message;
         case NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED:
-          return NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED.localise(
-            context,
-          );
+          final message = NetworkError.NETWORK_ERROR_METHOD_NOT_ALLOWED
+              .localise(context);
+          return message;
         case NetworkError.NETWORK_ERROR_BAD_REQUEST:
-          return NetworkError.NETWORK_ERROR_BAD_REQUEST.localise(context);
+          final message = NetworkError.NETWORK_ERROR_BAD_REQUEST.localise(
+            context,
+          );
+          return message;
         case NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST:
-          return NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST.localise(
-            context,
-          );
+          final message = NetworkError.NETWORK_ERROR_UNAUTHORIZED_REQUEST
+              .localise(context);
+          return message;
         case NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR:
-          return NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR.localise(context);
+          final message = NetworkError.NETWORK_ERROR_UNEXPECTED_ERROR.localise(
+            context,
+          );
+          return message;
         case NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT:
-          return NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT.localise(context);
+          final message = NetworkError.NETWORK_ERROR_REQUEST_TIMEOUT.localise(
+            context,
+          );
+          return message;
         case NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION:
-          return NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION.localise(
-            context,
-          );
+          final message = NetworkError.NETWORK_ERROR_NO_INTERNET_CONNECTION
+              .localise(context);
+          return message;
         case NetworkError.NETWORK_ERROR_CONFLICT:
-          return NetworkError.NETWORK_ERROR_CONFLICT.localise(context);
+          final message = NetworkError.NETWORK_ERROR_CONFLICT.localise(context);
+          return message;
         case NetworkError.NETWORK_ERROR_SEND_TIMEOUT:
-          return NetworkError.NETWORK_ERROR_SEND_TIMEOUT.localise(context);
-        case NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS:
-          return NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS.localise(context);
-        case NetworkError.NETWORK_ERROR_NOT_ACCEPTABLE:
-          return NetworkError.NETWORK_ERROR_NOT_ACCEPTABLE.localise(context);
-        case NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT:
-          return NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT.localise(context);
-        case NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS:
-          return NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS.localise(context);
-        case NetworkError.NETWORK_ERROR_UNAUTHENTICATED:
-          return NetworkError.NETWORK_ERROR_UNAUTHENTICATED.localise(context);
-        case NetworkError.NETWORK_ERROR_NOT_FOUND:
-          return NetworkError.NETWORK_ERROR_NOT_FOUND.localise(context);
-        case NetworkError.NETWORK_ERROR_PRECONDITION_FAILED:
-          return NetworkError.NETWORK_ERROR_PRECONDITION_FAILED.localise(
+          final message = NetworkError.NETWORK_ERROR_SEND_TIMEOUT.localise(
             context,
           );
+          return message;
+        case NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS:
+          final message = NetworkError.NETWORK_ERROR_UNABLE_TO_PROCESS.localise(
+            context,
+          );
+          return message;
+        case NetworkError.NETWORK_ERROR_NOT_ACCEPTABLE:
+          final message = NetworkError.NETWORK_ERROR_NOT_ACCEPTABLE.localise(
+            context,
+          );
+          return message;
+        case NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT:
+          final message = NetworkError.NETWORK_ERROR_GATEWAY_TIMEOUT.localise(
+            context,
+          );
+          return message;
+        case NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS:
+          final message = NetworkError.NETWORK_ERROR_TOO_MANY_REQUESTS.localise(
+            context,
+          );
+          return message;
+        case NetworkError.NETWORK_ERROR_UNAUTHENTICATED:
+          final message = NetworkError.NETWORK_ERROR_UNAUTHENTICATED.localise(
+            context,
+          );
+          return message;
+        case NetworkError.NETWORK_ERROR_NOT_FOUND:
+          final message = NetworkError.NETWORK_ERROR_NOT_FOUND.localise(
+            context,
+          );
+          return message;
+        case NetworkError.NETWORK_ERROR_PRECONDITION_FAILED:
+          final message = NetworkError.NETWORK_ERROR_PRECONDITION_FAILED
+              .localise(context);
+          return message;
         case NetworkError.NETWORK_ERROR_NOT_READY:
-          return NetworkError.NETWORK_ERROR_NOT_READY.localise(context);
+          final message = NetworkError.NETWORK_ERROR_NOT_READY.localise(
+            context,
+          );
+          return message;
       }
     }
     return '';

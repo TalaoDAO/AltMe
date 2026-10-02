@@ -260,7 +260,7 @@ Future<CredentialModel?> generateCryptoAccountOwnershipProof({
             );
           }
         }
-        return _createCredential(
+        final credential = await _createCredential(
           vc: vc,
           oldId: oldId,
           credentialManifest: credentialManifest,
@@ -272,6 +272,7 @@ Future<CredentialModel?> generateCryptoAccountOwnershipProof({
           profileType: profileType,
           vcFormatType: vcFormatType,
         );
+        return credential;
       case VCFormatType.jwtVc:
       case VCFormatType.jwtVcJson:
       case VCFormatType.jwtVcJsonLd:
@@ -347,7 +348,7 @@ Future<CredentialModel> _createCredential({
   }
 
   final id = oldId ?? 'urn:uuid:${const Uuid().v4()}';
-  return CredentialModel(
+  final credentialModel = CredentialModel(
     id: id,
     image: 'image',
     data: jsonLd,
@@ -359,4 +360,5 @@ Future<CredentialModel> _createCredential({
     activities: [Activity(acquisitionAt: dateTime)],
     profileLinkedId: profileType.getVCId,
   );
+  return credentialModel;
 }

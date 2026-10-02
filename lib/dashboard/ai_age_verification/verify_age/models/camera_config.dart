@@ -13,9 +13,10 @@ class CameraConfig extends Equatable {
   final bool frontCameraAsDefault;
 
   CameraConfig copyWith({bool? frontCameraAsDefault}) {
-    return CameraConfig(
+    final cameraConfig = CameraConfig(
       frontCameraAsDefault: frontCameraAsDefault ?? this.frontCameraAsDefault,
     );
+    return cameraConfig;
   }
 
   Map<String, dynamic> toJson() => _$CameraConfigToJson(this);

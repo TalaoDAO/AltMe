@@ -11,14 +11,16 @@ class RightsState extends Equatable {
   final StateMessage? message;
 
   RightsState loading() {
-    return const RightsState(status: AppStatus.loading);
+    const loadingState = RightsState(status: AppStatus.loading);
+    return loadingState;
   }
 
   RightsState error({required MessageHandler messageHandler}) {
-    return RightsState(
+    final errorState = RightsState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
     );
+    return errorState;
   }
 
   RightsState copyWith({
@@ -26,12 +28,13 @@ class RightsState extends Equatable {
     MessageHandler? messageHandler,
     int? selectedIndex,
   }) {
-    return RightsState(
+    final rightsState = RightsState(
       status: appStatus,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
     );
+    return rightsState;
   }
 
   Map<String, dynamic> toJson() => _$RightsStateToJson(this);

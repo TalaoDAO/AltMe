@@ -232,7 +232,7 @@ class ProfileModel extends Equatable {
     Oidc4VCIStack? oidc4VCIStack,
     TrustedList? trustedList,
   }) {
-    return ProfileModel(
+    final profileModel = ProfileModel(
       walletType: walletType ?? this.walletType,
       walletProtectionType: walletProtectionType ?? this.walletProtectionType,
       isDeveloperMode: isDeveloperMode ?? this.isDeveloperMode,
@@ -242,5 +242,6 @@ class ProfileModel extends Equatable {
       oidc4VCIStack: oidc4VCIStack ?? this.oidc4VCIStack,
       trustedList: trustedList ?? this.trustedList,
     );
+    return profileModel;
   }
 }

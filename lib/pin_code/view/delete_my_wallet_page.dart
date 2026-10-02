@@ -8,10 +8,11 @@ class DeleteMyWalletPage extends StatelessWidget {
   const DeleteMyWalletPage({super.key});
 
   static Route<void> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => const DeleteMyWalletPage(),
       settings: const RouteSettings(name: '/deleteMyWalletPage'),
     );
+    return route;
   }
 
   @override

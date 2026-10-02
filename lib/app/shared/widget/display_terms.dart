@@ -124,6 +124,7 @@ class _DisplayTermsofUseState extends State<DisplayTermsofUse> {
   }
 
   Future<String> _loadFile(String path) async {
-    return rootBundle.loadString(path);
+    final fileContent = rootBundle.loadString(path);
+    return fileContent;
   }
 }
