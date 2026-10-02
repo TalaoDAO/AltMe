@@ -86,7 +86,7 @@ class _UserPinViewState extends State<UserPinView> {
         scrollView: false,
         body: PinCodeWidget(
           title: widget.txCode?.description ?? l10n.enterYourSecretCode,
-          passwordDigits: widget.txCode?.length ?? 6,
+          passwordDigits: widget.txCode?.length ?? 4,
           deleteButton: Text(
             l10n.deleteDigit,
             style: Theme.of(context).textTheme.labelLarge,
