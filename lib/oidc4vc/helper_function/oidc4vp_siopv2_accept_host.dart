@@ -174,7 +174,7 @@ Future<void> oidc4vpSiopV2AcceptHost({
       // final-1.0 has no domain to match the verifier by, so it rests on
       // the request object's x5c alone.
       trustedEntity = oidc4vp.findTrustedVerifier(
-        trustedList: trustedList,
+        trustedList: trustedList!,
         clientId: uri.queryParameters['client_id'],
         encodedPresentation: encodedData as String?,
       );
