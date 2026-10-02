@@ -83,7 +83,6 @@ extension CredentialCategoryX on CredentialCategory {
           discoverTitle: l10n.advantagesDiscoverCards,
           discoverSubTitle: l10n.advantagesCredentialDiscoverSubtitle,
         );
-        return config;
       case CredentialCategory.identityCards:
         return CredentialCategoryConfig(
           homeTitle: l10n.identityCards,
@@ -91,7 +90,6 @@ extension CredentialCategoryX on CredentialCategory {
           discoverTitle: l10n.identityDiscoverCards,
           discoverSubTitle: l10n.identityCredentialDiscoverSubtitle,
         );
-        return config;
       case CredentialCategory.professionalCards:
         return CredentialCategoryConfig(
           homeTitle: l10n.myProfessionalCards,
@@ -99,7 +97,6 @@ extension CredentialCategoryX on CredentialCategory {
           discoverTitle: l10n.myProfessionalCredentialDiscoverSubtitle,
           discoverSubTitle: l10n.myProfessionalCredentialDiscoverSubtitle,
         );
-        return config;
       case CredentialCategory.contactInfoCredentials:
         return CredentialCategoryConfig(
           homeTitle: l10n.contactInfoCredentials,
@@ -107,7 +104,6 @@ extension CredentialCategoryX on CredentialCategory {
           discoverTitle: l10n.contactInfoDiscoverCredentials,
           discoverSubTitle: l10n.contactInfoCredentialDiscoverSubtitle,
         );
-        return config;
       case CredentialCategory.blockchainAccountsCards:
         return CredentialCategoryConfig(
           homeTitle: l10n.blockchainAccounts,
@@ -115,7 +111,6 @@ extension CredentialCategoryX on CredentialCategory {
           discoverTitle: l10n.blockchainCardsDiscoverTitle,
           discoverSubTitle: l10n.blockchainCardsDiscoverSubtitle,
         );
-        return config;
       case CredentialCategory.educationCards:
         return CredentialCategoryConfig(
           homeTitle: l10n.educationCredentials,
@@ -123,7 +118,6 @@ extension CredentialCategoryX on CredentialCategory {
           discoverTitle: l10n.educationDiscoverCredentials,
           discoverSubTitle: l10n.educationCredentialsDiscoverSubtitle,
         );
-        return config;
       case CredentialCategory.othersCards:
         return CredentialCategoryConfig(
           homeTitle: l10n.otherCards,
@@ -131,7 +125,6 @@ extension CredentialCategoryX on CredentialCategory {
           discoverTitle: '${l10n.get} ${l10n.otherCards}',
           discoverSubTitle: l10n.otherCredentialDiscoverSubtitle,
         );
-        return config;
       case CredentialCategory.financeCards:
         final config = CredentialCategoryConfig(
           homeTitle: l10n.financeCredentialsHomeTitle,

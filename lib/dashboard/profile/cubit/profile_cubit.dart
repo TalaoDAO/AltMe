@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
-import 'package:altme/dashboard/profile/models/models.dart';
 import 'package:altme/dashboard/profile/profile_provider/get_profile_from_provider.dart';
 import 'package:altme/dashboard/profile/profile_provider/get_wallet_attestation_data.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
