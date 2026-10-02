@@ -396,14 +396,18 @@ extension ResponseStringX on ResponseString {
         return globalMessage.RESPONSE_STRING_successfullyGeneratingProof;
 
       case ResponseString.RESPONSE_STRING_pleaseAddXtoConnectToTheDapp:
-        return globalMessage.RESPONSE_STRING_pleaseAddXtoConnectToTheDapp(
-          injectedMessage ?? '',
-        );
+        final message =
+            globalMessage.RESPONSE_STRING_pleaseAddXtoConnectToTheDapp(
+              injectedMessage ?? '',
+            );
+        return message;
 
       case ResponseString.RESPONSE_STRING_pleaseSwitchPolygonNetwork:
-        return globalMessage.RESPONSE_STRING_pleaseSwitchPolygonNetwork(
-          injectedMessage ?? '',
-        );
+        final message =
+            globalMessage.RESPONSE_STRING_pleaseSwitchPolygonNetwork(
+              injectedMessage ?? '',
+            );
+        return message;
 
       case ResponseString.RESPONSE_STRING_pleaseSwitchToRightOIDC4VCProfile:
         return globalMessage
@@ -413,9 +417,11 @@ extension ResponseStringX on ResponseString {
         return globalMessage.RESPONSE_STRING_authenticationSuccess;
 
       case ResponseString.RESPONSE_STRING_youcanSelectOnlyXCredential:
-        return globalMessage.RESPONSE_STRING_youcanSelectOnlyXCredential(
-          injectedMessage ?? '',
-        );
+        final message =
+            globalMessage.RESPONSE_STRING_youcanSelectOnlyXCredential(
+              injectedMessage ?? '',
+            );
+        return message;
 
       case ResponseString.RESPONSE_STRING_theCredentialIsNotReady:
         return globalMessage.RESPONSE_STRING_theCredentialIsNotReady;
@@ -499,9 +505,11 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_couldNotFindTheAccountWithThisAddress:
         // ignore: lines_longer_than_80_chars
-        return globalMessage.RESPONSE_STRING_couldNotFindTheAccountWithThisAddress(
-          injectedMessage ?? '',
-        );
+        final message =
+            globalMessage.RESPONSE_STRING_couldNotFindTheAccountWithThisAddress(
+              injectedMessage ?? '',
+            );
+        return message;
 
       case ResponseString.RESPONSE_STRING_invalidClientErrorDescription:
         return globalMessage.RESPONSE_STRING_invalidClientErrorDescription;

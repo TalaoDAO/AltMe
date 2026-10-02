@@ -21,7 +21,8 @@ class VcSelectiveDisclosure {
         .toList();
 
     final encryptedPayload = encryptedValues!.first;
-    return JWTDecode().decodePayload(token: encryptedPayload);
+    final decodedPayload = JWTDecode().decodePayload(token: encryptedPayload);
+    return decodedPayload;
   }
 
   Map<String, dynamic> get claims {

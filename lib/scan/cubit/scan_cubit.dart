@@ -905,7 +905,8 @@ class ScanCubit extends Cubit<ScanState> {
       if (credentialListJwt.length == 1) {
         return credentialListJwt.first;
       } else {
-        return jsonEncode(credentialListJwt);
+        final encodedCredentialListJwt = jsonEncode(credentialListJwt);
+        return encodedCredentialListJwt;
       }
     } else if (formatFromPresentationSubmission == VCFormatType.jwtVc ||
         formatFromPresentationSubmission == VCFormatType.jwtVcJson ||
@@ -1107,9 +1108,7 @@ class ScanCubit extends Cubit<ScanState> {
               ? ClientMetadata.fromJson(clientMetaDataJson)
               : null;
           if (clientMetaData == null) {
-            throw StateError(
-              'Client metadata is required for direct_post.jwt',
-            );
+            throw StateError('Client metadata is required for direct_post.jwt');
           }
 
           // Per OpenID4VP ("Encrypted Responses"): the JWE plaintext MUST be

@@ -87,10 +87,11 @@ class LegacyWalletAttestationProvider implements WalletAttestationProvider {
       ignoreProofHeaderType: true,
     );
 
-    return ClientAttestationPair(
+    final pair = ClientAttestationPair(
       attestation: walletAttestationData,
       proofOfPossession: jwtProofOfPossession,
     );
+    return pair;
   }
 
   /// Always `null`: this wallet provider does not attest credential-binding

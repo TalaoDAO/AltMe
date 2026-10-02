@@ -24,7 +24,8 @@ class ThemeRepository implements ThemePersistence {
 
   String? _getValue(String key) {
     try {
-      return _sharedPreferences.getString(key);
+      final value = _sharedPreferences.getString(key);
+      return value;
     } catch (_) {
       return null;
     }
@@ -60,7 +61,8 @@ class ThemeRepository implements ThemePersistence {
   @override
   Future<void> saveTheme(ThemeMode theme) {
     _controller.add(theme);
-    return _setValue(_kThemePersistenceKey, theme.name);
+    final saveFuture = _setValue(_kThemePersistenceKey, theme.name);
+    return saveFuture;
   }
 
   @override

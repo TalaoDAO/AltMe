@@ -79,13 +79,14 @@ class EnterpriseWalletConfigurationSource implements WalletConfigurationSource {
       );
     }
 
-    return getProfileFromProvider(
+    final profile = getProfileFromProvider(
       email: email,
       password: password,
       jwtVc: walletAttestationData,
       url: url,
       client: client,
     );
+    return profile;
   }
 
   @override

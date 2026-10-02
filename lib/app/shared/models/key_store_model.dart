@@ -8,11 +8,12 @@ class KeyStoreModel extends Equatable {
   });
 
   factory KeyStoreModel.fromJson(Map<String, dynamic> json) {
-    return KeyStoreModel(
+    final keyStore = KeyStoreModel(
       secretKey: json['secretKey'] as String,
       publicKey: json['publicKey'] as String,
       publicKeyHash: json['publicKeyHash'] as String,
     );
+    return keyStore;
   }
 
   final String secretKey;

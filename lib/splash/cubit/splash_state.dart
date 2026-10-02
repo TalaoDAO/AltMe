@@ -26,13 +26,14 @@ class SplashState extends Equatable {
     bool? isNewVersion,
     double? loadedValue,
   }) {
-    return SplashState(
+    final newState = SplashState(
       status: status ?? this.status,
       versionNumber: versionNumber ?? this.versionNumber,
       buildNumber: buildNumber ?? this.buildNumber,
       isNewVersion: isNewVersion ?? this.isNewVersion,
       loadedValue: loadedValue ?? this.loadedValue,
     );
+    return newState;
   }
 
   Map<String, dynamic> toJson() => _$SplashStateToJson(this);

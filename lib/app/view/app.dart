@@ -90,9 +90,10 @@ class App extends StatelessWidget {
           ),
           BlocProvider<AdvanceSettingsCubit>(
             create: (context) {
-              return AdvanceSettingsCubit(
+              final cubit = AdvanceSettingsCubit(
                 secureStorageProvider: getSecureStorage,
               );
+              return cubit;
             },
           ),
           BlocProvider(
