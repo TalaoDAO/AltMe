@@ -663,7 +663,22 @@ bool isSiopV2OrOidc4VpUrl(Uri uri) {
       uri.toString().startsWith(Parameters.authorizationEndPoint) ||
       uri.toString().startsWith('haip://authorize?');
 
-  return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;
+  // Wallet-provider-mediated cross-device presentation: a universal link on
+  // the wallet provider's own domain carrying `client_id` + `request_uri`
+  // (optionally `request_uri_method`), regardless of path. Checked by host
+  // rather than by a path prefix like Parameters.universalLink, because the
+  // verifier's request can be relayed at the domain root as well as under
+  // `/app/download`.
+  final isWalletProviderPresentationLink =
+      uri.scheme == 'https' &&
+      uri.host == Uri.parse(Parameters.universalLink).host &&
+      uri.queryParameters['client_id'] != null &&
+      uri.queryParameters['request_uri'] != null;
+
+  return isOpenIdUrl ||
+      isAuthorizeEndPoint ||
+      isSiopv2Url ||
+      isWalletProviderPresentationLink;
 }
 
 Future<void> handleErrorForOidc4Vci({
