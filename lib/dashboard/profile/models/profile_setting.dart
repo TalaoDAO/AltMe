@@ -156,7 +156,7 @@ class BlockchainOptions extends Equatable {
     bool? tzproRpcNode,
     bool? testnet,
   }) {
-    return BlockchainOptions(
+    final blockchainOptions = BlockchainOptions(
       associatedAddressFormat:
           associatedAddressFormat ?? this.associatedAddressFormat,
       bnbSupport: bnbSupport ?? this.bnbSupport,
@@ -172,6 +172,7 @@ class BlockchainOptions extends Equatable {
       tzproApiKey: tzproApiKey ?? this.tzproApiKey,
       testnet: testnet ?? this.testnet,
     );
+    return blockchainOptions;
   }
 
   @override
@@ -321,7 +322,7 @@ class DiscoverCardsOptions extends Equatable {
     bool? displayTezotopia,
     bool? displayEmailPassSdJwt,
   }) {
-    return DiscoverCardsOptions(
+    final discoverCardsOptions = DiscoverCardsOptions(
       displayDefi: displayDefi ?? this.displayDefi,
       displayHumanity: displayHumanity ?? this.displayHumanity,
       displayHumanityJwt: displayHumanityJwt ?? this.displayHumanityJwt,
@@ -353,6 +354,7 @@ class DiscoverCardsOptions extends Equatable {
       displayEmailPassSdJwt:
           displayEmailPassSdJwt ?? this.displayEmailPassSdJwt,
     );
+    return discoverCardsOptions;
   }
 
   VCFormatType vcFormatTypeForAuto({
@@ -548,7 +550,7 @@ class GeneralOptions extends Equatable {
     String? customerPlan,
     String? primaryColor,
   }) {
-    return GeneralOptions(
+    final generalOptions = GeneralOptions(
       walletType: walletType ?? this.walletType,
       companyName: companyName ?? this.companyName,
       companyWebsite: companyWebsite ?? this.companyWebsite,
@@ -563,6 +565,7 @@ class GeneralOptions extends Equatable {
       customerPlan: customerPlan ?? this.customerPlan,
       primaryColor: primaryColor ?? this.primaryColor,
     );
+    return generalOptions;
   }
 
   @override
@@ -770,9 +773,10 @@ class CustomOidc4VcProfile extends Equatable {
   factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) {
     final profileFromJson = _$CustomOidc4VcProfileFromJson(json);
     if (profileFromJson.formatsSupported!.isEmpty) {
-      return profileFromJson.copyWith(
+      final updatedProfile = profileFromJson.copyWith(
         formatsSupported: <VCFormatType>[profileFromJson.vcFormatType],
       );
+      return updatedProfile;
     }
     return profileFromJson;
   }

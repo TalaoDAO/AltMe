@@ -159,14 +159,15 @@ class DisplayCredentialField extends StatelessWidget {
   }
 
   TextSpan stringValue(TextTheme textTheme, BuildContext context) {
-    return TextSpan(
+    final span = TextSpan(
       text: value,
       style: textTheme.bodyMedium!.copyWith(color: valueColor),
     );
+    return span;
   }
 
   TextSpan uriValue(TextTheme textTheme, BuildContext context) {
-    return TextSpan(
+    final span = TextSpan(
       text: value,
       style: textTheme.bodyMedium!.copyWith(
         color: Theme.of(context).colorScheme.primary,
@@ -176,10 +177,11 @@ class DisplayCredentialField extends StatelessWidget {
           await LaunchUrl.launch(value);
         },
     );
+    return span;
   }
 
   TextSpan emailValue(TextTheme textTheme, BuildContext context) {
-    return TextSpan(
+    final span = TextSpan(
       text: value,
       style: textTheme.bodyMedium!.copyWith(
         color: Theme.of(context).colorScheme.primary,
@@ -189,6 +191,7 @@ class DisplayCredentialField extends StatelessWidget {
           await LaunchUrl.launch('mailto:$value');
         },
     );
+    return span;
   }
 }
 

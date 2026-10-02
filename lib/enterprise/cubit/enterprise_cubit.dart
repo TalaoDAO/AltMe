@@ -30,9 +30,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
   final AltmeChatSupportCubit altmeChatSupportCubit;
   final MatrixNotificationCubit matrixNotificationCubit;
 
-  Future<void> requestTheConfiguration({
-    required Uri uri,
-  }) async {
+  Future<void> requestTheConfiguration({required Uri uri}) async {
     try {
       emit(state.loading());
 
@@ -204,13 +202,14 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
   }
 
   Future<String> fetchWalletAttestationData(String url) async {
-    return getWalletAttestationData(
+    final walletAttestationData = await getWalletAttestationData(
       url: url,
       client: client,
       secureStorageProvider: profileCubit.secureStorageProvider,
       profileModel: profileCubit.state.model,
       jwtDecode: profileCubit.jwtDecode,
     );
+    return walletAttestationData;
   }
 
   Future<void> getWalletAttestationBitStatus() async {
@@ -478,9 +477,7 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
           configurationResponse['password'] != null &&
           configurationResponse['wallet-provider'] != null) {
         final uri = Uri.https('example.com', '/path', configurationResponse);
-        await requestTheConfiguration(
-          uri: uri,
-        );
+        await requestTheConfiguration(uri: uri);
       }
     }
   }

@@ -219,7 +219,7 @@ class _QrCameraViewState extends State<QrCameraView> {
     final plane = image.planes.first;
 
     // compose InputImage using bytes
-    return InputImage.fromBytes(
+    final inputImage = InputImage.fromBytes(
       bytes: plane.bytes,
       metadata: InputImageMetadata(
         size: Size(image.width.toDouble(), image.height.toDouble()),
@@ -228,6 +228,7 @@ class _QrCameraViewState extends State<QrCameraView> {
         bytesPerRow: plane.bytesPerRow, // used only in iOS
       ),
     );
+    return inputImage;
   }
 }
 

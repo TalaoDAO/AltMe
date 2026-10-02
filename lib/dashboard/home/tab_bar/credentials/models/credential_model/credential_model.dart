@@ -52,7 +52,8 @@ class CredentialModel extends Equatable {
       newJson.putIfAbsent('data', () => newJson['credentialPreview']);
     }
 
-    return _$CredentialModelFromJson(newJson);
+    final credentialModel = _$CredentialModelFromJson(newJson);
+    return credentialModel;
   }
 
   factory CredentialModel.copyWithData({
@@ -63,7 +64,7 @@ class CredentialModel extends Equatable {
     Display? display,
     CredentialManifest? credentialManifest,
   }) {
-    return CredentialModel(
+    final credentialModel = CredentialModel(
       id: oldCredentialModel.id,
       image: oldCredentialModel.image,
       data: newData,
@@ -86,6 +87,7 @@ class CredentialModel extends Equatable {
       pendingInfo: oldCredentialModel.pendingInfo,
       profileLinkedId: profileType.getVCId,
     );
+    return credentialModel;
   }
 
   @JsonKey(fromJson: fromJsonId)
@@ -137,7 +139,7 @@ class CredentialModel extends Equatable {
     String? profileLinkedId,
     String? aiCredentialAnalysis,
   }) {
-    return CredentialModel(
+    final credentialModel = CredentialModel(
       id: id ?? this.id,
       image: image ?? this.image,
       data: data ?? this.data,
@@ -159,6 +161,7 @@ class CredentialModel extends Equatable {
       profileLinkedId: profileLinkedId ?? this.profileLinkedId,
       aiCredentialAnalysis: aiCredentialAnalysis ?? this.aiCredentialAnalysis,
     );
+    return credentialModel;
   }
 
   String get issuer {
@@ -170,7 +173,10 @@ class CredentialModel extends Equatable {
       return issuer;
     } else if (issuer is Map) {
       final id = issuer['id'];
-      if (id != null) return id.toString();
+      if (id != null) {
+        final idString = id.toString();
+        return idString;
+      }
     }
 
     return '';
@@ -178,9 +184,11 @@ class CredentialModel extends Equatable {
 
   static String fromJsonId(dynamic json) {
     if (json == null || json == '') {
-      return const Uuid().v4();
+      final uuid = const Uuid().v4();
+      return uuid;
     } else {
-      return json.toString();
+      final jsonString = json.toString();
+      return jsonString;
     }
   }
 
@@ -188,7 +196,8 @@ class CredentialModel extends Equatable {
     if (json == null || json == '') {
       return null;
     }
-    return Display.fromJson(json as Map<String, dynamic>);
+    final display = Display.fromJson(json as Map<String, dynamic>);
+    return display;
   }
 
   Future<CredentialStatus> checkRevocationStatus() async {
@@ -230,11 +239,13 @@ class CredentialModel extends Equatable {
       return null;
     }
     if (json['credential_manifest'] != null) {
-      return CredentialManifest.fromJson(
+      final credentialManifest = CredentialManifest.fromJson(
         json['credential_manifest'] as Map<String, dynamic>,
       );
+      return credentialManifest;
     }
-    return CredentialManifest.fromJson(json);
+    final credentialManifest = CredentialManifest.fromJson(json);
+    return credentialManifest;
   }
 
   static String? readValueReceivedId(Map<dynamic, dynamic> map, String value) {

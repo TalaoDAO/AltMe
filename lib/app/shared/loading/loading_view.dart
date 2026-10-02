@@ -99,7 +99,7 @@ class LoadingView {
 
     state.insert(overlay);
 
-    return LoadingViewController(
+    final loadingViewController = LoadingViewController(
       close: () {
         textController.close();
         overlay.remove();
@@ -110,5 +110,6 @@ class LoadingView {
         return true;
       },
     );
+    return loadingViewController;
   }
 }

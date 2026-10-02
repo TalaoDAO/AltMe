@@ -46,7 +46,7 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
     required List<CredentialModel> credentialsToBePresented,
     VerifierTrustInfo? verifierTrustInfo,
   }) {
-    return MaterialPageRoute<void>(
+    final pageRoute = MaterialPageRoute<void>(
       builder: (context) => SelectiveDisclosurePickPage(
         uri: uri,
         credential: credential,
@@ -59,6 +59,7 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
       ),
       settings: const RouteSettings(name: '/SelectiveDisclosurePickPage'),
     );
+    return pageRoute;
   }
 
   @override

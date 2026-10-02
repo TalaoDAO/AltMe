@@ -185,51 +185,81 @@ extension BlockchainTypeX on BlockchainType {
   CredentialManifest get credentialManifest {
     switch (this) {
       case BlockchainType.tezos:
-        return CredentialManifest.fromJson(
+        final manifest = CredentialManifest.fromJson(
           ConstantsJson.tezosAssociatedAddressCredentialManifestJson,
         );
+        return manifest;
       case BlockchainType.ethereum:
-        return CredentialManifest.fromJson(
+        final manifest = CredentialManifest.fromJson(
           ConstantsJson.ethereumAssociatedAddressCredentialManifestJson,
         );
+        return manifest;
       case BlockchainType.fantom:
-        return CredentialManifest.fromJson(
+        final manifest = CredentialManifest.fromJson(
           ConstantsJson.fantomAssociatedAddressCredentialManifestJson,
         );
+        return manifest;
       case BlockchainType.polygon:
-        return CredentialManifest.fromJson(
+        final manifest = CredentialManifest.fromJson(
           ConstantsJson.polygonAssociatedAddressCredentialManifestJson,
         );
+        return manifest;
       case BlockchainType.binance:
-        return CredentialManifest.fromJson(
+        final manifest = CredentialManifest.fromJson(
           ConstantsJson.binanceAssociatedAddressCredentialManifestJson,
         );
+        return manifest;
       case BlockchainType.etherlink:
-        return CredentialManifest.fromJson(
+        final manifest = CredentialManifest.fromJson(
           ConstantsJson.etherlinkAssociatedAddressCredentialManifestJson,
         );
+        return manifest;
     }
   }
 
   Filter get filter {
     switch (this) {
       case BlockchainType.tezos:
-        return Filter(type: 'String', pattern: 'TezosAssociatedAddress');
+        final filter = Filter(
+          type: 'String',
+          pattern: 'TezosAssociatedAddress',
+        );
+        return filter;
 
       case BlockchainType.ethereum:
-        return Filter(type: 'String', pattern: 'EthereumAssociatedAddress');
+        final filter = Filter(
+          type: 'String',
+          pattern: 'EthereumAssociatedAddress',
+        );
+        return filter;
 
       case BlockchainType.fantom:
-        return Filter(type: 'String', pattern: 'FantomAssociatedAddress');
+        final filter = Filter(
+          type: 'String',
+          pattern: 'FantomAssociatedAddress',
+        );
+        return filter;
 
       case BlockchainType.polygon:
-        return Filter(type: 'String', pattern: 'PolygonAssociatedAddress');
+        final filter = Filter(
+          type: 'String',
+          pattern: 'PolygonAssociatedAddress',
+        );
+        return filter;
 
       case BlockchainType.binance:
-        return Filter(type: 'String', pattern: 'BinanceAssociatedAddress');
+        final filter = Filter(
+          type: 'String',
+          pattern: 'BinanceAssociatedAddress',
+        );
+        return filter;
 
       case BlockchainType.etherlink:
-        return Filter(type: 'String', pattern: 'EtherlinkAssociatedAddress');
+        final filter = Filter(
+          type: 'String',
+          pattern: 'EtherlinkAssociatedAddress',
+        );
+        return filter;
     }
   }
 

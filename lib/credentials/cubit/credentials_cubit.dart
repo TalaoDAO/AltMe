@@ -490,9 +490,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           profileType == ProfileType.enterprise) {
         continue;
       }
-      final doNotGenerateProfileType = [
-        ProfileType.EUDIW,
-      ];
+      final doNotGenerateProfileType = [ProfileType.EUDIW];
 
       if (doNotGenerateProfileType.contains(profileType)) {
         continue;
@@ -1055,7 +1053,7 @@ List<DiscoverDummyCredential> getDummiesFromExternalIssuerList(
   // filtering the external issuer list
   final List<DisplayExternalIssuer> list = List.from(externalIssuers);
   list.removeWhere((element) => element.category != category.name);
-  return list
+  final dummyCredentials = list
       .map(
         (e) => DiscoverDummyCredential(
           credentialSubjectType: CredentialSubjectType.defaultCredential,
@@ -1079,4 +1077,5 @@ List<DiscoverDummyCredential> getDummiesFromExternalIssuerList(
         ),
       )
       .toList();
+  return dummyCredentials;
 }

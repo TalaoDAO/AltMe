@@ -25,7 +25,8 @@ VerifierDisplayInfo resolveVerifierDisplay({
       ? x509SubjectField(leafCert, oidName: 'organizationName')
       : null;
 
-  return VerifierDisplayInfo(
+  final verifierDisplayInfo = VerifierDisplayInfo(
     name: organizationName ?? trustedEntity?.name ?? fallbackHost,
   );
+  return verifierDisplayInfo;
 }

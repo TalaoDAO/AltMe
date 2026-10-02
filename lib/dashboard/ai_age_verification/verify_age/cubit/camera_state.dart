@@ -35,13 +35,14 @@ class CameraState extends Equatable {
     int? acquiredCredentialsQuantity,
     String? ageEstimate,
   }) {
-    return CameraState(
+    final cameraState = CameraState(
       status: status ?? this.status,
       data: data ?? this.data,
       acquiredCredentialsQuantity:
           acquiredCredentialsQuantity ?? this.acquiredCredentialsQuantity,
       ageEstimate: ageEstimate ?? this.ageEstimate,
     );
+    return cameraState;
   }
 
   @override

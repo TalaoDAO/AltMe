@@ -645,7 +645,8 @@ class ProfileCubit extends Cubit<ProfileState> {
   @override
   Future<void> close() async {
     _timer?.cancel();
-    return super.close();
+    final closeFuture = super.close();
+    return closeFuture;
   }
 
   Future<void> setProfile(ProfileType profileType, {AppStatus? status}) async {
@@ -786,7 +787,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
     final jwt = JWTDecode().decodePayload(token: key);
     final challenge = jwt['challenge'] as String;
-    return getOidc4VCIState(challenge);
+    final oidc4VCIState = getOidc4VCIState(challenge);
+    return oidc4VCIState;
   }
 
   Oidc4VCIState? getOidc4VCIState(String? key) {
@@ -801,14 +803,16 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> deleteOidc4VCIState(String? key) async {
     if (key == null) {
-      return Future.value();
+      final completedFuture = Future<void>.value();
+      return completedFuture;
     }
 
     final Oidc4VCIStack oidc4VCIStack = state.model.oidc4VCIStack!;
     oidc4VCIStack.stack.removeWhere((element) => element.challenge == key);
     final profilModel = state.model.copyWith(oidc4VCIStack: oidc4VCIStack);
     await update(profilModel);
-    return Future.value();
+    final completedFuture = Future<void>.value();
+    return completedFuture;
   }
 
   /// Helper method to setup wallet profile configuration

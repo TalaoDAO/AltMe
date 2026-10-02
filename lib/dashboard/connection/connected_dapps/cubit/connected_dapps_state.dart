@@ -18,11 +18,13 @@ class ConnectedDappsState extends Equatable {
   final List<SavedDappData> savedDapps;
 
   ConnectedDappsState loading() {
-    return copyWith(status: AppStatus.loading);
+    final loadingState = copyWith(status: AppStatus.loading);
+    return loadingState;
   }
 
   ConnectedDappsState error({required MessageHandler messageHandler}) {
-    return copyWith(status: AppStatus.error);
+    final errorState = copyWith(status: AppStatus.error);
+    return errorState;
   }
 
   ConnectedDappsState copyWith({
@@ -31,7 +33,7 @@ class ConnectedDappsState extends Equatable {
     TokenModel? xtzModel,
     List<SavedDappData>? savedDapps,
   }) {
-    return ConnectedDappsState(
+    final connectedDappsState = ConnectedDappsState(
       status: status ?? this.status,
       message: messageHandler == null
           ? null
@@ -39,6 +41,7 @@ class ConnectedDappsState extends Equatable {
       xtzModel: xtzModel ?? this.xtzModel,
       savedDapps: savedDapps ?? this.savedDapps,
     );
+    return connectedDappsState;
   }
 
   Map<String, dynamic> toJson() => _$ConnectedDappsStateToJson(this);

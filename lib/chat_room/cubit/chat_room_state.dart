@@ -25,12 +25,13 @@ class ChatRoomState extends Equatable {
     User? user,
     StateMessage? message,
   }) {
-    return ChatRoomState(
+    final chatRoomState = ChatRoomState(
       status: status ?? this.status,
       messages: messages ?? this.messages,
       user: user ?? this.user,
       message: message ?? this.message,
     );
+    return chatRoomState;
   }
 
   @override

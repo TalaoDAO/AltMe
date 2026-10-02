@@ -30,14 +30,16 @@ class WalletConnectState extends Equatable {
   Map<String, dynamic> toJson() => _$WalletConnectStateToJson(this);
 
   WalletConnectState loading() {
-    return copyWith(status: WalletConnectStatus.loading);
+    final walletConnectState = copyWith(status: WalletConnectStatus.loading);
+    return walletConnectState;
   }
 
   WalletConnectState error({required MessageHandler messageHandler}) {
-    return copyWith(
+    final walletConnectState = copyWith(
       status: WalletConnectStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
     );
+    return walletConnectState;
   }
 
   WalletConnectState copyWith({
@@ -50,7 +52,7 @@ class WalletConnectState extends Equatable {
     Transaction? transaction,
     List<OperationDetails>? operationDetails,
   }) {
-    return WalletConnectState(
+    final walletConnectState = WalletConnectState(
       status: status,
       message: message,
       sessionProposalEvent: sessionProposalEvent ?? this.sessionProposalEvent,
@@ -60,6 +62,7 @@ class WalletConnectState extends Equatable {
       transaction: transaction ?? this.transaction,
       operationDetails: operationDetails ?? this.operationDetails,
     );
+    return walletConnectState;
   }
 
   @override

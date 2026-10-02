@@ -18,13 +18,14 @@ class InsertWithdrawalAmountPage extends StatelessWidget {
     required String withdrawalAddress,
     required TokenModel defualtSelectedToken,
   }) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => InsertWithdrawalAmountPage(
         withdrawalAddress: withdrawalAddress,
         defaultSelectedToken: defualtSelectedToken,
       ),
       settings: const RouteSettings(name: '/insertWithdrawalAmountPage'),
     );
+    return route;
   }
 
   @override

@@ -144,7 +144,8 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
     required String contractAddress,
   }) async {
     if (state.selectedToken.standard?.toLowerCase() == 'fa2') {
-      return _getFa2Transfers(baseUrl);
+      final fa2Transfers = _getFa2Transfers(baseUrl);
+      return fa2Transfers;
     }
 
     late Map<String, dynamic> params;
@@ -205,7 +206,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
       result = response['items'] as List<dynamic>;
 
       operations = result.map((dynamic e) {
-        return OperationModel(
+        final operation = OperationModel(
           type: '',
           id: -1,
           level: 0,
@@ -226,6 +227,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
           status: e['result'].toString(),
           hasInternals: false,
         );
+        return operation;
       }).toList();
     } catch (e, s) {
       getLogger(toString()).e('having issue: $e, stack: $s');
@@ -266,7 +268,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
               : (e['amount'] is int)
               ? (e['amount'] as int).toString()
               : 0.toString();
-          return OperationModel(
+          final operation = OperationModel(
             type: '',
             id: -1,
             level: 0,
@@ -287,6 +289,7 @@ class SendReceiveHomeCubit extends Cubit<SendReceiveHomeState> {
             status: 'applied',
             hasInternals: false,
           );
+          return operation;
         }).toList();
       } catch (e, s) {
         getLogger(toString()).e('having issue: $e, stack: $s');

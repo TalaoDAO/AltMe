@@ -158,7 +158,7 @@ Future<CredentialAcceptanceItem> buildCredentialAcceptanceItem({
     profileType: credentialsCubit.profileCubit.state.model.profileType,
   );
 
-  return CredentialAcceptanceItem(
+  final credentialAcceptanceItem = CredentialAcceptanceItem(
     credentialDisplayName: display?.name ?? credentialType,
     claims: buildTranslatedClaims(
       credentialModel: credentialModel,
@@ -166,6 +166,7 @@ Future<CredentialAcceptanceItem> buildCredentialAcceptanceItem({
     ),
     credentialModel: credentialModel,
   );
+  return credentialAcceptanceItem;
 }
 
 /// Used by the deferred-credential path, where exactly one credential is

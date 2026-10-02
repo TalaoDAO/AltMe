@@ -17,10 +17,11 @@ class SelectNetworkFeeState extends Equatable {
     NetworkFeeModel? selectedNetworkFee,
     List<NetworkFeeModel>? networkFeeList,
   }) {
-    return SelectNetworkFeeState(
+    final selectNetworkFeeState = SelectNetworkFeeState(
       selectedNetworkFee: selectedNetworkFee ?? this.selectedNetworkFee,
       networkFeeList: networkFeeList ?? this.networkFeeList,
     );
+    return selectNetworkFeeState;
   }
 
   Map<String, dynamic> toJson() => _$SelectNetworkFeeStateToJson(this);

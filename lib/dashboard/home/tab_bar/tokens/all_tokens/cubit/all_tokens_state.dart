@@ -23,17 +23,21 @@ class AllTokensState extends Equatable {
     List<ContractModel>? filteredContracts,
     List<ContractModel>? selectedContracts,
   }) {
-    return AllTokensState(
+    final state = AllTokensState(
       status: status ?? this.status,
       message: message ?? this.message,
       contracts: contracts ?? this.contracts,
       filteredContracts: filteredContracts ?? this.filteredContracts,
       selectedContracts: selectedContracts ?? this.selectedContracts,
     );
+    return state;
   }
 
   bool containContract({required ContractModel contractModel}) {
-    return selectedContracts.any((element) => element == contractModel);
+    final contains = selectedContracts.any(
+      (element) => element == contractModel,
+    );
+    return contains;
   }
 
   @override

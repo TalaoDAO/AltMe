@@ -11,10 +11,11 @@ class NftDetailsState extends Equatable {
   final StateMessage? message;
 
   NftDetailsState copyWith({AppStatus? status, StateMessage? message}) {
-    return NftDetailsState(
+    final state = NftDetailsState(
       status: status ?? this.status,
       message: message ?? this.message,
     );
+    return state;
   }
 
   Map<String, dynamic> toJson() => _$NftDetailsStateToJson(this);

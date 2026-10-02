@@ -9,10 +9,11 @@ class SoftwareLicenseDetailsPage extends StatelessWidget {
   final LicenseModel licenseModel;
 
   static Route<dynamic> route({required LicenseModel licenseModel}) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => SoftwareLicenseDetailsPage(licenseModel: licenseModel),
       settings: const RouteSettings(name: '/SoftwareLicenseDetailsPage'),
     );
+    return route;
   }
 
   @override

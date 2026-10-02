@@ -18,11 +18,12 @@ class ImportWalletState extends Equatable {
   final bool isMnemonicOrKeyValid;
 
   ImportWalletState loading() {
-    return ImportWalletState(
+    final importWalletState = ImportWalletState(
       status: AppStatus.loading,
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid,
     );
+    return importWalletState;
   }
 
   ImportWalletState populating({
@@ -30,27 +31,29 @@ class ImportWalletState extends Equatable {
     bool? isMnemonicOrKeyValid,
     int? recoveredCredentialLength,
   }) {
-    return ImportWalletState(
+    final importWalletState = ImportWalletState(
       status: AppStatus.populate,
       isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid ?? this.isMnemonicOrKeyValid,
     );
+    return importWalletState;
   }
 
   ImportWalletState error({required MessageHandler messageHandler}) {
-    return ImportWalletState(
+    final importWalletState = ImportWalletState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid,
     );
+    return importWalletState;
   }
 
   ImportWalletState copyWith({
     required AppStatus status,
     MessageHandler? messageHandler,
   }) {
-    return ImportWalletState(
+    final importWalletState = ImportWalletState(
       status: status,
       message: messageHandler == null
           ? null
@@ -58,10 +61,11 @@ class ImportWalletState extends Equatable {
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid,
     );
+    return importWalletState;
   }
 
   ImportWalletState success({MessageHandler? messageHandler}) {
-    return ImportWalletState(
+    final importWalletState = ImportWalletState(
       status: AppStatus.success,
       message: messageHandler == null
           ? null
@@ -69,6 +73,7 @@ class ImportWalletState extends Equatable {
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid,
     );
+    return importWalletState;
   }
 
   Map<String, dynamic> toJson() => _$ImportWalletStateToJson(this);

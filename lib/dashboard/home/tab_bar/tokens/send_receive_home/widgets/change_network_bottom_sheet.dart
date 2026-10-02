@@ -10,11 +10,12 @@ class ChangeNetworkBottomSheetView extends StatelessWidget {
   const ChangeNetworkBottomSheetView({super.key});
 
   static Future<void> show({required BuildContext context}) {
-    return showModalBottomSheet<void>(
+    final bottomSheet = showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (_) => const ChangeNetworkBottomSheetView(),
     );
+    return bottomSheet;
   }
 
   @override

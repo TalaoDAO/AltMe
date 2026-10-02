@@ -24,21 +24,28 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
   Color get defaultBackgroundColor {
     switch (this) {
       case CredentialSubjectType.defiCompliance:
-        return const Color.fromARGB(255, 62, 15, 163);
+        const color = Color.fromARGB(255, 62, 15, 163);
+        return color;
       case CredentialSubjectType.identityPass:
-        return const Color(0xffCAFFBF);
+        const color = Color(0xffCAFFBF);
+        return color;
       case CredentialSubjectType.professionalExperienceAssessment:
-        return const Color(0xFFFFADAD);
+        const color = Color(0xFFFFADAD);
+        return color;
       case CredentialSubjectType.professionalSkillAssessment:
-        return const Color(0xffCAFFBF);
+        const color = Color(0xffCAFFBF);
+        return color;
       case CredentialSubjectType.residentCard:
         return Colors.white;
       case CredentialSubjectType.selfIssued:
-        return const Color(0xffEFF0F6);
+        const color = Color(0xffEFF0F6);
+        return color;
       case CredentialSubjectType.defaultCredential:
-        return const Color(0xff6600FF);
+        const color = Color(0xff6600FF);
+        return color;
       case CredentialSubjectType.professionalStudentCard:
-        return const Color(0xffCAFFBF);
+        const color = Color(0xffCAFFBF);
+        return color;
       case CredentialSubjectType.walletCredential:
       case CredentialSubjectType.livenessCard:
       case CredentialSubjectType.nationality:
@@ -87,7 +94,8 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.identityCredential:
       case CredentialSubjectType.eudiPid:
       case CredentialSubjectType.pid:
-        return const Color(0xff6600FF);
+        const color = Color(0xff6600FF);
+        return color;
     }
   }
 
@@ -211,117 +219,173 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
   CredentialSubjectModel modelFromJson(Map<String, dynamic> json) {
     switch (this) {
       case CredentialSubjectType.defiCompliance:
-        return DefiComplianceModel.fromJson(json);
+        final model = DefiComplianceModel.fromJson(json);
+        return model;
       case CredentialSubjectType.livenessCard:
-        return LivenessCardModel.fromJson(json);
+        final model = LivenessCardModel.fromJson(json);
+        return model;
       case CredentialSubjectType.tezotopiaMembership:
-        return TezotopiaMembershipModel.fromJson(json);
+        final model = TezotopiaMembershipModel.fromJson(json);
+        return model;
       case CredentialSubjectType.chainbornMembership:
-        return ChainbornMembershipModel.fromJson(json);
+        final model = ChainbornMembershipModel.fromJson(json);
+        return model;
       case CredentialSubjectType.twitterCard:
-        return TwitterCardModel.fromJson(json);
+        final model = TwitterCardModel.fromJson(json);
+        return model;
       case CredentialSubjectType.ageRange:
-        return AgeRangeModel.fromJson(json);
+        final model = AgeRangeModel.fromJson(json);
+        return model;
       case CredentialSubjectType.nationality:
-        return NationalityModel.fromJson(json);
+        final model = NationalityModel.fromJson(json);
+        return model;
       case CredentialSubjectType.gender:
-        return GenderModel.fromJson(json);
+        final model = GenderModel.fromJson(json);
+        return model;
       case CredentialSubjectType.walletCredential:
-        return WalletCredentialModel.fromJson(json);
+        final model = WalletCredentialModel.fromJson(json);
+        return model;
       case CredentialSubjectType.tezosAssociatedWallet:
-        return TezosAssociatedAddressModel.fromJson(json);
+        final model = TezosAssociatedAddressModel.fromJson(json);
+        return model;
       case CredentialSubjectType.ethereumAssociatedWallet:
-        return EthereumAssociatedAddressModel.fromJson(json);
+        final model = EthereumAssociatedAddressModel.fromJson(json);
+        return model;
       case CredentialSubjectType.fantomAssociatedWallet:
-        return FantomAssociatedAddressModel.fromJson(json);
+        final model = FantomAssociatedAddressModel.fromJson(json);
+        return model;
       case CredentialSubjectType.polygonAssociatedWallet:
-        return PolygonAssociatedAddressModel.fromJson(json);
+        final model = PolygonAssociatedAddressModel.fromJson(json);
+        return model;
       case CredentialSubjectType.binanceAssociatedWallet:
-        return BinanceAssociatedAddressModel.fromJson(json);
+        final model = BinanceAssociatedAddressModel.fromJson(json);
+        return model;
       case CredentialSubjectType.etherlinkAssociatedWallet:
-        return EtherlinkAssociatedAddressModel.fromJson(json);
+        final model = EtherlinkAssociatedAddressModel.fromJson(json);
+        return model;
       case CredentialSubjectType.certificateOfEmployment:
-        return CertificateOfEmploymentModel.fromJson(json);
+        final model = CertificateOfEmploymentModel.fromJson(json);
+        return model;
       case CredentialSubjectType.emailPass:
-        return EmailPassModel.fromJson(json);
+        final model = EmailPassModel.fromJson(json);
+        return model;
       case CredentialSubjectType.identityPass:
-        return IdentityPassModel.fromJson(json);
+        final model = IdentityPassModel.fromJson(json);
+        return model;
       case CredentialSubjectType.verifiableIdCard:
-        return VerifiableIdCardModel.fromJson(json);
+        final model = VerifiableIdCardModel.fromJson(json);
+        return model;
       case CredentialSubjectType.learningAchievement:
-        return LearningAchievementModel.fromJson(json);
+        final model = LearningAchievementModel.fromJson(json);
+        return model;
       case CredentialSubjectType.over13:
-        return Over13Model.fromJson(json);
+        final model = Over13Model.fromJson(json);
+        return model;
       case CredentialSubjectType.over15:
-        return Over15Model.fromJson(json);
+        final model = Over15Model.fromJson(json);
+        return model;
       case CredentialSubjectType.over18:
-        return Over18Model.fromJson(json);
+        final model = Over18Model.fromJson(json);
+        return model;
       case CredentialSubjectType.over21:
-        return Over21Model.fromJson(json);
+        final model = Over21Model.fromJson(json);
+        return model;
       case CredentialSubjectType.over50:
-        return Over50Model.fromJson(json);
+        final model = Over50Model.fromJson(json);
+        return model;
       case CredentialSubjectType.over65:
-        return Over65Model.fromJson(json);
+        final model = Over65Model.fromJson(json);
+        return model;
       case CredentialSubjectType.passportFootprint:
-        return PassportFootprintModel.fromJson(json);
+        final model = PassportFootprintModel.fromJson(json);
+        return model;
       case CredentialSubjectType.phonePass:
-        return PhonePassModel.fromJson(json);
+        final model = PhonePassModel.fromJson(json);
+        return model;
       case CredentialSubjectType.professionalExperienceAssessment:
-        return ProfessionalExperienceAssessmentModel.fromJson(json);
+        final model = ProfessionalExperienceAssessmentModel.fromJson(json);
+        return model;
       case CredentialSubjectType.professionalSkillAssessment:
-        return ProfessionalSkillAssessmentModel.fromJson(json);
+        final model = ProfessionalSkillAssessmentModel.fromJson(json);
+        return model;
       case CredentialSubjectType.professionalStudentCard:
-        return ProfessionalStudentCardModel.fromJson(json);
+        final model = ProfessionalStudentCardModel.fromJson(json);
+        return model;
       case CredentialSubjectType.residentCard:
-        return ResidentCardModel.fromJson(json);
+        final model = ResidentCardModel.fromJson(json);
+        return model;
       case CredentialSubjectType.selfIssued:
-        return SelfIssuedModel.fromJson(json);
+        final model = SelfIssuedModel.fromJson(json);
+        return model;
       case CredentialSubjectType.studentCard:
-        return StudentCardModel.fromJson(json);
+        final model = StudentCardModel.fromJson(json);
+        return model;
       case CredentialSubjectType.voucher:
-        return VoucherModel.fromJson(json);
+        final model = VoucherModel.fromJson(json);
+        return model;
       case CredentialSubjectType.tezVoucher:
-        return TezotopiaVoucherModel.fromJson(json);
+        final model = TezotopiaVoucherModel.fromJson(json);
+        return model;
       case CredentialSubjectType.diplomaCard:
-        return DiplomaCardModel.fromJson(json);
+        final model = DiplomaCardModel.fromJson(json);
+        return model;
       case CredentialSubjectType.aragoPass:
-        return AragoPassModel.fromJson(json);
+        final model = AragoPassModel.fromJson(json);
+        return model;
       case CredentialSubjectType.aragoEmailPass:
-        return AragoEmailPassModel.fromJson(json);
+        final model = AragoEmailPassModel.fromJson(json);
+        return model;
       case CredentialSubjectType.aragoIdentityCard:
-        return AragoIdentityCardModel.fromJson(json);
+        final model = AragoIdentityCardModel.fromJson(json);
+        return model;
       case CredentialSubjectType.aragoLearningAchievement:
-        return AragoLearningAchievementModel.fromJson(json);
+        final model = AragoLearningAchievementModel.fromJson(json);
+        return model;
       case CredentialSubjectType.aragoOver18:
-        return AragoOver18Model.fromJson(json);
+        final model = AragoOver18Model.fromJson(json);
+        return model;
       case CredentialSubjectType.pcdsAgentCertificate:
-        return PcdsAgentCertificateModel.fromJson(json);
+        final model = PcdsAgentCertificateModel.fromJson(json);
+        return model;
       case CredentialSubjectType.ethereumPooAddress:
-        return EthereumPooAddressModel.fromJson(json);
+        final model = EthereumPooAddressModel.fromJson(json);
+        return model;
       case CredentialSubjectType.fantomPooAddress:
-        return FantomPooAddressModel.fromJson(json);
+        final model = FantomPooAddressModel.fromJson(json);
+        return model;
       case CredentialSubjectType.polygonPooAddress:
-        return PolygonPooAddressModel.fromJson(json);
+        final model = PolygonPooAddressModel.fromJson(json);
+        return model;
       case CredentialSubjectType.binancePooAddress:
-        return BinancePooAddressModel.fromJson(json);
+        final model = BinancePooAddressModel.fromJson(json);
+        return model;
       case CredentialSubjectType.tezosPooAddress:
-        return TezosPooAddressModel.fromJson(json);
+        final model = TezosPooAddressModel.fromJson(json);
+        return model;
       case CredentialSubjectType.euDiplomaCard:
-        return EUDiplomaCardModel.fromJson(json);
+        final model = EUDiplomaCardModel.fromJson(json);
+        return model;
       case CredentialSubjectType.euVerifiableId:
-        return EUVerifiableIdModel.fromJson(json);
+        final model = EUVerifiableIdModel.fromJson(json);
+        return model;
       case CredentialSubjectType.employeeCredential:
-        return EmployeeCredentialModel.fromJson(json);
+        final model = EmployeeCredentialModel.fromJson(json);
+        return model;
       case CredentialSubjectType.legalPersonalCredential:
-        return LegalPersonCredentialModel.fromJson(json);
+        final model = LegalPersonCredentialModel.fromJson(json);
+        return model;
       case CredentialSubjectType.defaultCredential:
-        return DefaultCredentialSubjectModel.fromJson(json);
+        final model = DefaultCredentialSubjectModel.fromJson(json);
+        return model;
       case CredentialSubjectType.identityCredential:
-        return IdentityCredentialSubjectModel.fromJson(json);
+        final model = IdentityCredentialSubjectModel.fromJson(json);
+        return model;
       case CredentialSubjectType.eudiPid:
-        return EudipidSubjectModel.fromJson(json);
+        final model = EudipidSubjectModel.fromJson(json);
+        return model;
       case CredentialSubjectType.pid:
-        return PidSubjectModel.fromJson(json);
+        final model = PidSubjectModel.fromJson(json);
+        return model;
     }
   }
 
@@ -945,7 +1009,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         break;
     }
 
-    return DiscoverDummyCredential(
+    final dummyCredential = DiscoverDummyCredential(
       image: image,
       link: link,
       credentialSubjectType: this,
@@ -964,6 +1028,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
           : ResponseMessage(message: longDescription),
       vcFormatType: assignedVCFormatType,
     );
+    return dummyCredential;
   }
 
   // Future changes will be made to values where 0 appears

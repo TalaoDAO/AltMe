@@ -46,7 +46,7 @@ class TezosNftModel extends NftModel {
   Map<String, dynamic> toJson() => _$TezosNftModelToJson(this);
 
   TokenModel getToken() {
-    return TokenModel(
+    final token = TokenModel(
       contractAddress: contractAddress,
       name: name,
       symbol: symbol ?? name,
@@ -56,14 +56,17 @@ class TezosNftModel extends NftModel {
       tokenId: tokenId,
       decimalsToShow: 0,
     );
+    return token;
   }
 
   List<String>? get creators {
     try {
       if (mCreators is String) {
-        return (jsonDecode(mCreators as String) as List<dynamic>)
-            .map((dynamic e) => e.toString())
-            .toList();
+        final decodedCreators =
+            (jsonDecode(mCreators as String) as List<dynamic>)
+                .map((dynamic e) => e.toString())
+                .toList();
+        return decodedCreators;
       } else if (mCreators is List<String>) {
         return mCreators as List<String>;
       } else {
@@ -77,9 +80,11 @@ class TezosNftModel extends NftModel {
   List<String>? get publishers {
     try {
       if (mPublishers is String) {
-        return (jsonDecode(mPublishers as String) as List<dynamic>)
-            .map((dynamic e) => e.toString())
-            .toList();
+        final decodedPublishers =
+            (jsonDecode(mPublishers as String) as List<dynamic>)
+                .map((dynamic e) => e.toString())
+                .toList();
+        return decodedPublishers;
       } else if (mPublishers is List<String>) {
         return mPublishers as List<String>;
       } else {

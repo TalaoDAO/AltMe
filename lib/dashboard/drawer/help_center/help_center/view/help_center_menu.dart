@@ -9,10 +9,11 @@ class HelpCenterMenu extends StatelessWidget {
   const HelpCenterMenu({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => const HelpCenterMenu(),
       settings: const RouteSettings(name: '/HelpCenterMenu'),
     );
+    return route;
   }
 
   @override

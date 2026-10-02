@@ -8,10 +8,11 @@ class AllTokensPage extends StatelessWidget {
   const AllTokensPage({super.key});
 
   static Route<void> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/addTokensPage'),
       builder: (_) => const AllTokensPage(),
     );
+    return route;
   }
 
   @override

@@ -8,10 +8,11 @@ class AltmeSupportChatPage extends StatelessWidget {
   final String? appBarTitle;
 
   static Route<void> route({String? appBarTitle}) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => AltmeSupportChatPage(appBarTitle: appBarTitle),
       settings: const RouteSettings(name: '/altmeSupportChatPage'),
     );
+    return route;
   }
 
   @override

@@ -72,7 +72,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   @override
   Future<void> close() async {
     //cancel streams
-    return super.close();
+    final closeFuture = super.close();
+    return closeFuture;
   }
 
   Future<void> process({required String? scannedResponse}) async {

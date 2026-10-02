@@ -12,7 +12,10 @@ class KycVerificationState extends Equatable {
   Map<String, dynamic> toJson() => _$KycVerificationStateToJson(this);
 
   KycVerificationState copyWith({KycVerificationStatus? status}) {
-    return KycVerificationState(status: status ?? this.status);
+    final kycVerificationState = KycVerificationState(
+      status: status ?? this.status,
+    );
+    return kycVerificationState;
   }
 
   @override

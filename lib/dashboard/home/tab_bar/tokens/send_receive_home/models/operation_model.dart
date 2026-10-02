@@ -36,7 +36,7 @@ class OperationModel extends Equatable {
       _$OperationModelFromJson(json);
 
   factory OperationModel.fromFa2Json(Map<String, dynamic> json) {
-    return OperationModel(
+    final operation = OperationModel(
       type: json['token']['standard'] as String,
       id: json['id'] as int,
       level: json['level'] as int,
@@ -61,6 +61,7 @@ class OperationModel extends Equatable {
       status: 'applied',
       hasInternals: true,
     );
+    return operation;
   }
 
   final String type;
@@ -85,7 +86,10 @@ class OperationModel extends Equatable {
   final OperationParameterModel? parameter;
 
   DateTime get dateTime {
-    return DateFormat('y-M-dTHH:mm:ssZ').parse(timestamp, true).toLocal();
+    final parsedDateTime = DateFormat(
+      'y-M-dTHH:mm:ssZ',
+    ).parse(timestamp, true).toLocal();
+    return parsedDateTime;
   }
 
   String get formatedDateTime {

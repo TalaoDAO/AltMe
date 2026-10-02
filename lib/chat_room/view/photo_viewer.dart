@@ -8,10 +8,11 @@ class PhotoViewer extends StatelessWidget {
   final ImageProvider imageProvider;
 
   static Route<dynamic> route({required ImageProvider imageProvider}) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/PhotoViewer'),
       builder: (_) => PhotoViewer(imageProvider: imageProvider),
     );
+    return route;
   }
 
   @override

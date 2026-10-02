@@ -9,10 +9,11 @@ class WhiteListPage extends StatefulWidget {
   const WhiteListPage({super.key});
 
   static Route<String?> route() {
-    return MaterialPageRoute<String?>(
+    final route = MaterialPageRoute<String?>(
       builder: (_) => const WhiteListPage(),
       settings: const RouteSettings(name: '/whiteListPage'),
     );
+    return route;
   }
 
   @override

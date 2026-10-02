@@ -43,7 +43,7 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
     required List<CredentialModel> credentialsToBePresented,
     VerifierTrustInfo? verifierTrustInfo,
   }) {
-    return MaterialPageRoute<void>(
+    final pageRoute = MaterialPageRoute<void>(
       builder: (context) => DcqlQueryOfferPickPage(
         uri: uri,
         credential: credential,
@@ -54,6 +54,7 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
       ),
       settings: const RouteSettings(name: '/DcqlQueryOfferPickPage'),
     );
+    return pageRoute;
   }
 
   @override
@@ -61,7 +62,7 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final profileModel = context.read<ProfileCubit>().state.model;
-        return CredentialManifestPickCubit(
+        final credentialManifestPickCubit = CredentialManifestPickCubit(
           credential: credential,
           credentialList: context.read<CredentialsCubit>().state.credentials,
           inputDescriptorIndex: inputDescriptorIndex,
@@ -74,6 +75,7 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
               [],
           profileType: profileModel.profileType,
         );
+        return credentialManifestPickCubit;
       },
       child: DcqlQueryOfferPickView(
         uri: uri,
@@ -305,7 +307,7 @@ class _DcqlQueryFailureView extends StatelessWidget {
   ) {
     final claims = credential.claims;
     if (claims != null && claims.isNotEmpty) {
-      return claims.map((claim) {
+      final labels = claims.map((claim) {
         final path = claim.path.whereType<String>().toList();
         final credentialModel = credentialModels
             .cast<CredentialModel?>()
@@ -325,10 +327,15 @@ class _DcqlQueryFailureView extends StatelessWidget {
               orElse: () => null,
             );
         if (credentialModel != null) {
-          return _translatedTitle(credentialModel, claim.path, languageCode);
+          final translatedTitle = _translatedTitle(
+            credentialModel,
+            claim.path,
+            languageCode,
+          );
+          return translatedTitle;
         }
         final value = path.isEmpty ? credential.id : path.last;
-        return value
+        final formattedValue = value
             .replaceAll(RegExp('([a-z])([A-Z])'), r'$1 $2')
             .replaceAll(RegExp('[_-]+'), ' ')
             .split(' ')
@@ -338,7 +345,9 @@ class _DcqlQueryFailureView extends StatelessWidget {
                   : '${word[0].toUpperCase()}${word.substring(1)}',
             )
             .join(' ');
+        return formattedValue;
       });
+      return labels;
     }
     return [credential.meta?.vctValues?.join(', ') ?? credential.id];
   }
@@ -373,7 +382,10 @@ String _translatedTitle(
       }
     }
   }
-  return path.map((item) => item == null ? '*' : item.toString()).join(' > ');
+  final joinedPath = path
+      .map((item) => item == null ? '*' : item.toString())
+      .join(' > ');
+  return joinedPath;
 }
 
 class VerifiableCredentialsColumn extends StatelessWidget {
@@ -394,16 +406,18 @@ class VerifiableCredentialsColumn extends StatelessWidget {
   static String _missingCredentialLabel(DcqlCredential missing) {
     final claims = missing.claims;
     if (claims != null && claims.isNotEmpty) {
-      return claims
+      final claimLabels = claims
           .map(
             (c) =>
                 c.path.map((s) => s == null ? '*' : s.toString()).join(' › '),
           )
           .join(', ');
+      return claimLabels;
     }
     final vctValues = missing.meta?.vctValues;
     if (vctValues != null && vctValues.isNotEmpty) {
-      return vctValues.join(', ');
+      final joinedVctValues = vctValues.join(', ');
+      return joinedVctValues;
     }
     return missing.id;
   }

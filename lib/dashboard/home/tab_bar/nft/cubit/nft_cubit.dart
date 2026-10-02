@@ -149,7 +149,7 @@ class NftCubit extends Cubit<NftState> {
 
       final nftList = List<EthereumNftModel>.from(
         result.map<EthereumNftModel>((dynamic e) {
-          return EthereumNftModel(
+          final ethereumNftModel = EthereumNftModel(
             name:
                 (e['name'] as String? ??
                     e['normalized_metadata']['name'] as String?) ??
@@ -165,6 +165,7 @@ class NftCubit extends Cubit<NftState> {
             image: e['normalized_metadata']['image'] as String?,
             animationUrl: e['normalized_metadata']['animation_url'] as String?,
           );
+          return ethereumNftModel;
         }),
       ).toList();
 
@@ -195,7 +196,7 @@ class NftCubit extends Cubit<NftState> {
   }) async {
     try {
       final List<dynamic> response =
-        await client.get(
+          await client.get(
                 '${network.apiUrl}/v1/tokens/balances',
                 queryParameters: <String, dynamic>{
                   'account': walletAddress,

@@ -7,10 +7,11 @@ class ThemeSettings extends StatelessWidget {
   const ThemeSettings({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/ThemeSettings'),
       builder: (_) => const ThemeSettings(),
     );
+    return route;
   }
 
   @override

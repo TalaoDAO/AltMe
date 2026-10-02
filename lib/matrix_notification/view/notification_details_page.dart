@@ -13,10 +13,11 @@ class NotificationDetailsPage extends StatelessWidget {
   final Message message;
 
   static Route<void> route({required Message message}) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => NotificationDetailsPage(message: message),
       settings: const RouteSettings(name: '/NotificationDetailsPage'),
     );
+    return route;
   }
 
   @override

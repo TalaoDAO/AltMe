@@ -19,7 +19,7 @@ class ReceivePage extends StatelessWidget {
     required String item,
     required String description,
   }) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/receivePage'),
       builder: (_) => ReceivePage(
         accountAddress: accountAddress,
@@ -27,6 +27,7 @@ class ReceivePage extends StatelessWidget {
         description: description,
       ),
     );
+    return route;
   }
 
   final String accountAddress;

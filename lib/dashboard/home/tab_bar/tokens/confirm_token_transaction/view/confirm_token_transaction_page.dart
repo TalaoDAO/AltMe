@@ -24,7 +24,7 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
     required String amount,
     bool isNFT = false,
   }) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/ConfirmTokenTransactionPage'),
       builder: (_) => ConfirmTokenTransactionPage(
         selectedToken: selectedToken,
@@ -33,6 +33,7 @@ class ConfirmTokenTransactionPage extends StatelessWidget {
         isNFT: isNFT,
       ),
     );
+    return route;
   }
 
   final TokenModel selectedToken;

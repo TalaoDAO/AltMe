@@ -14,13 +14,14 @@ class SendToPage extends StatelessWidget {
     TokenModel? defaultSelectedToken,
     NftModel? nftModel,
   }) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => SendToPage(
         defaultSelectedToken: defaultSelectedToken,
         nftModel: nftModel,
       ),
       settings: const RouteSettings(name: '/sendToPage'),
     );
+    return route;
   }
 
   @override

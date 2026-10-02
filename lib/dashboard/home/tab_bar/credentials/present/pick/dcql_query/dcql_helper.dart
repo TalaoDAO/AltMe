@@ -14,7 +14,7 @@ DcqlQueryResult keepFirstMatchPerCredential(DcqlQueryResult result) {
       entry.key: entry.value.take(1),
   };
 
-  return DcqlQueryResult(
+  final trimmedResult = DcqlQueryResult(
     query: result.query,
     verifiableCredentials: trimmedVerifiableCredentials,
     satisfiedClaimsByCredential: result.satisfiedClaimsByCredential,
@@ -24,6 +24,7 @@ DcqlQueryResult keepFirstMatchPerCredential(DcqlQueryResult result) {
     unsatisfiedMeta: result.unsatisfiedMeta,
     matchedCredentialSets: result.matchedCredentialSets,
   );
+  return trimmedResult;
 }
 
 // Map the DCQL-matched DigitalCredential objects back to your original
@@ -48,7 +49,8 @@ List<dynamic>? resolveConcretePath(
 
   if (current is Map<String, dynamic>) {
     if (!current.containsKey(head)) return null;
-    return resolveConcretePath(current[head], rest, [...acc, head]);
+    final mapResult = resolveConcretePath(current[head], rest, [...acc, head]);
+    return mapResult;
   }
   if (current is List) {
     if (head == null) {
@@ -58,7 +60,11 @@ List<dynamic>? resolveConcretePath(
       }
       return null;
     } else if (head is int && head >= 0 && head < current.length) {
-      return resolveConcretePath(current[head], rest, [...acc, head]);
+      final indexResult = resolveConcretePath(current[head], rest, [
+        ...acc,
+        head,
+      ]);
+      return indexResult;
     }
   }
   return null;

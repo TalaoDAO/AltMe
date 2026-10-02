@@ -73,7 +73,8 @@ class MWeb3Client {
       amount,
     ).getValueInUnit(toUnit).toStringAsFixed(6).characters.take(7).toString();
 
-    return double.parse(ethAmount);
+    final parsedAmount = double.parse(ethAmount);
+    return parsedAmount;
   }
 
   static Future<String?> sendToken({
@@ -402,7 +403,8 @@ class MWeb3Client {
     try {
       final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
 
-      return web3Client.sendRawTransaction(signed);
+      final rawTransactionHash = web3Client.sendRawTransaction(signed);
+      return rawTransactionHash;
     } catch (e, s) {
       log.e('sendEVMTransactionWithSignature error: $e, stack: $s');
       rethrow;

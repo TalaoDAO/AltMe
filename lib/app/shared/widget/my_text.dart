@@ -36,6 +36,7 @@ class MyText extends StatelessWidget {
 
   String get textWithDesiredLength {
     if (maxLength == null || maxLength! > text.length) return text;
-    return text.substring(0, maxLength);
+    final truncatedText = text.substring(0, maxLength);
+    return truncatedText;
   }
 }

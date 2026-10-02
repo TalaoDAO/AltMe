@@ -7,10 +7,11 @@ class DidMenu extends StatelessWidget {
   const DidMenu({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/ssiMenu/didMenu'),
       builder: (_) => const DidMenu(),
     );
+    return route;
   }
 
   @override

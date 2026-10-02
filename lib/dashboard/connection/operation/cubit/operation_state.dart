@@ -26,14 +26,16 @@ class OperationState extends Equatable {
   final String dAppName;
 
   OperationState loading() {
-    return copyWith(status: AppStatus.loading);
+    final loadingState = copyWith(status: AppStatus.loading);
+    return loadingState;
   }
 
   OperationState error({required MessageHandler messageHandler}) {
-    return copyWith(
+    final errorState = copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
     );
+    return errorState;
   }
 
   OperationState copyWith({
@@ -47,7 +49,7 @@ class OperationState extends Equatable {
     CryptoAccountData? cryptoAccountData,
     String? dAppName,
   }) {
-    return OperationState(
+    final operationState = OperationState(
       status: status ?? this.status,
       message: message,
       amount: amount ?? this.amount,
@@ -57,6 +59,7 @@ class OperationState extends Equatable {
       cryptoAccountData: cryptoAccountData ?? this.cryptoAccountData,
       dAppName: dAppName ?? this.dAppName,
     );
+    return operationState;
   }
 
   Map<String, dynamic> toJson() => _$OperationStateToJson(this);

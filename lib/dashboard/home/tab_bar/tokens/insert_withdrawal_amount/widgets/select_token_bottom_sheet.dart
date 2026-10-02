@@ -9,7 +9,7 @@ class SelectTokenBottomSheet extends StatelessWidget {
   const SelectTokenBottomSheet({super.key});
 
   static Future<TokenModel?> show(BuildContext context) {
-    return showModalBottomSheet(
+    final bottomSheet = showModalBottomSheet<TokenModel?>(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(Sizes.largeRadius),
@@ -19,6 +19,7 @@ class SelectTokenBottomSheet extends StatelessWidget {
       context: context,
       builder: (_) => const SelectTokenBottomSheet(),
     );
+    return bottomSheet;
   }
 
   @override

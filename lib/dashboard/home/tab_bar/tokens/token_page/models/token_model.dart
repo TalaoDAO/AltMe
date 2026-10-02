@@ -62,7 +62,7 @@ class TokenModel extends Equatable {
     String? standard,
     int? decimalsToShow,
   }) {
-    return TokenModel(
+    final token = TokenModel(
       contractAddress: contractAddress ?? this.contractAddress,
       name: name ?? this.name,
       symbol: symbol ?? this.symbol,
@@ -76,6 +76,7 @@ class TokenModel extends Equatable {
       standard: standard ?? this.standard,
       decimalsToShow: decimalsToShow ?? this.decimalsToShow,
     );
+    return token;
   }
 
   bool get isFA1 => standard?.toLowerCase() == 'fa1.2';
@@ -107,7 +108,8 @@ class TokenModel extends Equatable {
   }
 
   double get calculatedBalanceInDouble {
-    return double.parse(calculatedBalance.replaceAll(',', ''));
+    final balanceInDouble = double.parse(calculatedBalance.replaceAll(',', ''));
+    return balanceInDouble;
   }
 
   String? get iconUrl {
@@ -115,7 +117,8 @@ class TokenModel extends Equatable {
     if (iconUrl == null) {
       return null;
     } else {
-      return iconUrl.replaceFirst('ipfs://', Urls.ipfsGateway);
+      final resolvedIconUrl = iconUrl.replaceFirst('ipfs://', Urls.ipfsGateway);
+      return resolvedIconUrl;
     }
   }
 

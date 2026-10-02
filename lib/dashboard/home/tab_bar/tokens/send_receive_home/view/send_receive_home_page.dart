@@ -14,10 +14,11 @@ class SendReceiveHomePage extends StatefulWidget {
   final TokenModel selectedToken;
 
   static Route<dynamic> route({required TokenModel selectedToken}) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => SendReceiveHomePage(selectedToken: selectedToken),
       settings: const RouteSettings(name: '/sendReceiveHomePage'),
     );
+    return route;
   }
 
   @override
