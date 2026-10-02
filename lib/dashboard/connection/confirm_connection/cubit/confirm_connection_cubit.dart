@@ -89,7 +89,7 @@ class ConfirmConnectionCubit extends Cubit<ConfirmConnectionState> {
           final SessionProposalEvent? sessionProposalEvent =
               walletConnectState.sessionProposalEvent;
 
-          final cryptoAccounts = walletCubit.state.cryptoAccount.data.toList();
+          final cryptoAccounts = [currentAccount];
 
           final params = sessionProposalEvent!.params;
 

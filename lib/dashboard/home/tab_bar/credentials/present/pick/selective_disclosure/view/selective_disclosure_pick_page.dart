@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/oidc4vp_transaction/oidc4vp_signature.dart';
-import 'package:altme/oidc4vp_transaction/oidc4vp_transaction.dart';
+import 'package:altme/oidc4vc/model/verifier_trust_info.dart';
+import 'package:altme/oidc4vp_transaction/domain/oidc4vp_transaction.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/inject_selective_disclosure_state.dart';
@@ -24,6 +24,7 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
     required this.selectedCredential,
     required this.presentationDefinition,
     required this.credentialsToBePresented,
+    this.verifierTrustInfo,
   });
 
   final Uri uri;
@@ -33,6 +34,7 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
   final CredentialModel selectedCredential;
   final PresentationDefinition? presentationDefinition;
   final List<CredentialModel> credentialsToBePresented;
+  final VerifierTrustInfo? verifierTrustInfo;
 
   static Route<dynamic> route({
     required Uri uri,
@@ -42,8 +44,9 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
     required CredentialModel selectedCredential,
     required PresentationDefinition? presentationDefinition,
     required List<CredentialModel> credentialsToBePresented,
+    VerifierTrustInfo? verifierTrustInfo,
   }) {
-    return MaterialPageRoute<void>(
+    final pageRoute = MaterialPageRoute<void>(
       builder: (context) => SelectiveDisclosurePickPage(
         uri: uri,
         credential: credential,
@@ -52,9 +55,11 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
         selectedCredential: selectedCredential,
         presentationDefinition: presentationDefinition,
         credentialsToBePresented: credentialsToBePresented,
+        verifierTrustInfo: verifierTrustInfo,
       ),
       settings: const RouteSettings(name: '/SelectiveDisclosurePickPage'),
     );
+    return pageRoute;
   }
 
   @override
@@ -69,6 +74,7 @@ class SelectiveDisclosurePickPage extends StatelessWidget {
         selectedCredential: selectedCredential,
         presentationDefinition: presentationDefinition,
         credentialsToBePresented: credentialsToBePresented,
+        verifierTrustInfo: verifierTrustInfo,
       ),
     );
   }
@@ -84,6 +90,7 @@ class SelectiveDisclosurePickView extends StatefulWidget {
     required this.selectedCredential,
     required this.presentationDefinition,
     required this.credentialsToBePresented,
+    this.verifierTrustInfo,
   });
 
   final Uri uri;
@@ -93,6 +100,7 @@ class SelectiveDisclosurePickView extends StatefulWidget {
   final CredentialModel selectedCredential;
   final PresentationDefinition? presentationDefinition;
   final List<CredentialModel> credentialsToBePresented;
+  final VerifierTrustInfo? verifierTrustInfo;
 
   @override
   State<SelectiveDisclosurePickView> createState() =>
@@ -291,44 +299,41 @@ class _SelectiveDisclosurePickViewState
       final transactionData = scanCubit.state.transactionData;
 
       if (transactionData != null) {
-        /// create list of chain ids from transaction data
-        final List<int> chainIds = [];
-        final oidc4vpTransaction = Oidc4vpTransaction(
-          transactionData: transactionData,
-        );
-        final decodedTransactions = oidc4vpTransaction.decodeTransactions();
-
-        for (final tx in decodedTransactions) {
-          final decodedMap = tx as Map<String, dynamic>;
-          final chainId =
-              int.tryParse(decodedMap['chain_id']?.toString() ?? '1') ?? 1;
-          chainIds.add(chainId);
-        }
-
-        final Oidc4vpSignedTransaction oidc4vpSignedTransaction =
-            Oidc4vpSignedTransaction(
-              signedTransaction:
-                  scanCubit.state.blockchainTransactionsSignatures!,
-              signedTransactionChainIds: chainIds,
+        await transactionData.execute();
+        final List<String> blockchainTransactionHashes = [];
+        for (final transaction in transactionData.transactions) {
+          if (transaction is PaymentTransaction) {
+            blockchainTransactionHashes.addAll(
+              transaction.blockchainTransactionHashes,
             );
-
-        payload['blockchain_transaction_hashes'] = oidc4vpSignedTransaction
-            .getSignedTransactionHashes();
-
-        final List<String> transactionDataHashes = [];
-        for (final element in transactionData) {
-          transactionDataHashes.add(sh256Hash(jsonEncode(element)));
+          }
         }
-        payload['transaction_data_hashes'] = transactionDataHashes;
+        if (blockchainTransactionHashes.isNotEmpty) {
+          payload['blockchain_transaction_hashes'] =
+              blockchainTransactionHashes;
+        }
+
+        payload['transaction_data_hashes'] =
+            transactionData.transactionDataHashes;
       }
 
       // If there no cnf in the payload, then no need to add signature
       if (widget.selectedCredential.data['cnf'] != null) {
         /// sign and get token
-        final jwtToken = generateToken(
+        // A credential issued with a Wallet Key Attestation is bound to a
+        // key this wallet's usual private key never signs with (Wallet
+        // Provider Protocol §12) - its key store signs the Key Binding JWT
+        // directly, instead of handing out a raw key to sign locally.
+        final keyId = widget.selectedCredential.keyId;
+        final signer = keyId != null
+            ? profileCubit.credentialKeySigner?.call(keyId)
+            : null;
+
+        final jwtToken = await signKeyBindingJwt(
           payload: payload,
-          tokenParameters: tokenParameters,
-          ignoreProofHeaderType: true,
+          mediaType: MediaType.selectiveDisclosure,
+          signer: signer,
+          tokenParameters: signer == null ? tokenParameters : null,
         );
 
         newJwt = '$newJwt$jwtToken';
@@ -351,6 +356,7 @@ class _SelectiveDisclosurePickViewState
             issuer: widget.issuer,
             inputDescriptorIndex: widget.inputDescriptorIndex + 1,
             credentialsToBePresented: updatedCredentials,
+            verifierTrustInfo: widget.verifierTrustInfo,
           ),
         );
       } else {

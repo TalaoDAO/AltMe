@@ -180,6 +180,7 @@ void main() {
       await tester.pumpApp(
         MultiBlocProvider(
           providers: [
+            BlocProvider.value(value: qrCodeScanCubit),
             BlocProvider.value(value: onBoardingGenPhraseCubit),
             BlocProvider<HomeCubit>.value(value: homeCubit),
             BlocProvider<WalletCubit>.value(value: walletCubit),
@@ -192,7 +193,7 @@ void main() {
             ),
             BlocProvider<ProfileCubit>.value(value: profileCubit),
           ],
-          child: const OnBoardingGenPhrasePage(),
+          child: const OnBoardingGenPhraseView(),
         ),
       );
 

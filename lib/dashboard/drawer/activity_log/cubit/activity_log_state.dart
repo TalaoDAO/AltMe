@@ -12,14 +12,16 @@ class ActivityLogState extends Equatable {
   final List<LogData> logDatas;
 
   ActivityLogState loading() {
-    return copyWith(status: AppStatus.loading);
+    final loadingState = copyWith(status: AppStatus.loading);
+    return loadingState;
   }
 
   ActivityLogState copyWith({AppStatus? status, List<LogData>? logDatas}) {
-    return ActivityLogState(
+    final updatedState = ActivityLogState(
       status: status ?? this.status,
       logDatas: logDatas ?? this.logDatas,
     );
+    return updatedState;
   }
 
   Map<String, dynamic> toJson() => _$ActivityLogStateToJson(this);

@@ -26,7 +26,7 @@ class CredentialManifestPickState extends Equatable {
     bool? isButtonEnabled,
     StateMessage? message,
   }) {
-    return CredentialManifestPickState(
+    final newState = CredentialManifestPickState(
       selected: selected ?? this.selected,
       filteredCredentialList:
           filteredCredentialList ?? this.filteredCredentialList,
@@ -35,6 +35,7 @@ class CredentialManifestPickState extends Equatable {
       isButtonEnabled: isButtonEnabled ?? this.isButtonEnabled,
       message: message,
     );
+    return newState;
   }
 
   Map<String, dynamic> toJson() => _$CredentialManifestPickStateToJson(this);

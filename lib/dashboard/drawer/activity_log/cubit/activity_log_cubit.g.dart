@@ -8,7 +8,8 @@ part of 'activity_log_cubit.dart';
 
 ActivityLogState _$ActivityLogStateFromJson(Map<String, dynamic> json) =>
     ActivityLogState(
-      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+      status:
+          $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
           AppStatus.init,
       logDatas: (json['logDatas'] as List<dynamic>?)
           ?.map((e) => LogData.fromJson(e as Map<String, dynamic>))
@@ -39,5 +40,4 @@ const _$AppStatusEnumMap = {
   AppStatus.successAdd: 'successAdd',
   AppStatus.successUpdate: 'successUpdate',
   AppStatus.addEuropeanProfile: 'addEuropeanProfile',
-  AppStatus.addInjiProfile: 'addInjiProfile',
 };

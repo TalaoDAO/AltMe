@@ -1,16 +1,16 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/json_viewer/view/json_viewer_page.dart';
 import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
+import 'package:altme/dashboard/profile/models/profile.dart';
 import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.dart';
 import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
-import 'package:altme/trusted_list/function/get_issuer_open_id_configuration.dart';
-import 'package:altme/trusted_list/function/is_certificate_valid.dart';
-import 'package:altme/trusted_list/widget/trusted_entity_details.dart';
+import 'package:altme/oidc4vc/helper_function/resolve_issuer_display.dart';
+import 'package:altme/oidc4vc/widget/issuer_connect_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:trusted_list/trusted_list.dart';
 
 Future<void> oidc4vciAcceptHost({
   required Oidc4vcParameters oidc4vcParameters,
@@ -20,14 +20,16 @@ Future<void> oidc4vciAcceptHost({
   required bool showPrompt,
   required Issuer approvedIssuer,
 }) async {
+  var updatedOidc4vcParameters = oidc4vcParameters;
   final l10n = context.l10n;
+  final oidc4vc = context.read<QRCodeScanCubit>().oidc4vc;
   var acceptHost = true;
 
   if (isDeveloperMode) {
     /// issuance case
     final formattedData = getFormattedStringOIDC4VCI(
-      url: oidc4vcParameters.initialUri.toString(),
-      oidc4vcParameters: oidc4vcParameters,
+      url: updatedOidc4vcParameters.initialUri.toString(),
+      oidc4vcParameters: updatedOidc4vcParameters,
     );
 
     LoadingView().hide();
@@ -36,7 +38,7 @@ Future<void> oidc4vciAcceptHost({
           context: context,
           builder: (_) {
             return DeveloperModeDialog(
-              uri: oidc4vcParameters.initialUri,
+              uri: updatedOidc4vcParameters.initialUri,
               onDisplay: () async {
                 final returnedValue = await Navigator.of(context).push<dynamic>(
                   JsonViewerPage.route(
@@ -64,7 +66,7 @@ Future<void> oidc4vciAcceptHost({
 
   /// if dev mode is ON show some dialog to show data
   await handleErrorForOidc4Vci(
-    oidc4vcParameters: oidc4vcParameters,
+    oidc4vcParameters: updatedOidc4vcParameters,
     didKeyType: context
         .read<ProfileCubit>()
         .state
@@ -82,145 +84,108 @@ Future<void> oidc4vciAcceptHost({
         .customOidc4vcProfile
         .clientType,
   );
-  final profile = context.read<ProfileCubit>().state.model;
+  ProfileModel profile = context.read<ProfileCubit>().state.model;
   final trustedListEnabled =
       profile.profileSetting.walletSecurityOptions.trustedList;
-  final trustedList = profile.trustedList;
+  final trustedListUrl =
+      profile.profileSetting.walletSecurityOptions.trustedListUrl ??
+      Parameters.trustedListUrl;
+  TrustedList? trustedList = profile.trustedList;
+
+  // issuer open id configuration from signed metadata is used instead of
+  // unsigned open id configuration, when available
+  final issuerOpenIdConfiguration =
+      updatedOidc4vcParameters.issuerOpenIdConfiguration;
+
+  var isTrusted = false;
+
   if (trustedListEnabled) {
     try {
       if (trustedList == null) {
-        throw Exception('Missing trusted list.');
+        profile = await context.read<ProfileCubit>().addTrustedList(
+          trustedListUrl,
+          profile,
+        );
+        trustedList = profile.trustedList;
       }
-      // issuer open id configuration from signed metadata is used instead of
-      // unsigned open id configuration
+      // Looked up before the metadata is replaced below: up to draft16 the
+      // issuer's certificate chain travels in the header of its
+      // `signed_metadata` JWT, which the payload replacing it drops.
+      //
+      // A null entry is the verdict "not trusted", not an error - the
+      // issuer may be unlisted, registered for another role, unable to
+      // prove its chain against a listed root, or not registered for the
+      // credentials it is offering. The client generation knows which of
+      // those it has to check.
+      isTrusted =
+          oidc4vc.findTrustedIssuer(
+            trustedList: trustedList,
+            issuerOpenIdConfiguration: issuerOpenIdConfiguration,
+            vcTypes: oidc4vc.offeredVcTypes(updatedOidc4vcParameters),
+          ) !=
+          null;
 
-      final issuerOpenIdConfiguration =
-          oidc4vcParameters.issuerOpenIdConfiguration;
-
-      final signedMetadata = issuerOpenIdConfiguration.signedMetadata;
-
-      oidc4vcParameters = oidc4vcParameters.copyWith(
-        issuerOpenIdConfiguration: getIssuerOpenIdConfiguration(
-          issuerOpenIdConfiguration: issuerOpenIdConfiguration,
+      updatedOidc4vcParameters = updatedOidc4vcParameters.copyWith(
+        issuerOpenIdConfiguration: oidc4vc.resolveIssuerMetadata(
+          issuerOpenIdConfiguration,
         ),
       );
-
-      // get new issuer open id configuration from signed metadata
-      final trustedEntity = getIssuerFromTrustedList(
-        issuerOpenIdConfiguration: issuerOpenIdConfiguration,
-        trustedList: trustedList,
-      );
-      if (trustedEntity != null) {
-        // check if each element of
-        // oidc4vcParameters.credentialOffer['credential_configuration_ids'] are
-        // in trustedEntity.vcTypes
-
-        final credentialConfigurationIds =
-            oidc4vcParameters.credentialOffer['credential_configuration_ids'];
-        if (credentialConfigurationIds != null &&
-            credentialConfigurationIds is List) {
-          for (final credentialConfigurationId in credentialConfigurationIds) {
-            final vct = issuerOpenIdConfiguration
-                // ignore: lines_longer_than_80_chars
-                .credentialConfigurationsSupported[credentialConfigurationId]['vct'];
-            if (!trustedEntity.vcTypes!.contains(vct)) {
-              throw Exception(
-                // ignore: lines_longer_than_80_chars
-                "$credentialConfigurationId is not in the trusted entity's vcTypes",
-              );
-            }
-          }
-        } else {
-          throw Exception(
-            'credential_configuration_ids from credential offer is not valid',
-          );
-        }
-
-        isCertificateValid(
-          trustedEntity: trustedEntity,
-          signedMetadata: signedMetadata!,
-        );
-        // check certificate is trusted
-
-        LoadingView().hide();
-        acceptHost =
-            await showDialog<bool>(
-              context: context,
-              builder: (BuildContext context) {
-                return SafeArea(
-                  child: ConfirmDialog(
-                    title: l10n.scanPromptHost,
-                    content: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxHeight: MediaQuery.of(context).size.height * 0.6,
-                      ),
-                      child: SingleChildScrollView(
-                        child: TrustedEntityDetails(
-                          trustedEntity: trustedEntity,
-                        ),
-                      ),
-                    ),
-                    yes: l10n.communicationHostAllow,
-                    no: l10n.communicationHostDeny,
-                  ),
-                );
-              },
-            ) ??
-            false;
-      } else {
-        LoadingView().hide();
-        acceptHost =
-            await showDialog<bool>(
-              context: context,
-              builder: (BuildContext context) {
-                return ConfirmDialog(
-                  title: l10n.scanPromptHost,
-                  subtitle: l10n.notTrustedEntity,
-                  yes: l10n.communicationHostAllow,
-                  no: l10n.communicationHostDeny,
-                  invertedCallToAction: true,
-                );
-              },
-            ) ??
-            false;
-      }
     } catch (e) {
       context.read<QRCodeScanCubit>().emitError(error: e);
       return;
     }
   }
-  if (showPrompt && !trustedListEnabled) {
-    /// OIDC4VCI Case
 
-    final String title = l10n.scanPromptHost;
+  // Cache the result: it's a cryptographic check against every trusted
+  // -list entry, and later screens (e.g. the credential pick page) would
+  // otherwise recompute it from scratch for the same issuer.
+  updatedOidc4vcParameters = updatedOidc4vcParameters.copyWith(
+    isIssuerTrusted: isTrusted,
+  );
 
-    String subtitle = (approvedIssuer.did.isEmpty)
-        ? oidc4vcParameters.initialUri.host
-        : '''${approvedIssuer.organizationInfo.legalName}\n${approvedIssuer.organizationInfo.currentAddress}''';
+  if (showPrompt || trustedListEnabled) {
+    final languageCode = context
+        .read<ProfileCubit>()
+        .langCubit
+        .state
+        .locale
+        .languageCode;
+    // the credential offer has already been fetched by getIssuanceData, don't
+    // fetch it again just to get the issuer host.
+    final issuerHost = Uri.tryParse(updatedOidc4vcParameters.issuer)?.host;
+    final fallbackHost = (issuerHost != null && issuerHost.isNotEmpty)
+        ? issuerHost
+        : await getHost(
+            uri: updatedOidc4vcParameters.initialUri,
+            client: client,
+            oidc4vc: oidc4vc,
+          );
 
-    subtitle = await getHost(uri: oidc4vcParameters.initialUri, client: client);
+    final issuerDisplay = resolveIssuerDisplay(
+      issuerOpenIdConfiguration: issuerOpenIdConfiguration,
+      locale: languageCode,
+      fallbackHost: fallbackHost,
+    );
+
+    final credentialDisplayName = resolveOfferedCredentialDisplayName(
+      oidc4vcParameters: updatedOidc4vcParameters,
+      languageCode: languageCode,
+    );
 
     LoadingView().hide();
-    acceptHost =
-        await showDialog<bool>(
-          context: context,
-          builder: (BuildContext context) {
-            return ConfirmDialog(
-              title: title,
-              subtitle: subtitle,
-              yes: l10n.communicationHostAllow,
-              no: l10n.communicationHostDeny,
-              //lock: state.uri!.scheme == 'http',
-            );
-          },
-        ) ??
-        false;
+    acceptHost = await IssuerConnectDialog.show(
+      context: context,
+      issuerName: issuerDisplay.name,
+      logoUri: issuerDisplay.logoUri,
+      isTrusted: isTrusted,
+      credentialDisplayName: credentialDisplayName,
+    );
   }
   LoadingView().hide();
   if (acceptHost) {
     await context.read<QRCodeScanCubit>().acceptOidc4vci(
       approvedIssuer: approvedIssuer,
-      oidc4vcParameters: oidc4vcParameters,
+      oidc4vcParameters: updatedOidc4vcParameters,
       qrCodeScanCubit: context.read<QRCodeScanCubit>(),
     );
   } else {

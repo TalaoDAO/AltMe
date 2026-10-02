@@ -9,7 +9,7 @@ class OperationParameterModel extends Equatable {
   const OperationParameterModel({required this.entrypoint, this.value});
 
   factory OperationParameterModel.fromJson(Map<String, dynamic> json) {
-    return OperationParameterModel(
+    final operationParameter = OperationParameterModel(
       entrypoint: json['entrypoint'] as String,
       value: (json['value'] is Map)
           ? OperationParameterValueModel.fromJson(
@@ -17,6 +17,7 @@ class OperationParameterModel extends Equatable {
             )
           : null,
     );
+    return operationParameter;
   }
 
   final String entrypoint;

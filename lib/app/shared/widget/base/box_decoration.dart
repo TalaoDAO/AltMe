@@ -22,13 +22,14 @@ class BaseBoxDecoration extends Decoration {
     List<BoxShadow>? boxShadow,
     Gradient? gradient,
   }) {
-    return BaseBoxDecoration(
+    final decoration = BaseBoxDecoration(
       color: color ?? this.color,
       shapeColor: shapeColor ?? this.shapeColor,
       borderRadius: borderRadius ?? this.borderRadius,
       boxShadow: boxShadow ?? this.boxShadow,
       gradient: gradient ?? this.gradient,
     );
+    return decoration;
   }
 
   final Color? color;
@@ -45,20 +46,23 @@ class BaseBoxDecoration extends Decoration {
   @override
   Path getClipPath(Rect rect, TextDirection textDirection) {
     if (borderRadius != null) {
-      return Path()
+      final clipPath = Path()
         ..addRRect(borderRadius!.resolve(textDirection).toRRect(rect));
+      return clipPath;
     }
-    return Path()..addRect(rect);
+    final clipPath = Path()..addRect(rect);
+    return clipPath;
   }
 
   BaseBoxDecoration scale(double factor) {
-    return BaseBoxDecoration(
+    final scaled = BaseBoxDecoration(
       color: Color.lerp(null, color, factor),
       shapeColor: Color.lerp(null, shapeColor, factor),
       borderRadius: BorderRadiusGeometry.lerp(null, borderRadius, factor),
       boxShadow: BoxShadow.lerpList(null, boxShadow, factor),
       gradient: gradient?.scale(factor),
     );
+    return scaled;
   }
 
   @override
@@ -66,16 +70,30 @@ class BaseBoxDecoration extends Decoration {
 
   @override
   BaseBoxDecoration? lerpFrom(Decoration? a, double t) {
-    if (a == null) return scale(t);
-    if (a is BaseBoxDecoration) return BaseBoxDecoration.lerp(a, this, t);
-    return super.lerpFrom(a, t) as BaseBoxDecoration?;
+    if (a == null) {
+      final scaled = scale(t);
+      return scaled;
+    }
+    if (a is BaseBoxDecoration) {
+      final lerped = BaseBoxDecoration.lerp(a, this, t);
+      return lerped;
+    }
+    final lerped = super.lerpFrom(a, t) as BaseBoxDecoration?;
+    return lerped;
   }
 
   @override
   BaseBoxDecoration? lerpTo(Decoration? b, double t) {
-    if (b == null) return scale(1.0 - t);
-    if (b is BaseBoxDecoration) return BaseBoxDecoration.lerp(this, b, t);
-    return super.lerpTo(b, t) as BaseBoxDecoration?;
+    if (b == null) {
+      final scaled = scale(1.0 - t);
+      return scaled;
+    }
+    if (b is BaseBoxDecoration) {
+      final lerped = BaseBoxDecoration.lerp(this, b, t);
+      return lerped;
+    }
+    final lerped = super.lerpTo(b, t) as BaseBoxDecoration?;
+    return lerped;
   }
 
   static BaseBoxDecoration? lerp(
@@ -84,11 +102,17 @@ class BaseBoxDecoration extends Decoration {
     double t,
   ) {
     if (a == null && b == null) return null;
-    if (a == null) return b!.scale(t);
-    if (b == null) return a.scale(1.0 - t);
+    if (a == null) {
+      final scaled = b!.scale(t);
+      return scaled;
+    }
+    if (b == null) {
+      final scaled = a.scale(1.0 - t);
+      return scaled;
+    }
     if (t == 0.0) return a;
     if (t == 1.0) return b;
-    return BaseBoxDecoration(
+    final lerped = BaseBoxDecoration(
       color: Color.lerp(a.color, b.color, t),
       shapeColor: Color.lerp(a.shapeColor, b.shapeColor, t),
       borderRadius: BorderRadiusGeometry.lerp(
@@ -99,6 +123,7 @@ class BaseBoxDecoration extends Decoration {
       boxShadow: BoxShadow.lerpList(a.boxShadow, b.boxShadow, t),
       gradient: Gradient.lerp(a.gradient, b.gradient, t),
     );
+    return lerped;
   }
 
   @override
@@ -115,13 +140,14 @@ class BaseBoxDecoration extends Decoration {
 
   @override
   int get hashCode {
-    return Object.hash(
+    final combinedHash = Object.hash(
       color,
       shapeColor,
       borderRadius,
       boxShadow != null ? Object.hashAll(boxShadow!) : null,
       gradient,
     );
+    return combinedHash;
   }
 
   @override
@@ -163,14 +189,16 @@ class BaseBoxDecoration extends Decoration {
       final bounds = borderRadius!
           .resolve(textDirection)
           .toRRect(Offset.zero & size);
-      return bounds.contains(position);
+      final isHit = bounds.contains(position);
+      return isHit;
     }
     return true;
   }
 
   @override
   _BaseBoxDecorationPainter createBoxPainter([VoidCallback? onChanged]) {
-    return _BaseBoxDecorationPainter(this, onChanged);
+    final boxPainter = _BaseBoxDecorationPainter(this, onChanged);
+    return boxPainter;
   }
 }
 

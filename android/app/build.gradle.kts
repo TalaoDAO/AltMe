@@ -18,12 +18,6 @@ android {
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
-    packagingOptions {
-      jniLibs.pickFirsts += "lib/x86/libsodium.so"
-      jniLibs.pickFirsts += "lib/x86_64/libsodium.so"
-      jniLibs.pickFirsts += "lib/armeabi-v7a/libsodium.so"
-      jniLibs.pickFirsts += "lib/arm64-v8a/libsodium.so"
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -91,6 +85,16 @@ android {
         debug {
             signingConfig = signingConfigs.getByName("debug")
         }
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        // beacon-android-sdk pulls com.goterl:lazysodium-android:5.0.2, whose
+        // x86/x86_64/armeabi-v7a libsodium.so are built with 4 KB page alignment and
+        // trip Play's "Does not support 16 KB" check. 5.2.0 ships 16 KB-aligned
+        // (p_align 0x4000) libs for every ABI and drops the obsolete armeabi one.
+        force("com.goterl:lazysodium-android:5.2.0")
     }
 }
 

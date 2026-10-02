@@ -18,20 +18,22 @@ class ManageAccountsState extends Equatable {
   final CryptoAccount cryptoAccount;
 
   ManageAccountsState loading() {
-    return ManageAccountsState(
+    final loadingState = ManageAccountsState(
       status: AppStatus.loading,
       currentCryptoIndex: currentCryptoIndex,
       cryptoAccount: cryptoAccount,
     );
+    return loadingState;
   }
 
   ManageAccountsState error({required MessageHandler messageHandler}) {
-    return ManageAccountsState(
+    final errorState = ManageAccountsState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       currentCryptoIndex: currentCryptoIndex,
       cryptoAccount: cryptoAccount,
     );
+    return errorState;
   }
 
   ManageAccountsState success({
@@ -39,7 +41,7 @@ class ManageAccountsState extends Equatable {
     CryptoAccount? cryptoAccount,
     int? currentCryptoIndex,
   }) {
-    return ManageAccountsState(
+    final successState = ManageAccountsState(
       status: AppStatus.success,
       message: messageHandler == null
           ? null
@@ -47,6 +49,7 @@ class ManageAccountsState extends Equatable {
       currentCryptoIndex: currentCryptoIndex ?? this.currentCryptoIndex,
       cryptoAccount: cryptoAccount ?? this.cryptoAccount,
     );
+    return successState;
   }
 
   Map<String, dynamic> toJson() => _$ManageAccountsStateToJson(this);

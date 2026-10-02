@@ -71,11 +71,7 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
       final projectId = dotenv.get('WALLET_CONNECT_PROJECT_ID');
 
       _reownWalletKit = ReownWalletKit(
-        core: ReownCore(
-          projectId: projectId,
-          relayUrl:
-              'wss://relay.walletconnect.com', // The relay websocket URL, leave blank to use the default
-        ),
+        core: ReownCore(projectId: projectId),
         metadata: const PairingMetadata(
           name: 'Wallet (Altme)',
           description: 'Altme Wallet',
@@ -815,10 +811,11 @@ class WalletConnectCubit extends Cubit<WalletConnectState> {
   }
 
   OperationKind stringToEnum(String operation) {
-    return OperationKind.values.firstWhere(
+    final operationKind = OperationKind.values.firstWhere(
       (e) => e.toString().split('.').last == operation,
       orElse: () => OperationKind.transaction,
     );
+    return operationKind;
   }
 
   Future<void> disconnectSession(String topic) async {

@@ -8,10 +8,11 @@ class ContactUsPage extends StatelessWidget {
   final String email;
 
   static Route<dynamic> route({required String email}) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => ContactUsPage(email: email),
       settings: const RouteSettings(name: '/ContactUsPage'),
     );
+    return route;
   }
 
   @override

@@ -7,16 +7,13 @@ part of 'professional_experience_assessment_recipient.dart';
 // **************************************************************************
 
 ProfessionalExperienceAssessmentRecipient
-    _$ProfessionalExperienceAssessmentRecipientFromJson(
-            Map<String, dynamic> json) =>
-        ProfessionalExperienceAssessmentRecipient(
-          json['name'] as String? ?? '',
-          json['type'] as String? ?? '',
-        );
+_$ProfessionalExperienceAssessmentRecipientFromJson(
+  Map<String, dynamic> json,
+) => ProfessionalExperienceAssessmentRecipient(
+  json['name'] as String? ?? '',
+  json['type'] as String? ?? '',
+);
 
 Map<String, dynamic> _$ProfessionalExperienceAssessmentRecipientToJson(
-        ProfessionalExperienceAssessmentRecipient instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'type': instance.type,
-    };
+  ProfessionalExperienceAssessmentRecipient instance,
+) => <String, dynamic>{'name': instance.name, 'type': instance.type};

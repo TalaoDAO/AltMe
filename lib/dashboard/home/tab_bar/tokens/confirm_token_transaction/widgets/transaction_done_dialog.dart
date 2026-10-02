@@ -24,7 +24,7 @@ class TransactionDoneDialog extends StatelessWidget {
     String? transactionHash,
     VoidCallback? onTrasactionHashTap,
   }) {
-    return showDialog<void>(
+    final dialog = showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (_) => TransactionDoneDialog._(
@@ -34,6 +34,7 @@ class TransactionDoneDialog extends StatelessWidget {
         onTrasactionHashTap: onTrasactionHashTap,
       ),
     );
+    return dialog;
   }
 
   @override

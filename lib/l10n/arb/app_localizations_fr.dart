@@ -373,7 +373,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get to => 'À';
 
   @override
-  String get credential => 'Attestations digitales';
+  String get credential => 'Attestations';
 
   @override
   String get issuanceDate => 'Date d\'émission';
@@ -2297,7 +2297,21 @@ class AppLocalizationsFr extends AppLocalizations {
       'Vous ne pouvez pas obtenir cette attestation car certaines conditions ne sont pas remplies.';
 
   @override
-  String get youAreMissing => 'Vous êtes absent';
+  String get youAreMissing => 'Vous n\'avez pas les données demandées';
+
+  @override
+  String get dcqlInformationNotAvailable => 'Information non disponible';
+
+  @override
+  String get dcqlInformationNotAvailableDescription =>
+      'Nous n\'avons pas pu trouver toutes les informations demandées dans votre wallet.';
+
+  @override
+  String get dcqlMissingInformation => 'Information manquante';
+
+  @override
+  String get dcqlCannotContinue =>
+      'Vous ne pouvez pas continuer avec cette demande.';
 
   @override
   String get credentialsRequestedBy => 'informations demandées par';
@@ -3296,8 +3310,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Choisissez une ou plusieurs attestation(s)';
 
   @override
-  String get credentialShareTitle =>
-      'Choisissez une ou plusieurs attestation(s)';
+  String get credentialShareTitle => 'Partager les données';
 
   @override
   String get enterYourSecretCode => 'Entrez votre code secret.';
@@ -3395,4 +3408,104 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get pay => 'share and pay';
+
+  @override
+  String get issuerConnectTitle =>
+      'Se connecter à l\'émetteur de l\'attestation ?';
+
+  @override
+  String issuerConnectSubtitle(Object issuerName) {
+    return '$issuerName souhaite émettre une attestation dans votre wallet.';
+  }
+
+  @override
+  String get trustedIssuerLabel => 'Émetteur de confiance';
+
+  @override
+  String get issuerNotVerifiedLabel => 'Émetteur non vérifié';
+
+  @override
+  String get issuerNotVerifiedDescription =>
+      'L\'identité de cet émetteur n\'a pas pu être vérifiée.';
+
+  @override
+  String get onlyContinueIfTrustIssuer =>
+      'Continuez uniquement si vous reconnaissez et faites confiance à cet émetteur.';
+
+  @override
+  String get continueLabel => 'Continuer';
+
+  @override
+  String get credentialAcceptTitle =>
+      'Ajouter cette attestation à votre wallet ?';
+
+  @override
+  String get issuedByLabel => 'Émis par';
+
+  @override
+  String get informationIncludedLabel => 'Informations incluses';
+
+  @override
+  String get addToWalletLabel => 'Ajouter au wallet';
+
+  @override
+  String get addLabel => 'Ajouter';
+
+  @override
+  String verifierConnectTitle(Object verifierName) {
+    return 'Se connecter à $verifierName ?';
+  }
+
+  @override
+  String verifierConnectSubtitle(Object verifierName) {
+    return '$verifierName souhaite demander des informations à votre wallet.';
+  }
+
+  @override
+  String get verifiedOrganisationLabel => 'Organisation vérifiée';
+
+  @override
+  String get organisationNotVerifiedLabel => 'Organisation non vérifiée';
+
+  @override
+  String get organisationNotVerifiedDescription =>
+      'L\'identité de cette organisation n\'a pas pu être vérifiée.';
+
+  @override
+  String get onlyContinueIfTrustOrganisation =>
+      'Continuez uniquement si vous reconnaissez et faites confiance à cette organisation.';
+
+  @override
+  String get purposeLabel => 'Objet';
+
+  @override
+  String get shareInformationTitle => 'Partager vos informations ?';
+
+  @override
+  String shareInformationSubtitle(Object verifierName) {
+    return '$verifierName demande les informations suivantes à votre wallet.';
+  }
+
+  @override
+  String get onlyShareIfTrustOrganisation =>
+      'Ne partagez ces informations que si vous reconnaissez et faites confiance à cette organisation.';
+
+  @override
+  String get informationRequestedLabel => 'Informations demandées';
+
+  @override
+  String get sharedWithLabel => 'Partagé avec';
+
+  @override
+  String get notVerifiedLabel => 'Non vérifié';
+
+  @override
+  String get onlyInformationShownWillBeShared =>
+      'Seules les informations affichées ci-dessus seront partagées.';
+
+  @override
+  String get shareInformationButtonLabel => 'Partager les informations';
+
+  @override
+  String get dontShareLabel => 'Ne pas partager';
 }

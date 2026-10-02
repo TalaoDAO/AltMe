@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/selective_disclosure/dc_selective_disclosure.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
@@ -32,6 +34,7 @@ class SelectiveDisclosure {
   Map<String, dynamic> get sh256HashToContent => _delegate.sh256HashToContent;
   List<String> get contents => _delegate.contents;
   String? get getPicture => _delegate.getPicture;
+
   (List<ClaimsData>, String?) getClaimsData({
     required String key,
     required String? parentKeyId,
@@ -52,4 +55,16 @@ class SelectiveDisclosure {
   ) => _delegate.gestSdFromDigestList(key, parentKeyId, value, searchedKey);
   Map<String, dynamic> contentOfSh256Hash(String element) =>
       _delegate.contentOfSh256Hash(element);
+  String? getSdFromKey(String id) {
+    // for each element of disclosureListToContent check if its value converted
+    // with getMapFromList has id and first element.
+    // if that the case return the key of the element
+    for (final element in disclosureListToContent.entries) {
+      final map = getMapFromList(jsonDecode(element.value.toString()) as List);
+      if (map.keys.first == id) {
+        return element.key;
+      }
+    }
+    return null;
+  }
 }

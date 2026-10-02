@@ -83,6 +83,7 @@ extension CredentialCategoryX on CredentialCategory {
           discoverTitle: l10n.advantagesDiscoverCards,
           discoverSubTitle: l10n.advantagesCredentialDiscoverSubtitle,
         );
+        return config;
       case CredentialCategory.identityCards:
         return CredentialCategoryConfig(
           homeTitle: l10n.identityCards,
@@ -90,6 +91,7 @@ extension CredentialCategoryX on CredentialCategory {
           discoverTitle: l10n.identityDiscoverCards,
           discoverSubTitle: l10n.identityCredentialDiscoverSubtitle,
         );
+        return config;
       case CredentialCategory.professionalCards:
         return CredentialCategoryConfig(
           homeTitle: l10n.myProfessionalCards,
@@ -97,6 +99,7 @@ extension CredentialCategoryX on CredentialCategory {
           discoverTitle: l10n.myProfessionalCredentialDiscoverSubtitle,
           discoverSubTitle: l10n.myProfessionalCredentialDiscoverSubtitle,
         );
+        return config;
       case CredentialCategory.contactInfoCredentials:
         return CredentialCategoryConfig(
           homeTitle: l10n.contactInfoCredentials,
@@ -104,6 +107,7 @@ extension CredentialCategoryX on CredentialCategory {
           discoverTitle: l10n.contactInfoDiscoverCredentials,
           discoverSubTitle: l10n.contactInfoCredentialDiscoverSubtitle,
         );
+        return config;
       case CredentialCategory.blockchainAccountsCards:
         return CredentialCategoryConfig(
           homeTitle: l10n.blockchainAccounts,
@@ -111,6 +115,7 @@ extension CredentialCategoryX on CredentialCategory {
           discoverTitle: l10n.blockchainCardsDiscoverTitle,
           discoverSubTitle: l10n.blockchainCardsDiscoverSubtitle,
         );
+        return config;
       case CredentialCategory.educationCards:
         return CredentialCategoryConfig(
           homeTitle: l10n.educationCredentials,
@@ -118,6 +123,7 @@ extension CredentialCategoryX on CredentialCategory {
           discoverTitle: l10n.educationDiscoverCredentials,
           discoverSubTitle: l10n.educationCredentialsDiscoverSubtitle,
         );
+        return config;
       case CredentialCategory.othersCards:
         return CredentialCategoryConfig(
           homeTitle: l10n.otherCards,
@@ -125,41 +131,47 @@ extension CredentialCategoryX on CredentialCategory {
           discoverTitle: '${l10n.get} ${l10n.otherCards}',
           discoverSubTitle: l10n.otherCredentialDiscoverSubtitle,
         );
+        return config;
       case CredentialCategory.financeCards:
-        return CredentialCategoryConfig(
+        final config = CredentialCategoryConfig(
           homeTitle: l10n.financeCredentialsHomeTitle,
           homeSubTitle: l10n.financeCredentialsHomeSubtitle,
           discoverTitle: l10n.financeCredentialsDiscoverTitle,
           discoverSubTitle: l10n.financeCredentialsDiscoverSubtitle,
         );
+        return config;
       case CredentialCategory.humanityProofCards:
-        return CredentialCategoryConfig(
+        final config = CredentialCategoryConfig(
           homeTitle: l10n.hummanityProofCredentialsHomeTitle,
           homeSubTitle: l10n.hummanityProofCredentialsHomeSubtitle,
           discoverTitle: l10n.hummanityProofCredentialsDiscoverTitle,
           discoverSubTitle: l10n.hummanityProofCredentialsDiscoverSubtitle,
         );
+        return config;
       case CredentialCategory.socialMediaCards:
-        return CredentialCategoryConfig(
+        final config = CredentialCategoryConfig(
           homeTitle: l10n.socialMediaCredentialsHomeTitle,
           homeSubTitle: l10n.socialMediaCredentialsHomeSubtitle,
           discoverTitle: l10n.socialMediaCredentialsDiscoverTitle,
           discoverSubTitle: l10n.socialMediaCredentialsDiscoverSubtitle,
         );
+        return config;
       case CredentialCategory.walletIntegrity:
-        return CredentialCategoryConfig(
+        final config = CredentialCategoryConfig(
           homeTitle: l10n.walletIntegrityCredentialsHomeTitle,
           homeSubTitle: l10n.walletIntegrityCredentialsHomeSubtitle,
           discoverTitle: l10n.walletIntegrityCredentialsDiscoverTitle,
           discoverSubTitle: l10n.walletIntegrityCredentialsDiscoverSubtitle,
         );
+        return config;
       case CredentialCategory.pendingCards:
-        return CredentialCategoryConfig(
+        final config = CredentialCategoryConfig(
           homeTitle: l10n.pendingCredentialsHomeTitle,
           homeSubTitle: l10n.pendingCredentialsHomeSubtitle,
           discoverTitle: '',
           discoverSubTitle: '',
         );
+        return config;
     }
   }
 }

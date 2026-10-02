@@ -20,12 +20,13 @@ class ImportAccountState extends Equatable {
   final AccountType accountType;
 
   ImportAccountState loading() {
-    return ImportAccountState(
+    final loadingState = ImportAccountState(
       status: AppStatus.loading,
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid,
       accountType: accountType,
     );
+    return loadingState;
   }
 
   ImportAccountState populating({
@@ -34,26 +35,28 @@ class ImportAccountState extends Equatable {
     int? recoveredCredentialLength,
     AccountType? accountType,
   }) {
-    return ImportAccountState(
+    final populatingState = ImportAccountState(
       status: AppStatus.populate,
       isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid ?? this.isMnemonicOrKeyValid,
       accountType: accountType ?? this.accountType,
     );
+    return populatingState;
   }
 
   ImportAccountState error({required MessageHandler messageHandler}) {
-    return ImportAccountState(
+    final errorState = ImportAccountState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicOrKeyValid: isMnemonicOrKeyValid,
       accountType: accountType,
     );
+    return errorState;
   }
 
   ImportAccountState success({MessageHandler? messageHandler}) {
-    return ImportAccountState(
+    final successState = ImportAccountState(
       status: AppStatus.success,
       message: messageHandler == null
           ? null
@@ -62,6 +65,7 @@ class ImportAccountState extends Equatable {
       isMnemonicOrKeyValid: isMnemonicOrKeyValid,
       accountType: accountType,
     );
+    return successState;
   }
 
   Map<String, dynamic> toJson() => _$ImportAccountStateToJson(this);

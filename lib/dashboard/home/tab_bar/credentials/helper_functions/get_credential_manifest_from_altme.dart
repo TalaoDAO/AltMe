@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 Future<CredentialManifest> getCredentialManifestFromAltMe({
-  required OIDC4VC oidc4vc,
+  required OIDC4VCIClient oidc4vc,
   required OIDC4VCIDraftType oidc4vciDraftType,
 }) async {
   final openIdConfigurationData = await oidc4vc.getIssuerMetaData(

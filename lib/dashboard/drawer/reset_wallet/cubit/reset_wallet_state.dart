@@ -19,12 +19,13 @@ class ResetWalletState extends Equatable {
     bool? isRecoveryPhraseWritten,
     bool? isBackupCredentialSaved,
   }) {
-    return ResetWalletState(
+    final updatedState = ResetWalletState(
       isBackupCredentialSaved:
           isBackupCredentialSaved ?? this.isBackupCredentialSaved,
       isRecoveryPhraseWritten:
           isRecoveryPhraseWritten ?? this.isRecoveryPhraseWritten,
     );
+    return updatedState;
   }
 
   @override

@@ -14,10 +14,11 @@ class NftDetailsPage extends StatelessWidget {
   final NftModel nftModel;
 
   static Route<dynamic> route({required NftModel nftModel}) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/nftDetailsPage'),
       builder: (_) => NftDetailsPage(nftModel: nftModel),
     );
+    return route;
   }
 
   @override

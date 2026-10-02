@@ -13,10 +13,7 @@ enum DidKeyType {
   ebsiv4,
   @JsonValue('did:jwk:p-256')
   jwkP256,
-  @JsonValue(
-    'urn:ietf:params:oauth:client-assertion-type:jwt-client-attestation',
-  )
-  jwtClientAttestation,
+  none,
 }
 
 extension DidKeyTypeX on DidKeyType {
@@ -34,7 +31,7 @@ extension DidKeyTypeX on DidKeyType {
         return 'did:key EBSI-V4';
       case DidKeyType.jwkP256:
         return 'did:jwk P-256';
-      case DidKeyType.jwtClientAttestation:
+      case DidKeyType.none:
         return '';
     }
   }
@@ -52,7 +49,7 @@ extension DidKeyTypeX on DidKeyType {
         return 'did:key EBSI P-256';
       case DidKeyType.jwkP256:
         return 'did:jwk P-256';
-      case DidKeyType.jwtClientAttestation:
+      case DidKeyType.none:
         return '';
     }
   }
@@ -72,7 +69,7 @@ extension DidKeyTypeX on DidKeyType {
         return 'did:key';
       case DidKeyType.jwkP256:
         return 'did:jwk';
-      case DidKeyType.jwtClientAttestation:
+      case DidKeyType.none:
         return '';
     }
   }
@@ -91,7 +88,7 @@ extension DidKeyTypeX on DidKeyType {
         return l10n.ebsiV4DecentralizedId;
       case DidKeyType.jwkP256:
         return l10n.jwkDecentralizedIDP256;
-      case DidKeyType.jwtClientAttestation:
+      case DidKeyType.none:
         return '';
     }
   }
@@ -101,7 +98,7 @@ extension DidKeyTypeX on DidKeyType {
       case DidKeyType.secp256k1:
       case DidKeyType.p256:
       case DidKeyType.jwkP256:
-      case DidKeyType.jwtClientAttestation:
+      case DidKeyType.none:
       case DidKeyType.edDSA:
         return true;
       case DidKeyType.ebsiv3:

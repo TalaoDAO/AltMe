@@ -7,11 +7,7 @@ part of 'example_issuer.dart';
 // **************************************************************************
 
 ExampleIssuer _$ExampleIssuerFromJson(Map<String, dynamic> json) =>
-    ExampleIssuer(
-      issuer: json['issuer'] as String,
-    );
+    ExampleIssuer(issuer: json['issuer'] as String);
 
 Map<String, dynamic> _$ExampleIssuerToJson(ExampleIssuer instance) =>
-    <String, dynamic>{
-      'issuer': instance.issuer,
-    };
+    <String, dynamic>{'issuer': instance.issuer};

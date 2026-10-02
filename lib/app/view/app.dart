@@ -82,7 +82,7 @@ class App extends StatelessWidget {
           BlocProvider<ProfileCubit>(
             create: (context) => ProfileCubit(
               secureStorageProvider: secureStorageProvider,
-              oidc4vc: OIDC4VC(),
+              oidc4vc: Oidc4vciClientFactory.create(OIDC4VCIDraftType.final1),
               didKitProvider: DIDKitProvider(),
               langCubit: context.read<LangCubit>(),
               jwtDecode: JWTDecode(),
@@ -90,9 +90,10 @@ class App extends StatelessWidget {
           ),
           BlocProvider<AdvanceSettingsCubit>(
             create: (context) {
-              return AdvanceSettingsCubit(
+              final cubit = AdvanceSettingsCubit(
                 secureStorageProvider: getSecureStorage,
               );
+              return cubit;
             },
           ),
           BlocProvider(
@@ -112,7 +113,7 @@ class App extends StatelessWidget {
                 dio: Dio(),
               ),
               secureStorageProvider: secureStorageProvider,
-              oidc4vc: OIDC4VC(),
+              oidc4vc: Oidc4vciClientFactory.create(OIDC4VCIDraftType.final1),
               didKitProvider: DIDKitProvider(),
               profileCubit: context.read<ProfileCubit>(),
             ),
@@ -145,7 +146,7 @@ class App extends StatelessWidget {
               secureStorageProvider: secureStorageProvider,
               keyGenerator: KeyGenerator(),
               didKitProvider: DIDKitProvider(),
-              oidc4vc: OIDC4VC(),
+              oidc4vc: Oidc4vciClientFactory.create(OIDC4VCIDraftType.final1),
               advanceSettingsCubit: context.read<AdvanceSettingsCubit>(),
               jwtDecode: JWTDecode(),
               profileCubit: context.read<ProfileCubit>(),
@@ -163,7 +164,7 @@ class App extends StatelessWidget {
           BlocProvider<ScanCubit>(
             create: (context) => ScanCubit(
               client: DioClient(
-                baseUrl: Urls.checkIssuerTalaoUrl,
+                baseUrl: '',
                 secureStorageProvider: secureStorageProvider,
                 dio: Dio(),
               ),
@@ -172,7 +173,7 @@ class App extends StatelessWidget {
               secureStorageProvider: secureStorageProvider,
               profileCubit: context.read<ProfileCubit>(),
               walletCubit: context.read<WalletCubit>(),
-              oidc4vc: OIDC4VC(),
+              oidc4vc: Oidc4vciClientFactory.create(OIDC4VCIDraftType.final1),
               jwtDecode: JWTDecode(),
               activityLogManager: ActivityLogManager(secureStorageProvider),
             ),
@@ -210,7 +211,7 @@ class App extends StatelessWidget {
           BlocProvider<QRCodeScanCubit>(
             create: (context) => QRCodeScanCubit(
               client: DioClient(
-                baseUrl: Urls.checkIssuerTalaoUrl,
+                baseUrl: '',
                 secureStorageProvider: secureStorageProvider,
                 dio: Dio(),
               ),
@@ -224,7 +225,7 @@ class App extends StatelessWidget {
               walletConnectCubit: context.read<WalletConnectCubit>(),
               secureStorageProvider: secureStorageProvider,
               didKitProvider: DIDKitProvider(),
-              oidc4vc: OIDC4VC(),
+              oidc4vc: Oidc4vciClientFactory.create(OIDC4VCIDraftType.final1),
               walletCubit: context.read<WalletCubit>(),
               enterpriseCubit: context.read<EnterpriseCubit>(),
             ),
@@ -279,7 +280,7 @@ class App extends StatelessWidget {
               secureStorageProvider: secureStorageProvider,
               homeCubit: context.read<HomeCubit>(),
               client: DioClient(
-                baseUrl: Urls.checkIssuerTalaoUrl,
+                baseUrl: '',
                 secureStorageProvider: secureStorageProvider,
                 dio: Dio(),
               ),

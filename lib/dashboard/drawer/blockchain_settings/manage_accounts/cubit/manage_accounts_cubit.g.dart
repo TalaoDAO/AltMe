@@ -6,28 +6,28 @@ part of 'manage_accounts_cubit.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ManageAccountsState _$ManageAccountsStateFromJson(Map<String, dynamic> json) =>
-    ManageAccountsState(
-      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
-          AppStatus.init,
-      message: json['message'] == null
-          ? null
-          : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-      currentCryptoIndex: (json['currentCryptoIndex'] as num?)?.toInt() ?? 0,
-      cryptoAccount: json['cryptoAccount'] == null
-          ? null
-          : CryptoAccount.fromJson(
-              json['cryptoAccount'] as Map<String, dynamic>),
-    );
+ManageAccountsState _$ManageAccountsStateFromJson(
+  Map<String, dynamic> json,
+) => ManageAccountsState(
+  status:
+      $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ?? AppStatus.init,
+  message: json['message'] == null
+      ? null
+      : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
+  currentCryptoIndex: (json['currentCryptoIndex'] as num?)?.toInt() ?? 0,
+  cryptoAccount: json['cryptoAccount'] == null
+      ? null
+      : CryptoAccount.fromJson(json['cryptoAccount'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$ManageAccountsStateToJson(
-        ManageAccountsState instance) =>
-    <String, dynamic>{
-      'status': _$AppStatusEnumMap[instance.status]!,
-      'message': instance.message,
-      'currentCryptoIndex': instance.currentCryptoIndex,
-      'cryptoAccount': instance.cryptoAccount,
-    };
+  ManageAccountsState instance,
+) => <String, dynamic>{
+  'status': _$AppStatusEnumMap[instance.status]!,
+  'message': instance.message,
+  'currentCryptoIndex': instance.currentCryptoIndex,
+  'cryptoAccount': instance.cryptoAccount,
+};
 
 const _$AppStatusEnumMap = {
   AppStatus.init: 'init',
@@ -47,5 +47,4 @@ const _$AppStatusEnumMap = {
   AppStatus.successAdd: 'successAdd',
   AppStatus.successUpdate: 'successUpdate',
   AppStatus.addEuropeanProfile: 'addEuropeanProfile',
-  AppStatus.addInjiProfile: 'addInjiProfile',
 };

@@ -14,17 +14,22 @@ class SoftwareLicenseState extends Equatable {
   final List<LicenseModel> licenses;
 
   SoftwareLicenseState loading() {
-    return copyWith(status: AppStatus.loading, licenses: licenses);
+    final loadingState = copyWith(
+      status: AppStatus.loading,
+      licenses: licenses,
+    );
+    return loadingState;
   }
 
   SoftwareLicenseState copyWith({
     AppStatus? status,
     List<LicenseModel>? licenses,
   }) {
-    return SoftwareLicenseState(
+    final updatedState = SoftwareLicenseState(
       status: status ?? this.status,
       licenses: licenses ?? this.licenses,
     );
+    return updatedState;
   }
 
   Map<String, dynamic> toJson() => _$SoftwareLicenseStateToJson(this);

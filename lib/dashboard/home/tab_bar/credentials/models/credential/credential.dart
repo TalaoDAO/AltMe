@@ -24,13 +24,15 @@ class Credential {
 
   factory Credential.fromJson(Map<String, dynamic> json) {
     if (json['type'] == 'VerifiableCredential') {
-      return Credential.dummy();
+      final dummy = Credential.dummy();
+      return dummy;
     }
-    return _$CredentialFromJson(json);
+    final credential = _$CredentialFromJson(json);
+    return credential;
   }
 
   factory Credential.dummy() {
-    return Credential(
+    final dummyCredential = Credential(
       'dummy1',
       ['dummy2'],
       [''],
@@ -48,6 +50,7 @@ class Credential {
       CredentialStatusField.emptyCredentialStatusField(),
       [Evidence.emptyEvidence()],
     );
+    return dummyCredential;
   }
   @JsonKey(fromJson: fromJsonId)
   final String id;
@@ -87,7 +90,7 @@ class Credential {
     dynamic credentialStatus,
     List<Evidence>? evidence,
   }) {
-    return Credential(
+    final credential = Credential(
       id ?? this.id,
       context ?? this.context,
       type ?? this.type,
@@ -101,6 +104,7 @@ class Credential {
       credentialStatus ?? this.credentialStatus,
       evidence ?? this.evidence,
     );
+    return credential;
   }
 
   static List<Proof> _fromJsonProofs(dynamic json) {
@@ -108,9 +112,10 @@ class Credential {
       return [Proof.dummy()];
     }
     if (json is List) {
-      return json
+      final proofs = json
           .map((dynamic e) => Proof.fromJson(e as Map<String, dynamic>))
           .toList();
+      return proofs;
     }
     return [Proof.fromJson(json as Map<String, dynamic>)];
   }
@@ -120,9 +125,10 @@ class Credential {
       return [];
     }
     if (json is List) {
-      return json
+      final translations = json
           .map((dynamic e) => Translation.fromJson(e as Map<String, dynamic>))
           .toList();
+      return translations;
     }
     if (json is String) {
       return [Translation('en', json)];
@@ -135,26 +141,31 @@ class Credential {
       return [Evidence.emptyEvidence()];
     }
     if (json is List) {
-      return json
+      final evidenceList = json
           .map((dynamic e) => Evidence.fromJson(e as Map<String, dynamic>))
           .toList();
+      return evidenceList;
     }
     return [Evidence.fromJson(json as Map<String, dynamic>)];
   }
 
   static Credential fromJsonOrDummy(Map<String, dynamic> data) {
     try {
-      return Credential.fromJson(data);
+      final credential = Credential.fromJson(data);
+      return credential;
     } catch (e) {
-      return Credential.dummy();
+      final dummy = Credential.dummy();
+      return dummy;
     }
   }
 
   static String fromJsonId(dynamic json) {
     if (json == null || json == '') {
-      return const Uuid().v4();
+      final uuid = const Uuid().v4();
+      return uuid;
     } else {
-      return json.toString();
+      final jsonString = json.toString();
+      return jsonString;
     }
   }
 }

@@ -10,7 +10,8 @@ class TokenSelectBoxState extends Equatable {
   final bool isLoading;
 
   TokenSelectBoxState copyWith({TokenModel? selectedToken, bool? isLoading}) {
-    return TokenSelectBoxState(isLoading: isLoading ?? this.isLoading);
+    final state = TokenSelectBoxState(isLoading: isLoading ?? this.isLoading);
+    return state;
   }
 
   Map<String, dynamic> toJson() => _$TokenSelectBoxStateToJson(this);

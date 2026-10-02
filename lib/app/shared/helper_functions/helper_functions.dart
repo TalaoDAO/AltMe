@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/models/key_store_model.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/key_generator/key_generator.dart';
-import 'package:altme/app/shared/models/key_store_model.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:asn1lib/asn1lib.dart' as asn1lib;
 import 'package:convert/convert.dart';
 import 'package:credential_manifest/credential_manifest.dart';
-import 'package:tezart/tezart.dart';
+import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:fast_base58/fast_base58.dart';
 import 'package:intl/intl.dart';
@@ -19,11 +19,13 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:tezart/tezart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:x509_plus/x509.dart' as x509;
 
 export 'is_connected_to_internet.dart';
 export 'test_platform.dart';
+export 'x509_subject_fields.dart';
 
 String generateDefaultAccountName(
   int accountIndex,
@@ -255,7 +257,7 @@ int getIndexValue({required bool isEBSI, required DidKeyType didKeyType}) {
     case DidKeyType.ebsiv4:
       return 7;
     case DidKeyType.edDSA:
-    case DidKeyType.jwtClientAttestation:
+    case DidKeyType.none:
       return 0; // it is not needed, just assigned
   }
 }
@@ -311,7 +313,7 @@ Future<String> getPrivateKey({
 
       return key;
 
-    case DidKeyType.jwtClientAttestation:
+    case DidKeyType.none:
       if (profileCubit.state.model.walletType != WalletType.enterprise) {
         throw ResponseMessage(
           data: {
@@ -363,6 +365,21 @@ Future<String> getP256KeyToGetAndPresentVC(
 ) async {
   const storageKey = SecureStorageKeys.p256PrivateKeyToGetAndPresentVC;
 
+  return getP256Key(secureStorage, storageKey);
+}
+
+Future<String> getP256KeyForIntegrityToken(
+  SecureStorageProvider secureStorage,
+) async {
+  const storageKey = SecureStorageKeys.p256PrivateKeyForIntegrityToken;
+
+  return getP256Key(secureStorage, storageKey);
+}
+
+Future<String> getP256Key(
+  SecureStorageProvider secureStorage,
+  String storageKey,
+) async {
   /// return key if it is already created
   final String? p256PrivateKey = await secureStorage.get(storageKey);
   if (p256PrivateKey != null) return p256PrivateKey.replaceAll('=', '');
@@ -421,38 +438,6 @@ Future<String> fetchPrivateKey({
   );
 
   return privateKey;
-}
-
-Map<String, dynamic> decodePayload({
-  required JWTDecode jwtDecode,
-  required String token,
-}) {
-  final log = getLogger('QRCodeScanCubit - jwtDecode');
-  late final Map<String, dynamic> data;
-
-  try {
-    final payload = jwtDecode.parseJwt(token);
-    data = payload;
-  } catch (e, s) {
-    log.e('An error occurred while decoding.', error: e, stackTrace: s);
-  }
-  return data;
-}
-
-Map<String, dynamic> decodeHeader({
-  required JWTDecode jwtDecode,
-  required String token,
-}) {
-  final log = getLogger('QRCodeScanCubit - jwtDecode');
-  late final Map<String, dynamic> data;
-
-  try {
-    final header = jwtDecode.parseJwtHeader(token);
-    data = header;
-  } catch (e, s) {
-    log.e('An error occurred while decoding.', error: e, stackTrace: s);
-  }
-  return data;
 }
 
 String birthDateFormater(int birthData) {
@@ -556,7 +541,7 @@ Future<(String, String)> getDidAndKid({
         didMethod,
         privateKey,
       );
-    case DidKeyType.jwtClientAttestation:
+    case DidKeyType.none:
       final walletAttestationData = await profileCubit.secureStorageProvider
           .get(SecureStorageKeys.walletAttestationData);
 
@@ -665,6 +650,8 @@ bool isSiopV2OrOidc4VpUrl(Uri uri) {
       uri.toString().startsWith('openid-vc://?') ||
       uri.toString().startsWith(Parameters.walletPresentationDeepLink) ||
       uri.toString().startsWith('openid4vp://') ||
+      uri.toString().startsWith('av://') ||
+      uri.toString().startsWith('haip-vp://') ||
       uri.toString().startsWith('eudi-openid4vp://') ||
       uri.toString().startsWith('openid-hedera://?') ||
       uri.toString().startsWith('haip://?') &&
@@ -676,7 +663,22 @@ bool isSiopV2OrOidc4VpUrl(Uri uri) {
       uri.toString().startsWith(Parameters.authorizationEndPoint) ||
       uri.toString().startsWith('haip://authorize?');
 
-  return isOpenIdUrl || isAuthorizeEndPoint || isSiopv2Url;
+  // Wallet-provider-mediated cross-device presentation: a universal link on
+  // the wallet provider's own domain carrying `client_id` + `request_uri`
+  // (optionally `request_uri_method`), regardless of path. Checked by host
+  // rather than by a path prefix like Parameters.universalLink, because the
+  // verifier's request can be relayed at the domain root as well as under
+  // `/app/download`.
+  final isWalletProviderPresentationLink =
+      uri.scheme == 'https' &&
+      uri.host == Uri.parse(Parameters.universalLink).host &&
+      uri.queryParameters['client_id'] != null &&
+      uri.queryParameters['request_uri'] != null;
+
+  return isOpenIdUrl ||
+      isAuthorizeEndPoint ||
+      isSiopv2Url ||
+      isWalletProviderPresentationLink;
 }
 
 Future<void> handleErrorForOidc4Vci({
@@ -769,6 +771,13 @@ Future<void> handleErrorForOidc4Vci({
             },
           );
         }
+      case ClientType.wiaSub:
+
+        /// Wallet Provider Protocol §3: the OAuth Client Identifier is the
+        /// `sub` of the Wallet Instance Attestation, which is a URI rather
+        /// than a DID, so `subject_syntax_types_supported` says nothing
+        /// about it.
+        break;
     }
   }
 }
@@ -851,7 +860,7 @@ Future<Map<String, dynamic>?> getClientMetada({
 
 Future<bool?> isEBSIForVerifiers({
   required Uri uri,
-  required OIDC4VC oidc4vc,
+  required OIDC4VCIClient oidc4vc,
   required OIDC4VCIDraftType oidc4vciDraftType,
 }) async {
   try {
@@ -917,7 +926,11 @@ String getCredentialData(dynamic credential) {
   return cred;
 }
 
-Future<String> getHost({required Uri uri, required DioClient client}) async {
+Future<String> getHost({
+  required Uri uri,
+  required DioClient client,
+  required OIDC4VCIClient oidc4vc,
+}) async {
   final keys = <String>[];
   uri.queryParameters.forEach((key, value) => keys.add(key));
 
@@ -956,9 +969,15 @@ Future<String> getHost({required Uri uri, required DioClient client}) async {
 
     /// check if request uri is provided or not
     if (requestUri != null) {
-      final dynamic response = await client.get(requestUri);
-      final Map<String, dynamic> decodedResponse = decodePayload(
-        jwtDecode: JWTDecode(),
+      final String? requestUriMethod =
+          uri.queryParameters['request_uri_method'];
+      final dynamic response = await fetchRequestUriPayload(
+        url: requestUri,
+        client: client,
+        oidc4vc: oidc4vc,
+        requestUriMethod: requestUriMethod,
+      );
+      final Map<String, dynamic> decodedResponse = JWTDecode().decodePayload(
         token: response as String,
       );
 
@@ -1314,13 +1333,23 @@ String getSchemeFromUrl(String url) {
 Future<dynamic> fetchRequestUriPayload({
   required String url,
   required DioClient client,
+  required OIDC4VCIClient oidc4vc,
+  String? requestUriMethod,
+  Map<String, dynamic>? walletMetadata,
 }) async {
   final log = getLogger('QRCodeScanCubit - fetchRequestUriPayload');
   late final dynamic data;
 
   try {
-    final dynamic response = await client.get(url);
-    data = response.toString();
+    /// GET vs. POST (OpenID4VP 1.0 request_uri_method=post, section 5.10)
+    /// is decided by [oidc4vc]: only the OIDC4VP final-1.0 client honors
+    /// `post`, every earlier generation keeps the RFC9101 default GET.
+    data = await oidc4vc.fetchRequestObject(
+      requestUri: url,
+      dio: client.dio,
+      requestUriMethod: requestUriMethod,
+      walletMetadata: walletMetadata,
+    );
   } catch (e, s) {
     log.e(
       'An error occurred while connecting to the server.',
@@ -1433,10 +1462,24 @@ String getUpdatedUrlForSIOPV2OIC4VP({
 // authorization,
 // oAuthClientAttestation,
 // oAuthClientAttestationPop
+///
+/// [attestationProvider] supplies the client attestation pair. It defaults to
+/// the wallet-wide provider on [profileCubit] and then to
+/// [LegacyWalletAttestationProvider], the enterprise wallet provider's scheme,
+/// so existing callers behave exactly as before; a wallet whose provider uses
+/// another scheme passes its own.
+///
+/// [issuerMetadata] is the credential issuer's OpenID4VCI metadata, when the
+/// caller already holds it. An attestation scheme that reads the issuer's
+/// published preferences needs it: the Wallet Provider Protocol reads
+/// `preferred_client_status_period` (§9) before deciding whether a cached
+/// attestation still satisfies this issuer.
 Future<(String?, String?, String?, String?, String?)> getClientDetails({
   required ProfileCubit profileCubit,
   required bool isEBSI,
   required String issuer,
+  WalletAttestationProvider? attestationProvider,
+  Map<String, dynamic>? issuerMetadata,
 }) async {
   try {
     String? clientId;
@@ -1477,6 +1520,27 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
       clientId: '', // just added as it is required field
     );
 
+    final provider =
+        attestationProvider ??
+        profileCubit.walletAttestationProvider ??
+        LegacyWalletAttestationProvider(
+          secureStorageProvider: profileCubit.secureStorageProvider,
+          walletType: profileCubit.state.model.walletType,
+          did: did,
+          tokenParameters: tokenParameters,
+        );
+
+    /// The attestation pair, fetched at most once however many of the branches
+    /// below need it. A Wallet Provider Protocol attestation costs a network
+    /// round trip when the §11 cache misses, and the `client_id` and the two
+    /// headers all come out of the same one.
+    ClientAttestationPair? attestationPair;
+    Future<ClientAttestationPair?> clientAttestation() async =>
+        attestationPair ??= await provider.attestationFor(
+          credentialIssuer: issuer,
+          issuerMetadata: issuerMetadata,
+        );
+
     switch (customOidc4vcProfile.clientAuthentication) {
       ///  none
       case ClientAuthentication.none:
@@ -1494,6 +1558,13 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
             clientId = did;
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
+          case ClientType.wiaSub:
+
+            /// Wallet Provider Protocol §3: the wallet never chooses its own
+            /// OAuth Client Identifier. It is the `sub` claim of the Wallet
+            /// Instance Attestation, and §8 has the authorization server
+            /// reject any request whose `client_id` differs from it.
+            clientId = (await clientAttestation())?.clientId;
         }
 
       ///  only clientId
@@ -1505,6 +1576,13 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
             clientId = did;
           case ClientType.confidential:
             clientId = customOidc4vcProfile.clientId;
+          case ClientType.wiaSub:
+
+            /// Wallet Provider Protocol §3: the wallet never chooses its own
+            /// OAuth Client Identifier. It is the `sub` claim of the Wallet
+            /// Instance Attestation, and §8 has the authorization server
+            /// reject any request whose `client_id` differs from it.
+            clientId = (await clientAttestation())?.clientId;
         }
 
       case ClientAuthentication.clientSecretPost:
@@ -1512,39 +1590,24 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
         clientSecret = customOidc4vcProfile.clientSecret;
 
       case ClientAuthentication.clientSecretJwt:
-        if (profileCubit.state.model.walletType != WalletType.enterprise) {
-          throw ResponseMessage(
-            data: {
-              'error': 'invalid_request',
-              'error_description': 'Please switch to enterprise account',
-            },
-          );
-        }
-
-        final walletAttestationData = await profileCubit.secureStorageProvider
-            .get(SecureStorageKeys.walletAttestationData);
-
         clientId = did;
 
-        final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-        final nbf = iat - 10;
+        final attestation = await clientAttestation();
 
-        final payload = {
-          'iss': clientId,
-          'aud': issuer,
-          'nbf': nbf,
-          'exp': nbf + 60,
-          'jti': const Uuid().v4(),
-        };
+        oAuthClientAttestation = attestation?.attestation;
+        oAuthClientAttestationPop = attestation?.proofOfPossession;
 
-        final jwtProofOfPossession = generateToken(
-          payload: payload,
-          tokenParameters: tokenParameters,
-          ignoreProofHeaderType: true,
-        );
+      /// Wallet Provider Protocol §8: the Wallet Instance Attestation and a
+      /// proof of possession signed with the key in its `cnf.jwk` — the Wallet
+      /// Device Key — authenticate the wallet on the Pushed Authorization
+      /// Request and the Token Request, and `client_id` is the attestation's
+      /// `sub` (§3). The attestation is not sent on the Credential Request.
+      case ClientAuthentication.wia:
+        final attestation = await clientAttestation();
 
-        oAuthClientAttestation = walletAttestationData;
-        oAuthClientAttestationPop = jwtProofOfPossession;
+        clientId = attestation?.clientId;
+        oAuthClientAttestation = attestation?.attestation;
+        oAuthClientAttestationPop = attestation?.proofOfPossession;
     }
 
     return (
@@ -1567,30 +1630,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
   Display? display;
   dynamic credentialSupported;
 
-  if (openIdConfiguration.credentialsSupported != null) {
-    final credentialsSupported = openIdConfiguration.credentialsSupported!;
-    final CredentialsSupported? credSupported = credentialsSupported
-        .firstWhereOrNull(
-          (CredentialsSupported credentialsSupported) =>
-              (credentialsSupported.id != null &&
-                  credentialsSupported.id == credentialType) ||
-              (credentialsSupported.types != null &&
-                  credentialsSupported.types!.contains(credentialType)),
-        );
-
-    if (credSupported != null) {
-      credentialSupported = credSupported.toJson();
-
-      final credSupportedDisplay = credSupported.display;
-
-      if (credSupportedDisplay != null) {
-        display = extractDisplay(
-          credSupportedDisplay,
-          languageCode,
-        ); // if local is not provided
-      }
-    }
-  } else if (openIdConfiguration.credentialConfigurationsSupported != null) {
+  if (openIdConfiguration.credentialConfigurationsSupported != null) {
     final credentialsSupported =
         openIdConfiguration.credentialConfigurationsSupported;
 
@@ -1603,20 +1643,43 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
 
       if (credSupported is Map<String, dynamic>) {
         /// display
-        if (credSupported.containsKey('display')) {
-          final displayData = credSupported['display'];
+        final displayData =
+            credSupported['credential_metadata']?['display'] ??
+            credSupported['display'];
 
-          if (displayData is List<dynamic>) {
-            final displays = displayData
-                .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
-                .toList();
+        if (displayData is List<dynamic>) {
+          final displays = displayData
+              .map((ele) => Display.fromJson(ele as Map<String, dynamic>))
+              .toList();
 
-            display = extractDisplay(
-              displays,
-              languageCode,
-            ); // if local is not provided
-          }
+          display = extractDisplay(
+            displays,
+            languageCode,
+          ); // if local is not provided
         }
+      }
+    }
+  } else if (openIdConfiguration.credentialsSupported != null) {
+    final credentialsSupported = openIdConfiguration.credentialsSupported!;
+    final CredentialsSupported? credSupported = credentialsSupported
+        .firstWhereOrNull(
+          (CredentialsSupported credentialsSupported) =>
+              (credentialsSupported.id != null &&
+                  credentialsSupported.id == credentialType) ||
+              (credentialsSupported.types != null &&
+                  credentialsSupported.types!.contains(credentialType)),
+        );
+
+    if (credSupported != null) {
+      credentialSupported = credSupported.toJson();
+      // Prioritize OIDC4VCI final 1.0
+      final credSupportedDisplay = credSupported.display;
+
+      if (credSupportedDisplay != null) {
+        display = extractDisplay(
+          credSupportedDisplay,
+          languageCode,
+        ); // if local is not provided
       }
     }
   }
@@ -2093,31 +2156,73 @@ Future<Map<String, dynamic>?> checkX509({
       }
     }
 
-    final publicKey = cert.publicKey;
-    if (publicKey is x509.RsaPublicKey) {
-      final BigInt modulus = BigInt.parse(publicKey.modulus.toString());
-      final n = base64Encode(modulus.toBytes);
-      final publicKeyJwk = {
-        'e': 'AQAB',
-        'kty': 'RSA',
-        'n': n.replaceAll('=', ''),
-      };
-      return publicKeyJwk;
-    } else if (publicKey is x509.EcPublicKey) {
-      final BigInt xModulus = BigInt.parse(publicKey.xCoordinate.toString());
-      final BigInt yModulus = BigInt.parse(publicKey.yCoordinate.toString());
-      final x = base64Encode(xModulus.toBytes);
-      final y = base64Encode(yModulus.toBytes);
-      final publicKeyJwk = {
-        'kty': 'EC',
-        'crv': 'P-256',
-        'x': x.replaceAll('=', ''),
-        'y': y.replaceAll('=', ''),
-      };
-      return publicKeyJwk;
-    }
+    return x509PublicKeyJwk(cert);
   }
   return null;
+}
+
+/// Converts an x509 certificate's public key into a JWK, supporting RSA and
+/// EC (P-256) keys. Shared by the `x509_san_dns` and `x509_hash` client_id
+/// scheme checks.
+Map<String, dynamic>? x509PublicKeyJwk(x509.X509Certificate cert) {
+  final publicKey = cert.publicKey;
+  if (publicKey is x509.RsaPublicKey) {
+    final BigInt modulus = BigInt.parse(publicKey.modulus.toString());
+    final n = base64Encode(modulus.toBytes);
+    return {'e': 'AQAB', 'kty': 'RSA', 'n': n.replaceAll('=', '')};
+  } else if (publicKey is x509.EcPublicKey) {
+    final BigInt xModulus = BigInt.parse(publicKey.xCoordinate.toString());
+    final BigInt yModulus = BigInt.parse(publicKey.yCoordinate.toString());
+    final x = base64Encode(xModulus.toBytes);
+    final y = base64Encode(yModulus.toBytes);
+    return {
+      'kty': 'EC',
+      'crv': 'P-256',
+      'x': x.replaceAll('=', ''),
+      'y': y.replaceAll('=', ''),
+    };
+  }
+  return null;
+}
+
+/// Verifies the `x509_hash` client_id scheme (OpenID4VP Final 1.0): the
+/// client_id must equal the base64url-encoded (no padding) SHA-256 hash of
+/// the leaf certificate (`x5c[0]`) found in the JWT header.
+Future<Map<String, dynamic>?> checkX509Hash({
+  required Map<String, dynamic> header,
+  required String clientId,
+}) async {
+  final x5c = header['x5c'];
+
+  if (x5c == null || x5c is! List || x5c.isEmpty) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_format',
+        'error_description': 'x509_hash scheme error',
+      },
+    );
+  }
+
+  final certificate = x5c.first.toString();
+  final decoded = base64Decode(certificate);
+
+  final computedHash = base64Url
+      .encode(sha256.convert(decoded).bytes)
+      .replaceAll('=', '');
+
+  if (computedHash != clientId) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_format',
+        'error_description': 'x509_hash scheme error',
+      },
+    );
+  }
+
+  final seq = asn1lib.ASN1Sequence.fromBytes(decoded);
+  final cert = x509.X509Certificate.fromAsn1(seq);
+
+  return x509PublicKeyJwk(cert);
 }
 
 Future<Map<String, dynamic>?> checkVerifierAttestation({
@@ -2196,32 +2301,38 @@ String getDidMethod(BlockchainType blockchainType) {
   return didMethod;
 }
 
+/// Whether the Authorization Server's metadata is resolved through the
+/// issuer's `authorization_servers` link, which every generation after
+/// draft11 does.
+///
+/// The answer belongs to the OIDC4VCI generation, so it is the client that
+/// gives it - see [OIDC4VCIClient.usesOAuthAuthorizationServerLink].
 bool useOauthServerAuthEndPoint(ProfileModel profileModel) {
-  final profileSetting = profileModel.profileSetting;
-  final customOidc4vcProfile =
-      profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile;
-
   // Commenting while EBSI V4 is not live
   // final bool notEligible = profileModel.profileType == ProfileType.ebsiV3 ||
   //     profileModel.profileType == ProfileType.ebsiV4;
 
-  final bool notEligible = profileModel.profileType == ProfileType.ebsiV3;
-
-  if (notEligible) return false;
-
-  final bool greaterThanDraft13 =
-      customOidc4vcProfile.oidc4vciDraft != OIDC4VCIDraftType.draft11;
-
-  if (greaterThanDraft13) return true;
-
-  return false;
+  return Oidc4vciClientFactory.create(
+    profileModel
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile
+        .oidc4vciDraft,
+  ).usesOAuthAuthorizationServerLink;
 }
 
+/// A DPoP proof (RFC 9449) for a POST to [url].
+///
+/// [dpopNonce] is a nonce the server supplied in a `DPoP-Nonce` response
+/// header (§8, §9), carried as the proof's `nonce` claim. It is not
+/// [nonce]: that one is the OpenID4VCI `c_nonce`, which has no place in a DPoP
+/// proof and is deliberately left out.
 Future<String> getDPopJwt({
   required String url,
   required String publicKey,
   String? accessToken,
   String? nonce,
+  String? dpopNonce,
 }) async {
   final tokenParameters = TokenParameters(
     privateKey: jsonDecode(publicKey) as Map<String, dynamic>,
@@ -2244,6 +2355,7 @@ Future<String> getDPopJwt({
   }
 
   // if (nonce != null) payload['nonce'] = nonce;
+  if (dpopNonce != null) payload['nonce'] = dpopNonce;
 
   final jwtToken = generateToken(
     payload: payload,
@@ -2251,6 +2363,28 @@ Future<String> getDPopJwt({
     ignoreProofHeaderType: false,
   );
   return jwtToken;
+}
+
+/// The nonce of an RFC 9449 `use_dpop_nonce` challenge in [error], or null
+/// when it is not one. The server wants a DPoP proof that carries this nonce
+/// and expects the client to retry once: an authorization server (token, PAR)
+/// answers 400 with the error in the body (§8), a resource server 401 with it
+/// in `WWW-Authenticate` (§9); both put the nonce in a `DPoP-Nonce` header.
+/// [error] is a [DioException], or the [NetworkException] `DioClient` makes
+/// of one.
+String? dpopNonceChallenge(Object error) {
+  final (data, headers) = switch (error) {
+    DioException(:final response) => (response?.data, response?.headers),
+    NetworkException(:final data, :final headers) => (data, headers),
+    _ => (null, null),
+  };
+  final dpopNonce = headers?.value('dpop-nonce');
+  if (dpopNonce == null) return null;
+
+  final isChallenge =
+      (data is Map && data['error'] == 'use_dpop_nonce') ||
+      (headers?.value('www-authenticate')?.contains('use_dpop_nonce') ?? false);
+  return isChallenge ? dpopNonce : null;
 }
 
 String generateP256KeyForDPop() {
@@ -2358,8 +2492,25 @@ bool isContract(String reciever) {
   return false;
 }
 
+/// client_id scheme prefixes that, per OpenID4VP, are followed by a value
+/// which may itself contain further ':' characters (e.g. a DID). For these,
+/// only the scheme prefix itself must be stripped, not split on every ':'.
+const _clientIdSchemePrefixes = [
+  'decentralized_identifier',
+  'x509_san_dns',
+  'x509_hash',
+  'did',
+  'redirect_uri',
+  'verifier_attestation',
+];
+
 String? getClientIdForPresentation(String? clientId) {
   if (clientId == null) return '';
+  final index = clientId.indexOf(':');
+  if (index != -1 &&
+      _clientIdSchemePrefixes.contains(clientId.substring(0, index))) {
+    return clientId.substring(index + 1);
+  }
   if (clientId.contains(':')) {
     final parts = clientId.split(':');
     if (parts.length == 2) {
@@ -2378,6 +2529,7 @@ String? getClientIdForPresentation(String? clientId) {
 Future<bool> verifyX509Chain(List<dynamic> x5cChain) async {
   if (x5cChain.isEmpty) return false;
   try {
+    // ignore: unused_local_variable
     final certs = x5cChain.map((certBase64) {
       final der = base64Decode(certBase64.toString());
       final seq = asn1lib.ASN1Sequence.fromBytes(der);
@@ -2385,13 +2537,13 @@ Future<bool> verifyX509Chain(List<dynamic> x5cChain) async {
     }).toList();
 
     // Check each cert is signed by the next (issuer)
-    for (var i = 0; i < certs.length - 1; i++) {
-      final child = certs[i];
-      final issuer = certs[i + 1];
-      // if (!child.verify(issuer.publicKey)) {
-      //   return false;
-      // }
-    }
+    // for (var i = 0; i < certs.length - 1; i++) {
+    //   final child = certs[i];
+    //   final issuer = certs[i + 1];
+    // if (!child.verify(issuer.publicKey)) {
+    //   return false;
+    // }
+    // }
     // Optionally: Check the root is self-signed (not required for all
     // use cases)
     // final root = certs.last;

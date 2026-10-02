@@ -16,9 +16,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matrix/matrix.dart' hide User;
 import 'package:mime/mime.dart';
-import 'package:oidc4vc/oidc4vc.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
 typedef OnMessageCreated = Future<String> Function(Message);
@@ -29,7 +30,6 @@ class MatrixChatImpl extends MatrixChatInterface {
       didKitProvider: DIDKitProvider(),
       dioClient: DioClient(secureStorageProvider: getSecureStorage, dio: Dio()),
       secureStorageProvider: getSecureStorage,
-      oidc4vc: OIDC4VC(),
     );
     return _instance!;
   }
@@ -38,7 +38,6 @@ class MatrixChatImpl extends MatrixChatInterface {
     required this.didKitProvider,
     required this.dioClient,
     required this.secureStorageProvider,
-    required this.oidc4vc,
   });
 
   static MatrixChatImpl? _instance;
@@ -46,7 +45,6 @@ class MatrixChatImpl extends MatrixChatInterface {
   final DIDKitProvider didKitProvider;
   final DioClient dioClient;
   final SecureStorageProvider secureStorageProvider;
-  final OIDC4VC oidc4vc;
 
   @override
   Future<User> init(ProfileCubit profileCubit) async {
@@ -96,15 +94,16 @@ class MatrixChatImpl extends MatrixChatInterface {
       if (client != null) {
         await dispose();
       }
-      client = Client(
-        'AltMeUser',
-        databaseBuilder: (_) async {
-          final dir = await getApplicationSupportDirectory();
-          final db = HiveCollectionsDatabase('matrix_support_chat', dir.path);
-          await db.open();
-          return db;
-        },
+      final dir = await getApplicationSupportDirectory();
+      final database = await openDatabase(
+        join(dir.path, 'matrix_support_chat.sqlite'),
       );
+      final db = await MatrixSdkDatabase.init(
+        'matrix_support_chat',
+        database: database,
+      );
+
+      client = Client('AltMeUser', database: db);
       client!.homeserver = Uri.parse(Urls.matrixHomeServer);
       await client!.init();
     } catch (e, s) {
@@ -115,7 +114,8 @@ class MatrixChatImpl extends MatrixChatInterface {
 
   @override
   Future<String?> getRoomIdFromStorage(String roomIdStoredKey) async {
-    return secureStorageProvider.get(roomIdStoredKey);
+    final roomId = secureStorageProvider.get(roomIdStoredKey);
+    return roomId;
   }
 
   @override
@@ -156,13 +156,14 @@ class MatrixChatImpl extends MatrixChatInterface {
   Future<List<Message>> retriveMessagesFromDB(String roomId) async {
     final room = client?.getRoomById(roomId);
     if (room == null) return [];
-    final events = await client!.database?.getEventList(room);
-    if (events == null || events.isEmpty) return [];
+    final events = await client!.database.getEventList(room);
+    if (events.isEmpty) return [];
     final messageEvents =
         events.where((event) => event.type == 'm.room.message').toList()
           ..sort((e1, e2) => e2.originServerTs.compareTo(e1.originServerTs));
 
-    return messageEvents.map(mapEventToMessage).toList();
+    final messages = messageEvents.map(mapEventToMessage).toList();
+    return messages;
   }
 
   @override
@@ -259,10 +260,6 @@ class MatrixChatImpl extends MatrixChatInterface {
     switch (status) {
       case EventStatus.error:
         return Status.error;
-      case EventStatus.removed:
-        return Status.error;
-      case EventStatus.roomState:
-        return Status.delivered;
       case EventStatus.sending:
         return Status.sending;
       case EventStatus.sent:
@@ -306,18 +303,18 @@ class MatrixChatImpl extends MatrixChatInterface {
   Future<void> handleFileSelection({
     required OnMessageCreated onMessageCreated,
   }) async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.any);
+    final result = await FilePicker.pickFile(type: FileType.any);
 
-    if (result != null && result.files.single.path != null) {
+    if (result != null && result.path != null) {
       final messageId = const Uuid().v4();
       final message = FileMessage(
         author: user!,
         createdAt: DateTime.now().millisecondsSinceEpoch,
         id: messageId,
-        mimeType: lookupMimeType(result.files.single.path!),
-        name: result.files.single.name,
-        size: result.files.single.size,
-        uri: result.files.single.path!,
+        mimeType: lookupMimeType(result.path!),
+        name: result.name,
+        size: await result.length(),
+        uri: result.path!,
         status: Status.sending,
       );
       final roomId = await onMessageCreated.call(message);
@@ -330,8 +327,8 @@ class MatrixChatImpl extends MatrixChatInterface {
           .getRoomById(roomId)
           ?.sendFileEvent(
             MatrixFile(
-              bytes: File(result.files.single.path!).readAsBytesSync(),
-              name: result.files.single.name,
+              bytes: File(result.path!).readAsBytesSync(),
+              name: result.name,
             ),
             txid: messageId,
           );
@@ -429,10 +426,11 @@ class MatrixChatImpl extends MatrixChatInterface {
           } catch (_) {
             final millisecondsSinceEpoch =
                 DateTime.now().millisecondsSinceEpoch;
-            return createRoomAndInviteSupport(
+            final newRoomId = createRoomAndInviteSupport(
               '$roomName-updated-$millisecondsSinceEpoch',
               invites,
             );
+            return newRoomId;
           }
         } else {
           await client!.joinRoom(result.first.id);
@@ -472,7 +470,8 @@ class MatrixChatImpl extends MatrixChatInterface {
     final Uri uri = Uri.parse(
       url,
     ).getThumbnail(client!, height: height, width: width, animated: false);
-    return uri.toString();
+    final thumbnailUrl = uri.toString();
+    return thumbnailUrl;
   }
 
   @override

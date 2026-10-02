@@ -35,6 +35,14 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
+pod 'BeaconCore',              :git => 'https://github.com/TalaoDAO/beacon-ios-sdk', :tag => '4.0.4'
+pod 'BeaconClientDApp',        :git => 'https://github.com/TalaoDAO/beacon-ios-sdk', :tag => '4.0.4'
+pod 'BeaconClientWallet',      :git => 'https://github.com/TalaoDAO/beacon-ios-sdk', :tag => '4.0.4'
+pod 'BeaconBlockchainSubstrate',:git => 'https://github.com/TalaoDAO/beacon-ios-sdk', :tag => '4.0.4'
+pod 'BeaconBlockchainTezos',   :git => 'https://github.com/TalaoDAO/beacon-ios-sdk', :tag => '4.0.4'
+pod 'BeaconTransportP2PMatrix',:git => 'https://github.com/TalaoDAO/beacon-ios-sdk', :tag => '4.0.4'
+pod 'Bits',                    :git => 'https://github.com/TalaoDAO/swift-bits.git',  :tag => '1.0.1'
+
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 
@@ -42,7 +50,6 @@ end
 $iOSVersion = '14.0'
 
 post_install do |installer|
-  # Google's ML Kit Barcode Scanning setup
   installer.pods_project.build_configurations.each do |config|
     config.build_settings["EXCLUDED_ARCHS[sdk=*]"] = "armv7"
     config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = $iOSVersion
@@ -50,11 +57,21 @@ post_install do |installer|
 
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
-      target.build_configurations.each do |config|
+    target.build_configurations.each do |config|
         # Google's ML Kit Barcode Scanning setup 
-        if Gem::Version.new($iOSVersion) > Gem::Version.new(config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'])
-          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = $iOSVersion
-        end
+
+      if Gem::Version.new($iOSVersion) > Gem::Version.new(config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'])
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = $iOSVersion
       end
+
+      # --- didkit fix ---
+      if target.name == 'didkit'
+        config.build_settings['STRIP_STYLE'] = 'non-global'
+        config.build_settings['OTHER_LDFLAGS'] ||= ['$(inherited)']
+        lib_path = "/Users/romualdbarbe/Documents/tmp/spruceid/didkit/lib/flutter/ios/libdidkit.a"
+        config.build_settings['OTHER_LDFLAGS'] << "-force_load #{lib_path}"
+      end
+      # --- end didkit fix ---
+    end
   end
 end

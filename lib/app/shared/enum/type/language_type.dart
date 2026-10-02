@@ -1,13 +1,6 @@
 import 'package:altme/l10n/l10n.dart';
 
-enum LanguageType {
-  phone,
-  ca,
-  en,
-  es,
-  fr,
-  el,
-}
+enum LanguageType { phone, ca, en, es, fr, el }
 
 extension LanguageTypeX on LanguageType {
   String getTitle({required AppLocalizations l10n, required String name}) {

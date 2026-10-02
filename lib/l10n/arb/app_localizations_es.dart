@@ -2283,7 +2283,20 @@ class AppLocalizationsEs extends AppLocalizations {
       'No puede obtener esta tarjeta: no se cumplen algunas condiciones.';
 
   @override
-  String get youAreMissing => 'Le faltan';
+  String get youAreMissing => 'No tienes la información solicitada';
+
+  @override
+  String get dcqlInformationNotAvailable => 'Información no disponible';
+
+  @override
+  String get dcqlInformationNotAvailableDescription =>
+      'No hemos podido encontrar toda la información solicitada en tu cartera.';
+
+  @override
+  String get dcqlMissingInformation => 'Información que falta';
+
+  @override
+  String get dcqlCannotContinue => 'No puedes continuar con esta solicitud.';
 
   @override
   String get credentialsRequestedBy => 'credenciales solicitadas por';
@@ -3177,19 +3190,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get header => 'Encabezado';
 
   @override
-  String get payload => 'Payload';
+  String get payload => 'Carga útil';
 
   @override
   String get data => 'Datos';
 
   @override
-  String get keyBindingHeader => 'Key Binding Header';
+  String get keyBindingHeader => 'Encabezado de vinculación de clave';
 
   @override
-  String get keyBindingPayload => 'Key Binding Payload';
+  String get keyBindingPayload => 'Carga útil de vinculación de clave';
 
   @override
-  String get ebsiV4DecentralizedId => 'did:key EBSI V4 P-256';
+  String get ebsiV4DecentralizedId => 'Identidad descentralizada de EBSI V4';
 
   @override
   String get noNotificationsYet => 'Aún no hay notificaciones';
@@ -3279,8 +3292,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Elige la(s) credencial(es) que quieres obtener';
 
   @override
-  String get credentialShareTitle =>
-      'Elige la(s) credencial(es) para compartir';
+  String get credentialShareTitle => 'Compartir información';
 
   @override
   String get enterYourSecretCode => 'Introduce tu código secreto.';
@@ -3326,55 +3338,153 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get reject => 'Reject';
+  String get reject => 'Rechazar';
 
   @override
-  String get operation => 'Operation';
+  String get operation => 'Operación';
 
   @override
   String get chooseYourSSIProfileOrCustomizeYourOwn =>
-      'Choose your wallet profile or customize your own';
+      'Elige el perfil de tu cartera o personaliza el tuyo';
 
   @override
   String get recoveryPhraseIncorrectErrorMessage =>
-      'Please try again with correct order.';
+      'Inténtalo de nuevo con el orden correcto.';
 
   @override
-  String get invalidCode => 'Invalid code';
+  String get invalidCode => 'Código no válido';
 
   @override
-  String get back => 'Back';
+  String get back => 'Atrás';
 
   @override
   String get greek => 'Ελληνικά';
 
   @override
   String get iaAnalyze =>
-      'Data will be shared with a remote AI engine. Don\'t share personal data.';
+      'Los datos se compartirán con un motor de IA remoto. No compartas datos personales.';
 
   @override
-  String get iaAnalyzeTitle => 'AI Agent';
+  String get iaAnalyzeTitle => 'Agente de IA';
 
   @override
   String get deleteDigit => 'Eliminar';
 
   @override
-  String get aiPleaseWait => 'This treatment can take up to 1 min';
+  String get aiPleaseWait => 'Este procesamiento puede tardar hasta 1 minuto';
 
   @override
-  String get trustedList => 'Use trusted list';
+  String get trustedList => 'Usar lista de confianza';
 
   @override
   String get trustedListSubtitle =>
-      'List of trusted entities in the current ecosystem. You are warned in case of interaction with non trusted entity.';
+      'Lista de entidades de confianza del ecosistema actual. Se te avisará en caso de interacción con una entidad no confiable.';
 
   @override
   String get notTrustedEntity =>
-      'This entity is not in the trusted list. You should be very cautious with untrusted entities.';
+      'Esta entidad no está en la lista de confianza. Debes tener mucha precaución con entidades no confiables.';
 
   @override
-  String get acceptanceRequest => 'Payment request';
+  String get acceptanceRequest => 'Solicitud de pago';
 
   @override
-  String get pay => 'share and pay';
+  String get pay => 'compartir y pagar';
+
+  @override
+  String get issuerConnectTitle => '¿Conectar con el emisor de la credencial?';
+
+  @override
+  String issuerConnectSubtitle(Object issuerName) {
+    return '$issuerName quiere emitir una credencial a tu cartera.';
+  }
+
+  @override
+  String get trustedIssuerLabel => 'Emisor de confianza';
+
+  @override
+  String get issuerNotVerifiedLabel => 'Emisor no verificado';
+
+  @override
+  String get issuerNotVerifiedDescription =>
+      'No se ha podido verificar la identidad de este emisor.';
+
+  @override
+  String get onlyContinueIfTrustIssuer =>
+      'Continúa solo si reconoces y confías en este emisor.';
+
+  @override
+  String get continueLabel => 'Continuar';
+
+  @override
+  String get credentialAcceptTitle => '¿Añadir esta credencial a tu cartera?';
+
+  @override
+  String get issuedByLabel => 'Emitido por';
+
+  @override
+  String get informationIncludedLabel => 'Información incluida';
+
+  @override
+  String get addToWalletLabel => 'Añadir a la cartera';
+
+  @override
+  String get addLabel => 'Añadir';
+
+  @override
+  String verifierConnectTitle(Object verifierName) {
+    return '¿Conectar con $verifierName?';
+  }
+
+  @override
+  String verifierConnectSubtitle(Object verifierName) {
+    return '$verifierName quiere solicitar información de tu cartera.';
+  }
+
+  @override
+  String get verifiedOrganisationLabel => 'Organización verificada';
+
+  @override
+  String get organisationNotVerifiedLabel => 'Organización no verificada';
+
+  @override
+  String get organisationNotVerifiedDescription =>
+      'No se ha podido verificar la identidad de esta organización.';
+
+  @override
+  String get onlyContinueIfTrustOrganisation =>
+      'Continúa solo si reconoces y confías en esta organización.';
+
+  @override
+  String get purposeLabel => 'Finalidad';
+
+  @override
+  String get shareInformationTitle => '¿Quieres compartir tu información?';
+
+  @override
+  String shareInformationSubtitle(Object verifierName) {
+    return '$verifierName está solicitando la siguiente información de tu cartera.';
+  }
+
+  @override
+  String get onlyShareIfTrustOrganisation =>
+      'Comparte esta información solo si reconoces y confías en esta organización.';
+
+  @override
+  String get informationRequestedLabel => 'Información solicitada';
+
+  @override
+  String get sharedWithLabel => 'Compartido con';
+
+  @override
+  String get notVerifiedLabel => 'No verificado';
+
+  @override
+  String get onlyInformationShownWillBeShared =>
+      'Solo se compartirá la información mostrada arriba.';
+
+  @override
+  String get shareInformationButtonLabel => 'Compartir información';
+
+  @override
+  String get dontShareLabel => 'No compartir';
 }

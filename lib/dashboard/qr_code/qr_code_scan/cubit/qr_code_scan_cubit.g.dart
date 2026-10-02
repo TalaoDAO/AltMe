@@ -8,7 +8,8 @@ part of 'qr_code_scan_cubit.dart';
 
 QRCodeScanState _$QRCodeScanStateFromJson(Map<String, dynamic> json) =>
     QRCodeScanState(
-      status: $enumDecodeNullable(_$QrScanStatusEnumMap, json['status']) ??
+      status:
+          $enumDecodeNullable(_$QrScanStatusEnumMap, json['status']) ??
           QrScanStatus.init,
       uri: json['uri'] == null ? null : Uri.parse(json['uri'] as String),
       isScan: json['isScan'] as bool? ?? false,

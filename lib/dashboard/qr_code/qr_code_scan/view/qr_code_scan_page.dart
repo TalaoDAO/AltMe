@@ -86,7 +86,6 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
 
             await context.read<QRCodeScanCubit>().process(
               scannedResponse: barcodes.first.rawValue,
-              qrCodeScanCubit: context.read<QRCodeScanCubit>(),
             );
           }
         },

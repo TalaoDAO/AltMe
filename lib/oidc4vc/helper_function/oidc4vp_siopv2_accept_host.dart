@@ -1,22 +1,20 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/dashboard/json_viewer/view/json_viewer_page.dart';
-import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
-import 'package:altme/dashboard/qr_code/qr_code_scan/cubit/qr_code_scan_cubit.dart';
-import 'package:altme/dashboard/qr_code/widget/developer_mode_dialog.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vc/helper_function/get_payload.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vp_prompt.dart';
-import 'package:altme/oidc4vp_transaction/widget/accept_oidc4_vp_transaction_page.dart';
+import 'package:altme/oidc4vp_transaction/data/oidc4vp_transaction_factory.dart';
+import 'package:altme/oidc4vp_transaction/domain/transaction_data.dart';
+import 'package:altme/oidc4vp_transaction/presentation/oidc4_vp_transaction_page.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
-import 'package:altme/trusted_list/function/check_issuer_is_trusted.dart';
-import 'package:altme/trusted_list/function/check_presentation_is_trusted.dart';
-import 'package:altme/trusted_list/function/is_certificate_valid.dart';
-import 'package:altme/trusted_list/model/trusted_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:oidc4vc/oidc4vc.dart';
+import 'package:trusted_list/trusted_list.dart';
 
 Future<void> oidc4vpSiopV2AcceptHost({
   required Uri uri,
@@ -33,13 +31,53 @@ Future<void> oidc4vpSiopV2AcceptHost({
   final String? request = uri.queryParameters['request'];
   late dynamic encodedData;
   Map<String, dynamic>? response;
+  Map<String, dynamic>? jwtHeader;
+
+  final oidc4vc = context.read<QRCodeScanCubit>().oidc4vc;
+  final oidc4vp = Oidc4vpClientFactory.create(
+    context
+        .read<ProfileCubit>()
+        .state
+        .model
+        .profileSetting
+        .selfSovereignIdentityOptions
+        .customOidc4vcProfile
+        .oidc4vpDraft,
+  );
 
   if (requestUri != null || request != null) {
-    encodedData = await getPayload(client, requestUri, request);
-    response = decodePayload(
-      jwtDecode: JWTDecode(),
-      token: encodedData as String,
+    encodedData = await getPayload(
+      client,
+      oidc4vc,
+      requestUri,
+      request,
+      requestUriMethod: uri.queryParameters['request_uri_method'],
     );
+    response = JWTDecode().decodePayload(token: encodedData as String);
+    jwtHeader = JWTDecode().decodeHeader(token: encodedData);
+  }
+
+  /// purpose, taken from the presentation_definition when it is embedded
+  /// directly in the request (no extra network round-trip)
+  String? purpose;
+  try {
+    final presentationDefinitionParam =
+        uri.queryParameters['presentation_definition'];
+    if (presentationDefinitionParam != null) {
+      final pd =
+          jsonDecode(presentationDefinitionParam) as Map<String, dynamic>;
+      purpose = pd['purpose'] as String?;
+    } else {
+      final pd = response?['presentation_definition'];
+      if (pd is Map<String, dynamic>) {
+        purpose = pd['purpose'] as String?;
+      } else if (pd is String) {
+        final decodedPd = jsonDecode(pd) as Map<String, dynamic>;
+        purpose = decodedPd['purpose'] as String?;
+      }
+    }
+  } catch (_) {
+    purpose = null;
   }
 
   if (isDeveloperMode) {
@@ -111,34 +149,35 @@ Future<void> oidc4vpSiopV2AcceptHost({
         true;
     if (!moveAhead) return;
   }
-  final profile = context.read<ProfileCubit>().state.model;
+  ProfileModel profile = context.read<ProfileCubit>().state.model;
   final trustedListEnabled =
       profile.profileSetting.walletSecurityOptions.trustedList;
-  final trustedList = profile.trustedList;
+  final trustedListUrl =
+      profile.profileSetting.walletSecurityOptions.trustedListUrl ??
+      Parameters.trustedListUrl;
+  TrustedList? trustedList = profile.trustedList;
   late TrustedEntity? trustedEntity;
   if (trustedListEnabled) {
     try {
       if (trustedList == null) {
-        throw Exception('Missing trusted list.');
+        profile = await context.read<ProfileCubit>().addTrustedList(
+          trustedListUrl,
+          profile,
+        );
+        trustedList = profile.trustedList;
       }
 
-      // get new issuer open id configuration from signed metadata
-      trustedEntity = getEntityFromTrustedList(
-        trustedList,
-        uri.queryParameters['client_id'],
-        TrustedEntityType.verifier,
+      // A null entry is the verdict "not trusted", not an error - the
+      // verifier may be unlisted, unable to prove its certificate chain
+      // against a listed root, or not registered for the credentials it
+      // is asking for. The OIDC4VP generation knows which of those apply:
+      // final-1.0 has no domain to match the verifier by, so it rests on
+      // the request object's x5c alone.
+      trustedEntity = oidc4vp.findTrustedVerifier(
+        trustedList: trustedList,
+        clientId: uri.queryParameters['client_id'],
+        encodedPresentation: encodedData as String?,
       );
-      if (trustedEntity != null) {
-        checkPresentationIsTrusted(
-          trustedEntity: trustedEntity,
-          encodedPresentation: encodedData as String,
-        );
-        isCertificateValid(
-          trustedEntity: trustedEntity,
-          signedMetadata: encodedData,
-        );
-        // issuer has passed the trusted list checks
-      }
     } catch (e) {
       context.read<QRCodeScanCubit>().emitError(error: e);
       return;
@@ -149,14 +188,18 @@ Future<void> oidc4vpSiopV2AcceptHost({
   if (response != null) {
     if (response.containsKey('transaction_data')) {
       LoadingView().hide();
-      unawaited(
-        context.read<ScanCubit>().addTransactionData(
-          response['transaction_data'] as List<dynamic>,
-        ),
+      final transactionData = response['transaction_data'] as List<dynamic>;
+      final transactionObjects = Oidc4vpTransactionFactory(
+        transactionData: transactionData,
       );
+      final transactions = TransactionData(
+        transactionData: transactionData,
+        transactions: transactionObjects.transactionList,
+      );
+      unawaited(context.read<ScanCubit>().addTransactionData(transactions));
 
       await Navigator.of(context).push<void>(
-        AcceptOidc4VpTransactionPage.route(
+        Oidc4VpTransactionPage.route(
           trustedListEnabled: trustedListEnabled,
           trustedEntity: trustedEntity,
           uri: uri,
@@ -176,6 +219,8 @@ Future<void> oidc4vpSiopV2AcceptHost({
     uri: uri,
     client: client,
     showPrompt: showPrompt,
+    jwtHeader: jwtHeader,
+    purpose: purpose,
   ).show();
 
   // Default action if there is no prompt

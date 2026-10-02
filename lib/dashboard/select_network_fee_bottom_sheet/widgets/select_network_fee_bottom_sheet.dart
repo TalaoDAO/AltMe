@@ -19,7 +19,7 @@ class SelectNetworkFeeBottomSheet extends StatelessWidget {
     required NetworkFeeModel selectedNetworkFee,
     List<NetworkFeeModel> networkFeeList = const [],
   }) {
-    return showModalBottomSheet<NetworkFeeModel?>(
+    final selectedFee = showModalBottomSheet<NetworkFeeModel?>(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(Sizes.largeRadius),
@@ -32,6 +32,7 @@ class SelectNetworkFeeBottomSheet extends StatelessWidget {
         networkFeeList: networkFeeList,
       ),
     );
+    return selectedFee;
   }
 
   @override

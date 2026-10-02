@@ -131,6 +131,26 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
+			<string>haip-vp</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>haip-vp</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>av</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>av</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
 			<string>altme-openid-credential-offer</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
@@ -198,7 +218,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Please give us access to your camera, to scan QR codes and complete verification.</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Compellio Wallet uses Face ID to securely access your wallet.</string>
+	<string>User can login with Face ID, pin code or both.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Please give us access to your photo library to verify you.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

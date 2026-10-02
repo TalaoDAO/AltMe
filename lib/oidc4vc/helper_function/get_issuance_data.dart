@@ -10,7 +10,7 @@ import 'package:oidc4vc/oidc4vc.dart';
 Future<Oidc4vcParameters> getIssuanceData({
   required String url,
   required DioClient client,
-  required OIDC4VC oidc4vc,
+  required OIDC4VCIClient oidc4vc,
   required OIDC4VCIDraftType oidc4vciDraftType,
   required bool useOAuthAuthorizationServerLink,
 }) async {
@@ -82,13 +82,14 @@ Future<Oidc4vcParameters> getIssuanceData({
   }
 
   if (issuer == '') {
-    return Oidc4vcParameters(
+    final oidc4vcParameters = Oidc4vcParameters(
       oidc4vciDraftType: oidc4vciDraftType,
       useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
       initialUri: uri,
       userPinRequired: userPinRequired,
       issuerState: issuerState,
     );
+    return oidc4vcParameters;
   }
 
   final issuerOpenIdConfiguration = await oidc4vc.getIssuerMetaData(
@@ -155,17 +156,29 @@ Future<Oidc4vcParameters> getIssuanceData({
           oidc4vcType == OIDC4VCType.EBSI) {
         if (credSupported?.trustFramework != null &&
             credSupported == credSupported?.trustFramework) {
-          return oidc4vcParameters.copyWith(oidc4vcType: OIDC4VCType.DEFAULT);
+          final defaultParameters = oidc4vcParameters.copyWith(
+            oidc4vcType: OIDC4VCType.DEFAULT,
+          );
+          return defaultParameters;
         }
 
         if (credSupported?.trustFramework?.name != null &&
             credSupported?.trustFramework?.name == 'ebsi') {
-          return oidc4vcParameters.copyWith(oidc4vcType: OIDC4VCType.EBSI);
+          final ebsiParameters = oidc4vcParameters.copyWith(
+            oidc4vcType: OIDC4VCType.EBSI,
+          );
+          return ebsiParameters;
         } else {
-          return oidc4vcParameters.copyWith(oidc4vcType: OIDC4VCType.DEFAULT);
+          final defaultParameters = oidc4vcParameters.copyWith(
+            oidc4vcType: OIDC4VCType.DEFAULT,
+          );
+          return defaultParameters;
         }
       }
-      return oidc4vcParameters.copyWith(oidc4vcType: oidc4vcType);
+      final typedParameters = oidc4vcParameters.copyWith(
+        oidc4vcType: oidc4vcType,
+      );
+      return typedParameters;
     }
   }
 

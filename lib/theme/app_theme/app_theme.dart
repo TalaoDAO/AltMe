@@ -30,7 +30,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
-    return theme.copyWith(
+    final themedData = theme.copyWith(
       textTheme: GoogleFonts.interTextTheme(theme.textTheme),
       colorScheme: ColorScheme.fromSeed(
         seedColor: seedColor,
@@ -38,5 +38,6 @@ class AppTheme {
         dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
       ),
     );
+    return themedData;
   }
 }

@@ -33,13 +33,14 @@ class NetworkFeeModel extends Equatable {
     String? tokenSymbol,
     NetworkSpeed? networkSpeed,
   }) {
-    return NetworkFeeModel(
+    final networkFee = NetworkFeeModel(
       totalFee: totalFee ?? this.totalFee,
       bakerFee: bakerFee ?? this.bakerFee,
       networkSpeed: networkSpeed ?? this.networkSpeed,
       feeInUSD: feeInUSD ?? this.feeInUSD,
       tokenSymbol: tokenSymbol ?? this.tokenSymbol,
     );
+    return networkFee;
   }
 
   @override

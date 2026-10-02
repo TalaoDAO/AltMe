@@ -10,7 +10,6 @@ import 'package:altme/dashboard/profile/profile_provider/get_wallet_attestation_
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/oidc4vc/model/oidc4vci_stack.dart';
 import 'package:altme/oidc4vc/model/oidc4vci_state.dart';
-import 'package:altme/trusted_list/model/trusted_list.dart';
 import 'package:bloc/bloc.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
@@ -22,6 +21,7 @@ import 'package:oidc4vc/oidc4vc.dart';
 import 'package:random_string/random_string.dart';
 
 import 'package:secure_storage/secure_storage.dart';
+import 'package:trusted_list/trusted_list.dart';
 
 part 'profile_cubit.g.dart';
 
@@ -34,15 +34,38 @@ class ProfileCubit extends Cubit<ProfileState> {
     required this.didKitProvider,
     required this.langCubit,
     required this.jwtDecode,
+    this.walletAttestationProvider,
+    this.credentialKeySigner,
   }) : super(ProfileState(model: ProfileModel.empty())) {
     load();
   }
 
   final SecureStorageProvider secureStorageProvider;
-  final OIDC4VC oidc4vc;
+  OIDC4VCIClient oidc4vc;
   final DIDKitProvider didKitProvider;
   final LangCubit langCubit;
   final JWTDecode jwtDecode;
+
+  /// The wallet provider's client attestation scheme, when this wallet has one
+  /// that outlives a single request.
+  ///
+  /// The OpenID4VCI call sites reach their attestation through here rather than
+  /// building one themselves, because a scheme that keeps per-issuer state -
+  /// the Wallet Provider Protocol caches an attestation per credential issuer
+  /// (§11) and spends each key attestation once (§12.11) - cannot be rebuilt
+  /// per call without losing that state. Left `null`, every call site falls
+  /// back to the request-scoped [LegacyWalletAttestationProvider] exactly as
+  /// before.
+  final WalletAttestationProvider? walletAttestationProvider;
+
+  /// Resolves a signer for a credential-binding key by its local handle, for
+  /// a credential issued with a Wallet Key Attestation (Wallet Provider
+  /// Protocol §12) rather than the wallet's own proof-of-possession key.
+  ///
+  /// Left `null`, a credential never carries a [CredentialModel.keyId] either
+  /// (there is nothing to resolve), so every call site keeps presenting with
+  /// the wallet's usual key exactly as before.
+  final JwtSigner Function(String keyId)? credentialKeySigner;
 
   Timer? _timer;
 
@@ -218,49 +241,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             enterpriseWalletName: enterpriseWalletName,
           );
 
-        case ProfileType.ebsiV3:
-          final privateKey = await getPrivateKey(
-            didKeyType: Parameters.didKeyTypeForEbsiV3,
-            profileCubit: this,
-          );
-
-          final (did, _) = await getDidAndKid(
-            didKeyType: Parameters.didKeyTypeForEbsiV3,
-            privateKey: privateKey,
-            profileCubit: this,
-          );
-
-          profileModel = ProfileModel.ebsiV3(
-            walletType: walletType,
-            walletProtectionType: walletProtectionType,
-            isDeveloperMode: isDeveloperMode,
-            clientId: did,
-            clientSecret: randomString(12),
-            enterpriseWalletName: enterpriseWalletName,
-          );
-
-        // case ProfileType.ebsiV4:
-        //   final privateKey = await getPrivateKey(
-        //     didKeyType: Parameters.didKeyTypeForEbsiV4,
-        //     profileCubit: this,
-        //   );
-
-        //   final (did, _) = await getDidAndKid(
-        //     didKeyType: Parameters.didKeyTypeForEbsiV4,
-        //     privateKey: privateKey,
-        //     profileCubit: this,
-        //   );
-
-        //   profileModel = ProfileModel.ebsiV4(
-        //     walletType: walletType,
-        //     walletProtectionType: walletProtectionType,
-        //     isDeveloperMode: isDeveloperMode,
-        //     clientId: did,
-        //     clientSecret: randomString(12),
-        //     enterpriseWalletName: enterpriseWalletName,
-        //   );
-
-        case ProfileType.diipv3:
+        case ProfileType.diipv5:
           final privateKey = await getPrivateKey(
             didKeyType: Parameters.didKeyTypeForOwfBaselineProfile,
             profileCubit: this,
@@ -272,27 +253,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             profileCubit: this,
           );
 
-          profileModel = ProfileModel.diipv3(
-            walletType: walletType,
-            walletProtectionType: walletProtectionType,
-            isDeveloperMode: isDeveloperMode,
-            clientId: did,
-            clientSecret: randomString(12),
-            enterpriseWalletName: enterpriseWalletName,
-          );
-        case ProfileType.diipv4:
-          final privateKey = await getPrivateKey(
-            didKeyType: Parameters.didKeyTypeForOwfBaselineProfile,
-            profileCubit: this,
-          );
-
-          final (did, _) = await getDidAndKid(
-            didKeyType: Parameters.didKeyTypeForOwfBaselineProfile,
-            privateKey: privateKey,
-            profileCubit: this,
-          );
-
-          profileModel = ProfileModel.diipv4(
+          profileModel = ProfileModel.diipv5(
             walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
@@ -322,7 +283,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             profileSetting: profileSetting,
             enterpriseWalletName: profileSetting.generalOptions.profileName,
           );
-        case ProfileType.europeanWallet:
+        case ProfileType.EUDIW:
           if (europeanWalletProfileSettingJsonString != null) {
             final customProfileSettingMap =
                 jsonDecode(europeanWalletProfileSettingJsonString)
@@ -331,30 +292,6 @@ class ProfileCubit extends Cubit<ProfileState> {
             profileSetting = ProfileSetting.fromJson(customProfileSettingMap);
           } else {
             throw Exception('Failed to load European wallet profile setting');
-          }
-
-          profileModel = ProfileModel(
-            walletType: walletType,
-            walletProtectionType: walletProtectionType,
-            isDeveloperMode: isDeveloperMode,
-            profileType: profileType,
-            profileSetting: profileSetting,
-            enterpriseWalletName: enterpriseWalletName,
-          );
-
-        case ProfileType.inji:
-          final injiProfileSettingJsonString = await secureStorageProvider.get(
-            SecureStorageKeys.injiProfileSetting,
-          );
-
-          if (injiProfileSettingJsonString != null) {
-            final injiProfileSettingMap =
-                jsonDecode(injiProfileSettingJsonString)
-                    as Map<String, dynamic>;
-
-            profileSetting = ProfileSetting.fromJson(injiProfileSettingMap);
-          } else {
-            throw Exception('Failed to load Inji wallet profile setting');
           }
 
           profileModel = ProfileModel(
@@ -458,7 +395,13 @@ class ProfileCubit extends Cubit<ProfileState> {
         SecureStorageKeys.profileType,
         profileModel.profileType.toString(),
       );
-
+      oidc4vc = Oidc4vciClientFactory.create(
+        profileModel
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile
+            .oidc4vciDraft,
+      );
       emit(
         state.copyWith(
           model: profileModel,
@@ -712,7 +655,8 @@ class ProfileCubit extends Cubit<ProfileState> {
   @override
   Future<void> close() async {
     _timer?.cancel();
-    return super.close();
+    final closeFuture = super.close();
+    return closeFuture;
   }
 
   Future<void> setProfile(ProfileType profileType, {AppStatus? status}) async {
@@ -725,49 +669,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
 
     switch (profileType) {
-      case ProfileType.ebsiV3:
-        await update(
-          ProfileModel.ebsiV3(
-            walletProtectionType: state.model.walletProtectionType,
-            isDeveloperMode: state.model.isDeveloperMode,
-            walletType: state.model.walletType,
-            enterpriseWalletName: state.model.enterpriseWalletName,
-            clientId: state
-                .model
-                .profileSetting
-                .selfSovereignIdentityOptions
-                .customOidc4vcProfile
-                .clientId,
-            clientSecret: state
-                .model
-                .profileSetting
-                .selfSovereignIdentityOptions
-                .customOidc4vcProfile
-                .clientSecret,
-          ),
-          status: status,
-        );
-      // case ProfileType.ebsiV4:
-      //   await update(
-      //     ProfileModel.ebsiV4(
-      //       walletProtectionType: state.model.walletProtectionType,
-      //       isDeveloperMode: state.model.isDeveloperMode,
-      //       walletType: state.model.walletType,
-      //       enterpriseWalletName: state.model.enterpriseWalletName,
-      //       clientId: state
-      //           .model
-      //           .profileSetting
-      //           .selfSovereignIdentityOptions
-      //           .customOidc4vcProfile
-      //           .clientId,
-      //       clientSecret: state
-      //           .model
-      //           .profileSetting
-      //           .selfSovereignIdentityOptions
-      //           .customOidc4vcProfile
-      //           .clientSecret,
-      //     ),
-      //   );
       case ProfileType.defaultOne:
         await update(
           ProfileModel.defaultOne(
@@ -791,31 +692,9 @@ class ProfileCubit extends Cubit<ProfileState> {
           status: status,
         );
 
-      case ProfileType.diipv3:
+      case ProfileType.diipv5:
         await update(
-          ProfileModel.diipv3(
-            walletProtectionType: state.model.walletProtectionType,
-            isDeveloperMode: state.model.isDeveloperMode,
-            walletType: state.model.walletType,
-            enterpriseWalletName: state.model.enterpriseWalletName,
-            clientId: state
-                .model
-                .profileSetting
-                .selfSovereignIdentityOptions
-                .customOidc4vcProfile
-                .clientId,
-            clientSecret: state
-                .model
-                .profileSetting
-                .selfSovereignIdentityOptions
-                .customOidc4vcProfile
-                .clientSecret,
-          ),
-          status: status,
-        );
-      case ProfileType.diipv4:
-        await update(
-          ProfileModel.diipv4(
+          ProfileModel.diipv5(
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
             walletType: state.model.walletType,
@@ -879,10 +758,10 @@ class ProfileCubit extends Cubit<ProfileState> {
           ),
           status: status,
         );
-      case ProfileType.europeanWallet:
+      case ProfileType.EUDIW:
         final profileSetting = await _setupWalletProfile(
-          email: 'guest@EWC',
-          password: 'guest',
+          email: 'eudiw|guest@eudiw.local',
+          password: 'guest-password',
           storageKey: SecureStorageKeys.europeanWalletProfileSetting,
           loggerTag: 'loadEuropeanWallet',
         );
@@ -894,22 +773,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           status: status,
         );
         emit(state.copyWith(status: AppStatus.addEuropeanProfile));
-
-      case ProfileType.inji:
-        final profileSetting = await _setupWalletProfile(
-          email: 'guest@Mosip',
-          password: 'guest',
-          storageKey: SecureStorageKeys.injiProfileSetting,
-          loggerTag: 'loadInjiWallet',
-        );
-        await update(
-          state.model.copyWith(
-            profileType: profileType,
-            profileSetting: profileSetting,
-          ),
-          status: status,
-        );
-        emit(state.copyWith(status: AppStatus.addInjiProfile));
     }
   }
 
@@ -932,9 +795,10 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (key == null) {
       return null;
     }
-    final jwt = decodePayload(jwtDecode: JWTDecode(), token: key);
+    final jwt = JWTDecode().decodePayload(token: key);
     final challenge = jwt['challenge'] as String;
-    return getOidc4VCIState(challenge);
+    final oidc4VCIState = getOidc4VCIState(challenge);
+    return oidc4VCIState;
   }
 
   Oidc4VCIState? getOidc4VCIState(String? key) {
@@ -949,14 +813,16 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> deleteOidc4VCIState(String? key) async {
     if (key == null) {
-      return Future.value();
+      final completedFuture = Future<void>.value();
+      return completedFuture;
     }
 
     final Oidc4VCIStack oidc4VCIStack = state.model.oidc4VCIStack!;
     oidc4VCIStack.stack.removeWhere((element) => element.challenge == key);
     final profilModel = state.model.copyWith(oidc4VCIStack: oidc4VCIStack);
     await update(profilModel);
-    return Future.value();
+    final completedFuture = Future<void>.value();
+    return completedFuture;
   }
 
   /// Helper method to setup wallet profile configuration
@@ -968,7 +834,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   }) async {
     late ProfileSetting profileSetting;
     try {
-      const url = 'https://wallet-provider.talao.co';
+      const url = 'https://wallet-provider.com';
       final walletAttestationData = await getWalletAttestationData(
         url: url,
         secureStorageProvider: secureStorageProvider,

@@ -11,14 +11,16 @@ class ConfirmConnectionState extends Equatable {
   final StateMessage? message;
 
   ConfirmConnectionState loading() {
-    return const ConfirmConnectionState(status: AppStatus.loading);
+    const loadingState = ConfirmConnectionState(status: AppStatus.loading);
+    return loadingState;
   }
 
   ConfirmConnectionState error({required MessageHandler messageHandler}) {
-    return ConfirmConnectionState(
+    final errorState = ConfirmConnectionState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
     );
+    return errorState;
   }
 
   ConfirmConnectionState copyWith({
@@ -26,12 +28,13 @@ class ConfirmConnectionState extends Equatable {
     MessageHandler? messageHandler,
     int? selectedIndex,
   }) {
-    return ConfirmConnectionState(
+    final confirmConnectionState = ConfirmConnectionState(
       status: appStatus,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
     );
+    return confirmConnectionState;
   }
 
   Map<String, dynamic> toJson() => _$ConfirmConnectionStateToJson(this);

@@ -7,25 +7,25 @@ part of 'restore_credential_mnemonic_cubit.dart';
 // **************************************************************************
 
 RestoreCredentialMnemonicState _$RestoreCredentialMnemonicStateFromJson(
-        Map<String, dynamic> json) =>
-    RestoreCredentialMnemonicState(
-      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
-          AppStatus.init,
-      message: json['message'] == null
-          ? null
-          : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-      isTextFieldEdited: json['isTextFieldEdited'] as bool? ?? false,
-      isMnemonicValid: json['isMnemonicValid'] as bool? ?? false,
-    );
+  Map<String, dynamic> json,
+) => RestoreCredentialMnemonicState(
+  status:
+      $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ?? AppStatus.init,
+  message: json['message'] == null
+      ? null
+      : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
+  isTextFieldEdited: json['isTextFieldEdited'] as bool? ?? false,
+  isMnemonicValid: json['isMnemonicValid'] as bool? ?? false,
+);
 
 Map<String, dynamic> _$RestoreCredentialMnemonicStateToJson(
-        RestoreCredentialMnemonicState instance) =>
-    <String, dynamic>{
-      'status': _$AppStatusEnumMap[instance.status]!,
-      'message': instance.message,
-      'isTextFieldEdited': instance.isTextFieldEdited,
-      'isMnemonicValid': instance.isMnemonicValid,
-    };
+  RestoreCredentialMnemonicState instance,
+) => <String, dynamic>{
+  'status': _$AppStatusEnumMap[instance.status]!,
+  'message': instance.message,
+  'isTextFieldEdited': instance.isTextFieldEdited,
+  'isMnemonicValid': instance.isMnemonicValid,
+};
 
 const _$AppStatusEnumMap = {
   AppStatus.init: 'init',
@@ -45,5 +45,4 @@ const _$AppStatusEnumMap = {
   AppStatus.successAdd: 'successAdd',
   AppStatus.successUpdate: 'successUpdate',
   AppStatus.addEuropeanProfile: 'addEuropeanProfile',
-  AppStatus.addInjiProfile: 'addInjiProfile',
 };

@@ -7,14 +7,14 @@ part of 'profile_cubit.dart';
 // **************************************************************************
 
 ProfileState _$ProfileStateFromJson(Map<String, dynamic> json) => ProfileState(
-      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
-          AppStatus.init,
-      message: json['message'] == null
-          ? null
-          : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-      model: ProfileModel.fromJson(json['model'] as Map<String, dynamic>),
-      allowLogin: json['allowLogin'] as bool? ?? true,
-    );
+  status:
+      $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ?? AppStatus.init,
+  message: json['message'] == null
+      ? null
+      : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
+  model: ProfileModel.fromJson(json['model'] as Map<String, dynamic>),
+  allowLogin: json['allowLogin'] as bool? ?? true,
+);
 
 Map<String, dynamic> _$ProfileStateToJson(ProfileState instance) =>
     <String, dynamic>{
@@ -42,5 +42,4 @@ const _$AppStatusEnumMap = {
   AppStatus.successAdd: 'successAdd',
   AppStatus.successUpdate: 'successUpdate',
   AppStatus.addEuropeanProfile: 'addEuropeanProfile',
-  AppStatus.addInjiProfile: 'addInjiProfile',
 };

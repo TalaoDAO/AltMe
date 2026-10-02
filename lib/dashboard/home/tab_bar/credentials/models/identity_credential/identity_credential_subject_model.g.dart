@@ -7,17 +7,17 @@ part of 'identity_credential_subject_model.dart';
 // **************************************************************************
 
 IdentityCredentialSubjectModel _$IdentityCredentialSubjectModelFromJson(
-        Map<String, dynamic> json) =>
-    IdentityCredentialSubjectModel(
-      id: json['id'] as String?,
-      type: json['type'],
-      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-    );
+  Map<String, dynamic> json,
+) => IdentityCredentialSubjectModel(
+  id: json['id'] as String?,
+  type: json['type'],
+  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+);
 
 Map<String, dynamic> _$IdentityCredentialSubjectModelToJson(
-        IdentityCredentialSubjectModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'type': instance.type,
-      'issuedBy': instance.issuedBy?.toJson(),
-    };
+  IdentityCredentialSubjectModel instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'type': instance.type,
+  'issuedBy': instance.issuedBy?.toJson(),
+};

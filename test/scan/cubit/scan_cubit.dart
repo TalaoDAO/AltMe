@@ -23,7 +23,7 @@ class MockProfileCubit extends Mock implements ProfileCubit {}
 
 class MockWalletCubit extends Mock implements WalletCubit {}
 
-class MockOIDC4VC extends Mock implements OIDC4VC {}
+class MockOIDC4VC extends Mock implements OIDC4VCIClient {}
 
 class MockJWTDecode extends Mock implements JWTDecode {}
 

@@ -214,10 +214,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get recoveryMnemonicError => 'Εισάγετε μια έγκυρη μνημονική φράση';
 
   @override
-  String get showDialogYes => 'ΑΚΥΡΩΣΗ';
+  String get showDialogYes => 'Συνέχεια';
 
   @override
-  String get showDialogNo => 'ΣΥΝΕΧΕΙΑ';
+  String get showDialogNo => 'Ακύρωση';
 
   @override
   String get supportTitle => 'Βοήθεια';
@@ -688,7 +688,7 @@ class AppLocalizationsEl extends AppLocalizations {
       'Χρειάζεστε άδεια αποθήκευσης για τη φόρτωση αρχείου. Μεταβείτε στις ρυθμίσεις της εφαρμογής και δώστε πρόσβαση στο δικαίωμα αποθήκευσης.';
 
   @override
-  String get cancel => 'ΑΚΥΡΩΣΗ';
+  String get cancel => 'Ακύρωση';
 
   @override
   String get loading => 'Παρακαλούμε περιμένετε...';
@@ -758,7 +758,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get generate => 'Δημιουργία';
 
   @override
-  String get myAssets => 'Τα κρυπτοστοιχεία μου';
+  String get myAssets => 'Τα στοιχεία μου';
 
   @override
   String get search => 'Αναζήτηση';
@@ -830,7 +830,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get changePinCode => 'Αλλαγή κωδικού PIN';
 
   @override
-  String get tryAgain => 'ΔΟΚΙΜΑΣΤΕ ΞΑΝΑ';
+  String get tryAgain => 'Δοκιμάστε ξανά';
 
   @override
   String get credentialSelectionListEmptyError =>
@@ -844,13 +844,13 @@ class AppLocalizationsEl extends AppLocalizations {
       'Ο κωδικός PIN σας άλλαξε με επιτυχία';
 
   @override
-  String get advantagesCards => 'Κάρτες προνομίων';
+  String get advantagesCards => 'Κάρτες Προνομίων';
 
   @override
   String get advantagesDiscoverCards => 'Ξεκλειδώστε αποκλειστικά προνόμια';
 
   @override
-  String get identityCards => 'Οι κάρτες μου';
+  String get identityCards => 'Δελτία ταυτότητας';
 
   @override
   String get identityDiscoverCards => 'Απλοποίηση της επαλήθευσης ταυτότητας';
@@ -923,7 +923,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get manageAccounts => 'Διαχείριση λογαριασμών blockchain';
 
   @override
-  String get blockchainAccounts => 'Λογαριασμοί blockchain';
+  String get blockchainAccounts => 'Λογαριασμοί Blockchain';
 
   @override
   String get educationCredentials => 'Πιστοποιητικά εκπαίδευσης';
@@ -1011,10 +1011,10 @@ class AppLocalizationsEl extends AppLocalizations {
       'Θέλετε πραγματικά να επεξεργαστείτε αυτό το όνομα λογαριασμού;';
 
   @override
-  String get cryptoEditConfirmationDialogYes => 'ΑΠΟΘΗΚΕΥΣΗ';
+  String get cryptoEditConfirmationDialogYes => 'Αποθήκευση';
 
   @override
-  String get cryptoEditConfirmationDialogNo => 'ΑΚΥΡΩΣΗ';
+  String get cryptoEditConfirmationDialogNo => 'Ακύρωση';
 
   @override
   String get cryptoEditLabel => 'Όνομα Λογαριασμού';
@@ -1298,7 +1298,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get revealPrivateKey => 'Αποκάλυψη ιδιωτικού κλειδιού';
 
   @override
-  String get share => 'Σύνδεσμος';
+  String get share => 'Κοινοποίηση';
 
   @override
   String get shareWith => 'Κοινοποίηση με';
@@ -2301,7 +2301,22 @@ class AppLocalizationsEl extends AppLocalizations {
       'Δεν μπορείτε να λάβετε αυτή την κάρτα επειδή δεν πληρούνται ορισμένες προϋποθέσεις.';
 
   @override
-  String get youAreMissing => 'Σας λείπει';
+  String get youAreMissing => 'Δεν έχετε τις πληροφορίες που ζητήθηκαν';
+
+  @override
+  String get dcqlInformationNotAvailable =>
+      'Οι πληροφορίες δεν είναι διαθέσιμες';
+
+  @override
+  String get dcqlInformationNotAvailableDescription =>
+      'Δεν μπορέσαμε να βρούμε όλες τις πληροφορίες που ζητήθηκαν στο πορτοφόλι σας.';
+
+  @override
+  String get dcqlMissingInformation => 'Λείπουν πληροφορίες';
+
+  @override
+  String get dcqlCannotContinue =>
+      'Δεν μπορείτε να συνεχίσετε με αυτό το αίτημα.';
 
   @override
   String get credentialsRequestedBy => 'πιστοποιητικά';
@@ -3292,8 +3307,7 @@ class AppLocalizationsEl extends AppLocalizations {
       'Επιλέξτε τα πιστοποιητικά που θέλετε να αποκτήσετε';
 
   @override
-  String get credentialShareTitle =>
-      'Επιλέξτε τα πιστοποιητικά προς κοινή χρήση';
+  String get credentialShareTitle => 'Κοινοποίηση πληροφοριών';
 
   @override
   String get enterYourSecretCode => 'Εισάγετε τον μυστικό σας κωδικό.';
@@ -3388,4 +3402,104 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get pay => 'Πληρωμή';
+
+  @override
+  String get issuerConnectTitle => 'Σύνδεση με τον εκδότη πιστοποιητικού;';
+
+  @override
+  String issuerConnectSubtitle(Object issuerName) {
+    return 'Ο $issuerName θέλει να εκδώσει ένα πιστοποιητικό στο πορτοφόλι σας.';
+  }
+
+  @override
+  String get trustedIssuerLabel => 'Αξιόπιστος εκδότης';
+
+  @override
+  String get issuerNotVerifiedLabel => 'Μη επαληθευμένος εκδότης';
+
+  @override
+  String get issuerNotVerifiedDescription =>
+      'Δεν ήταν δυνατή η επαλήθευση της ταυτότητας αυτού του εκδότη.';
+
+  @override
+  String get onlyContinueIfTrustIssuer =>
+      'Συνεχίστε μόνο αν αναγνωρίζετε και εμπιστεύεστε αυτόν τον εκδότη.';
+
+  @override
+  String get continueLabel => 'Συνέχεια';
+
+  @override
+  String get credentialAcceptTitle =>
+      'Προσθήκη πιστοποιητικού στο πορτοφόλι σας;';
+
+  @override
+  String get issuedByLabel => 'Εκδόθηκε από';
+
+  @override
+  String get informationIncludedLabel => 'Πληροφορίες που περιλαμβάνονται';
+
+  @override
+  String get addToWalletLabel => 'Προσθήκη στο πορτοφόλι';
+
+  @override
+  String get addLabel => 'Προσθήκη';
+
+  @override
+  String verifierConnectTitle(Object verifierName) {
+    return 'Σύνδεση με τον $verifierName;';
+  }
+
+  @override
+  String verifierConnectSubtitle(Object verifierName) {
+    return 'Ο $verifierName θέλει να ζητήσει πληροφορίες από το πορτοφόλι σας.';
+  }
+
+  @override
+  String get verifiedOrganisationLabel => 'Επαληθευμένος οργανισμός';
+
+  @override
+  String get organisationNotVerifiedLabel => 'Μη επαληθευμένος οργανισμός';
+
+  @override
+  String get organisationNotVerifiedDescription =>
+      'Δεν ήταν δυνατή η επαλήθευση της ταυτότητας αυτού του οργανισμού.';
+
+  @override
+  String get onlyContinueIfTrustOrganisation =>
+      'Συνεχίστε μόνο αν αναγνωρίζετε και εμπιστεύεστε αυτόν τον οργανισμό.';
+
+  @override
+  String get purposeLabel => 'Σκοπός';
+
+  @override
+  String get shareInformationTitle =>
+      'Θέλετε να μοιραστείτε τις πληροφορίες σας;';
+
+  @override
+  String shareInformationSubtitle(Object verifierName) {
+    return 'Ο $verifierName ζητά τις παρακάτω πληροφορίες από το πορτοφόλι σας.';
+  }
+
+  @override
+  String get onlyShareIfTrustOrganisation =>
+      'Μοιραστείτε αυτές τις πληροφορίες μόνο αν αναγνωρίζετε και εμπιστεύεστε αυτόν τον οργανισμό.';
+
+  @override
+  String get informationRequestedLabel => 'Πληροφορίες που ζητήθηκαν';
+
+  @override
+  String get sharedWithLabel => 'Κοινοποιήθηκε με';
+
+  @override
+  String get notVerifiedLabel => 'Μη επαληθευμένο';
+
+  @override
+  String get onlyInformationShownWillBeShared =>
+      'Θα κοινοποιηθούν μόνο οι πληροφορίες που εμφανίζονται παραπάνω.';
+
+  @override
+  String get shareInformationButtonLabel => 'Κοινοποίηση πληροφοριών';
+
+  @override
+  String get dontShareLabel => 'Μην κοινοποιήσετε';
 }

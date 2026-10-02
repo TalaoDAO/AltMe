@@ -15,4 +15,5 @@ export 'models/model.dart';
 export 'text_field_helper/text_field_helper.dart';
 export 'translation/translation.dart';
 export 'validators/validators.dart';
+export 'wallet_provider/wallet_provider.dart';
 export 'widget/widget.dart';

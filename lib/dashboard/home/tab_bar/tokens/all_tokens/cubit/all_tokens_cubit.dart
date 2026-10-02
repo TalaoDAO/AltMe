@@ -113,7 +113,8 @@ class AllTokensCubit extends Cubit<AllTokensState> {
       getLogger(
         runtimeType.toString(),
       ).e('error in get contracts from secureStorage, e: $e, s: $s');
-      return setDefaultSelectedContractIfFirstTime([]);
+      final selectedContracts = await setDefaultSelectedContractIfFirstTime([]);
+      return selectedContracts;
     }
   }
 

@@ -1,11 +1,15 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/alert_message/exception_message.dart';
+import 'package:altme/app/shared/alert_message/message_cubit.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/flavor/cubit/flavor_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/onboarding/starter/starter.dart';
+import 'package:altme/route/route.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
@@ -51,6 +55,8 @@ class MockProfileCubit extends MockCubit<ProfileState> implements ProfileCubit {
 
 class MockCredentialsCubit extends MockCubit<CredentialsState>
     implements CredentialsCubit {
+  @override
+  final state = const CredentialsState();
   @override
   Future<void> loadAllCredentials() async {}
 }
@@ -108,6 +114,32 @@ class MockAdvanceSettingsCubit extends MockCubit<AdvanceSettingsState>
   Future<void> setState(AdvanceSettingsState newState) async {}
 }
 
+class MockManageNetworkCubit extends MockCubit<ManageNetworkState>
+    implements ManageNetworkCubit {
+  @override
+  final state = ManageNetworkState(network: TezosNetwork.mainNet());
+
+  @override
+  Future<void> loadNetwork() async {}
+}
+
+class MockTokensCubit extends MockCubit<TokensState> implements TokensCubit {
+  @override
+  Future<void> fetchFromZero() async {}
+}
+
+class MockNftCubit extends MockCubit<NftState> implements NftCubit {
+  @override
+  Future<void> fetchFromZero() async {}
+}
+
+class MockDeepLinkCubit extends MockCubit<String> implements DeepLinkCubit {}
+
+class MockMessageCubit extends MockCubit<ExceptionMessage>
+    implements MessageCubit {}
+
+class MockRouteCubit extends MockCubit<String?> implements RouteCubit {}
+
 void main() {
   late FlavorCubit flavorCubit;
   late SplashCubit splashCubit;
@@ -120,6 +152,12 @@ void main() {
   late BeaconCubit beaconCubit;
   late WalletConnectCubit walletConnectCubit;
   late EnterpriseCubit enterpriseCubit;
+  late ManageNetworkCubit manageNetworkCubit;
+  late TokensCubit tokensCubit;
+  late NftCubit nftCubit;
+  late DeepLinkCubit deepLinkCubit;
+  late MessageCubit messageCubit;
+  late RouteCubit routeCubit;
 
   setUpAll(() async {
     flavorCubit = MockFlavorCubit();
@@ -133,11 +171,23 @@ void main() {
     beaconCubit = MockBeaconCubit();
     walletConnectCubit = MockWalletConnectCubit();
     enterpriseCubit = MockEnterpriseCubit();
+    manageNetworkCubit = MockManageNetworkCubit();
+    tokensCubit = MockTokensCubit();
+    nftCubit = MockNftCubit();
+    deepLinkCubit = MockDeepLinkCubit();
+    messageCubit = MockMessageCubit();
+    routeCubit = MockRouteCubit();
+
     when(
       () => splashCubit.state,
     ).thenReturn(const SplashState(status: SplashStatus.init));
     when(() => splashCubit.initialiseApp()).thenAnswer((_) async {});
     when(() => flavorCubit.state).thenReturn(FlavorMode.development);
+    when(() => deepLinkCubit.state).thenReturn('');
+    when(
+      () => messageCubit.state,
+    ).thenReturn(ExceptionMessage(error: '', errorDescription: ''));
+    when(() => routeCubit.state).thenReturn(null);
   });
 
   Widget makeTestableWidget() {
@@ -158,6 +208,14 @@ void main() {
         BlocProvider<ScanCubit>(create: (context) => scanCubit),
         BlocProvider<QRCodeScanCubit>(create: (context) => qRCodeScanCubit),
         BlocProvider<SplashCubit>(create: (context) => splashCubit),
+        BlocProvider<ManageNetworkCubit>(
+          create: (context) => manageNetworkCubit,
+        ),
+        BlocProvider<TokensCubit>(create: (context) => tokensCubit),
+        BlocProvider<NftCubit>(create: (context) => nftCubit),
+        BlocProvider<DeepLinkCubit>(create: (context) => deepLinkCubit),
+        BlocProvider<MessageCubit>(create: (context) => messageCubit),
+        BlocProvider<RouteCubit>(create: (context) => routeCubit),
       ],
       child: const MaterialApp(
         localizationsDelegates: [

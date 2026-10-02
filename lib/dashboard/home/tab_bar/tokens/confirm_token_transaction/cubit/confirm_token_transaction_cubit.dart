@@ -14,6 +14,7 @@ import 'package:decimal/decimal.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:tezart/tezart.dart';
+import 'package:wallet/wallet.dart';
 import 'package:web3dart/json_rpc.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -166,6 +167,27 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
   late String rpcNodeUrlForTransaction;
 
+  /// Endpoints already tried for the current transaction, so a retry never
+  /// hits the same unreachable node again.
+  final Set<String> _triedRpcNodeUrls = <String>{};
+
+  /// Moves [rpcNodeUrlForTransaction] onto an endpoint that has not been tried
+  /// yet for this transaction. Returns false when every endpoint was tried.
+  bool _advanceRpcNodeUrl() {
+    final dynamic rpcNodeUrl = manageNetworkCubit.state.network.rpcNodeUrl;
+    if (rpcNodeUrl is! List<String>) return false;
+
+    final remaining = rpcNodeUrl
+        .where((url) => !_triedRpcNodeUrls.contains(url))
+        .toList();
+    if (remaining.isEmpty) return false;
+
+    rpcNodeUrlForTransaction = remaining[Random().nextInt(remaining.length)];
+    _triedRpcNodeUrls.add(rpcNodeUrlForTransaction);
+    logger.i('retrying on a different rpcNodeUrl: $rpcNodeUrlForTransaction');
+    return true;
+  }
+
   Future<void> _calculateFeeTezos() async {
     int retryCount = 0;
     const maxRetries = Parameters.maxEntries;
@@ -184,6 +206,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
         }
 
         logger.i('rpcNodeUrl: $rpcNodeUrlForTransaction');
+        _triedRpcNodeUrls.add(rpcNodeUrlForTransaction);
         final client = TezartClient(rpcNodeUrlForTransaction);
         final keystore = KeyGenerator().getKeystore(
           secretKey: state.selectedAccountSecretKey,
@@ -289,11 +312,44 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
     Keystore keystore,
   ) async {
     try {
-      return await tezosContract(client, keystore);
+      final operationsList = await tezosContract(client, keystore);
+      return operationsList;
     } catch (e) {
       logger.e('Michelson contract fee estimation error: $e');
       return null;
     }
+  }
+
+  /// Builds `transfer` entrypoint parameters as the native Dart structures
+  /// tezart's MichelineEncoder expects (a Map keyed by the type's annotations,
+  /// or a List for a Michelson `list`). Passing a Michelson source string
+  /// instead fails with
+  /// "type 'String' is not a subtype of type 'List<dynamic>'".
+  ///
+  /// FA1.2 (TZIP-7):
+  ///   (pair (address %from) (pair (address %to) (nat %value)))
+  /// FA2 (TZIP-12):
+  ///   list (pair (address %from_)
+  ///              (list %txs (pair (address %to_)
+  ///                               (pair (nat %token_id) (nat %amount)))))
+  dynamic _buildTransferParams({
+    required bool isFA1,
+    required String from,
+    required String to,
+    required int amount,
+    required int tokenId,
+  }) {
+    if (isFA1) {
+      return <String, dynamic>{'from': from, 'to': to, 'value': amount};
+    }
+    return <dynamic>[
+      <String, dynamic>{
+        'from_': from,
+        'txs': <dynamic>[
+          <String, dynamic>{'to_': to, 'token_id': tokenId, 'amount': amount},
+        ],
+      },
+    ];
   }
 
   Future<OperationsList> tezosContract(
@@ -304,18 +360,37 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       contractAddress: state.selectedToken.contractAddress,
       rpcInterface: client.rpcInterface,
     );
-    final amount = (double.parse(state.tokenAmount) * 1000000).toInt();
-    final parameters = state.selectedToken.isFA1
-        ? '''(Pair "${keystore.publicKey}" (Pair "${state.withdrawalAddress}" $amount))'''
-        : '''{Pair "${keystore.publicKey}" {Pair "${state.withdrawalAddress}" (Pair ${int.parse(state.selectedToken.tokenId ?? '0')} $amount)}}''';
+    // Use the token's own decimals, as the real transfer does, so the
+    // estimate reflects the operation that will actually be sent.
+    final amount =
+        (double.parse(state.tokenAmount) *
+                pow(10, int.parse(state.selectedToken.decimals)))
+            .toInt();
+    final parameters = _buildTransferParams(
+      isFA1: state.selectedToken.isFA1,
+      from: keystore.address,
+      to: state.withdrawalAddress,
+      amount: amount,
+      tokenId: int.parse(state.selectedToken.tokenId ?? '0'),
+    );
 
     final finalOperationList = await contract.callOperation(
       entrypoint: 'transfer',
-      amount: amount,
+      // A token transfer carries no XTZ; the value moves inside `params`.
+      amount: 0,
       params: parameters,
       source: keystore,
       publicKey: keystore.publicKey,
     );
+
+    // callOperation only *builds* the operation list; every Operation still
+    // has its initial `fee`/`totalFee` of 0 until the list is estimated.
+    // Without this the fee shown to the user, and the customFee handed to the
+    // send below, were both zero -- and a zero-fee operation is refused by
+    // the mempool, so it was injected, never included, and the account
+    // counter never moved.
+    await finalOperationList.estimate();
+
     return finalOperationList;
   }
 
@@ -460,6 +535,7 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
 
   void resetTransactionAttemptCount() {
     transactionAttemptCount = 0;
+    _triedRpcNodeUrls.clear();
   }
 
   Future<void> sendContractInvocationOperation() async {
@@ -496,6 +572,9 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
       }
     } catch (e, s) {
       if (transactionAttemptCount < 3) {
+        // Failover: a retry against the same unreachable node would fail
+        // identically, so move to an endpoint we have not tried yet.
+        _advanceRpcNodeUrl();
         await Future<void>.delayed(const Duration(milliseconds: 500));
         await sendContractInvocationOperation();
         return;
@@ -564,34 +643,38 @@ class ConfirmTokenTransactionCubit extends Cubit<ConfirmTokenTransactionState> {
                   ))
               .toInt();
 
-      final parameters = token.isFA1
-          ? '''(Pair "${keystore.publicKey}" (Pair "${state.withdrawalAddress}" $amount))'''
-          : '''{Pair "${keystore.publicKey}" {Pair "${state.withdrawalAddress}" (Pair ${int.parse(token.tokenId ?? '0')} $amount)}}''';
+      final parameters = _buildTransferParams(
+        isFA1: token.isFA1,
+        from: keystore.address,
+        to: state.withdrawalAddress,
+        amount: amount,
+        tokenId: int.parse(token.tokenId ?? '0'),
+      );
 
       getLogger('sendContractInvocationOperation').i(
-        'sending from: ${keystore.publicKey}'
+        'sending from: ${keystore.address}'
         ',to: ${state.withdrawalAddress} ,amountInInt: $amount '
         'amountInDecimal: $tokenAmount tokenSymbol: ${token.symbol}',
       );
 
-      // fee calculated by XTZ
-      final customFee = int.parse(
-        Decimal.parse(state.networkFee!.totalFee)
-            .toDouble()
-            .toStringAsFixed(
-              6,
-            ) // 6 is because the deciaml of XTZ is alway 6 (mutez)
-            .replaceAll('.', '')
-            .replaceAll(',', ''),
-      );
+      // The baker fee is what the operation's `fee` field must carry.
+      // `totalFee` also includes the storage burn, which the protocol charges
+      // separately, so using it here would overpay.
+      final feeInXtz = state.networkFee?.bakerFee ?? state.networkFee?.totalFee;
+      final customFee = feeInXtz == null
+          ? 0
+          : (Decimal.parse(feeInXtz).toDouble() * 1000000).round();
 
       final operationList = await contract.callOperation(
         entrypoint: 'transfer',
-        amount: amount,
+        // A token transfer carries no XTZ; the value moves inside `params`.
+        amount: 0,
         params: parameters,
         source: keystore,
         publicKey: keystore.publicKey,
-        customFee: customFee,
+        // A zero customFee would override tezart's own minimal-fee
+        // computation and produce an operation the mempool refuses.
+        customFee: customFee > 0 ? customFee : null,
       );
 
       await operationList.executeAndMonitor(null);

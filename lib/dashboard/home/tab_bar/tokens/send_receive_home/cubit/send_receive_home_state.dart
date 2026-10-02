@@ -18,14 +18,16 @@ class SendReceiveHomeState extends Equatable {
   final StateMessage? message;
 
   SendReceiveHomeState loading() {
-    return copyWith(status: AppStatus.loading);
+    final state = copyWith(status: AppStatus.loading);
+    return state;
   }
 
   SendReceiveHomeState error({required MessageHandler messageHandler}) {
-    return copyWith(
+    final state = copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
     );
+    return state;
   }
 
   SendReceiveHomeState success({
@@ -33,7 +35,7 @@ class SendReceiveHomeState extends Equatable {
     List<OperationModel>? operations,
     TokenModel? selectedToken,
   }) {
-    return copyWith(
+    final state = copyWith(
       status: AppStatus.success,
       selectedToken: selectedToken,
       operations: operations ?? this.operations,
@@ -41,6 +43,7 @@ class SendReceiveHomeState extends Equatable {
           ? null
           : StateMessage.success(messageHandler: messageHandler),
     );
+    return state;
   }
 
   SendReceiveHomeState copyWith({
@@ -49,12 +52,13 @@ class SendReceiveHomeState extends Equatable {
     AppStatus? status,
     StateMessage? message,
   }) {
-    return SendReceiveHomeState(
+    final state = SendReceiveHomeState(
       operations: operations ?? this.operations,
       selectedToken: selectedToken ?? this.selectedToken,
       status: status ?? this.status,
       message: message ?? this.message,
     );
+    return state;
   }
 
   Map<String, dynamic> toJson() => _$SendReceiveHomeStateToJson(this);

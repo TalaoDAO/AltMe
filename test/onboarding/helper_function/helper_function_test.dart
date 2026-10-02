@@ -70,7 +70,7 @@ class MockSecureStorageProvider extends Mock implements SecureStorageProvider {}
 
 class MockLangCubit extends MockCubit<LangState> implements LangCubit {}
 
-class MockOIDC4VC extends Mock implements OIDC4VC {}
+class MockOIDC4VC extends Mock implements OIDC4VCIClient {}
 
 class MockActivityLogManager extends Mock implements ActivityLogManager {}
 
@@ -91,7 +91,13 @@ class MockCredentialsCubit extends MockCubit<CredentialsState>
 class MockWalletConnectCubit extends MockCubit<WalletConnectState>
     implements WalletConnectCubit {}
 
+class FakeLogData extends Fake implements LogData {}
+
 void main() {
+  setUpAll(() {
+    registerFallbackValue(FakeLogData());
+  });
+
   group('generateAccount', () {
     late KeyGenerator keyGenerator;
     late MockDIDKitProvider didKitProvider;
@@ -125,6 +131,10 @@ void main() {
 
       when(
         () => secureStorageProvider.set(any(), any()),
+      ).thenAnswer((_) async => Future<void>.value());
+
+      when(
+        () => activityLogManager.saveLog(any()),
       ).thenAnswer((_) async => Future<void>.value());
 
       profileCubit = ProfileCubit(
@@ -178,7 +188,12 @@ void main() {
           walletProtectionType: WalletProtectionType.pinCode,
           isDeveloperMode: false,
           profileType: ProfileType.custom,
-          profileSetting: ProfileSetting.initial(),
+          profileSetting: ProfileSetting.initial().copyWith(
+            helpCenterOptions: HelpCenterOptions.initial().copyWith(
+              customChatSupport: true,
+              customChatSupportName: 'Support',
+            ),
+          ),
         ),
       );
 

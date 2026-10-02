@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/oidc4vc/model/verifier_trust_info.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 
 import 'package:credential_manifest/credential_manifest.dart';
@@ -19,6 +20,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
     required this.issuer,
     required this.inputDescriptorIndex,
     required this.credentialsToBePresented,
+    this.verifierTrustInfo,
   });
 
   final Uri uri;
@@ -26,6 +28,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
   final Issuer issuer;
   final int inputDescriptorIndex;
   final List<CredentialModel> credentialsToBePresented;
+  final VerifierTrustInfo? verifierTrustInfo;
 
   static Route<dynamic> route({
     required Uri uri,
@@ -33,17 +36,20 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
     required Issuer issuer,
     required int inputDescriptorIndex,
     required List<CredentialModel> credentialsToBePresented,
+    VerifierTrustInfo? verifierTrustInfo,
   }) {
-    return MaterialPageRoute<void>(
+    final pageRoute = MaterialPageRoute<void>(
       builder: (context) => CredentialManifestOfferPickPage(
         uri: uri,
         credential: credential,
         issuer: issuer,
         inputDescriptorIndex: inputDescriptorIndex,
         credentialsToBePresented: credentialsToBePresented,
+        verifierTrustInfo: verifierTrustInfo,
       ),
       settings: const RouteSettings(name: '/CredentialManifestOfferPickPage'),
     );
+    return pageRoute;
   }
 
   @override
@@ -51,7 +57,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final profileModel = context.read<ProfileCubit>().state.model;
-        return CredentialManifestPickCubit(
+        final credentialManifestPickCubit = CredentialManifestPickCubit(
           credential: credential,
           credentialList: context.read<CredentialsCubit>().state.credentials,
           inputDescriptorIndex: inputDescriptorIndex,
@@ -64,6 +70,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
               [],
           profileType: profileModel.profileType,
         );
+        return credentialManifestPickCubit;
       },
       child: CredentialManifestOfferPickView(
         uri: uri,
@@ -71,6 +78,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
         issuer: issuer,
         inputDescriptorIndex: inputDescriptorIndex,
         credentialsToBePresented: credentialsToBePresented,
+        verifierTrustInfo: verifierTrustInfo,
       ),
     );
   }
@@ -84,6 +92,7 @@ class CredentialManifestOfferPickView extends StatefulWidget {
     required this.issuer,
     required this.inputDescriptorIndex,
     required this.credentialsToBePresented,
+    this.verifierTrustInfo,
   });
 
   final Uri uri;
@@ -91,6 +100,7 @@ class CredentialManifestOfferPickView extends StatefulWidget {
   final Issuer issuer;
   final int inputDescriptorIndex;
   final List<CredentialModel> credentialsToBePresented;
+  final VerifierTrustInfo? verifierTrustInfo;
 
   @override
   State<CredentialManifestOfferPickView> createState() =>
@@ -152,6 +162,7 @@ class _CredentialManifestOfferPickViewState
                 credentialsToBePresented: widget.credentialsToBePresented,
                 presentationDefinition: presentationDefinition,
                 selectedCredential: firstOne,
+                verifierTrustInfo: widget.verifierTrustInfo,
               ),
             );
           }
@@ -391,7 +402,7 @@ class _CredentialManifestOfferPickViewState
       final firstOne = credentialManifestState
           .filteredCredentialList[credentialManifestState.selected.first];
 
-      return Navigator.of(context).pushReplacement<void, void>(
+      final navigation = Navigator.of(context).pushReplacement<void, void>(
         SelectiveDisclosurePickPage.route(
           uri: widget.uri,
           issuer: widget.issuer,
@@ -402,8 +413,10 @@ class _CredentialManifestOfferPickViewState
           selectedCredential: firstOne,
           presentationDefinition: presentationDefinition,
           credentialsToBePresented: widget.credentialsToBePresented,
+          verifierTrustInfo: widget.verifierTrustInfo,
         ),
       );
+      return navigation;
     }
 
     late List<CredentialModel> updatedCredentials;
@@ -435,6 +448,7 @@ class _CredentialManifestOfferPickViewState
           issuer: widget.issuer,
           inputDescriptorIndex: widget.inputDescriptorIndex + 1,
           credentialsToBePresented: updatedCredentials,
+          verifierTrustInfo: widget.verifierTrustInfo,
         ),
       );
     } else {

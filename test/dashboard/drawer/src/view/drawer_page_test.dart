@@ -89,13 +89,13 @@ void main() {
           ),
         );
 
-        expect(find.text('Wallet Profiles'), findsOneWidget);
+        expect(find.text('Wallet Profile'), findsOneWidget);
         expect(
-          find.text('Choose your SSI profile or customize your own'),
+          find.text('Choose your wallet profile or customize your own'),
           findsOneWidget,
         );
 
-        await tester.tap(find.text('Wallet Profiles'));
+        await tester.tap(find.text('Wallet Profile'));
         await tester.pumpAndSettle();
 
         verify(
@@ -158,7 +158,7 @@ void main() {
         expect(find.text('Blockchain Settings'), findsOneWidget);
         expect(
           find.text(
-            'Manage accounts, Recovery Phrase, Connected dApps and Networks',
+            'Manage accounts, recovery phrase, connected DApps and networks',
           ),
           findsOneWidget,
         );
@@ -240,7 +240,7 @@ void main() {
       expect(
         find.text(
           'Contact us and get support if you need '
-          'assistance on using our wallet',
+          'assistance on using your wallet',
         ),
         findsOneWidget,
       );
@@ -315,7 +315,9 @@ void main() {
 
       expect(find.text('Reset Wallet'), findsOneWidget);
       expect(
-        find.text('Erase all data stored on your phone and reset your wallet.'),
+        find.text(
+          'Erase all data stored on this device and reset your wallet.',
+        ),
         findsOneWidget,
       );
 

@@ -95,9 +95,10 @@ class ProfileSelectorWidget extends StatelessWidget {
                                   .loadAllCredentials();
 
                               if (profileType == ProfileType.custom) {
-                                return Navigator.of(
+                                final navigation = Navigator.of(
                                   context,
                                 ).push<void>(Oidc4vcSettingMenu.route());
+                                return navigation;
                               }
                               LoadingView().hide();
                             },

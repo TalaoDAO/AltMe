@@ -10,7 +10,7 @@ class ScanState extends Equatable {
     this.domain,
     this.done,
     this.transactionData,
-    this.blockchainTransactionsSignatures,
+    this.localDocumentSignature,
     this.credentialPresentation,
     this.presentationIssuer,
     this.credentialsToBePresented,
@@ -22,8 +22,8 @@ class ScanState extends Equatable {
   final String? keyId;
   final String? challenge;
   final String? domain;
-  final List<dynamic>? transactionData;
-  final List<Uint8List>? blockchainTransactionsSignatures;
+  final TransactionData? transactionData;
+  final Map<String, dynamic>? localDocumentSignature;
   final CredentialModel? credentialPresentation;
   final Issuer? presentationIssuer;
   final List<CredentialModel>? credentialsToBePresented;
@@ -31,7 +31,7 @@ class ScanState extends Equatable {
   final dynamic Function(String)? done;
 
   ScanState loading() {
-    return copyWith(
+    final loadingState = copyWith(
       status: ScanStatus.loading,
       uri: uri,
       keyId: keyId,
@@ -39,6 +39,7 @@ class ScanState extends Equatable {
       domain: domain,
       done: done,
     );
+    return loadingState;
   }
 
   ScanState scanPermission({
@@ -48,7 +49,7 @@ class ScanState extends Equatable {
     String? domain,
     required dynamic Function(String) done,
   }) {
-    return copyWith(
+    final permissionState = copyWith(
       status: ScanStatus.askPermissionDidAuth,
       uri: uri,
       keyId: keyId,
@@ -56,17 +57,20 @@ class ScanState extends Equatable {
       domain: domain,
       done: done,
     );
+    return permissionState;
   }
 
   ScanState warning({required MessageHandler messageHandler}) {
-    return copyWith(
+    final warningState = copyWith(
       status: ScanStatus.warning,
       message: StateMessage.warning(messageHandler: messageHandler),
     );
+    return warningState;
   }
 
   ScanState error({required StateMessage message}) {
-    return copyWith(status: ScanStatus.error, message: message);
+    final errorState = copyWith(status: ScanStatus.error, message: message);
+    return errorState;
   }
 
   ScanState copyWith({
@@ -77,8 +81,8 @@ class ScanState extends Equatable {
     String? challenge,
     String? domain,
     dynamic Function(String)? done,
-    List<dynamic>? transactionData,
-    List<Uint8List>? blockchainTransactionsSignatures,
+    TransactionData? transactionData,
+    Map<String, dynamic>? localDocumentSignature,
     CredentialModel? credentialPresentation,
     Issuer? presentationIssuer,
     List<CredentialModel>? credentialsToBePresented,
@@ -86,9 +90,8 @@ class ScanState extends Equatable {
     // when status is successfull we need to reset transactionData and
     // blockchainTransactionsSignatures to null if they are not provided
     var newTransactionData = transactionData ?? this.transactionData;
-    var newBlockchainTransactionsSignatures =
-        blockchainTransactionsSignatures ??
-        this.blockchainTransactionsSignatures;
+    var newLocalDocumentSignature =
+        localDocumentSignature ?? this.localDocumentSignature;
     var newCredentialPresentation =
         credentialPresentation ?? this.credentialPresentation;
     var newPresentationIssuer = presentationIssuer ?? this.presentationIssuer;
@@ -97,13 +100,13 @@ class ScanState extends Equatable {
 
     if (status == ScanStatus.success || status == ScanStatus.error) {
       newTransactionData = null;
-      newBlockchainTransactionsSignatures = null;
+      newLocalDocumentSignature = null;
       newCredentialsToBePresented = null;
       newPresentationIssuer = null;
       newCredentialPresentation = null;
     }
 
-    return ScanState(
+    final newState = ScanState(
       status: status ?? this.status,
       message: message ?? this.message,
       uri: uri ?? this.uri,
@@ -112,11 +115,12 @@ class ScanState extends Equatable {
       domain: domain ?? this.domain,
       done: done ?? this.done,
       transactionData: newTransactionData,
-      blockchainTransactionsSignatures: newBlockchainTransactionsSignatures,
+      localDocumentSignature: newLocalDocumentSignature,
       credentialPresentation: newCredentialPresentation,
       presentationIssuer: newPresentationIssuer,
       credentialsToBePresented: newCredentialsToBePresented,
     );
+    return newState;
   }
 
   @override
@@ -129,7 +133,7 @@ class ScanState extends Equatable {
     domain,
     done,
     transactionData,
-    blockchainTransactionsSignatures,
+    localDocumentSignature,
     credentialPresentation,
     presentationIssuer,
     credentialsToBePresented,

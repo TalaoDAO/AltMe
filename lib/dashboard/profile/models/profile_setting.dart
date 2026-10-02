@@ -34,6 +34,17 @@ class ProfileSetting extends Equatable {
     walletSecurityOptions: WalletSecurityOptions.initial(),
   );
 
+  factory ProfileSetting.provider() => ProfileSetting(
+    blockchainOptions: BlockchainOptions.initial(),
+    discoverCardsOptions: DiscoverCardsOptions.initial(),
+    generalOptions: GeneralOptions.empty(),
+    helpCenterOptions: HelpCenterOptions.initial(),
+    selfSovereignIdentityOptions: SelfSovereignIdentityOptions.provider(),
+    settingsMenu: SettingsMenu.initial(),
+    version: '',
+    walletSecurityOptions: WalletSecurityOptions.provider(),
+  );
+
   final BlockchainOptions? blockchainOptions;
   final DiscoverCardsOptions? discoverCardsOptions;
   final GeneralOptions generalOptions;
@@ -145,7 +156,7 @@ class BlockchainOptions extends Equatable {
     bool? tzproRpcNode,
     bool? testnet,
   }) {
-    return BlockchainOptions(
+    final blockchainOptions = BlockchainOptions(
       associatedAddressFormat:
           associatedAddressFormat ?? this.associatedAddressFormat,
       bnbSupport: bnbSupport ?? this.bnbSupport,
@@ -161,6 +172,7 @@ class BlockchainOptions extends Equatable {
       tzproApiKey: tzproApiKey ?? this.tzproApiKey,
       testnet: testnet ?? this.testnet,
     );
+    return blockchainOptions;
   }
 
   @override
@@ -200,10 +212,10 @@ class DiscoverCardsOptions extends Equatable {
     this.displayOver18SdJwt = false,
     this.displayVerifiableIdJwt = false,
     this.displayVerifiableIdSdJwt = false,
-    this.displayEmailPass = true,
-    this.displayEmailPassJwt = true,
-    this.displayPhonePass = true,
-    this.displayPhonePassJwt = true,
+    this.displayEmailPass = false,
+    this.displayEmailPassJwt = false,
+    this.displayPhonePass = false,
+    this.displayPhonePassJwt = false,
     this.displayPhonePassSdJwt = false,
     this.displayChainborn = false,
     this.displayTezotopia = false,
@@ -310,7 +322,7 @@ class DiscoverCardsOptions extends Equatable {
     bool? displayTezotopia,
     bool? displayEmailPassSdJwt,
   }) {
-    return DiscoverCardsOptions(
+    final discoverCardsOptions = DiscoverCardsOptions(
       displayDefi: displayDefi ?? this.displayDefi,
       displayHumanity: displayHumanity ?? this.displayHumanity,
       displayHumanityJwt: displayHumanityJwt ?? this.displayHumanityJwt,
@@ -342,6 +354,7 @@ class DiscoverCardsOptions extends Equatable {
       displayEmailPassSdJwt:
           displayEmailPassSdJwt ?? this.displayEmailPassSdJwt,
     );
+    return discoverCardsOptions;
   }
 
   VCFormatType vcFormatTypeForAuto({
@@ -537,7 +550,7 @@ class GeneralOptions extends Equatable {
     String? customerPlan,
     String? primaryColor,
   }) {
-    return GeneralOptions(
+    final generalOptions = GeneralOptions(
       walletType: walletType ?? this.walletType,
       companyName: companyName ?? this.companyName,
       companyWebsite: companyWebsite ?? this.companyWebsite,
@@ -552,6 +565,7 @@ class GeneralOptions extends Equatable {
       customerPlan: customerPlan ?? this.customerPlan,
       primaryColor: primaryColor ?? this.primaryColor,
     );
+    return generalOptions;
   }
 
   @override
@@ -662,6 +676,12 @@ class SelfSovereignIdentityOptions extends Equatable {
         displayManageDecentralizedId: true,
       );
 
+  factory SelfSovereignIdentityOptions.provider() =>
+      SelfSovereignIdentityOptions(
+        customOidc4vcProfile: CustomOidc4VcProfile.provider(),
+        displayManageDecentralizedId: true,
+      );
+
   final CustomOidc4VcProfile customOidc4vcProfile;
   final bool displayManageDecentralizedId;
 
@@ -724,12 +744,39 @@ class CustomOidc4VcProfile extends Equatable {
     displayMode: false,
   );
 
+  factory CustomOidc4VcProfile.provider() => CustomOidc4VcProfile(
+    pushAuthorizationRequest: false,
+    statusListCache: true,
+    clientAuthentication: ClientAuthentication.wia,
+    credentialManifestSupport: false,
+    cryptoHolderBinding: true,
+    defaultDid: DidKeyType.p256,
+    dpopSupport: true,
+    oidc4vciDraft: OIDC4VCIDraftType.final1,
+    oidc4vpDraft: OIDC4VPDraftType.final1,
+    scope: true,
+    securityLevel: false,
+    proofHeader: ProofHeaderType.jwk, // N/A
+    siopv2Draft: SIOPV2DraftType.draft12,
+    clientType: ClientType.p256JWKThumprint,
+    clientSecret: randomString(12),
+    vcFormatType: VCFormatType.dcSdJWT,
+    proofType: ProofType.jwt,
+    formatsSupported: const [
+      VCFormatType.jwtVcJson,
+      VCFormatType.dcSdJWT,
+      VCFormatType.ldpVc,
+    ],
+    displayMode: false,
+  );
+
   factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) {
     final profileFromJson = _$CustomOidc4VcProfileFromJson(json);
     if (profileFromJson.formatsSupported!.isEmpty) {
-      return profileFromJson.copyWith(
+      final updatedProfile = profileFromJson.copyWith(
         formatsSupported: <VCFormatType>[profileFromJson.vcFormatType],
       );
+      return updatedProfile;
     }
     return profileFromJson;
   }
@@ -900,6 +947,14 @@ class WalletSecurityOptions extends Equatable {
       _$WalletSecurityOptionsFromJson(json);
 
   factory WalletSecurityOptions.initial() => const WalletSecurityOptions(
+    confirmSecurityVerifierAccess: false,
+    displaySecurityAdvancedSettings: true,
+    secureSecurityAuthenticationWithPinCode: false,
+    verifySecurityIssuerWebsiteIdentity: false,
+    trustedList: false,
+  );
+
+  factory WalletSecurityOptions.provider() => const WalletSecurityOptions(
     confirmSecurityVerifierAccess: false,
     displaySecurityAdvancedSettings: true,
     secureSecurityAuthenticationWithPinCode: false,

@@ -36,7 +36,7 @@ class CredentialsDetailsPage extends StatelessWidget {
     CardChatSupportCubit? cardChatSupportCubit,
     bool readOnly = false,
   }) {
-    return MaterialPageRoute<void>(
+    final pageRoute = MaterialPageRoute<void>(
       builder: (context) => CredentialsDetailsPage(
         credentialModel: credentialModel,
         readOnly: readOnly,
@@ -44,6 +44,7 @@ class CredentialsDetailsPage extends StatelessWidget {
       ),
       settings: const RouteSettings(name: '/credentialsDetailsPages'),
     );
+    return pageRoute;
   }
 
   @override
@@ -103,8 +104,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final outputDescriptors =
-        widget.credentialModel.credentialManifest?.outputDescriptors;
 
     final profileData = context.read<ProfileCubit>().state.model;
 
@@ -141,10 +140,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         credentialSubjectType == CredentialSubjectType.eudiPid ||
         credentialSubjectType == CredentialSubjectType.identityCredential ||
         credentialSubjectType == CredentialSubjectType.verifiableIdCard;
-
-    final isOver18OfDippV3 =
-        profileData.profileType == ProfileType.diipv3 &&
-        credentialSubjectType == CredentialSubjectType.over18;
 
     return BlocConsumer<CredentialDetailsCubit, CredentialDetailsState>(
       listener: (context, state) {
@@ -286,18 +281,6 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             ),
                           ],
 
-                          /// credential manifest details
-                          if (!isOver18OfDippV3) ...[
-                            if (!isDeveloperMode &&
-                                credentialManifestSupport &&
-                                outputDescriptors != null) ...[
-                              CredentialManifestDetails(
-                                outputDescriptor: outputDescriptors.firstOrNull,
-                                credentialModel: widget.credentialModel,
-                              ),
-                            ],
-                          ],
-
                           /// display widget
                           if (!credentialManifestSupport &&
                               widget.credentialModel.display != null &&
@@ -400,7 +383,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                     text: l10n.credentialDetailDeleteCard,
                   ),
                   const SizedBox(height: 8),
-                  if (widget.credentialModel.pendingInfo == null) ...[
+                  if (isDeveloperMode)
                     MyOutlinedButton(
                       text: l10n.download,
                       onPressed: () {
@@ -432,8 +415,10 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               box!.localToGlobal(Offset.zero) & box.size,
                         );
                       },
-                    ),
-                  ] else ...[
+                    )
+                  else
+                    const SizedBox.shrink(),
+                  if (widget.credentialModel.pendingInfo != null)
                     MyOutlinedButton(
                       text: l10n.getItNow,
                       onPressed: () {
@@ -445,15 +430,19 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               qrCodeScanCubit: context.read<QRCodeScanCubit>(),
                             );
                       },
-                    ),
-                  ],
+                    )
+                  else
+                    const SizedBox.shrink(),
                   if (widget.credentialModel.shareLink != '')
                     MyOutlinedButton.icon(
                       icon: SvgPicture.asset(
                         IconStrings.qrCode,
                         width: 24,
                         height: 24,
-                        color: Theme.of(context).colorScheme.onPrimary,
+                        colorFilter: ColorFilter.mode(
+                          Theme.of(context).colorScheme.onSurface,
+                          BlendMode.srcIn,
+                        ),
                       ),
                       onPressed: () {
                         Navigator.of(context).push<void>(

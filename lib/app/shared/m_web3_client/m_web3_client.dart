@@ -3,7 +3,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:wallet/wallet.dart';
 import 'package:web3dart/web3dart.dart';
 
 class MWeb3Client {
@@ -73,7 +73,8 @@ class MWeb3Client {
       amount,
     ).getValueInUnit(toUnit).toStringAsFixed(6).characters.take(7).toString();
 
-    return double.parse(ethAmount);
+    final parsedAmount = double.parse(ethAmount);
+    return parsedAmount;
   }
 
   static Future<String?> sendToken({
@@ -239,8 +240,8 @@ class MWeb3Client {
     final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
     final gasPrice = await web3Client.getGasPrice();
     try {
-      log.i('from: ${sender.hex}');
-      log.i('to: ${reciever.hex}');
+      log.i('from: ${sender.with0x}');
+      log.i('to: ${reciever.with0x}');
       log.i('gasPrice: ${gasPrice.getInWei}');
       log.i('value: ${amount.getInWei}');
       log.i('data: $data');
@@ -402,7 +403,8 @@ class MWeb3Client {
     try {
       final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
 
-      return web3Client.sendRawTransaction(signed);
+      final rawTransactionHash = web3Client.sendRawTransaction(signed);
+      return rawTransactionHash;
     } catch (e, s) {
       log.e('sendEVMTransactionWithSignature error: $e, stack: $s');
       rethrow;

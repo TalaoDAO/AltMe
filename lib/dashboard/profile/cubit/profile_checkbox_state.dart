@@ -31,7 +31,7 @@ class ProfileCheckboxState {
     bool? isCompanyWebsite,
     bool? isJobTitle,
   }) {
-    return ProfileCheckboxState(
+    final profileCheckboxState = ProfileCheckboxState(
       isFirstName: isFirstName ?? this.isFirstName,
       isLastName: isLastName ?? this.isLastName,
       isPhone: isPhone ?? this.isPhone,
@@ -41,5 +41,6 @@ class ProfileCheckboxState {
       isCompanyWebsite: isCompanyWebsite ?? this.isCompanyWebsite,
       isJobTitle: isJobTitle ?? this.isJobTitle,
     );
+    return profileCheckboxState;
   }
 }

@@ -21,7 +21,8 @@ class VcSelectiveDisclosure {
         .toList();
 
     final encryptedPayload = encryptedValues!.first;
-    return decodePayload(jwtDecode: JWTDecode(), token: encryptedPayload);
+    final decodedPayload = JWTDecode().decodePayload(token: encryptedPayload);
+    return decodedPayload;
   }
 
   Map<String, dynamic> get claims {
@@ -151,7 +152,7 @@ class VcSelectiveDisclosure {
   }
 
   String? get getPicture {
-    if (credentialModel.format.toString() != VCFormatType.vcSdJWT.vcValue ||
+    if (credentialModel.format.toString() != VCFormatType.vcSdJWT.vcValue &&
         credentialModel.format.toString() != VCFormatType.dcSdJWT.vcValue) {
       return null;
     }

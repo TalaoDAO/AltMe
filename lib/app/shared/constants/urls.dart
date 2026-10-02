@@ -1,7 +1,5 @@
 class Urls {
   static const String appContactWebsiteUrl = 'https://altme.io';
-  static const String checkIssuerTalaoUrl =
-      'https://talao.co/trusted-issuers-registry/v1/issuers';
 
   static const String checkIssuerEbsiUrl =
       'https://api.conformance.intebsi.xyz/trusted-issuers-registry/v2/issuers';
@@ -24,7 +22,7 @@ class Urls {
       'https://issuer.talao.co/tezotopia/membershipcard/';
 
   /// id360 url
-  static const String id360Url = 'https://talao.co/id360/oidc4vc';
+  static const String id360Url = 'https://talao.co/id360';
 
   /// chainborn membership
   static const String chainbornMembershipCardUrl =
@@ -37,15 +35,16 @@ class Urls {
   static const String ipfsGateway = 'https://ipfs.io/ipfs/';
 
   /// main tezos rpc
+  // Sourced from Taquito's documented public RPC node list:
+  // https://taquito.io/docs/rpc_nodes
   static const mainnetRPC = [
-    'https://mainnet.ecadinfra.com',
-    'https://mainnet.api.tez.ie',
-    'https://rpc.tzbeta.net',
-    'https://mainnet.tezos.marigold.dev',
-    'https://rpc.tzstats.com',
+    'https://rpc.tzbeta.net', // Tezos Foundation (operated by Blockscale)
+    'https://mainnet.smartpy.io', // SmartPy
+    'https://tezos-mainnet.octez.io', // Trilitech
+    'https://rpc.tzkt.io/mainnet', // TzKT
   ];
 
-  static const ghostnetRPC = 'https://rpc.tzkt.io/ghostnet';
+  static const ghostnetRPC = 'https://rpc.shadownet.teztnets.com';
 
   static const coinGeckoBase = 'https://api.coingecko.com/api/v3/';
 
@@ -55,7 +54,7 @@ class Urls {
 
   // TZKT
   static const tzktMainnetUrl = 'https://api.tzkt.io';
-  static const tzktGhostnetUrl = 'https://api.ghostnet.tzkt.io';
+  static const tzktGhostnetUrl = 'https://api.shadownet.tzkt.io';
 
   //Moralis
   static const moralisBaseUrl = 'https://deep-index.moralis.io/api/v2.2';

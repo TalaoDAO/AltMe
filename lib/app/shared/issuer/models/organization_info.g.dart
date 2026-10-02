@@ -12,7 +12,8 @@ OrganizationInfo _$OrganizationInfoFromJson(Map<String, dynamic> json) =>
       legalName: json['legalName'] as String? ?? '',
       currentAddress: json['currentAddress'] as String? ?? '',
       website: json['website'] as String? ?? '',
-      issuerDomain: (json['issuerDomain'] as List<dynamic>?)
+      issuerDomain:
+          (json['issuerDomain'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           [],

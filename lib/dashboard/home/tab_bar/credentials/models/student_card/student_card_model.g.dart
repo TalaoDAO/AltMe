@@ -9,7 +9,8 @@ part of 'student_card_model.dart';
 StudentCardModel _$StudentCardModelFromJson(Map<String, dynamic> json) =>
     StudentCardModel(
       recipient: StudentCardModel._fromJsonProfessionalStudentCardRecipient(
-          json['recipient']),
+        json['recipient'],
+      ),
       expires: json['expires'] as String? ?? '',
       id: json['id'] as String?,
       type: json['type'],
@@ -17,21 +18,12 @@ StudentCardModel _$StudentCardModelFromJson(Map<String, dynamic> json) =>
       offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
     );
 
-Map<String, dynamic> _$StudentCardModelToJson(StudentCardModel instance) {
-  final val = <String, dynamic>{
-    'id': instance.id,
-    'type': instance.type,
-    'issuedBy': instance.issuedBy?.toJson(),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('offeredBy', instance.offeredBy?.toJson());
-  val['recipient'] = instance.recipient?.toJson();
-  val['expires'] = instance.expires;
-  return val;
-}
+Map<String, dynamic> _$StudentCardModelToJson(StudentCardModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'type': instance.type,
+      'issuedBy': instance.issuedBy?.toJson(),
+      'offeredBy': ?instance.offeredBy?.toJson(),
+      'recipient': instance.recipient?.toJson(),
+      'expires': instance.expires,
+    };

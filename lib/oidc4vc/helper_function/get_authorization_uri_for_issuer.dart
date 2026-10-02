@@ -67,6 +67,17 @@ Future<Uri?> getAuthorizationUriForIssuer({
         oAuthClientAttestationPop: oAuthClientAttestationPop,
         oAuthClientAttestation: oAuthClientAttestation,
       );
+
+    /// Wallet Provider Protocol §8: the same three values as
+    /// `clientSecretJwt` — the `client_id` is the Wallet Instance
+    /// Attestation's `sub` (§3) and the attestation travels in the
+    /// `OAuth-Client-Attestation` header of the Pushed Authorization Request.
+    case ClientAuthentication.wia:
+      oidc4VCIState = initialOidc4VCIState.copyWith(
+        clientId: clientId,
+        oAuthClientAttestationPop: oAuthClientAttestationPop,
+        oAuthClientAttestation: oAuthClientAttestation,
+      );
   }
 
   // save the state and give the id for the jwt
@@ -82,7 +93,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
 
   late Uri authorizationUri;
 
-  final authorizationRequestParemeters = OIDC4VC()
+  final authorizationRequestParemeters = profileCubit.oidc4vc
       .getAuthorizationRequestParemeters(
         selectedCredentials: selectedCredentials,
         clientId: clientId,
@@ -160,11 +171,52 @@ Future<Uri?> getAuthorizationUriForIssuer({
     }
 
     /// error we shuld get it from
-    final response = await client.post(
-      parUrl,
-      headers: headers,
-      data: authorizationRequestParemeters,
-    );
+    dynamic response;
+    try {
+      response = await client.post(
+        parUrl,
+        headers: headers,
+        data: authorizationRequestParemeters,
+      );
+    } on NetworkException catch (e) {
+      // RFC 9449 §8: retried once with a fresh proof when the authorization
+      // server asks for a DPoP nonce. The client attestation PoP is replaced
+      // too: the server has already consumed its `jti` and would reject it as
+      // replayed.
+      final dpopNonce = dpopNonceChallenge(e);
+      if (dPop == null || dpopNonce == null) rethrow;
+      if (clientAuthentication == ClientAuthentication.wia) {
+        final (
+          _,
+          _,
+          _,
+          freshAttestation,
+          freshAttestationPop,
+        ) = await getClientDetails(
+          profileCubit: profileCubit,
+          isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
+          issuer: oidc4vcParameters.issuer,
+          issuerMetadata:
+              oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
+        );
+        if (freshAttestation != null && freshAttestationPop != null) {
+          headers['OAuth-Client-Attestation'] = freshAttestation;
+          headers['OAuth-Client-Attestation-PoP'] = freshAttestationPop;
+        }
+      }
+      response = await client.post(
+        parUrl,
+        headers: {
+          ...headers,
+          'DPoP': await getDPopJwt(
+            url: parUrl,
+            publicKey: publicKeyForDPop,
+            dpopNonce: dpopNonce,
+          ),
+        },
+        data: authorizationRequestParemeters,
+      );
+    }
 
     if (profileCubit.state.model.isDeveloperMode) {
       final formattedData =

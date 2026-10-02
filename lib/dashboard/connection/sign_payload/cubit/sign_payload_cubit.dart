@@ -3,19 +3,18 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/app/shared/services/tezos_service.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:convert/convert.dart';
-import 'package:altme/app/shared/services/tezos_service.dart';
 import 'package:equatable/equatable.dart';
-import 'package:eth_sig_util/eth_sig_util.dart';
+import 'package:eth_sig_util_plus/eth_sig_util_plus.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
 part 'sign_payload_cubit.g.dart';

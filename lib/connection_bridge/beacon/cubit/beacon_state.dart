@@ -20,20 +20,22 @@ class BeaconState extends Equatable {
   Map<String, dynamic> toJson() => _$BeaconStateToJson(this);
 
   BeaconState loading() {
-    return BeaconState(
+    final beaconState = BeaconState(
       status: BeaconStatus.loading,
       beaconRequest: beaconRequest,
       isBeaconStarted: isBeaconStarted,
     );
+    return beaconState;
   }
 
   BeaconState error({required MessageHandler messageHandler}) {
-    return BeaconState(
+    final beaconState = BeaconState(
       status: BeaconStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       beaconRequest: beaconRequest,
       isBeaconStarted: isBeaconStarted,
     );
+    return beaconState;
   }
 
   BeaconState copyWith({
@@ -42,7 +44,7 @@ class BeaconState extends Equatable {
     BeaconRequest? beaconRequest,
     bool? isBeaconStarted,
   }) {
-    return BeaconState(
+    final beaconState = BeaconState(
       status: status,
       message: messageHandler == null
           ? null
@@ -50,6 +52,7 @@ class BeaconState extends Equatable {
       beaconRequest: beaconRequest ?? this.beaconRequest,
       isBeaconStarted: isBeaconStarted ?? this.isBeaconStarted,
     );
+    return beaconState;
   }
 
   @override

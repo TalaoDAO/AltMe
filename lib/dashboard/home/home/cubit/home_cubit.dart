@@ -8,13 +8,13 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activit
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:crypto/crypto.dart';
+import 'package:dart_web3/crypto.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
-import 'package:web3dart/crypto.dart';
 
 part 'home_cubit.g.dart';
 part 'home_state.dart';
@@ -30,7 +30,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   final DioClient client;
   final SecureStorageProvider secureStorageProvider;
-  final OIDC4VC oidc4vc;
+  final OIDC4VCIClient oidc4vc;
   final ProfileCubit profileCubit;
   final DIDKitProvider didKitProvider;
 

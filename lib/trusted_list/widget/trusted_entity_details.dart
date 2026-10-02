@@ -1,7 +1,7 @@
-import 'package:altme/trusted_list/model/trusted_entity.dart';
 import 'package:altme/trusted_list/widget/trusted_entity_electronic_address.dart';
 import 'package:altme/trusted_list/widget/trusted_entity_postal_address.dart';
 import 'package:flutter/material.dart';
+import 'package:trusted_list/trusted_list.dart';
 
 /// Widget to display TrustedEntity details field by field
 class TrustedEntityDetails extends StatelessWidget {
@@ -29,12 +29,12 @@ class TrustedEntityDetails extends StatelessWidget {
           ),
         if (trustedEntity.postalAddress != null)
           TrustedEntityPostalAddress(
-            postalAddress: trustedEntity.postalAddress!,
+            postalAddress: trustedEntity.postalAddress,
             textTheme: textTheme,
           ),
         if (trustedEntity.electronicAddress != null)
           TrustedEntityElectronicAddress(
-            electronicAddress: trustedEntity.electronicAddress!,
+            electronicAddress: trustedEntity.electronicAddress,
             textTheme: textTheme,
           ),
       ],

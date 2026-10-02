@@ -18,14 +18,16 @@ class SignPayloadState extends Equatable {
   final String dAppName;
 
   SignPayloadState loading() {
-    return copyWith(status: AppStatus.loading);
+    final loadingState = copyWith(status: AppStatus.loading);
+    return loadingState;
   }
 
   SignPayloadState error({required MessageHandler messageHandler}) {
-    return copyWith(
+    final errorState = copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
     );
+    return errorState;
   }
 
   SignPayloadState copyWith({
@@ -34,12 +36,13 @@ class SignPayloadState extends Equatable {
     String? payloadMessage,
     String? dAppName,
   }) {
-    return SignPayloadState(
+    final signPayloadState = SignPayloadState(
       status: status,
       message: message,
       payloadMessage: payloadMessage ?? this.payloadMessage,
       dAppName: dAppName ?? this.dAppName,
     );
+    return signPayloadState;
   }
 
   Map<String, dynamic> toJson() => _$SignPayloadStateToJson(this);

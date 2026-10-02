@@ -14,9 +14,9 @@ EudipidSubjectModel _$EudipidSubjectModelFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$EudipidSubjectModelToJson(
-        EudipidSubjectModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'type': instance.type,
-      'issuedBy': instance.issuedBy?.toJson(),
-    };
+  EudipidSubjectModel instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'type': instance.type,
+  'issuedBy': instance.issuedBy?.toJson(),
+};

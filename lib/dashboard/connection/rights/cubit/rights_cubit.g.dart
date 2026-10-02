@@ -7,12 +7,12 @@ part of 'rights_cubit.dart';
 // **************************************************************************
 
 RightsState _$RightsStateFromJson(Map<String, dynamic> json) => RightsState(
-      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
-          AppStatus.init,
-      message: json['message'] == null
-          ? null
-          : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-    );
+  status:
+      $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ?? AppStatus.init,
+  message: json['message'] == null
+      ? null
+      : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$RightsStateToJson(RightsState instance) =>
     <String, dynamic>{
@@ -38,5 +38,4 @@ const _$AppStatusEnumMap = {
   AppStatus.successAdd: 'successAdd',
   AppStatus.successUpdate: 'successUpdate',
   AppStatus.addEuropeanProfile: 'addEuropeanProfile',
-  AppStatus.addInjiProfile: 'addInjiProfile',
 };

@@ -243,13 +243,7 @@ void main() {
       expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.ebsiv3), 5);
       expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.jwkP256), 6);
       expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.edDSA), 0);
-      expect(
-        getIndexValue(
-          isEBSI: false,
-          didKeyType: DidKeyType.jwtClientAttestation,
-        ),
-        0,
-      );
+      expect(getIndexValue(isEBSI: false, didKeyType: DidKeyType.none), 0);
     });
 
     group('getWalletAttestationP256Key', () {
@@ -346,10 +340,7 @@ void main() {
       expect(getDidKeyFromString('DidKeyType.p256'), DidKeyType.p256);
       expect(getDidKeyFromString('DidKeyType.ebsiv3'), DidKeyType.ebsiv3);
       expect(getDidKeyFromString('DidKeyType.jwkP256'), DidKeyType.jwkP256);
-      expect(
-        getDidKeyFromString('DidKeyType.jwtClientAttestation'),
-        DidKeyType.jwtClientAttestation,
-      );
+      expect(getDidKeyFromString('DidKeyType.jwtClientAttestation'), null);
       expect(getDidKeyFromString('InvalidKeyType'), null);
       expect(getDidKeyFromString(null), null);
     });
@@ -363,7 +354,7 @@ void main() {
           'AU7_OUNLXQqtwI';
 
       test('decodePayload correctly decodes a JWT token', () {
-        final decodedData = decodePayload(jwtDecode: jwtDecode, token: jwt);
+        final decodedData = jwtDecode.decodePayload(token: jwt);
         final expectedData = {
           'sub': '1234567890',
           'name': 'Bibash',
@@ -373,7 +364,7 @@ void main() {
       });
 
       test('decodeHeader correctly decodes a JWT token', () {
-        final decodedData = decodeHeader(jwtDecode: jwtDecode, token: jwt);
+        final decodedData = jwtDecode.decodeHeader(token: jwt);
         final expectedData = {'alg': 'HS256', 'typ': 'JWT'};
         expect(decodedData, expectedData);
       });
@@ -433,6 +424,64 @@ void main() {
       test('isOIDC4VCIUrl returns true for valid OIDC4VCI URLs', () {
         expect(isOIDC4VCIUrl(Uri.parse('openid://some/path')), true);
         expect(isOIDC4VCIUrl(Uri.parse('haip://another/path')), true);
+      });
+
+      group('isSiopV2OrOidc4VpUrl', () {
+        test('returns true for scheme-based presentation URLs', () {
+          expect(
+            isSiopV2OrOidc4VpUrl(Uri.parse('openid4vp://?request_uri=foo')),
+            true,
+          );
+          expect(
+            isSiopV2OrOidc4VpUrl(Uri.parse('siopv2://?request_uri=foo')),
+            true,
+          );
+        });
+
+        test('returns true for a wallet provider universal link carrying '
+            'client_id and request_uri, at any path', () {
+          expect(
+            isSiopV2OrOidc4VpUrl(
+              Uri.parse(
+                'https://app.altme.io/'
+                '?client_id=x509_hash%3Aabc'
+                '&request_uri=https%3A%2F%2Fverifier.example%2Freq%2F1'
+                '&request_uri_method=post',
+              ),
+            ),
+            true,
+          );
+          expect(
+            isSiopV2OrOidc4VpUrl(
+              Uri.parse(
+                'https://app.altme.io/app/download'
+                '?client_id=x509_hash%3Aabc'
+                '&request_uri=https%3A%2F%2Fverifier.example%2Freq%2F1'
+                '&request_uri_method=post',
+              ),
+            ),
+            true,
+          );
+        });
+
+        test('returns false for a wallet provider universal link missing '
+            'client_id or request_uri', () {
+          expect(
+            isSiopV2OrOidc4VpUrl(
+              Uri.parse('https://app.altme.io/app/download/callback?code=abc'),
+            ),
+            false,
+          );
+        });
+
+        test('returns false for an unrelated https URL', () {
+          expect(
+            isSiopV2OrOidc4VpUrl(
+              Uri.parse('https://example.com/?client_id=foo&request_uri=bar'),
+            ),
+            false,
+          );
+        });
       });
 
       group('handleErrorForOID4VCI throws correct errors', () {
@@ -797,13 +846,6 @@ void main() {
             }),
           );
           expect(
-            getMessageHandler('Exception: OPENID-CONFIGURATION-ISSUE'),
-            isA<ResponseMessage>().having((e) => e.data, '', {
-              'error': 'unsupported_format',
-              'error_description': 'Openid configuration response issue.',
-            }),
-          );
-          expect(
             getMessageHandler('Exception: NOT_A_VALID_OPENID_URL'),
             isA<ResponseMessage>().having((e) => e.data, '', {
               'error': 'unsupported_format',
@@ -939,7 +981,7 @@ void main() {
 
           expect(
             getErrorResponseString('invalid_grant'),
-            ResponseString.RESPONSE_STRING_credentialIssuanceDenied,
+            ResponseString.RESPONSE_STRING_invalidCode,
           );
           expect(
             getErrorResponseString('issuance_pending'),
@@ -1150,13 +1192,7 @@ void main() {
                 clientMetaData: null,
                 credentialsToBePresented: [],
               ),
-              [
-                VCFormatType.ldpVc,
-                VCFormatType.jwtVc,
-                VCFormatType.jwtVcJson,
-                VCFormatType.jwtVcJsonLd,
-                VCFormatType.vcSdJWT,
-              ],
+              [VCFormatType.jwtVc],
             );
           });
 
@@ -1173,13 +1209,7 @@ void main() {
                 clientMetaData: null,
                 credentialsToBePresented: [],
               ),
-              [
-                VCFormatType.ldpVc,
-                VCFormatType.jwtVc,
-                VCFormatType.jwtVcJson,
-                VCFormatType.jwtVcJsonLd,
-                VCFormatType.vcSdJWT,
-              ],
+              [VCFormatType.jwtVcJson],
             );
           });
 
@@ -1196,13 +1226,7 @@ void main() {
                 clientMetaData: null,
                 credentialsToBePresented: [],
               ),
-              [
-                VCFormatType.ldpVc,
-                VCFormatType.jwtVc,
-                VCFormatType.jwtVcJson,
-                VCFormatType.jwtVcJsonLd,
-                VCFormatType.vcSdJWT,
-              ],
+              [VCFormatType.vcSdJWT],
             );
           });
 
@@ -1633,7 +1657,7 @@ void main() {
               blockchainNetwork: PolygonNetwork.testNet(),
               dotEnv: mockDotenv,
             );
-            expect(result, 'https://rpc-mumbai.maticvigil.com');
+            expect(result, 'https://rpc-amoy.polygon.technology/');
           });
 
           test('returns infura URL for EthereumNetwork.mainNet()', () async {
@@ -1651,7 +1675,7 @@ void main() {
               blockchainNetwork: EthereumNetwork.testNet(),
               dotEnv: mockDotenv,
             );
-            expect(result, 'https://rpc.sepolia.dev');
+            expect(result, 'https://ethereum-sepolia-rpc.publicnode.com');
           });
 
           test('returns infura URL for TezosNetwork.mainNet()', () async {
@@ -1669,7 +1693,7 @@ void main() {
               blockchainNetwork: TezosNetwork.ghostnet(),
               dotEnv: mockDotenv,
             );
-            expect(result, 'https://rpc.tzkt.io/ghostnet');
+            expect(result, 'https://rpc.shadownet.teztnets.com');
           });
         });
       });

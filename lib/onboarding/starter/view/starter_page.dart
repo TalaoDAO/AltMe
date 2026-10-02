@@ -10,10 +10,11 @@ class StarterPage extends StatelessWidget {
   const StarterPage({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/starterPage'),
       builder: (_) => const StarterPage(),
     );
+    return route;
   }
 
   @override

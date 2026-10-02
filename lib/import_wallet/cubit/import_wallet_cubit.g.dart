@@ -8,7 +8,8 @@ part of 'import_wallet_cubit.dart';
 
 ImportWalletState _$ImportWalletStateFromJson(Map<String, dynamic> json) =>
     ImportWalletState(
-      status: $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
+      status:
+          $enumDecodeNullable(_$AppStatusEnumMap, json['status']) ??
           AppStatus.init,
       message: json['message'] == null
           ? null
@@ -43,5 +44,4 @@ const _$AppStatusEnumMap = {
   AppStatus.successAdd: 'successAdd',
   AppStatus.successUpdate: 'successUpdate',
   AppStatus.addEuropeanProfile: 'addEuropeanProfile',
-  AppStatus.addInjiProfile: 'addInjiProfile',
 };

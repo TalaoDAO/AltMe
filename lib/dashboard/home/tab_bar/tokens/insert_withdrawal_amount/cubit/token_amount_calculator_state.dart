@@ -16,7 +16,8 @@ class TokenAmountCalculatorState extends Equatable {
   final AppStatus status;
 
   TokenAmountCalculatorState loading() {
-    return copyWith(status: AppStatus.loading);
+    final state = copyWith(status: AppStatus.loading);
+    return state;
   }
 
   TokenAmountCalculatorState copyWith({
@@ -24,11 +25,12 @@ class TokenAmountCalculatorState extends Equatable {
     String? validAmount,
     String? insertedAmount,
   }) {
-    return TokenAmountCalculatorState(
+    final state = TokenAmountCalculatorState(
       status: status,
       insertedAmount: insertedAmount ?? this.insertedAmount,
       validAmount: validAmount ?? this.validAmount,
     );
+    return state;
   }
 
   Map<String, dynamic> toJson() => _$TokenAmountCalculatorStateToJson(this);

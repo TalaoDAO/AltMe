@@ -7,17 +7,17 @@ part of 'beacon_cubit.dart';
 // **************************************************************************
 
 BeaconState _$BeaconStateFromJson(Map<String, dynamic> json) => BeaconState(
-      status: $enumDecodeNullable(_$BeaconStatusEnumMap, json['status']) ??
-          BeaconStatus.init,
-      isBeaconStarted: json['isBeaconStarted'] as bool? ?? false,
-      beaconRequest: json['beaconRequest'] == null
-          ? null
-          : BeaconRequest.fromJson(
-              json['beaconRequest'] as Map<String, dynamic>),
-      message: json['message'] == null
-          ? null
-          : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-    );
+  status:
+      $enumDecodeNullable(_$BeaconStatusEnumMap, json['status']) ??
+      BeaconStatus.init,
+  isBeaconStarted: json['isBeaconStarted'] as bool? ?? false,
+  beaconRequest: json['beaconRequest'] == null
+      ? null
+      : BeaconRequest.fromJson(json['beaconRequest'] as Map<String, dynamic>),
+  message: json['message'] == null
+      ? null
+      : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$BeaconStateToJson(BeaconState instance) =>
     <String, dynamic>{

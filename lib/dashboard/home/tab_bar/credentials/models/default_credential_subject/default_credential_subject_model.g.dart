@@ -7,30 +7,36 @@ part of 'default_credential_subject_model.dart';
 // **************************************************************************
 
 DefaultCredentialSubjectModel _$DefaultCredentialSubjectModelFromJson(
-        Map<String, dynamic> json) =>
-    DefaultCredentialSubjectModel(
-      id: json['id'] as String?,
-      type: json['type'],
-      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-      credentialSubjectType: $enumDecodeNullable(
-              _$CredentialSubjectTypeEnumMap, json['credentialSubjectType']) ??
-          CredentialSubjectType.defaultCredential,
-      credentialCategory: $enumDecodeNullable(
-              _$CredentialCategoryEnumMap, json['credentialCategory']) ??
-          CredentialCategory.othersCards,
-    );
+  Map<String, dynamic> json,
+) => DefaultCredentialSubjectModel(
+  id: json['id'] as String?,
+  type: json['type'],
+  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+  credentialSubjectType:
+      $enumDecodeNullable(
+        _$CredentialSubjectTypeEnumMap,
+        json['credentialSubjectType'],
+      ) ??
+      CredentialSubjectType.defaultCredential,
+  credentialCategory:
+      $enumDecodeNullable(
+        _$CredentialCategoryEnumMap,
+        json['credentialCategory'],
+      ) ??
+      CredentialCategory.othersCards,
+);
 
 Map<String, dynamic> _$DefaultCredentialSubjectModelToJson(
-        DefaultCredentialSubjectModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'type': instance.type,
-      'issuedBy': instance.issuedBy?.toJson(),
-      'credentialSubjectType':
-          _$CredentialSubjectTypeEnumMap[instance.credentialSubjectType]!,
-      'credentialCategory':
-          _$CredentialCategoryEnumMap[instance.credentialCategory]!,
-    };
+  DefaultCredentialSubjectModel instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'type': instance.type,
+  'issuedBy': instance.issuedBy?.toJson(),
+  'credentialSubjectType':
+      _$CredentialSubjectTypeEnumMap[instance.credentialSubjectType]!,
+  'credentialCategory':
+      _$CredentialCategoryEnumMap[instance.credentialCategory]!,
+};
 
 const _$CredentialSubjectTypeEnumMap = {
   CredentialSubjectType.ageRange: 'ageRange',

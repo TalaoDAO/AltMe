@@ -7,41 +7,36 @@ part of 'blockchain_credential_subject_model.dart';
 // **************************************************************************
 
 BlockchainCredentialSubjectModel _$BlockchainCredentialSubjectModelFromJson(
-        Map<String, dynamic> json) =>
-    BlockchainCredentialSubjectModel(
-      associatedAddress: json['associatedAddress'] as String? ?? '',
-      id: json['id'] as String,
-      type: json['type'] as String,
-      credentialSubjectType: $enumDecode(
-          _$CredentialSubjectTypeEnumMap, json['credentialSubjectType']),
-      credentialCategory:
-          $enumDecode(_$CredentialCategoryEnumMap, json['credentialCategory']),
-      issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
-      offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
-    );
+  Map<String, dynamic> json,
+) => BlockchainCredentialSubjectModel(
+  associatedAddress: json['associatedAddress'] as String? ?? '',
+  id: json['id'] as String,
+  type: json['type'] as String,
+  credentialSubjectType: $enumDecode(
+    _$CredentialSubjectTypeEnumMap,
+    json['credentialSubjectType'],
+  ),
+  credentialCategory: $enumDecode(
+    _$CredentialCategoryEnumMap,
+    json['credentialCategory'],
+  ),
+  issuedBy: CredentialSubjectModel.fromJsonAuthor(json['issuedBy']),
+  offeredBy: CredentialSubjectModel.fromJsonAuthor(json['offeredBy']),
+);
 
 Map<String, dynamic> _$BlockchainCredentialSubjectModelToJson(
-    BlockchainCredentialSubjectModel instance) {
-  final val = <String, dynamic>{
-    'id': instance.id,
-    'type': instance.type,
-    'issuedBy': instance.issuedBy?.toJson(),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('offeredBy', instance.offeredBy?.toJson());
-  val['credentialSubjectType'] =
-      _$CredentialSubjectTypeEnumMap[instance.credentialSubjectType]!;
-  val['credentialCategory'] =
-      _$CredentialCategoryEnumMap[instance.credentialCategory]!;
-  val['associatedAddress'] = instance.associatedAddress;
-  return val;
-}
+  BlockchainCredentialSubjectModel instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'type': instance.type,
+  'issuedBy': instance.issuedBy?.toJson(),
+  'offeredBy': ?instance.offeredBy?.toJson(),
+  'credentialSubjectType':
+      _$CredentialSubjectTypeEnumMap[instance.credentialSubjectType]!,
+  'credentialCategory':
+      _$CredentialCategoryEnumMap[instance.credentialCategory]!,
+  'associatedAddress': instance.associatedAddress,
+};
 
 const _$CredentialSubjectTypeEnumMap = {
   CredentialSubjectType.ageRange: 'ageRange',

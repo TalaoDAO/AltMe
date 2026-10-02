@@ -28,29 +28,31 @@ class ConfirmTokenTransactionState extends Equatable {
   final OperationsList? operationsList;
 
   ConfirmTokenTransactionState loading() {
-    return copyWith(
+    final state = copyWith(
       status: AppStatus.loading,
       withdrawalAddress: withdrawalAddress,
       networkFee: networkFee,
       operationsList: operationsList,
     );
+    return state;
   }
 
   ConfirmTokenTransactionState error({required MessageHandler messageHandler}) {
-    return copyWith(
+    final state = copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       withdrawalAddress: withdrawalAddress,
       networkFee: networkFee,
       operationsList: operationsList,
     );
+    return state;
   }
 
   ConfirmTokenTransactionState success({
     MessageHandler? messageHandler,
     String? transactionHash,
   }) {
-    return copyWith(
+    final state = copyWith(
       status: AppStatus.success,
       transactionHash: transactionHash,
       message: messageHandler == null
@@ -60,6 +62,7 @@ class ConfirmTokenTransactionState extends Equatable {
       networkFee: networkFee,
       operationsList: operationsList,
     );
+    return state;
   }
 
   ConfirmTokenTransactionState copyWith({
@@ -75,7 +78,7 @@ class ConfirmTokenTransactionState extends Equatable {
     String? selectedAccountSecretKey,
     OperationsList? operationsList,
   }) {
-    return ConfirmTokenTransactionState(
+    final state = ConfirmTokenTransactionState(
       withdrawalAddress: withdrawalAddress ?? this.withdrawalAddress,
       networkFee: networkFee ?? this.networkFee,
       networkFees: networkFees ?? this.networkFees,
@@ -89,6 +92,7 @@ class ConfirmTokenTransactionState extends Equatable {
       totalAmount: totalAmount ?? this.totalAmount,
       operationsList: operationsList ?? this.operationsList,
     );
+    return state;
   }
 
   @override

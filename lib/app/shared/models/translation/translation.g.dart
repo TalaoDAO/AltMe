@@ -7,12 +7,9 @@ part of 'translation.dart';
 // **************************************************************************
 
 Translation _$TranslationFromJson(Map<String, dynamic> json) => Translation(
-      json['@language'] as String? ?? 'en',
-      json['@value'] as String? ?? '',
-    );
+  json['@language'] as String? ?? 'en',
+  json['@value'] as String? ?? '',
+);
 
 Map<String, dynamic> _$TranslationToJson(Translation instance) =>
-    <String, dynamic>{
-      '@language': instance.language,
-      '@value': instance.value,
-    };
+    <String, dynamic>{'@language': instance.language, '@value': instance.value};

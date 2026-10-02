@@ -66,7 +66,7 @@ void main() {
           ),
         );
 
-        await tester.tap(find.text('Create account'.toUpperCase()));
+        await tester.tap(find.text('Create Wallet'.toUpperCase()));
 
         // verify(
         //   () => profileCubit.setProfileSetting(
@@ -99,7 +99,7 @@ void main() {
           ),
         );
 
-        await tester.tap(find.text('Import account'.toUpperCase()));
+        await tester.tap(find.text('Restore Wallet'.toUpperCase()));
 
         // verify(
         //   () => profileCubit.setProfileSetting(

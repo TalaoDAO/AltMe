@@ -29,11 +29,12 @@ class InsertWithdrawalPageState extends Equatable {
     bool? isValidWithdrawal,
     TokenModel? selectedToken,
   }) {
-    return InsertWithdrawalPageState(
+    final state = InsertWithdrawalPageState(
       selectedToken: selectedToken ?? this.selectedToken,
       amount: amount ?? this.amount,
       isValidWithdrawal: isValidWithdrawal ?? this.isValidWithdrawal,
     );
+    return state;
   }
 
   Map<String, dynamic> toJson() => _$InsertWithdrawalPageStateToJson(this);

@@ -20,24 +20,16 @@ SelfIssuedModel _$SelfIssuedModelFromJson(Map<String, dynamic> json) =>
       jobTitle: json['jobTitle'] as String?,
     );
 
-Map<String, dynamic> _$SelfIssuedModelToJson(SelfIssuedModel instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('id', instance.id);
-  writeNotNull('type', instance.type);
-  writeNotNull('address', instance.address);
-  writeNotNull('familyName', instance.familyName);
-  writeNotNull('givenName', instance.givenName);
-  writeNotNull('telephone', instance.telephone);
-  writeNotNull('email', instance.email);
-  writeNotNull('workFor', instance.workFor);
-  writeNotNull('companyWebsite', instance.companyWebsite);
-  writeNotNull('jobTitle', instance.jobTitle);
-  return val;
-}
+Map<String, dynamic> _$SelfIssuedModelToJson(SelfIssuedModel instance) =>
+    <String, dynamic>{
+      'id': ?instance.id,
+      'type': ?instance.type,
+      'address': ?instance.address,
+      'familyName': ?instance.familyName,
+      'givenName': ?instance.givenName,
+      'telephone': ?instance.telephone,
+      'email': ?instance.email,
+      'workFor': ?instance.workFor,
+      'companyWebsite': ?instance.companyWebsite,
+      'jobTitle': ?instance.jobTitle,
+    };

@@ -7,7 +7,7 @@ Future<CredentialModel?> generateCryptoAccountOwnershipProof({
   required KeyGenerator keyGenerator,
   required String did,
   required CustomOidc4VcProfile customOidc4vcProfile,
-  required OIDC4VC oidc4vc,
+  required OIDC4VCIClient oidc4vc,
   required Map<String, dynamic> privateKey,
   required ProfileType profileType,
   required VCFormatType vcFormatType,
@@ -260,7 +260,7 @@ Future<CredentialModel?> generateCryptoAccountOwnershipProof({
             );
           }
         }
-        return _createCredential(
+        final credential = await _createCredential(
           vc: vc,
           oldId: oldId,
           credentialManifest: credentialManifest,
@@ -272,11 +272,15 @@ Future<CredentialModel?> generateCryptoAccountOwnershipProof({
           profileType: profileType,
           vcFormatType: vcFormatType,
         );
+        return credential;
       case VCFormatType.jwtVc:
       case VCFormatType.jwtVcJson:
       case VCFormatType.jwtVcJsonLd:
       case VCFormatType.auto:
         // TODO(all): Handle this case.
+        throw UnimplementedError();
+      case VCFormatType.mdoc:
+        // TODO(hawkbee): Handle this case. pour crypto account ownership proof
         throw UnimplementedError();
     }
   } catch (e, s) {
@@ -293,7 +297,7 @@ Future<CredentialModel> _createCredential({
   required String vc,
   required CredentialManifest credentialManifest,
   required CustomOidc4VcProfile customOidc4vcProfile,
-  required OIDC4VC oidc4vc,
+  required OIDC4VCIClient oidc4vc,
   required Map<String, dynamic> privateKey,
   required String did,
   required String kid,
@@ -344,7 +348,7 @@ Future<CredentialModel> _createCredential({
   }
 
   final id = oldId ?? 'urn:uuid:${const Uuid().v4()}';
-  return CredentialModel(
+  final credentialModel = CredentialModel(
     id: id,
     image: 'image',
     data: jsonLd,
@@ -356,4 +360,5 @@ Future<CredentialModel> _createCredential({
     activities: [Activity(acquisitionAt: dateTime)],
     profileLinkedId: profileType.getVCId,
   );
+  return credentialModel;
 }

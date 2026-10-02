@@ -26,28 +26,31 @@ class QRCodeScanState extends Equatable {
   Map<String, dynamic> toJson() => _$QRCodeScanStateToJson(this);
 
   QRCodeScanState loading({bool? isScan}) {
-    return QRCodeScanState(
+    final loadingState = QRCodeScanState(
       status: QrScanStatus.loading,
       isScan: isScan ?? this.isScan,
       uri: uri,
     );
+    return loadingState;
   }
 
   QRCodeScanState acceptHost() {
-    return QRCodeScanState(
+    final acceptHostState = QRCodeScanState(
       status: QrScanStatus.acceptHost,
       isScan: isScan,
       uri: uri,
     );
+    return acceptHostState;
   }
 
   QRCodeScanState error({required StateMessage message}) {
-    return QRCodeScanState(
+    final errorState = QRCodeScanState(
       status: QrScanStatus.error,
       message: message,
       isScan: isScan,
       uri: uri,
     );
+    return errorState;
   }
 
   QRCodeScanState copyWith({
@@ -70,7 +73,7 @@ class QRCodeScanState extends Equatable {
     } else {
       newUri = uri;
     }
-    return QRCodeScanState(
+    final newState = QRCodeScanState(
       status: qrScanStatus,
       message: message,
       isScan: isScan ?? this.isScan,
@@ -78,6 +81,7 @@ class QRCodeScanState extends Equatable {
       route: route, // route should be cleared when one route is done
       dialogData: dialogData,
     );
+    return newState;
   }
 
   @override

@@ -6,11 +6,8 @@ part of 'send_to_cubit.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SendToState _$SendToStateFromJson(Map<String, dynamic> json) => SendToState(
-      withdrawalAddress: json['withdrawalAddress'] as String? ?? '',
-    );
+SendToState _$SendToStateFromJson(Map<String, dynamic> json) =>
+    SendToState(withdrawalAddress: json['withdrawalAddress'] as String? ?? '');
 
 Map<String, dynamic> _$SendToStateToJson(SendToState instance) =>
-    <String, dynamic>{
-      'withdrawalAddress': instance.withdrawalAddress,
-    };
+    <String, dynamic>{'withdrawalAddress': instance.withdrawalAddress};

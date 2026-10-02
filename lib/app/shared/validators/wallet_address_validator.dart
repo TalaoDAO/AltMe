@@ -1,4 +1,4 @@
-import 'package:web3dart/web3dart.dart';
+import 'package:wallet/wallet.dart';
 
 mixin WalletAddressValidator {
   bool _validEtherumAddress(String ethereumAddress) {
@@ -14,7 +14,8 @@ mixin WalletAddressValidator {
     if (address == null || address.isEmpty) {
       return false;
     } else if (address.startsWith('0x')) {
-      return _validEtherumAddress(address);
+      final isValid = _validEtherumAddress(address);
+      return isValid;
     } else if (address.startsWith('tz')) {
       return address.length > 8;
     } else {

@@ -16,7 +16,6 @@ import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
-
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -48,7 +47,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   final AdvanceSettingsCubit advanceSettingsCubit;
   final JWTDecode jwtDecode;
   final ProfileCubit profileCubit;
-  final OIDC4VC oidc4vc;
+  final OIDC4VCIClient oidc4vc;
   final WalletCubit walletCubit;
   final ActivityLogManager activityLogManager;
 
@@ -491,11 +490,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           profileType == ProfileType.enterprise) {
         continue;
       }
-      final doNotGenerateProfileType = [
-        ProfileType.ebsiV3,
-        ProfileType.europeanWallet,
-        ProfileType.inji,
-      ];
+      final doNotGenerateProfileType = [ProfileType.EUDIW];
 
       if (doNotGenerateProfileType.contains(profileType)) {
         continue;
@@ -1058,7 +1053,7 @@ List<DiscoverDummyCredential> getDummiesFromExternalIssuerList(
   // filtering the external issuer list
   final List<DisplayExternalIssuer> list = List.from(externalIssuers);
   list.removeWhere((element) => element.category != category.name);
-  return list
+  final dummyCredentials = list
       .map(
         (e) => DiscoverDummyCredential(
           credentialSubjectType: CredentialSubjectType.defaultCredential,
@@ -1082,4 +1077,5 @@ List<DiscoverDummyCredential> getDummiesFromExternalIssuerList(
         ),
       )
       .toList();
+  return dummyCredentials;
 }
