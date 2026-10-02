@@ -9,7 +9,6 @@ void main() {
       expect(ProfileType.defaultOne.getTitle(name: ''), 'Default');
       expect(ProfileType.enterprise.getTitle(name: ''), 'Enterprise');
       expect(ProfileType.enterprise.getTitle(name: 'Test'), 'Test');
-      expect(ProfileType.EUDIW.getTitle(name: ''), 'EUDI Wallet');
     });
 
     test('Get VC ID', () {
@@ -17,7 +16,6 @@ void main() {
       expect(ProfileType.diipv5.getVCId, 'R4D8F2H');
       expect(ProfileType.defaultOne.getVCId, 'Z4C7T1X');
       expect(ProfileType.enterprise.getVCId, 'L8F6V3P');
-      expect(ProfileType.EUDIW.getVCId, 'M3FN2K8');
     });
 
     test('Profile ID matches enum name', () {

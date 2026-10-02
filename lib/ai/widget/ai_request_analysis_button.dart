@@ -24,9 +24,7 @@ extension on ProfileType {
       case ProfileType.custom:
         return 'custom';
       case ProfileType.diipv5:
-        return 'DIIP_V5';
-      case ProfileType.EUDIW:
-        return 'EWC';
+        return 'OIDC4VC_final_1.0';
     }
   }
 }

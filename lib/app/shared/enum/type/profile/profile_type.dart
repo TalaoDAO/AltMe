@@ -1,6 +1,6 @@
-// to enable ebsi profile again revert commit with label: 
+// to enable ebsi profile again revert commit with label:
 // Remove EBSI from profile list #3504
-enum ProfileType { defaultOne, diipv5, EUDIW, custom, enterprise }
+enum ProfileType { defaultOne, diipv5, custom, enterprise }
 
 extension ProfileTypeX on ProfileType {
   String getTitle({required String name}) {
@@ -10,11 +10,9 @@ extension ProfileTypeX on ProfileType {
       case ProfileType.enterprise:
         return name.isEmpty ? 'Enterprise' : name;
       case ProfileType.diipv5:
-        return 'DIIP V5.0';
+        return 'OID4VC final 1.0';
       case ProfileType.defaultOne:
         return 'Default';
-      case ProfileType.EUDIW:
-        return 'EUDI Wallet';
     }
   }
 
@@ -30,8 +28,6 @@ extension ProfileTypeX on ProfileType {
         return 'Z4C7T1X';
       case ProfileType.enterprise:
         return 'L8F6V3P';
-      case ProfileType.EUDIW:
-        return 'M3FN2K8';
     }
   }
 }

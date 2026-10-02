@@ -59,12 +59,6 @@ final messageCubitListener = BlocListener<MessageCubit, ExceptionMessage>(
 
 final ProfileCubitListener = BlocListener<ProfileCubit, ProfileState>(
   listener: (BuildContext context, ProfileState state) {
-    if (state.status == AppStatus.addEuropeanProfile) {
-      context.read<CredentialsCubit>().addWalletCredential(
-        qrCodeScanCubit: context.read<QRCodeScanCubit>(),
-        profileLinkedId: ProfileType.EUDIW.getVCId,
-      );
-    }
 
     // TODO(hawkbee): QRCodeScanCubit should be immutable
     context.read<QRCodeScanCubit>().oidc4vc = context

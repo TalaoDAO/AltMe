@@ -33,7 +33,6 @@ class WalletLogo extends StatelessWidget {
                 : flavorCubit.state == FlavorMode.staging
                 ? ImageStrings.appLogoStage
                 : ImageStrings.appLogo;
-          case ProfileType.EUDIW:
           case ProfileType.enterprise:
             final isLightTheme =
                 Theme.of(context).brightness == Brightness.light;

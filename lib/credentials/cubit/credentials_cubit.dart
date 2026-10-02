@@ -490,11 +490,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           profileType == ProfileType.enterprise) {
         continue;
       }
-      final doNotGenerateProfileType = [ProfileType.EUDIW];
-
-      if (doNotGenerateProfileType.contains(profileType)) {
-        continue;
-      }
 
       await profileCubit.setProfile(profileType, status: AppStatus.idle);
       final didKeyType = profileCubit

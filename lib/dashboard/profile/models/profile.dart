@@ -117,28 +117,28 @@ class ProfileModel extends Equatable {
       selfSovereignIdentityOptions: SelfSovereignIdentityOptions(
         displayManageDecentralizedId: true,
         customOidc4vcProfile: CustomOidc4VcProfile(
+          pushAuthorizationRequest: false,
+          statusListCache: true,
           clientAuthentication: ClientAuthentication.clientId,
-          credentialManifestSupport: true,
+          credentialManifestSupport: false,
           cryptoHolderBinding: true,
-          defaultDid: DidKeyType.jwkP256,
+          defaultDid: DidKeyType.p256,
+          dpopSupport: false,
           oidc4vciDraft: OIDC4VCIDraftType.final1,
           oidc4vpDraft: OIDC4VPDraftType.final1,
           scope: true,
-          securityLevel: true,
-          proofHeader: ProofHeaderType.kid,
+          securityLevel: false,
+          proofHeader: ProofHeaderType.jwk, // N/A
           siopv2Draft: SIOPV2DraftType.draft12,
-          clientType: ClientType.did,
+          clientType: ClientType.p256JWKThumprint,
           clientId: clientId,
           clientSecret: clientSecret,
-          vcFormatType: VCFormatType.auto,
-
-          /// pas ldp_vc
+          vcFormatType: VCFormatType.ldpVc,
           proofType: ProofType.jwt,
-          pushAuthorizationRequest: true,
           formatsSupported: const [
             VCFormatType.jwtVcJson,
-            VCFormatType.jwtVcJsonLd,
             VCFormatType.dcSdJWT,
+            VCFormatType.ldpVc,
           ],
           displayMode: false,
         ),
@@ -150,7 +150,7 @@ class ProfileModel extends Equatable {
         displaySecurityAdvancedSettings: true,
         secureSecurityAuthenticationWithPinCode: true,
         verifySecurityIssuerWebsiteIdentity: true,
-        trustedList: false,
+        trustedList: true,
       ),
     ),
   );

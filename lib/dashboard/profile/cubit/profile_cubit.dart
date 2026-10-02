@@ -282,25 +282,6 @@ class ProfileCubit extends Cubit<ProfileState> {
             profileSetting: profileSetting,
             enterpriseWalletName: profileSetting.generalOptions.profileName,
           );
-        case ProfileType.EUDIW:
-          if (europeanWalletProfileSettingJsonString != null) {
-            final customProfileSettingMap =
-                jsonDecode(europeanWalletProfileSettingJsonString)
-                    as Map<String, dynamic>;
-
-            profileSetting = ProfileSetting.fromJson(customProfileSettingMap);
-          } else {
-            throw Exception('Failed to load European wallet profile setting');
-          }
-
-          profileModel = ProfileModel(
-            walletType: walletType,
-            walletProtectionType: walletProtectionType,
-            isDeveloperMode: isDeveloperMode,
-            profileType: profileType,
-            profileSetting: profileSetting,
-            enterpriseWalletName: enterpriseWalletName,
-          );
       }
 
       // TrustedList logic
@@ -757,21 +738,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           ),
           status: status,
         );
-      case ProfileType.EUDIW:
-        final profileSetting = await _setupWalletProfile(
-          email: 'eudiw|guest@eudiw.local',
-          password: 'guest-password',
-          storageKey: SecureStorageKeys.europeanWalletProfileSetting,
-          loggerTag: 'loadEuropeanWallet',
-        );
-        await update(
-          state.model.copyWith(
-            profileType: profileType,
-            profileSetting: profileSetting,
-          ),
-          status: status,
-        );
-        emit(state.copyWith(status: AppStatus.addEuropeanProfile));
     }
   }
 
