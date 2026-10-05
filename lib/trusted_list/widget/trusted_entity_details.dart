@@ -29,12 +29,12 @@ class TrustedEntityDetails extends StatelessWidget {
           ),
         if (trustedEntity.postalAddress != null)
           TrustedEntityPostalAddress(
-            postalAddress: trustedEntity.postalAddress,
+            postalAddress: trustedEntity.postalAddress!,
             textTheme: textTheme,
           ),
         if (trustedEntity.electronicAddress != null)
           TrustedEntityElectronicAddress(
-            electronicAddress: trustedEntity.electronicAddress,
+            electronicAddress: trustedEntity.electronicAddress!,
             textTheme: textTheme,
           ),
       ],
