@@ -5,6 +5,7 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/oidc4vc/helper_function/flatten_claims_for_display.dart';
+import 'package:altme/oidc4vc/helper_function/mdoc_credential_data.dart';
 import 'package:altme/oidc4vc/helper_function/resolve_issuer_display.dart';
 import 'package:altme/oidc4vc/model/credential_acceptance_data.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -107,8 +108,24 @@ Future<CredentialAcceptanceItem> buildCredentialAcceptanceItem({
         credentialType: credentialType,
       );
     case VCFormatType.mdoc:
-      // TODO(hawkbee): Handle this case. mdoc
-      throw UnimplementedError();
+      // final / draft15+: `credentials: [{credential}]`; draft13: `credential`.
+      final credentials = encodedCredentialFromOIDC4VC['credentials'];
+      final issuerSigned = credentials is List && credentials.isNotEmpty
+          ? credentials.first['credential']
+          : encodedCredentialFromOIDC4VC['credential'];
+      if (issuerSigned is! String) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_format',
+            'error_description': 'The format of vc is incorrect.',
+          },
+        );
+      }
+      credentialFromOIDC4VC = await getMdocCredentialData(
+        issuerSigned: issuerSigned,
+        credentialType: credentialType,
+        keyId: keyId,
+      );
   }
   final Map<String, dynamic> newCredential = Map<String, dynamic>.from(
     credentialFromOIDC4VC,

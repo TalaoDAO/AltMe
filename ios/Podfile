@@ -1,6 +1,8 @@
 source 'https://github.com/CocoaPods/Specs.git'
 source 'https://github.com/passbase/cocoapods-specs.git'
 source 'https://github.com/passbase/microblink-cocoapods-specs.git'
+# SpruceIDMobileSdk (required by sprucekit_mobile) is only published here.
+source 'https://github.com/spruceid/cocoapods-specs.git'
 
 # Uncomment this line to define a global platform for your project
 platform :ios, '15.5'

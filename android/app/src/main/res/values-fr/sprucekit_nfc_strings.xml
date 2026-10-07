@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sprucekit_nfc_hce_service_desc">Partager un document mobile d\'un geste</string>
+    <string name="sprucekit_nfc_hce_group_desc">Document mobile ISO 18013-5</string>
+</resources>

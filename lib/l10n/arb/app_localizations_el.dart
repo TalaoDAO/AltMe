@@ -3502,4 +3502,70 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get dontShareLabel => 'Μην κοινοποιήσετε';
+
+  @override
+  String get mdocShowToReader => 'Show to a reader';
+
+  @override
+  String get mdocProximityTitle => 'Share in person';
+
+  @override
+  String get mdocProximityPreparing => 'Preparing the connection…';
+
+  @override
+  String get mdocProximityScanQrCode => 'Let the reader scan this QR code';
+
+  @override
+  String get mdocProximityWaitingForTap => 'Hold your phone against the reader';
+
+  @override
+  String get mdocProximityConnected =>
+      'Reader connected, waiting for its request…';
+
+  @override
+  String get mdocProximityRequestTitle => 'The reader asks for';
+
+  @override
+  String get mdocProximityUnverifiedReader =>
+      'The identity of this reader is not verified.';
+
+  @override
+  String get mdocProximityWillRetain => 'Kept by the reader';
+
+  @override
+  String get mdocProximitySending => 'Sending…';
+
+  @override
+  String get mdocProximitySuccess =>
+      'Your information was shared with the reader.';
+
+  @override
+  String get mdocProximityBluetoothOff =>
+      'Turn on Bluetooth to share with the reader.';
+
+  @override
+  String get mdocProximityBluetoothPermission =>
+      'Allow Bluetooth access to share with the reader.';
+
+  @override
+  String get mdocProximityOpenSettings => 'Open settings';
+
+  @override
+  String get mdocProximityTimeout => 'The reader did not respond in time.';
+
+  @override
+  String get mdocProximityReaderDisconnected => 'The reader disconnected.';
+
+  @override
+  String get mdocProximityNfcUnavailable =>
+      'NFC is turned off. Use the QR code instead.';
+
+  @override
+  String get mdocProximityError => 'The presentation failed.';
+
+  @override
+  String get mdocProximityTapInstead => 'Tap the reader instead';
+
+  @override
+  String get mdocProximityQrCodeInstead => 'Show a QR code instead';
 }

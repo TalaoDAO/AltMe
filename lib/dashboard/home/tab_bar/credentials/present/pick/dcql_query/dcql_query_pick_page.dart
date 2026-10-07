@@ -5,8 +5,10 @@ import 'package:altme/app/shared/helper_functions/get_display.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_helper.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_mdoc_helper.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
+import 'package:altme/mdoc_proximity/helpers/mdoc_credential_model.dart';
 import 'package:altme/oidc4vc/model/verifier_trust_info.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
@@ -130,15 +132,21 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       final query = DcqlCredentialQuery.fromJson(rawQuery);
       final credentials = context.read<CredentialsCubit>().state.credentials;
       final candidates = <CredentialModel>[];
-      final packageFormatCredentials = <SdJwtDigitalCredential>[];
-      for (final e in credentials.where(
-        (e) => e.format == VCFormatType.dcSdJWT.vpValue,
-      )) {
+      final packageFormatCredentials = <DigitalCredential>[];
+      for (final e in credentials) {
         try {
-          packageFormatCredentials.add(
-            SdJwtDigitalCredential.fromSdJwt(sdJwtToken: e.jwt!),
-          );
-          candidates.add(e);
+          if (e.format == VCFormatType.dcSdJWT.vpValue) {
+            packageFormatCredentials.add(
+              SdJwtDigitalCredential.fromSdJwt(sdJwtToken: e.jwt!),
+            );
+            candidates.add(e);
+          } else if (e.canPresentInProximity) {
+            // an mdoc bound to a platform key, which signs DeviceAuth
+            final mdoc = mdocDigitalCredential(e);
+            if (mdoc == null) continue;
+            packageFormatCredentials.add(mdoc);
+            candidates.add(e);
+          }
         } catch (_) {
           // skip candidates that fail to parse rather than aborting the
           // whole screen
@@ -192,7 +200,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
     required BuildContext context,
     required Uri uri,
     required DcqlQueryResult result,
-    required List<SdJwtDigitalCredential> packageFormatCredentials,
+    required List<DigitalCredential> packageFormatCredentials,
     required List<CredentialModel> candidates,
   }) async {
     final profileCubit = context.read<ProfileCubit>();
@@ -208,6 +216,21 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       didKeyType: customOidc4vcProfile.defaultDid,
     );
 
+    // An mdoc's DeviceAuth signs over the request: client_id, nonce,
+    // response_uri and, when encrypted, the verifier's encryption key.
+    final presentsMdoc = result.verifiableCredentials.values.any(
+      (matches) => matches.any((c) => c is MdocDigitalCredential),
+    );
+    final mdocSessionTranscript = presentsMdoc
+        ? oid4vpSessionTranscript(
+            uri: uri,
+            clientMetadata: await getClientMetada(
+              client: context.read<ScanCubit>().client,
+              uri: uri,
+            ),
+          )
+        : null;
+
     final vpToken = await buildVpToken(
       result,
       packageFormatCredentials,
@@ -216,6 +239,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       jsonDecode(privateKeyString) as Map<String, dynamic>,
       customOidc4vcProfile.proofHeader,
       credentialKeySigner: profileCubit.credentialKeySigner,
+      mdocSessionTranscript: mdocSessionTranscript,
     );
 
     await context.read<ScanCubit>().presentOidc4vpFinal(
@@ -398,7 +422,7 @@ class VerifiableCredentialsColumn extends StatelessWidget {
   });
 
   final DcqlQueryResult result;
-  final List<SdJwtDigitalCredential> packageFormatCredentials;
+  final List<DigitalCredential> packageFormatCredentials;
   final List<CredentialModel> candidates;
 
   // Label a missing (zero-match) credential-query requirement: the claims
@@ -420,7 +444,7 @@ class VerifiableCredentialsColumn extends StatelessWidget {
       final joinedVctValues = vctValues.join(', ');
       return joinedVctValues;
     }
-    return missing.id;
+    return missing.meta?.doctypeValue ?? missing.id;
   }
 
   @override

@@ -86,7 +86,11 @@ List<ClaimEntry> buildTranslatedClaims({
     final path = claim['path'];
     if (path is! List) continue;
 
-    final value = _valueAtPath(credentialModel.data, path);
+    // mso_mdoc data elements live under credentialSubject, keyed by name
+    // space, while their claim paths start at the name space.
+    final value =
+        _valueAtPath(credentialModel.data, path) ??
+        _valueAtPath(credentialModel.data['credentialSubject'], path);
     if (value == null) continue;
 
     final display = getDisplay(claim, languageCode);
