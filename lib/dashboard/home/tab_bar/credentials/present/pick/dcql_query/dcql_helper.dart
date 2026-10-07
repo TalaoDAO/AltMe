@@ -1,4 +1,5 @@
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_mdoc_helper.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:dcql/dcql.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -30,9 +31,9 @@ DcqlQueryResult keepFirstMatchPerCredential(DcqlQueryResult result) {
 // Map the DCQL-matched DigitalCredential objects back to your original
 // candidate (which still has the raw jwt string), using identity equality
 // — same trick you already use.
-SdJwtDigitalCredential? findOriginal(
+DigitalCredential? findOriginal(
   DigitalCredential matched,
-  List<SdJwtDigitalCredential> packageFormatCredentials,
+  List<DigitalCredential> packageFormatCredentials,
 ) => packageFormatCredentials.firstWhere((e) => identical(e, matched));
 
 // Resolve a DCQL path (which may contain `null` wildcards) against the
@@ -142,14 +143,19 @@ Future<String> buildPresentation({
 }
 
 // --- Build the vp_token itself ---
+//
+// SD-JWT credentials present as SD-JWT + KB-JWT; mso_mdoc credentials as a
+// DeviceResponse signed over [mdocSessionTranscript], which is required as
+// soon as one is presented.
 Future<Map<String, List<String>>> buildVpToken(
   DcqlQueryResult result,
-  List<SdJwtDigitalCredential> packageFormatCredentials,
+  List<DigitalCredential> packageFormatCredentials,
   List<CredentialModel> candidates, // your wallet-side objects, same order
   Uri uri,
   Map<String, dynamic> privateKey,
   ProofHeaderType proofHeaderType, {
   JwtSigner Function(String keyId)? credentialKeySigner,
+  List<Object?>? mdocSessionTranscript,
 }) async {
   final vpToken = <String, List<String>>{};
 
@@ -168,6 +174,20 @@ Future<Map<String, List<String>>> buildVpToken(
       final original = findOriginal(matched, packageFormatCredentials);
       if (original == null) continue;
       final index = packageFormatCredentials.indexOf(original);
+
+      if (original is MdocDigitalCredential) {
+        if (mdocSessionTranscript == null) {
+          throw StateError('an mdoc presentation needs a SessionTranscript');
+        }
+        presentations.add(
+          await buildMdocPresentation(
+            credential: candidates[index],
+            requestedPaths: requestedPaths,
+            sessionTranscript: mdocSessionTranscript,
+          ),
+        );
+        continue;
+      }
 
       presentations.add(
         await buildPresentation(
