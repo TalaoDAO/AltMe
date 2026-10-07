@@ -3508,4 +3508,72 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get dontShareLabel => 'Ne pas partager';
+
+  @override
+  String get mdocShowToReader => 'Présenter à un lecteur';
+
+  @override
+  String get mdocProximityTitle => 'Partager en personne';
+
+  @override
+  String get mdocProximityPreparing => 'Préparation de la connexion…';
+
+  @override
+  String get mdocProximityScanQrCode =>
+      'Faites scanner ce QR code par le lecteur';
+
+  @override
+  String get mdocProximityWaitingForTap =>
+      'Approchez votre téléphone du lecteur';
+
+  @override
+  String get mdocProximityConnected =>
+      'Lecteur connecté, en attente de sa demande…';
+
+  @override
+  String get mdocProximityRequestTitle => 'Le lecteur demande';
+
+  @override
+  String get mdocProximityUnverifiedReader =>
+      'L\'identité de ce lecteur n\'est pas vérifiée.';
+
+  @override
+  String get mdocProximityWillRetain => 'Conservé par le lecteur';
+
+  @override
+  String get mdocProximitySending => 'Envoi…';
+
+  @override
+  String get mdocProximitySuccess =>
+      'Vos informations ont été partagées avec le lecteur.';
+
+  @override
+  String get mdocProximityBluetoothOff =>
+      'Activez le Bluetooth pour partager avec le lecteur.';
+
+  @override
+  String get mdocProximityBluetoothPermission =>
+      'Autorisez l\'accès au Bluetooth pour partager avec le lecteur.';
+
+  @override
+  String get mdocProximityOpenSettings => 'Ouvrir les réglages';
+
+  @override
+  String get mdocProximityTimeout => 'Le lecteur n\'a pas répondu à temps.';
+
+  @override
+  String get mdocProximityReaderDisconnected => 'Le lecteur s\'est déconnecté.';
+
+  @override
+  String get mdocProximityNfcUnavailable =>
+      'Le NFC est désactivé. Utilisez plutôt le QR code.';
+
+  @override
+  String get mdocProximityError => 'La présentation a échoué.';
+
+  @override
+  String get mdocProximityTapInstead => 'Approcher du lecteur à la place';
+
+  @override
+  String get mdocProximityQrCodeInstead => 'Afficher un QR code à la place';
 }

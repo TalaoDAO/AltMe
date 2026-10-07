@@ -8,6 +8,7 @@ import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/ldp_vc/ldp_vc.dart';
+import 'package:altme/mdoc_proximity/mdoc_proximity.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/widget/display_selective_disclosure.dart';
 import 'package:did_kit/did_kit.dart';
@@ -433,6 +434,18 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                     )
                   else
                     const SizedBox.shrink(),
+                  if (widget.credentialModel.canPresentInProximity)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: MyOutlinedButton(
+                        text: l10n.mdocShowToReader,
+                        onPressed: () => Navigator.of(context).push<void>(
+                          MdocProximityPage.route(
+                            credentialModel: widget.credentialModel,
+                          ),
+                        ),
+                      ),
+                    ),
                   if (widget.credentialModel.shareLink != '')
                     MyOutlinedButton.icon(
                       icon: SvgPicture.asset(
