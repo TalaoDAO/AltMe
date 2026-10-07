@@ -65,6 +65,13 @@ class MdocProximityView extends StatelessWidget {
             ProximityWaitingForTap() => _Message(
               icon: Icons.nfc,
               text: l10n.mdocProximityWaitingForTap,
+              actions: [
+                MyOutlinedButton(
+                  text: l10n.mdocProximityQrCodeInstead,
+                  onPressed: () =>
+                      cubit.restart(engagement: ProximityEngagement.qrCode),
+                ),
+              ],
             ),
             ProximityShowQrCode(:final uri) => _QrCode(uri: uri),
             ProximityBluetoothRequired(:final authorization) => _Message(
@@ -186,10 +193,21 @@ class _Message extends StatelessWidget {
   }
 }
 
-class _QrCode extends StatelessWidget {
+class _QrCode extends StatefulWidget {
   const _QrCode({required this.uri});
 
   final String uri;
+
+  @override
+  State<_QrCode> createState() => _QrCodeState();
+}
+
+class _QrCodeState extends State<_QrCode> {
+  late final Future<ProximityNfcAvailability> _nfcAvailability = context
+      .read<MdocProximityCubit>()
+      .nfcAvailability();
+
+  String get uri => widget.uri;
 
   @override
   Widget build(BuildContext context) {
@@ -205,6 +223,21 @@ class _QrCode extends StatelessWidget {
             size: 260,
             backgroundColor: Colors.white,
           ),
+        ),
+        const SizedBox(height: 20),
+        // NFC engagement is Android only; the plugin reports it unsupported
+        // on iOS and on phones without host card emulation.
+        FutureBuilder<ProximityNfcAvailability>(
+          future: _nfcAvailability,
+          builder: (context, snapshot) =>
+              snapshot.data == ProximityNfcAvailability.available
+              ? MyOutlinedButton(
+                  text: l10n.mdocProximityTapInstead,
+                  onPressed: () => context.read<MdocProximityCubit>().restart(
+                    engagement: ProximityEngagement.nfc,
+                  ),
+                )
+              : const SizedBox.shrink(),
         ),
       ],
     );
