@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/oidc4vc/helper_function/mdoc_credential_data.dart';
 import 'package:dio/dio.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:platform_p256_keys/platform_p256_keys.dart';
 
 /// Retreive credential_type from url
 // encodedCredentialOrFutureTokens,deferredCredentialEndpoint,
@@ -20,6 +22,7 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
   required QRCodeScanCubit qrCodeScanCubit,
   required String publicKeyForDPop,
   required String? cnonce,
+  PlatformP256Keys platformKeys = const PlatformP256Keys(),
 }) async {
   final privateKey = await fetchPrivateKey(
     isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
@@ -181,26 +184,64 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
       );
     }
 
-    final credentialData = await profileCubit.oidc4vc.buildCredentialData(
-      nonce: nonce,
-      keyAttestationProofs: keyAttestation?.proofs,
-      issuerTokenParameters: issuerTokenParameters,
-      credentialType: credentialType,
-      types: types,
-      format: format,
-      credentialIdentifier: credentialIdentifier,
-      cryptoHolderBinding: cryptoHolderBinding,
-      credentialDefinition: credentialDefinition,
-      clientAuthentication: customOidc4vcProfile.clientAuthentication,
-      vct: vct,
-      proofType: customOidc4vcProfile.proofType,
-      did: did,
-      kid: kid,
-      privateKey: privateKey,
-      formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
-      oidc4vcParameters: oidc4vcParameters,
-      clientId: clientId,
-    );
+    /// An mso_mdoc is bound to a fresh platform key (Android Keystore /
+    /// Secure Enclave) under a new alias, unless a key attestation already
+    /// names the key: the proof carries that key's public JWK and is signed
+    /// by the platform, and the alias becomes the credential's keyId.
+    String? mdocKeyAlias;
+    var proofTokenParameters = issuerTokenParameters;
+    JwtSigner? proofSigner;
+    if (format == VCFormatType.mdoc.vcValue &&
+        cryptoHolderBinding &&
+        keyAttestation == null) {
+      final alias = newMdocKeyAlias();
+      final key = await platformKeys.getOrCreate(alias);
+      mdocKeyAlias = alias;
+      proofTokenParameters = IssuerTokenParameters(
+        privateKey: key.publicJwk,
+        did: did,
+        issuer: oidc4vcParameters.issuer,
+        mediaType: MediaType.proofOfOwnership,
+        clientType: customOidc4vcProfile.clientType,
+        proofHeaderType: ProofHeaderType.jwk,
+        clientId: clientId ?? '',
+      );
+      proofSigner = (header, payload) => platformKeys.signCompactJws(
+        alias: alias,
+        header: header,
+        payload: payload,
+      );
+    }
+
+    final Map<String, dynamic> credentialData;
+    try {
+      credentialData = await profileCubit.oidc4vc.buildCredentialData(
+        nonce: nonce,
+        keyAttestationProofs: keyAttestation?.proofs,
+        issuerTokenParameters: proofTokenParameters,
+        credentialType: credentialType,
+        types: types,
+        format: format,
+        credentialIdentifier: credentialIdentifier,
+        cryptoHolderBinding: cryptoHolderBinding,
+        credentialDefinition: credentialDefinition,
+        clientAuthentication: customOidc4vcProfile.clientAuthentication,
+        vct: vct,
+        proofType: mdocKeyAlias != null
+            ? ProofType.jwt
+            : customOidc4vcProfile.proofType,
+        did: did,
+        kid: kid,
+        privateKey: privateKey,
+        formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
+        oidc4vcParameters: oidc4vcParameters,
+        clientId: clientId,
+        proofSigner: proofSigner,
+      );
+    } catch (_) {
+      if (mdocKeyAlias != null) await platformKeys.delete(mdocKeyAlias);
+      rethrow;
+    }
 
     if (profileCubit.state.model.isDeveloperMode) {
       final value = await qrCodeScanCubit.showDataBeforeSending(
@@ -214,6 +255,7 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
         qrCodeScanCubit.completer = null;
         qrCodeScanCubit.resetNonceAndAccessTokenAndAuthorizationDetails();
         qrCodeScanCubit.goBack();
+        if (mdocKeyAlias != null) await platformKeys.delete(mdocKeyAlias);
         return false;
       }
     }
@@ -228,6 +270,10 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
         credentialData: credentialData,
         publicKeyForDPop: publicKeyForDPop,
       );
+    } catch (_) {
+      // No credential will ever be bound to this key.
+      if (mdocKeyAlias != null) await platformKeys.delete(mdocKeyAlias);
+      rethrow;
     } finally {
       /// Wallet Provider Protocol §12.11: a key attestation is spent on the
       /// issuance attempt, not on its outcome, so it is marked consumed
@@ -250,7 +296,7 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
     // Only the first credential of a batch response is ever turned into a
     // CredentialModel (see buildCredentialAcceptanceItem's dcSdJWT branch),
     // so the first attested key is the one that credential needs correlated.
-    credentialKeyIds.add(keyAttestation?.keyIds.firstOrNull);
+    credentialKeyIds.add(keyAttestation?.keyIds.firstOrNull ?? mdocKeyAlias);
     return true;
   }
 

@@ -102,6 +102,7 @@ class ProfileModel extends Equatable {
             VCFormatType.jwtVcJson,
             VCFormatType.dcSdJWT,
             VCFormatType.ldpVc,
+            VCFormatType.mdoc,
           ],
           displayMode: false,
         ),
