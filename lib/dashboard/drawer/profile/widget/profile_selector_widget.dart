@@ -63,6 +63,11 @@ class ProfileSelectorWidget extends StatelessWidget {
                         return Container();
                       }
 
+                      // Not offered for now; the profile itself is kept.
+                      if (profileType == ProfileType.diipv5) {
+                        return Container();
+                      }
+
                       return Column(
                         children: [
                           ListTile(
