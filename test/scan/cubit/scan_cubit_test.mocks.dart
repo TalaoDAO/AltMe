@@ -1916,6 +1916,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
     required List<_i9.VCFormatType>? formatsSupported,
     required String? clientId,
     List<String>? keyAttestationProofs,
+    _i9.JwtSigner? proofSigner,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#buildCredentialData, [], {
@@ -1937,6 +1938,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #formatsSupported: formatsSupported,
               #clientId: clientId,
               #keyAttestationProofs: keyAttestationProofs,
+              #proofSigner: proofSigner,
             }),
             returnValue: _i17.Future<Map<String, dynamic>>.value(
               <String, dynamic>{},
@@ -2074,6 +2076,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
     required _i9.ClientAuthentication? clientAuthentication,
     required String? iss,
     String? cnonce,
+    _i9.JwtSigner? signer,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#getIssuerJwt, [], {
@@ -2081,6 +2084,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #clientAuthentication: clientAuthentication,
               #iss: iss,
               #cnonce: cnonce,
+              #signer: signer,
             }),
             returnValue: _i17.Future<String>.value(
               _i19.dummyValue<String>(
@@ -2090,6 +2094,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
                   #clientAuthentication: clientAuthentication,
                   #iss: iss,
                   #cnonce: cnonce,
+                  #signer: signer,
                 }),
               ),
             ),
