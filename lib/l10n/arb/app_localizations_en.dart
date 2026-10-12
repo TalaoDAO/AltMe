@@ -3529,6 +3529,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mdocProximityQrCodeInstead => 'Show a QR code instead';
 
   @override
-  String get mdocEngagementQrCodeScanned =>
-      'This QR code is shown by a wallet to share a credential in person. Scan it with a reader app.';
+  String get mdocReaderTitle => 'Read a driving licence';
+
+  @override
+  String get mdocReaderConnecting => 'Connecting to the wallet…';
+
+  @override
+  String get mdocReaderWaitingForResponse =>
+      'Connected. Waiting for the holder to share…';
+
+  @override
+  String get mdocReaderBluetoothPermission =>
+      'Allow Bluetooth access to read the driving licence.';
+
+  @override
+  String get mdocReaderError => 'The reading failed.';
+
+  @override
+  String get mdocReaderNothingShared => 'The holder shared no data.';
+
+  @override
+  String get mdocReaderIssuerCheck => 'Issuer signature';
+
+  @override
+  String get mdocReaderDeviceCheck => 'Device signature';
+
+  @override
+  String get mdocReaderCheckValid => 'Valid';
+
+  @override
+  String get mdocReaderCheckInvalid => 'Invalid';
+
+  @override
+  String get mdocReaderCheckUnchecked => 'Not checked';
 }

@@ -4,6 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/mdoc_proximity/cubit/mdoc_proximity_cubit.dart';
 import 'package:altme/mdoc_proximity/helpers/mdoc_credential_model.dart';
 import 'package:altme/mdoc_proximity/widgets/mdoc_request_view.dart';
+import 'package:altme/mdoc_proximity/widgets/proximity_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdoc_proximity/mdoc_proximity.dart';
@@ -59,10 +60,14 @@ class MdocProximityView extends StatelessWidget {
         builder: (context, state) {
           final cubit = context.read<MdocProximityCubit>();
           return switch (state) {
-            ProximityPreparing() => _Waiting(l10n.mdocProximityPreparing),
-            ProximityConnected() => _Waiting(l10n.mdocProximityConnected),
-            ProximitySending() => _Waiting(l10n.mdocProximitySending),
-            ProximityWaitingForTap() => _Message(
+            ProximityPreparing() => ProximityWaiting(
+              l10n.mdocProximityPreparing,
+            ),
+            ProximityConnected() => ProximityWaiting(
+              l10n.mdocProximityConnected,
+            ),
+            ProximitySending() => ProximityWaiting(l10n.mdocProximitySending),
+            ProximityWaitingForTap() => ProximityMessage(
               icon: Icons.nfc,
               text: l10n.mdocProximityWaitingForTap,
               actions: [
@@ -74,27 +79,31 @@ class MdocProximityView extends StatelessWidget {
               ],
             ),
             ProximityShowQrCode(:final uri) => _QrCode(uri: uri),
-            ProximityBluetoothRequired(:final authorization) => _Message(
-              icon: Icons.bluetooth_disabled,
-              text: authorization
-                  ? l10n.mdocProximityBluetoothPermission
-                  : l10n.mdocProximityBluetoothOff,
-              actions: [
-                if (authorization)
-                  MyOutlinedButton(
-                    text: l10n.mdocProximityOpenSettings,
-                    onPressed: openAppSettings,
+            ProximityBluetoothRequired(:final authorization) =>
+              ProximityMessage(
+                icon: Icons.bluetooth_disabled,
+                text: authorization
+                    ? l10n.mdocProximityBluetoothPermission
+                    : l10n.mdocProximityBluetoothOff,
+                actions: [
+                  if (authorization)
+                    MyOutlinedButton(
+                      text: l10n.mdocProximityOpenSettings,
+                      onPressed: openAppSettings,
+                    ),
+                  MyElevatedButton(
+                    text: l10n.tryAgain,
+                    onPressed: cubit.restart,
                   ),
-                MyElevatedButton(text: l10n.tryAgain, onPressed: cubit.restart),
-              ],
-            ),
+                ],
+              ),
             ProximityRequest(:final documents) => MdocRequestView(
               credentialModel: credentialModel,
               documents: documents,
               onShare: cubit.approve,
               onCancel: () => Navigator.of(context).pop(),
             ),
-            ProximitySuccess() => _Message(
+            ProximitySuccess() => ProximityMessage(
               icon: Icons.check_circle_outline,
               text: l10n.mdocProximitySuccess,
               actions: [
@@ -104,7 +113,7 @@ class MdocProximityView extends StatelessWidget {
                 ),
               ],
             ),
-            ProximityFailure(:final reason, :final message) => _Message(
+            ProximityFailure(:final reason, :final message) => ProximityMessage(
               icon: Icons.error_outline,
               text: switch (reason) {
                 ProximityFailureReason.timeout => l10n.mdocProximityTimeout,
@@ -133,62 +142,6 @@ class MdocProximityView extends StatelessWidget {
           };
         },
       ),
-    );
-  }
-}
-
-class _Waiting extends StatelessWidget {
-  const _Waiting(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const CircularProgressIndicator(),
-          const SizedBox(height: 16),
-          Text(text, textAlign: TextAlign.center),
-        ],
-      ),
-    );
-  }
-}
-
-class _Message extends StatelessWidget {
-  const _Message({
-    required this.icon,
-    required this.text,
-    this.detail,
-    this.actions = const [],
-  });
-
-  final IconData icon;
-  final String text;
-  final String? detail;
-  final List<Widget> actions;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Icon(icon, size: 64),
-        const SizedBox(height: 16),
-        Text(text, textAlign: TextAlign.center),
-        if (detail != null) ...[
-          const SizedBox(height: 8),
-          Text(
-            detail!,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-        ],
-        for (final action in actions) ...[const SizedBox(height: 8), action],
-      ],
     );
   }
 }

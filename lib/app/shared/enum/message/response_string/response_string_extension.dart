@@ -125,9 +125,6 @@ extension ResponseStringX on ResponseString {
       case ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED:
         return globalMessage.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED;
 
-      case ResponseString.RESPONSE_STRING_MDOC_ENGAGEMENT_QR_CODE_SCANNED:
-        return globalMessage.RESPONSE_STRING_MDOC_ENGAGEMENT_QR_CODE_SCANNED;
-
       case ResponseString
           .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE:
         return globalMessage

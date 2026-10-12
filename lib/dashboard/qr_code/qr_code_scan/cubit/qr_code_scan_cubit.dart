@@ -10,6 +10,7 @@ import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/credential
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_query_pick_page.dart';
 import 'package:altme/deep_link/deep_link.dart';
 import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
+import 'package:altme/mdoc_proximity/view/mdoc_reader_page.dart';
 import 'package:altme/oidc4vc/helper_function/get_issuance_data.dart';
 import 'package:altme/oidc4vc/helper_function/resolve_issuer_display.dart';
 import 'package:altme/oidc4vc/model/credential_acceptance_data.dart';
@@ -82,6 +83,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     await Future<void>.delayed(const Duration(milliseconds: 1000));
     emit(state.loading(isScan: true));
     try {
+      if (scannedResponse != null &&
+          scannedResponse.toLowerCase().startsWith('mdoc:')) {
+        /// ISO 18013-5 device engagement shown by a holder: read it in
+        /// person, over BLE, without internet
+        emit(
+          state.copyWith(
+            qrScanStatus: QrScanStatus.success,
+            route: MdocReaderPage.route(qrUri: scannedResponse),
+          ),
+        );
+        return;
+      }
+
       final isInternetAvailable = await isConnectedToInternet();
       if (!isInternetAvailable) {
         throw NetworkException(
@@ -92,13 +106,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       if (scannedResponse == null || scannedResponse.isEmpty) {
         throw ResponseMessage(
           message: ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
-        );
-      } else if (scannedResponse.toLowerCase().startsWith('mdoc:')) {
-        /// ISO 18013-5 device engagement shown by a holder: only a reader
-        /// can use it
-        throw ResponseMessage(
-          message:
-              ResponseString.RESPONSE_STRING_MDOC_ENGAGEMENT_QR_CODE_SCANNED,
         );
       } else if (scannedResponse.startsWith('tezos://')) {
         /// beacon
