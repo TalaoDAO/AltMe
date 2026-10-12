@@ -20,7 +20,17 @@
     "mdocProximityError",
     "mdocProximityTapInstead",
     "mdocProximityQrCodeInstead",
-    "mdocEngagementQrCodeScanned"
+    "mdocReaderTitle",
+    "mdocReaderConnecting",
+    "mdocReaderWaitingForResponse",
+    "mdocReaderBluetoothPermission",
+    "mdocReaderError",
+    "mdocReaderNothingShared",
+    "mdocReaderIssuerCheck",
+    "mdocReaderDeviceCheck",
+    "mdocReaderCheckValid",
+    "mdocReaderCheckInvalid",
+    "mdocReaderCheckUnchecked"
   ],
 
   "el": [
@@ -44,7 +54,17 @@
     "mdocProximityError",
     "mdocProximityTapInstead",
     "mdocProximityQrCodeInstead",
-    "mdocEngagementQrCodeScanned"
+    "mdocReaderTitle",
+    "mdocReaderConnecting",
+    "mdocReaderWaitingForResponse",
+    "mdocReaderBluetoothPermission",
+    "mdocReaderError",
+    "mdocReaderNothingShared",
+    "mdocReaderIssuerCheck",
+    "mdocReaderDeviceCheck",
+    "mdocReaderCheckValid",
+    "mdocReaderCheckInvalid",
+    "mdocReaderCheckUnchecked"
   ],
 
   "es": [
@@ -68,10 +88,30 @@
     "mdocProximityError",
     "mdocProximityTapInstead",
     "mdocProximityQrCodeInstead",
-    "mdocEngagementQrCodeScanned"
+    "mdocReaderTitle",
+    "mdocReaderConnecting",
+    "mdocReaderWaitingForResponse",
+    "mdocReaderBluetoothPermission",
+    "mdocReaderError",
+    "mdocReaderNothingShared",
+    "mdocReaderIssuerCheck",
+    "mdocReaderDeviceCheck",
+    "mdocReaderCheckValid",
+    "mdocReaderCheckInvalid",
+    "mdocReaderCheckUnchecked"
   ],
 
   "fr": [
-    "mdocEngagementQrCodeScanned"
+    "mdocReaderTitle",
+    "mdocReaderConnecting",
+    "mdocReaderWaitingForResponse",
+    "mdocReaderBluetoothPermission",
+    "mdocReaderError",
+    "mdocReaderNothingShared",
+    "mdocReaderIssuerCheck",
+    "mdocReaderDeviceCheck",
+    "mdocReaderCheckValid",
+    "mdocReaderCheckInvalid",
+    "mdocReaderCheckUnchecked"
   ]
 }

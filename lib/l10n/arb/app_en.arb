@@ -1255,5 +1255,15 @@
   "mdocProximityError": "The presentation failed.",
   "mdocProximityTapInstead": "Tap the reader instead",
   "mdocProximityQrCodeInstead": "Show a QR code instead",
-  "mdocEngagementQrCodeScanned": "This QR code is shown by a wallet to share a credential in person. Scan it with a reader app."
+  "mdocReaderTitle": "Read a driving licence",
+  "mdocReaderConnecting": "Connecting to the wallet…",
+  "mdocReaderWaitingForResponse": "Connected. Waiting for the holder to share…",
+  "mdocReaderBluetoothPermission": "Allow Bluetooth access to read the driving licence.",
+  "mdocReaderError": "The reading failed.",
+  "mdocReaderNothingShared": "The holder shared no data.",
+  "mdocReaderIssuerCheck": "Issuer signature",
+  "mdocReaderDeviceCheck": "Device signature",
+  "mdocReaderCheckValid": "Valid",
+  "mdocReaderCheckInvalid": "Invalid",
+  "mdocReaderCheckUnchecked": "Not checked"
 }

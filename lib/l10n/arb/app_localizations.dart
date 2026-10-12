@@ -6411,11 +6411,71 @@ abstract class AppLocalizations {
   /// **'Show a QR code instead'**
   String get mdocProximityQrCodeInstead;
 
-  /// No description provided for @mdocEngagementQrCodeScanned.
+  /// No description provided for @mdocReaderTitle.
   ///
   /// In en, this message translates to:
-  /// **'This QR code is shown by a wallet to share a credential in person. Scan it with a reader app.'**
-  String get mdocEngagementQrCodeScanned;
+  /// **'Read a driving licence'**
+  String get mdocReaderTitle;
+
+  /// No description provided for @mdocReaderConnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to the wallet…'**
+  String get mdocReaderConnecting;
+
+  /// No description provided for @mdocReaderWaitingForResponse.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected. Waiting for the holder to share…'**
+  String get mdocReaderWaitingForResponse;
+
+  /// No description provided for @mdocReaderBluetoothPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Bluetooth access to read the driving licence.'**
+  String get mdocReaderBluetoothPermission;
+
+  /// No description provided for @mdocReaderError.
+  ///
+  /// In en, this message translates to:
+  /// **'The reading failed.'**
+  String get mdocReaderError;
+
+  /// No description provided for @mdocReaderNothingShared.
+  ///
+  /// In en, this message translates to:
+  /// **'The holder shared no data.'**
+  String get mdocReaderNothingShared;
+
+  /// No description provided for @mdocReaderIssuerCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Issuer signature'**
+  String get mdocReaderIssuerCheck;
+
+  /// No description provided for @mdocReaderDeviceCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Device signature'**
+  String get mdocReaderDeviceCheck;
+
+  /// No description provided for @mdocReaderCheckValid.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid'**
+  String get mdocReaderCheckValid;
+
+  /// No description provided for @mdocReaderCheckInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid'**
+  String get mdocReaderCheckInvalid;
+
+  /// No description provided for @mdocReaderCheckUnchecked.
+  ///
+  /// In en, this message translates to:
+  /// **'Not checked'**
+  String get mdocReaderCheckUnchecked;
 }
 
 class _AppLocalizationsDelegate

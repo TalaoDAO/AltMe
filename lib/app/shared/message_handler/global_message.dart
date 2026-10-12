@@ -151,9 +151,6 @@ class GlobalMessage {
   String get RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED =>
       l10n.thisQRCodeIsNotSupported;
 
-  String get RESPONSE_STRING_MDOC_ENGAGEMENT_QR_CODE_SCANNED =>
-      l10n.mdocEngagementQrCodeScanned;
-
   String get RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE =>
       l10n.thisUrlDoseNotContainAValidMessage;
 
