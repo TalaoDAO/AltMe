@@ -6290,6 +6290,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Don\'t share'**
   String get dontShareLabel;
+
+  /// No description provided for @mdocShowToReader.
+  ///
+  /// In en, this message translates to:
+  /// **'Show to a reader'**
+  String get mdocShowToReader;
+
+  /// No description provided for @mdocProximityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share in person'**
+  String get mdocProximityTitle;
+
+  /// No description provided for @mdocProximityPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing the connection…'**
+  String get mdocProximityPreparing;
+
+  /// No description provided for @mdocProximityScanQrCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Let the reader scan this QR code'**
+  String get mdocProximityScanQrCode;
+
+  /// No description provided for @mdocProximityWaitingForTap.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold your phone against the reader'**
+  String get mdocProximityWaitingForTap;
+
+  /// No description provided for @mdocProximityConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Reader connected, waiting for its request…'**
+  String get mdocProximityConnected;
+
+  /// No description provided for @mdocProximityRequestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The reader asks for'**
+  String get mdocProximityRequestTitle;
+
+  /// No description provided for @mdocProximityUnverifiedReader.
+  ///
+  /// In en, this message translates to:
+  /// **'The identity of this reader is not verified.'**
+  String get mdocProximityUnverifiedReader;
+
+  /// No description provided for @mdocProximityWillRetain.
+  ///
+  /// In en, this message translates to:
+  /// **'Kept by the reader'**
+  String get mdocProximityWillRetain;
+
+  /// No description provided for @mdocProximitySending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending…'**
+  String get mdocProximitySending;
+
+  /// No description provided for @mdocProximitySuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Your information was shared with the reader.'**
+  String get mdocProximitySuccess;
+
+  /// No description provided for @mdocProximityBluetoothOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on Bluetooth to share with the reader.'**
+  String get mdocProximityBluetoothOff;
+
+  /// No description provided for @mdocProximityBluetoothPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Bluetooth access to share with the reader.'**
+  String get mdocProximityBluetoothPermission;
+
+  /// No description provided for @mdocProximityOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get mdocProximityOpenSettings;
+
+  /// No description provided for @mdocProximityTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'The reader did not respond in time.'**
+  String get mdocProximityTimeout;
+
+  /// No description provided for @mdocProximityReaderDisconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'The reader disconnected.'**
+  String get mdocProximityReaderDisconnected;
+
+  /// No description provided for @mdocProximityNfcUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'NFC is turned off. Use the QR code instead.'**
+  String get mdocProximityNfcUnavailable;
+
+  /// No description provided for @mdocProximityError.
+  ///
+  /// In en, this message translates to:
+  /// **'The presentation failed.'**
+  String get mdocProximityError;
+
+  /// No description provided for @mdocProximityTapInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the reader instead'**
+  String get mdocProximityTapInstead;
+
+  /// No description provided for @mdocProximityQrCodeInstead.
+  ///
+  /// In en, this message translates to:
+  /// **'Show a QR code instead'**
+  String get mdocProximityQrCodeInstead;
+
+  /// No description provided for @mdocReaderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Read a driving licence'**
+  String get mdocReaderTitle;
+
+  /// No description provided for @mdocReaderConnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to the wallet…'**
+  String get mdocReaderConnecting;
+
+  /// No description provided for @mdocReaderWaitingForResponse.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected. Waiting for the holder to share…'**
+  String get mdocReaderWaitingForResponse;
+
+  /// No description provided for @mdocReaderBluetoothPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Bluetooth access to read the driving licence.'**
+  String get mdocReaderBluetoothPermission;
+
+  /// No description provided for @mdocReaderError.
+  ///
+  /// In en, this message translates to:
+  /// **'The reading failed.'**
+  String get mdocReaderError;
+
+  /// No description provided for @mdocReaderNothingShared.
+  ///
+  /// In en, this message translates to:
+  /// **'The holder shared no data.'**
+  String get mdocReaderNothingShared;
+
+  /// No description provided for @mdocReaderIssuerCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Issuer signature'**
+  String get mdocReaderIssuerCheck;
+
+  /// No description provided for @mdocReaderDeviceCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Device signature'**
+  String get mdocReaderDeviceCheck;
+
+  /// No description provided for @mdocReaderCheckValid.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid'**
+  String get mdocReaderCheckValid;
+
+  /// No description provided for @mdocReaderCheckInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid'**
+  String get mdocReaderCheckInvalid;
+
+  /// No description provided for @mdocReaderCheckUnchecked.
+  ///
+  /// In en, this message translates to:
+  /// **'Not checked'**
+  String get mdocReaderCheckUnchecked;
 }
 
 class _AppLocalizationsDelegate

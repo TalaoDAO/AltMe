@@ -214,6 +214,8 @@
 	<array>
 		<string>_dartobservatory._tcp</string>
 	</array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Bluetooth is used to share your documents with a nearby reader.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Please give us access to your camera, to complete the verification.</string>
 	<key>NSFaceIDUsageDescription</key>

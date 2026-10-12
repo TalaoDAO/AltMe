@@ -3508,4 +3508,107 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get dontShareLabel => 'Ne pas partager';
+
+  @override
+  String get mdocShowToReader => 'Présenter à un lecteur';
+
+  @override
+  String get mdocProximityTitle => 'Partager en personne';
+
+  @override
+  String get mdocProximityPreparing => 'Préparation de la connexion…';
+
+  @override
+  String get mdocProximityScanQrCode =>
+      'Faites scanner ce QR code par le lecteur';
+
+  @override
+  String get mdocProximityWaitingForTap =>
+      'Approchez votre téléphone du lecteur';
+
+  @override
+  String get mdocProximityConnected =>
+      'Lecteur connecté, en attente de sa demande…';
+
+  @override
+  String get mdocProximityRequestTitle => 'Le lecteur demande';
+
+  @override
+  String get mdocProximityUnverifiedReader =>
+      'L\'identité de ce lecteur n\'est pas vérifiée.';
+
+  @override
+  String get mdocProximityWillRetain => 'Conservé par le lecteur';
+
+  @override
+  String get mdocProximitySending => 'Envoi…';
+
+  @override
+  String get mdocProximitySuccess =>
+      'Vos informations ont été partagées avec le lecteur.';
+
+  @override
+  String get mdocProximityBluetoothOff =>
+      'Activez le Bluetooth pour partager avec le lecteur.';
+
+  @override
+  String get mdocProximityBluetoothPermission =>
+      'Autorisez l\'accès au Bluetooth pour partager avec le lecteur.';
+
+  @override
+  String get mdocProximityOpenSettings => 'Ouvrir les réglages';
+
+  @override
+  String get mdocProximityTimeout => 'Le lecteur n\'a pas répondu à temps.';
+
+  @override
+  String get mdocProximityReaderDisconnected => 'Le lecteur s\'est déconnecté.';
+
+  @override
+  String get mdocProximityNfcUnavailable =>
+      'Le NFC est désactivé. Utilisez plutôt le QR code.';
+
+  @override
+  String get mdocProximityError => 'La présentation a échoué.';
+
+  @override
+  String get mdocProximityTapInstead => 'Approcher du lecteur à la place';
+
+  @override
+  String get mdocProximityQrCodeInstead => 'Afficher un QR code à la place';
+
+  @override
+  String get mdocReaderTitle => 'Read a driving licence';
+
+  @override
+  String get mdocReaderConnecting => 'Connecting to the wallet…';
+
+  @override
+  String get mdocReaderWaitingForResponse =>
+      'Connected. Waiting for the holder to share…';
+
+  @override
+  String get mdocReaderBluetoothPermission =>
+      'Allow Bluetooth access to read the driving licence.';
+
+  @override
+  String get mdocReaderError => 'The reading failed.';
+
+  @override
+  String get mdocReaderNothingShared => 'The holder shared no data.';
+
+  @override
+  String get mdocReaderIssuerCheck => 'Issuer signature';
+
+  @override
+  String get mdocReaderDeviceCheck => 'Device signature';
+
+  @override
+  String get mdocReaderCheckValid => 'Valid';
+
+  @override
+  String get mdocReaderCheckInvalid => 'Invalid';
+
+  @override
+  String get mdocReaderCheckUnchecked => 'Not checked';
 }
