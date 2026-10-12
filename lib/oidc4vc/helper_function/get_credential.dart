@@ -425,6 +425,16 @@ Future<dynamic> getSingleCredentialData({
       );
       return credential;
     }
+  } on DioException catch (e) {
+    // TEMP(mdoc debug): the credential request goes through a bare Dio that
+    // logs nothing; log what was sent and the issuer's error body.
+    getLogger('getSingleCredentialData')
+      ..e('credential request => ${jsonEncode(credentialData)}')
+      ..e(
+        'credential response ${e.response?.statusCode} => '
+        '${e.response?.data}',
+      );
+    rethrow;
   } catch (e) {
     rethrow;
   }

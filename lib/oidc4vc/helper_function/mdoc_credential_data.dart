@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:altme/app/app.dart';
 import 'package:mdoc/mdoc.dart';
 import 'package:platform_p256_keys/platform_p256_keys.dart';
@@ -65,8 +68,46 @@ Future<Map<String, dynamic>> getMdocCredentialData({
     'type': [credentialType],
     'issuanceDate': mdoc.mso.signed.toIso8601String(),
     'expirationDate': mdoc.mso.validUntil.toIso8601String(),
-    'credentialSubject': {'type': credentialType, ...mdoc.claims()},
+    'credentialSubject': {'type': credentialType, ..._displayClaims(mdoc)},
     'docType': mdoc.docType,
     'issuerSigned': issuerSigned,
   };
+}
+
+/// The data elements as JSON values, with JPEG and PNG images (e.g. the
+/// `portrait`) as `data:` URIs, which the credential display renders as
+/// pictures — the way SD-JWT credentials carry them.
+Map<String, Map<String, Object?>> _displayClaims(IssuerSigned mdoc) => {
+  for (final entry in mdoc.nameSpaces.entries)
+    entry.key: {
+      for (final item in entry.value)
+        item.elementIdentifier: _displayValue(item.elementValue),
+    },
+};
+
+Object? _displayValue(Object? value) {
+  if (value is Uint8List) {
+    final mimeType = _imageMimeType(value);
+    if (mimeType != null) {
+      return 'data:$mimeType;base64,${base64.encode(value)}';
+    }
+  }
+  return cborToJson(value);
+}
+
+String? _imageMimeType(Uint8List bytes) {
+  if (bytes.length > 3 &&
+      bytes[0] == 0xff &&
+      bytes[1] == 0xd8 &&
+      bytes[2] == 0xff) {
+    return 'image/jpeg';
+  }
+  if (bytes.length > 4 &&
+      bytes[0] == 0x89 &&
+      bytes[1] == 0x50 &&
+      bytes[2] == 0x4e &&
+      bytes[3] == 0x47) {
+    return 'image/png';
+  }
+  return null;
 }

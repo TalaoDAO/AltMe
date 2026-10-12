@@ -35,6 +35,27 @@ void main() {
       });
     });
 
+    test('stores JPEG images as data URIs, other bytes as base64url', () async {
+      final jpeg = Uint8List.fromList([0xff, 0xd8, 0xff, 0xe0, 1, 2]);
+
+      final data = await getMdocCredentialData(
+        issuerSigned: testIssuerSigned(
+          elements: {
+            'portrait': jpeg,
+            'signature_usual_mark': Uint8List.fromList([1, 2, 3]),
+          },
+        ),
+        credentialType: 'mDL',
+        platformKeys: keys,
+      );
+
+      final elements =
+          (data['credentialSubject'] as Map<String, dynamic>)[mdlNameSpace]
+              as Map<String, Object?>;
+      expect(elements['portrait'], 'data:image/jpeg;base64,/9j/4AEC');
+      expect(elements['signature_usual_mark'], 'AQID');
+    });
+
     test('accepts an mdoc bound to the platform key', () async {
       when(() => keys.find('mdoc_1')).thenAnswer(
         (_) async => PlatformP256Key(
