@@ -56,7 +56,26 @@ class MdocProximityView extends StatelessWidget {
       titleLeading: const BackLeadingButton(),
       scrollView: false,
       secureScreen: true,
-      body: BlocBuilder<MdocProximityCubit, ProximityState>(
+      body: BlocConsumer<MdocProximityCubit, ProximityState>(
+        // Like an OIDC4VP presentation, success is a snackbar on the
+        // dashboard rather than a screen of its own.
+        listenWhen: (previous, current) =>
+            current is ProximitySuccess && previous is! ProximitySuccess,
+        listener: (context, state) {
+          AlertMessage.showStateMessage(
+            context: context,
+            stateMessage: StateMessage.success(
+              messageHandler: ResponseMessage(
+                message: ResponseString
+                    .RESPONSE_STRING_SUCCESSFULLY_PRESENTED_YOUR_CREDENTIAL,
+              ),
+            ),
+          );
+          Navigator.popUntil(
+            context,
+            (route) => route.settings.name == AltMeStrings.dashBoardPage,
+          );
+        },
         builder: (context, state) {
           final cubit = context.read<MdocProximityCubit>();
           return switch (state) {
@@ -103,16 +122,8 @@ class MdocProximityView extends StatelessWidget {
               onShare: cubit.approve,
               onCancel: () => Navigator.of(context).pop(),
             ),
-            ProximitySuccess() => ProximityMessage(
-              icon: Icons.check_circle_outline,
-              text: l10n.mdocProximitySuccess,
-              actions: [
-                MyElevatedButton(
-                  text: l10n.done,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            ),
+            // The listener pops back to the dashboard.
+            ProximitySuccess() => const SizedBox.shrink(),
             ProximityFailure(:final reason, :final message) => ProximityMessage(
               icon: Icons.error_outline,
               text: switch (reason) {
