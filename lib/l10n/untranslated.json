@@ -19,7 +19,8 @@
     "mdocProximityNfcUnavailable",
     "mdocProximityError",
     "mdocProximityTapInstead",
-    "mdocProximityQrCodeInstead"
+    "mdocProximityQrCodeInstead",
+    "mdocEngagementQrCodeScanned"
   ],
 
   "el": [
@@ -42,7 +43,8 @@
     "mdocProximityNfcUnavailable",
     "mdocProximityError",
     "mdocProximityTapInstead",
-    "mdocProximityQrCodeInstead"
+    "mdocProximityQrCodeInstead",
+    "mdocEngagementQrCodeScanned"
   ],
 
   "es": [
@@ -65,6 +67,11 @@
     "mdocProximityNfcUnavailable",
     "mdocProximityError",
     "mdocProximityTapInstead",
-    "mdocProximityQrCodeInstead"
+    "mdocProximityQrCodeInstead",
+    "mdocEngagementQrCodeScanned"
+  ],
+
+  "fr": [
+    "mdocEngagementQrCodeScanned"
   ]
 }

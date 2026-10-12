@@ -6410,6 +6410,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show a QR code instead'**
   String get mdocProximityQrCodeInstead;
+
+  /// No description provided for @mdocEngagementQrCodeScanned.
+  ///
+  /// In en, this message translates to:
+  /// **'This QR code is shown by a wallet to share a credential in person. Scan it with a reader app.'**
+  String get mdocEngagementQrCodeScanned;
 }
 
 class _AppLocalizationsDelegate

@@ -211,6 +211,12 @@ class ResponseMessage with MessageHandler {
               .localise(context);
           return message;
 
+        case ResponseString.RESPONSE_STRING_MDOC_ENGAGEMENT_QR_CODE_SCANNED:
+          final message = ResponseString
+              .RESPONSE_STRING_MDOC_ENGAGEMENT_QR_CODE_SCANNED
+              .localise(context);
+          return message;
+
         case ResponseString
             .RESPONSE_STRING_THIS_URL_DOSE_NOT_CONTAIN_A_VALID_MESSAGE:
           final message = ResponseString

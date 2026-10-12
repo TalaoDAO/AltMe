@@ -1254,5 +1254,6 @@
   "mdocProximityNfcUnavailable": "NFC is turned off. Use the QR code instead.",
   "mdocProximityError": "The presentation failed.",
   "mdocProximityTapInstead": "Tap the reader instead",
-  "mdocProximityQrCodeInstead": "Show a QR code instead"
+  "mdocProximityQrCodeInstead": "Show a QR code instead",
+  "mdocEngagementQrCodeScanned": "This QR code is shown by a wallet to share a credential in person. Scan it with a reader app."
 }

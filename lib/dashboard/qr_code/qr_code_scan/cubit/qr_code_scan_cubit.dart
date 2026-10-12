@@ -93,6 +93,13 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         throw ResponseMessage(
           message: ResponseString.RESPONSE_STRING_THIS_QR_CODE_IS_NOT_SUPPORTED,
         );
+      } else if (scannedResponse.toLowerCase().startsWith('mdoc:')) {
+        /// ISO 18013-5 device engagement shown by a holder: only a reader
+        /// can use it
+        throw ResponseMessage(
+          message:
+              ResponseString.RESPONSE_STRING_MDOC_ENGAGEMENT_QR_CODE_SCANNED,
+        );
       } else if (scannedResponse.startsWith('tezos://')) {
         /// beacon
         final String pairingRequest = Uri.parse(

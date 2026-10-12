@@ -3527,4 +3527,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mdocProximityQrCodeInstead => 'Show a QR code instead';
+
+  @override
+  String get mdocEngagementQrCodeScanned =>
+      'This QR code is shown by a wallet to share a credential in person. Scan it with a reader app.';
 }

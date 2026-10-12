@@ -3576,4 +3576,8 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get mdocProximityQrCodeInstead => 'Afficher un QR code à la place';
+
+  @override
+  String get mdocEngagementQrCodeScanned =>
+      'This QR code is shown by a wallet to share a credential in person. Scan it with a reader app.';
 }
