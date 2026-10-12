@@ -198,6 +198,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
           issuer: oidc4vcParameters.issuer,
           issuerMetadata:
               oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
+          clientAuthentication: clientAuthentication,
         );
         if (freshAttestation != null && freshAttestationPop != null) {
           headers['OAuth-Client-Attestation'] = freshAttestation;

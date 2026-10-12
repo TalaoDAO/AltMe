@@ -1344,6 +1344,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required Oidc4vcParameters oidc4vcParameters,
   }) async {
     try {
+      final clientAuthentication = clientAuthenticationFor(
+        profile: profileCubit.state.model,
+        authorizationServerMetadata: oidc4vcParameters
+            .authorizationServerOpenIdConfiguration
+            .rawConfiguration,
+      );
       final (
         clientId,
         clientSecret,
@@ -1356,6 +1362,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         issuer: oidc4vcParameters.issuer,
         issuerMetadata:
             oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
+        clientAuthentication: clientAuthentication,
       );
 
       final customOidc4vcProfile = profileCubit
@@ -1406,7 +1413,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           scope: scope,
           clientId: clientId,
           clientSecret: clientSecret,
-          clientAuthentication: customOidc4vcProfile.clientAuthentication,
+          clientAuthentication: clientAuthentication,
           formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
           oAuthClientAttestation: oAuthClientAttestation,
           oAuthClientAttestationPop: oAuthClientAttestationPop,
@@ -1485,9 +1492,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             /// the authorization code flow puts a whole browser round trip in
             /// between and a proof of possession is short-lived. The §11 cache
             /// answers from memory, so this costs a signature, not a request.
+            final clientAuthentication = clientAuthenticationFor(
+              profile: profileCubit.state.model,
+              authorizationServerMetadata: oidc4vcParameters
+                  .authorizationServerOpenIdConfiguration
+                  .rawConfiguration,
+            );
             final fetchesClientAttestation =
-                customOidc4vcProfile.clientAuthentication ==
-                ClientAuthentication.wia;
+                clientAuthentication == ClientAuthentication.wia;
             Future<void> fetchClientAttestation() async {
               final (
                 _,
@@ -1502,6 +1514,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 issuerMetadata: oidc4vcParameters
                     .issuerOpenIdConfiguration
                     .rawConfiguration,
+                clientAuthentication: clientAuthentication,
               );
               tokenAttestation = freshAttestation ?? tokenAttestation;
               tokenAttestationPop = freshAttestationPop ?? tokenAttestationPop;

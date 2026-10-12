@@ -225,7 +225,12 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
         credentialIdentifier: credentialIdentifier,
         cryptoHolderBinding: cryptoHolderBinding,
         credentialDefinition: credentialDefinition,
-        clientAuthentication: customOidc4vcProfile.clientAuthentication,
+        clientAuthentication: clientAuthenticationFor(
+          profile: profileCubit.state.model,
+          authorizationServerMetadata: oidc4vcParameters
+              .authorizationServerOpenIdConfiguration
+              .rawConfiguration,
+        ),
         vct: vct,
         proofType: mdocKeyAlias != null
             ? ProofType.jwt

@@ -1457,11 +1457,38 @@ String getUpdatedUrlForSIOPV2OIC4VP({
   return newUrl;
 }
 
+/// The client authentication the wallet uses with an authorization server.
+///
+/// The profile's own, or Wallet Instance Attestation when the authorization
+/// server lists `attest_jwt_client_auth` in its
+/// `token_endpoint_auth_methods_supported` (OAuth 2.0 Attestation-Based Client
+/// Authentication) — except on the default profile, which has no wallet
+/// attestation.
+ClientAuthentication clientAuthenticationFor({
+  required ProfileModel profile,
+  Map<String, dynamic>? authorizationServerMetadata,
+}) {
+  final configured = profile
+      .profileSetting
+      .selfSovereignIdentityOptions
+      .customOidc4vcProfile
+      .clientAuthentication;
+  if (profile.profileType == ProfileType.defaultOne) return configured;
+  final methods =
+      authorizationServerMetadata?['token_endpoint_auth_methods_supported'];
+  final asksForAttestation =
+      methods is List && methods.contains('attest_jwt_client_auth');
+  return asksForAttestation ? ClientAuthentication.wia : configured;
+}
+
 // clientId,
 // clientSecret,
 // authorization,
 // oAuthClientAttestation,
 // oAuthClientAttestationPop
+///
+/// [clientAuthentication] overrides the profile's, as
+/// [clientAuthenticationFor] decides it for one authorization server.
 ///
 /// [attestationProvider] supplies the client attestation pair. It defaults to
 /// the wallet-wide provider on [profileCubit] and then to
@@ -1480,6 +1507,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
   required String issuer,
   WalletAttestationProvider? attestationProvider,
   Map<String, dynamic>? issuerMetadata,
+  ClientAuthentication? clientAuthentication,
 }) async {
   try {
     String? clientId;
@@ -1541,7 +1569,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
           issuerMetadata: issuerMetadata,
         );
 
-    switch (customOidc4vcProfile.clientAuthentication) {
+    switch (clientAuthentication ?? customOidc4vcProfile.clientAuthentication) {
       ///  none
       case ClientAuthentication.none:
         break;
