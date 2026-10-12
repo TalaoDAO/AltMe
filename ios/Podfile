@@ -33,6 +33,20 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 
 flutter_ios_podfile_setup
 
+# sprucekit_mobile depends on statically linked pods (SpruceIDMobileSdk, SpruceIDMobileSdkRs,
+# SpruceIDMobileSdkRsRustFramework). As a dynamic framework (use_frameworks!) it is rejected by
+# CocoaPods and would not link them anyway, so build it as a static framework: Runner then links
+# it together with its static dependencies.
+pre_install do |installer|
+  installer.pod_targets.each do |pod|
+    if pod.name == 'sprucekit_mobile'
+      def pod.build_type
+        Pod::BuildType.static_framework
+      end
+    end
+  end
+end
+
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
