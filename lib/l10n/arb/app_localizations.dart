@@ -5550,7 +5550,7 @@ abstract class AppLocalizations {
   /// No description provided for @theWalletIsSuspended.
   ///
   /// In en, this message translates to:
-  /// **'The wallet is suspended.'**
+  /// **'This wallet has been deactivated. You can no longer obtain new attestations. Contact support for assistance'**
   String get theWalletIsSuspended;
 
   /// No description provided for @jwkThumbprintP256Key.

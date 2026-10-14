@@ -3055,7 +3055,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get statusListIndex => 'Índice de lista de estados';
 
   @override
-  String get theWalletIsSuspended => 'La cartera digital está suspendida.';
+  String get theWalletIsSuspended =>
+      'Esta cartera ha sido desactivada. Ya no puede obtener nuevas atestaciones. Póngase en contacto con el servicio de asistencia.';
 
   @override
   String get jwkThumbprintP256Key => 'Huella digital JWK P-256';

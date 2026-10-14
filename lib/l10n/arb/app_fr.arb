@@ -1015,7 +1015,7 @@
   "statuslListSignatureFailed": "Status list signature invalide",
   "statusList": "Status list",
   "statusListIndex": "Status list index",
-  "theWalletIsSuspended": "Le wallet est suspendu.",
+  "theWalletIsSuspended": "Ce wallet a été désactivé. Vous ne pouvez plus obtenir de nouvelles attestations. Contactez le support pour obtenir de l'aide.",
   "jwkThumbprintP256Key": "JWK Thumbprint P-256",
   "walletBlockedPopupTitle": "Le wallet est bloqué 10 minutes",
   "walletBlockedPopupDescription": "Le wallet est bloqué.\nVous devez ré-initialiser votre wallet.",

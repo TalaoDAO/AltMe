@@ -3069,7 +3069,8 @@ class AppLocalizationsEl extends AppLocalizations {
   String get statusListIndex => 'Ευρετήριο καταλόγου κατάστασης';
 
   @override
-  String get theWalletIsSuspended => 'Το πορτοφόλι έχει ανασταλεί.';
+  String get theWalletIsSuspended =>
+      'Αυτό το πορτοφόλι έχει απενεργοποιηθεί. Δεν μπορείτε πλέον να λαμβάνετε νέες βεβαιώσεις. Επικοινωνήστε με την υποστήριξη για βοήθεια.';
 
   @override
   String get jwkThumbprintP256Key => 'JWK αποτύπωμα αντίχειρα P-256';

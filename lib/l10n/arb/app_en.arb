@@ -1000,7 +1000,7 @@
   "statuslListSignatureFailed": "Status list signature failed", 
   "statusList": "Status list",
   "statusListIndex": "Status list index",
-  "theWalletIsSuspended": "The wallet is suspended.", 
+  "theWalletIsSuspended": "This wallet has been deactivated. You can no longer obtain new attestations. Contact support for assistance", 
   "jwkThumbprintP256Key": "JWK Thumbprint P-256",
   "walletBlockedPopupTitle": "Blocked 10 minutes",
   "walletBlockedPopupDescription": "Too many failed attempts, your wallet is blocked for your security.\nYou can reset your wallet in order to use it again.",

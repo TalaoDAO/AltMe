@@ -1878,7 +1878,7 @@
   "@statusList": {},
   "statusListIndex": "Ευρετήριο καταλόγου κατάστασης",
   "@statusListIndex": {},
-  "theWalletIsSuspended": "Το πορτοφόλι έχει ανασταλεί.",
+  "theWalletIsSuspended": "Αυτό το πορτοφόλι έχει απενεργοποιηθεί. Δεν μπορείτε πλέον να λαμβάνετε νέες βεβαιώσεις. Επικοινωνήστε με την υποστήριξη για βοήθεια.",
   "@theWalletIsSuspended": {},
   "jwkThumbprintP256Key": "JWK αποτύπωμα αντίχειρα P-256",
   "@jwkThumbprintP256Key": {},

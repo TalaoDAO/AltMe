@@ -3030,7 +3030,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusListIndex => 'Status list index';
 
   @override
-  String get theWalletIsSuspended => 'The wallet is suspended.';
+  String get theWalletIsSuspended =>
+      'This wallet has been deactivated. You can no longer obtain new attestations. Contact support for assistance';
 
   @override
   String get jwkThumbprintP256Key => 'JWK Thumbprint P-256';

@@ -1004,7 +1004,7 @@
   "statuslListSignatureFailed": "Error en la firma de la lista de estado",
   "statusList": "Lista de estados",
   "statusListIndex": "Índice de lista de estados",
-  "theWalletIsSuspended": "La cartera digital está suspendida.",
+  "theWalletIsSuspended": "Esta cartera ha sido desactivada. Ya no puede obtener nuevas atestaciones. Póngase en contacto con el servicio de asistencia.",
   "jwkThumbprintP256Key": "Huella digital JWK P-256",
   "walletBlockedPopupTitle": "Bloqueado 10 minutos",
   "walletBlockedPopupDescription": "Demasiados intentos fallidos, tu cartera digital está bloqueada por seguridad.\nReinicia tu cartera para usar los servicios nuevamente.",

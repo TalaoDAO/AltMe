@@ -1002,7 +1002,7 @@
   "statuslListSignatureFailed": "Error en la signatura de la llista d'estats",
   "statusList": "Llista d'estats",
   "statusListIndex": "Índex de la llista d'estats",
-  "theWalletIsSuspended": "La cartera està suspesa.",
+  "theWalletIsSuspended": "Aquesta cartera ha estat desactivada. Ja no podeu obtenir noves atestacions. Contacteu amb el servei d'assistència.",
   "jwkThumbprintP256Key": "Empremta digital JWK P-256",
   "walletBlockedPopupTitle": "Bloquejat 10 minuts",
   "walletBlockedPopupDescription": "Massa intents fallits, la teva cartera digital està bloquejada per seguretat.\nReinicia la teva cartera per utilitzar els serveis de nou.",
