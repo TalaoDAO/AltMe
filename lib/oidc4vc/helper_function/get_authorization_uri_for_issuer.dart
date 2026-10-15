@@ -202,6 +202,14 @@ Future<Uri?> getAuthorizationUriForIssuer({
           profileCubit: profileCubit,
           isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
           issuer: oidc4vcParameters.issuer,
+          authorizationServer:
+              oidc4vcParameters.authorizationServerOpenIdConfiguration.issuer,
+          attestationChallengeEndpoint:
+              oidc4vcParameters
+                      .authorizationServerOpenIdConfiguration
+                      .rawConfiguration?['challenge_endpoint']
+                  as String?,
+          client: client,
           issuerMetadata:
               oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
           clientAuthentication: clientAuthentication,
