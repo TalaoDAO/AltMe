@@ -28,7 +28,7 @@ void main() {
       expect(data['type'], ['mDL']);
       expect(data['docType'], mdlDocType);
       expect(data['issuerSigned'], issuerSigned);
-      expect(data['expirationDate'], '2027-10-01T00:00:00.000Z');
+      expect(data['expirationDate'], '2099-01-01T00:00:00.000Z');
       expect(data['credentialSubject'], {
         'type': 'mDL',
         mdlNameSpace: {'family_name': 'Doe', 'age_over_18': true},
@@ -104,6 +104,59 @@ void main() {
         ),
         throwsA(isA<ResponseMessage>()),
       );
+    });
+
+    test('rejects an issuer signature that does not verify', () {
+      expect(
+        () => getMdocCredentialData(
+          issuerSigned: testIssuerSigned(badSignature: true),
+          credentialType: 'mDL',
+          platformKeys: keys,
+        ),
+        throwsA(isA<ResponseMessage>()),
+      );
+    });
+
+    test('accepts the docType the issuer offered', () async {
+      final data = await getMdocCredentialData(
+        issuerSigned: testIssuerSigned(),
+        credentialType: 'mDL',
+        expectedDocType: mdlDocType,
+        platformKeys: keys,
+      );
+
+      expect(data['docType'], mdlDocType);
+    });
+
+    test('rejects a docType other than the one offered', () {
+      expect(
+        () => getMdocCredentialData(
+          issuerSigned: testIssuerSigned(docType: 'eu.europa.ec.eudi.pid.1'),
+          credentialType: 'mDL',
+          expectedDocType: mdlDocType,
+          platformKeys: keys,
+        ),
+        throwsA(isA<ResponseMessage>()),
+      );
+    });
+
+    test('rejects an mdoc outside its validity period', () {
+      Future<void> at(DateTime now) => getMdocCredentialData(
+        issuerSigned: testIssuerSigned(validUntil: '2027-10-01T00:00:00Z'),
+        credentialType: 'mDL',
+        now: now,
+        platformKeys: keys,
+      );
+
+      expect(
+        () => at(DateTime.utc(2027, 10, 2)),
+        throwsA(isA<ResponseMessage>()),
+      );
+      expect(
+        () => at(DateTime.utc(2026, 9, 30)),
+        throwsA(isA<ResponseMessage>()),
+      );
+      expect(at(DateTime.utc(2027)), completes);
     });
 
     test('rejects something that is not an mdoc', () {

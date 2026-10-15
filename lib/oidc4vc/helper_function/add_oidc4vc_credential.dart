@@ -121,10 +121,19 @@ Future<CredentialAcceptanceItem> buildCredentialAcceptanceItem({
           },
         );
       }
+      // The docType the issuer offered for this credential configuration.
+      final configurations =
+          openIdConfiguration?.credentialConfigurationsSupported;
+      final configuration = configurations is Map<String, dynamic>
+          ? configurations[credentialType]
+          : null;
       credentialFromOIDC4VC = await getMdocCredentialData(
         issuerSigned: issuerSigned,
         credentialType: credentialType,
         keyId: keyId,
+        expectedDocType: configuration is Map<String, dynamic>
+            ? configuration['doctype'] as String?
+            : null,
       );
   }
   final Map<String, dynamic> newCredential = Map<String, dynamic>.from(
