@@ -19,10 +19,11 @@ class ProtocolTraceLogsState extends Equatable {
     AppStatus? status,
     List<String>? filePaths,
   }) {
-    return ProtocolTraceLogsState(
+    final state = ProtocolTraceLogsState(
       status: status ?? this.status,
       filePaths: filePaths ?? this.filePaths,
     );
+    return state;
   }
 
   Map<String, dynamic> toJson() => _$ProtocolTraceLogsStateToJson(this);

@@ -12,10 +12,11 @@ class ProtocolTraceLogsPage extends StatelessWidget {
   const ProtocolTraceLogsPage({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => const ProtocolTraceLogsPage(),
       settings: const RouteSettings(name: '/ProtocolTraceLogsPage'),
     );
+    return route;
   }
 
   @override
