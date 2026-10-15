@@ -119,6 +119,43 @@ void main() {
     expect(find.text('Netwok Test'), findsOneWidget);
   });
 
+  testWidgets('AlertMessage shows the status, not a server HTML error page', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpApp(
+      Scaffold(
+        body: Builder(
+          builder: (BuildContext context) {
+            return ElevatedButton(
+              onPressed: () {
+                AlertMessage.showStateMessage(
+                  context: context,
+                  stateMessage: StateMessage(
+                    messageHandler: NetworkException(
+                      message: NetworkError.NETWORK_ERROR_NOT_ACCEPTABLE,
+                      data: '<!DOCTYPE html>\n<html><body>Error</body></html>',
+                    ),
+                    injectedMessage: null,
+                    showDialog: false,
+                    duration: const Duration(seconds: 2),
+                    type: MessageType.info,
+                  ),
+                );
+              },
+              child: const Text('Show SnackBar'),
+            );
+          },
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Show SnackBar'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Not acceptable'), findsOneWidget);
+    expect(find.textContaining('DOCTYPE'), findsNothing);
+  });
+
   testWidgets('AlertMessage shows default message when nothing is provided', (
     WidgetTester tester,
   ) async {
