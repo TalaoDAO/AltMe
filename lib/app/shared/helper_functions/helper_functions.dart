@@ -1330,7 +1330,46 @@ String getSchemeFromUrl(String url) {
   return parts.length > 1 ? '${parts[0]}://' : '';
 }
 
+/// The Request Objects fetched for the request being processed, by
+/// `request_uri`.
+///
+/// A wallet fetches a `request_uri` once: verifiers may serve it only once, and
+/// with `request_uri_method=post` each fetch is a new request with its own
+/// `wallet_nonce`. Every step of a presentation that needs the Request Object
+/// reads it from here.
+final Map<String, Future<dynamic>> _requestObjects = {};
+
+/// Forgets the Request Objects of the previous request; called when a new one
+/// is scanned.
+void forgetRequestObjects() => _requestObjects.clear();
+
+/// The Request Object at [url], fetched once per request (see
+/// [forgetRequestObjects]); `''` when it could not be fetched.
 Future<dynamic> fetchRequestUriPayload({
+  required String url,
+  required DioClient client,
+  required OIDC4VCIClient oidc4vc,
+  String? requestUriMethod,
+  Map<String, dynamic>? walletMetadata,
+}) async {
+  final cached = _requestObjects[url];
+  if (cached != null) return cached;
+
+  // Kept while still pending, so that a concurrent caller shares this fetch.
+  final pending = _requestObjects[url] = _fetchRequestUriPayload(
+    url: url,
+    client: client,
+    oidc4vc: oidc4vc,
+    requestUriMethod: requestUriMethod,
+    walletMetadata: walletMetadata,
+  );
+  final data = await pending;
+  // Not kept when it failed, so that trying again fetches again.
+  if (data == '') _requestObjects.removeWhere((key, _) => key == url);
+  return data;
+}
+
+Future<dynamic> _fetchRequestUriPayload({
   required String url,
   required DioClient client,
   required OIDC4VCIClient oidc4vc,

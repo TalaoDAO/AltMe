@@ -191,6 +191,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       ),
     );
 
+    // A new request: its request_uri is fetched once, from here on.
+    forgetRequestObjects();
+
     // Debug builds: one protocol trace file per scanned flow.
     ProtocolTrace.current?.beginFlow(
       isSiopV2OrOidc4VpUrl(uri)
@@ -2083,7 +2086,20 @@ ${state.uri}
     required Uri uri,
   }) async {
     if (oidc4vc is Oidc4vciClientFinal) {
-      final dcqlQuery = await oidc4vc.getDcqlQueryFromUri(uri: uri);
+      final requestUri = uri.queryParameters['request_uri'];
+      if (requestUri == null) {
+        throw Exception('REQUEST_URI_NOT_PRESENT_IN_URI');
+      }
+      // The Request Object fetched when the request was scanned.
+      final dcqlQuery = await fetchRequestUriPayload(
+        url: requestUri,
+        client: client,
+        oidc4vc: oidc4vc,
+        requestUriMethod: uri.queryParameters['request_uri_method'],
+      );
+      if (dcqlQuery is! String || dcqlQuery.isEmpty) {
+        throw Exception('ERROR_FETCHING_DCQL_QUERY');
+      }
       final CredentialModel credentialPreview = CredentialModel(
         id: 'id',
         image: 'image',
