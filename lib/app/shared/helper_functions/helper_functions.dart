@@ -1481,6 +1481,34 @@ ClientAuthentication clientAuthenticationFor({
   return asksForAttestation ? ClientAuthentication.wia : configured;
 }
 
+/// A fresh Client Attestation challenge from [challengeEndpoint].
+///
+/// OAuth 2.0 Attestation-Based Client Authentication (draft 11, §6.3): the
+/// client POSTs to the authorization server's `challenge_endpoint` and receives
+/// `attestation_challenge`, which the proof of possession then carries as
+/// `challenge`. An authorization server that publishes the endpoint answers a
+/// proof without one with `use_attestation_challenge`.
+Future<String> fetchAttestationChallenge({
+  required DioClient client,
+  required String challengeEndpoint,
+}) async {
+  final response = await client.post(challengeEndpoint);
+  final body = response is String
+      ? jsonDecode(response) as Map<String, dynamic>
+      : response as Map<String, dynamic>;
+  final challenge = body['attestation_challenge'];
+  if (challenge is! String || challenge.isEmpty) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_request',
+        'error_description':
+            'the authorization server returned no attestation_challenge',
+      },
+    );
+  }
+  return challenge;
+}
+
 // clientId,
 // clientSecret,
 // authorization,
@@ -1506,6 +1534,8 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
   required bool isEBSI,
   required String issuer,
   String? authorizationServer,
+  String? attestationChallengeEndpoint,
+  DioClient? client,
   WalletAttestationProvider? attestationProvider,
   Map<String, dynamic>? issuerMetadata,
   ClientAuthentication? clientAuthentication,
@@ -1568,6 +1598,14 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
         attestationPair ??= await provider.attestationFor(
           credentialIssuer: issuer,
           authorizationServer: authorizationServer,
+          // Fetched here, only once an attestation is actually built, so that
+          // every proof of possession carries a challenge of its own.
+          challenge: attestationChallengeEndpoint != null && client != null
+              ? await fetchAttestationChallenge(
+                  client: client,
+                  challengeEndpoint: attestationChallengeEndpoint,
+                )
+              : null,
           issuerMetadata: issuerMetadata,
         );
 

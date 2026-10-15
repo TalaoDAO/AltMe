@@ -53,13 +53,14 @@ class LegacyWalletAttestationProvider implements WalletAttestationProvider {
   /// [issuerMetadata] is ignored: the enterprise scheme publishes nothing in
   /// the credential issuer's metadata and reads nothing out of it.
   ///
-  /// [authorizationServer] is ignored too: the enterprise issuers this scheme
-  /// was built against accept the credential issuer as the proof's `aud`, and
-  /// that is left as it was.
+  /// [authorizationServer] and [challenge] are ignored too: the enterprise
+  /// issuers this scheme was built against accept the credential issuer as the
+  /// proof's `aud` and ask for no challenge, and that is left as it was.
   @override
   Future<ClientAttestationPair?> attestationFor({
     required String credentialIssuer,
     String? authorizationServer,
+    String? challenge,
     Map<String, dynamic>? issuerMetadata,
   }) async {
     if (walletType != WalletType.enterprise) {

@@ -91,9 +91,15 @@ abstract class WalletAttestationProvider {
   /// the proof of possession's `aud`; it differs from [credentialIssuer]
   /// whenever the credential issuer delegates to a separate authorization
   /// server. `null` when that server's metadata named no issuer.
+  ///
+  /// [challenge] is a fresh `attestation_challenge` from that server's
+  /// `challenge_endpoint`, carried in the proof of possession as `challenge`
+  /// (draft 11, §5.1, §6.3). `null` when the server publishes no challenge
+  /// endpoint.
   Future<ClientAttestationPair?> attestationFor({
     required String credentialIssuer,
     String? authorizationServer,
+    String? challenge,
     Map<String, dynamic>? issuerMetadata,
   });
 
