@@ -18,7 +18,7 @@ const protocolTraceFolder = 'protocol_traces';
 /// access tokens and credentials. Must run before the first `HttpClient` is
 /// created, so before `runApp`.
 Future<void> startProtocolTrace() async {
-  // if (!kDebugMode) return;
+  if (!kDebugMode) return;
   final log = getLogger('ProtocolTrace');
   try {
     final base =
