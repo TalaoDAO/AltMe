@@ -84,8 +84,16 @@ abstract class WalletAttestationProvider {
   /// `preferred_client_status_period` (§9) to decide whether a cached
   /// attestation is still good enough, and the enterprise scheme reads nothing
   /// at all.
+  ///
+  /// [authorizationServer] is the RFC 8414 issuer identifier of the
+  /// authorization server the pair is presented to. OAuth 2.0
+  /// Attestation-Based Client Authentication (draft 11, §5.1) requires it as
+  /// the proof of possession's `aud`; it differs from [credentialIssuer]
+  /// whenever the credential issuer delegates to a separate authorization
+  /// server. `null` when that server's metadata named no issuer.
   Future<ClientAttestationPair?> attestationFor({
     required String credentialIssuer,
+    String? authorizationServer,
     Map<String, dynamic>? issuerMetadata,
   });
 

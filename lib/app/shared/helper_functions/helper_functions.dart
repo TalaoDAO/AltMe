@@ -1505,6 +1505,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
   required ProfileCubit profileCubit,
   required bool isEBSI,
   required String issuer,
+  String? authorizationServer,
   WalletAttestationProvider? attestationProvider,
   Map<String, dynamic>? issuerMetadata,
   ClientAuthentication? clientAuthentication,
@@ -1566,6 +1567,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
     Future<ClientAttestationPair?> clientAttestation() async =>
         attestationPair ??= await provider.attestationFor(
           credentialIssuer: issuer,
+          authorizationServer: authorizationServer,
           issuerMetadata: issuerMetadata,
         );
 

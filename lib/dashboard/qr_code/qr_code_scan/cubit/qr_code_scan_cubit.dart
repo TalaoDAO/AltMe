@@ -1360,6 +1360,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         profileCubit: profileCubit,
         isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
         issuer: oidc4vcParameters.issuer,
+        authorizationServer:
+            oidc4vcParameters.authorizationServerOpenIdConfiguration.issuer,
         issuerMetadata:
             oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
         clientAuthentication: clientAuthentication,
@@ -1511,6 +1513,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 profileCubit: profileCubit,
                 isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
                 issuer: oidc4vcParameters.issuer,
+                authorizationServer: oidc4vcParameters
+                    .authorizationServerOpenIdConfiguration
+                    .issuer,
                 issuerMetadata: oidc4vcParameters
                     .issuerOpenIdConfiguration
                     .rawConfiguration,
