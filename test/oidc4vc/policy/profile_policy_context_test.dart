@@ -62,6 +62,22 @@ void main() {
   Future<ProfilePolicyContext> resolve(ProfileModel model) =>
       ProfilePolicyContext.resolve(model, loader: shippedPolicies);
 
+  /// A context under the policy [id], whatever this app's
+  /// `Parameters.policyFor` maps [model]'s profile to, so the cases below hold
+  /// in every app that shares this adapter.
+  Future<ProfilePolicyContext> under(
+    String id,
+    ProfileModel model, {
+    PolicyMode mode = PolicyMode.lenient,
+    bool hasWalletAttestation = true,
+  }) async => ProfilePolicyContext(
+    policy: await shippedPolicies.load(id),
+    mode: mode,
+    profile:
+        model.profileSetting.selfSovereignIdentityOptions.customOidc4vcProfile,
+    hasWalletAttestation: hasWalletAttestation,
+  );
+
   const advertisesDpop = {
     'dpop_signing_alg_values_supported': ['ES256'],
   };
@@ -79,10 +95,18 @@ void main() {
 
   group('resolve', () {
     test('loads the policy Parameters maps the profile to', () async {
-      expect((await resolve(defaultOne)).policy.id, 'core');
-      expect((await resolve(custom)).policy.id, 'core');
-      expect((await resolve(eudiw)).policy.id, 'haip');
-      expect((await resolve(eudiw)).mode, PolicyMode.lenient);
+      for (final type in ProfileType.values) {
+        final (:id, :mode, :hasWalletAttestation) = Parameters.policyFor(type);
+        final context = await resolve(custom.copyWith(profileType: type));
+
+        expect(context.policy.id, id, reason: type.name);
+        expect(context.mode, mode, reason: type.name);
+        expect(
+          context.hasWalletAttestation,
+          hasWalletAttestation,
+          reason: type.name,
+        );
+      }
     });
 
     test('keeps the profile flags when the policy file fails', () async {
@@ -102,7 +126,11 @@ void main() {
   group('decide', () {
     group('DPoP (#3515)', () {
       test('is used when the authorization server advertises it', () async {
-        final context = await resolve(defaultOne);
+        final context = await under(
+          'core',
+          defaultOne,
+          hasWalletAttestation: false,
+        );
 
         expect(
           context.decide(parameters(authorizationServer: advertisesDpop)).dpop,
@@ -111,13 +139,18 @@ void main() {
       });
 
       test('is not used when the server does not advertise it', () async {
-        final context = await resolve(defaultOne);
+        final context = await under(
+          'core',
+          defaultOne,
+          hasWalletAttestation: false,
+        );
 
         expect(context.decide(parameters()).dpop, isFalse);
       });
 
       test('is always used when the profile switches it on', () async {
-        final context = await resolve(
+        final context = await under(
+          'core',
           withOidc4vc(custom, (p) => p.copyWith(dpopSupport: true)),
         );
 
@@ -127,7 +160,7 @@ void main() {
 
     group('client authentication (#3538)', () {
       test('is WIA when the authorization server asks for it', () async {
-        final context = await resolve(custom);
+        final context = await under('core', custom);
         final decisions = context.decide(
           parameters(authorizationServer: asksForAttestation),
         );
@@ -140,7 +173,7 @@ void main() {
       });
 
       test("is the profile's own otherwise", () async {
-        final context = await resolve(custom);
+        final context = await under('core', custom);
 
         expect(
           context.clientAuthentication(context.decide(parameters())),
@@ -153,7 +186,11 @@ void main() {
       });
 
       test('is never WIA on the default profile', () async {
-        final context = await resolve(defaultOne);
+        final context = await under(
+          'core',
+          defaultOne,
+          hasWalletAttestation: false,
+        );
         final decisions = context.decide(
           parameters(authorizationServer: asksForAttestation),
         );
@@ -166,7 +203,7 @@ void main() {
       });
 
       test('is WIA when the profile configures it', () async {
-        final context = await resolve(eudiw);
+        final context = await under('haip', eudiw);
 
         expect(
           context.clientAuthentication(context.decide(parameters())),
@@ -177,9 +214,10 @@ void main() {
 
     group('PAR', () {
       test('follows the profile flag', () async {
-        expect((await resolve(custom)).decide(parameters()).par, isFalse);
+        expect((await under('core', custom)).decide(parameters()).par, isFalse);
         expect(
-          (await resolve(
+          (await under(
+            'core',
             withOidc4vc(
               custom,
               (p) => p.copyWith(pushAuthorizationRequest: true),
@@ -190,7 +228,7 @@ void main() {
       });
 
       test('is used when the authorization server requires it', () async {
-        final context = await resolve(custom);
+        final context = await under('core', custom);
 
         expect(
           context
@@ -207,7 +245,7 @@ void main() {
       });
 
       test('is always used under haip', () async {
-        final context = await resolve(eudiw);
+        final context = await under('haip', eudiw);
 
         expect(context.decide(parameters()).par, isTrue);
       });
@@ -216,7 +254,11 @@ void main() {
 
   group('checkIssuance', () {
     test('accepts CORE 3/4 under core', () async {
-      final context = await resolve(defaultOne);
+      final context = await under(
+        'core',
+        defaultOne,
+        hasWalletAttestation: false,
+      );
 
       expect(
         context.checkIssuance(parameters(authorizationServer: parNotRequired)),
@@ -225,7 +267,7 @@ void main() {
     });
 
     test('warns on CORE 3/4 under haip lenient', () async {
-      final context = await resolve(eudiw);
+      final context = await under('haip', eudiw);
       final verdict = context.checkIssuance(
         parameters(authorizationServer: parNotRequired),
       );
@@ -274,7 +316,11 @@ void main() {
         verdict.violations.map((violation) => violation.code).toList();
 
     test('accepts any request under core', () async {
-      final context = await resolve(defaultOne);
+      final context = await under(
+        'core',
+        defaultOne,
+        hasWalletAttestation: false,
+      );
 
       expect(context.checkPresentation(byValue), const PolicyYes());
     });
@@ -282,7 +328,7 @@ void main() {
     test(
       'accepts a signed x509_hash direct_post.jwt request under haip',
       () async {
-        final context = await resolve(eudiw);
+        final context = await under('haip', eudiw);
 
         expect(
           context.checkPresentation(
@@ -297,7 +343,7 @@ void main() {
     test(
       'warns on a request that misses the haip rules under lenient',
       () async {
-        final context = await resolve(eudiw);
+        final context = await under('haip', eudiw);
         final verdict = context.checkPresentation(byValue);
 
         expect(verdict, isA<PolicyWarning>());
@@ -310,7 +356,7 @@ void main() {
     );
 
     test('reads the Request Object rather than the query parameters', () async {
-      final context = await resolve(eudiw);
+      final context = await under('haip', eudiw);
       final verdict = context.checkPresentation(
         byReference,
         requestObject: jwt(const {'alg': 'none'}, haipRequest),
@@ -321,7 +367,7 @@ void main() {
 
     test('falls back to the query parameters when the Request Object is not '
         'a JWT', () async {
-      final context = await resolve(eudiw);
+      final context = await under('haip', eudiw);
 
       expect(
         codes(context.checkPresentation(byValue, requestObject: '')),
@@ -336,14 +382,7 @@ void main() {
     test(
       'a strict policy stops a request that misses the haip rules',
       () async {
-        final context = ProfilePolicyContext(
-          policy: await shippedPolicies.load('haip'),
-          mode: PolicyMode.strict,
-          profile: eudiw
-              .profileSetting
-              .selfSovereignIdentityOptions
-              .customOidc4vcProfile,
-        );
+        final context = await under('haip', eudiw, mode: PolicyMode.strict);
         final verdict = context.checkPresentation(byValue);
 
         expect(verdict, isA<PolicyNo>());
@@ -352,13 +391,10 @@ void main() {
     );
 
     test('requires verifier_info under eudi_wallet only', () async {
-      final context = ProfilePolicyContext(
-        policy: await shippedPolicies.load('eudi_wallet'),
+      final context = await under(
+        'eudi_wallet',
+        eudiw,
         mode: PolicyMode.strict,
-        profile: eudiw
-            .profileSetting
-            .selfSovereignIdentityOptions
-            .customOidc4vcProfile,
       );
 
       expect(
@@ -407,13 +443,13 @@ void main() {
     );
 
     test('lets a Yes through silently', () async {
-      (await resolve(custom)).enforce(const PolicyYes());
+      (await under('core', custom)).enforce(const PolicyYes());
 
       expect(traced(), isNot(contains('Policy')));
     });
 
     test('traces a Warning and goes on', () async {
-      (await resolve(eudiw)).enforce(const PolicyWarning([violation]));
+      (await under('haip', eudiw)).enforce(const PolicyWarning([violation]));
 
       expect(traced(), contains('Policy warning'));
       expect(traced(), contains('HAIP_PAR_REQUIRED_BY_AS'));
@@ -421,7 +457,7 @@ void main() {
     });
 
     test('stops the flow on a No with a policy_violation error', () async {
-      final context = await resolve(eudiw);
+      final context = await under('haip', eudiw);
 
       expect(
         () => context.enforce(const PolicyNo([violation])),
@@ -436,14 +472,7 @@ void main() {
     });
 
     test('a strict policy stops CORE 3/4', () async {
-      final context = ProfilePolicyContext(
-        policy: await shippedPolicies.load('haip'),
-        mode: PolicyMode.strict,
-        profile: eudiw
-            .profileSetting
-            .selfSovereignIdentityOptions
-            .customOidc4vcProfile,
-      );
+      final context = await under('haip', eudiw, mode: PolicyMode.strict);
 
       expect(
         () => context.enforce(
