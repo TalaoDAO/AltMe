@@ -1811,6 +1811,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             qrCodeScanCubit: this,
             openIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
             credentialKeyIds: credentialKeyIds,
+            dpopKey: customOidc4vcProfile.dpopSupport ? publicKeyForDPop : null,
           );
           allItems.addAll(items);
         } else {

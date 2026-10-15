@@ -2447,37 +2447,12 @@ Future<String> getDPopJwt({
   String? accessToken,
   String? nonce,
   String? dpopNonce,
-}) async {
-  final tokenParameters = TokenParameters(
-    privateKey: jsonDecode(publicKey) as Map<String, dynamic>,
-    mediaType: MediaType.dPop,
-    did: '', // just added as it is required field
-    clientType:
-        ClientType.p256JWKThumprint, // just added as it is required field
-    proofHeaderType: ProofHeaderType.jwk,
-    clientId: '', // just added as it is required field
-  );
-
-  final jti = const Uuid().v4();
-  final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-
-  final payload = {'jti': jti, 'htm': 'POST', 'htu': url, 'iat': iat};
-
-  if (accessToken != null) {
-    final hash = sh256Hash(accessToken);
-    payload['ath'] = hash;
-  }
-
-  // if (nonce != null) payload['nonce'] = nonce;
-  if (dpopNonce != null) payload['nonce'] = dpopNonce;
-
-  final jwtToken = generateToken(
-    payload: payload,
-    tokenParameters: tokenParameters,
-    ignoreProofHeaderType: false,
-  );
-  return jwtToken;
-}
+}) async => dPopProof(
+  url: url,
+  privateKey: publicKey,
+  accessToken: accessToken,
+  dpopNonce: dpopNonce,
+);
 
 /// The nonce of an RFC 9449 `use_dpop_nonce` challenge in [error], or null
 /// when it is not one. The server wants a DPoP proof that carries this nonce

@@ -500,6 +500,7 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
       if (state.status == QrScanStatus.success) {
         if (state.route != null) {
           await Navigator.of(context).push<void>(state.route!);
+          context.read<CredentialsCubit>().notifyDeclinedCredentials();
           context.read<QRCodeScanCubit>().clearRoute();
         }
       }
