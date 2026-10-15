@@ -3611,4 +3611,8 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get mdocReaderCheckUnchecked => 'Not checked';
+
+  @override
+  String get policyViolation =>
+      'Este servicio no cumple los requisitos de seguridad del perfil de su cartera.';
 }

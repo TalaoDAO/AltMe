@@ -22,6 +22,8 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
   required List<dynamic>? authorizationDetails,
   required QRCodeScanCubit qrCodeScanCubit,
   required String publicKeyForDPop,
+  required bool dpop,
+  required ClientAuthentication clientAuthentication,
   required String? cnonce,
   PlatformP256Keys platformKeys = const PlatformP256Keys(),
 }) async {
@@ -226,12 +228,7 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
         credentialIdentifier: credentialIdentifier,
         cryptoHolderBinding: cryptoHolderBinding,
         credentialDefinition: credentialDefinition,
-        clientAuthentication: clientAuthenticationFor(
-          profile: profileCubit.state.model,
-          authorizationServerMetadata: oidc4vcParameters
-              .authorizationServerOpenIdConfiguration
-              .rawConfiguration,
-        ),
+        clientAuthentication: clientAuthentication,
         vct: vct,
         proofType: mdocKeyAlias != null
             ? ProofType.jwt
@@ -277,6 +274,7 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
         dio: Dio()..interceptors.addAll([if (kDebugMode) Logging()]),
         credentialData: credentialData,
         publicKeyForDPop: publicKeyForDPop,
+        dpop: dpop,
       );
     } catch (_) {
       // No credential will ever be bound to this key.
@@ -382,21 +380,16 @@ Future<dynamic> getSingleCredentialData({
   required Dio dio,
   required Map<String, dynamic> credentialData,
   required String publicKeyForDPop,
+  required bool dpop,
 }) async {
   final credentialEndpoint = profileCubit.oidc4vc.readCredentialEndpoint(
     openIdConfiguration,
   );
 
-  final customOidc4vcProfile = profileCubit
-      .state
-      .model
-      .profileSetting
-      .selfSovereignIdentityOptions
-      .customOidc4vcProfile;
   try {
     String? dPop;
 
-    if (customOidc4vcProfile.dpopSupport) {
+    if (dpop) {
       dPop = await getDPopJwt(
         url: credentialEndpoint,
         accessToken: accessToken,

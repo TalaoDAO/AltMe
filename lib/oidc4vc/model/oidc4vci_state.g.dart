@@ -22,6 +22,11 @@ Oidc4VCIState _$Oidc4VCIStateFromJson(Map<String, dynamic> json) =>
       clientSecret: json['clientSecret'] as String?,
       oAuthClientAttestation: json['oAuthClientAttestation'] as String?,
       oAuthClientAttestationPop: json['oAuthClientAttestationPop'] as String?,
+      dpop: json['dpop'] as bool? ?? false,
+      clientAuthentication: $enumDecodeNullable(
+        _$ClientAuthenticationEnumMap,
+        json['clientAuthentication'],
+      ),
     );
 
 Map<String, dynamic> _$Oidc4VCIStateToJson(Oidc4VCIState instance) =>
@@ -40,4 +45,16 @@ Map<String, dynamic> _$Oidc4VCIStateToJson(Oidc4VCIState instance) =>
       'clientSecret': instance.clientSecret,
       'oAuthClientAttestation': instance.oAuthClientAttestation,
       'oAuthClientAttestationPop': instance.oAuthClientAttestationPop,
+      'dpop': instance.dpop,
+      'clientAuthentication':
+          _$ClientAuthenticationEnumMap[instance.clientAuthentication],
     };
+
+const _$ClientAuthenticationEnumMap = {
+  ClientAuthentication.none: 'none',
+  ClientAuthentication.clientSecretBasic: 'client_secret_basic',
+  ClientAuthentication.clientSecretPost: 'client_secret_post',
+  ClientAuthentication.clientId: 'client_id',
+  ClientAuthentication.clientSecretJwt: 'client_secret_jwt',
+  ClientAuthentication.wia: 'wia',
+};

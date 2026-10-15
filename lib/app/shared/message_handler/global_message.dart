@@ -401,4 +401,5 @@ class GlobalMessage {
       l10n.recoveryPhraseIncorrectErrorMessage;
 
   String get RESPONSE_STRING_invalidCode => l10n.invalidCode;
+  String get RESPONSE_STRING_policyViolation => l10n.policyViolation;
 }

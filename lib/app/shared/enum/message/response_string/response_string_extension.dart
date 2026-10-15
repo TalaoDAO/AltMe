@@ -529,6 +529,9 @@ extension ResponseStringX on ResponseString {
 
       case ResponseString.RESPONSE_STRING_invalidCode:
         return globalMessage.RESPONSE_STRING_invalidCode;
+
+      case ResponseString.RESPONSE_STRING_policyViolation:
+        return globalMessage.RESPONSE_STRING_policyViolation;
     }
   }
 }

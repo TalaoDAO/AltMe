@@ -1359,12 +1359,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required Oidc4vcParameters oidc4vcParameters,
   }) async {
     try {
-      final clientAuthentication = clientAuthenticationFor(
-        profile: profileCubit.state.model,
-        authorizationServerMetadata: oidc4vcParameters
-            .authorizationServerOpenIdConfiguration
-            .rawConfiguration,
+      // The policy is checked before the first request to the authorization
+      // server, and decides the whole flow.
+      final policy = await ProfilePolicyContext.resolve(
+        profileCubit.state.model,
       );
+      policy.enforce(policy.checkIssuance(oidc4vcParameters));
+      final decisions = policy.decide(oidc4vcParameters);
+      final clientAuthentication = policy.clientAuthentication(decisions);
 
       final customOidc4vcProfile = profileCubit
           .state
@@ -1436,6 +1438,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               ? null
               : oAuthClientAttestationPop,
           publicKeyForDPop: publicKeyForDPop,
+          dpop: decisions.dpop,
+          clientAuthentication: clientAuthentication,
           oidc4vcParameters: oidc4vcParameters,
         );
       } else {
@@ -1453,7 +1457,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
           oAuthClientAttestation: oAuthClientAttestation,
           oAuthClientAttestationPop: oAuthClientAttestationPop,
-          secureAuthorizedFlow: customOidc4vcProfile.pushAuthorizationRequest,
+          decisions: decisions,
           client: client,
           profileType: profileCubit.state.model.profileType,
           walletIssuer: Parameters.walletIssuer,
@@ -1491,6 +1495,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String? clientId,
     required String? clientSecret,
     required String publicKeyForDPop,
+    required bool dpop,
+    required ClientAuthentication clientAuthentication,
     String? oAuthClientAttestation,
     String? oAuthClientAttestationPop,
   }) async {
@@ -1538,12 +1544,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             /// Skipped when the authorization server grants anonymous
             /// pre-authorized access: that token request carries neither a
             /// client_id nor client authentication (OpenID4VCI).
-            final clientAuthentication = clientAuthenticationFor(
-              profile: profileCubit.state.model,
-              authorizationServerMetadata: oidc4vcParameters
-                  .authorizationServerOpenIdConfiguration
-                  .rawConfiguration,
-            );
             final isAnonymousPreAuthorizedFlow =
                 oidc4vcParameters.preAuthorizedCode != null &&
                 oidc4vcParameters
@@ -1617,7 +1617,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
             String? dPop;
 
-            if (customOidc4vcProfile.dpopSupport) {
+            if (dpop) {
               dPop = await getDPopJwt(
                 url: oidc4vcParameters.tokenEndpoint,
                 accessToken: savedAccessToken,
@@ -1714,6 +1714,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 authorizationDetails: savedAuthorizationDetails,
                 qrCodeScanCubit: this,
                 publicKeyForDPop: publicKeyForDPop,
+                dpop: dpop,
+                clientAuthentication: clientAuthentication,
                 oidc4vcParameters: oidc4vcParameters,
               );
             } catch (e) {
@@ -1736,6 +1738,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                   authorizationDetails: savedAuthorizationDetails,
                   qrCodeScanCubit: this,
                   publicKeyForDPop: publicKeyForDPop,
+                  dpop: dpop,
+                  clientAuthentication: clientAuthentication,
                   oidc4vcParameters: oidc4vcParameters,
                 );
               } else {
@@ -1797,7 +1801,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             qrCodeScanCubit: this,
             openIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
             credentialKeyIds: credentialKeyIds,
-            dpopKey: customOidc4vcProfile.dpopSupport ? publicKeyForDPop : null,
+            dpopKey: dpop ? publicKeyForDPop : null,
           );
           allItems.addAll(items);
         } else {
@@ -2059,6 +2063,16 @@ ${state.uri}
         oAuthClientAttestation: oidc4VCIState.oAuthClientAttestation,
         oAuthClientAttestationPop: oidc4VCIState.oAuthClientAttestationPop,
         publicKeyForDPop: oidc4VCIState.publicKeyForDPo,
+        dpop: oidc4VCIState.dpop,
+        clientAuthentication:
+            oidc4VCIState.clientAuthentication ??
+            profileCubit
+                .state
+                .model
+                .profileSetting
+                .selfSovereignIdentityOptions
+                .customOidc4vcProfile
+                .clientAuthentication,
         oidc4vcParameters: Oidc4vcParameters(
           oidc4vciDraftType: oidc4vciDraftType,
           useOAuthAuthorizationServerLink: false,

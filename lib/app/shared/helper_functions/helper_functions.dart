@@ -1212,6 +1212,9 @@ ResponseString getErrorResponseString(String errorString) {
     case 'server_error':
       return ResponseString.RESPONSE_STRING_theServiceIsNotAvailable;
 
+    case 'policy_violation':
+      return ResponseString.RESPONSE_STRING_policyViolation;
+
     case 'invalid_client':
       return ResponseString.RESPONSE_STRING_invalidClientErrorDescription;
 
@@ -1496,30 +1499,6 @@ String getUpdatedUrlForSIOPV2OIC4VP({
   return newUrl;
 }
 
-/// The client authentication the wallet uses with an authorization server.
-///
-/// The profile's own, or Wallet Instance Attestation when the authorization
-/// server lists `attest_jwt_client_auth` in its
-/// `token_endpoint_auth_methods_supported` (OAuth 2.0 Attestation-Based Client
-/// Authentication) — except on the default profile, which has no wallet
-/// attestation.
-ClientAuthentication clientAuthenticationFor({
-  required ProfileModel profile,
-  Map<String, dynamic>? authorizationServerMetadata,
-}) {
-  final configured = profile
-      .profileSetting
-      .selfSovereignIdentityOptions
-      .customOidc4vcProfile
-      .clientAuthentication;
-  if (profile.profileType == ProfileType.defaultOne) return configured;
-  final methods =
-      authorizationServerMetadata?['token_endpoint_auth_methods_supported'];
-  final asksForAttestation =
-      methods is List && methods.contains('attest_jwt_client_auth');
-  return asksForAttestation ? ClientAuthentication.wia : configured;
-}
-
 /// A fresh Client Attestation challenge from [challengeEndpoint].
 ///
 /// OAuth 2.0 Attestation-Based Client Authentication (draft 11, §6.3): the
@@ -1555,7 +1534,7 @@ Future<String> fetchAttestationChallenge({
 // oAuthClientAttestationPop
 ///
 /// [clientAuthentication] overrides the profile's, as
-/// [clientAuthenticationFor] decides it for one authorization server.
+/// `ProfilePolicyContext.clientAuthentication` decides it for one flow.
 ///
 /// [attestationProvider] supplies the client attestation pair. It defaults to
 /// the wallet-wide provider on [profileCubit] and then to

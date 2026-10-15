@@ -3623,4 +3623,8 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get mdocReaderCheckUnchecked => 'Not checked';
+
+  @override
+  String get policyViolation =>
+      'Αυτή η υπηρεσία δεν πληροί τις απαιτήσεις ασφαλείας του προφίλ του πορτοφολιού σας.';
 }

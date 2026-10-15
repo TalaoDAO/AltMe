@@ -6512,6 +6512,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not checked'**
   String get mdocReaderCheckUnchecked;
+
+  /// No description provided for @policyViolation.
+  ///
+  /// In en, this message translates to:
+  /// **'This service does not meet the security requirements of your wallet profile.'**
+  String get policyViolation;
 }
 
 class _AppLocalizationsDelegate

@@ -19,7 +19,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
   required String? clientSecret,
   required ClientAuthentication clientAuthentication,
   required List<VCFormatType> formatsSupported,
-  required bool secureAuthorizedFlow,
+  required IssuanceDecisions decisions,
   required DioClient client,
   required ProfileType profileType,
   required String walletIssuer,
@@ -46,6 +46,8 @@ Future<Uri?> getAuthorizationUriForIssuer({
     tokenEndpoint: oidc4vcParameters.tokenEndpoint,
     authorizationServer:
         oidc4vcParameters.authorizationServerOpenIdConfiguration.issuer,
+    dpop: decisions.dpop,
+    clientAuthentication: clientAuthentication,
   );
   late Oidc4VCIState oidc4VCIState;
   switch (clientAuthentication) {
@@ -108,17 +110,13 @@ Future<Uri?> getAuthorizationUriForIssuer({
         scope: scope,
         clientAuthentication: clientAuthentication,
         formatsSuported: formatsSupported,
-        secureAuthorizedFlow: secureAuthorizedFlow,
+        secureAuthorizedFlow: decisions.par,
         isEBSIProfile: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
         walletIssuer: walletIssuer,
         oidc4vcParameters: oidc4vcParameters,
       );
 
-  final requirePushedAuthorizationRequests = oidc4vcParameters
-      .authorizationServerOpenIdConfiguration
-      .requirePushedAuthorizationRequests;
-
-  final isSecure = requirePushedAuthorizationRequests || secureAuthorizedFlow;
+  final isSecure = decisions.par;
 
   if (profileCubit.state.model.isDeveloperMode) {
     final value = await qrCodeScanCubit.showDataBeforeSending(
@@ -139,13 +137,6 @@ Future<Uri?> getAuthorizationUriForIssuer({
   if (isSecure) {
     String? dPop;
 
-    final customOidc4vcProfile = profileCubit
-        .state
-        .model
-        .profileSetting
-        .selfSovereignIdentityOptions
-        .customOidc4vcProfile;
-
     // RFC 9126 §5: `pushed_authorization_request_endpoint` is authorization
     // server metadata, so it is read there first. The credential issuer's own
     // metadata only has it when the issuer is its own authorization server.
@@ -160,7 +151,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
             .pushedAuthorizationRequestEndpoint ??
         '${oidc4vcParameters.authorizationEndpoint}/par';
 
-    if (customOidc4vcProfile.dpopSupport) {
+    if (decisions.dpop) {
       dPop = await getDPopJwt(
         url: parUrl,
         // accessToken: savedAccessToken,

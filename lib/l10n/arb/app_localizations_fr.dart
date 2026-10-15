@@ -3631,4 +3631,8 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get mdocReaderCheckUnchecked => 'Not checked';
+
+  @override
+  String get policyViolation =>
+      'Ce service ne respecte pas les exigences de sécurité du profil de votre wallet.';
 }

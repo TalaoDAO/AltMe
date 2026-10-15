@@ -1248,5 +1248,6 @@
   "notVerifiedLabel": "No verificat",
   "onlyInformationShownWillBeShared": "Només es compartirà la informació mostrada a dalt.",
   "shareInformationButtonLabel": "Compartir informació",
-  "dontShareLabel": "No comparteixis"
+  "dontShareLabel": "No comparteixis",
+  "policyViolation": "Aquest servei no compleix els requisits de seguretat del perfil de la vostra cartera."
 }
