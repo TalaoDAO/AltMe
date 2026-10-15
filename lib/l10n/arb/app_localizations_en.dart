@@ -3190,6 +3190,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activityLogDescription => 'See your activities';
 
   @override
+  String get protocolTraceLogs => 'Protocol Trace Logs';
+
+  @override
+  String get protocolTraceLogsDescription =>
+      'View and delete recorded trace files';
+
+  @override
+  String get protocolTraceLogsEmpty => 'No trace files recorded yet';
+
+  @override
+  String get deleteAllTraceLogs => 'Delete all';
+
+  @override
+  String get deleteAllTraceLogsConfirmationTitle => 'Delete all trace logs?';
+
+  @override
+  String get deleteAllTraceLogsConfirmationSubtitle => 'This cannot be undone.';
+
+  @override
   String get walletInitialized => 'Wallet Initialized';
 
   @override

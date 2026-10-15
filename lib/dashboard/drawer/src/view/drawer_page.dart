@@ -5,6 +5,7 @@ import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:protocol_trace/protocol_trace.dart';
 
 class DrawerPage extends StatelessWidget {
   const DrawerPage({super.key});
@@ -191,6 +192,18 @@ class DrawerView extends StatelessWidget {
                             Navigator.of(
                               context,
                             ).push<void>(ActivityLogPage.route());
+                          },
+                        ),
+                        const SizedBox(height: Sizes.spaceSmall),
+                      ],
+                      if (ProtocolTrace.current != null) ...[
+                        DrawerCategoryItem(
+                          title: l10n.protocolTraceLogs,
+                          subTitle: l10n.protocolTraceLogsDescription,
+                          onClick: () {
+                            Navigator.of(
+                              context,
+                            ).push<void>(ProtocolTraceLogsPage.route());
                           },
                         ),
                         const SizedBox(height: Sizes.spaceSmall),

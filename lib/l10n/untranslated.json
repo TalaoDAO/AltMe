@@ -34,6 +34,12 @@
   ],
 
   "el": [
+    "protocolTraceLogs",
+    "protocolTraceLogsDescription",
+    "protocolTraceLogsEmpty",
+    "deleteAllTraceLogs",
+    "deleteAllTraceLogsConfirmationTitle",
+    "deleteAllTraceLogsConfirmationSubtitle",
     "mdocShowToReader",
     "mdocProximityTitle",
     "mdocProximityPreparing",
@@ -102,6 +108,12 @@
   ],
 
   "fr": [
+    "protocolTraceLogs",
+    "protocolTraceLogsDescription",
+    "protocolTraceLogsEmpty",
+    "deleteAllTraceLogs",
+    "deleteAllTraceLogsConfirmationTitle",
+    "deleteAllTraceLogsConfirmationSubtitle",
     "mdocReaderTitle",
     "mdocReaderConnecting",
     "mdocReaderWaitingForResponse",

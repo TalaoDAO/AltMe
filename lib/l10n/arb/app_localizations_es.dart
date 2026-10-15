@@ -3215,6 +3215,28 @@ class AppLocalizationsEs extends AppLocalizations {
   String get activityLogDescription => 'Ver tus actividades';
 
   @override
+  String get protocolTraceLogs => 'Registros de Trazas del Protocolo';
+
+  @override
+  String get protocolTraceLogsDescription =>
+      'Ver y eliminar los archivos de traza grabados';
+
+  @override
+  String get protocolTraceLogsEmpty =>
+      'Todavía no se ha grabado ningún archivo de traza';
+
+  @override
+  String get deleteAllTraceLogs => 'Eliminar todos';
+
+  @override
+  String get deleteAllTraceLogsConfirmationTitle =>
+      '¿Eliminar todos los registros de traza?';
+
+  @override
+  String get deleteAllTraceLogsConfirmationSubtitle =>
+      'Esta acción no se puede deshacer.';
+
+  @override
   String get walletInitialized => 'Cartera digital inicializada';
 
   @override
