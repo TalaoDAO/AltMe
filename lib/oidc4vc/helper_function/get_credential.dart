@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/helper_function/mdoc_credential_data.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:platform_p256_keys/platform_p256_keys.dart';
 
@@ -271,7 +272,9 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
         profileCubit: profileCubit,
         openIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
         accessToken: accessToken,
-        dio: Dio(),
+        // The app's request logging, in debug builds only, so that a refused
+        // credential request shows its status and body.
+        dio: Dio()..interceptors.addAll([if (kDebugMode) Logging()]),
         credentialData: credentialData,
         publicKeyForDPop: publicKeyForDPop,
       );
@@ -404,7 +407,7 @@ Future<dynamic> getSingleCredentialData({
     try {
       final credential = await profileCubit.oidc4vc.getSingleCredential(
         accessToken: accessToken,
-        dio: Dio(),
+        dio: dio,
         credentialData: credentialData,
         credentialEndpoint: credentialEndpoint,
         dPop: dPop,
@@ -418,7 +421,7 @@ Future<dynamic> getSingleCredentialData({
       if (dPop == null || dpopNonce == null) rethrow;
       final credential = await profileCubit.oidc4vc.getSingleCredential(
         accessToken: accessToken,
-        dio: Dio(),
+        dio: dio,
         credentialData: credentialData,
         credentialEndpoint: credentialEndpoint,
         dPop: await getDPopJwt(
