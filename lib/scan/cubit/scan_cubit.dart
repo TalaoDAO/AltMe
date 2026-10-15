@@ -419,6 +419,7 @@ class ScanCubit extends Cubit<ScanState> {
   }
 
   void emitError(dynamic e) {
+    traceFlowFailure(e);
     final messageHandler = getMessageHandler(e);
 
     emit(

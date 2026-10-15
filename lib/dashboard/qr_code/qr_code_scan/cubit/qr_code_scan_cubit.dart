@@ -30,6 +30,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:protocol_trace/protocol_trace.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'qr_code_scan_cubit.g.dart';
@@ -163,6 +164,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   void emitError({required dynamic error, Widget? callToAction}) {
+    traceFlowFailure(error);
     final messageHandler = getMessageHandler(error);
 
     emit(
@@ -187,6 +189,16 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         qrScanStatus: QrScanStatus.loading,
         isScan: isScan,
       ),
+    );
+
+    // Debug builds: one protocol trace file per scanned flow.
+    ProtocolTrace.current?.beginFlow(
+      isSiopV2OrOidc4VpUrl(uri)
+          ? 'Credential presentation'
+          : uri.queryParameters.containsKey('credential_offer') ||
+                uri.queryParameters.containsKey('credential_offer_uri')
+          ? 'Credential issuance'
+          : 'QR code scan',
     );
 
     try {

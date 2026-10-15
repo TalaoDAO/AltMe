@@ -13,7 +13,17 @@ class Logging extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    // One message per part: logcat cuts a message at about 4 KB, and a single
+    // client attestation header nearly fills that, which used to cut off the
+    // remaining headers and the body.
     log.i('REQUEST[${options.method}] => PATH: ${options.uri}');
+    for (final header in options.headers.entries) {
+      log.i('Header ${header.key}: ${header.value}');
+    }
+    if (options.queryParameters.isNotEmpty) {
+      log.i('Query: ${_encode(options.queryParameters)}');
+    }
+    log.i('Body: ${_encode(options.data)}');
     return super.onRequest(options, handler);
   }
 

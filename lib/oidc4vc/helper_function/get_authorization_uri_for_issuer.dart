@@ -143,9 +143,15 @@ Future<Uri?> getAuthorizationUriForIssuer({
         .selfSovereignIdentityOptions
         .customOidc4vcProfile;
 
-    // TODO(hawkbee): return an error message if
-    // openIdConfiguration.pushedAuthorizationRequestEndpoint is null
+    // RFC 9126 §5: `pushed_authorization_request_endpoint` is authorization
+    // server metadata, so it is read there first. The credential issuer's own
+    // metadata only has it when the issuer is its own authorization server.
+    // TODO(hawkbee): return an error message rather than guessing when
+    // neither publishes it.
     final parUrl =
+        oidc4vcParameters
+            .authorizationServerOpenIdConfiguration
+            .pushedAuthorizationRequestEndpoint ??
         oidc4vcParameters
             .issuerOpenIdConfiguration
             .pushedAuthorizationRequestEndpoint ??
