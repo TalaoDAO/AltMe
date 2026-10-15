@@ -188,12 +188,17 @@ Future<Uri?> getAuthorizationUriForIssuer({
         data: authorizationRequestParemeters,
       );
     } on NetworkException catch (e) {
-      // RFC 9449 §8: retried once with a fresh proof when the authorization
-      // server asks for a DPoP nonce. The client attestation PoP is replaced
-      // too: the server has already consumed its `jti` and would reject it as
+      // Retried once with fresh proofs when the authorization server asks for
+      // a DPoP nonce (RFC 9449 §8) or for a fresh attestation challenge
+      // (`use_attestation_challenge`). Both proofs are replaced either way: the
+      // server has already consumed their `jti` and would reject them as
       // replayed.
-      final dpopNonce = dpopNonceChallenge(e);
-      if (dPop == null || dpopNonce == null) rethrow;
+      final dpopNonce = dPop == null ? null : dpopNonceChallenge(e);
+      final attestationChallenge =
+          clientAuthentication == ClientAuthentication.wia
+          ? attestationChallengeRequest(e)
+          : (requested: false, challenge: null);
+      if (dpopNonce == null && !attestationChallenge.requested) rethrow;
       if (clientAuthentication == ClientAuthentication.wia) {
         final (
           _,
@@ -212,6 +217,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
                       .authorizationServerOpenIdConfiguration
                       .rawConfiguration?['challenge_endpoint']
                   as String?,
+          attestationChallenge: attestationChallenge.challenge,
           client: client,
           issuerMetadata:
               oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
@@ -226,11 +232,12 @@ Future<Uri?> getAuthorizationUriForIssuer({
         parUrl,
         headers: {
           ...headers,
-          'DPoP': await getDPopJwt(
-            url: parUrl,
-            publicKey: publicKeyForDPop,
-            dpopNonce: dpopNonce,
-          ),
+          if (dPop != null)
+            'DPoP': await getDPopJwt(
+              url: parUrl,
+              publicKey: publicKeyForDPop,
+              dpopNonce: dpopNonce,
+            ),
         },
         data: authorizationRequestParemeters,
       );
