@@ -215,6 +215,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       if (isSiopV2OrOidc4VpUrl(uri)) {
         /// verfier case
 
+        await enforcePresentationPolicy(uri);
+
         final String? requestUri = state.uri?.queryParameters['request_uri'];
         final String? request = state.uri?.queryParameters['request'];
 
@@ -1069,6 +1071,30 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         ),
       );
     }
+  }
+
+  /// Checks the presentation request of [uri] against the profile policy
+  /// before the user is asked to consent: a No stops the flow, a Warning goes
+  /// to the protocol trace.
+  Future<void> enforcePresentationPolicy(Uri uri) async {
+    final request = uri.queryParameters['request'];
+    final requestUri = uri.queryParameters['request_uri'];
+    final policy = await ProfilePolicyContext.resolve(profileCubit.state.model);
+    policy.enforce(
+      policy.checkPresentation(
+        uri,
+        requestObject:
+            request ??
+            (requestUri == null
+                ? null
+                : await fetchRequestUriPayload(
+                    url: requestUri,
+                    client: client,
+                    oidc4vc: oidc4vc,
+                    requestUriMethod: uri.queryParameters['request_uri_method'],
+                  )),
+      ),
+    );
   }
 
   /// verify jwt

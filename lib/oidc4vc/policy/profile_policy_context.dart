@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:protocol_trace/protocol_trace.dart';
 
@@ -22,8 +23,8 @@ class ProfilePolicyContext {
   /// The policy of [model]'s profile type, loaded by [loader].
   ///
   /// A policy file that fails to load gives a context with no rule, so the
-  /// decisions follow the profile flags alone, and [checkIssuance] reports
-  /// the failure.
+  /// decisions follow the profile flags alone, and the checks report the
+  /// failure.
   static Future<ProfilePolicyContext> resolve(
     ProfileModel model, {
     ProfilePolicyLoader? loader,
@@ -95,12 +96,7 @@ class ProfilePolicyContext {
   /// [parameters] against the policy.
   PolicyVerdict checkIssuance(Oidc4vcParameters parameters) =>
       PolicyVerdict.of([
-        if (loadError != null)
-          const PolicyViolation(
-            code: 'POLICY_UNAVAILABLE',
-            rule: 'policy',
-            sources: [],
-          ),
+        if (loadError != null) _unavailable,
         ..._issuance
             .checkAuthorizationServer(
               parameters.authorizationServerOpenIdConfiguration,
@@ -110,6 +106,46 @@ class ProfilePolicyContext {
             .checkIssuerMetadata(parameters.issuerOpenIdConfiguration)
             .violations,
       ], mode: mode);
+
+  /// Checks the presentation request of [uri] against the policy.
+  ///
+  /// [requestObject] is the request's Request Object, passed by value or
+  /// fetched by reference. When there is none, or it is not a JWT, the query
+  /// parameters of [uri] are the request.
+  PolicyVerdict checkPresentation(Uri uri, {Object? requestObject}) {
+    final (request, header) =
+        _decodeRequestObject(requestObject) ?? (uri.queryParameters, null);
+    return PolicyVerdict.of([
+      if (loadError != null) _unavailable,
+      ...PresentationPolicy(
+        policy,
+        mode: mode,
+      ).checkRequest(request, requestObjectHeader: header).violations,
+    ], mode: mode);
+  }
+
+  static (Map<String, dynamic>, Map<String, dynamic>)? _decodeRequestObject(
+    Object? requestObject,
+  ) {
+    if (requestObject is! String || requestObject.split('.').length != 3) {
+      return null;
+    }
+    try {
+      final jwtDecode = JWTDecode();
+      return (
+        jwtDecode.parseJwt(requestObject),
+        jwtDecode.parseJwtHeader(requestObject),
+      );
+    } on Exception {
+      return null;
+    }
+  }
+
+  static const _unavailable = PolicyViolation(
+    code: 'POLICY_UNAVAILABLE',
+    rule: 'policy',
+    sources: [],
+  );
 
   /// Acts on [verdict]: a [PolicyNo] stops the flow with a
   /// `policy_violation` error; a [PolicyWarning] goes to the protocol trace

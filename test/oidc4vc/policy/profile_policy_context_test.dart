@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:altme/app/app.dart';
@@ -246,6 +247,138 @@ void main() {
         context.checkIssuance(parameters()).violations.single.code,
         'POLICY_UNAVAILABLE',
       );
+    });
+  });
+
+  group('checkPresentation', () {
+    String encode(Map<String, dynamic> part) =>
+        base64Url.encode(utf8.encode(jsonEncode(part)));
+    String jwt(Map<String, dynamic> header, Map<String, dynamic> payload) =>
+        '${encode(header)}.${encode(payload)}.signature';
+
+    const haipRequest = {
+      'client_id': 'x509_hash:abc',
+      'response_mode': 'direct_post.jwt',
+      'response_type': 'vp_token',
+    };
+    final signedHaipRequest = jwt(const {'alg': 'ES256'}, haipRequest);
+    final byReference = Uri.parse(
+      'openid4vp://?client_id=x509_hash:abc&request_uri=https://verifier.example/r',
+    );
+    final byValue = Uri.parse(
+      'openid4vp://?client_id=redirect_uri:https://verifier.example'
+      '&response_mode=direct_post&response_type=vp_token',
+    );
+
+    List<String> codes(PolicyVerdict verdict) =>
+        verdict.violations.map((violation) => violation.code).toList();
+
+    test('accepts any request under core', () async {
+      final context = await resolve(defaultOne);
+
+      expect(context.checkPresentation(byValue), const PolicyYes());
+    });
+
+    test(
+      'accepts a signed x509_hash direct_post.jwt request under haip',
+      () async {
+        final context = await resolve(eudiw);
+
+        expect(
+          context.checkPresentation(
+            byReference,
+            requestObject: signedHaipRequest,
+          ),
+          const PolicyYes(),
+        );
+      },
+    );
+
+    test(
+      'warns on a request that misses the haip rules under lenient',
+      () async {
+        final context = await resolve(eudiw);
+        final verdict = context.checkPresentation(byValue);
+
+        expect(verdict, isA<PolicyWarning>());
+        expect(codes(verdict), [
+          'HAIP_CLIENT_ID_PREFIX_NOT_ALLOWED',
+          'HAIP_SIGNED_REQUEST_OBJECT_MISSING',
+          'HAIP_RESPONSE_ENCRYPTION_MISSING',
+        ]);
+      },
+    );
+
+    test('reads the Request Object rather than the query parameters', () async {
+      final context = await resolve(eudiw);
+      final verdict = context.checkPresentation(
+        byReference,
+        requestObject: jwt(const {'alg': 'none'}, haipRequest),
+      );
+
+      expect(codes(verdict), ['HAIP_SIGNED_REQUEST_OBJECT_MISSING']);
+    });
+
+    test('falls back to the query parameters when the Request Object is not '
+        'a JWT', () async {
+      final context = await resolve(eudiw);
+
+      expect(
+        codes(context.checkPresentation(byValue, requestObject: '')),
+        codes(context.checkPresentation(byValue)),
+      );
+      expect(
+        codes(context.checkPresentation(byValue, requestObject: 'a.b.c')),
+        codes(context.checkPresentation(byValue)),
+      );
+    });
+
+    test(
+      'a strict policy stops a request that misses the haip rules',
+      () async {
+        final context = ProfilePolicyContext(
+          policy: await shippedPolicies.load('haip'),
+          mode: PolicyMode.strict,
+          profile: eudiw
+              .profileSetting
+              .selfSovereignIdentityOptions
+              .customOidc4vcProfile,
+        );
+        final verdict = context.checkPresentation(byValue);
+
+        expect(verdict, isA<PolicyNo>());
+        expect(() => context.enforce(verdict), throwsA(isA<ResponseMessage>()));
+      },
+    );
+
+    test('requires verifier_info under eudi_wallet only', () async {
+      final context = ProfilePolicyContext(
+        policy: await shippedPolicies.load('eudi_wallet'),
+        mode: PolicyMode.strict,
+        profile: eudiw
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile,
+      );
+
+      expect(
+        codes(
+          context.checkPresentation(
+            byReference,
+            requestObject: signedHaipRequest,
+          ),
+        ),
+        ['EUDI_WALLET_VERIFIER_INFO_MISSING'],
+      );
+    });
+
+    test('reports a policy file that failed to load', () async {
+      final context = await ProfilePolicyContext.resolve(
+        custom,
+        loader: ProfilePolicyLoader(readFile: (_) async => 'not json'),
+      );
+
+      expect(codes(context.checkPresentation(byValue)), ['POLICY_UNAVAILABLE']);
     });
   });
 
