@@ -114,6 +114,10 @@ class DcqlQueryOfferPickView extends StatefulWidget {
 }
 
 class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
+  /// Set once Confirm is pressed: the button is disabled from then on, so a
+  /// presentation cannot be sent twice.
+  bool _presenting = false;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -177,15 +181,24 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
           child: Container(
             padding: const EdgeInsets.all(16),
             child: MyElevatedButton(
-              onPressed: () {
-                present(
-                  context: context,
-                  uri: widget.uri,
-                  result: result,
-                  packageFormatCredentials: packageFormatCredentials,
-                  candidates: candidates,
-                );
-              },
+              onPressed: _presenting
+                  ? null
+                  : () async {
+                      setState(() => _presenting = true);
+                      try {
+                        await present(
+                          context: context,
+                          uri: widget.uri,
+                          result: result,
+                          packageFormatCredentials: packageFormatCredentials,
+                          candidates: candidates,
+                        );
+                      } catch (_) {
+                        // Nothing was sent: the user may try again.
+                        if (mounted) setState(() => _presenting = false);
+                        rethrow;
+                      }
+                    },
               text: l10n.confirm,
             ),
           ),
