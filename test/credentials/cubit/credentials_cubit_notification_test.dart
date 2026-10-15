@@ -1,10 +1,10 @@
-import 'package:did_kit/did_kit.dart';
-import 'package:dio/dio.dart';
 import 'package:altme/activity_log/activity_log.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/key_generator/key_generator.dart';
 import 'package:altme/wallet/wallet.dart';
+import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:mocktail/mocktail.dart';

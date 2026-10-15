@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:altme/app/app.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:altme/app/app.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:protocol_trace/protocol_trace.dart';
 

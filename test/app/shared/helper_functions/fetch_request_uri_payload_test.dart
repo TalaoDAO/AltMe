@@ -1,5 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:altme/app/app.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:oidc4vc/oidc4vc.dart';
