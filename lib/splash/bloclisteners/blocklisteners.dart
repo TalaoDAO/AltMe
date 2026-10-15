@@ -9,6 +9,7 @@ import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/enterprise/enterprise.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/oidc4vc/helper_function/authorization_state.dart';
 import 'package:altme/oidc4vc/helper_function/get_issuance_data.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vci_accept_host.dart';
 import 'package:altme/oidc4vc/helper_function/oidc4vp_siopv2_accept_host.dart';
@@ -18,7 +19,6 @@ import 'package:altme/scan/scan.dart';
 import 'package:altme/splash/splash.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:beacon_flutter/beacon_flutter.dart';
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -393,12 +393,12 @@ final qrCodeBlocListener = BlocListener<QRCodeScanCubit, QRCodeScanState>(
               'AUTHORIZATION_URI_SECRET_KEY',
             );
 
-            final jwt = JWT.verify(
-              stateValue,
-              SecretKey(authorizationUriSecretKey),
-            );
-
-            final statePayload = jwt.payload as Map<String, dynamic>;
+            final statePayload = <String, dynamic>{
+              'challenge': AuthorizationState.decrypt(
+                stateValue,
+                secret: authorizationUriSecretKey,
+              ),
+            };
 
             await context.read<QRCodeScanCubit>().authorizedFlowCompletion(
               statePayload: statePayload,

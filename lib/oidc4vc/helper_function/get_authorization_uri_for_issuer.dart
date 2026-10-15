@@ -3,9 +3,8 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/oidc4vc/helper_function/authorization_state.dart';
 import 'package:altme/oidc4vc/model/oidc4vci_state.dart';
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
-
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -82,16 +81,18 @@ Future<Uri?> getAuthorizationUriForIssuer({
       );
   }
 
-  // save the state and give the id for the jwt
+  // save the state and give its id, encrypted, as the OAuth state
   profileCubit.addOidc4VCI(oidc4VCIState);
-  final jwt = JWT({'challenge': pkcePair.codeChallenge});
 
   await dotenv.load();
   final String authorizationUriSecretKey = dotenv.get(
     'AUTHORIZATION_URI_SECRET_KEY',
   );
 
-  final jwtToken = jwt.sign(SecretKey(authorizationUriSecretKey));
+  final authorizationState = AuthorizationState.encrypt(
+    pkcePair.codeChallenge,
+    secret: authorizationUriSecretKey,
+  );
 
   late Uri authorizationUri;
 
@@ -103,7 +104,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
         redirectUri: Parameters.redirectUri,
         nonce: nonce,
         pkcePair: pkcePair,
-        state: jwtToken,
+        state: authorizationState,
         scope: scope,
         clientAuthentication: clientAuthentication,
         formatsSuported: formatsSupported,
