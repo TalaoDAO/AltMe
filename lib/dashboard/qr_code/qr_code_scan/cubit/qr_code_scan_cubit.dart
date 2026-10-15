@@ -1626,54 +1626,40 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               );
             }
 
-            final requestTokenData = tokenData;
-            Future<(Map<String, dynamic>?, String?, String?, List<dynamic>?)>
-            requestToken(String? dPop) => oidc4vc.getTokenResponse(
+            /// get token response - retried with fresh proofs when the
+            /// authorization server asks for a DPoP nonce (RFC 9449 §8) or for
+            /// a fresh attestation challenge (`use_attestation_challenge`),
+            /// see `getTokenResponse`.
+            final tokenResult = await oidc4vc.getTokenResponse(
               authorization: authorization,
               tokenEndPoint: oidc4vcParameters.tokenEndpoint,
               oAuthClientAttestation: tokenAttestation,
               oAuthClientAttestationPop: tokenAttestationPop,
               dio: client.dio,
-              tokenData: requestTokenData,
+              tokenData: tokenData,
               dPop: dPop,
               issuer: oidc4vcParameters.issuer,
-            );
-
-            /// get token response - retried once with fresh proofs when the
-            /// authorization server asks for a DPoP nonce (RFC 9449 §8) or for
-            /// a fresh attestation challenge (`use_attestation_challenge`).
-            /// Both proofs are replaced either way: the server has already
-            /// consumed their `jti` on the first attempt and would reject them
-            /// as replayed.
-            (Map<String, dynamic>?, String?, String?, List<dynamic>?)
-            tokenResult;
-            try {
-              tokenResult = await requestToken(dPop);
-            } on DioException catch (e) {
-              final dpopNonce = dPop == null ? null : dpopNonceChallenge(e);
-              final attestationChallenge = fetchesClientAttestation
-                  ? attestationChallengeRequest(e)
-                  : (requested: false, challenge: null);
-              if (dpopNonce == null && !attestationChallenge.requested) {
-                rethrow;
-              }
-              if (fetchesClientAttestation) {
-                await fetchClientAttestation(
-                  challenge: attestationChallenge.challenge,
+              refreshProofs: (answers) async {
+                if (fetchesClientAttestation) {
+                  await fetchClientAttestation(
+                    challenge: answers.attestationChallenge,
+                  );
+                }
+                return (
+                  oAuthClientAttestation: tokenAttestation,
+                  oAuthClientAttestationPop: tokenAttestationPop,
+                  dPop: dPop == null
+                      ? null
+                      : await getDPopJwt(
+                          url: oidc4vcParameters.tokenEndpoint,
+                          accessToken: savedAccessToken,
+                          nonce: answers.dpopNonce == null ? savedNonce : null,
+                          publicKey: publicKeyForDPop,
+                          dpopNonce: answers.dpopNonce,
+                        ),
                 );
-              }
-              tokenResult = await requestToken(
-                dPop == null
-                    ? null
-                    : await getDPopJwt(
-                        url: oidc4vcParameters.tokenEndpoint,
-                        accessToken: savedAccessToken,
-                        nonce: dpopNonce == null ? savedNonce : null,
-                        publicKey: publicKeyForDPop,
-                        dpopNonce: dpopNonce,
-                      ),
-              );
-            }
+              },
+            );
             final (
               Map<String, dynamic>? tokenResponse,
               String? accessToken,

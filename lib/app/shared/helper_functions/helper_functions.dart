@@ -1570,7 +1570,7 @@ Future<String> fetchAttestationChallenge({
 /// attestation still satisfies this issuer.
 ///
 /// [attestationChallenge] is a challenge the authorization server already
-/// supplied (see [attestationChallengeRequest]); it is used instead of
+/// supplied (see `answerAuthorizationServerChallenges`); it is used instead of
 /// fetching one from [attestationChallengeEndpoint].
 Future<(String?, String?, String?, String?, String?)> getClientDetails({
   required ProfileCubit profileCubit,
@@ -2474,29 +2474,6 @@ String? dpopNonceChallenge(Object error) {
       (data is Map && data['error'] == 'use_dpop_nonce') ||
       (headers?.value('www-authenticate')?.contains('use_dpop_nonce') ?? false);
   return isChallenge ? dpopNonce : null;
-}
-
-/// Whether [error] is an authorization server refusing a Client Attestation
-/// PoP without a fresh challenge (`use_attestation_challenge`), and the
-/// challenge it supplied in the `OAuth-Client-Attestation-Challenge` header,
-/// if any (OAuth 2.0 Attestation-Based Client Authentication, §6.3). The
-/// client retries once with a PoP carrying it. [error] is a [DioException],
-/// or the [NetworkException] `DioClient` makes of one.
-({bool requested, String? challenge}) attestationChallengeRequest(
-  Object error,
-) {
-  final (data, headers) = switch (error) {
-    DioException(:final response) => (response?.data, response?.headers),
-    NetworkException(:final data, :final headers) => (data, headers),
-    _ => (null, null),
-  };
-  final requested = data is Map && data['error'] == 'use_attestation_challenge';
-  return (
-    requested: requested,
-    challenge: requested
-        ? headers?.value('oauth-client-attestation-challenge')
-        : null,
-  );
 }
 
 String generateP256KeyForDPop() {

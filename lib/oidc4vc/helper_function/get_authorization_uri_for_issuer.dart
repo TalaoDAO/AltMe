@@ -180,68 +180,63 @@ Future<Uri?> getAuthorizationUriForIssuer({
     }
 
     /// error we shuld get it from
-    dynamic response;
-    try {
-      response = await client.post(
-        parUrl,
-        headers: headers,
-        data: authorizationRequestParemeters,
-      );
-    } on NetworkException catch (e) {
-      // Retried once with fresh proofs when the authorization server asks for
-      // a DPoP nonce (RFC 9449 §8) or for a fresh attestation challenge
-      // (`use_attestation_challenge`). Both proofs are replaced either way: the
-      // server has already consumed their `jti` and would reject them as
-      // replayed.
-      final dpopNonce = dPop == null ? null : dpopNonceChallenge(e);
-      final attestationChallenge =
-          clientAuthentication == ClientAuthentication.wia
-          ? attestationChallengeRequest(e)
-          : (requested: false, challenge: null);
-      if (dpopNonce == null && !attestationChallenge.requested) rethrow;
-      if (clientAuthentication == ClientAuthentication.wia) {
-        final (
-          _,
-          _,
-          _,
-          freshAttestation,
-          freshAttestationPop,
-        ) = await getClientDetails(
-          profileCubit: profileCubit,
-          isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
-          issuer: oidc4vcParameters.issuer,
-          authorizationServer:
-              oidc4vcParameters.authorizationServerOpenIdConfiguration.issuer,
-          attestationChallengeEndpoint:
-              oidc4vcParameters
-                      .authorizationServerOpenIdConfiguration
-                      .rawConfiguration?['challenge_endpoint']
-                  as String?,
-          attestationChallenge: attestationChallenge.challenge,
-          client: client,
-          issuerMetadata:
-              oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
-          clientAuthentication: clientAuthentication,
-        );
-        if (freshAttestation != null && freshAttestationPop != null) {
-          headers['OAuth-Client-Attestation'] = freshAttestation;
-          headers['OAuth-Client-Attestation-PoP'] = freshAttestationPop;
-        }
-      }
-      response = await client.post(
-        parUrl,
-        headers: {
-          ...headers,
-          if (dPop != null)
-            'DPoP': await getDPopJwt(
+    // Retried with fresh proofs when the authorization server asks for a DPoP
+    // nonce (RFC 9449 §8) or for a fresh attestation challenge
+    // (`use_attestation_challenge`), see `answerAuthorizationServerChallenges`.
+    final dynamic response = await answerAuthorizationServerChallenges<dynamic>(
+      answersDpopNonce: dPop != null,
+      answersAttestationChallenge:
+          clientAuthentication == ClientAuthentication.wia,
+      errorResponseOf: (error) => error is NetworkException
+          ? (data: error.data, headers: error.headers)
+          : null,
+      send: (answers) async {
+        if (answers != null) {
+          if (clientAuthentication == ClientAuthentication.wia) {
+            final (
+              _,
+              _,
+              _,
+              freshAttestation,
+              freshAttestationPop,
+            ) = await getClientDetails(
+              profileCubit: profileCubit,
+              isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
+              issuer: oidc4vcParameters.issuer,
+              authorizationServer: oidc4vcParameters
+                  .authorizationServerOpenIdConfiguration
+                  .issuer,
+              attestationChallengeEndpoint:
+                  oidc4vcParameters
+                          .authorizationServerOpenIdConfiguration
+                          .rawConfiguration?['challenge_endpoint']
+                      as String?,
+              attestationChallenge: answers.attestationChallenge,
+              client: client,
+              issuerMetadata:
+                  oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
+              clientAuthentication: clientAuthentication,
+            );
+            if (freshAttestation != null && freshAttestationPop != null) {
+              headers['OAuth-Client-Attestation'] = freshAttestation;
+              headers['OAuth-Client-Attestation-PoP'] = freshAttestationPop;
+            }
+          }
+          if (dPop != null) {
+            headers['DPoP'] = await getDPopJwt(
               url: parUrl,
               publicKey: publicKeyForDPop,
-              dpopNonce: dpopNonce,
-            ),
-        },
-        data: authorizationRequestParemeters,
-      );
-    }
+              dpopNonce: answers.dpopNonce,
+            );
+          }
+        }
+        return client.post(
+          parUrl,
+          headers: headers,
+          data: authorizationRequestParemeters,
+        );
+      },
+    );
 
     if (profileCubit.state.model.isDeveloperMode) {
       final formattedData =
