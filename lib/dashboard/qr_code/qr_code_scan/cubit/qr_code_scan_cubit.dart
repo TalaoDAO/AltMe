@@ -1350,28 +1350,6 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             .authorizationServerOpenIdConfiguration
             .rawConfiguration,
       );
-      final (
-        clientId,
-        clientSecret,
-        authorization,
-        oAuthClientAttestation,
-        oAuthClientAttestationPop,
-      ) = await getClientDetails(
-        profileCubit: profileCubit,
-        isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
-        issuer: oidc4vcParameters.issuer,
-        authorizationServer:
-            oidc4vcParameters.authorizationServerOpenIdConfiguration.issuer,
-        attestationChallengeEndpoint:
-            oidc4vcParameters
-                    .authorizationServerOpenIdConfiguration
-                    .rawConfiguration?['challenge_endpoint']
-                as String?,
-        client: client,
-        issuerMetadata:
-            oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
-        clientAuthentication: clientAuthentication,
-      );
 
       final customOidc4vcProfile = profileCubit
           .state
@@ -1379,6 +1357,41 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           .profileSetting
           .selfSovereignIdentityOptions
           .customOidc4vcProfile;
+
+      // In the pre-authorized flow with a Wallet Instance Attestation, the
+      // token request is the only request that carries the attestation, and
+      // addCredentialsInLoop builds that pair — client_id included — right
+      // before sending it. Building one here as well would spend an
+      // attestation challenge on a proof that is never sent.
+      final attestsAtTokenRequest =
+          oidc4vcParameters.preAuthorizedCode != null &&
+          clientAuthentication == ClientAuthentication.wia;
+
+      final (
+        clientId,
+        clientSecret,
+        authorization,
+        oAuthClientAttestation,
+        oAuthClientAttestationPop,
+      ) = attestsAtTokenRequest
+          ? (null, null, null, null, null)
+          : await getClientDetails(
+              profileCubit: profileCubit,
+              isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
+              issuer: oidc4vcParameters.issuer,
+              authorizationServer: oidc4vcParameters
+                  .authorizationServerOpenIdConfiguration
+                  .issuer,
+              attestationChallengeEndpoint:
+                  oidc4vcParameters
+                          .authorizationServerOpenIdConfiguration
+                          .rawConfiguration?['challenge_endpoint']
+                      as String?,
+              client: client,
+              issuerMetadata:
+                  oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
+              clientAuthentication: clientAuthentication,
+            );
 
       final publicKeyForDPop = generateP256KeyForDPop();
 
@@ -1467,6 +1480,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     String? oAuthClientAttestationPop,
   }) async {
     final allItems = <CredentialAcceptanceItem>[];
+    // Replaced by the client_id of the attestation fetched for the token
+    // request, which the later credentials of this loop keep using.
+    var effectiveClientId = clientId;
     try {
       for (int i = 0; i < selectedCredentials.length; i++) {
         emit(state.loading());
@@ -1499,18 +1515,31 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             /// leg rather than replaying the one stored at PAR time, because
             /// the authorization code flow puts a whole browser round trip in
             /// between and a proof of possession is short-lived. The §11 cache
-            /// answers from memory, so this costs a signature, not a request.
+            /// answers from memory, so this costs a signature and, when the
+            /// authorization server asks for one, a challenge. In the
+            /// pre-authorized flow this is the only attestation fetched: it
+            /// also supplies the client_id.
+            ///
+            /// Skipped when the authorization server grants anonymous
+            /// pre-authorized access: that token request carries neither a
+            /// client_id nor client authentication (OpenID4VCI).
             final clientAuthentication = clientAuthenticationFor(
               profile: profileCubit.state.model,
               authorizationServerMetadata: oidc4vcParameters
                   .authorizationServerOpenIdConfiguration
                   .rawConfiguration,
             );
+            final isAnonymousPreAuthorizedFlow =
+                oidc4vcParameters.preAuthorizedCode != null &&
+                oidc4vcParameters
+                    .authorizationServerOpenIdConfiguration
+                    .preAuthorizedGrantAnonymousAccessSupported;
             final fetchesClientAttestation =
-                clientAuthentication == ClientAuthentication.wia;
+                clientAuthentication == ClientAuthentication.wia &&
+                !isAnonymousPreAuthorizedFlow;
             Future<void> fetchClientAttestation() async {
               final (
-                _,
+                freshClientId,
                 _,
                 _,
                 freshAttestation,
@@ -1533,6 +1562,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                     .rawConfiguration,
                 clientAuthentication: clientAuthentication,
               );
+              effectiveClientId = freshClientId ?? effectiveClientId;
               tokenAttestation = freshAttestation ?? tokenAttestation;
               tokenAttestationPop = freshAttestationPop ?? tokenAttestationPop;
             }
@@ -1545,7 +1575,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               userPin: userPin,
               code: codeForAuthorisedFlow,
               codeVerifier: codeVerifier,
-              clientId: clientId,
+              clientId: effectiveClientId,
               txCode: txCode,
               clientSecret: clientSecret,
               authorization: authorization,
@@ -1662,7 +1692,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 credential: selectedCredentials[i],
                 cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
                 didKeyType: customOidc4vcProfile.defaultDid,
-                clientId: clientId,
+                clientId: effectiveClientId,
                 profileCubit: profileCubit,
                 accessToken: savedAccessToken!,
                 cnonce: savedNonce,
@@ -1684,7 +1714,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                   credential: selectedCredentials[i],
                   cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
                   didKeyType: customOidc4vcProfile.defaultDid,
-                  clientId: clientId,
+                  clientId: effectiveClientId,
                   profileCubit: profileCubit,
                   accessToken: savedAccessToken!,
                   cnonce: nonce,
