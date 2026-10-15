@@ -13,6 +13,7 @@ class Oidc4VCIState {
     required this.publicKeyForDPo,
     required this.oidc4vciDraft,
     required this.tokenEndpoint,
+    this.authorizationServer,
     this.authorization,
     this.clientId,
     this.clientSecret,
@@ -31,6 +32,13 @@ class Oidc4VCIState {
   final String publicKeyForDPo;
   final String oidc4vciDraft;
   final String tokenEndpoint;
+
+  /// The authorization server's RFC 8414 issuer identifier, discovered
+  /// before the browser round trip (e.g. for the PAR). Carried across it so
+  /// the token request's client attestation PoP can address its `aud` to
+  /// the authorization server rather than falling back to the credential
+  /// issuer.
+  final String? authorizationServer;
   final String? authorization;
   final String? clientId;
   final String? clientSecret;
@@ -48,6 +56,7 @@ class Oidc4VCIState {
     String? publicKeyForDPo,
     String? oidc4vciDraft,
     String? tokenEndpoint,
+    String? authorizationServer,
     String? authorization,
     String? clientId,
     String? clientSecret,
@@ -63,6 +72,7 @@ class Oidc4VCIState {
       publicKeyForDPo: publicKeyForDPo ?? this.publicKeyForDPo,
       oidc4vciDraft: oidc4vciDraft ?? this.oidc4vciDraft,
       tokenEndpoint: tokenEndpoint ?? this.tokenEndpoint,
+      authorizationServer: authorizationServer ?? this.authorizationServer,
       authorization: authorization ?? this.authorization,
       clientId: clientId ?? this.clientId,
       clientSecret: clientSecret ?? this.clientSecret,

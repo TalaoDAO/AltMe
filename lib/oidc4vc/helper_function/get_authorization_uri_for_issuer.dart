@@ -45,6 +45,8 @@ Future<Uri?> getAuthorizationUriForIssuer({
     publicKeyForDPo: publicKeyForDPop,
     oidc4vciDraft: oidc4vcParameters.oidc4vciDraftType.numbering,
     tokenEndpoint: oidc4vcParameters.tokenEndpoint,
+    authorizationServer:
+        oidc4vcParameters.authorizationServerOpenIdConfiguration.issuer,
   );
   late Oidc4VCIState oidc4VCIState;
   switch (clientAuthentication) {

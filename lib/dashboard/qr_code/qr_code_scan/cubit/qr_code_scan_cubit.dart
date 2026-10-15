@@ -2065,6 +2065,10 @@ ${state.uri}
           oidc4vcType: oidc4VCIState.isEBSI ? OIDC4VCType.EBSI : null,
           tokenEndpoint: oidc4VCIState.tokenEndpoint,
           issuerOpenIdConfiguration: issuerOpenIdConfiguration,
+          authorizationServerOpenIdConfiguration: OpenIdConfiguration(
+            requirePushedAuthorizationRequests: false,
+            issuer: oidc4VCIState.authorizationServer,
+          ),
         ),
       );
       await profileCubit.deleteOidc4VCIState(oidc4VCIState.challenge);
