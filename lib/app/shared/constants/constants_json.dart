@@ -360,6 +360,7 @@ abstract class ConstantsJson {
       'haip://',
       'altme-openid-credential-offer://',
       'haip-vci://',
+      'eu-eaa-offer://',
     ],
     'client_name': '${Parameters.appName} wallet',
     'contacts': ['contact@talao.io'],

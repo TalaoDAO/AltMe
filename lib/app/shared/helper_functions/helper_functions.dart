@@ -641,6 +641,7 @@ String sortedPrivateJwk(String privateKey) {
 bool isOIDC4VCIUrl(Uri uri) {
   return uri.toString().startsWith('openid') ||
       uri.toString().startsWith('haip') ||
+      uri.toString().startsWith('eu-eaa-offer://') ||
       uri.toString().startsWith(Parameters.walletOfferDeepLink);
 }
 
@@ -653,6 +654,7 @@ bool isSiopV2OrOidc4VpUrl(Uri uri) {
       uri.toString().startsWith('av://') ||
       uri.toString().startsWith('haip-vp://') ||
       uri.toString().startsWith('eudi-openid4vp://') ||
+      uri.toString().startsWith('eu-eaap://') ||
       uri.toString().startsWith('openid-hedera://?') ||
       uri.toString().startsWith('haip://?') &&
           (uri.queryParameters['request_uri'] != null ||

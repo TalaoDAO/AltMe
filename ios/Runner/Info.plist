@@ -80,6 +80,16 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
+			<string>eu-eaa-offer</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>eu-eaa-offer</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
 			<string>openid</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
@@ -134,6 +144,16 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>eudi-openid4vp</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>eu-eaap</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>eu-eaap</string>
 			</array>
 		</dict>
 		<dict>
