@@ -1272,5 +1272,8 @@
   "mdocReaderCheckValid": "Valid",
   "mdocReaderCheckInvalid": "Invalid",
   "mdocReaderCheckUnchecked": "Not checked",
-  "policyViolation": "This service does not meet the security requirements of your wallet profile."
+  "policyViolation": "This service does not meet the security requirements of your wallet profile.",
+  "@policyViolation": {
+    "description": "Shown when an issuer or verifier fails the wallet profile's policy"
+  }
 }

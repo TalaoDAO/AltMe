@@ -21,12 +21,14 @@ OpenIdConfiguration metadata(Map<String, dynamic> json) =>
 Oidc4vcParameters parameters({
   Map<String, dynamic> authorizationServer = const {},
   Map<String, dynamic> issuer = const {},
+  String? preAuthorizedCode,
 }) => Oidc4vcParameters(
   oidc4vciDraftType: OIDC4VCIDraftType.final1,
   useOAuthAuthorizationServerLink: false,
   initialUri: Uri(),
   userPinRequired: false,
   issuerState: null,
+  preAuthorizedCode: preAuthorizedCode,
   issuerOpenIdConfiguration: metadata(issuer),
   authorizationServerOpenIdConfiguration: metadata(authorizationServer),
 );
@@ -58,6 +60,9 @@ void main() {
     profileType: ProfileType.EUDIW,
     profileSetting: ProfileSetting.provider(),
   );
+
+  List<String> codesOf(PolicyVerdict verdict) =>
+      verdict.violations.map((violation) => violation.code).toList();
 
   Future<ProfilePolicyContext> resolve(ProfileModel model) =>
       ProfilePolicyContext.resolve(model, loader: shippedPolicies);
@@ -109,17 +114,44 @@ void main() {
       }
     });
 
+    test("loads every mapped policy from this app's asset bundle", () async {
+      TestWidgetsFlutterBinding.ensureInitialized();
+      for (final type in ProfileType.values) {
+        final context = await ProfilePolicyContext.resolve(
+          custom.copyWith(profileType: type),
+        );
+
+        expect(context.loadError, isNull, reason: type.name);
+        expect(
+          context.policy.id,
+          Parameters.policyFor(type).id,
+          reason: type.name,
+        );
+      }
+    });
+
     test('keeps the profile flags when the policy file fails', () async {
-      final context = await ProfilePolicyContext.resolve(
-        custom,
-        loader: ProfilePolicyLoader(readFile: (_) async => 'not json'),
+      Future<ProfilePolicyContext> failing(ProfileModel model) =>
+          ProfilePolicyContext.resolve(
+            model,
+            loader: ProfilePolicyLoader(readFile: (_) async => 'not json'),
+          );
+      final flagsOff = await failing(custom);
+      final flagsOn = await failing(
+        withOidc4vc(
+          custom,
+          (p) => p.copyWith(dpopSupport: true, pushAuthorizationRequest: true),
+        ),
       );
 
-      expect(context.loadError, isA<PolicyLoadException>());
+      expect(flagsOff.loadError, isA<PolicyLoadException>());
       expect(
-        context.decide(parameters(authorizationServer: advertisesDpop)).dpop,
+        flagsOff.decide(parameters(authorizationServer: advertisesDpop)).dpop,
         isFalse,
       );
+      final decisions = flagsOn.decide(parameters());
+      expect(decisions.dpop, isTrue);
+      expect(decisions.par, isTrue);
     });
   });
 
@@ -279,6 +311,46 @@ void main() {
       );
     });
 
+    test('holds a pre-authorized offer to the rules of its grant', () async {
+      final haip = await under('haip', eudiw, mode: PolicyMode.strict);
+      final eudiWallet = await under(
+        'eudi_wallet',
+        eudiw,
+        mode: PolicyMode.strict,
+      );
+
+      const signedIssuer = {'signed_metadata': 'a.b.c'};
+
+      // No PAR, PKCE or iss: the authorization endpoint is not used.
+      expect(
+        haip.checkIssuance(
+          parameters(preAuthorizedCode: 'code', issuer: signedIssuer),
+        ),
+        const PolicyYes(),
+      );
+      expect(
+        codesOf(
+          eudiWallet.checkIssuance(
+            parameters(preAuthorizedCode: 'code', issuer: signedIssuer),
+          ),
+        ),
+        ['EUDI_WALLET_WALLET_ATTESTATION_NOT_SUPPORTED_BY_AS'],
+      );
+      // An anonymous token request carries no client authentication.
+      expect(
+        eudiWallet.checkIssuance(
+          parameters(
+            preAuthorizedCode: 'code',
+            issuer: signedIssuer,
+            authorizationServer: const {
+              'pre-authorized_grant_anonymous_access_supported': true,
+            },
+          ),
+        ),
+        const PolicyYes(),
+      );
+    });
+
     test('reports a policy file that failed to load', () async {
       final context = await ProfilePolicyContext.resolve(
         custom,
@@ -288,6 +360,32 @@ void main() {
       expect(
         context.checkIssuance(parameters()).violations.single.code,
         'POLICY_UNAVAILABLE',
+      );
+    });
+
+    test('a policy file that failed to load stops a strict flow and warns a '
+        'lenient one', () {
+      ProfilePolicyContext unavailable(PolicyMode mode) => ProfilePolicyContext(
+        policy: const ProfilePolicy(id: 'eudi_wallet'),
+        mode: mode,
+        profile: eudiw
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .customOidc4vcProfile,
+        loadError: const PolicyLoadException('not json'),
+      );
+      final strict = unavailable(PolicyMode.strict);
+      final lenient = unavailable(PolicyMode.lenient);
+
+      expect(strict.checkIssuance(parameters()), isA<PolicyNo>());
+      expect(
+        () => strict.enforce(strict.checkIssuance(parameters())),
+        throwsA(isA<ResponseMessage>()),
+      );
+      expect(lenient.checkIssuance(parameters()), isA<PolicyWarning>());
+      expect(
+        strict.checkPresentation(Uri.parse('openid4vp://?client_id=x')),
+        isA<PolicyNo>(),
       );
     });
   });

@@ -82,15 +82,14 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         oAuthClientAttestationPop: state.oAuthClientAttestationPop,
         publicKeyForDPop: state.publicKeyForDPo,
         dpop: state.dpop,
-        clientAuthentication:
-            state.clientAuthentication ??
-            profileCubit
-                .state
-                .model
-                .profileSetting
-                .selfSovereignIdentityOptions
-                .customOidc4vcProfile
-                .clientAuthentication,
+        clientAuthentication: state.clientAuthenticationFor(
+          profileCubit
+              .state
+              .model
+              .profileSetting
+              .selfSovereignIdentityOptions
+              .customOidc4vcProfile,
+        ),
         oidc4vcParameters: oidc4vcParameters,
       );
       await profileCubit.deleteOidc4VCIState(state.challenge);

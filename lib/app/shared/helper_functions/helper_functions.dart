@@ -1533,8 +1533,8 @@ Future<String> fetchAttestationChallenge({
 // oAuthClientAttestation,
 // oAuthClientAttestationPop
 ///
-/// [clientAuthentication] overrides the profile's, as
-/// `ProfilePolicyContext.clientAuthentication` decides it for one flow.
+/// [clientAuthentication] is the one `ProfilePolicyContext.clientAuthentication`
+/// decides for the flow; the profile's own setting is not read here.
 ///
 /// [attestationProvider] supplies the client attestation pair. It defaults to
 /// the wallet-wide provider on [profileCubit] and then to
@@ -1561,7 +1561,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
   DioClient? client,
   WalletAttestationProvider? attestationProvider,
   Map<String, dynamic>? issuerMetadata,
-  ClientAuthentication? clientAuthentication,
+  required ClientAuthentication clientAuthentication,
 }) async {
   try {
     String? clientId;
@@ -1634,7 +1634,7 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
           issuerMetadata: issuerMetadata,
         );
 
-    switch (clientAuthentication ?? customOidc4vcProfile.clientAuthentication) {
+    switch (clientAuthentication) {
       ///  none
       case ClientAuthentication.none:
         break;

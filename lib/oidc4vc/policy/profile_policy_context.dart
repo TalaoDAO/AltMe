@@ -71,11 +71,14 @@ class ProfilePolicyContext {
   IssuanceChoices get _choices => IssuanceChoices(
     par: profile.pushAuthorizationRequest,
     dpop: profile.dpopSupport ? true : null,
-    walletAttestation: !hasWalletAttestation
-        ? false
-        : profile.clientAuthentication == ClientAuthentication.wia
-        ? true
-        : null,
+    walletAttestation: switch ((
+      hasWalletAttestation,
+      profile.clientAuthentication,
+    )) {
+      (false, _) => false,
+      (_, ClientAuthentication.wia) => true,
+      _ => null,
+    },
   );
 
   /// What the wallet does in the issuance flow of [parameters].
@@ -93,19 +96,30 @@ class ProfilePolicyContext {
       : profile.clientAuthentication;
 
   /// Checks the authorization server and credential issuer metadata of
-  /// [parameters] against the policy.
+  /// [parameters] against the policy, with the authorization server rules
+  /// that govern the grant of [parameters].
   PolicyVerdict checkIssuance(Oidc4vcParameters parameters) =>
       PolicyVerdict.of([
         if (loadError != null) _unavailable,
         ..._issuance
             .checkAuthorizationServer(
               parameters.authorizationServerOpenIdConfiguration,
+              grant: _grantOf(parameters),
             )
             .violations,
         ..._issuance
             .checkIssuerMetadata(parameters.issuerOpenIdConfiguration)
             .violations,
       ], mode: mode);
+
+  static IssuanceGrant _grantOf(Oidc4vcParameters parameters) =>
+      parameters.preAuthorizedCode == null
+      ? IssuanceGrant.authorizationCode
+      : parameters
+            .authorizationServerOpenIdConfiguration
+            .preAuthorizedGrantAnonymousAccessSupported
+      ? IssuanceGrant.anonymousPreAuthorizedCode
+      : IssuanceGrant.preAuthorizedCode;
 
   /// Checks the presentation request of [uri] against the policy.
   ///

@@ -6513,7 +6513,7 @@ abstract class AppLocalizations {
   /// **'Not checked'**
   String get mdocReaderCheckUnchecked;
 
-  /// No description provided for @policyViolation.
+  /// Shown when an issuer or verifier fails the wallet profile's policy
   ///
   /// In en, this message translates to:
   /// **'This service does not meet the security requirements of your wallet profile.'**

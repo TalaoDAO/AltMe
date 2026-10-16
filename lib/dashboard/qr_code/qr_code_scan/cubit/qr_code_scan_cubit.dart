@@ -52,6 +52,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.oidc4vc,
     required this.walletCubit,
     required this.enterpriseCubit,
+    this.resolvePolicy = ProfilePolicyContext.resolve,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -68,6 +69,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   OIDC4VCIClient oidc4vc;
   final WalletCubit walletCubit;
   final EnterpriseCubit enterpriseCubit;
+
+  /// The profile policy of a flow, resolved when the flow starts.
+  final Future<ProfilePolicyContext> Function(ProfileModel model) resolvePolicy;
 
   final log = getLogger('QRCodeScanCubit');
 
@@ -1079,22 +1083,23 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   Future<void> enforcePresentationPolicy(Uri uri) async {
     final request = uri.queryParameters['request'];
     final requestUri = uri.queryParameters['request_uri'];
-    final policy = await ProfilePolicyContext.resolve(profileCubit.state.model);
-    policy.enforce(
-      policy.checkPresentation(
-        uri,
-        requestObject:
-            request ??
-            (requestUri == null
-                ? null
-                : await fetchRequestUriPayload(
-                    url: requestUri,
-                    client: client,
-                    oidc4vc: oidc4vc,
-                    requestUriMethod: uri.queryParameters['request_uri_method'],
-                  )),
-      ),
-    );
+    final requestObject =
+        request ??
+        (requestUri == null
+            ? null
+            : await fetchRequestUriPayload(
+                url: requestUri,
+                client: client,
+                oidc4vc: oidc4vc,
+                requestUriMethod: uri.queryParameters['request_uri_method'],
+              ));
+    // A request_uri that could not be fetched is reported by the step that
+    // reads the Request Object. Judging the bare query parameters instead
+    // would turn a network error into a policy violation.
+    if (requestUri != null && request == null && requestObject == '') return;
+
+    final policy = await resolvePolicy(profileCubit.state.model);
+    policy.enforce(policy.checkPresentation(uri, requestObject: requestObject));
   }
 
   /// verify jwt
@@ -1387,9 +1392,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     try {
       // The policy is checked before the first request to the authorization
       // server, and decides the whole flow.
-      final policy = await ProfilePolicyContext.resolve(
-        profileCubit.state.model,
-      );
+      final policy = await resolvePolicy(profileCubit.state.model);
       policy.enforce(policy.checkIssuance(oidc4vcParameters));
       final decisions = policy.decide(oidc4vcParameters);
       final clientAuthentication = policy.clientAuthentication(decisions);
@@ -2090,15 +2093,14 @@ ${state.uri}
         oAuthClientAttestationPop: oidc4VCIState.oAuthClientAttestationPop,
         publicKeyForDPop: oidc4VCIState.publicKeyForDPo,
         dpop: oidc4VCIState.dpop,
-        clientAuthentication:
-            oidc4VCIState.clientAuthentication ??
-            profileCubit
-                .state
-                .model
-                .profileSetting
-                .selfSovereignIdentityOptions
-                .customOidc4vcProfile
-                .clientAuthentication,
+        clientAuthentication: oidc4VCIState.clientAuthenticationFor(
+          profileCubit
+              .state
+              .model
+              .profileSetting
+              .selfSovereignIdentityOptions
+              .customOidc4vcProfile,
+        ),
         oidc4vcParameters: Oidc4vcParameters(
           oidc4vciDraftType: oidc4vciDraftType,
           useOAuthAuthorizationServerLink: false,
