@@ -314,15 +314,8 @@ Future<String> getPrivateKey({
       return key;
 
     case DidKeyType.none:
-      if (profileCubit.state.model.walletType != WalletType.enterprise) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'Please switch to enterprise account',
-          },
-        );
-      }
-
+      // An enterprise account or a wallet provider profile (EUDI Wallet): both
+      // keep a wallet attestation.
       final walletAttestationData = await profileCubit.secureStorageProvider
           .get(SecureStorageKeys.walletAttestationData);
 
@@ -1607,12 +1600,18 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
     final provider =
         attestationProvider ??
         profileCubit.walletAttestationProvider ??
-        LegacyWalletAttestationProvider(
-          secureStorageProvider: profileCubit.secureStorageProvider,
-          walletType: profileCubit.state.model.walletType,
-          did: did,
-          tokenParameters: tokenParameters,
-        );
+        (profileCubit.state.model.walletType == WalletType.enterprise
+            ? LegacyWalletAttestationProvider(
+                secureStorageProvider: profileCubit.secureStorageProvider,
+                walletType: profileCubit.state.model.walletType,
+                did: did,
+                tokenParameters: tokenParameters,
+              )
+            // A wallet provider profile (EUDI Wallet) keeps a standard Wallet
+            // Instance Attestation.
+            : StoredWalletAttestationProvider(
+                secureStorageProvider: profileCubit.secureStorageProvider,
+              ));
 
     /// The attestation pair, fetched at most once however many of the branches
     /// below need it. A Wallet Provider Protocol attestation costs a network
@@ -1713,6 +1712,11 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
       oAuthClientAttestationPop,
     );
   } catch (e) {
+    // Without its attestation a `wia` client cannot authenticate at all.
+    // Carrying on with nulls only sends a request the authorization server
+    // refuses with `invalid_client_attestation`, which hides why the
+    // attestation is missing.
+    if (clientAuthentication == ClientAuthentication.wia) rethrow;
     return (null, null, null, null, null);
   }
 }

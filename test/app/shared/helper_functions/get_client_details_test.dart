@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jose_plus/jose.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -28,6 +31,18 @@ class _FakeAttestationProvider extends Fake
       clientId: 'the-wia-sub',
     );
   }
+}
+
+/// Cannot provide an attestation, as when the wallet provider is unreachable.
+class _FailingAttestationProvider extends Fake
+    implements WalletAttestationProvider {
+  @override
+  Future<ClientAttestationPair?> attestationFor({
+    required String credentialIssuer,
+    String? authorizationServer,
+    String? challenge,
+    Map<String, dynamic>? issuerMetadata,
+  }) async => throw ResponseMessage(data: {'error': 'unavailable'});
 }
 
 void main() {
@@ -97,5 +112,62 @@ void main() {
         expect(attestationProvider.requests, 0);
       },
     );
+
+    test('says why when the WIA it decided on cannot be had', () async {
+      await expectLater(
+        getClientDetails(
+          profileCubit: profileCubit,
+          isEBSI: false,
+          issuer: 'https://issuer.example',
+          attestationProvider: _FailingAttestationProvider(),
+          clientAuthentication: ClientAuthentication.wia,
+        ),
+        throwsA(isA<ResponseMessage>()),
+      );
+    });
+
+    test('presents the stored WIA of a personal wallet, signed with its '
+        'attestation key', () async {
+      final secureStorage = profileCubit.secureStorageProvider;
+      final attestationKey = JsonWebKey.generate('ES256');
+      final attestation =
+          (JsonWebSignatureBuilder()
+                ..jsonContent = {
+                  'sub': 'https://client.wallet-provider.example',
+                  'cnf': {
+                    'jwk': Map<String, dynamic>.from(attestationKey.toJson())
+                      ..remove('d'),
+                  },
+                }
+                ..addRecipient(
+                  JsonWebKey.generate('ES256'),
+                  algorithm: 'ES256',
+                ))
+              .build()
+              .toCompactSerialization();
+      when(
+        () => secureStorage.get(SecureStorageKeys.walletAttestationData),
+      ).thenAnswer((_) async => attestation);
+      when(
+        () => secureStorage.get(SecureStorageKeys.p256PrivateKeyForWallet),
+      ).thenAnswer((_) async => jsonEncode(attestationKey.toJson()));
+
+      final (
+        clientId,
+        _,
+        _,
+        sentAttestation,
+        proofOfPossession,
+      ) = await getClientDetails(
+        profileCubit: profileCubit,
+        isEBSI: false,
+        issuer: 'https://issuer.example',
+        clientAuthentication: ClientAuthentication.wia,
+      );
+
+      expect(clientId, 'https://client.wallet-provider.example');
+      expect(sentAttestation, attestation);
+      expect(proofOfPossession, isNotNull);
+    });
   });
 }
