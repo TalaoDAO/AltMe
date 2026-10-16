@@ -866,26 +866,15 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
         howToGetIt = ResponseString.RESPONSE_STRING_tezVoucherHowToGetIt;
 
       case CredentialSubjectType.verifiableIdCard:
-        var type = 'verifiableid';
         image = ImageStrings.dummyVerifiableIdCard;
 
         final discoverCardsOptions = profileSetting.discoverCardsOptions;
 
-        if (discoverCardsOptions != null) {
-          if (discoverCardsOptions.displayVerifiableIdSdJwt &&
-              (assignedVCFormatType == VCFormatType.vcSdJWT ||
-                  assignedVCFormatType == VCFormatType.dcSdJWT)) {
-            type = 'pid';
-            image = ImageStrings.dummyPIDCard;
-          } else if (discoverCardsOptions.displayVerifiableIdJwt &&
-              assignedVCFormatType == VCFormatType.jwtVcJson) {
-            type = 'verifiableid';
-          } else if (discoverCardsOptions.displayVerifiableId &&
-              assignedVCFormatType == VCFormatType.ldpVc) {
-            type = 'verifiableid';
-          }
-        } else if (assignedVCFormatType == VCFormatType.jwtVc) {
-          type = 'individualverifiableattestation';
+        if (discoverCardsOptions != null &&
+            discoverCardsOptions.displayVerifiableIdSdJwt &&
+            (assignedVCFormatType == VCFormatType.vcSdJWT ||
+                assignedVCFormatType == VCFormatType.dcSdJWT)) {
+          image = ImageStrings.dummyPIDCard;
         }
 
         link = Urls.id360Url;

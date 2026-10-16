@@ -6,7 +6,6 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/oidc4vc/helper_function/flatten_claims_for_display.dart';
 import 'package:altme/oidc4vc/helper_function/mdoc_credential_data.dart';
-import 'package:altme/oidc4vc/helper_function/resolve_issuer_display.dart';
 import 'package:altme/oidc4vc/model/credential_acceptance_data.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -210,7 +209,8 @@ Future<void> addOIDC4VCCredential({
   String? credentialIdToBeDeleted,
   String? issuer,
 }) async {
-  final item = await buildCredentialAcceptanceItem(
+  // Rejects a credential the wallet cannot read.
+  await buildCredentialAcceptanceItem(
     encodedCredentialFromOIDC4VC: encodedCredentialFromOIDC4VC,
     credentialsCubit: credentialsCubit,
     credentialType: credentialType,
@@ -218,42 +218,6 @@ Future<void> addOIDC4VCCredential({
     openIdConfiguration: openIdConfiguration,
     jwtDecode: jwtDecode,
   );
-
-  final profileModel = credentialsCubit.profileCubit.state.model;
-  final languageCode =
-      credentialsCubit.profileCubit.langCubit.state.locale.languageCode;
-  final fallbackHost = Uri.tryParse(issuer ?? '')?.host ?? issuer ?? '';
-
-  final issuerName = openIdConfiguration != null
-      ? resolveIssuerDisplay(
-          issuerOpenIdConfiguration: openIdConfiguration,
-          locale: languageCode,
-          fallbackHost: fallbackHost,
-        ).name
-      : fallbackHost;
-
-  final trustedList = profileModel.trustedList;
-  final trustedListEnabled =
-      profileModel.profileSetting.walletSecurityOptions.trustedList;
-  var isTrusted = false;
-  if (openIdConfiguration != null &&
-      trustedListEnabled &&
-      trustedList != null) {
-    // No credential offer to read here - this runs once the credential has
-    // been issued - so the issuer is checked against the one credential at
-    // hand rather than against a whole offer.
-    final oidc4vc = credentialsCubit.profileCubit.oidc4vc;
-    isTrusted =
-        oidc4vc.findTrustedIssuer(
-          trustedList: trustedList,
-          issuerOpenIdConfiguration: openIdConfiguration,
-          vcTypes: oidc4vc.vcTypesOfCredentials(
-            credentials: [credentialType],
-            issuerOpenIdConfiguration: openIdConfiguration,
-          ),
-        ) !=
-        null;
-  }
 
   if (credentialIdToBeDeleted != null) {
     ///delete pending dummy credential
@@ -263,7 +227,10 @@ Future<void> addOIDC4VCCredential({
     );
   }
   // TODO(hawkbee): Pick the old process for defered credential.
-  // the pick page inserts the credential itself once the user accepts
+  // the pick page inserts the credential itself once the user accepts.
+  // It needs the item built above, the issuer's display name
+  // (resolveIssuerDisplay) and whether the trusted list names the issuer
+  // (oidc4vc.findTrustedIssuer), as computed before commit 63509c0b7.
   // qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
   //   items: [item],
   //   issuerName: issuerName,

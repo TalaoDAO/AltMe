@@ -403,7 +403,7 @@ class MWeb3Client {
     try {
       final Web3Client web3Client = Web3Client(web3RpcURL, http.Client());
 
-      final rawTransactionHash = web3Client.sendRawTransaction(signed);
+      final rawTransactionHash = await web3Client.sendRawTransaction(signed);
       return rawTransactionHash;
     } catch (e, s) {
       log.e('sendEVMTransactionWithSignature error: $e, stack: $s');
