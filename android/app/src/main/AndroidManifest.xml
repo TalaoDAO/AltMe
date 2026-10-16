@@ -152,6 +152,13 @@
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="haip-vci" />
+			</intent-filter>
+            
+            <intent-filter android:autoVerify="true">
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
 				<data android:scheme="haip" />
 			</intent-filter>
         </activity><meta-data
