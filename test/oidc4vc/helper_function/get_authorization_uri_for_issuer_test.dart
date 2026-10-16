@@ -164,7 +164,7 @@ void main() {
     });
   });
 
-  group('Oidc4VCIState.clientAuthenticationFor', () {
+  group('Oidc4VCIState.resumedClientAuthentication', () {
     Oidc4VCIState state({ClientAuthentication? clientAuthentication}) =>
         Oidc4VCIState(
           codeVerifier: 'verifier',
@@ -187,7 +187,7 @@ void main() {
       expect(
         state(
           clientAuthentication: ClientAuthentication.wia,
-        ).clientAuthenticationFor(profile),
+        ).resumedClientAuthentication(profile),
         ClientAuthentication.wia,
       );
     });
@@ -196,7 +196,7 @@ void main() {
       "falls back to the profile's for a state saved before the policies",
       () {
         expect(
-          state().clientAuthenticationFor(profile),
+          state().resumedClientAuthentication(profile),
           ClientAuthentication.clientId,
         );
       },

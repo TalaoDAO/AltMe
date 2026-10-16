@@ -82,7 +82,7 @@ Future<void> initiateOIDC4VCCredentialIssuance({
         oAuthClientAttestationPop: state.oAuthClientAttestationPop,
         publicKeyForDPop: state.publicKeyForDPo,
         dpop: state.dpop,
-        clientAuthentication: state.clientAuthenticationFor(
+        clientAuthentication: state.resumedClientAuthentication(
           profileCubit
               .state
               .model

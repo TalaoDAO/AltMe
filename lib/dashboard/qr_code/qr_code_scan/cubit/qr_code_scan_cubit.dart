@@ -2093,7 +2093,7 @@ ${state.uri}
         oAuthClientAttestationPop: oidc4VCIState.oAuthClientAttestationPop,
         publicKeyForDPop: oidc4VCIState.publicKeyForDPo,
         dpop: oidc4VCIState.dpop,
-        clientAuthentication: oidc4VCIState.clientAuthenticationFor(
+        clientAuthentication: oidc4VCIState.resumedClientAuthentication(
           profileCubit
               .state
               .model

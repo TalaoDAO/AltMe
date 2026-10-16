@@ -61,8 +61,9 @@ class Oidc4VCIState {
 
   /// The client authentication of the resumed flow: the one decided when it
   /// started, or [profile]'s for a state saved before the policies.
-  ClientAuthentication clientAuthenticationFor(CustomOidc4VcProfile profile) =>
-      clientAuthentication ?? profile.clientAuthentication;
+  ClientAuthentication resumedClientAuthentication(
+    CustomOidc4VcProfile profile,
+  ) => clientAuthentication ?? profile.clientAuthentication;
 
   Map<String, dynamic> toJson() => _$Oidc4VCIStateToJson(this);
 
