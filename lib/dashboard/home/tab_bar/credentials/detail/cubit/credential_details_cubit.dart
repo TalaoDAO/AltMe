@@ -146,12 +146,13 @@ class CredentialDetailsCubit extends Cubit<CredentialDetailsState> {
 
               final payload = jwtDecode.parseJwt(response.toString());
 
-              /// verify the signature of the VC with the kid of the JWT
-              final VerificationType isVerified = await verifyEncodedData(
+              final VerificationType isVerified = await verifyStatusListToken(
+                statusListToken: response.toString(),
                 issuer: payload['iss']?.toString() ?? item.issuer,
                 jwtDecode: jwtDecode,
-                jwt: response.toString(),
-                fromStatusList: true,
+                referencedTokenKey: item.jwt == null
+                    ? null
+                    : x5cLeafKey(jwt: item.jwt!, jwtDecode: jwtDecode),
                 isCachingEnabled: customOidc4vcProfile.statusListCache,
                 useOAuthAuthorizationServerLink: useOauthServerAuthEndPoint(
                   profileCubit.state.model,
