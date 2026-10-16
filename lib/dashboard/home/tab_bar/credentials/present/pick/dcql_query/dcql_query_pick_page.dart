@@ -193,10 +193,10 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
                           packageFormatCredentials: packageFormatCredentials,
                           candidates: candidates,
                         );
-                      } catch (_) {
-                        // Nothing was sent: the user may try again.
-                        if (mounted) setState(() => _presenting = false);
-                        rethrow;
+                      } catch (e) {
+                        // Failed before sending (key, VP token): shown by the
+                        // scan listener, which also closes this page.
+                        if (mounted) context.read<ScanCubit>().emitError(e);
                       }
                     },
               text: l10n.confirm,
