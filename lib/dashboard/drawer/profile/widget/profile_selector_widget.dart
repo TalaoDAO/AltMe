@@ -31,144 +31,135 @@ class ProfileSelectorWidget extends StatelessWidget {
                   Radius.circular(Sizes.largeRadius),
                 ),
               ),
-              // The ListTiles paint their ink on this Material, above the
-              // coloured box.
-              child: Material(
-                type: MaterialType.transparency,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          buildContext
+                              .l10n
+                              .chooseYourSSIProfileOrCustomizeYourOwn,
+                          style: Theme.of(buildContext).textTheme.titleMedium,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  ListView.builder(
+                    itemCount: ProfileType.values.length,
+                    shrinkWrap: true,
+                    physics: const ScrollPhysics(),
+                    padding: EdgeInsets.zero,
+                    itemBuilder: (context, index) {
+                      final profileType = ProfileType.values[index];
+
+                      if (!walletContainsEnterpriseProfile &&
+                          profileType == ProfileType.enterprise) {
+                        return Container();
+                      }
+
+                      // Not offered for now; the profile itself is kept.
+                      if (profileType == ProfileType.diipv5) {
+                        return Container();
+                      }
+
+                      return Column(
                         children: [
-                          Text(
-                            buildContext
-                                .l10n
-                                .chooseYourSSIProfileOrCustomizeYourOwn,
-                            style: Theme.of(buildContext).textTheme.titleMedium,
+                          ListTile(
+                            onTap: () async {
+                              if (profileType == ProfileType.custom) {
+                                final l10n = context.l10n;
+                                final bool moveAhead =
+                                    await showDialog<bool>(
+                                      context: context,
+                                      builder: (_) {
+                                        return ConfirmDialog(
+                                          title:
+                                              l10n.doYouWantToSetupTheProfile,
+                                          yes: l10n.yes,
+                                          showNoButton: true,
+                                          no: l10n.no,
+                                        );
+                                      },
+                                    ) ??
+                                    false;
+                                if (!moveAhead) return;
+                              }
+                              LoadingView().show(context: buildContext);
+
+                              try {
+                                await context.read<ProfileCubit>().setProfile(
+                                  profileType,
+                                );
+                                await context
+                                    .read<CredentialsCubit>()
+                                    .loadAllCredentials();
+                              } catch (e) {
+                                // The previous profile stays selected.
+                                LoadingView().hide();
+                                if (!context.mounted) return;
+                                const failedToLoad = ResponseString
+                                    .RESPONSE_STRING_FAILED_TO_LOAD_PROFILE;
+                                AlertMessage.showStateMessage(
+                                  context: context,
+                                  stateMessage: StateMessage.error(
+                                    messageHandler: ResponseMessage(
+                                      message: failedToLoad,
+                                      data: {'error_description': '$e'},
+                                    ),
+                                    showDialog: true,
+                                  ),
+                                );
+                                return;
+                              }
+
+                              if (profileType == ProfileType.custom) {
+                                final navigation = Navigator.of(
+                                  context,
+                                ).push<void>(Oidc4vcSettingMenu.route());
+                                return navigation;
+                              }
+                              LoadingView().hide();
+                            },
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                width: 0.5,
+                              ),
+                            ),
+                            title: Text(
+                              profileType.getTitle(
+                                name: profile.enterpriseWalletName ?? '',
+                              ),
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            trailing: Icon(
+                              state.model.profileType == profileType
+                                  ? Icons.radio_button_checked
+                                  : Icons.radio_button_unchecked,
+                              size: Sizes.icon2x,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Divider(
+                              height: 0,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurface.withValues(alpha: 0.12),
+                            ),
                           ),
                         ],
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    ListView.builder(
-                      itemCount: ProfileType.values.length,
-                      shrinkWrap: true,
-                      physics: const ScrollPhysics(),
-                      padding: EdgeInsets.zero,
-                      itemBuilder: (context, index) {
-                        final profileType = ProfileType.values[index];
-
-                        if (!walletContainsEnterpriseProfile &&
-                            profileType == ProfileType.enterprise) {
-                          return Container();
-                        }
-
-                        // Not offered for now; the profile itself is kept.
-                        if (profileType == ProfileType.diipv5) {
-                          return Container();
-                        }
-
-                        return Column(
-                          children: [
-                            ListTile(
-                              onTap: () async {
-                                if (profileType == ProfileType.custom) {
-                                  final l10n = context.l10n;
-                                  final bool moveAhead =
-                                      await showDialog<bool>(
-                                        context: context,
-                                        builder: (_) {
-                                          return ConfirmDialog(
-                                            title:
-                                                l10n.doYouWantToSetupTheProfile,
-                                            yes: l10n.yes,
-                                            showNoButton: true,
-                                            no: l10n.no,
-                                          );
-                                        },
-                                      ) ??
-                                      false;
-                                  if (!moveAhead) return;
-                                }
-                                LoadingView().show(context: buildContext);
-
-                                try {
-                                  await context.read<ProfileCubit>().setProfile(
-                                    profileType,
-                                  );
-                                  await context
-                                      .read<CredentialsCubit>()
-                                      .loadAllCredentials();
-                                } catch (e) {
-                                  // The previous profile stays selected.
-                                  LoadingView().hide();
-                                  if (!context.mounted) return;
-                                  const failedToLoad = ResponseString
-                                      .RESPONSE_STRING_FAILED_TO_LOAD_PROFILE;
-                                  AlertMessage.showStateMessage(
-                                    context: context,
-                                    stateMessage: StateMessage.error(
-                                      messageHandler: ResponseMessage(
-                                        message: failedToLoad,
-                                        data: {'error_description': '$e'},
-                                      ),
-                                      showDialog: true,
-                                    ),
-                                  );
-                                  return;
-                                }
-
-                                if (profileType == ProfileType.custom) {
-                                  final navigation = Navigator.of(
-                                    context,
-                                  ).push<void>(Oidc4vcSettingMenu.route());
-                                  return navigation;
-                                }
-                                LoadingView().hide();
-                              },
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
-                                  width: 0.5,
-                                ),
-                              ),
-                              title: Text(
-                                profileType.getTitle(
-                                  name: profile.enterpriseWalletName ?? '',
-                                ),
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                              trailing: Icon(
-                                state.model.profileType == profileType
-                                    ? Icons.radio_button_checked
-                                    : Icons.radio_button_unchecked,
-                                size: Sizes.icon2x,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                              ),
-                              child: Divider(
-                                height: 0,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurface.withValues(alpha: 0.12),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
           ],

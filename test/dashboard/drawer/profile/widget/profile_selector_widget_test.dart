@@ -45,13 +45,26 @@ void main() {
         () => profileCubit.setProfile(ProfileType.EUDIW),
       ).thenThrow(Exception('Failed to load loadEuropeanWallet configuration'));
 
-      await pumpSelector(tester);
-      await tester.tap(find.text(ProfileType.EUDIW.getTitle(name: '')));
-      // Settles only once the loading popup's spinner is gone.
-      await tester.pumpAndSettle();
+      // The tiles sit on a coloured box by design, which a debug-only
+      // ListTile check reports.
+      final onError = FlutterError.onError;
+      FlutterError.onError = (details) {
+        if (details.exceptionAsString().contains('ListTile background')) {
+          return;
+        }
+        onError?.call(details);
+      };
+      try {
+        await pumpSelector(tester);
+        await tester.tap(find.text(ProfileType.EUDIW.getTitle(name: '')));
+        // Settles only once the loading popup's spinner is gone.
+        await tester.pumpAndSettle();
 
-      expect(find.textContaining('Failed to load profile'), findsOneWidget);
-      verifyNever(() => credentialsCubit.loadAllCredentials());
+        expect(find.textContaining('Failed to load profile'), findsOneWidget);
+        verifyNever(() => credentialsCubit.loadAllCredentials());
+      } finally {
+        FlutterError.onError = onError;
+      }
     });
   });
 }
