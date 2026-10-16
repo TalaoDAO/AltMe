@@ -79,13 +79,30 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
         );
         return credentialManifestPickCubit;
       },
-      child: DcqlQueryOfferPickView(
-        uri: uri,
-        credential: credential,
-        issuer: issuer,
-        inputDescriptorIndex: inputDescriptorIndex,
-        credentialsToBePresented: credentialsToBePresented,
-        verifierTrustInfo: verifierTrustInfo,
+      // The app-wide scan listener pops the dialog it shows on an error, so
+      // this page shows the message itself, like the other pick pages.
+      child: BlocListener<ScanCubit, ScanState>(
+        listener: (context, scanState) {
+          if (scanState.status == ScanStatus.loading) {
+            LoadingView().show(context: context);
+          } else {
+            LoadingView().hide();
+          }
+          if (scanState.message != null) {
+            AlertMessage.showStateMessage(
+              context: context,
+              stateMessage: scanState.message!,
+            );
+          }
+        },
+        child: DcqlQueryOfferPickView(
+          uri: uri,
+          credential: credential,
+          issuer: issuer,
+          inputDescriptorIndex: inputDescriptorIndex,
+          credentialsToBePresented: credentialsToBePresented,
+          verifierTrustInfo: verifierTrustInfo,
+        ),
       ),
     );
   }
@@ -194,9 +211,12 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
                           candidates: candidates,
                         );
                       } catch (e) {
-                        // Failed before sending (key, VP token): shown by the
-                        // scan listener, which also closes this page.
-                        if (mounted) context.read<ScanCubit>().emitError(e);
+                        // Nothing was sent (key, VP token): the user may try
+                        // again.
+                        if (mounted) {
+                          setState(() => _presenting = false);
+                          context.read<ScanCubit>().emitError(e);
+                        }
                       }
                     },
               text: l10n.confirm,

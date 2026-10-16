@@ -1243,8 +1243,7 @@ class ScanCubit extends Cubit<ScanState> {
     } catch (e, s) {
       final log = getLogger('ScanCubit - presentOidc4vpFinal');
       log.e('something went wrong - $e', error: e, stackTrace: s);
-      // The verifier's own error, if any, reaches the user through the
-      // scan listener, which also closes the presentation page.
+      // The pick page shows it, with the verifier's own error if any.
       emitError(e);
     }
   }
