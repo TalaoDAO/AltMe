@@ -24,6 +24,9 @@ ProfileSetting _$ProfileSettingFromJson(Map<String, dynamic> json) =>
       helpCenterOptions: HelpCenterOptions.fromJson(
         json['helpCenterOptions'] as Map<String, dynamic>,
       ),
+      readerRequests: (json['readerRequests'] as List<dynamic>?)
+          ?.map((e) => ReaderRequest.fromJson(e as Map<String, dynamic>))
+          .toList(),
       selfSovereignIdentityOptions: SelfSovereignIdentityOptions.fromJson(
         json['selfSovereignIdentityOptions'] as Map<String, dynamic>,
       ),
@@ -42,6 +45,7 @@ Map<String, dynamic> _$ProfileSettingToJson(ProfileSetting instance) =>
       'discoverCardsOptions': instance.discoverCardsOptions,
       'generalOptions': instance.generalOptions,
       'helpCenterOptions': instance.helpCenterOptions,
+      'readerRequests': instance.readerRequests,
       'selfSovereignIdentityOptions': instance.selfSovereignIdentityOptions,
       'settingsMenu': instance.settingsMenu,
       'version': instance.version,

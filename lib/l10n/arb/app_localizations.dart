@@ -6327,12 +6327,6 @@ abstract class AppLocalizations {
   /// **'Don\'t share'**
   String get dontShareLabel;
 
-  /// No description provided for @mdocShowToReader.
-  ///
-  /// In en, this message translates to:
-  /// **'Show to a reader'**
-  String get mdocShowToReader;
-
   /// No description provided for @mdocProximityTitle.
   ///
   /// In en, this message translates to:
@@ -6374,6 +6368,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The identity of this reader is not verified.'**
   String get mdocProximityUnverifiedReader;
+
+  /// No description provided for @mdocProximityDocumentUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot be shared in this session'**
+  String get mdocProximityDocumentUnavailable;
 
   /// No description provided for @mdocProximityWillRetain.
   ///
@@ -6450,7 +6450,7 @@ abstract class AppLocalizations {
   /// No description provided for @mdocReaderTitle.
   ///
   /// In en, this message translates to:
-  /// **'Read a driving licence'**
+  /// **'Read in person'**
   String get mdocReaderTitle;
 
   /// No description provided for @mdocReaderConnecting.
@@ -6468,7 +6468,7 @@ abstract class AppLocalizations {
   /// No description provided for @mdocReaderBluetoothPermission.
   ///
   /// In en, this message translates to:
-  /// **'Allow Bluetooth access to read the driving licence.'**
+  /// **'Allow Bluetooth access to read the holder\'s attestations.'**
   String get mdocReaderBluetoothPermission;
 
   /// No description provided for @mdocReaderError.
@@ -6483,35 +6483,65 @@ abstract class AppLocalizations {
   /// **'The holder shared no data.'**
   String get mdocReaderNothingShared;
 
-  /// No description provided for @mdocReaderIssuerCheck.
+  /// No description provided for @mdocReaderDocumentVerified.
   ///
   /// In en, this message translates to:
-  /// **'Issuer signature'**
-  String get mdocReaderIssuerCheck;
+  /// **'Issuer and device signatures verified'**
+  String get mdocReaderDocumentVerified;
 
-  /// No description provided for @mdocReaderDeviceCheck.
+  /// No description provided for @mdocReaderNotVerified.
   ///
   /// In en, this message translates to:
-  /// **'Device signature'**
-  String get mdocReaderDeviceCheck;
+  /// **'Not verified'**
+  String get mdocReaderNotVerified;
 
-  /// No description provided for @mdocReaderCheckValid.
+  /// No description provided for @mdocReaderUnrequested.
   ///
   /// In en, this message translates to:
-  /// **'Valid'**
-  String get mdocReaderCheckValid;
+  /// **'Sent without being asked, not verified.'**
+  String get mdocReaderUnrequested;
 
-  /// No description provided for @mdocReaderCheckInvalid.
+  /// No description provided for @mdocReaderResponseErrors.
   ///
   /// In en, this message translates to:
-  /// **'Invalid'**
-  String get mdocReaderCheckInvalid;
+  /// **'Response'**
+  String get mdocReaderResponseErrors;
 
-  /// No description provided for @mdocReaderCheckUnchecked.
+  /// No description provided for @mdocReaderRequestsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Not checked'**
-  String get mdocReaderCheckUnchecked;
+  /// **'Reader'**
+  String get mdocReaderRequestsTitle;
+
+  /// No description provided for @mdocReaderRequestsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose what to ask for, then scan the holder\'s QR code.'**
+  String get mdocReaderRequestsSubtitle;
+
+  /// No description provided for @mdocReaderNotHolderQrCode.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not a wallet QR code to read in person.'**
+  String get mdocReaderNotHolderQrCode;
+
+  /// No description provided for @mdocPresent.
+  ///
+  /// In en, this message translates to:
+  /// **'Present'**
+  String get mdocPresent;
+
+  /// No description provided for @mdocPresentNoAttestation.
+  ///
+  /// In en, this message translates to:
+  /// **'No attestation in your wallet can be shown to a reader in person.'**
+  String get mdocPresentNoAttestation;
+
+  /// No description provided for @scanTabScan.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan'**
+  String get scanTabScan;
 
   /// Shown when an issuer or verifier fails the wallet profile's policy
   ///

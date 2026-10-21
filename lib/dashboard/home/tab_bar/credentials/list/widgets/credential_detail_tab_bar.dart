@@ -10,10 +10,16 @@ class CredentialDetailTabbar extends StatelessWidget {
     required this.title,
     required this.onTap,
     this.badgeCount = 0,
+    this.icon,
   });
 
   final bool isSelected;
+
+  /// The label, or with an [icon], its tooltip.
   final String title;
+
+  /// Shown instead of the [title] text.
+  final IconData? icon;
   final GestureTapCallback onTap;
   final int badgeCount;
 
@@ -45,14 +51,27 @@ class CredentialDetailTabbar extends StatelessWidget {
                 )
               : null,
           child: Center(
-            child: Text(
-              title,
-              style: isSelected
-                  ? textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold)
-                  : textTheme.bodyMedium!.copyWith(
-                      color: colorScheme.onSurface,
+            child: icon != null
+                ? Tooltip(
+                    message: title,
+                    child: Icon(
+                      icon,
+                      semanticLabel: title,
+                      color: isSelected
+                          ? colorScheme.onSurface
+                          : colorScheme.outline,
                     ),
-            ),
+                  )
+                : Text(
+                    title,
+                    style: isSelected
+                        ? textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          )
+                        : textTheme.bodyMedium!.copyWith(
+                            color: colorScheme.onSurface,
+                          ),
+                  ),
           ),
         ),
       ),

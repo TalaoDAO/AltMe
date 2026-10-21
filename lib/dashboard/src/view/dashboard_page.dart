@@ -9,6 +9,7 @@ import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/matrix_notification/matrix_notification.dart';
 import 'package:altme/splash/splash.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -77,6 +78,31 @@ class _DashboardViewState extends State<DashboardView> {
     }
     context.read<DashboardCubit>().onPageChanged(index);
     pageController.jumpToPage(index);
+  }
+
+  /// Opens the in-person presentation QR code, like the scan button does
+  /// for scanning.
+  void _openPresent(BuildContext context) {
+    if (kIsWeb) {
+      final l10n = context.l10n;
+      showDialog<void>(
+        context: context,
+        builder: (_) => ConfirmDialog(
+          title: l10n.unavailable_feature_title,
+          subtitle: l10n.unavailable_feature_message,
+          yes: l10n.ok,
+          showNoButton: false,
+        ),
+      );
+      return;
+    }
+    if (context.read<HomeCubit>().state.homeStatus == HomeStatus.hasNoWallet) {
+      showDialog<void>(context: context, builder: (_) => const WalletDialog());
+      return;
+    }
+    Navigator.of(
+      context,
+    ).push<void>(QrCodeScanPage.route(initialTab: ScanPageTab.present));
   }
 
   String _getTitle(int selectedIndex, AppLocalizations l10n) {
@@ -325,10 +351,9 @@ class _DashboardViewState extends State<DashboardView> {
                                   ),
                                 ] else ...[
                                   BottomBarItem(
-                                    icon: IconStrings.settings,
-                                    text: l10n.settings,
-                                    onTap: () =>
-                                        scaffoldKey.currentState!.openDrawer(),
+                                    iconData: Icons.contactless_outlined,
+                                    text: l10n.mdocPresent,
+                                    onTap: () => _openPresent(context),
                                     isSelected: false,
                                   ),
                                 ],

@@ -14,13 +14,21 @@ void main() {
   late StreamController<ReaderState> states;
 
   const result = ReaderResult(
-    docTypes: ['org.iso.18013.5.1.mDL'],
-    nameSpaces: {
-      'org.iso.18013.5.1': {'given_name': 'ALICE'},
-    },
-    issuerAuthentication: ReaderCheck.unchecked,
-    deviceAuthentication: ReaderCheck.valid,
+    documents: [
+      ReaderDocument(
+        docType: 'org.iso.18013.5.1.mDL',
+        nameSpaces: {
+          'org.iso.18013.5.1': {'given_name': 'ALICE'},
+        },
+      ),
+    ],
   );
+
+  const query = {
+    eudiPidDocType: {
+      eudiPidDocType: {'family_name': false},
+    },
+  };
 
   setUp(() {
     reader = _MockMdocReader();
@@ -29,7 +37,11 @@ void main() {
     when(() => reader.dispose()).thenAnswer((_) async {});
     when(() => reader.cancel()).thenAnswer((_) async {});
     when(
-      () => reader.start(qrUri: any(named: 'qrUri')),
+      () => reader.start(
+        qrUri: any(named: 'qrUri'),
+        query: any(named: 'query'),
+        trustedRoots: any(named: 'trustedRoots'),
+      ),
     ).thenAnswer((_) async {});
   });
 
@@ -38,8 +50,18 @@ void main() {
   MdocReaderCubit build({bool bluetoothGranted = true}) => MdocReaderCubit(
     reader: reader,
     qrUri: 'mdoc:abc',
+    query: query,
+    trustedRoots: const ['PEM'],
     requestBluetoothPermissions: () async => bluetoothGranted,
   );
+
+  void verifyStarted() => verify(
+    () => reader.start(
+      qrUri: 'mdoc:abc',
+      query: query,
+      trustedRoots: const ['PEM'],
+    ),
+  ).called(1);
 
   group('MdocReaderCubit', () {
     blocTest<MdocReaderCubit, ReaderState>(
@@ -56,7 +78,7 @@ void main() {
         ReaderWaitingForResponse(),
         ReaderSuccess(result),
       ],
-      verify: (_) => verify(() => reader.start(qrUri: 'mdoc:abc')).called(1),
+      verify: (_) => verifyStarted(),
     );
 
     blocTest<MdocReaderCubit, ReaderState>(
@@ -67,14 +89,23 @@ void main() {
         ReaderConnecting(),
         ReaderBluetoothRequired(authorization: true),
       ],
-      verify: (_) =>
-          verifyNever(() => reader.start(qrUri: any(named: 'qrUri'))),
+      verify: (_) => verifyNever(
+        () => reader.start(
+          qrUri: any(named: 'qrUri'),
+          query: any(named: 'query'),
+          trustedRoots: any(named: 'trustedRoots'),
+        ),
+      ),
     );
 
     blocTest<MdocReaderCubit, ReaderState>(
       'fails with the platform message',
       setUp: () => when(
-        () => reader.start(qrUri: any(named: 'qrUri')),
+        () => reader.start(
+          qrUri: any(named: 'qrUri'),
+          query: any(named: 'query'),
+          trustedRoots: any(named: 'trustedRoots'),
+        ),
       ).thenThrow(PlatformException(code: 'x', message: 'no BLE')),
       build: build,
       act: (cubit) => cubit.start(),
@@ -89,7 +120,7 @@ void main() {
       expect: () => const [ReaderConnecting()],
       verify: (_) {
         verify(() => reader.cancel()).called(1);
-        verify(() => reader.start(qrUri: 'mdoc:abc')).called(1);
+        verifyStarted();
       },
     );
 

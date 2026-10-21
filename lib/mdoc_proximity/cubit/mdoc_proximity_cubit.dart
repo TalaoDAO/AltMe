@@ -22,7 +22,7 @@ Future<bool> requestProximityBluetoothPermissions() async {
   return statuses.values.every((status) => status.isGranted);
 }
 
-/// Drives one ISO/IEC 18013-5 proximity presentation of an mdoc.
+/// Drives one ISO/IEC 18013-5 proximity presentation of the wallet's mdocs.
 class MdocProximityCubit extends Cubit<ProximityState> {
   /// Creates the cubit.
   MdocProximityCubit({
@@ -39,8 +39,7 @@ class MdocProximityCubit extends Cubit<ProximityState> {
   final BluetoothPermissionRequest _requestBluetoothPermissions;
   late final StreamSubscription<ProximityState> _subscription;
 
-  String? _issuerSigned;
-  String? _keyAlias;
+  List<ProximityMdoc> _mdocs = const [];
 
   /// The engagement of the current (or last) session.
   ProximityEngagement engagement = ProximityEngagement.qrCode;
@@ -49,14 +48,12 @@ class MdocProximityCubit extends Cubit<ProximityState> {
   Future<ProximityNfcAvailability> nfcAvailability() =>
       _proximity.nfcAvailability();
 
-  /// Starts presenting the mdoc [issuerSigned] bound to [keyAlias].
+  /// Starts presenting [mdocs]; the reader's request picks among them.
   Future<void> start({
-    required String issuerSigned,
-    required String keyAlias,
+    required List<ProximityMdoc> mdocs,
     ProximityEngagement engagement = ProximityEngagement.qrCode,
   }) async {
-    _issuerSigned = issuerSigned;
-    _keyAlias = keyAlias;
+    _mdocs = mdocs;
     this.engagement = engagement;
     emit(const ProximityPreparing());
 
@@ -66,11 +63,7 @@ class MdocProximityCubit extends Cubit<ProximityState> {
     }
 
     try {
-      await _proximity.start(
-        issuerSigned: issuerSigned,
-        keyAlias: keyAlias,
-        engagement: engagement,
-      );
+      await _proximity.start(mdocs: mdocs, engagement: engagement);
     } on MdocProximityException catch (e) {
       emit(ProximityFailure(ProximityFailureReason.error, e.message));
     } on PlatformException catch (e) {
@@ -80,15 +73,9 @@ class MdocProximityCubit extends Cubit<ProximityState> {
 
   /// Starts again, e.g. after a failure or to switch engagement.
   Future<void> restart({ProximityEngagement? engagement}) async {
-    final issuerSigned = _issuerSigned;
-    final keyAlias = _keyAlias;
-    if (issuerSigned == null || keyAlias == null) return;
+    if (_mdocs.isEmpty) return;
     await _proximity.cancel();
-    await start(
-      issuerSigned: issuerSigned,
-      keyAlias: keyAlias,
-      engagement: engagement ?? this.engagement,
-    );
+    await start(mdocs: _mdocs, engagement: engagement ?? this.engagement);
   }
 
   /// Shares the selected elements: docType → name space → elements.

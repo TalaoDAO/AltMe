@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mdoc_proximity/mdoc_proximity.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:random_string/random_string.dart';
 
@@ -14,6 +15,7 @@ class ProfileSetting extends Equatable {
     this.discoverCardsOptions,
     required this.generalOptions,
     required this.helpCenterOptions,
+    this.readerRequests,
     required this.selfSovereignIdentityOptions,
     required this.settingsMenu,
     required this.version,
@@ -49,6 +51,10 @@ class ProfileSetting extends Equatable {
   final DiscoverCardsOptions? discoverCardsOptions;
   final GeneralOptions generalOptions;
   final HelpCenterOptions helpCenterOptions;
+
+  /// What the wallet, as an ISO/IEC 18013-5 reader, can ask a holder for.
+  /// Without any, the wallet offers no reader.
+  final List<ReaderRequest>? readerRequests;
   final SelfSovereignIdentityOptions selfSovereignIdentityOptions;
   final SettingsMenu settingsMenu;
   final String version;
@@ -61,6 +67,7 @@ class ProfileSetting extends Equatable {
     DiscoverCardsOptions? discoverCardsOptions,
     GeneralOptions? generalOptions,
     HelpCenterOptions? helpCenterOptions,
+    List<ReaderRequest>? readerRequests,
     SelfSovereignIdentityOptions? selfSovereignIdentityOptions,
     SettingsMenu? settingsMenu,
     String? version,
@@ -70,6 +77,7 @@ class ProfileSetting extends Equatable {
     discoverCardsOptions: discoverCardsOptions ?? this.discoverCardsOptions,
     generalOptions: generalOptions ?? this.generalOptions,
     helpCenterOptions: helpCenterOptions ?? this.helpCenterOptions,
+    readerRequests: readerRequests ?? this.readerRequests,
     selfSovereignIdentityOptions:
         selfSovereignIdentityOptions ?? this.selfSovereignIdentityOptions,
     settingsMenu: settingsMenu ?? this.settingsMenu,
@@ -83,6 +91,7 @@ class ProfileSetting extends Equatable {
     discoverCardsOptions,
     generalOptions,
     helpCenterOptions,
+    readerRequests,
     selfSovereignIdentityOptions,
     settingsMenu,
     version,

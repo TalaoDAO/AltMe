@@ -1,5 +1,6 @@
 import 'package:altme/app/shared/helper_functions/get_display.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:mdoc_proximity/mdoc_proximity.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 /// mso_mdoc views of a stored credential (see `getMdocCredentialData`).
@@ -13,10 +14,28 @@ extension MdocCredentialModel on CredentialModel {
   /// The mdoc document type.
   String? get mdocDocType => data['docType'] as String?;
 
+  /// What the user calls this mdoc: the issuer's display name, else its
+  /// document type.
+  String get mdocName => switch (display?.name) {
+    final String name when name.isNotEmpty => name,
+    _ => mdocDocType ?? getName,
+  };
+
   /// Whether this mdoc can be shown to a reader: it is bound to a platform
   /// key the proximity session can sign with.
   bool get canPresentInProximity =>
-      isMdoc && mdocIssuerSigned != null && keyId != null;
+      isMdoc &&
+      mdocIssuerSigned != null &&
+      mdocDocType != null &&
+      keyId != null;
+
+  /// This mdoc for a proximity session; requires [canPresentInProximity].
+  ProximityMdoc get proximityMdoc => ProximityMdoc(
+    id: id,
+    docType: mdocDocType!,
+    issuerSigned: mdocIssuerSigned!,
+    keyAlias: keyId!,
+  );
 
   /// The value of [element] in [nameSpace], or `null`.
   Object? mdocValue(String nameSpace, String element) {

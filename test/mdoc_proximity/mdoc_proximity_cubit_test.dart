@@ -9,6 +9,15 @@ import 'package:mocktail/mocktail.dart';
 class _MockMdocProximity extends Mock implements MdocProximity {}
 
 void main() {
+  const mdocs = [
+    ProximityMdoc(
+      id: 'wallet-pid',
+      docType: 'eu.europa.ec.eudi.pid.1',
+      issuerSigned: 'is',
+      keyAlias: 'mdoc_1',
+    ),
+  ];
+
   late _MockMdocProximity proximity;
   late StreamController<ProximityState> states;
 
@@ -20,8 +29,7 @@ void main() {
     when(() => proximity.cancel()).thenAnswer((_) async {});
     when(
       () => proximity.start(
-        issuerSigned: any(named: 'issuerSigned'),
-        keyAlias: any(named: 'keyAlias'),
+        mdocs: any(named: 'mdocs'),
         engagement: any(named: 'engagement'),
       ),
     ).thenAnswer((_) async {});
@@ -42,7 +50,7 @@ void main() {
       'starts the session and follows its states',
       build: build,
       act: (cubit) async {
-        await cubit.start(issuerSigned: 'is', keyAlias: 'mdoc_1');
+        await cubit.start(mdocs: mdocs);
         states.add(const ProximityShowQrCode('mdoc:abc'));
       },
       expect: () => const [
@@ -51,8 +59,7 @@ void main() {
       ],
       verify: (_) => verify(
         () => proximity.start(
-          issuerSigned: 'is',
-          keyAlias: 'mdoc_1',
+          mdocs: mdocs,
           engagement: ProximityEngagement.qrCode,
         ),
       ),
@@ -61,15 +68,14 @@ void main() {
     blocTest<MdocProximityCubit, ProximityState>(
       'does not start without the Bluetooth permissions',
       build: () => build(bluetoothGranted: false),
-      act: (cubit) => cubit.start(issuerSigned: 'is', keyAlias: 'mdoc_1'),
+      act: (cubit) => cubit.start(mdocs: mdocs),
       expect: () => const [
         ProximityPreparing(),
         ProximityBluetoothRequired(authorization: true),
       ],
       verify: (_) => verifyNever(
         () => proximity.start(
-          issuerSigned: any(named: 'issuerSigned'),
-          keyAlias: any(named: 'keyAlias'),
+          mdocs: any(named: 'mdocs'),
           engagement: any(named: 'engagement'),
         ),
       ),
@@ -79,13 +85,12 @@ void main() {
       'reports a session that cannot start',
       setUp: () => when(
         () => proximity.start(
-          issuerSigned: any(named: 'issuerSigned'),
-          keyAlias: any(named: 'keyAlias'),
+          mdocs: any(named: 'mdocs'),
           engagement: any(named: 'engagement'),
         ),
       ).thenThrow(const MdocProximityException('no key')),
       build: build,
-      act: (cubit) => cubit.start(issuerSigned: 'is', keyAlias: 'mdoc_1'),
+      act: (cubit) => cubit.start(mdocs: mdocs),
       expect: () => const [
         ProximityPreparing(),
         ProximityFailure(ProximityFailureReason.error, 'no key'),
@@ -116,15 +121,14 @@ void main() {
       'restart cancels and starts again with the new engagement',
       build: build,
       act: (cubit) async {
-        await cubit.start(issuerSigned: 'is', keyAlias: 'mdoc_1');
+        await cubit.start(mdocs: mdocs);
         await cubit.restart(engagement: ProximityEngagement.nfc);
       },
       verify: (cubit) {
         verify(() => proximity.cancel()).called(1);
         verify(
           () => proximity.start(
-            issuerSigned: 'is',
-            keyAlias: 'mdoc_1',
+            mdocs: mdocs,
             engagement: ProximityEngagement.nfc,
           ),
         ).called(1);
