@@ -123,15 +123,14 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
             await profileCubit.setProfileSetting(
               profileSetting: profileSetting,
               profileType: profileType,
-              walletType: null, // keep the current wallet type
             );
 
-            if (profileType == ProfileType.custom) {
-              await secureStorageProvider.set(
-                SecureStorageKeys.customProfileSettings,
-                jsonEncode(profileSettingJson),
-              );
-            }
+            await secureStorageProvider.set(
+              profileType == ProfileType.custom
+                  ? SecureStorageKeys.customProfileSettings
+                  : SecureStorageKeys.enterpriseProfileSetting,
+              jsonEncode(profileSettingJson),
+            );
           }
         } else {
           await profileCubit.setProfile(profileType);

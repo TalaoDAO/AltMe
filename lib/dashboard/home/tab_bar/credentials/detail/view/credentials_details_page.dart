@@ -140,12 +140,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
     // Shown on the default card, so left out of the claims listed below it.
     final showPortrait =
         credentialImage == null &&
-        const [
-          CredentialSubjectType.defaultCredential,
-          CredentialSubjectType.identityCredential,
-          CredentialSubjectType.eudiPid,
-          CredentialSubjectType.pid,
-        ].contains(credentialSubjectType);
+        CredentialDisplay.portraitSubjectTypes.contains(credentialSubjectType);
 
     final showVerticalDescription =
         credentialSubjectType == CredentialSubjectType.eudiPid ||

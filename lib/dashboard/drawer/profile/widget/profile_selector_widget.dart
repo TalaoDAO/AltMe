@@ -13,8 +13,7 @@ class ProfileSelectorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final profile = context.read<ProfileCubit>().state.model;
 
-    final walletContainsEnterpriseProfile =
-        profile.walletType == WalletType.enterprise;
+    final walletContainsEnterpriseProfile = profile.hasEnterpriseProfile;
 
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (buildContext, state) {

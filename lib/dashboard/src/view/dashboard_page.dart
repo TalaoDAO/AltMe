@@ -167,17 +167,12 @@ class _DashboardViewState extends State<DashboardView> {
             builder: (context, profileState) {
               final profileModel = profileState.model;
 
-              final isEnterprise =
-                  profileModel.walletType == WalletType.enterprise;
-
               final helpCenterOptions =
                   profileModel.profileSetting.helpCenterOptions;
 
-              final displayChatSupport =
-                  isEnterprise && helpCenterOptions.displayChatSupport;
+              final displayChatSupport = helpCenterOptions.displayChatSupport;
 
-              final displayNotification =
-                  isEnterprise && helpCenterOptions.displayNotification;
+              final displayNotification = helpCenterOptions.displayNotification;
 
               return PopScope(
                 canPop: false,
@@ -309,7 +304,7 @@ class _DashboardViewState extends State<DashboardView> {
                                     isSelected:
                                         dashboardState.selectedIndex == 2,
                                   ),
-                                if (displayChatSupport && isEnterprise) ...[
+                                if (displayChatSupport) ...[
                                   StreamBuilder(
                                     initialData: context
                                         .read<AltmeChatSupportCubit>()

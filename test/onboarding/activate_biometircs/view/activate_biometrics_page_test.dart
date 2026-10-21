@@ -14,7 +14,6 @@ class MockProfileCubit extends MockCubit<ProfileState> implements ProfileCubit {
   @override
   final state = ProfileState(
     model: ProfileModel(
-      walletType: WalletType.personal,
       walletProtectionType: WalletProtectionType.FA2,
       isDeveloperMode: false,
       profileType: ProfileType.custom,
@@ -114,10 +113,7 @@ void main() {
 
       expect(find.byType(BasePage), findsOneWidget);
       expect(find.byType(BiometricsSwitch), findsOneWidget);
-      expect(
-        find.textContaining('Activate Biometrics'),
-        findsOneWidget,
-      );
+      expect(find.textContaining('Activate Biometrics'), findsOneWidget);
     });
 
     testWidgets(

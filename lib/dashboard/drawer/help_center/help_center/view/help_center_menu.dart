@@ -54,10 +54,6 @@ class HelpCenterView extends StatelessWidget {
       customChatSupportName = helpCenterOptions.customChatSupportName!;
     }
 
-    final isEnterprise =
-        context.read<ProfileCubit>().state.model.walletType ==
-        WalletType.enterprise;
-
     return BasePage(
       backgroundColor: Theme.of(context).colorScheme.surface,
       useSafeArea: true,
@@ -69,7 +65,7 @@ class HelpCenterView extends StatelessWidget {
         children: <Widget>[
           const BackLeadingButton(padding: EdgeInsets.zero),
           const DrawerLogo(),
-          if (helpCenterOptions.displayChatSupport && isEnterprise) ...[
+          if (helpCenterOptions.displayChatSupport) ...[
             DrawerItem(
               title: l10n.chatRoom,
               onTap: () {
@@ -81,7 +77,7 @@ class HelpCenterView extends StatelessWidget {
               },
             ),
           ],
-          if (helpCenterOptions.displayNotification && isEnterprise) ...[
+          if (helpCenterOptions.displayNotification) ...[
             DrawerItem(
               title: l10n.notificationRoom,
               onTap: () {

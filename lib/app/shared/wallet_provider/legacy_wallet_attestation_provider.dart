@@ -1,5 +1,4 @@
 import 'package:altme/app/shared/constants/secure_storage_keys.dart';
-import 'package:altme/app/shared/enum/enum.dart';
 import 'package:altme/app/shared/message_handler/message_handler.dart';
 import 'package:altme/app/shared/wallet_provider/wallet_attestation_provider.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -22,7 +21,6 @@ class LegacyWalletAttestationProvider implements WalletAttestationProvider {
   /// Creates a provider over the current request's signing context.
   const LegacyWalletAttestationProvider({
     required this.secureStorageProvider,
-    required this.walletType,
     required this.did,
     required this.tokenParameters,
   });
@@ -36,13 +34,6 @@ class LegacyWalletAttestationProvider implements WalletAttestationProvider {
 
   /// Where the attestation was stored when the account was configured.
   final SecureStorageProvider secureStorageProvider;
-
-  /// The kind of wallet this is.
-  ///
-  /// Only an enterprise wallet has an attestation to present: a personal wallet
-  /// never had one configured, and asking for one is a programming error rather
-  /// than an empty result.
-  final WalletType walletType;
 
   /// The DID that issues the proof of possession.
   final String did;
@@ -63,7 +54,13 @@ class LegacyWalletAttestationProvider implements WalletAttestationProvider {
     String? challenge,
     Map<String, dynamic>? issuerMetadata,
   }) async {
-    if (walletType != WalletType.enterprise) {
+    final walletAttestationData = await secureStorageProvider.get(
+      SecureStorageKeys.walletAttestationData,
+    );
+
+    // Only a wallet configured by an enterprise account has an attestation to
+    // present.
+    if (walletAttestationData == null) {
       throw ResponseMessage(
         data: {
           'error': 'invalid_request',
@@ -71,10 +68,6 @@ class LegacyWalletAttestationProvider implements WalletAttestationProvider {
         },
       );
     }
-
-    final walletAttestationData = await secureStorageProvider.get(
-      SecureStorageKeys.walletAttestationData,
-    );
 
     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     final nbf = iat - proofOfPossessionBackdateInSeconds;

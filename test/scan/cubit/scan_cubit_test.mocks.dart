@@ -1159,13 +1159,11 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
   _i17.Future<void> setProfileSetting({
     required _i5.ProfileSetting? profileSetting,
     required _i16.ProfileType? profileType,
-    required _i16.WalletType? walletType,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#setProfileSetting, [], {
               #profileSetting: profileSetting,
               #profileType: profileType,
-              #walletType: walletType,
             }),
             returnValue: _i17.Future<void>.value(),
             returnValueForMissingStub: _i17.Future<void>.value(),

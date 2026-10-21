@@ -70,7 +70,6 @@ class SecureStorageKeys {
 
   static const String hasVerifiedMnemonics = 'hasVerifiedMnemonics';
 
-  static const String walletType = 'walletType';
   static const String walletAttestationData = 'walletAttestationData';
 
   static const String customProfileSettings = 'customProfileSettings';

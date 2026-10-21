@@ -26,7 +26,6 @@ void main() {
         when(() => mockProfileCubit.state).thenReturn(
           ProfileState(
             model: ProfileModel.defaultOne(
-              walletType: WalletType.personal,
               walletProtectionType: WalletProtectionType.FA2,
               isDeveloperMode: true,
               clientId: 'clientId',
@@ -182,7 +181,6 @@ void main() {
       when(() => mockProfileCubit.state).thenReturn(
         ProfileState(
           model: ProfileModel.diipv5(
-            walletType: WalletType.personal,
             walletProtectionType: WalletProtectionType.FA2,
             isDeveloperMode: true,
             clientId: 'clientId',
@@ -227,7 +225,6 @@ void main() {
         when(() => mockProfileCubit.state).thenReturn(
           ProfileState(
             model: ProfileModel(
-              walletType: WalletType.personal,
               walletProtectionType: WalletProtectionType.pinCode,
               isDeveloperMode: false,
               profileType: ProfileType.enterprise,
