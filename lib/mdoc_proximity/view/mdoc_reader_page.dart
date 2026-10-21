@@ -2,34 +2,52 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/mdoc_proximity/cubit/mdoc_reader_cubit.dart';
+import 'package:altme/mdoc_proximity/helpers/reader_trusted_roots.dart';
 import 'package:altme/mdoc_proximity/widgets/proximity_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdoc_proximity/mdoc_proximity.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-/// Reads an mDL from a holder's QR code, in person (ISO/IEC 18013-5).
+/// Reads mdocs from a holder's QR code, in person (ISO/IEC 18013-5).
 class MdocReaderPage extends StatelessWidget {
   /// Creates the page.
-  const MdocReaderPage({super.key, required this.qrUri});
+  const MdocReaderPage({
+    super.key,
+    required this.qrUri,
+    this.query = mdlReaderQuery,
+  });
 
   /// The holder's `mdoc:` device engagement.
   final String qrUri;
 
+  /// What is asked for.
+  final ReaderQuery query;
+
   /// The route to this page.
-  static Route<dynamic> route({required String qrUri}) =>
-      MaterialPageRoute<void>(
-        builder: (_) => MdocReaderPage(qrUri: qrUri),
-        settings: const RouteSettings(name: '/MdocReaderPage'),
-      );
+  static Route<dynamic> route({
+    required String qrUri,
+    ReaderQuery query = mdlReaderQuery,
+  }) => MaterialPageRoute<void>(
+    builder: (_) => MdocReaderPage(qrUri: qrUri, query: query),
+    settings: const RouteSettings(name: '/MdocReaderPage'),
+  );
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          MdocReaderCubit(reader: MdocReader(), qrUri: qrUri)..start(),
+      create: (_) => MdocReaderCubit(
+        reader: MdocReader(),
+        qrUri: qrUri,
+        query: query,
+        trustedRoots: readerTrustedRoots(
+          context.read<ProfileCubit>().state.model.trustedList,
+          query.keys,
+        ),
+      )..start(),
       child: const MdocReaderView(),
     );
   }
@@ -90,7 +108,7 @@ class MdocReaderView extends StatelessWidget {
   }
 }
 
-/// What the holder shared, with the outcome of the signature checks.
+/// What the holder shared that passed every check, and what did not pass.
 class MdocReaderResultView extends StatelessWidget {
   /// Creates the view.
   const MdocReaderResultView({super.key, required this.result});
@@ -101,30 +119,60 @@ class MdocReaderResultView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final textTheme = Theme.of(context).textTheme;
-    final elements = [
-      for (final nameSpace in result.nameSpaces.values) ...nameSpace.entries,
-    ];
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final colorScheme = theme.colorScheme;
     return ListView(
       children: [
-        Text(result.docTypes.join(', '), style: textTheme.titleMedium),
-        const SizedBox(height: 8),
-        _CheckRow(
-          label: l10n.mdocReaderIssuerCheck,
-          check: result.issuerAuthentication,
-        ),
-        _CheckRow(
-          label: l10n.mdocReaderDeviceCheck,
-          check: result.deviceAuthentication,
-        ),
-        for (final MapEntry(key: category, value: messages)
-            in result.errors.entries)
-          Text('$category: ${messages.join('; ')}', style: textTheme.bodySmall),
-        const Divider(height: 32),
-        if (elements.isEmpty) Text(l10n.mdocReaderNothingShared),
-        for (final MapEntry(:key, :value) in elements)
-          _ElementRow(identifier: key, value: value),
-        const SizedBox(height: 16),
+        if (result.documents.isEmpty && !result.hasErrors)
+          Text(l10n.mdocReaderNothingShared),
+        for (final document in result.documents) ...[
+          Row(
+            children: [
+              Icon(Icons.verified_outlined, color: colorScheme.primary),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(document.docType, style: textTheme.titleMedium),
+              ),
+            ],
+          ),
+          Text(l10n.mdocReaderDocumentVerified, style: textTheme.bodySmall),
+          for (final nameSpace in document.nameSpaces.values)
+            for (final MapEntry(:key, :value) in nameSpace.entries)
+              _ElementRow(identifier: key, value: value),
+          const Divider(height: 32),
+        ],
+        if (result.hasErrors) ...[
+          Row(
+            children: [
+              Icon(Icons.gpp_bad_outlined, color: colorScheme.error),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  l10n.mdocReaderNotVerified,
+                  style: textTheme.titleMedium,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          for (final docType in {
+            ...result.failedDocTypes,
+            ...result.documentErrors.keys,
+          })
+            _ErrorRow(
+              title: docType,
+              messages: result.documentErrors[docType] ?? const [],
+            ),
+          for (final docType in result.unrequestedDocTypes)
+            _ErrorRow(title: docType, messages: [l10n.mdocReaderUnrequested]),
+          if (result.responseErrors.isNotEmpty)
+            _ErrorRow(
+              title: l10n.mdocReaderResponseErrors,
+              messages: result.responseErrors,
+            ),
+          const Divider(height: 32),
+        ],
         MyElevatedButton(
           text: l10n.done,
           onPressed: () => Navigator.of(context).pop(),
@@ -134,41 +182,23 @@ class MdocReaderResultView extends StatelessWidget {
   }
 }
 
-class _CheckRow extends StatelessWidget {
-  const _CheckRow({required this.label, required this.check});
+class _ErrorRow extends StatelessWidget {
+  const _ErrorRow({required this.title, required this.messages});
 
-  final String label;
-  final ReaderCheck check;
+  final String title;
+  final List<String> messages;
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final colorScheme = Theme.of(context).colorScheme;
-    final (icon, color, text) = switch (check) {
-      ReaderCheck.valid => (
-        Icons.verified_outlined,
-        colorScheme.primary,
-        l10n.mdocReaderCheckValid,
-      ),
-      ReaderCheck.invalid => (
-        Icons.gpp_bad_outlined,
-        colorScheme.error,
-        l10n.mdocReaderCheckInvalid,
-      ),
-      ReaderCheck.unchecked => (
-        Icons.help_outline,
-        colorScheme.onSurfaceVariant,
-        l10n.mdocReaderCheckUnchecked,
-      ),
-    };
+    final textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: color, size: 20),
-          const SizedBox(width: 8),
-          Expanded(child: Text(label)),
-          Text(text, style: TextStyle(color: color)),
+          Text(title, style: textTheme.bodyMedium),
+          for (final message in messages)
+            Text(message, style: textTheme.bodySmall),
         ],
       ),
     );

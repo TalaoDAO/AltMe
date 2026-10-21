@@ -3483,9 +3483,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dontShareLabel => 'Don\'t share';
 
   @override
-  String get mdocShowToReader => 'Show to a reader';
-
-  @override
   String get mdocProximityTitle => 'Share in person';
 
   @override
@@ -3507,6 +3504,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get mdocProximityUnverifiedReader =>
       'The identity of this reader is not verified.';
+
+  @override
+  String get mdocProximityDocumentUnavailable =>
+      'Cannot be shared in this session';
 
   @override
   String get mdocProximityWillRetain => 'Kept by the reader';
@@ -3549,7 +3550,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mdocProximityQrCodeInstead => 'Show a QR code instead';
 
   @override
-  String get mdocReaderTitle => 'Read a driving licence';
+  String get mdocReaderTitle => 'Read in person';
 
   @override
   String get mdocReaderConnecting => 'Connecting to the wallet…';
@@ -3560,7 +3561,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mdocReaderBluetoothPermission =>
-      'Allow Bluetooth access to read the driving licence.';
+      'Allow Bluetooth access to read the holder\'s attestations.';
 
   @override
   String get mdocReaderError => 'The reading failed.';
@@ -3569,19 +3570,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mdocReaderNothingShared => 'The holder shared no data.';
 
   @override
-  String get mdocReaderIssuerCheck => 'Issuer signature';
+  String get mdocReaderDocumentVerified =>
+      'Issuer and device signatures verified';
 
   @override
-  String get mdocReaderDeviceCheck => 'Device signature';
+  String get mdocReaderNotVerified => 'Not verified';
 
   @override
-  String get mdocReaderCheckValid => 'Valid';
+  String get mdocReaderUnrequested => 'Sent without being asked, not verified.';
 
   @override
-  String get mdocReaderCheckInvalid => 'Invalid';
+  String get mdocReaderResponseErrors => 'Response';
 
   @override
-  String get mdocReaderCheckUnchecked => 'Not checked';
+  String get mdocReaderRequestsTitle => 'Reader';
+
+  @override
+  String get mdocReaderRequestsSubtitle =>
+      'Choose what to ask for, then scan the holder\'s QR code.';
+
+  @override
+  String get mdocReaderNotHolderQrCode =>
+      'This is not a wallet QR code to read in person.';
+
+  @override
+  String get mdocPresent => 'Present';
+
+  @override
+  String get mdocPresentNoAttestation =>
+      'No attestation in your wallet can be shown to a reader in person.';
+
+  @override
+  String get scanTabScan => 'Scan';
 
   @override
   String get policyViolation =>

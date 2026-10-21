@@ -4,10 +4,42 @@ import 'package:altme/oidc4vc/model/oidc4vci_stack.dart';
 // import 'package:http/http.dart' as http;
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mdoc_proximity/mdoc_proximity.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:trusted_list/trusted_list.dart';
 
 part 'profile.g.dart';
+
+/// What the Default profile, as a reader, can ask a holder for.
+const defaultReaderRequests = [
+  ReaderRequest(
+    id: 'pid-basic',
+    name: 'PID',
+    query: {
+      eudiPidDocType: {
+        eudiPidDocType: {
+          'family_name': false,
+          'given_name': false,
+          'birth_date': false,
+        },
+      },
+    },
+  ),
+  ReaderRequest(
+    id: 'mdl-basic',
+    name: 'mDL',
+    query: {
+      'org.iso.18013.5.1.mDL': {
+        'org.iso.18013.5.1': {
+          'family_name': false,
+          'given_name': false,
+          'birth_date': false,
+          'portrait': false,
+        },
+      },
+    },
+  ),
+];
 
 @JsonSerializable()
 // ignore: must_be_immutable
@@ -103,6 +135,7 @@ class ProfileModel extends Equatable {
           displayMode: false,
         ),
       ),
+      readerRequests: defaultReaderRequests,
       settingsMenu: SettingsMenu.initial(),
       version: '',
       walletSecurityOptions: const WalletSecurityOptions(

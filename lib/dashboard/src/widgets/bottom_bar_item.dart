@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class BottomBarItem extends StatelessWidget {
   const BottomBarItem({
     super.key,
-    required this.icon,
+    this.icon,
+    this.iconData,
     required this.text,
     required this.onTap,
     required this.isSelected,
@@ -12,7 +13,10 @@ class BottomBarItem extends StatelessWidget {
   });
 
   final String text;
-  final String icon;
+
+  /// An asset icon, or else [iconData].
+  final String? icon;
+  final IconData? iconData;
   final VoidCallback onTap;
   final bool isSelected;
   final int badgeCount;
@@ -36,11 +40,17 @@ class BottomBarItem extends StatelessWidget {
               ),
               child: Container(
                 margin: const EdgeInsets.only(bottom: 5),
-                child: ImageIcon(
-                  AssetImage(icon),
-                  color: bottomBarItemColor(context),
-                  size: 20,
-                ),
+                child: icon != null
+                    ? ImageIcon(
+                        AssetImage(icon!),
+                        color: bottomBarItemColor(context),
+                        size: 20,
+                      )
+                    : Icon(
+                        iconData,
+                        color: bottomBarItemColor(context),
+                        size: 20,
+                      ),
               ),
             ),
             Text(

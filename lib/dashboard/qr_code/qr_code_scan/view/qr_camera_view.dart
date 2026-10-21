@@ -11,7 +11,7 @@ import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 class QrCameraView extends StatefulWidget {
   const QrCameraView({
     super.key,
-    required this.title,
+    this.title,
     required this.onImage,
     this.onCameraFeedReady,
     this.onDetectorViewModeChanged,
@@ -19,7 +19,9 @@ class QrCameraView extends StatefulWidget {
     this.initialCameraLensDirection = CameraLensDirection.back,
   });
 
-  final String title;
+  /// The page title. Without one, only the camera preview is built, to be
+  /// embedded in a page of its own.
+  final String? title;
   final dynamic Function(InputImage inputImage) onImage;
   final VoidCallback? onCameraFeedReady;
   final VoidCallback? onDetectorViewModeChanged;
@@ -81,31 +83,31 @@ class _QrCameraViewState extends State<QrCameraView> {
     if (_cameras.isEmpty) return Container();
     if (_controller == null) return Container();
     if (_controller?.value.isInitialized == false) return Container();
+    final preview = ColoredBox(
+      color: Theme.of(context).colorScheme.surface,
+      child: Center(
+        child: _changingCameraLens
+            ? Container()
+            : CameraPreview(
+                _controller!,
+                child: CustomPaint(painter: BlurPainter(), child: Container()),
+              ),
+      ),
+    );
+    final title = widget.title;
+    if (title == null) return preview;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: Text(
-          widget.title,
+          title,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.titleLarge,
         ),
         leading: const BackLeadingButton(),
         backgroundColor: Theme.of(context).colorScheme.surface,
       ),
-      body: ColoredBox(
-        color: Theme.of(context).colorScheme.surface,
-        child: Center(
-          child: _changingCameraLens
-              ? Container()
-              : CameraPreview(
-                  _controller!,
-                  child: CustomPaint(
-                    painter: BlurPainter(),
-                    child: Container(),
-                  ),
-                ),
-        ),
-      ),
+      body: preview,
     );
   }
 

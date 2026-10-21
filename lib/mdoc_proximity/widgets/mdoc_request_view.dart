@@ -5,23 +5,24 @@ import 'package:altme/mdoc_proximity/helpers/mdoc_credential_model.dart';
 import 'package:flutter/material.dart';
 import 'package:mdoc_proximity/mdoc_proximity.dart';
 
-/// What a reader asks for, with a checkbox per data element the wallet holds.
+/// What a reader asks for, document by document, with a checkbox per data
+/// element of the attestation that answers it.
 ///
 /// Everything requested and held is selected by default; the user unticks
-/// what they do not want to share. Elements the mdoc does not hold are
-/// listed but cannot be selected.
+/// what they do not want to share. Elements no attestation holds are listed
+/// but cannot be selected.
 class MdocRequestView extends StatefulWidget {
   /// Creates the view.
   const MdocRequestView({
     super.key,
-    required this.credentialModel,
+    required this.credentials,
     required this.documents,
     required this.onShare,
     required this.onCancel,
   });
 
-  /// The mdoc being presented.
-  final CredentialModel credentialModel;
+  /// The mdocs of the session, found by [ProximityDocumentRequest.mdocId].
+  final List<CredentialModel> credentials;
 
   /// The reader's request.
   final List<ProximityDocumentRequest> documents;
@@ -46,9 +47,14 @@ class _MdocRequestViewState extends State<MdocRequestView> {
             _id(document.docType, ns.key, element),
   };
 
+  /// The attestation answering [document], if any.
+  CredentialModel? _credential(ProximityDocumentRequest document) => widget
+      .credentials
+      .where((credential) => credential.id == document.mdocId)
+      .firstOrNull;
+
   bool _held(ProximityDocumentRequest document, String ns, String element) =>
-      document.docType == widget.credentialModel.mdocDocType &&
-      widget.credentialModel.mdocValue(ns, element) != null;
+      _credential(document)?.mdocValue(ns, element) != null;
 
   static String _id(String docType, String ns, String element) =>
       '$docType|$ns|$element';
@@ -87,19 +93,22 @@ class _MdocRequestViewState extends State<MdocRequestView> {
         Expanded(
           child: ListView(
             children: [
-              for (final document in widget.documents)
+              for (final document in widget.documents) ...[
+                _DocumentHeader(
+                  docType: document.docType,
+                  credential: _credential(document),
+                ),
                 for (final ns in document.nameSpaces.entries)
                   for (final element in ns.value.entries)
                     _ElementTile(
-                      label: widget.credentialModel.mdocLabel(
-                        ns.key,
-                        element.key,
-                        languageCode,
-                      ),
-                      value: widget.credentialModel.mdocValue(
-                        ns.key,
-                        element.key,
-                      ),
+                      label:
+                          _credential(
+                            document,
+                          )?.mdocLabel(ns.key, element.key, languageCode) ??
+                          element.key,
+                      value: _credential(
+                        document,
+                      )?.mdocValue(ns.key, element.key),
                       intentToRetain: element.value,
                       selected: _selected.contains(
                         _id(document.docType, ns.key, element.key),
@@ -119,6 +128,7 @@ class _MdocRequestViewState extends State<MdocRequestView> {
                             })
                           : null,
                     ),
+              ],
             ],
           ),
         ),
@@ -133,6 +143,33 @@ class _MdocRequestViewState extends State<MdocRequestView> {
         const SizedBox(height: 8),
         MyOutlinedButton(text: l10n.dontShareLabel, onPressed: widget.onCancel),
       ],
+    );
+  }
+}
+
+/// The attestation answering a requested document, or why none does.
+class _DocumentHeader extends StatelessWidget {
+  const _DocumentHeader({required this.docType, required this.credential});
+
+  final String docType;
+  final CredentialModel? credential;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final credential = this.credential;
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: Icon(
+        credential != null ? Icons.badge_outlined : Icons.block,
+        color: credential != null ? null : theme.colorScheme.error,
+      ),
+      title: Text(credential?.mdocName ?? docType),
+      subtitle: Text(
+        credential != null
+            ? docType
+            : context.l10n.mdocProximityDocumentUnavailable,
+      ),
     );
   }
 }
