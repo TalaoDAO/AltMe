@@ -1532,10 +1532,10 @@ Future<String> fetchAttestationChallenge({
 /// decides for the flow; the profile's own setting is not read here.
 ///
 /// [attestationProvider] supplies the client attestation pair. It defaults to
-/// the wallet-wide provider on [profileCubit] and then to
-/// [LegacyWalletAttestationProvider], the enterprise wallet provider's scheme,
-/// so existing callers behave exactly as before; a wallet whose provider uses
-/// another scheme passes its own.
+/// the wallet-wide provider on [profileCubit], then to
+/// [LegacyWalletAttestationProvider] for `client_secret_jwt` and to
+/// [StoredWalletAttestationProvider] for every other scheme; a wallet whose
+/// provider uses another scheme passes its own.
 ///
 /// [issuerMetadata] is the credential issuer's OpenID4VCI metadata, when the
 /// caller already holds it. An attestation scheme that reads the issuer's
@@ -1600,15 +1600,15 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
     final provider =
         attestationProvider ??
         profileCubit.walletAttestationProvider ??
-        (profileCubit.state.model.walletType == WalletType.enterprise
+        (clientAuthentication == ClientAuthentication.clientSecretJwt
             ? LegacyWalletAttestationProvider(
                 secureStorageProvider: profileCubit.secureStorageProvider,
-                walletType: profileCubit.state.model.walletType,
                 did: did,
                 tokenParameters: tokenParameters,
               )
-            // A wallet provider profile (EUDI Wallet) keeps a standard Wallet
-            // Instance Attestation.
+            // Any other scheme presents the stored Wallet Instance Attestation
+            // the standard way: its `sub` is the client_id (Wallet Provider
+            // Protocol §3), whichever profile it was configured for.
             : StoredWalletAttestationProvider(
                 secureStorageProvider: profileCubit.secureStorageProvider,
               ));

@@ -32,7 +32,6 @@ void main() {
         when(() => mockProfileCubit.state).thenReturn(
           ProfileState(
             model: ProfileModel(
-              walletType: WalletType.personal,
               walletProtectionType: WalletProtectionType.biometrics,
               isDeveloperMode: false,
               profileType: ProfileType.custom,
@@ -52,7 +51,6 @@ void main() {
         when(() => mockProfileCubit.state).thenReturn(
           ProfileState(
             model: ProfileModel(
-              walletType: WalletType.personal,
               walletProtectionType: WalletProtectionType.pinCode,
               isDeveloperMode: false,
               profileType: ProfileType.custom,

@@ -178,16 +178,16 @@ void main() {
       verify(() => homeCubit.emitHasWallet()).called(1);
     });
 
-    test('should initiate chat if enterprise wallet', () async {
+    test('should initiate chat if enterprise profile installed', () async {
       when(() => homeCubit.emitHasWallet()).thenAnswer((_) async => {});
       when(() => altmeChatSupportCubit.init()).thenAnswer((_) async => {});
 
       await profileCubit.update(
         ProfileModel(
-          walletType: WalletType.enterprise,
           walletProtectionType: WalletProtectionType.pinCode,
           isDeveloperMode: false,
           profileType: ProfileType.custom,
+          enterpriseWalletName: 'Enterprise',
           profileSetting: ProfileSetting.initial().copyWith(
             helpCenterOptions: HelpCenterOptions.initial().copyWith(
               customChatSupport: true,
@@ -213,7 +213,7 @@ void main() {
         walletConnectCubit: walletConnectCubit,
       );
 
-      expect(profileCubit.state.model.walletType, WalletType.enterprise);
+      expect(profileCubit.state.model.hasEnterpriseProfile, isTrue);
       verify(() => altmeChatSupportCubit.init()).called(1);
     });
   });

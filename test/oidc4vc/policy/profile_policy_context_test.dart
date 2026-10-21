@@ -49,7 +49,6 @@ ProfileModel withOidc4vc(
 
 void main() {
   final defaultOne = ProfileModel.defaultOne(
-    walletType: WalletType.personal,
     walletProtectionType: WalletProtectionType.pinCode,
     isDeveloperMode: false,
     clientId: null,

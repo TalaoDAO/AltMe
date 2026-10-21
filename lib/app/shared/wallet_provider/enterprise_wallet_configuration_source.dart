@@ -104,7 +104,6 @@ class EnterpriseWalletConfigurationSource implements WalletConfigurationSource {
     await profileCubit.setProfileSetting(
       profileSetting: profileSetting,
       profileType: ProfileType.enterprise,
-      walletType: WalletType.enterprise,
     );
   }
 }

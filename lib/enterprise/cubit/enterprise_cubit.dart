@@ -335,7 +335,6 @@ class EnterpriseCubit extends Cubit<EnterpriseState> {
       await profileCubit.setProfileSetting(
         profileSetting: profileSetting,
         profileType: ProfileType.enterprise,
-        walletType: WalletType.enterprise,
       );
       // if (isVerified == VerificationType.verified) {
       //   emit(

@@ -11,4 +11,3 @@ export 'restore_type.dart';
 export 'wallet_protection_type.dart';
 export 'wallet_provider_type.dart';
 export 'wallet_route_type.dart';
-export 'wallet_type.dart';

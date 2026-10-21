@@ -15,7 +15,6 @@ class MockProfileCubit extends MockCubit<ProfileState> implements ProfileCubit {
   Future<void> setProfileSetting({
     required ProfileSetting profileSetting,
     required ProfileType profileType,
-    WalletType? walletType,
   }) async {}
 }
 

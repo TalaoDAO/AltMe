@@ -7,7 +7,6 @@ part of 'profile.dart';
 // **************************************************************************
 
 ProfileModel _$ProfileModelFromJson(Map<String, dynamic> json) => ProfileModel(
-  walletType: $enumDecode(_$WalletTypeEnumMap, json['walletType']),
   walletProtectionType: $enumDecode(
     _$WalletProtectionTypeEnumMap,
     json['walletProtectionType'],
@@ -28,7 +27,6 @@ ProfileModel _$ProfileModelFromJson(Map<String, dynamic> json) => ProfileModel(
 
 Map<String, dynamic> _$ProfileModelToJson(ProfileModel instance) =>
     <String, dynamic>{
-      'walletType': _$WalletTypeEnumMap[instance.walletType]!,
       'walletProtectionType':
           _$WalletProtectionTypeEnumMap[instance.walletProtectionType]!,
       'isDeveloperMode': instance.isDeveloperMode,
@@ -38,11 +36,6 @@ Map<String, dynamic> _$ProfileModelToJson(ProfileModel instance) =>
       'oidc4VCIStack': instance.oidc4VCIStack,
       'trustedList': instance.trustedList,
     };
-
-const _$WalletTypeEnumMap = {
-  WalletType.personal: 'personal',
-  WalletType.enterprise: 'enterprise',
-};
 
 const _$WalletProtectionTypeEnumMap = {
   WalletProtectionType.pinCode: 'pinCode',

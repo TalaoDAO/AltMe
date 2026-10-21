@@ -528,7 +528,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required CryptoAccountData cryptoAccountData,
   }) async {
     final walletContainsEnterpriseProfile =
-        profileCubit.state.model.walletType == WalletType.enterprise;
+        profileCubit.state.model.hasEnterpriseProfile;
 
     final ProfileType currentProfileType = profileCubit.state.model.profileType;
     // for each profileType create the crypto ownership proofs

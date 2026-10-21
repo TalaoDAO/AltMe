@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jose_plus/jose.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -126,8 +127,9 @@ void main() {
       );
     });
 
-    test('presents the stored WIA of a personal wallet, signed with its '
-        'attestation key', () async {
+    /// Stores a WIA bound to the wallet's attestation key, as the wallet
+    /// provider issues it, and returns it.
+    Future<String> storeAttestation() async {
       final secureStorage = profileCubit.secureStorageProvider;
       final attestationKey = JsonWebKey.generate('ES256');
       final attestation =
@@ -151,6 +153,11 @@ void main() {
       when(
         () => secureStorage.get(SecureStorageKeys.p256PrivateKeyForWallet),
       ).thenAnswer((_) async => jsonEncode(attestationKey.toJson()));
+      return attestation;
+    }
+
+    test('presents the stored WIA, signed with its attestation key', () async {
+      final attestation = await storeAttestation();
 
       final (
         clientId,
@@ -168,6 +175,49 @@ void main() {
       expect(clientId, 'https://client.wallet-provider.example');
       expect(sentAttestation, attestation);
       expect(proofOfPossession, isNotNull);
+    });
+
+    test('takes the client_id of an enterprise profile from its WIA', () async {
+      // #3553: an enterprise profile configured by a wallet provider got the
+      // enterprise scheme, which has no client_id to give, and the
+      // authorization server refused the token request.
+      final model = profileCubit.state.model;
+      when(() => profileCubit.state).thenReturn(
+        ProfileState(
+          model: model.copyWith(
+            profileType: ProfileType.enterprise,
+            enterpriseWalletName: 'IMT',
+          ),
+        ),
+      );
+      await storeAttestation();
+
+      final (clientId, _, _, _, proofOfPossession) = await getClientDetails(
+        profileCubit: profileCubit,
+        isEBSI: false,
+        issuer: 'https://issuer.example',
+        clientAuthentication: ClientAuthentication.wia,
+      );
+
+      expect(clientId, 'https://client.wallet-provider.example');
+      expect(
+        JWTDecode().parseJwt(proofOfPossession!)['iss'],
+        'https://client.wallet-provider.example',
+      );
+    });
+
+    test('keeps the enterprise scheme for client_secret_jwt', () async {
+      await storeAttestation();
+
+      final (clientId, _, _, _, proofOfPossession) = await getClientDetails(
+        profileCubit: profileCubit,
+        isEBSI: false,
+        issuer: 'https://issuer.example',
+        clientAuthentication: ClientAuthentication.clientSecretJwt,
+      );
+
+      expect(clientId, startsWith('did:'));
+      expect(JWTDecode().parseJwt(proofOfPossession!)['iss'], clientId);
     });
   });
 }

@@ -605,9 +605,9 @@ class HelpCenterOptions extends Equatable {
   factory HelpCenterOptions.initial() => const HelpCenterOptions(
     customChatSupport: false,
     customEmailSupport: false,
-    displayChatSupport: true,
+    displayChatSupport: false,
     displayEmailSupport: true,
-    displayNotification: true,
+    displayNotification: false,
   );
 
   final bool customChatSupport;

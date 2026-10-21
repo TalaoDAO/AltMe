@@ -54,8 +54,8 @@ class ProfileCubit extends Cubit<ProfileState> {
   /// the Wallet Provider Protocol caches an attestation per credential issuer
   /// (§11) and spends each key attestation once (§12.11) - cannot be rebuilt
   /// per call without losing that state. Left `null`, every call site falls
-  /// back to the request-scoped [LegacyWalletAttestationProvider] exactly as
-  /// before.
+  /// back to a request-scoped provider chosen by its client authentication
+  /// (see `getClientDetails`).
   final WalletAttestationProvider? walletAttestationProvider;
 
   /// Resolves a signer for a credential-binding key by its local handle, for
@@ -104,22 +104,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     final log = getLogger('ProfileCubit - load');
     try {
-      /// walletType
-      var walletType = WalletType.personal;
-
-      final walletTypeString = await secureStorageProvider.get(
-        SecureStorageKeys.walletType,
-      );
-
-      if (walletTypeString != null) {
-        final enumVal = WalletType.values.firstWhereOrNull(
-          (ele) => ele.toString() == walletTypeString,
-        );
-        if (enumVal != null) {
-          walletType = enumVal;
-        }
-      }
-
       var walletProtectionType = WalletProtectionType.pinCode;
 
       final walletProtectionTypeString = await secureStorageProvider.get(
@@ -212,7 +196,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           }
 
           profileModel = ProfileModel(
-            walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
             profileType: profileType,
@@ -233,7 +216,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
 
           profileModel = ProfileModel.defaultOne(
-            walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
             clientId: did,
@@ -254,7 +236,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
 
           profileModel = ProfileModel.diipv5(
-            walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
             clientId: did,
@@ -276,7 +257,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           }
 
           profileModel = ProfileModel(
-            walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
             profileType: profileType,
@@ -295,7 +275,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           }
 
           profileModel = ProfileModel(
-            walletType: walletType,
             walletProtectionType: walletProtectionType,
             isDeveloperMode: isDeveloperMode,
             profileType: profileType,
@@ -374,11 +353,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       await secureStorageProvider.set(
         SecureStorageKeys.oidc4VCIStack,
         jsonEncode(profileModel.oidc4VCIStack),
-      );
-
-      await secureStorageProvider.set(
-        SecureStorageKeys.walletType,
-        profileModel.walletType.toString(),
       );
 
       await secureStorageProvider.set(
@@ -541,7 +515,6 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> setProfileSetting({
     required ProfileSetting profileSetting,
     required ProfileType profileType,
-    required WalletType? walletType,
   }) async {
     final externalIssuers =
         profileSetting.discoverCardsOptions?.displayExternalIssuer;
@@ -645,9 +618,12 @@ class ProfileCubit extends Cubit<ProfileState> {
         ),
       ),
       profileType: profileType,
-      enterpriseWalletName: profileSetting.generalOptions.profileName,
+      // Any other profile keeps the name of the enterprise profile installed,
+      // if there is one.
+      enterpriseWalletName: profileType == ProfileType.enterprise
+          ? profileSetting.generalOptions.profileName
+          : null,
       trustedList: trustedListContent,
-      walletType: walletType,
     );
     await update(profileModel);
   }
@@ -674,7 +650,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           ProfileModel.defaultOne(
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
-            walletType: state.model.walletType,
             enterpriseWalletName: state.model.enterpriseWalletName,
             clientId: state
                 .model
@@ -697,7 +672,6 @@ class ProfileCubit extends Cubit<ProfileState> {
           ProfileModel.diipv5(
             walletProtectionType: state.model.walletProtectionType,
             isDeveloperMode: state.model.isDeveloperMode,
-            walletType: state.model.walletType,
             enterpriseWalletName: state.model.enterpriseWalletName,
             clientId: state
                 .model
