@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/helper_functions/value_type_if_null.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
-import 'package:altme/selective_disclosure/model/claims_data.dart';
+import 'package:altme/selective_disclosure/model/model.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -181,6 +181,46 @@ class VcSelectiveDisclosure {
       }
     }
     return null;
+  }
+
+  /// The first `portrait` claim, in the issuer's claim order, whose value is
+  /// an image, to be shown on the card of an SD-JWT or mdoc credential.
+  PortraitClaim? get portrait {
+    final format = credentialModel.format.toString();
+    if (format != VCFormatType.vcSdJWT.vcValue &&
+        format != VCFormatType.dcSdJWT.vcValue &&
+        format != VCFormatType.mdoc.vcValue) {
+      return null;
+    }
+
+    PortraitClaim? findIn(Map<String, dynamic> claims, String? parentKeyId) {
+      for (final entry in claims.entries) {
+        final claim = entry.value;
+        if (claim is! Map<String, dynamic>) continue;
+        if (entry.key == Parameters.portraitOnCardKey) {
+          final (claimsData, _) = getClaimsData(
+            key: entry.key,
+            parentKeyId: parentKeyId,
+          );
+          if (claimsData.isNotEmpty) {
+            final data = claimsData.first.data;
+            final valueType = claim['value_type'] ?? valueTypeIfNull(data);
+            if (Parameters.pictureOnCardValueTypeList.contains(valueType)) {
+              return PortraitClaim(
+                key: entry.key,
+                parentKeyId: parentKeyId,
+                data: data,
+              );
+            }
+          }
+        }
+        final nested = findIn(claim, entry.key);
+        if (nested != null) return nested;
+      }
+      return null;
+    }
+
+    return findIn(claims, null);
   }
 
   (List<ClaimsData>, String?) getClaimsData({

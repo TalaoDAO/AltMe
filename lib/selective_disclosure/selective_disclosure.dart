@@ -37,6 +37,7 @@ class SelectiveDisclosure {
   Map<String, dynamic> get sh256HashToContent => _delegate.sh256HashToContent;
   List<String> get contents => _delegate.contents;
   String? get getPicture => _delegate.getPicture;
+  PortraitClaim? get portrait => _delegate.portrait;
 
   (List<ClaimsData>, String?) getClaimsData({
     required String key,

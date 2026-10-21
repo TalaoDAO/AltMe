@@ -8,6 +8,7 @@ import 'package:altme/app/shared/widget/transparent_ink_well.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/selective_disclosure/helper_functions/selective_disclosure_display_map.dart';
+import 'package:altme/selective_disclosure/model/model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
     this.onPressed,
     this.selectiveDisclosureState,
     this.parentKeyId,
+    this.hiddenClaim,
   });
 
   final CredentialModel credentialModel;
@@ -29,6 +31,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
   final void Function(String?, String, String?, String?)? onPressed;
   final SelectiveDisclosureState? selectiveDisclosureState;
   final String? parentKeyId;
+  final PortraitClaim? hiddenClaim;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +50,7 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
       selectedClaimsKeyIds:
           selectiveDisclosureState?.selectedClaimsKeyIds ?? [],
       onPressed: onPressed,
+      hiddenClaim: hiddenClaim,
       displayMode: context
           .read<ProfileCubit>()
           .state

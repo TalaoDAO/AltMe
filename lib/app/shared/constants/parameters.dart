@@ -165,6 +165,10 @@ class Parameters {
   static const pictureOnCardKeyList = ['picture', 'face', 'portrait'];
   static const pictureOnCardValueTypeList = ['image/jpeg', 'image/png'];
 
+  // An SD-JWT or mdoc claim with this name and an image value is shown on
+  // the card of the credential details, not in the attribute list.
+  static const portraitOnCardKey = 'portrait';
+
   /// The profile policy (a policy file of `package:oidc4vc`) and mode that
   /// govern the protocol flows of a [ProfileType].
   ///

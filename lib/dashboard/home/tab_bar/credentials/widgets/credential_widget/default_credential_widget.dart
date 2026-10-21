@@ -9,6 +9,7 @@ class DefaultCredentialWidget extends StatelessWidget {
     this.showBgDecoration = true,
     this.descriptionMaxLine = 2,
     this.displyalDescription = true,
+    this.portrait,
   });
 
   final CredentialModel credentialModel;
@@ -16,6 +17,7 @@ class DefaultCredentialWidget extends StatelessWidget {
   final bool showBgDecoration;
   final bool displyalDescription;
   final bool isDiscover;
+  final String? portrait;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class DefaultCredentialWidget extends StatelessWidget {
         showBgDecoration: showBgDecoration,
         displyalDescription: displyalDescription,
         isDiscover: isDiscover,
+        portrait: portrait,
       );
     } else {
       return CredentialManifestCard(

@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class DefaultDisplayDescriptor extends StatelessWidget {
@@ -12,6 +15,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
     required this.descriptionMaxLine,
     required this.isDiscover,
     this.displyalDescription = true,
+    this.portrait,
   });
 
   final CredentialModel credentialModel;
@@ -19,6 +23,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
   final bool showBgDecoration;
   final bool displyalDescription;
   final bool isDiscover;
+  final String? portrait;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +46,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
                   credentialModel: credentialModel,
                   descriptionMaxLine: descriptionMaxLine,
                   displyalDescription: displyalDescription,
+                  portrait: portrait,
                 ),
               ),
             ),
@@ -58,6 +64,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
                     credentialModel: credentialModel,
                     descriptionMaxLine: descriptionMaxLine,
                     displyalDescription: displyalDescription,
+                    portrait: portrait,
                   ),
                   if (isDiscover) Image.asset(ImageStrings.blankGetCard),
                 ],
@@ -72,6 +79,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
                 credentialModel: credentialModel,
                 descriptionMaxLine: descriptionMaxLine,
                 displyalDescription: displyalDescription,
+                portrait: portrait,
               ),
             ),
           );
@@ -85,6 +93,7 @@ class DefaultCardBody extends StatelessWidget {
     required this.descriptionMaxLine,
     this.showBgDecoration = true,
     this.displyalDescription = true,
+    this.portrait,
   });
 
   final CredentialModel credentialModel;
@@ -92,6 +101,9 @@ class DefaultCardBody extends StatelessWidget {
   final bool showBgDecoration;
 
   final bool displyalDescription;
+
+  /// An image (`data:` URI or base64) shown on the left of the card.
+  final String? portrait;
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +120,8 @@ class DefaultCardBody extends StatelessWidget {
     final logo =
         credentialModel.display?.logo?.url ??
         credentialModel.display?.logo?.uri;
+
+    final portraitImage = _decodePortrait(portrait);
 
     return CustomMultiChildLayout(
       delegate: CredentialBaseWidgetDelegate(position: Offset.zero),
@@ -166,7 +180,7 @@ class DefaultCardBody extends StatelessWidget {
           LayoutId(
             id: 'provided-by',
             child: FractionallySizedBox(
-              widthFactor: 0.75,
+              widthFactor: portraitImage == null ? 0.75 : 0.56,
               heightFactor: 0.11,
               child: MyRichText(
                 text: TextSpan(
@@ -196,7 +210,7 @@ class DefaultCardBody extends StatelessWidget {
           LayoutId(
             id: 'value',
             child: FractionallySizedBox(
-              widthFactor: 0.8,
+              widthFactor: portraitImage == null ? 0.8 : 0.56,
               heightFactor: 0.15,
               child: Container(
                 alignment: Alignment.centerLeft,
@@ -207,6 +221,20 @@ class DefaultCardBody extends StatelessWidget {
                   ).textTheme.bodyMedium!.copyWith(color: textColor),
                   maxLines: descriptionMaxLine,
                 ),
+              ),
+            ),
+          ),
+        if (portraitImage != null)
+          LayoutId(
+            id: 'portrait',
+            child: FractionallySizedBox(
+              widthFactor: 0.25,
+              heightFactor: 0.44,
+              child: Image.memory(
+                portraitImage,
+                fit: BoxFit.contain,
+                alignment: Alignment.centerLeft,
+                errorBuilder: (_, _, _) => const SizedBox.shrink(),
               ),
             ),
           ),
@@ -272,5 +300,14 @@ class DefaultCardBody extends StatelessWidget {
           ),
       ],
     );
+  }
+}
+
+Uint8List? _decodePortrait(String? portrait) {
+  if (portrait == null) return null;
+  try {
+    return base64Decode(portrait.split(',').last);
+  } on FormatException {
+    return null;
   }
 }
