@@ -3233,6 +3233,25 @@ class AppLocalizationsFr extends AppLocalizations {
   String get activityLogDescription => 'Consultez le journal des évènements';
 
   @override
+  String get protocolTraceLogs => 'Protocol Trace Logs';
+
+  @override
+  String get protocolTraceLogsDescription =>
+      'View and delete recorded trace files';
+
+  @override
+  String get protocolTraceLogsEmpty => 'No trace files recorded yet';
+
+  @override
+  String get deleteAllTraceLogs => 'Delete all';
+
+  @override
+  String get deleteAllTraceLogsConfirmationTitle => 'Delete all trace logs?';
+
+  @override
+  String get deleteAllTraceLogsConfirmationSubtitle => 'This cannot be undone.';
+
+  @override
   String get walletInitialized => 'Wallet initialisé';
 
   @override
@@ -3612,4 +3631,8 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get mdocReaderCheckUnchecked => 'Not checked';
+
+  @override
+  String get policyViolation =>
+      'Ce service ne respecte pas les exigences de sécurité du profil de votre wallet.';
 }

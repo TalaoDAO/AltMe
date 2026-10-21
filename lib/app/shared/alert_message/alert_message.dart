@@ -24,7 +24,11 @@ class AlertMessage {
       if (messageHandler is NetworkException) {
         data = messageHandler.data;
         if (data != null && data is String) {
-          message = messageHandler.data as String;
+          // A server's HTML error page is not a message to show: the status
+          // it came with says more.
+          message = data.trimLeft().startsWith('<')
+              ? messageHandler.getMessage(context, messageHandler)
+              : data;
         }
       } else if (messageHandler is ResponseMessage) {
         data = messageHandler.data;

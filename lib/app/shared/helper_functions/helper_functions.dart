@@ -314,15 +314,8 @@ Future<String> getPrivateKey({
       return key;
 
     case DidKeyType.none:
-      if (profileCubit.state.model.walletType != WalletType.enterprise) {
-        throw ResponseMessage(
-          data: {
-            'error': 'invalid_request',
-            'error_description': 'Please switch to enterprise account',
-          },
-        );
-      }
-
+      // An enterprise account or a wallet provider profile (EUDI Wallet): both
+      // keep a wallet attestation.
       final walletAttestationData = await profileCubit.secureStorageProvider
           .get(SecureStorageKeys.walletAttestationData);
 
@@ -641,6 +634,7 @@ String sortedPrivateJwk(String privateKey) {
 bool isOIDC4VCIUrl(Uri uri) {
   return uri.toString().startsWith('openid') ||
       uri.toString().startsWith('haip') ||
+      uri.toString().startsWith('eu-eaa-offer://') ||
       uri.toString().startsWith(Parameters.walletOfferDeepLink);
 }
 
@@ -653,6 +647,7 @@ bool isSiopV2OrOidc4VpUrl(Uri uri) {
       uri.toString().startsWith('av://') ||
       uri.toString().startsWith('haip-vp://') ||
       uri.toString().startsWith('eudi-openid4vp://') ||
+      uri.toString().startsWith('eu-eaap://') ||
       uri.toString().startsWith('openid-hedera://?') ||
       uri.toString().startsWith('haip://?') &&
           (uri.queryParameters['request_uri'] != null ||
@@ -1212,6 +1207,9 @@ ResponseString getErrorResponseString(String errorString) {
     case 'server_error':
       return ResponseString.RESPONSE_STRING_theServiceIsNotAvailable;
 
+    case 'policy_violation':
+      return ResponseString.RESPONSE_STRING_policyViolation;
+
     case 'invalid_client':
       return ResponseString.RESPONSE_STRING_invalidClientErrorDescription;
 
@@ -1330,7 +1328,46 @@ String getSchemeFromUrl(String url) {
   return parts.length > 1 ? '${parts[0]}://' : '';
 }
 
+/// The Request Objects fetched for the request being processed, by
+/// `request_uri`.
+///
+/// A wallet fetches a `request_uri` once: verifiers may serve it only once, and
+/// with `request_uri_method=post` each fetch is a new request with its own
+/// `wallet_nonce`. Every step of a presentation that needs the Request Object
+/// reads it from here.
+final Map<String, Future<dynamic>> _requestObjects = {};
+
+/// Forgets the Request Objects of the previous request; called when a new one
+/// is scanned.
+void forgetRequestObjects() => _requestObjects.clear();
+
+/// The Request Object at [url], fetched once per request (see
+/// [forgetRequestObjects]); `''` when it could not be fetched.
 Future<dynamic> fetchRequestUriPayload({
+  required String url,
+  required DioClient client,
+  required OIDC4VCIClient oidc4vc,
+  String? requestUriMethod,
+  Map<String, dynamic>? walletMetadata,
+}) async {
+  final cached = _requestObjects[url];
+  if (cached != null) return cached;
+
+  // Kept while still pending, so that a concurrent caller shares this fetch.
+  final pending = _requestObjects[url] = _fetchRequestUriPayload(
+    url: url,
+    client: client,
+    oidc4vc: oidc4vc,
+    requestUriMethod: requestUriMethod,
+    walletMetadata: walletMetadata,
+  );
+  final data = await pending;
+  // Not kept when it failed, so that trying again fetches again.
+  if (data == '') _requestObjects.removeWhere((key, _) => key == url);
+  return data;
+}
+
+Future<dynamic> _fetchRequestUriPayload({
   required String url,
   required DioClient client,
   required OIDC4VCIClient oidc4vc,
@@ -1457,28 +1494,32 @@ String getUpdatedUrlForSIOPV2OIC4VP({
   return newUrl;
 }
 
-/// The client authentication the wallet uses with an authorization server.
+/// A fresh Client Attestation challenge from [challengeEndpoint].
 ///
-/// The profile's own, or Wallet Instance Attestation when the authorization
-/// server lists `attest_jwt_client_auth` in its
-/// `token_endpoint_auth_methods_supported` (OAuth 2.0 Attestation-Based Client
-/// Authentication) — except on the default profile, which has no wallet
-/// attestation.
-ClientAuthentication clientAuthenticationFor({
-  required ProfileModel profile,
-  Map<String, dynamic>? authorizationServerMetadata,
-}) {
-  final configured = profile
-      .profileSetting
-      .selfSovereignIdentityOptions
-      .customOidc4vcProfile
-      .clientAuthentication;
-  if (profile.profileType == ProfileType.defaultOne) return configured;
-  final methods =
-      authorizationServerMetadata?['token_endpoint_auth_methods_supported'];
-  final asksForAttestation =
-      methods is List && methods.contains('attest_jwt_client_auth');
-  return asksForAttestation ? ClientAuthentication.wia : configured;
+/// OAuth 2.0 Attestation-Based Client Authentication (draft 11, §6.3): the
+/// client POSTs to the authorization server's `challenge_endpoint` and receives
+/// `attestation_challenge`, which the proof of possession then carries as
+/// `challenge`. An authorization server that publishes the endpoint answers a
+/// proof without one with `use_attestation_challenge`.
+Future<String> fetchAttestationChallenge({
+  required DioClient client,
+  required String challengeEndpoint,
+}) async {
+  final response = await client.post(challengeEndpoint);
+  final body = response is String
+      ? jsonDecode(response) as Map<String, dynamic>
+      : response as Map<String, dynamic>;
+  final challenge = body['attestation_challenge'];
+  if (challenge is! String || challenge.isEmpty) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_request',
+        'error_description':
+            'the authorization server returned no attestation_challenge',
+      },
+    );
+  }
+  return challenge;
 }
 
 // clientId,
@@ -1487,8 +1528,8 @@ ClientAuthentication clientAuthenticationFor({
 // oAuthClientAttestation,
 // oAuthClientAttestationPop
 ///
-/// [clientAuthentication] overrides the profile's, as
-/// [clientAuthenticationFor] decides it for one authorization server.
+/// [clientAuthentication] is the one `ProfilePolicyContext.clientAuthentication`
+/// decides for the flow; the profile's own setting is not read here.
 ///
 /// [attestationProvider] supplies the client attestation pair. It defaults to
 /// the wallet-wide provider on [profileCubit] and then to
@@ -1501,13 +1542,21 @@ ClientAuthentication clientAuthenticationFor({
 /// published preferences needs it: the Wallet Provider Protocol reads
 /// `preferred_client_status_period` (§9) before deciding whether a cached
 /// attestation still satisfies this issuer.
+///
+/// [attestationChallenge] is a challenge the authorization server already
+/// supplied (see `answerAuthorizationServerChallenges`); it is used instead of
+/// fetching one from [attestationChallengeEndpoint].
 Future<(String?, String?, String?, String?, String?)> getClientDetails({
   required ProfileCubit profileCubit,
   required bool isEBSI,
   required String issuer,
+  String? authorizationServer,
+  String? attestationChallengeEndpoint,
+  String? attestationChallenge,
+  DioClient? client,
   WalletAttestationProvider? attestationProvider,
   Map<String, dynamic>? issuerMetadata,
-  ClientAuthentication? clientAuthentication,
+  required ClientAuthentication clientAuthentication,
 }) async {
   try {
     String? clientId;
@@ -1551,12 +1600,18 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
     final provider =
         attestationProvider ??
         profileCubit.walletAttestationProvider ??
-        LegacyWalletAttestationProvider(
-          secureStorageProvider: profileCubit.secureStorageProvider,
-          walletType: profileCubit.state.model.walletType,
-          did: did,
-          tokenParameters: tokenParameters,
-        );
+        (profileCubit.state.model.walletType == WalletType.enterprise
+            ? LegacyWalletAttestationProvider(
+                secureStorageProvider: profileCubit.secureStorageProvider,
+                walletType: profileCubit.state.model.walletType,
+                did: did,
+                tokenParameters: tokenParameters,
+              )
+            // A wallet provider profile (EUDI Wallet) keeps a standard Wallet
+            // Instance Attestation.
+            : StoredWalletAttestationProvider(
+                secureStorageProvider: profileCubit.secureStorageProvider,
+              ));
 
     /// The attestation pair, fetched at most once however many of the branches
     /// below need it. A Wallet Provider Protocol attestation costs a network
@@ -1566,10 +1621,21 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
     Future<ClientAttestationPair?> clientAttestation() async =>
         attestationPair ??= await provider.attestationFor(
           credentialIssuer: issuer,
+          authorizationServer: authorizationServer,
+          // Fetched here, only once an attestation is actually built, so that
+          // every proof of possession carries a challenge of its own.
+          challenge:
+              attestationChallenge ??
+              (attestationChallengeEndpoint != null && client != null
+                  ? await fetchAttestationChallenge(
+                      client: client,
+                      challengeEndpoint: attestationChallengeEndpoint,
+                    )
+                  : null),
           issuerMetadata: issuerMetadata,
         );
 
-    switch (clientAuthentication ?? customOidc4vcProfile.clientAuthentication) {
+    switch (clientAuthentication) {
       ///  none
       case ClientAuthentication.none:
         break;
@@ -1646,6 +1712,11 @@ Future<(String?, String?, String?, String?, String?)> getClientDetails({
       oAuthClientAttestationPop,
     );
   } catch (e) {
+    // Without its attestation a `wia` client cannot authenticate at all.
+    // Carrying on with nulls only sends a request the authorization server
+    // refuses with `invalid_client_attestation`, which hides why the
+    // attestation is missing.
+    if (clientAuthentication == ClientAuthentication.wia) rethrow;
     return (null, null, null, null, null);
   }
 }
@@ -2361,37 +2432,12 @@ Future<String> getDPopJwt({
   String? accessToken,
   String? nonce,
   String? dpopNonce,
-}) async {
-  final tokenParameters = TokenParameters(
-    privateKey: jsonDecode(publicKey) as Map<String, dynamic>,
-    mediaType: MediaType.dPop,
-    did: '', // just added as it is required field
-    clientType:
-        ClientType.p256JWKThumprint, // just added as it is required field
-    proofHeaderType: ProofHeaderType.jwk,
-    clientId: '', // just added as it is required field
-  );
-
-  final jti = const Uuid().v4();
-  final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-
-  final payload = {'jti': jti, 'htm': 'POST', 'htu': url, 'iat': iat};
-
-  if (accessToken != null) {
-    final hash = sh256Hash(accessToken);
-    payload['ath'] = hash;
-  }
-
-  // if (nonce != null) payload['nonce'] = nonce;
-  if (dpopNonce != null) payload['nonce'] = dpopNonce;
-
-  final jwtToken = generateToken(
-    payload: payload,
-    tokenParameters: tokenParameters,
-    ignoreProofHeaderType: false,
-  );
-  return jwtToken;
-}
+}) async => dPopProof(
+  url: url,
+  privateKey: publicKey,
+  accessToken: accessToken,
+  dpopNonce: dpopNonce,
+);
 
 /// The nonce of an RFC 9449 `use_dpop_nonce` challenge in [error], or null
 /// when it is not one. The server wants a DPoP proof that carries this nonce

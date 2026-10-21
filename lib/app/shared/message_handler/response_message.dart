@@ -931,6 +931,11 @@ class ResponseMessage with MessageHandler {
             context,
           );
           return message;
+
+        case ResponseString.RESPONSE_STRING_policyViolation:
+          final message =
+              ResponseString.RESPONSE_STRING_policyViolation.localise(context);
+          return message;
       }
     }
     return '';

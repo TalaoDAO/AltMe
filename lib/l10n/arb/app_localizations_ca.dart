@@ -3200,6 +3200,28 @@ class AppLocalizationsCa extends AppLocalizations {
   String get activityLogDescription => 'Veure les teves activitats';
 
   @override
+  String get protocolTraceLogs => 'Registres de Traça del Protocol';
+
+  @override
+  String get protocolTraceLogsDescription =>
+      'Veure i eliminar els fitxers de traça enregistrats';
+
+  @override
+  String get protocolTraceLogsEmpty =>
+      'Encara no s\'ha enregistrat cap fitxer de traça';
+
+  @override
+  String get deleteAllTraceLogs => 'Eliminar-ho tot';
+
+  @override
+  String get deleteAllTraceLogsConfirmationTitle =>
+      'Eliminar tots els registres de traça?';
+
+  @override
+  String get deleteAllTraceLogsConfirmationSubtitle =>
+      'Aquesta acció no es pot desfer.';
+
+  @override
   String get walletInitialized => 'Cartera digital inicialitzada';
 
   @override
@@ -3577,4 +3599,8 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get mdocReaderCheckUnchecked => 'Not checked';
+
+  @override
+  String get policyViolation =>
+      'Aquest servei no compleix els requisits de seguretat del perfil de la vostra cartera.';
 }

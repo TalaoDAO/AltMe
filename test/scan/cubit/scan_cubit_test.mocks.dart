@@ -247,18 +247,6 @@ class MockDioClient extends _i1.Mock implements _i16.DioClient {
           as _i17.Future<dynamic>);
 
   @override
-  _i17.Future<void> getSpecificHeader(
-    String? uri,
-    Map<String, dynamic>? headers,
-  ) =>
-      (super.noSuchMethod(
-            Invocation.method(#getSpecificHeader, [uri, headers]),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
-          )
-          as _i17.Future<void>);
-
-  @override
   _i17.Future<dynamic> post(
     String? uri, {
     dynamic data,
@@ -444,6 +432,24 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
   bool get isClosed =>
       (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
           as bool);
+
+  @override
+  void expectIssuanceNotification({
+    required String? credentialId,
+    required _i9.IssuanceNotification? notification,
+  }) => super.noSuchMethod(
+    Invocation.method(#expectIssuanceNotification, [], {
+      #credentialId: credentialId,
+      #notification: notification,
+    }),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void notifyDeclinedCredentials() => super.noSuchMethod(
+    Invocation.method(#notifyDeclinedCredentials, []),
+    returnValueForMissingStub: null,
+  );
 
   @override
   _i17.Future<void> loadAllCredentials() =>
@@ -1698,6 +1704,15 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
     required String? oAuthClientAttestationPop,
     required String? dPop,
     required String? issuer,
+    _i17.Future<
+      ({
+        String? dPop,
+        String? oAuthClientAttestation,
+        String? oAuthClientAttestationPop,
+      })
+    >
+    Function(_i9.ChallengeAnswers)?
+    refreshProofs,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#getTokenResponse, [], {
@@ -1709,6 +1724,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #oAuthClientAttestationPop: oAuthClientAttestationPop,
               #dPop: dPop,
               #issuer: issuer,
+              #refreshProofs: refreshProofs,
             }),
             returnValue:
                 _i17.Future<
@@ -1752,6 +1768,40 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
             returnValue: _i17.Future<dynamic>.value(),
           )
           as _i17.Future<dynamic>);
+
+  @override
+  _i9.IssuanceNotification? issuanceNotification({
+    required dynamic credentialResponse,
+    required _i9.OpenIdConfiguration? openIdConfiguration,
+    required String? accessToken,
+    String? dpopKey,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#issuanceNotification, [], {
+              #credentialResponse: credentialResponse,
+              #openIdConfiguration: openIdConfiguration,
+              #accessToken: accessToken,
+              #dpopKey: dpopKey,
+            }),
+          )
+          as _i9.IssuanceNotification?);
+
+  @override
+  _i17.Future<void> sendNotification({
+    required _i9.IssuanceNotification? notification,
+    required _i9.IssuanceNotificationEvent? event,
+    required _i4.Dio? dio,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#sendNotification, [], {
+              #notification: notification,
+              #event: event,
+              #dio: dio,
+            }),
+            returnValue: _i17.Future<void>.value(),
+            returnValueForMissingStub: _i17.Future<void>.value(),
+          )
+          as _i17.Future<void>);
 
   @override
   _i17.Future<dynamic> getDeferredCredential({

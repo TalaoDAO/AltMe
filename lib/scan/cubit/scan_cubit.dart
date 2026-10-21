@@ -419,6 +419,7 @@ class ScanCubit extends Cubit<ScanState> {
   }
 
   void emitError(dynamic e) {
+    traceFlowFailure(e);
     final messageHandler = getMessageHandler(e);
 
     emit(
@@ -1242,12 +1243,8 @@ class ScanCubit extends Cubit<ScanState> {
     } catch (e, s) {
       final log = getLogger('ScanCubit - presentOidc4vpFinal');
       log.e('something went wrong - $e', error: e, stackTrace: s);
-      throw ResponseMessage(
-        data: {
-          'error': 'something went wrong during presentation',
-          'error_description': '$e /n $s',
-        },
-      );
+      // The pick page shows it, with the verifier's own error if any.
+      emitError(e);
     }
   }
 }

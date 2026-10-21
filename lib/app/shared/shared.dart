@@ -12,6 +12,7 @@ export 'local_auth/local_auth_api.dart';
 export 'm_web3_client/m_web3_client.dart';
 export 'message_handler/message_handler.dart';
 export 'models/model.dart';
+export 'protocol_trace/start_protocol_trace.dart';
 export 'text_field_helper/text_field_helper.dart';
 export 'translation/translation.dart';
 export 'validators/validators.dart';

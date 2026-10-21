@@ -8,6 +8,7 @@ import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/matrix_notification/matrix_notification.dart';
+import 'package:altme/splash/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -41,6 +42,9 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Whatever the way here (PIN, onboarding, wallet import), the wallet is
+      // unlocked: the links waiting for it can be processed.
+      context.read<SplashCubit>().authenticated();
       Future.delayed(Duration.zero, () {
         /// If there is a deepLink we give do as if it coming from QRCode
         context.read<QRCodeScanCubit>().deepLink();

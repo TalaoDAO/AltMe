@@ -79,13 +79,30 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
         );
         return credentialManifestPickCubit;
       },
-      child: DcqlQueryOfferPickView(
-        uri: uri,
-        credential: credential,
-        issuer: issuer,
-        inputDescriptorIndex: inputDescriptorIndex,
-        credentialsToBePresented: credentialsToBePresented,
-        verifierTrustInfo: verifierTrustInfo,
+      // The app-wide scan listener pops the dialog it shows on an error, so
+      // this page shows the message itself, like the other pick pages.
+      child: BlocListener<ScanCubit, ScanState>(
+        listener: (context, scanState) {
+          if (scanState.status == ScanStatus.loading) {
+            LoadingView().show(context: context);
+          } else {
+            LoadingView().hide();
+          }
+          if (scanState.message != null) {
+            AlertMessage.showStateMessage(
+              context: context,
+              stateMessage: scanState.message!,
+            );
+          }
+        },
+        child: DcqlQueryOfferPickView(
+          uri: uri,
+          credential: credential,
+          issuer: issuer,
+          inputDescriptorIndex: inputDescriptorIndex,
+          credentialsToBePresented: credentialsToBePresented,
+          verifierTrustInfo: verifierTrustInfo,
+        ),
       ),
     );
   }
@@ -114,6 +131,10 @@ class DcqlQueryOfferPickView extends StatefulWidget {
 }
 
 class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
+  /// Set once Confirm is pressed: the button is disabled from then on, so a
+  /// presentation cannot be sent twice.
+  bool _presenting = false;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -177,15 +198,27 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
           child: Container(
             padding: const EdgeInsets.all(16),
             child: MyElevatedButton(
-              onPressed: () {
-                present(
-                  context: context,
-                  uri: widget.uri,
-                  result: result,
-                  packageFormatCredentials: packageFormatCredentials,
-                  candidates: candidates,
-                );
-              },
+              onPressed: _presenting
+                  ? null
+                  : () async {
+                      setState(() => _presenting = true);
+                      try {
+                        await present(
+                          context: context,
+                          uri: widget.uri,
+                          result: result,
+                          packageFormatCredentials: packageFormatCredentials,
+                          candidates: candidates,
+                        );
+                      } catch (e) {
+                        // Nothing was sent (key, VP token): the user may try
+                        // again.
+                        if (mounted) {
+                          setState(() => _presenting = false);
+                          context.read<ScanCubit>().emitError(e);
+                        }
+                      }
+                    },
               text: l10n.confirm,
             ),
           ),

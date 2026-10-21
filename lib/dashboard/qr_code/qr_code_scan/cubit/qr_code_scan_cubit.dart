@@ -30,6 +30,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:json_path/json_path.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:protocol_trace/protocol_trace.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 part 'qr_code_scan_cubit.g.dart';
@@ -51,6 +52,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required this.oidc4vc,
     required this.walletCubit,
     required this.enterpriseCubit,
+    this.resolvePolicy = ProfilePolicyContext.resolve,
   }) : super(const QRCodeScanState());
 
   final DioClient client;
@@ -67,6 +69,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   OIDC4VCIClient oidc4vc;
   final WalletCubit walletCubit;
   final EnterpriseCubit enterpriseCubit;
+
+  /// The profile policy of a flow, resolved when the flow starts.
+  final Future<ProfilePolicyContext> Function(ProfileModel model) resolvePolicy;
 
   final log = getLogger('QRCodeScanCubit');
 
@@ -163,6 +168,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
   }
 
   void emitError({required dynamic error, Widget? callToAction}) {
+    traceFlowFailure(error);
     final messageHandler = getMessageHandler(error);
 
     emit(
@@ -189,6 +195,19 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       ),
     );
 
+    // A new request: its request_uri is fetched once, from here on.
+    forgetRequestObjects();
+
+    // Debug builds: one protocol trace file per scanned flow.
+    ProtocolTrace.current?.beginFlow(
+      isSiopV2OrOidc4VpUrl(uri)
+          ? 'Credential presentation'
+          : uri.queryParameters.containsKey('credential_offer') ||
+                uri.queryParameters.containsKey('credential_offer_uri')
+          ? 'Credential issuance'
+          : 'QR code scan',
+    );
+
     try {
       /// SIOPV2 : wallet returns an id_token which is a simple jwt
 
@@ -199,6 +218,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
       if (isSiopV2OrOidc4VpUrl(uri)) {
         /// verfier case
+
+        await enforcePresentationPolicy(uri);
 
         final String? requestUri = state.uri?.queryParameters['request_uri'];
         final String? request = state.uri?.queryParameters['request'];
@@ -1056,6 +1077,31 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     }
   }
 
+  /// Checks the presentation request of [uri] against the profile policy
+  /// before the user is asked to consent: a No stops the flow, a Warning goes
+  /// to the protocol trace.
+  Future<void> enforcePresentationPolicy(Uri uri) async {
+    final request = uri.queryParameters['request'];
+    final requestUri = uri.queryParameters['request_uri'];
+    final requestObject =
+        request ??
+        (requestUri == null
+            ? null
+            : await fetchRequestUriPayload(
+                url: requestUri,
+                client: client,
+                oidc4vc: oidc4vc,
+                requestUriMethod: uri.queryParameters['request_uri_method'],
+              ));
+    // A request_uri that could not be fetched is reported by the step that
+    // reads the Request Object. Judging the bare query parameters instead
+    // would turn a network error into a policy violation.
+    if (requestUri != null && request == null && requestObject == '') return;
+
+    final policy = await resolvePolicy(profileCubit.state.model);
+    policy.enforce(policy.checkPresentation(uri, requestObject: requestObject));
+  }
+
   /// verify jwt
   Future<void> verifyJWTBeforeLaunchingOIDC4VPANDSIOPV2Flow() async {
     final String? requestUri = state.uri?.queryParameters['request_uri'];
@@ -1344,26 +1390,12 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required Oidc4vcParameters oidc4vcParameters,
   }) async {
     try {
-      final clientAuthentication = clientAuthenticationFor(
-        profile: profileCubit.state.model,
-        authorizationServerMetadata: oidc4vcParameters
-            .authorizationServerOpenIdConfiguration
-            .rawConfiguration,
-      );
-      final (
-        clientId,
-        clientSecret,
-        authorization,
-        oAuthClientAttestation,
-        oAuthClientAttestationPop,
-      ) = await getClientDetails(
-        profileCubit: profileCubit,
-        isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
-        issuer: oidc4vcParameters.issuer,
-        issuerMetadata:
-            oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
-        clientAuthentication: clientAuthentication,
-      );
+      // The policy is checked before the first request to the authorization
+      // server, and decides the whole flow.
+      final policy = await resolvePolicy(profileCubit.state.model);
+      policy.enforce(policy.checkIssuance(oidc4vcParameters));
+      final decisions = policy.decide(oidc4vcParameters);
+      final clientAuthentication = policy.clientAuthentication(decisions);
 
       final customOidc4vcProfile = profileCubit
           .state
@@ -1371,6 +1403,41 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           .profileSetting
           .selfSovereignIdentityOptions
           .customOidc4vcProfile;
+
+      // In the pre-authorized flow with a Wallet Instance Attestation, the
+      // token request is the only request that carries the attestation, and
+      // addCredentialsInLoop builds that pair — client_id included — right
+      // before sending it. Building one here as well would spend an
+      // attestation challenge on a proof that is never sent.
+      final attestsAtTokenRequest =
+          oidc4vcParameters.preAuthorizedCode != null &&
+          clientAuthentication == ClientAuthentication.wia;
+
+      final (
+        clientId,
+        clientSecret,
+        authorization,
+        oAuthClientAttestation,
+        oAuthClientAttestationPop,
+      ) = attestsAtTokenRequest
+          ? (null, null, null, null, null)
+          : await getClientDetails(
+              profileCubit: profileCubit,
+              isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
+              issuer: oidc4vcParameters.issuer,
+              authorizationServer: oidc4vcParameters
+                  .authorizationServerOpenIdConfiguration
+                  .issuer,
+              attestationChallengeEndpoint:
+                  oidc4vcParameters
+                          .authorizationServerOpenIdConfiguration
+                          .rawConfiguration?['challenge_endpoint']
+                      as String?,
+              client: client,
+              issuerMetadata:
+                  oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
+              clientAuthentication: clientAuthentication,
+            );
 
       final publicKeyForDPop = generateP256KeyForDPop();
 
@@ -1400,6 +1467,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               ? null
               : oAuthClientAttestationPop,
           publicKeyForDPop: publicKeyForDPop,
+          dpop: decisions.dpop,
+          clientAuthentication: clientAuthentication,
           oidc4vcParameters: oidc4vcParameters,
         );
       } else {
@@ -1417,7 +1486,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
           oAuthClientAttestation: oAuthClientAttestation,
           oAuthClientAttestationPop: oAuthClientAttestationPop,
-          secureAuthorizedFlow: customOidc4vcProfile.pushAuthorizationRequest,
+          decisions: decisions,
           client: client,
           profileType: profileCubit.state.model.profileType,
           walletIssuer: Parameters.walletIssuer,
@@ -1455,10 +1524,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required String? clientId,
     required String? clientSecret,
     required String publicKeyForDPop,
+    required bool dpop,
+    required ClientAuthentication clientAuthentication,
     String? oAuthClientAttestation,
     String? oAuthClientAttestationPop,
   }) async {
     final allItems = <CredentialAcceptanceItem>[];
+    // Replaced by the client_id of the attestation fetched for the token
+    // request, which the later credentials of this loop keep using.
+    var effectiveClientId = clientId;
     try {
       for (int i = 0; i < selectedCredentials.length; i++) {
         emit(state.loading());
@@ -1491,18 +1565,25 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             /// leg rather than replaying the one stored at PAR time, because
             /// the authorization code flow puts a whole browser round trip in
             /// between and a proof of possession is short-lived. The §11 cache
-            /// answers from memory, so this costs a signature, not a request.
-            final clientAuthentication = clientAuthenticationFor(
-              profile: profileCubit.state.model,
-              authorizationServerMetadata: oidc4vcParameters
-                  .authorizationServerOpenIdConfiguration
-                  .rawConfiguration,
-            );
+            /// answers from memory, so this costs a signature and, when the
+            /// authorization server asks for one, a challenge. In the
+            /// pre-authorized flow this is the only attestation fetched: it
+            /// also supplies the client_id.
+            ///
+            /// Skipped when the authorization server grants anonymous
+            /// pre-authorized access: that token request carries neither a
+            /// client_id nor client authentication (OpenID4VCI).
+            final isAnonymousPreAuthorizedFlow =
+                oidc4vcParameters.preAuthorizedCode != null &&
+                oidc4vcParameters
+                    .authorizationServerOpenIdConfiguration
+                    .preAuthorizedGrantAnonymousAccessSupported;
             final fetchesClientAttestation =
-                clientAuthentication == ClientAuthentication.wia;
-            Future<void> fetchClientAttestation() async {
+                clientAuthentication == ClientAuthentication.wia &&
+                !isAnonymousPreAuthorizedFlow;
+            Future<void> fetchClientAttestation({String? challenge}) async {
               final (
-                _,
+                freshClientId,
                 _,
                 _,
                 freshAttestation,
@@ -1511,11 +1592,22 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 profileCubit: profileCubit,
                 isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
                 issuer: oidc4vcParameters.issuer,
+                authorizationServer: oidc4vcParameters
+                    .authorizationServerOpenIdConfiguration
+                    .issuer,
+                attestationChallengeEndpoint:
+                    oidc4vcParameters
+                            .authorizationServerOpenIdConfiguration
+                            .rawConfiguration?['challenge_endpoint']
+                        as String?,
+                attestationChallenge: challenge,
+                client: client,
                 issuerMetadata: oidc4vcParameters
                     .issuerOpenIdConfiguration
                     .rawConfiguration,
                 clientAuthentication: clientAuthentication,
               );
+              effectiveClientId = freshClientId ?? effectiveClientId;
               tokenAttestation = freshAttestation ?? tokenAttestation;
               tokenAttestationPop = freshAttestationPop ?? tokenAttestationPop;
             }
@@ -1528,7 +1620,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               userPin: userPin,
               code: codeForAuthorisedFlow,
               codeVerifier: codeVerifier,
-              clientId: clientId,
+              clientId: effectiveClientId,
               txCode: txCode,
               clientSecret: clientSecret,
               authorization: authorization,
@@ -1554,7 +1646,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
             String? dPop;
 
-            if (customOidc4vcProfile.dpopSupport) {
+            if (dpop) {
               dPop = await getDPopJwt(
                 url: oidc4vcParameters.tokenEndpoint,
                 accessToken: savedAccessToken,
@@ -1563,41 +1655,40 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
               );
             }
 
-            final requestTokenData = tokenData;
-            Future<(Map<String, dynamic>?, String?, String?, List<dynamic>?)>
-            requestToken(String? dPop) => oidc4vc.getTokenResponse(
+            /// get token response - retried with fresh proofs when the
+            /// authorization server asks for a DPoP nonce (RFC 9449 §8) or for
+            /// a fresh attestation challenge (`use_attestation_challenge`),
+            /// see `getTokenResponse`.
+            final tokenResult = await oidc4vc.getTokenResponse(
               authorization: authorization,
               tokenEndPoint: oidc4vcParameters.tokenEndpoint,
               oAuthClientAttestation: tokenAttestation,
               oAuthClientAttestationPop: tokenAttestationPop,
               dio: client.dio,
-              tokenData: requestTokenData,
+              tokenData: tokenData,
               dPop: dPop,
               issuer: oidc4vcParameters.issuer,
+              refreshProofs: (answers) async {
+                if (fetchesClientAttestation) {
+                  await fetchClientAttestation(
+                    challenge: answers.attestationChallenge,
+                  );
+                }
+                return (
+                  oAuthClientAttestation: tokenAttestation,
+                  oAuthClientAttestationPop: tokenAttestationPop,
+                  dPop: dPop == null
+                      ? null
+                      : await getDPopJwt(
+                          url: oidc4vcParameters.tokenEndpoint,
+                          accessToken: savedAccessToken,
+                          nonce: answers.dpopNonce == null ? savedNonce : null,
+                          publicKey: publicKeyForDPop,
+                          dpopNonce: answers.dpopNonce,
+                        ),
+                );
+              },
             );
-
-            /// get token response - retried once with a fresh proof when the
-            /// authorization server asks for a DPoP nonce (RFC 9449 §8). The
-            /// client attestation PoP is replaced too: the server has already
-            /// consumed its `jti` on the first attempt and would reject it as
-            /// replayed.
-            (Map<String, dynamic>?, String?, String?, List<dynamic>?)
-            tokenResult;
-            try {
-              tokenResult = await requestToken(dPop);
-            } on DioException catch (e) {
-              final dpopNonce = dpopNonceChallenge(e);
-              if (dPop == null || dpopNonce == null) rethrow;
-              if (fetchesClientAttestation) await fetchClientAttestation();
-              tokenResult = await requestToken(
-                await getDPopJwt(
-                  url: oidc4vcParameters.tokenEndpoint,
-                  accessToken: savedAccessToken,
-                  publicKey: publicKeyForDPop,
-                  dpopNonce: dpopNonce,
-                ),
-              );
-            }
             final (
               Map<String, dynamic>? tokenResponse,
               String? accessToken,
@@ -1645,13 +1736,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                 credential: selectedCredentials[i],
                 cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
                 didKeyType: customOidc4vcProfile.defaultDid,
-                clientId: clientId,
+                clientId: effectiveClientId,
                 profileCubit: profileCubit,
                 accessToken: savedAccessToken!,
                 cnonce: savedNonce,
                 authorizationDetails: savedAuthorizationDetails,
                 qrCodeScanCubit: this,
                 publicKeyForDPop: publicKeyForDPop,
+                dpop: dpop,
+                clientAuthentication: clientAuthentication,
                 oidc4vcParameters: oidc4vcParameters,
               );
             } catch (e) {
@@ -1667,13 +1760,15 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
                   credential: selectedCredentials[i],
                   cryptoHolderBinding: customOidc4vcProfile.cryptoHolderBinding,
                   didKeyType: customOidc4vcProfile.defaultDid,
-                  clientId: clientId,
+                  clientId: effectiveClientId,
                   profileCubit: profileCubit,
                   accessToken: savedAccessToken!,
                   cnonce: nonce,
                   authorizationDetails: savedAuthorizationDetails,
                   qrCodeScanCubit: this,
                   publicKeyForDPop: publicKeyForDPop,
+                  dpop: dpop,
+                  clientAuthentication: clientAuthentication,
                   oidc4vcParameters: oidc4vcParameters,
                 );
               } else {
@@ -1735,6 +1830,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             qrCodeScanCubit: this,
             openIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
             credentialKeyIds: credentialKeyIds,
+            dpopKey: dpop ? publicKeyForDPop : null,
           );
           allItems.addAll(items);
         } else {
@@ -1996,6 +2092,15 @@ ${state.uri}
         oAuthClientAttestation: oidc4VCIState.oAuthClientAttestation,
         oAuthClientAttestationPop: oidc4VCIState.oAuthClientAttestationPop,
         publicKeyForDPop: oidc4VCIState.publicKeyForDPo,
+        dpop: oidc4VCIState.dpop,
+        clientAuthentication: oidc4VCIState.resumedClientAuthentication(
+          profileCubit
+              .state
+              .model
+              .profileSetting
+              .selfSovereignIdentityOptions
+              .customOidc4vcProfile,
+        ),
         oidc4vcParameters: Oidc4vcParameters(
           oidc4vciDraftType: oidc4vciDraftType,
           useOAuthAuthorizationServerLink: false,
@@ -2006,6 +2111,10 @@ ${state.uri}
           oidc4vcType: oidc4VCIState.isEBSI ? OIDC4VCType.EBSI : null,
           tokenEndpoint: oidc4VCIState.tokenEndpoint,
           issuerOpenIdConfiguration: issuerOpenIdConfiguration,
+          authorizationServerOpenIdConfiguration: OpenIdConfiguration(
+            requirePushedAuthorizationRequests: false,
+            issuer: oidc4VCIState.authorizationServer,
+          ),
         ),
       );
       await profileCubit.deleteOidc4VCIState(oidc4VCIState.challenge);
@@ -2020,7 +2129,20 @@ ${state.uri}
     required Uri uri,
   }) async {
     if (oidc4vc is Oidc4vciClientFinal) {
-      final dcqlQuery = await oidc4vc.getDcqlQueryFromUri(uri: uri);
+      final requestUri = uri.queryParameters['request_uri'];
+      if (requestUri == null) {
+        throw Exception('REQUEST_URI_NOT_PRESENT_IN_URI');
+      }
+      // The Request Object fetched when the request was scanned.
+      final dcqlQuery = await fetchRequestUriPayload(
+        url: requestUri,
+        client: client,
+        oidc4vc: oidc4vc,
+        requestUriMethod: uri.queryParameters['request_uri_method'],
+      );
+      if (dcqlQuery is! String || dcqlQuery.isEmpty) {
+        throw Exception('ERROR_FETCHING_DCQL_QUERY');
+      }
       final CredentialModel credentialPreview = CredentialModel(
         id: 'id',
         image: 'image',

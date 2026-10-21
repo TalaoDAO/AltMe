@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vc/helper_function/mdoc_credential_data.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:platform_p256_keys/platform_p256_keys.dart';
 
@@ -21,6 +22,8 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
   required List<dynamic>? authorizationDetails,
   required QRCodeScanCubit qrCodeScanCubit,
   required String publicKeyForDPop,
+  required bool dpop,
+  required ClientAuthentication clientAuthentication,
   required String? cnonce,
   PlatformP256Keys platformKeys = const PlatformP256Keys(),
 }) async {
@@ -225,12 +228,7 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
         credentialIdentifier: credentialIdentifier,
         cryptoHolderBinding: cryptoHolderBinding,
         credentialDefinition: credentialDefinition,
-        clientAuthentication: clientAuthenticationFor(
-          profile: profileCubit.state.model,
-          authorizationServerMetadata: oidc4vcParameters
-              .authorizationServerOpenIdConfiguration
-              .rawConfiguration,
-        ),
+        clientAuthentication: clientAuthentication,
         vct: vct,
         proofType: mdocKeyAlias != null
             ? ProofType.jwt
@@ -271,9 +269,12 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
         profileCubit: profileCubit,
         openIdConfiguration: oidc4vcParameters.issuerOpenIdConfiguration,
         accessToken: accessToken,
-        dio: Dio(),
+        // The app's request logging, in debug builds only, so that a refused
+        // credential request shows its status and body.
+        dio: Dio()..interceptors.addAll([if (kDebugMode) Logging()]),
         credentialData: credentialData,
         publicKeyForDPop: publicKeyForDPop,
+        dpop: dpop,
       );
     } catch (_) {
       // No credential will ever be bound to this key.
@@ -379,21 +380,16 @@ Future<dynamic> getSingleCredentialData({
   required Dio dio,
   required Map<String, dynamic> credentialData,
   required String publicKeyForDPop,
+  required bool dpop,
 }) async {
   final credentialEndpoint = profileCubit.oidc4vc.readCredentialEndpoint(
     openIdConfiguration,
   );
 
-  final customOidc4vcProfile = profileCubit
-      .state
-      .model
-      .profileSetting
-      .selfSovereignIdentityOptions
-      .customOidc4vcProfile;
   try {
     String? dPop;
 
-    if (customOidc4vcProfile.dpopSupport) {
+    if (dpop) {
       dPop = await getDPopJwt(
         url: credentialEndpoint,
         accessToken: accessToken,
@@ -404,7 +400,7 @@ Future<dynamic> getSingleCredentialData({
     try {
       final credential = await profileCubit.oidc4vc.getSingleCredential(
         accessToken: accessToken,
-        dio: Dio(),
+        dio: dio,
         credentialData: credentialData,
         credentialEndpoint: credentialEndpoint,
         dPop: dPop,
@@ -418,7 +414,7 @@ Future<dynamic> getSingleCredentialData({
       if (dPop == null || dpopNonce == null) rethrow;
       final credential = await profileCubit.oidc4vc.getSingleCredential(
         accessToken: accessToken,
-        dio: Dio(),
+        dio: dio,
         credentialData: credentialData,
         credentialEndpoint: credentialEndpoint,
         dPop: await getDPopJwt(

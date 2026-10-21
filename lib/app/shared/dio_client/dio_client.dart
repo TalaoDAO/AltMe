@@ -57,7 +57,7 @@ class DioClient {
   }) async {
     try {
       final stopwatch = Stopwatch()..start();
-      await getSpecificHeader(uri, headers);
+      final requestOptions = await _requestOptions(uri, headers, options);
       log.i('uri - $uri');
       dynamic response;
 
@@ -67,7 +67,7 @@ class DioClient {
           response = await dio.get<dynamic>(
             uri,
             queryParameters: queryParameters,
-            options: options,
+            options: requestOptions,
             cancelToken: cancelToken,
             onReceiveProgress: onReceiveProgress,
           );
@@ -80,7 +80,7 @@ class DioClient {
             response = await dio.get<dynamic>(
               uri,
               queryParameters: queryParameters,
-              options: options,
+              options: requestOptions,
               cancelToken: cancelToken,
               onReceiveProgress: onReceiveProgress,
             );
@@ -95,7 +95,7 @@ class DioClient {
         response = await dio.get<dynamic>(
           uri,
           queryParameters: queryParameters,
-          options: options,
+          options: requestOptions,
           cancelToken: cancelToken,
           onReceiveProgress: onReceiveProgress,
         );
@@ -116,24 +116,33 @@ class DioClient {
     }
   }
 
-  Future<void> getSpecificHeader(
+  /// [options] carrying the headers of a request to [uri].
+  ///
+  /// Set on the request, never on `dio.options`: this Dio is shared, and
+  /// defaults set by one request (a PAR's client attestation and DPoP proof)
+  /// would be sent with every later one, verifiers included.
+  Future<Options> _requestOptions(
     String uri,
     Map<String, dynamic> headers,
+    Options? options,
   ) async {
+    var requestHeaders = headers;
     if (uri.contains(Urls.tezotopiaMembershipCardUrl) ||
         uri.contains(Urls.chainbornMembershipCardUrl) ||
         uri.contains(Urls.twitterCardUrl)) {
       await dotenv.load();
       final YOTI_AI_API_KEY = dotenv.get('YOTI_AI_API_KEY');
 
-      dio.options.headers = <String, dynamic>{
+      requestHeaders = <String, dynamic>{
         'Content-Type': 'application/json; charset=UTF-8',
         'accept': 'application/json',
         'X-API-KEY': YOTI_AI_API_KEY,
       };
-    } else {
-      dio.options.headers = headers;
     }
+    final requestOptions = (options ?? Options()).copyWith(
+      headers: {...requestHeaders, ...?options?.headers},
+    );
+    return requestOptions;
   }
 
   Future<dynamic> post(
@@ -151,7 +160,7 @@ class DioClient {
   }) async {
     try {
       final stopwatch = Stopwatch()..start();
-      await getSpecificHeader(uri, headers);
+      final requestOptions = await _requestOptions(uri, headers, options);
       if (timeout != null) {
         dio.options.connectTimeout = Duration(seconds: timeout);
         dio.options.receiveTimeout = Duration(seconds: timeout);
@@ -160,7 +169,7 @@ class DioClient {
         uri,
         data: data,
         queryParameters: queryParameters,
-        options: options,
+        options: requestOptions,
         cancelToken: cancelToken,
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,

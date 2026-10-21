@@ -92,12 +92,31 @@ class ProfileSelectorWidget extends StatelessWidget {
                               }
                               LoadingView().show(context: buildContext);
 
-                              await context.read<ProfileCubit>().setProfile(
-                                profileType,
-                              );
-                              await context
-                                  .read<CredentialsCubit>()
-                                  .loadAllCredentials();
+                              try {
+                                await context.read<ProfileCubit>().setProfile(
+                                  profileType,
+                                );
+                                await context
+                                    .read<CredentialsCubit>()
+                                    .loadAllCredentials();
+                              } catch (e) {
+                                // The previous profile stays selected.
+                                LoadingView().hide();
+                                if (!context.mounted) return;
+                                const failedToLoad = ResponseString
+                                    .RESPONSE_STRING_FAILED_TO_LOAD_PROFILE;
+                                AlertMessage.showStateMessage(
+                                  context: context,
+                                  stateMessage: StateMessage.error(
+                                    messageHandler: ResponseMessage(
+                                      message: failedToLoad,
+                                      data: {'error_description': '$e'},
+                                    ),
+                                    showDialog: true,
+                                  ),
+                                );
+                                return;
+                              }
 
                               if (profileType == ProfileType.custom) {
                                 final navigation = Navigator.of(

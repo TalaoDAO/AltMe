@@ -1067,6 +1067,12 @@
   "noNotificationsYet": "Aún no hay notificaciones",
   "activityLog": "Registro de Actividad",
   "activityLogDescription": "Ver tus actividades",
+  "protocolTraceLogs": "Registros de Trazas del Protocolo",
+  "protocolTraceLogsDescription": "Ver y eliminar los archivos de traza grabados",
+  "protocolTraceLogsEmpty": "Todavía no se ha grabado ningún archivo de traza",
+  "deleteAllTraceLogs": "Eliminar todos",
+  "deleteAllTraceLogsConfirmationTitle": "¿Eliminar todos los registros de traza?",
+  "deleteAllTraceLogsConfirmationSubtitle": "Esta acción no se puede deshacer.",
   "walletInitialized": "Cartera digital inicializada",
   "backupCredentials": "Credenciales de respaldo",
   "restoredCredentials": "Credenciales restauradas",
@@ -1244,5 +1250,6 @@
   "notVerifiedLabel": "No verificado",
   "onlyInformationShownWillBeShared": "Solo se compartirá la información mostrada arriba.",
   "shareInformationButtonLabel": "Compartir información",
-  "dontShareLabel": "No compartir"
+  "dontShareLabel": "No compartir",
+  "policyViolation": "Este servicio no cumple los requisitos de seguridad del perfil de su cartera."
 }

@@ -1070,6 +1070,12 @@
   "noNotificationsYet": "No notifications yet",
   "activityLog": "Activity Log",
   "activityLogDescription": "See your activities",
+  "protocolTraceLogs": "Protocol Trace Logs",
+  "protocolTraceLogsDescription": "View and delete recorded trace files",
+  "protocolTraceLogsEmpty": "No trace files recorded yet",
+  "deleteAllTraceLogs": "Delete all",
+  "deleteAllTraceLogsConfirmationTitle": "Delete all trace logs?",
+  "deleteAllTraceLogsConfirmationSubtitle": "This cannot be undone.",
   "walletInitialized": "Wallet Initialized",
   "backupCredentials": "Backup Credentials",
   "restoredCredentials": "Restored Credentials",
@@ -1265,5 +1271,9 @@
   "mdocReaderDeviceCheck": "Device signature",
   "mdocReaderCheckValid": "Valid",
   "mdocReaderCheckInvalid": "Invalid",
-  "mdocReaderCheckUnchecked": "Not checked"
+  "mdocReaderCheckUnchecked": "Not checked",
+  "policyViolation": "This service does not meet the security requirements of your wallet profile.",
+  "@policyViolation": {
+    "description": "Shown when an issuer or verifier fails the wallet profile's policy"
+  }
 }

@@ -424,6 +424,10 @@ void main() {
       test('isOIDC4VCIUrl returns true for valid OIDC4VCI URLs', () {
         expect(isOIDC4VCIUrl(Uri.parse('openid://some/path')), true);
         expect(isOIDC4VCIUrl(Uri.parse('haip://another/path')), true);
+        expect(
+          isOIDC4VCIUrl(Uri.parse('eu-eaa-offer://?credential_offer_uri=foo')),
+          true,
+        );
       });
 
       group('isSiopV2OrOidc4VpUrl', () {
@@ -434,6 +438,10 @@ void main() {
           );
           expect(
             isSiopV2OrOidc4VpUrl(Uri.parse('siopv2://?request_uri=foo')),
+            true,
+          );
+          expect(
+            isSiopV2OrOidc4VpUrl(Uri.parse('eu-eaap://?request_uri=foo')),
             true,
           );
         });

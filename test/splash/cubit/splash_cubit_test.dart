@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/chat_room/chat_room.dart';
 import 'package:altme/connection_bridge/connection_bridge.dart';
@@ -300,6 +302,51 @@ void main() {
           });
           expect(splashCubit.state.status, SplashStatus.routeToOnboarding);
         });
+      });
+    });
+
+    group('whenAuthenticated', () {
+      Future<SplashCubit> splashCubit() async {
+        final cubit = SplashCubit(
+          credentialsCubit: credentialsCubit,
+          secureStorageProvider: mockSecureStorage,
+          homeCubit: homeCubit,
+          walletCubit: walletCubit,
+          client: DioClient(
+            baseUrl: '',
+            secureStorageProvider: mockSecureStorage,
+            dio: Dio(),
+          ),
+          altmeChatSupportCubit: altmeChatSupportCubit,
+          matrixNotificationCubit: matrixNotificationCubit,
+          profileCubit: profileCubit,
+          packageInfo: packageInfo,
+          qrCodeScanCubit: qrCodeScanCubit,
+          walletConnectCubit: walletConnectCubit,
+        );
+        // Lets the version check of the constructor settle first.
+        await Future<void>.delayed(Duration.zero);
+        return cubit;
+      }
+
+      test('completes at once when the wallet is already unlocked', () async {
+        final cubit = await splashCubit();
+        cubit.authenticated();
+
+        await expectLater(cubit.whenAuthenticated(), completes);
+      });
+
+      test('waits until the wallet is unlocked', () async {
+        final cubit = await splashCubit();
+        var unlocked = false;
+        unawaited(cubit.whenAuthenticated().then((_) => unlocked = true));
+
+        await Future<void>.delayed(Duration.zero);
+        expect(unlocked, isFalse);
+
+        cubit.authenticated();
+        await Future<void>.delayed(Duration.zero);
+        expect(unlocked, isTrue);
       });
     });
   });

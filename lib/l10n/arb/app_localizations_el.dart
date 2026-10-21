@@ -3229,6 +3229,25 @@ class AppLocalizationsEl extends AppLocalizations {
   String get activityLogDescription => 'Δείτε τις δραστηριότητές σας';
 
   @override
+  String get protocolTraceLogs => 'Protocol Trace Logs';
+
+  @override
+  String get protocolTraceLogsDescription =>
+      'View and delete recorded trace files';
+
+  @override
+  String get protocolTraceLogsEmpty => 'No trace files recorded yet';
+
+  @override
+  String get deleteAllTraceLogs => 'Delete all';
+
+  @override
+  String get deleteAllTraceLogsConfirmationTitle => 'Delete all trace logs?';
+
+  @override
+  String get deleteAllTraceLogsConfirmationSubtitle => 'This cannot be undone.';
+
+  @override
   String get walletInitialized => 'Αρχικοποίηση πορτοφολιού';
 
   @override
@@ -3604,4 +3623,8 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get mdocReaderCheckUnchecked => 'Not checked';
+
+  @override
+  String get policyViolation =>
+      'Αυτή η υπηρεσία δεν πληροί τις απαιτήσεις ασφαλείας του προφίλ του πορτοφολιού σας.';
 }

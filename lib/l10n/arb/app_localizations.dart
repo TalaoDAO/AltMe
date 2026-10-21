@@ -5823,6 +5823,42 @@ abstract class AppLocalizations {
   /// **'See your activities'**
   String get activityLogDescription;
 
+  /// No description provided for @protocolTraceLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'Protocol Trace Logs'**
+  String get protocolTraceLogs;
+
+  /// No description provided for @protocolTraceLogsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'View and delete recorded trace files'**
+  String get protocolTraceLogsDescription;
+
+  /// No description provided for @protocolTraceLogsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No trace files recorded yet'**
+  String get protocolTraceLogsEmpty;
+
+  /// No description provided for @deleteAllTraceLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all'**
+  String get deleteAllTraceLogs;
+
+  /// No description provided for @deleteAllTraceLogsConfirmationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all trace logs?'**
+  String get deleteAllTraceLogsConfirmationTitle;
+
+  /// No description provided for @deleteAllTraceLogsConfirmationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This cannot be undone.'**
+  String get deleteAllTraceLogsConfirmationSubtitle;
+
   /// No description provided for @walletInitialized.
   ///
   /// In en, this message translates to:
@@ -6476,6 +6512,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not checked'**
   String get mdocReaderCheckUnchecked;
+
+  /// Shown when an issuer or verifier fails the wallet profile's policy
+  ///
+  /// In en, this message translates to:
+  /// **'This service does not meet the security requirements of your wallet profile.'**
+  String get policyViolation;
 }
 
 class _AppLocalizationsDelegate

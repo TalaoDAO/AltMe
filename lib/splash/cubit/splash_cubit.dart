@@ -136,4 +136,12 @@ class SplashCubit extends Cubit<SplashState> {
   void authenticated() {
     emit(state.copyWith(status: SplashStatus.authenticated));
   }
+
+  /// Completes once the wallet is unlocked, right away when it already is.
+  Future<void> whenAuthenticated() async {
+    if (state.status == SplashStatus.authenticated) return;
+    await stream.firstWhere(
+      (state) => state.status == SplashStatus.authenticated,
+    );
+  }
 }

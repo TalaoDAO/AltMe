@@ -1065,6 +1065,12 @@
   "noNotificationsYet": "Encara no hi ha notificacions",
   "activityLog": "Registre d'Activitat",
   "activityLogDescription": "Veure les teves activitats",
+  "protocolTraceLogs": "Registres de Traça del Protocol",
+  "protocolTraceLogsDescription": "Veure i eliminar els fitxers de traça enregistrats",
+  "protocolTraceLogsEmpty": "Encara no s'ha enregistrat cap fitxer de traça",
+  "deleteAllTraceLogs": "Eliminar-ho tot",
+  "deleteAllTraceLogsConfirmationTitle": "Eliminar tots els registres de traça?",
+  "deleteAllTraceLogsConfirmationSubtitle": "Aquesta acció no es pot desfer.",
   "walletInitialized": "Cartera digital inicialitzada",
   "backupCredentials": "Credencials de còpia de seguretat",
   "restoredCredentials": "Credencials restaurades",
@@ -1242,5 +1248,6 @@
   "notVerifiedLabel": "No verificat",
   "onlyInformationShownWillBeShared": "Només es compartirà la informació mostrada a dalt.",
   "shareInformationButtonLabel": "Compartir informació",
-  "dontShareLabel": "No comparteixis"
+  "dontShareLabel": "No comparteixis",
+  "policyViolation": "Aquest servei no compleix els requisits de seguretat del perfil de la vostra cartera."
 }

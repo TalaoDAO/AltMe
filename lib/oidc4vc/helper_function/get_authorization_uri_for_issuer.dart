@@ -3,9 +3,8 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/app/shared/shared.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/oidc4vc/helper_function/authorization_state.dart';
 import 'package:altme/oidc4vc/model/oidc4vci_state.dart';
-import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
-
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -20,7 +19,7 @@ Future<Uri?> getAuthorizationUriForIssuer({
   required String? clientSecret,
   required ClientAuthentication clientAuthentication,
   required List<VCFormatType> formatsSupported,
-  required bool secureAuthorizedFlow,
+  required IssuanceDecisions decisions,
   required DioClient client,
   required ProfileType profileType,
   required String walletIssuer,
@@ -45,6 +44,10 @@ Future<Uri?> getAuthorizationUriForIssuer({
     publicKeyForDPo: publicKeyForDPop,
     oidc4vciDraft: oidc4vcParameters.oidc4vciDraftType.numbering,
     tokenEndpoint: oidc4vcParameters.tokenEndpoint,
+    authorizationServer:
+        oidc4vcParameters.authorizationServerOpenIdConfiguration.issuer,
+    dpop: decisions.dpop,
+    clientAuthentication: clientAuthentication,
   );
   late Oidc4VCIState oidc4VCIState;
   switch (clientAuthentication) {
@@ -80,16 +83,18 @@ Future<Uri?> getAuthorizationUriForIssuer({
       );
   }
 
-  // save the state and give the id for the jwt
+  // save the state and give its id, encrypted, as the OAuth state
   profileCubit.addOidc4VCI(oidc4VCIState);
-  final jwt = JWT({'challenge': pkcePair.codeChallenge});
 
   await dotenv.load();
   final String authorizationUriSecretKey = dotenv.get(
     'AUTHORIZATION_URI_SECRET_KEY',
   );
 
-  final jwtToken = jwt.sign(SecretKey(authorizationUriSecretKey));
+  final authorizationState = AuthorizationState.encrypt(
+    pkcePair.codeChallenge,
+    secret: authorizationUriSecretKey,
+  );
 
   late Uri authorizationUri;
 
@@ -101,21 +106,17 @@ Future<Uri?> getAuthorizationUriForIssuer({
         redirectUri: Parameters.redirectUri,
         nonce: nonce,
         pkcePair: pkcePair,
-        state: jwtToken,
+        state: authorizationState,
         scope: scope,
         clientAuthentication: clientAuthentication,
         formatsSuported: formatsSupported,
-        secureAuthorizedFlow: secureAuthorizedFlow,
+        secureAuthorizedFlow: decisions.par,
         isEBSIProfile: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
         walletIssuer: walletIssuer,
         oidc4vcParameters: oidc4vcParameters,
       );
 
-  final requirePushedAuthorizationRequests = oidc4vcParameters
-      .authorizationServerOpenIdConfiguration
-      .requirePushedAuthorizationRequests;
-
-  final isSecure = requirePushedAuthorizationRequests || secureAuthorizedFlow;
+  final isSecure = decisions.par;
 
   if (profileCubit.state.model.isDeveloperMode) {
     final value = await qrCodeScanCubit.showDataBeforeSending(
@@ -136,22 +137,21 @@ Future<Uri?> getAuthorizationUriForIssuer({
   if (isSecure) {
     String? dPop;
 
-    final customOidc4vcProfile = profileCubit
-        .state
-        .model
-        .profileSetting
-        .selfSovereignIdentityOptions
-        .customOidc4vcProfile;
-
-    // TODO(hawkbee): return an error message if
-    // openIdConfiguration.pushedAuthorizationRequestEndpoint is null
+    // RFC 9126 §5: `pushed_authorization_request_endpoint` is authorization
+    // server metadata, so it is read there first. The credential issuer's own
+    // metadata only has it when the issuer is its own authorization server.
+    // TODO(hawkbee): return an error message rather than guessing when
+    // neither publishes it.
     final parUrl =
+        oidc4vcParameters
+            .authorizationServerOpenIdConfiguration
+            .pushedAuthorizationRequestEndpoint ??
         oidc4vcParameters
             .issuerOpenIdConfiguration
             .pushedAuthorizationRequestEndpoint ??
         '${oidc4vcParameters.authorizationEndpoint}/par';
 
-    if (customOidc4vcProfile.dpopSupport) {
+    if (decisions.dpop) {
       dPop = await getDPopJwt(
         url: parUrl,
         // accessToken: savedAccessToken,
@@ -171,53 +171,63 @@ Future<Uri?> getAuthorizationUriForIssuer({
     }
 
     /// error we shuld get it from
-    dynamic response;
-    try {
-      response = await client.post(
-        parUrl,
-        headers: headers,
-        data: authorizationRequestParemeters,
-      );
-    } on NetworkException catch (e) {
-      // RFC 9449 §8: retried once with a fresh proof when the authorization
-      // server asks for a DPoP nonce. The client attestation PoP is replaced
-      // too: the server has already consumed its `jti` and would reject it as
-      // replayed.
-      final dpopNonce = dpopNonceChallenge(e);
-      if (dPop == null || dpopNonce == null) rethrow;
-      if (clientAuthentication == ClientAuthentication.wia) {
-        final (
-          _,
-          _,
-          _,
-          freshAttestation,
-          freshAttestationPop,
-        ) = await getClientDetails(
-          profileCubit: profileCubit,
-          isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
-          issuer: oidc4vcParameters.issuer,
-          issuerMetadata:
-              oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
-          clientAuthentication: clientAuthentication,
-        );
-        if (freshAttestation != null && freshAttestationPop != null) {
-          headers['OAuth-Client-Attestation'] = freshAttestation;
-          headers['OAuth-Client-Attestation-PoP'] = freshAttestationPop;
+    // Retried with fresh proofs when the authorization server asks for a DPoP
+    // nonce (RFC 9449 §8) or for a fresh attestation challenge
+    // (`use_attestation_challenge`), see `answerAuthorizationServerChallenges`.
+    final dynamic response = await answerAuthorizationServerChallenges<dynamic>(
+      answersDpopNonce: dPop != null,
+      answersAttestationChallenge:
+          clientAuthentication == ClientAuthentication.wia,
+      errorResponseOf: (error) => error is NetworkException
+          ? (data: error.data, headers: error.headers)
+          : null,
+      send: (answers) async {
+        if (answers != null) {
+          if (clientAuthentication == ClientAuthentication.wia) {
+            final (
+              _,
+              _,
+              _,
+              freshAttestation,
+              freshAttestationPop,
+            ) = await getClientDetails(
+              profileCubit: profileCubit,
+              isEBSI: oidc4vcParameters.oidc4vcType == OIDC4VCType.EBSI,
+              issuer: oidc4vcParameters.issuer,
+              authorizationServer: oidc4vcParameters
+                  .authorizationServerOpenIdConfiguration
+                  .issuer,
+              attestationChallengeEndpoint:
+                  oidc4vcParameters
+                          .authorizationServerOpenIdConfiguration
+                          .rawConfiguration?['challenge_endpoint']
+                      as String?,
+              attestationChallenge: answers.attestationChallenge,
+              client: client,
+              issuerMetadata:
+                  oidc4vcParameters.issuerOpenIdConfiguration.rawConfiguration,
+              clientAuthentication: clientAuthentication,
+            );
+            if (freshAttestation != null && freshAttestationPop != null) {
+              headers['OAuth-Client-Attestation'] = freshAttestation;
+              headers['OAuth-Client-Attestation-PoP'] = freshAttestationPop;
+            }
+          }
+          if (dPop != null) {
+            headers['DPoP'] = await getDPopJwt(
+              url: parUrl,
+              publicKey: publicKeyForDPop,
+              dpopNonce: answers.dpopNonce,
+            );
+          }
         }
-      }
-      response = await client.post(
-        parUrl,
-        headers: {
-          ...headers,
-          'DPoP': await getDPopJwt(
-            url: parUrl,
-            publicKey: publicKeyForDPop,
-            dpopNonce: dpopNonce,
-          ),
-        },
-        data: authorizationRequestParemeters,
-      );
-    }
+        return client.post(
+          parUrl,
+          headers: headers,
+          data: authorizationRequestParemeters,
+        );
+      },
+    );
 
     if (profileCubit.state.model.isDeveloperMode) {
       final formattedData =

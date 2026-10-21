@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:altme/dashboard/profile/profile_provider/get_wallet_attestation_data.dart';
+import 'package:altme/oidc4vc/helper_function/verify_encoded_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// A self-signed P-256 certificate (CN=Test mdoc issuer), made with openssl.

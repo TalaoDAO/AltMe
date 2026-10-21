@@ -1222,5 +1222,6 @@
   "mdocProximityNfcUnavailable": "Le NFC est désactivé. Utilisez plutôt le QR code.",
   "mdocProximityError": "La présentation a échoué.",
   "mdocProximityTapInstead": "Approcher du lecteur à la place",
-  "mdocProximityQrCodeInstead": "Afficher un QR code à la place"
+  "mdocProximityQrCodeInstead": "Afficher un QR code à la place",
+  "policyViolation": "Ce service ne respecte pas les exigences de sécurité du profil de votre wallet."
 }
