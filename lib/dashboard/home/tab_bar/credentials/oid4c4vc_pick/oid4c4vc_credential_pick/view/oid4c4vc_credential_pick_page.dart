@@ -134,6 +134,17 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                     credentialImage = LdpVc(credential).getPicture;
                   }
 
+                  // Shown on the default card, so left out of the claims
+                  // listed below it.
+                  final showPortrait =
+                      credentialImage == null &&
+                      CredentialDisplay.portraitSubjectTypes.contains(
+                        credential
+                            .credentialPreview
+                            .credentialSubjectModel
+                            .credentialSubjectType,
+                      );
+
                   return TransparentInkWell(
                     onTap: () => context
                         .read<Oidc4vcCredentialPickCubit>()
@@ -151,6 +162,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                               credDisplayType: CredDisplayType.Detail,
                               profileSetting: profileSetting,
                               isDiscover: false,
+                              showPortrait: showPortrait,
                             ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -173,6 +185,7 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                             credentialModel: credential,
                             claims: null,
                             showVertically: true,
+                            hidePortrait: showPortrait,
                           ),
                         ],
                       ),

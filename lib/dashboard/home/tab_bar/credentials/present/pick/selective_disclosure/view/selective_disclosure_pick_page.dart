@@ -169,6 +169,7 @@ class _SelectiveDisclosurePickViewState
                     credDisplayType: CredDisplayType.List,
                     profileSetting: profileSetting,
                     isDiscover: false,
+                    showPortrait: true,
                   ),
                 const SizedBox(height: 20),
                 ConsumeSelectiveDisclosureCubit(
