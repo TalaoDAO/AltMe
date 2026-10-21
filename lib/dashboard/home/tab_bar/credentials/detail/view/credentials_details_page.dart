@@ -138,16 +138,14 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         .credentialSubjectType;
 
     // Shown on the default card, so left out of the claims listed below it.
-    final portrait =
+    final showPortrait =
         credentialImage == null &&
-            const [
-              CredentialSubjectType.defaultCredential,
-              CredentialSubjectType.identityCredential,
-              CredentialSubjectType.eudiPid,
-              CredentialSubjectType.pid,
-            ].contains(credentialSubjectType)
-        ? SelectiveDisclosure(widget.credentialModel).portrait
-        : null;
+        const [
+          CredentialSubjectType.defaultCredential,
+          CredentialSubjectType.identityCredential,
+          CredentialSubjectType.eudiPid,
+          CredentialSubjectType.pid,
+        ].contains(credentialSubjectType);
 
     final showVerticalDescription =
         credentialSubjectType == CredentialSubjectType.eudiPid ||
@@ -211,7 +209,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             credDisplayType: CredDisplayType.Detail,
                             profileSetting: profileSetting,
                             isDiscover: false,
-                            portrait: portrait?.data,
+                            showPortrait: showPortrait,
                           ),
                         const SizedBox(height: 20),
                         Column(
@@ -319,7 +317,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               credentialModel: widget.credentialModel,
                               claims: null,
                               showVertically: showVerticalDescription,
-                              hiddenClaim: portrait,
+                              hidePortrait: showPortrait,
                             ),
 
                           // /// normal claims data

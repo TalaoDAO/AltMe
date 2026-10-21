@@ -11,7 +11,7 @@ class CredentialDisplay extends StatelessWidget {
     required this.profileSetting,
     required this.isDiscover,
     this.displyalDescription = true,
-    this.portrait,
+    this.showPortrait = false,
   });
 
   final CredentialModel credentialModel;
@@ -20,8 +20,8 @@ class CredentialDisplay extends StatelessWidget {
   final bool displyalDescription;
   final bool isDiscover;
 
-  /// An image shown on the card, used by the details of the default card.
-  final String? portrait;
+  /// Whether the default card shows the credential's portrait.
+  final bool showPortrait;
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +101,7 @@ class CredentialDisplay extends StatelessWidget {
                 showBgDecoration: false,
                 descriptionMaxLine: 5,
                 isDiscover: isDiscover,
-                portrait: portrait,
+                showPortrait: showPortrait,
               );
           }
         }
@@ -123,7 +123,7 @@ class CredentialDisplay extends StatelessWidget {
               showBgDecoration: false,
               descriptionMaxLine: 5,
               isDiscover: isDiscover,
-              portrait: portrait,
+              showPortrait: showPortrait,
             );
         }
 

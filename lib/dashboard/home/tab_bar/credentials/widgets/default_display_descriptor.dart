@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
+import 'package:altme/selective_disclosure/selective_disclosure.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
     required this.descriptionMaxLine,
     required this.isDiscover,
     this.displyalDescription = true,
-    this.portrait,
+    this.showPortrait = false,
   });
 
   final CredentialModel credentialModel;
@@ -23,7 +24,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
   final bool showBgDecoration;
   final bool displyalDescription;
   final bool isDiscover;
-  final String? portrait;
+  final bool showPortrait;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
                   credentialModel: credentialModel,
                   descriptionMaxLine: descriptionMaxLine,
                   displyalDescription: displyalDescription,
-                  portrait: portrait,
+                  showPortrait: showPortrait,
                 ),
               ),
             ),
@@ -64,7 +65,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
                     credentialModel: credentialModel,
                     descriptionMaxLine: descriptionMaxLine,
                     displyalDescription: displyalDescription,
-                    portrait: portrait,
+                    showPortrait: showPortrait,
                   ),
                   if (isDiscover) Image.asset(ImageStrings.blankGetCard),
                 ],
@@ -79,7 +80,7 @@ class DefaultDisplayDescriptor extends StatelessWidget {
                 credentialModel: credentialModel,
                 descriptionMaxLine: descriptionMaxLine,
                 displyalDescription: displyalDescription,
-                portrait: portrait,
+                showPortrait: showPortrait,
               ),
             ),
           );
@@ -93,7 +94,7 @@ class DefaultCardBody extends StatelessWidget {
     required this.descriptionMaxLine,
     this.showBgDecoration = true,
     this.displyalDescription = true,
-    this.portrait,
+    this.showPortrait = false,
   });
 
   final CredentialModel credentialModel;
@@ -102,8 +103,8 @@ class DefaultCardBody extends StatelessWidget {
 
   final bool displyalDescription;
 
-  /// An image (`data:` URI or base64) shown on the left of the card.
-  final String? portrait;
+  /// Whether the credential's portrait is shown on the left of the card.
+  final bool showPortrait;
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +122,9 @@ class DefaultCardBody extends StatelessWidget {
         credentialModel.display?.logo?.url ??
         credentialModel.display?.logo?.uri;
 
-    final portraitImage = _decodePortrait(portrait);
+    final portraitImage = showPortrait
+        ? _decodePortrait(SelectiveDisclosure(credentialModel).portrait?.data)
+        : null;
 
     return CustomMultiChildLayout(
       delegate: CredentialBaseWidgetDelegate(position: Offset.zero),
