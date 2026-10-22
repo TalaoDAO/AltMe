@@ -66,7 +66,6 @@ class MdocReaderView extends StatelessWidget {
       titleAlignment: Alignment.topCenter,
       titleLeading: const BackLeadingButton(),
       scrollView: false,
-      secureScreen: true,
       body: BlocBuilder<MdocReaderCubit, ReaderState>(
         builder: (context, state) {
           final cubit = context.read<MdocReaderCubit>();
