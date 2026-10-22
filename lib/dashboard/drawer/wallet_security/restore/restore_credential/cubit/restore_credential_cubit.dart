@@ -181,7 +181,7 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
           recoveredCredentialLength: credentialList.length,
         ),
       );
-    } catch (e) {
+    } catch (e, s) {
       if (e is MessageHandler) {
         emit(state.error(messageHandler: e));
       } else if (e.toString().startsWith('Auth message')) {
@@ -194,6 +194,11 @@ class RestoreCredentialCubit extends Cubit<RestoreCredentialState> {
           ),
         );
       } else {
+        getLogger('RestoreCredentialCubit - recoverWallet').e(
+          'Failed to recover wallet from backup',
+          error: e,
+          stackTrace: s,
+        );
         emit(
           state.error(
             messageHandler: ResponseMessage(

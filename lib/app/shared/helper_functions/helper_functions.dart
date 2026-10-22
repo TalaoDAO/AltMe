@@ -1001,6 +1001,12 @@ MessageHandler getMessageHandler(dynamic e) {
   if (e is MessageHandler) {
     return e;
   } else if (e is DioException) {
+    getLogger('getMessageHandler').e(
+      'DioException[${e.type}] ${e.response?.statusCode} '
+      '${e.requestOptions.uri}',
+      error: e,
+      stackTrace: e.stackTrace,
+    );
     final error = NetworkException.getDioException(error: e);
 
     return NetworkException(data: error.data);
@@ -1148,6 +1154,9 @@ MessageHandler getMessageHandler(dynamic e) {
         },
       );
     } else {
+      getLogger(
+        'getMessageHandler',
+      ).e('Unhandled exception mapped to generic message: $stringException');
       return ResponseMessage(
         message:
             ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,

@@ -19,32 +19,40 @@ Future<bool> isWalletCreated({
   final log = getLogger('IsWalletCreated');
 
   log.i('did initialisation');
-  final String? ssiMnemonic = await secureStorageProvider.get(
-    SecureStorageKeys.ssiMnemonic,
+  final String? ssiMnemonic = await traceStartup(
+    'isWalletCreated: read ssiMnemonic',
+    () => secureStorageProvider.get(SecureStorageKeys.ssiMnemonic),
   );
   if (ssiMnemonic == null || ssiMnemonic.isEmpty) {
     return false;
   }
 
-  final String? ssiKey = await secureStorageProvider.get(
-    SecureStorageKeys.ssiKey,
+  final String? ssiKey = await traceStartup(
+    'isWalletCreated: read ssiKey',
+    () => secureStorageProvider.get(SecureStorageKeys.ssiKey),
   );
   if (ssiKey == null || ssiKey.isEmpty) {
     return false;
   }
 
   log.i('blockchain initialisation');
-  await blockchainInitialize(
-    qrCodeScanCubit: qrCodeScanCubit,
-    ssiMnemonic: ssiMnemonic,
-    secureStorageProvider: secureStorageProvider,
-    walletCubit: walletCubit,
-    credentialsCubit: credentialsCubit,
-    walletConnectCubit: walletConnectCubit,
+  await traceStartup(
+    'isWalletCreated: blockchainInitialize',
+    () => blockchainInitialize(
+      qrCodeScanCubit: qrCodeScanCubit,
+      ssiMnemonic: ssiMnemonic,
+      secureStorageProvider: secureStorageProvider,
+      walletCubit: walletCubit,
+      credentialsCubit: credentialsCubit,
+      walletConnectCubit: walletConnectCubit,
+    ),
   );
 
   log.i('wallet initialisation');
-  await credentialsCubit.loadAllCredentials();
+  await traceStartup(
+    'isWalletCreated: loadAllCredentials',
+    credentialsCubit.loadAllCredentials,
+  );
 
   return true;
 }

@@ -14,7 +14,12 @@ class CredentialsRepository {
     Map<String, String> data;
     try {
       data = await _secureStorageProvider.getAllValues();
-    } catch (e) {
+    } catch (e, s) {
+      getLogger('CredentialsRepository - findAll').e(
+        'Failed to read credentials from secure storage',
+        error: e,
+        stackTrace: s,
+      );
       throw ResponseMessage(
         message:
             ResponseString.RESPONSE_STRING_SOMETHING_WENT_WRONG_TRY_AGAIN_LATER,

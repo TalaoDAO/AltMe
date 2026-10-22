@@ -107,6 +107,7 @@ dependencies:
   secure_application: ^4.1.0
   secure_storage: ^1.0.0
   selective_disclosure_jwt: ^1.1.1
+  sentry_flutter: ^10.1.0
   share_plus: ^13.3.0
   shared_preferences: ^2.5.3
   shimmer: ^3.0.0

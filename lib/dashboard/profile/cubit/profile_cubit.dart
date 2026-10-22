@@ -37,7 +37,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     this.walletAttestationProvider,
     this.credentialKeySigner,
   }) : super(ProfileState(model: ProfileModel.empty())) {
-    load();
+    unawaited(traceStartup('ProfileCubit.load', load));
   }
 
   final SecureStorageProvider secureStorageProvider;
@@ -204,15 +204,21 @@ class ProfileCubit extends Cubit<ProfileState> {
           );
 
         case ProfileType.defaultOne:
-          final privateKey = await getPrivateKey(
-            didKeyType: Parameters.didKeyTypeForDefault,
-            profileCubit: this,
+          final privateKey = await traceStartup(
+            'ProfileCubit.load: private key',
+            () => getPrivateKey(
+              didKeyType: Parameters.didKeyTypeForDefault,
+              profileCubit: this,
+            ),
           );
 
-          final (did, _) = await getDidAndKid(
-            didKeyType: Parameters.didKeyTypeForDefault,
-            privateKey: privateKey,
-            profileCubit: this,
+          final (did, _) = await traceStartup(
+            'ProfileCubit.load: did and kid',
+            () => getDidAndKid(
+              didKeyType: Parameters.didKeyTypeForDefault,
+              privateKey: privateKey,
+              profileCubit: this,
+            ),
           );
 
           profileModel = ProfileModel.defaultOne(

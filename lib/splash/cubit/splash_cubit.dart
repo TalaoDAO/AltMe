@@ -12,6 +12,7 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:secure_storage/secure_storage.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'splash_cubit.g.dart';
 part 'splash_state.dart';
@@ -54,31 +55,51 @@ class SplashCubit extends Cubit<SplashState> {
       if (counter > 5) {
         timer.cancel();
 
-        final bool hasWallet = await isWalletCreated(
-          secureStorageProvider: secureStorageProvider,
-          qrCodeScanCubit: qrCodeScanCubit,
-          credentialsCubit: credentialsCubit,
-          walletCubit: walletCubit,
-          walletConnectCubit: walletConnectCubit,
+        final bool hasWallet = await traceStartup(
+          'SplashCubit: isWalletCreated',
+          () => isWalletCreated(
+            secureStorageProvider: secureStorageProvider,
+            qrCodeScanCubit: qrCodeScanCubit,
+            credentialsCubit: credentialsCubit,
+            walletCubit: walletCubit,
+            walletConnectCubit: walletConnectCubit,
+          ),
         );
 
         if (hasWallet) {
-          await homeCubit.emitHasWallet();
+          await traceStartup(
+            'SplashCubit: emitHasWallet',
+            homeCubit.emitHasWallet,
+          );
 
           final helpCenterOptions =
               profileCubit.state.model.profileSetting.helpCenterOptions;
 
           if (helpCenterOptions.customChatSupport &&
               helpCenterOptions.customChatSupportName != null) {
-            await altmeChatSupportCubit.init();
+            await traceStartup(
+              'SplashCubit: chat support init',
+              altmeChatSupportCubit.init,
+            );
           }
 
           if (helpCenterOptions.customNotification != null &&
               helpCenterOptions.customNotification! &&
               helpCenterOptions.customNotificationRoom != null) {
-            await matrixNotificationCubit.init();
+            await traceStartup(
+              'SplashCubit: matrix notification init',
+              matrixNotificationCubit.init,
+            );
           }
 
+          unawaited(
+            Sentry.addBreadcrumb(
+              Breadcrumb(
+                message: 'SplashCubit: route to passcode',
+                category: 'startup',
+              ),
+            ),
+          );
           emit(state.copyWith(status: SplashStatus.routeToPassCode));
         } else {
           homeCubit.emitHasNoWallet();
