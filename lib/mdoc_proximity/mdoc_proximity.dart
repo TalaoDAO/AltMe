@@ -1,6 +1,7 @@
 export 'cubit/mdoc_proximity_cubit.dart';
 export 'cubit/mdoc_reader_cubit.dart';
 export 'helpers/mdoc_credential_model.dart';
+export 'helpers/proximity_reader.dart';
 export 'helpers/reader_trusted_roots.dart';
 export 'view/mdoc_present_view.dart';
 export 'view/mdoc_reader_page.dart';

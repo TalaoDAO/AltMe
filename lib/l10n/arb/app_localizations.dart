@@ -6351,22 +6351,22 @@ abstract class AppLocalizations {
   /// **'Reader connected, waiting for its request…'**
   String get mdocProximityConnected;
 
-  /// No description provided for @mdocProximityRequestTitle.
+  /// No description provided for @mdocProximityRequestedBy.
   ///
   /// In en, this message translates to:
-  /// **'The reader asks for'**
-  String get mdocProximityRequestTitle;
+  /// **'Requested by'**
+  String get mdocProximityRequestedBy;
 
-  /// No description provided for @mdocProximityUnverifiedReader.
+  /// No description provided for @mdocProximityUnknownReader.
   ///
   /// In en, this message translates to:
-  /// **'The identity of this reader is not verified.'**
-  String get mdocProximityUnverifiedReader;
+  /// **'Unknown reader'**
+  String get mdocProximityUnknownReader;
 
   /// No description provided for @mdocProximityDocumentUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'Cannot be shared in this session'**
+  /// **'You don\'t have the requested attestation'**
   String get mdocProximityDocumentUnavailable;
 
   /// No description provided for @mdocProximityWillRetain.

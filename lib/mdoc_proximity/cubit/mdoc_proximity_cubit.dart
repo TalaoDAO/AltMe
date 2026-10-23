@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/mdoc_proximity/helpers/mdoc_credential_model.dart';
+import 'package:altme/mdoc_proximity/helpers/proximity_reader.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:mdoc_proximity/mdoc_proximity.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:platform_p256_keys/platform_p256_keys.dart';
+import 'package:trusted_list/trusted_list.dart';
 
 /// Asks for the runtime permissions a BLE proximity session needs.
 typedef BluetoothPermissionRequest = Future<bool> Function();
@@ -27,10 +30,15 @@ Future<bool> requestProximityBluetoothPermissions() async {
 }
 
 /// A proximity session and, while the reader's request waits for an answer,
-/// the wallet's credentials that can answer each requested document.
+/// who asks and the wallet's credentials that can answer each requested
+/// document.
 class MdocProximityState extends Equatable {
   /// Creates the state.
-  const MdocProximityState(this.session, {this.candidates = const {}});
+  const MdocProximityState(
+    this.session, {
+    this.candidates = const {},
+    this.reader = const ProximityReader(),
+  });
 
   /// Where the session is.
   final ProximityState session;
@@ -39,8 +47,11 @@ class MdocProximityState extends Equatable {
   /// empty when the wallet holds none.
   final Map<String, List<CredentialModel>> candidates;
 
+  /// For a [ProximityRequest]: the reader, checked against the trusted list.
+  final ProximityReader reader;
+
   @override
-  List<Object?> get props => [session, candidates];
+  List<Object?> get props => [session, candidates, reader];
 }
 
 /// Drives one ISO/IEC 18013-5 proximity presentation of the wallet's mdocs.
@@ -49,16 +60,19 @@ class MdocProximityState extends Equatable {
 /// document types it wants, and the cubit then finds, among the wallet's
 /// credentials, those that can answer each of them.
 class MdocProximityCubit extends Cubit<MdocProximityState> {
-  /// Creates the cubit. [credentials] is read when a request arrives, so the
-  /// session follows the wallet's credentials without restarting.
+  /// Creates the cubit. [credentials] and [trustedList] are read when a
+  /// request arrives, so the session follows the wallet without restarting;
+  /// [trustedList] gives `null` when the profile does not use one.
   MdocProximityCubit({
     required MdocProximity proximity,
     required List<CredentialModel> Function() credentials,
+    TrustedList? Function() trustedList = _noTrustedList,
     PlatformP256Keys platformKeys = const PlatformP256Keys(),
     BluetoothPermissionRequest requestBluetoothPermissions =
         requestProximityBluetoothPermissions,
   }) : _proximity = proximity,
        _credentials = credentials,
+       _trustedList = trustedList,
        _platformKeys = platformKeys,
        _requestBluetoothPermissions = requestBluetoothPermissions,
        super(const MdocProximityState(ProximityPreparing())) {
@@ -67,9 +81,11 @@ class MdocProximityCubit extends Cubit<MdocProximityState> {
 
   final MdocProximity _proximity;
   final List<CredentialModel> Function() _credentials;
+  final TrustedList? Function() _trustedList;
   final PlatformP256Keys _platformKeys;
   final BluetoothPermissionRequest _requestBluetoothPermissions;
   late final StreamSubscription<ProximityState> _subscription;
+  final _log = getLogger('MdocProximityCubit');
 
   /// Whether the user declined: the reader's termination that follows is not
   /// a success.
@@ -124,21 +140,35 @@ class MdocProximityCubit extends Cubit<MdocProximityState> {
     }
   }
 
-  void _fail(String? message) => emit(
-    MdocProximityState(ProximityFailure(ProximityFailureReason.error, message)),
-  );
+  void _fail(String? message) {
+    _log.e('session failed: $message');
+    emit(
+      MdocProximityState(
+        ProximityFailure(ProximityFailureReason.error, message),
+      ),
+    );
+  }
 
   Future<void> _onSessionState(ProximityState session) async {
     switch (session) {
       case ProximityRequest(:final documents):
+        final reader = ProximityReader.of(documents, _trustedList());
+        _log.i(
+          'session: request for ${documents.map((d) => d.docType).toList()}, '
+          'reader: ${reader.name}, trusted: ${reader.isTrusted}',
+        );
         final candidates = await _candidates(documents);
         if (!isClosed) {
-          emit(MdocProximityState(session, candidates: candidates));
+          emit(
+            MdocProximityState(session, candidates: candidates, reader: reader),
+          );
         }
       case ProximitySuccess() when _declined:
+        _log.i('session: $session (declined)');
         // The view leaves the page once the decline is sent.
         return;
       default:
+        _log.i('session: $session');
         emit(MdocProximityState(session));
     }
   }
@@ -173,3 +203,5 @@ class MdocProximityCubit extends Cubit<MdocProximityState> {
     return super.close();
   }
 }
+
+TrustedList? _noTrustedList() => null;

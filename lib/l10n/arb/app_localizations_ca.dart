@@ -3513,15 +3513,14 @@ class AppLocalizationsCa extends AppLocalizations {
       'Reader connected, waiting for its request…';
 
   @override
-  String get mdocProximityRequestTitle => 'The reader asks for';
+  String get mdocProximityRequestedBy => 'Requested by';
 
   @override
-  String get mdocProximityUnverifiedReader =>
-      'The identity of this reader is not verified.';
+  String get mdocProximityUnknownReader => 'Unknown reader';
 
   @override
   String get mdocProximityDocumentUnavailable =>
-      'Cannot be shared in this session';
+      'You don\'t have the requested attestation';
 
   @override
   String get mdocProximityWillRetain => 'Kept by the reader';

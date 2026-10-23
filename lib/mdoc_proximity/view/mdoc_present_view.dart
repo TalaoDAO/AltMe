@@ -1,5 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
+import 'package:altme/dashboard/profile/profile.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/mdoc_proximity/cubit/mdoc_proximity_cubit.dart';
 import 'package:altme/mdoc_proximity/helpers/mdoc_credential_model.dart';
@@ -38,6 +39,12 @@ class MdocPresentView extends StatelessWidget {
       create: (context) => MdocProximityCubit(
         proximity: MdocProximity(),
         credentials: () => context.read<CredentialsCubit>().state.credentials,
+        trustedList: () {
+          final profile = context.read<ProfileCubit>().state.model;
+          return profile.profileSetting.walletSecurityOptions.trustedList
+              ? profile.trustedList
+              : null;
+        },
       )..start(),
       child: const MdocProximityView(),
     );
@@ -97,6 +104,7 @@ class MdocProximityView extends StatelessWidget {
           ProximityRequest(:final documents) => MdocRequestView(
             documents: documents,
             candidates: state.candidates,
+            reader: state.reader,
             onShare: cubit.approve,
             onDecline: () async {
               await cubit.decline();

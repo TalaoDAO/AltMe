@@ -3544,15 +3544,14 @@ class AppLocalizationsFr extends AppLocalizations {
       'Lecteur connecté, en attente de sa demande…';
 
   @override
-  String get mdocProximityRequestTitle => 'Le lecteur demande';
+  String get mdocProximityRequestedBy => 'Demandé par';
 
   @override
-  String get mdocProximityUnverifiedReader =>
-      'L\'identité de ce lecteur n\'est pas vérifiée.';
+  String get mdocProximityUnknownReader => 'Lecteur inconnu';
 
   @override
   String get mdocProximityDocumentUnavailable =>
-      'Ne peut pas être partagé dans cette session';
+      'Vous n\'avez pas l\'attestation demandée';
 
   @override
   String get mdocProximityWillRetain => 'Conservé par le lecteur';

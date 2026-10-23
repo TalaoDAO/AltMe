@@ -89,8 +89,6 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
         titleLeading: const BackLeadingButton(),
         scrollView: false,
         padding: EdgeInsets.zero,
-        // The Present tab shows the data a reader asks for.
-        secureScreen: true,
         body: Column(
           children: [
             Row(
