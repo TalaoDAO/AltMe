@@ -8,68 +8,101 @@ import 'package:mdoc_proximity/mdoc_proximity.dart';
 /// What a reader asks for, document by document, with a checkbox per data
 /// element of the attestation that answers it.
 ///
-/// Everything requested and held is selected by default; the user unticks
-/// what they do not want to share. Elements no attestation holds are listed
-/// but cannot be selected.
+/// Each requested document is answered by one of the wallet's [candidates]
+/// for its type; the user picks when there are several. Everything requested
+/// and held is selected by default; the user unticks what they do not want
+/// to share. Elements the chosen attestation does not hold are listed but
+/// cannot be selected, and a document with no candidate cannot be shared.
 class MdocRequestView extends StatefulWidget {
   /// Creates the view.
   const MdocRequestView({
     super.key,
-    required this.credentials,
     required this.documents,
+    required this.candidates,
     required this.onShare,
-    required this.onCancel,
+    required this.onDecline,
   });
-
-  /// The mdocs of the session, found by [ProximityDocumentRequest.mdocId].
-  final List<CredentialModel> credentials;
 
   /// The reader's request.
   final List<ProximityDocumentRequest> documents;
 
-  /// Called with docType → name space → element identifiers.
-  final void Function(Map<String, Map<String, List<String>>> elements) onShare;
+  /// docType → the credentials that can answer it.
+  final Map<String, List<CredentialModel>> candidates;
+
+  /// Called with one disclosure per document the user shares.
+  final void Function(List<ProximityDisclosure> disclosures) onShare;
 
   /// Called when the user declines.
-  final VoidCallback onCancel;
+  final VoidCallback onDecline;
 
   @override
   State<MdocRequestView> createState() => _MdocRequestViewState();
 }
 
 class _MdocRequestViewState extends State<MdocRequestView> {
-  /// `docType|nameSpace|element` of every selected element.
-  late final Set<String> _selected = {
+  /// docType → the candidate chosen to answer it; the first by default.
+  late final Map<String, CredentialModel> _chosen = {
     for (final document in widget.documents)
-      for (final ns in document.nameSpaces.entries)
-        for (final element in ns.value.keys)
-          if (_held(document, ns.key, element))
-            _id(document.docType, ns.key, element),
+      if (_candidatesOf(document.docType).firstOrNull
+          case final CredentialModel credential)
+        document.docType: credential,
   };
 
+  /// `docType|nameSpace|element` of every selected element.
+  late final Set<String> _selected = {
+    for (final document in widget.documents) ..._heldIds(document),
+  };
+
+  List<CredentialModel> _candidatesOf(String docType) =>
+      widget.candidates[docType] ?? const [];
+
   /// The attestation answering [document], if any.
-  CredentialModel? _credential(ProximityDocumentRequest document) => widget
-      .credentials
-      .where((credential) => credential.id == document.mdocId)
-      .firstOrNull;
+  CredentialModel? _credential(ProximityDocumentRequest document) =>
+      _chosen[document.docType];
 
   bool _held(ProximityDocumentRequest document, String ns, String element) =>
       _credential(document)?.mdocValue(ns, element) != null;
 
+  /// The ids of the elements of [document] the chosen attestation holds.
+  Iterable<String> _heldIds(ProximityDocumentRequest document) => [
+    for (final ns in document.nameSpaces.entries)
+      for (final element in ns.value.keys)
+        if (_held(document, ns.key, element))
+          _id(document.docType, ns.key, element),
+  ];
+
   static String _id(String docType, String ns, String element) =>
       '$docType|$ns|$element';
 
-  Map<String, Map<String, List<String>>> _selection() {
-    final selection = <String, Map<String, List<String>>>{};
-    for (final id in _selected) {
-      final [docType, ns, element] = id.split('|');
-      selection
-          .putIfAbsent(docType, () => {})
-          .putIfAbsent(ns, () => [])
-          .add(element);
-    }
-    return selection;
-  }
+  void _choose(ProximityDocumentRequest document, CredentialModel credential) =>
+      setState(() {
+        _chosen[document.docType] = credential;
+        _selected
+          ..removeWhere((id) => id.startsWith('${document.docType}|'))
+          ..addAll(_heldIds(document));
+      });
+
+  List<ProximityDisclosure> _disclosures() => [
+    for (final document in widget.documents)
+      if (_credential(document) case final CredentialModel credential)
+        if (_elements(document) case final elements when elements.isNotEmpty)
+          ProximityDisclosure(
+            mdoc: credential.proximityMdoc,
+            elements: elements,
+          ),
+  ];
+
+  /// name space → the selected elements of [document].
+  Map<String, List<String>> _elements(ProximityDocumentRequest document) => {
+    for (final ns in document.nameSpaces.entries)
+      if ([
+            for (final element in ns.value.keys)
+              if (_selected.contains(_id(document.docType, ns.key, element)))
+                element,
+          ]
+          case final elements when elements.isNotEmpty)
+        ns.key: elements,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +131,12 @@ class _MdocRequestViewState extends State<MdocRequestView> {
                   docType: document.docType,
                   credential: _credential(document),
                 ),
+                if (_candidatesOf(document.docType).length > 1)
+                  _CandidateSelector(
+                    candidates: _candidatesOf(document.docType),
+                    chosen: _credential(document)!,
+                    onChanged: (credential) => _choose(document, credential),
+                  ),
                 for (final ns in document.nameSpaces.entries)
                   for (final element in ns.value.entries)
                     _ElementTile(
@@ -138,11 +177,52 @@ class _MdocRequestViewState extends State<MdocRequestView> {
           text: l10n.shareInformationButtonLabel,
           onPressed: _selected.isEmpty
               ? null
-              : () => widget.onShare(_selection()),
+              : () => widget.onShare(_disclosures()),
         ),
         const SizedBox(height: 8),
-        MyOutlinedButton(text: l10n.dontShareLabel, onPressed: widget.onCancel),
+        MyOutlinedButton(
+          text: l10n.dontShareLabel,
+          onPressed: widget.onDecline,
+        ),
       ],
+    );
+  }
+}
+
+/// Which of several attestations of one type answers the document.
+class _CandidateSelector extends StatelessWidget {
+  const _CandidateSelector({
+    required this.candidates,
+    required this.chosen,
+    required this.onChanged,
+  });
+
+  final List<CredentialModel> candidates;
+  final CredentialModel chosen;
+  final ValueChanged<CredentialModel> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField<CredentialModel>(
+      initialValue: chosen,
+      isExpanded: true,
+      decoration: InputDecoration(
+        labelText: context.l10n.mdocProximityChooseAttestation,
+      ),
+      items: [
+        for (final (index, credential) in candidates.indexed)
+          DropdownMenuItem(
+            value: credential,
+            child: Text(
+              // Two attestations of one type often share a name.
+              '${credential.mdocName} (${index + 1})',
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+      ],
+      onChanged: (credential) {
+        if (credential != null) onChanged(credential);
+      },
     );
   }
 }

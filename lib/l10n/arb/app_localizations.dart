@@ -6345,12 +6345,6 @@ abstract class AppLocalizations {
   /// **'Let the reader scan this QR code'**
   String get mdocProximityScanQrCode;
 
-  /// No description provided for @mdocProximityWaitingForTap.
-  ///
-  /// In en, this message translates to:
-  /// **'Hold your phone against the reader'**
-  String get mdocProximityWaitingForTap;
-
   /// No description provided for @mdocProximityConnected.
   ///
   /// In en, this message translates to:
@@ -6423,29 +6417,17 @@ abstract class AppLocalizations {
   /// **'The reader disconnected.'**
   String get mdocProximityReaderDisconnected;
 
-  /// No description provided for @mdocProximityNfcUnavailable.
+  /// No description provided for @mdocProximityChooseAttestation.
   ///
   /// In en, this message translates to:
-  /// **'NFC is turned off. Use the QR code instead.'**
-  String get mdocProximityNfcUnavailable;
+  /// **'Attestation to share'**
+  String get mdocProximityChooseAttestation;
 
   /// No description provided for @mdocProximityError.
   ///
   /// In en, this message translates to:
   /// **'The presentation failed.'**
   String get mdocProximityError;
-
-  /// No description provided for @mdocProximityTapInstead.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap the reader instead'**
-  String get mdocProximityTapInstead;
-
-  /// No description provided for @mdocProximityQrCodeInstead.
-  ///
-  /// In en, this message translates to:
-  /// **'Show a QR code instead'**
-  String get mdocProximityQrCodeInstead;
 
   /// No description provided for @mdocReaderTitle.
   ///

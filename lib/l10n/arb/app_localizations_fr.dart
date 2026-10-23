@@ -3540,10 +3540,6 @@ class AppLocalizationsFr extends AppLocalizations {
       'Faites scanner ce QR code par le lecteur';
 
   @override
-  String get mdocProximityWaitingForTap =>
-      'Approchez votre téléphone du lecteur';
-
-  @override
   String get mdocProximityConnected =>
       'Lecteur connecté, en attente de sa demande…';
 
@@ -3586,17 +3582,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mdocProximityReaderDisconnected => 'Le lecteur s\'est déconnecté.';
 
   @override
-  String get mdocProximityNfcUnavailable =>
-      'Le NFC est désactivé. Utilisez plutôt le QR code.';
+  String get mdocProximityChooseAttestation => 'Attestation à partager';
 
   @override
   String get mdocProximityError => 'La présentation a échoué.';
-
-  @override
-  String get mdocProximityTapInstead => 'Approcher du lecteur à la place';
-
-  @override
-  String get mdocProximityQrCodeInstead => 'Afficher un QR code à la place';
 
   @override
   String get mdocReaderTitle => 'Lire en personne';
