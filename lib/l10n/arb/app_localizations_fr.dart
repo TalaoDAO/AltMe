@@ -3715,6 +3715,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get scanTabScan => 'Scanner';
 
   @override
+  String get mdocReadTab => 'Lire';
+
+  @override
   String get policyViolation =>
       'Ce service ne respecte pas les exigences de sécurité du profil de votre wallet.';
 

@@ -6645,6 +6645,12 @@ abstract class AppLocalizations {
   /// **'Scan'**
   String get scanTabScan;
 
+  /// No description provided for @mdocReadTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get mdocReadTab;
+
   /// Shown when an issuer or verifier fails the wallet profile's policy
   ///
   /// In en, this message translates to:

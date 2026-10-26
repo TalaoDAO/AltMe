@@ -100,7 +100,7 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
                       title: switch (candidate) {
                         ScanPageTab.scan => l10n.scanTabScan,
                         ScanPageTab.present => l10n.mdocPresent,
-                        ScanPageTab.read => l10n.mdocReaderRequestsTitle,
+                        ScanPageTab.read => l10n.mdocReadTab,
                       },
                       icon: switch (candidate) {
                         ScanPageTab.scan => Icons.qr_code_scanner,

@@ -1270,6 +1270,7 @@
   "mdocPresent": "Présenter",
   "mdocPresentNoAttestation": "Aucune attestation de votre wallet ne peut être présentée en personne à un lecteur.",
   "scanTabScan": "Scanner",
+  "mdocReadTab": "Lire",
   "policyViolation": "Ce service ne respecte pas les exigences de sécurité du profil de votre wallet.",
   "proximityBleSettings": "Proximité (BLE)",
   "proximityBleSettingsSubtitle": "Modes Bluetooth qu'un lecteur peut utiliser pour se connecter lors d'une présentation en personne. Gardez les deux sauf si un lecteur n'arrive pas à se connecter. Un mode reste toujours activé.",

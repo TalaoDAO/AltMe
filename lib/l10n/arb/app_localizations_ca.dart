@@ -3682,6 +3682,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get scanTabScan => 'Scan';
 
   @override
+  String get mdocReadTab => 'Read';
+
+  @override
   String get policyViolation =>
       'Aquest servei no compleix els requisits de seguretat del perfil de la vostra cartera.';
 

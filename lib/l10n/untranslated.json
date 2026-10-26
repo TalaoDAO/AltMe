@@ -30,7 +30,8 @@
     "mdocReaderNotHolderQrCode",
     "mdocPresent",
     "mdocPresentNoAttestation",
-    "scanTabScan"
+    "scanTabScan",
+    "mdocReadTab"
   ],
 
   "el": [
@@ -70,7 +71,8 @@
     "mdocReaderNotHolderQrCode",
     "mdocPresent",
     "mdocPresentNoAttestation",
-    "scanTabScan"
+    "scanTabScan",
+    "mdocReadTab"
   ],
 
   "es": [
@@ -104,7 +106,8 @@
     "mdocReaderNotHolderQrCode",
     "mdocPresent",
     "mdocPresentNoAttestation",
-    "scanTabScan"
+    "scanTabScan",
+    "mdocReadTab"
   ],
 
   "fr": [

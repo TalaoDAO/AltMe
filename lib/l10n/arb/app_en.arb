@@ -1308,6 +1308,7 @@
   "mdocPresent": "Present",
   "mdocPresentNoAttestation": "No attestation in your wallet can be shown to a reader in person.",
   "scanTabScan": "Scan",
+  "mdocReadTab": "Read",
   "policyViolation": "This service does not meet the security requirements of your wallet profile.",
   "@policyViolation": {
     "description": "Shown when an issuer or verifier fails the wallet profile's policy"
