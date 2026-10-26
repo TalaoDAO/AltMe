@@ -32,7 +32,6 @@ android {
         applicationId = "co.altme.alt.me.altme"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        // sprucekit_mobile (mdoc proximity) requires API 26.
         minSdk = maxOf(26, flutter.minSdkVersion)
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

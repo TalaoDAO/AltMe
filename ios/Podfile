@@ -1,8 +1,6 @@
 source 'https://github.com/CocoaPods/Specs.git'
 source 'https://github.com/passbase/cocoapods-specs.git'
 source 'https://github.com/passbase/microblink-cocoapods-specs.git'
-# SpruceIDMobileSdk (required by sprucekit_mobile) is only published here.
-source 'https://github.com/spruceid/cocoapods-specs.git'
 
 # Uncomment this line to define a global platform for your project
 platform :ios, '15.5'
@@ -32,20 +30,6 @@ end
 require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
 
 flutter_ios_podfile_setup
-
-# sprucekit_mobile depends on statically linked pods (SpruceIDMobileSdk, SpruceIDMobileSdkRs,
-# SpruceIDMobileSdkRsRustFramework). As a dynamic framework (use_frameworks!) it is rejected by
-# CocoaPods and would not link them anyway, so build it as a static framework: Runner then links
-# it together with its static dependencies.
-pre_install do |installer|
-  installer.pod_targets.each do |pod|
-    if pod.name == 'sprucekit_mobile'
-      def pod.build_type
-        Pod::BuildType.static_framework
-      end
-    end
-  end
-end
 
 target 'Runner' do
   use_frameworks!
