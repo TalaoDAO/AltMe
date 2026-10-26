@@ -21,11 +21,16 @@ class _MockQRCodeScanCubit extends MockCubit<QRCodeScanState>
 
 class _MockScanCubit extends MockCubit<ScanState> implements ScanCubit {}
 
+class _MockCustomReaderRequestsCubit
+    extends MockCubit<CustomReaderRequestsState>
+    implements CustomReaderRequestsCubit {}
+
 void main() {
   late _MockProfileCubit profileCubit;
   late _MockCredentialsCubit credentialsCubit;
   late _MockQRCodeScanCubit qrCodeScanCubit;
   late _MockScanCubit scanCubit;
+  late _MockCustomReaderRequestsCubit customReaderRequestsCubit;
 
   void withProfile({required bool readerRequests}) {
     final model = ProfileModel.empty();
@@ -45,6 +50,10 @@ void main() {
     credentialsCubit = _MockCredentialsCubit();
     qrCodeScanCubit = _MockQRCodeScanCubit();
     scanCubit = _MockScanCubit();
+    customReaderRequestsCubit = _MockCustomReaderRequestsCubit();
+    when(
+      () => customReaderRequestsCubit.state,
+    ).thenReturn(const CustomReaderRequestsState());
     when(() => credentialsCubit.state).thenReturn(const CredentialsState());
     when(() => qrCodeScanCubit.state).thenReturn(const QRCodeScanState());
     when(() => scanCubit.state).thenReturn(const ScanState());
@@ -57,6 +66,9 @@ void main() {
         BlocProvider<CredentialsCubit>.value(value: credentialsCubit),
         BlocProvider<QRCodeScanCubit>.value(value: qrCodeScanCubit),
         BlocProvider<ScanCubit>.value(value: scanCubit),
+        BlocProvider<CustomReaderRequestsCubit>.value(
+          value: customReaderRequestsCubit,
+        ),
       ],
       // The Scan tab needs a camera: start on the Present tab.
       child: const QrCodeScanPage(initialTab: ScanPageTab.present),
@@ -80,6 +92,7 @@ void main() {
       expect(find.byType(MdocReaderRequestsView), findsOneWidget);
       expect(find.text('PID'), findsOneWidget);
       expect(find.text('mDL'), findsOneWidget);
+      expect(find.text('My requests'), findsOneWidget);
     });
 
     testWidgets('has no Read tab without reader requests', (tester) async {

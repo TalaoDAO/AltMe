@@ -3601,15 +3601,86 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mdocReaderResponseErrors => 'Response';
 
   @override
-  String get mdocReaderRequestsTitle => 'Reader';
+  String get mdocReaderRequestsTitle => 'Lector';
 
   @override
   String get mdocReaderRequestsSubtitle =>
-      'Choose what to ask for, then scan the holder\'s QR code.';
+      'Elija qué solicitar y luego escanee el código QR del titular.';
 
   @override
   String get mdocReaderNotHolderQrCode =>
       'This is not a wallet QR code to read in person.';
+
+  @override
+  String get mdocReaderMyRequests => 'Mis solicitudes';
+
+  @override
+  String get mdocReaderAddRequest => 'Añadir una solicitud';
+
+  @override
+  String get mdocReaderRequestNewTitle => 'Nueva solicitud';
+
+  @override
+  String get mdocReaderRequestEditTitle => 'Editar solicitud';
+
+  @override
+  String get mdocReaderRequestName => 'Nombre';
+
+  @override
+  String get mdocReaderRequestRequired => 'Obligatorio';
+
+  @override
+  String mdocReaderRequestDocument(int number) {
+    return 'Documento $number';
+  }
+
+  @override
+  String get mdocReaderRequestAddDocument => 'Añadir un documento';
+
+  @override
+  String get mdocReaderRequestDocType => 'Tipo de documento';
+
+  @override
+  String get mdocReaderRequestNameSpace => 'Espacio de nombres';
+
+  @override
+  String get mdocReaderRequestClaims => 'Atributos';
+
+  @override
+  String get mdocReaderRequestRetain => 'Conservar';
+
+  @override
+  String get mdocReaderRequestRetainHint =>
+      'Conservar indica al titular que usted guarda el valor.';
+
+  @override
+  String get mdocReaderRequestNoClaims => 'Ninguno seleccionado';
+
+  @override
+  String get mdocReaderRequestClaimsRequired => 'Elija al menos un atributo.';
+
+  @override
+  String get mdocReaderRequestAddClaim => 'Añadir un atributo';
+
+  @override
+  String get mdocReaderRequestClaimHint => 'Identificador, p. ej. family_name';
+
+  @override
+  String get mdocReaderRequestSuggestedClaims => 'Atributos sugeridos';
+
+  @override
+  String get mdocReaderRequestDeleteTitle => '¿Eliminar esta solicitud?';
+
+  @override
+  String mdocReaderRequestClaimCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count atributos',
+      one: '1 atributo',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get mdocPresent => 'Present';

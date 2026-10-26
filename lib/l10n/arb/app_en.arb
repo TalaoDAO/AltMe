@@ -1271,6 +1271,40 @@
   "mdocReaderRequestsTitle": "Reader",
   "mdocReaderRequestsSubtitle": "Choose what to ask for, then scan the holder's QR code.",
   "mdocReaderNotHolderQrCode": "This is not a wallet QR code to read in person.",
+  "mdocReaderMyRequests": "My requests",
+  "mdocReaderAddRequest": "Add a request",
+  "mdocReaderRequestNewTitle": "New request",
+  "mdocReaderRequestEditTitle": "Edit request",
+  "mdocReaderRequestName": "Name",
+  "mdocReaderRequestRequired": "Required",
+  "mdocReaderRequestDocument": "Document {number}",
+  "@mdocReaderRequestDocument": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "mdocReaderRequestAddDocument": "Add a document",
+  "mdocReaderRequestDocType": "Document type",
+  "mdocReaderRequestNameSpace": "Name space",
+  "mdocReaderRequestClaims": "Claims",
+  "mdocReaderRequestRetain": "Retain",
+  "mdocReaderRequestRetainHint": "Retain tells the holder that you keep the value.",
+  "mdocReaderRequestNoClaims": "None selected",
+  "mdocReaderRequestClaimsRequired": "Choose at least one claim.",
+  "mdocReaderRequestAddClaim": "Add a claim",
+  "mdocReaderRequestClaimHint": "Identifier, e.g. family_name",
+  "mdocReaderRequestSuggestedClaims": "Suggested claims",
+  "mdocReaderRequestDeleteTitle": "Delete this request?",
+  "mdocReaderRequestClaimCount": "{count, plural, =1{1 claim} other{{count} claims}}",
+  "@mdocReaderRequestClaimCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "mdocPresent": "Present",
   "mdocPresentNoAttestation": "No attestation in your wallet can be shown to a reader in person.",
   "scanTabScan": "Scan",

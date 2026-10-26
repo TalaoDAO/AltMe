@@ -1257,5 +1257,41 @@
   "proximityBlePeripheralServer": "Servidor periférico",
   "proximityBlePeripheralServerSubtitle": "El lector se conecta a su teléfono.",
   "proximityBleCentralClient": "Cliente central",
-  "proximityBleCentralClientSubtitle": "Su teléfono se conecta al lector."
+  "proximityBleCentralClientSubtitle": "Su teléfono se conecta al lector.",
+  "mdocReaderMyRequests": "Mis solicitudes",
+  "mdocReaderAddRequest": "Añadir una solicitud",
+  "mdocReaderRequestNewTitle": "Nueva solicitud",
+  "mdocReaderRequestEditTitle": "Editar solicitud",
+  "mdocReaderRequestName": "Nombre",
+  "mdocReaderRequestRequired": "Obligatorio",
+  "mdocReaderRequestDocument": "Documento {number}",
+  "@mdocReaderRequestDocument": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "mdocReaderRequestAddDocument": "Añadir un documento",
+  "mdocReaderRequestDocType": "Tipo de documento",
+  "mdocReaderRequestNameSpace": "Espacio de nombres",
+  "mdocReaderRequestClaims": "Atributos",
+  "mdocReaderRequestRetain": "Conservar",
+  "mdocReaderRequestRetainHint": "Conservar indica al titular que usted guarda el valor.",
+  "mdocReaderRequestNoClaims": "Ninguno seleccionado",
+  "mdocReaderRequestClaimsRequired": "Elija al menos un atributo.",
+  "mdocReaderRequestAddClaim": "Añadir un atributo",
+  "mdocReaderRequestClaimHint": "Identificador, p. ej. family_name",
+  "mdocReaderRequestSuggestedClaims": "Atributos sugeridos",
+  "mdocReaderRequestDeleteTitle": "¿Eliminar esta solicitud?",
+  "mdocReaderRequestClaimCount": "{count, plural, =1{1 atributo} other{{count} atributos}}",
+  "@mdocReaderRequestClaimCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mdocReaderRequestsTitle": "Lector",
+  "mdocReaderRequestsSubtitle": "Elija qué solicitar y luego escanee el código QR del titular."
 }

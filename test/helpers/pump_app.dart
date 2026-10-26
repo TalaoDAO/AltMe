@@ -11,16 +11,18 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 extension PumpApp on WidgetTester {
-  Future<void> pumpApp(Widget widget) {
-    return pumpWidget(
-      MaterialApp(
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: widget,
-      ),
+  /// Pumps [widget] in a [MaterialApp]. [wrapApp] puts something above the
+  /// app, like the providers of the real app, which routes pushed from
+  /// [widget] can see.
+  Future<void> pumpApp(Widget widget, {Widget Function(Widget app)? wrapApp}) {
+    final app = MaterialApp(
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: widget,
     );
+    return pumpWidget(wrapApp == null ? app : wrapApp(app));
   }
 }

@@ -1255,5 +1255,41 @@
   "proximityBlePeripheralServer": "Servidor perifèric",
   "proximityBlePeripheralServerSubtitle": "El lector es connecta al vostre telèfon.",
   "proximityBleCentralClient": "Client central",
-  "proximityBleCentralClientSubtitle": "El vostre telèfon es connecta al lector."
+  "proximityBleCentralClientSubtitle": "El vostre telèfon es connecta al lector.",
+  "mdocReaderMyRequests": "Les meves sol·licituds",
+  "mdocReaderAddRequest": "Afegeix una sol·licitud",
+  "mdocReaderRequestNewTitle": "Nova sol·licitud",
+  "mdocReaderRequestEditTitle": "Editar sol·licitud",
+  "mdocReaderRequestName": "Nom",
+  "mdocReaderRequestRequired": "Obligatori",
+  "mdocReaderRequestDocument": "Document {number}",
+  "@mdocReaderRequestDocument": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "mdocReaderRequestAddDocument": "Afegeix un document",
+  "mdocReaderRequestDocType": "Tipus de document",
+  "mdocReaderRequestNameSpace": "Espai de noms",
+  "mdocReaderRequestClaims": "Atributs",
+  "mdocReaderRequestRetain": "Conservar",
+  "mdocReaderRequestRetainHint": "Conservar indica al titular que en guardeu el valor.",
+  "mdocReaderRequestNoClaims": "Cap seleccionat",
+  "mdocReaderRequestClaimsRequired": "Trieu almenys un atribut.",
+  "mdocReaderRequestAddClaim": "Afegeix un atribut",
+  "mdocReaderRequestClaimHint": "Identificador, p. ex. family_name",
+  "mdocReaderRequestSuggestedClaims": "Atributs suggerits",
+  "mdocReaderRequestDeleteTitle": "Voleu esborrar aquesta sol·licitud?",
+  "mdocReaderRequestClaimCount": "{count, plural, =1{1 atribut} other{{count} atributs}}",
+  "@mdocReaderRequestClaimCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mdocReaderRequestsTitle": "Lector",
+  "mdocReaderRequestsSubtitle": "Trieu què voleu demanar i, tot seguit, escanegeu el codi QR del titular."
 }

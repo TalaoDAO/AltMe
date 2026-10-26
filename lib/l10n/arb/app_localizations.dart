@@ -6507,6 +6507,126 @@ abstract class AppLocalizations {
   /// **'This is not a wallet QR code to read in person.'**
   String get mdocReaderNotHolderQrCode;
 
+  /// No description provided for @mdocReaderMyRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'My requests'**
+  String get mdocReaderMyRequests;
+
+  /// No description provided for @mdocReaderAddRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a request'**
+  String get mdocReaderAddRequest;
+
+  /// No description provided for @mdocReaderRequestNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New request'**
+  String get mdocReaderRequestNewTitle;
+
+  /// No description provided for @mdocReaderRequestEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit request'**
+  String get mdocReaderRequestEditTitle;
+
+  /// No description provided for @mdocReaderRequestName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get mdocReaderRequestName;
+
+  /// No description provided for @mdocReaderRequestRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get mdocReaderRequestRequired;
+
+  /// No description provided for @mdocReaderRequestDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Document {number}'**
+  String mdocReaderRequestDocument(int number);
+
+  /// No description provided for @mdocReaderRequestAddDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a document'**
+  String get mdocReaderRequestAddDocument;
+
+  /// No description provided for @mdocReaderRequestDocType.
+  ///
+  /// In en, this message translates to:
+  /// **'Document type'**
+  String get mdocReaderRequestDocType;
+
+  /// No description provided for @mdocReaderRequestNameSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Name space'**
+  String get mdocReaderRequestNameSpace;
+
+  /// No description provided for @mdocReaderRequestClaims.
+  ///
+  /// In en, this message translates to:
+  /// **'Claims'**
+  String get mdocReaderRequestClaims;
+
+  /// No description provided for @mdocReaderRequestRetain.
+  ///
+  /// In en, this message translates to:
+  /// **'Retain'**
+  String get mdocReaderRequestRetain;
+
+  /// No description provided for @mdocReaderRequestRetainHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Retain tells the holder that you keep the value.'**
+  String get mdocReaderRequestRetainHint;
+
+  /// No description provided for @mdocReaderRequestNoClaims.
+  ///
+  /// In en, this message translates to:
+  /// **'None selected'**
+  String get mdocReaderRequestNoClaims;
+
+  /// No description provided for @mdocReaderRequestClaimsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose at least one claim.'**
+  String get mdocReaderRequestClaimsRequired;
+
+  /// No description provided for @mdocReaderRequestAddClaim.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a claim'**
+  String get mdocReaderRequestAddClaim;
+
+  /// No description provided for @mdocReaderRequestClaimHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Identifier, e.g. family_name'**
+  String get mdocReaderRequestClaimHint;
+
+  /// No description provided for @mdocReaderRequestSuggestedClaims.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested claims'**
+  String get mdocReaderRequestSuggestedClaims;
+
+  /// No description provided for @mdocReaderRequestDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this request?'**
+  String get mdocReaderRequestDeleteTitle;
+
+  /// No description provided for @mdocReaderRequestClaimCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 claim} other{{count} claims}}'**
+  String mdocReaderRequestClaimCount(int count);
+
   /// No description provided for @mdocPresent.
   ///
   /// In en, this message translates to:

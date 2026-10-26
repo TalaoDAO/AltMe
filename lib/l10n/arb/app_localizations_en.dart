@@ -3583,6 +3583,77 @@ class AppLocalizationsEn extends AppLocalizations {
       'This is not a wallet QR code to read in person.';
 
   @override
+  String get mdocReaderMyRequests => 'My requests';
+
+  @override
+  String get mdocReaderAddRequest => 'Add a request';
+
+  @override
+  String get mdocReaderRequestNewTitle => 'New request';
+
+  @override
+  String get mdocReaderRequestEditTitle => 'Edit request';
+
+  @override
+  String get mdocReaderRequestName => 'Name';
+
+  @override
+  String get mdocReaderRequestRequired => 'Required';
+
+  @override
+  String mdocReaderRequestDocument(int number) {
+    return 'Document $number';
+  }
+
+  @override
+  String get mdocReaderRequestAddDocument => 'Add a document';
+
+  @override
+  String get mdocReaderRequestDocType => 'Document type';
+
+  @override
+  String get mdocReaderRequestNameSpace => 'Name space';
+
+  @override
+  String get mdocReaderRequestClaims => 'Claims';
+
+  @override
+  String get mdocReaderRequestRetain => 'Retain';
+
+  @override
+  String get mdocReaderRequestRetainHint =>
+      'Retain tells the holder that you keep the value.';
+
+  @override
+  String get mdocReaderRequestNoClaims => 'None selected';
+
+  @override
+  String get mdocReaderRequestClaimsRequired => 'Choose at least one claim.';
+
+  @override
+  String get mdocReaderRequestAddClaim => 'Add a claim';
+
+  @override
+  String get mdocReaderRequestClaimHint => 'Identifier, e.g. family_name';
+
+  @override
+  String get mdocReaderRequestSuggestedClaims => 'Suggested claims';
+
+  @override
+  String get mdocReaderRequestDeleteTitle => 'Delete this request?';
+
+  @override
+  String mdocReaderRequestClaimCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count claims',
+      one: '1 claim',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get mdocPresent => 'Present';
 
   @override

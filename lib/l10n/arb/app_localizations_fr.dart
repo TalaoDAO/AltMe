@@ -3633,6 +3633,78 @@ class AppLocalizationsFr extends AppLocalizations {
       'Ce QR code n\'est pas celui d\'un wallet à lire en personne.';
 
   @override
+  String get mdocReaderMyRequests => 'Mes demandes';
+
+  @override
+  String get mdocReaderAddRequest => 'Ajouter une demande';
+
+  @override
+  String get mdocReaderRequestNewTitle => 'Nouvelle demande';
+
+  @override
+  String get mdocReaderRequestEditTitle => 'Modifier la demande';
+
+  @override
+  String get mdocReaderRequestName => 'Nom';
+
+  @override
+  String get mdocReaderRequestRequired => 'Obligatoire';
+
+  @override
+  String mdocReaderRequestDocument(int number) {
+    return 'Document $number';
+  }
+
+  @override
+  String get mdocReaderRequestAddDocument => 'Ajouter un document';
+
+  @override
+  String get mdocReaderRequestDocType => 'Type de document';
+
+  @override
+  String get mdocReaderRequestNameSpace => 'Espace de noms';
+
+  @override
+  String get mdocReaderRequestClaims => 'Attributs';
+
+  @override
+  String get mdocReaderRequestRetain => 'Conserver';
+
+  @override
+  String get mdocReaderRequestRetainHint =>
+      'Conserver indique au détenteur que vous gardez la valeur.';
+
+  @override
+  String get mdocReaderRequestNoClaims => 'Aucun sélectionné';
+
+  @override
+  String get mdocReaderRequestClaimsRequired =>
+      'Choisissez au moins un attribut.';
+
+  @override
+  String get mdocReaderRequestAddClaim => 'Ajouter un attribut';
+
+  @override
+  String get mdocReaderRequestClaimHint => 'Identifiant, p. ex. family_name';
+
+  @override
+  String get mdocReaderRequestSuggestedClaims => 'Attributs suggérés';
+
+  @override
+  String get mdocReaderRequestDeleteTitle => 'Supprimer cette demande ?';
+
+  @override
+  String mdocReaderRequestClaimCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count attributs',
+      one: '1 attribut',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get mdocPresent => 'Présenter';
 
   @override

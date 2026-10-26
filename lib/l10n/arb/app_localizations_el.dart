@@ -3613,15 +3613,87 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mdocReaderResponseErrors => 'Response';
 
   @override
-  String get mdocReaderRequestsTitle => 'Reader';
+  String get mdocReaderRequestsTitle => 'Αναγνώστης';
 
   @override
   String get mdocReaderRequestsSubtitle =>
-      'Choose what to ask for, then scan the holder\'s QR code.';
+      'Επιλέξτε τι θα ζητήσετε και στη συνέχεια σαρώστε τον κωδικό QR του κατόχου.';
 
   @override
   String get mdocReaderNotHolderQrCode =>
       'This is not a wallet QR code to read in person.';
+
+  @override
+  String get mdocReaderMyRequests => 'Τα αιτήματά μου';
+
+  @override
+  String get mdocReaderAddRequest => 'Προσθήκη αιτήματος';
+
+  @override
+  String get mdocReaderRequestNewTitle => 'Νέο αίτημα';
+
+  @override
+  String get mdocReaderRequestEditTitle => 'Επεξεργασία αιτήματος';
+
+  @override
+  String get mdocReaderRequestName => 'Όνομα';
+
+  @override
+  String get mdocReaderRequestRequired => 'Υποχρεωτικό';
+
+  @override
+  String mdocReaderRequestDocument(int number) {
+    return 'Έγγραφο $number';
+  }
+
+  @override
+  String get mdocReaderRequestAddDocument => 'Προσθήκη εγγράφου';
+
+  @override
+  String get mdocReaderRequestDocType => 'Τύπος εγγράφου';
+
+  @override
+  String get mdocReaderRequestNameSpace => 'Χώρος ονομάτων';
+
+  @override
+  String get mdocReaderRequestClaims => 'Χαρακτηριστικά';
+
+  @override
+  String get mdocReaderRequestRetain => 'Διατήρηση';
+
+  @override
+  String get mdocReaderRequestRetainHint =>
+      'Η διατήρηση ενημερώνει τον κάτοχο ότι κρατάτε την τιμή.';
+
+  @override
+  String get mdocReaderRequestNoClaims => 'Δεν έχει επιλεγεί κανένα';
+
+  @override
+  String get mdocReaderRequestClaimsRequired =>
+      'Επιλέξτε τουλάχιστον ένα χαρακτηριστικό.';
+
+  @override
+  String get mdocReaderRequestAddClaim => 'Προσθήκη χαρακτηριστικού';
+
+  @override
+  String get mdocReaderRequestClaimHint => 'Αναγνωριστικό, π.χ. family_name';
+
+  @override
+  String get mdocReaderRequestSuggestedClaims => 'Προτεινόμενα χαρακτηριστικά';
+
+  @override
+  String get mdocReaderRequestDeleteTitle => 'Διαγραφή αυτού του αιτήματος;';
+
+  @override
+  String mdocReaderRequestClaimCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count χαρακτηριστικά',
+      one: '1 χαρακτηριστικό',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get mdocPresent => 'Present';

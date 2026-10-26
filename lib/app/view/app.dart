@@ -22,6 +22,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/lang/cubit/lang_state.dart';
 import 'package:altme/matrix_notification/cubit/matrix_notification_cubit.dart';
+import 'package:altme/mdoc_proximity/cubit/custom_reader_requests_cubit.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/route/route.dart';
@@ -72,6 +73,10 @@ class App extends StatelessWidget {
                 LangCubit(secureStorageProvider: getSecureStorage),
           ),
           BlocProvider<RouteCubit>(create: (context) => RouteCubit()),
+          BlocProvider<CustomReaderRequestsCubit>(
+            create: (context) =>
+                CustomReaderRequestsCubit(secureStorage: secureStorageProvider),
+          ),
           BlocProvider<BeaconCubit>(
             create: (context) => BeaconCubit(beacon: Beacon()),
           ),

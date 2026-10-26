@@ -1233,6 +1233,40 @@
   "mdocReaderRequestsTitle": "Lecteur",
   "mdocReaderRequestsSubtitle": "Choisissez ce que vous demandez, puis scannez le QR code du détenteur.",
   "mdocReaderNotHolderQrCode": "Ce QR code n'est pas celui d'un wallet à lire en personne.",
+  "mdocReaderMyRequests": "Mes demandes",
+  "mdocReaderAddRequest": "Ajouter une demande",
+  "mdocReaderRequestNewTitle": "Nouvelle demande",
+  "mdocReaderRequestEditTitle": "Modifier la demande",
+  "mdocReaderRequestName": "Nom",
+  "mdocReaderRequestRequired": "Obligatoire",
+  "mdocReaderRequestDocument": "Document {number}",
+  "@mdocReaderRequestDocument": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "mdocReaderRequestAddDocument": "Ajouter un document",
+  "mdocReaderRequestDocType": "Type de document",
+  "mdocReaderRequestNameSpace": "Espace de noms",
+  "mdocReaderRequestClaims": "Attributs",
+  "mdocReaderRequestRetain": "Conserver",
+  "mdocReaderRequestRetainHint": "Conserver indique au détenteur que vous gardez la valeur.",
+  "mdocReaderRequestNoClaims": "Aucun sélectionné",
+  "mdocReaderRequestClaimsRequired": "Choisissez au moins un attribut.",
+  "mdocReaderRequestAddClaim": "Ajouter un attribut",
+  "mdocReaderRequestClaimHint": "Identifiant, p. ex. family_name",
+  "mdocReaderRequestSuggestedClaims": "Attributs suggérés",
+  "mdocReaderRequestDeleteTitle": "Supprimer cette demande ?",
+  "mdocReaderRequestClaimCount": "{count, plural, =1{1 attribut} other{{count} attributs}}",
+  "@mdocReaderRequestClaimCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "mdocPresent": "Présenter",
   "mdocPresentNoAttestation": "Aucune attestation de votre wallet ne peut être présentée en personne à un lecteur.",
   "scanTabScan": "Scanner",
