@@ -3595,4 +3595,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get policyViolation =>
       'This service does not meet the security requirements of your wallet profile.';
+
+  @override
+  String get proximityBleSettings => 'Proximity (BLE)';
+
+  @override
+  String get proximityBleSettingsSubtitle =>
+      'Bluetooth modes a reader can use to connect when you present in person. Keep both unless a reader fails to connect. One always stays on.';
+
+  @override
+  String get proximityBlePeripheralServer => 'Peripheral server';
+
+  @override
+  String get proximityBlePeripheralServerSubtitle =>
+      'The reader connects to your phone.';
+
+  @override
+  String get proximityBleCentralClient => 'Central client';
+
+  @override
+  String get proximityBleCentralClientSubtitle =>
+      'Your phone connects to the reader.';
 }

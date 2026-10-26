@@ -3636,4 +3636,25 @@ class AppLocalizationsEl extends AppLocalizations {
   @override
   String get policyViolation =>
       'Αυτή η υπηρεσία δεν πληροί τις απαιτήσεις ασφαλείας του προφίλ του πορτοφολιού σας.';
+
+  @override
+  String get proximityBleSettings => 'Εγγύτητα (BLE)';
+
+  @override
+  String get proximityBleSettingsSubtitle =>
+      'Λειτουργίες Bluetooth που μπορεί να χρησιμοποιήσει ένας αναγνώστης για να συνδεθεί όταν παρουσιάζετε αυτοπροσώπως. Διατηρήστε και τις δύο, εκτός αν ένας αναγνώστης δεν μπορεί να συνδεθεί. Μία παραμένει πάντα ενεργή.';
+
+  @override
+  String get proximityBlePeripheralServer => 'Περιφερειακός διακομιστής';
+
+  @override
+  String get proximityBlePeripheralServerSubtitle =>
+      'Ο αναγνώστης συνδέεται στο τηλέφωνό σας.';
+
+  @override
+  String get proximityBleCentralClient => 'Κεντρικός πελάτης';
+
+  @override
+  String get proximityBleCentralClientSubtitle =>
+      'Το τηλέφωνό σας συνδέεται στον αναγνώστη.';
 }

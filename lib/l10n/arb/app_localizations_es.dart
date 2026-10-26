@@ -3624,4 +3624,25 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get policyViolation =>
       'Este servicio no cumple los requisitos de seguridad del perfil de su cartera.';
+
+  @override
+  String get proximityBleSettings => 'Proximidad (BLE)';
+
+  @override
+  String get proximityBleSettingsSubtitle =>
+      'Modos Bluetooth que un lector puede usar para conectarse cuando presenta en persona. Mantenga ambos salvo que un lector no logre conectarse. Siempre queda uno activado.';
+
+  @override
+  String get proximityBlePeripheralServer => 'Servidor periférico';
+
+  @override
+  String get proximityBlePeripheralServerSubtitle =>
+      'El lector se conecta a su teléfono.';
+
+  @override
+  String get proximityBleCentralClient => 'Cliente central';
+
+  @override
+  String get proximityBleCentralClientSubtitle =>
+      'Su teléfono se conecta al lector.';
 }

@@ -6530,6 +6530,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This service does not meet the security requirements of your wallet profile.'**
   String get policyViolation;
+
+  /// No description provided for @proximityBleSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Proximity (BLE)'**
+  String get proximityBleSettings;
+
+  /// No description provided for @proximityBleSettingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth modes a reader can use to connect when you present in person. Keep both unless a reader fails to connect. One always stays on.'**
+  String get proximityBleSettingsSubtitle;
+
+  /// No description provided for @proximityBlePeripheralServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Peripheral server'**
+  String get proximityBlePeripheralServer;
+
+  /// No description provided for @proximityBlePeripheralServerSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The reader connects to your phone.'**
+  String get proximityBlePeripheralServerSubtitle;
+
+  /// No description provided for @proximityBleCentralClient.
+  ///
+  /// In en, this message translates to:
+  /// **'Central client'**
+  String get proximityBleCentralClient;
+
+  /// No description provided for @proximityBleCentralClientSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your phone connects to the reader.'**
+  String get proximityBleCentralClientSubtitle;
 }
 
 class _AppLocalizationsDelegate

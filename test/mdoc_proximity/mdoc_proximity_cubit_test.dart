@@ -53,7 +53,9 @@ void main() {
     when(() => proximity.states).thenAnswer((_) => states.stream);
     when(() => proximity.dispose()).thenAnswer((_) async {});
     when(() => proximity.cancel()).thenAnswer((_) async {});
-    when(() => proximity.start()).thenAnswer((_) async {});
+    when(
+      () => proximity.start(bleModes: any(named: 'bleModes')),
+    ).thenAnswer((_) async {});
     when(() => proximity.approve(any())).thenAnswer((_) async {});
     when(() => proximity.decline()).thenAnswer((_) async {});
     when(() => keys.find(any())).thenAnswer(
@@ -67,13 +69,16 @@ void main() {
 
   tearDown(() => states.close());
 
-  MdocProximityCubit build({bool bluetoothGranted = true}) =>
-      MdocProximityCubit(
-        proximity: proximity,
-        credentials: () => credentials,
-        platformKeys: keys,
-        requestBluetoothPermissions: () async => bluetoothGranted,
-      );
+  MdocProximityCubit build({
+    bool bluetoothGranted = true,
+    Set<ProximityBleMode> Function()? bleModes,
+  }) => MdocProximityCubit(
+    proximity: proximity,
+    credentials: () => credentials,
+    platformKeys: keys,
+    requestBluetoothPermissions: () async => bluetoothGranted,
+    bleModes: bleModes ?? ProximityBleMode.values.toSet,
+  );
 
   Future<void> settle() => Future<void>.delayed(Duration.zero);
 
@@ -90,8 +95,47 @@ void main() {
         MdocProximityState(ProximityPreparing()),
         MdocProximityState(ProximityShowQrCode('mdoc:abc')),
       ],
-      verify: (_) => verify(() => proximity.start()),
+      verify: (_) =>
+          verify(() => proximity.start(bleModes: any(named: 'bleModes'))),
     );
+
+    test('starts each session with the BLE modes ticked then', () async {
+      var modes = {ProximityBleMode.centralClient};
+      final cubit = build(bleModes: () => modes);
+
+      await cubit.start();
+      verify(
+        () => proximity.start(bleModes: {ProximityBleMode.centralClient}),
+      ).called(1);
+
+      modes = {ProximityBleMode.peripheralServer};
+      await cubit.restart();
+      verify(
+        () => proximity.start(bleModes: {ProximityBleMode.peripheralServer}),
+      ).called(1);
+      await cubit.close();
+    });
+
+    test('offers both BLE modes by default', () async {
+      final cubit = MdocProximityCubit(
+        proximity: proximity,
+        credentials: () => credentials,
+        platformKeys: keys,
+        requestBluetoothPermissions: () async => true,
+      );
+
+      await cubit.start();
+
+      verify(
+        () => proximity.start(
+          bleModes: {
+            ProximityBleMode.peripheralServer,
+            ProximityBleMode.centralClient,
+          },
+        ),
+      ).called(1);
+      await cubit.close();
+    });
 
     blocTest<MdocProximityCubit, MdocProximityState>(
       'does not start without the Bluetooth permissions',
@@ -101,13 +145,14 @@ void main() {
         MdocProximityState(ProximityPreparing()),
         MdocProximityState(ProximityBluetoothRequired(authorization: true)),
       ],
-      verify: (_) => verifyNever(() => proximity.start()),
+      verify: (_) =>
+          verifyNever(() => proximity.start(bleModes: any(named: 'bleModes'))),
     );
 
     blocTest<MdocProximityCubit, MdocProximityState>(
       'reports a session that cannot start',
       setUp: () => when(
-        () => proximity.start(),
+        () => proximity.start(bleModes: any(named: 'bleModes')),
       ).thenThrow(const MdocProximityException('no key')),
       build: build,
       act: (cubit) => cubit.start(),
@@ -128,7 +173,9 @@ void main() {
       },
       verify: (_) {
         verify(() => proximity.cancel()).called(1);
-        verify(() => proximity.start()).called(2);
+        verify(
+          () => proximity.start(bleModes: any(named: 'bleModes')),
+        ).called(2);
       },
     );
 

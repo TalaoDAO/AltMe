@@ -1277,5 +1277,11 @@
   "policyViolation": "This service does not meet the security requirements of your wallet profile.",
   "@policyViolation": {
     "description": "Shown when an issuer or verifier fails the wallet profile's policy"
-  }
+  },
+  "proximityBleSettings": "Proximity (BLE)",
+  "proximityBleSettingsSubtitle": "Bluetooth modes a reader can use to connect when you present in person. Keep both unless a reader fails to connect. One always stays on.",
+  "proximityBlePeripheralServer": "Peripheral server",
+  "proximityBlePeripheralServerSubtitle": "The reader connects to your phone.",
+  "proximityBleCentralClient": "Central client",
+  "proximityBleCentralClientSubtitle": "Your phone connects to the reader."
 }

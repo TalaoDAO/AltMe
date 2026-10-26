@@ -3645,4 +3645,25 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get policyViolation =>
       'Ce service ne respecte pas les exigences de sécurité du profil de votre wallet.';
+
+  @override
+  String get proximityBleSettings => 'Proximité (BLE)';
+
+  @override
+  String get proximityBleSettingsSubtitle =>
+      'Modes Bluetooth qu\'un lecteur peut utiliser pour se connecter lors d\'une présentation en personne. Gardez les deux sauf si un lecteur n\'arrive pas à se connecter. Un mode reste toujours activé.';
+
+  @override
+  String get proximityBlePeripheralServer => 'Serveur périphérique';
+
+  @override
+  String get proximityBlePeripheralServerSubtitle =>
+      'Le lecteur se connecte à votre téléphone.';
+
+  @override
+  String get proximityBleCentralClient => 'Client central';
+
+  @override
+  String get proximityBleCentralClientSubtitle =>
+      'Votre téléphone se connecte au lecteur.';
 }

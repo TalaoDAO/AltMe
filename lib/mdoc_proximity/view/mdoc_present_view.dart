@@ -45,6 +45,13 @@ class MdocPresentView extends StatelessWidget {
               ? profile.trustedList
               : null;
         },
+        bleModes: () => context
+            .read<ProfileCubit>()
+            .state
+            .model
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .proximityBleModes,
       )..start(),
       child: const MdocProximityView(),
     );

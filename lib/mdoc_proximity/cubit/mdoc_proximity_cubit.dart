@@ -63,16 +63,20 @@ class MdocProximityCubit extends Cubit<MdocProximityState> {
   /// Creates the cubit. [credentials] and [trustedList] are read when a
   /// request arrives, so the session follows the wallet without restarting;
   /// [trustedList] gives `null` when the profile does not use one.
+  /// [bleModes] is read at each [start], so a settings change applies to the
+  /// next session.
   MdocProximityCubit({
     required MdocProximity proximity,
     required List<CredentialModel> Function() credentials,
     TrustedList? Function() trustedList = _noTrustedList,
+    Set<ProximityBleMode> Function() bleModes = _allBleModes,
     PlatformP256Keys platformKeys = const PlatformP256Keys(),
     BluetoothPermissionRequest requestBluetoothPermissions =
         requestProximityBluetoothPermissions,
   }) : _proximity = proximity,
        _credentials = credentials,
        _trustedList = trustedList,
+       _bleModes = bleModes,
        _platformKeys = platformKeys,
        _requestBluetoothPermissions = requestBluetoothPermissions,
        super(const MdocProximityState(ProximityPreparing())) {
@@ -82,6 +86,7 @@ class MdocProximityCubit extends Cubit<MdocProximityState> {
   final MdocProximity _proximity;
   final List<CredentialModel> Function() _credentials;
   final TrustedList? Function() _trustedList;
+  final Set<ProximityBleMode> Function() _bleModes;
   final PlatformP256Keys _platformKeys;
   final BluetoothPermissionRequest _requestBluetoothPermissions;
   late final StreamSubscription<ProximityState> _subscription;
@@ -106,7 +111,7 @@ class MdocProximityCubit extends Cubit<MdocProximityState> {
     }
 
     try {
-      await _proximity.start();
+      await _proximity.start(bleModes: _bleModes());
     } on MdocProximityException catch (e) {
       _fail(e.message);
     } on PlatformException catch (e) {
@@ -205,3 +210,5 @@ class MdocProximityCubit extends Cubit<MdocProximityState> {
 }
 
 TrustedList? _noTrustedList() => null;
+
+Set<ProximityBleMode> _allBleModes() => ProximityBleMode.values.toSet();
