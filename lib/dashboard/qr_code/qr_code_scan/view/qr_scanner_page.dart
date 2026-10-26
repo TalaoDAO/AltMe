@@ -28,6 +28,7 @@ class _QrScannerPageState extends State<QrScannerPage> {
   }
 
   bool isScanned = false;
+  bool isFirstImage = true;
   var _cameraLensDirection = CameraLensDirection.back;
 
   @override
@@ -41,6 +42,13 @@ class _QrScannerPageState extends State<QrScannerPage> {
             inputImage,
           );
           if (barcodes.isEmpty) {
+            return;
+          }
+
+          /// We are skiping the first image because android device get
+          /// last image from previous camera usage
+          if (isFirstImage) {
+            isFirstImage = false;
             return;
           }
 
