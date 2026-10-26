@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:altme/app/app.dart';
 import 'package:altme/mdoc_proximity/cubit/mdoc_proximity_cubit.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/services.dart';
@@ -18,12 +19,13 @@ class MdocReaderCubit extends Cubit<ReaderState> {
   }) : _reader = reader,
        _requestBluetoothPermissions = requestBluetoothPermissions,
        super(const ReaderConnecting()) {
-    _subscription = _reader.states.listen(emit);
+    _subscription = _reader.states.listen(_onReaderState);
   }
 
   final MdocReader _reader;
   final BluetoothPermissionRequest _requestBluetoothPermissions;
   late final StreamSubscription<ReaderState> _subscription;
+  final _log = getLogger('MdocReaderCubit');
 
   /// The holder's `mdoc:` device engagement.
   final String qrUri;
@@ -53,6 +55,29 @@ class MdocReaderCubit extends Cubit<ReaderState> {
     } on PlatformException catch (e) {
       emit(ReaderFailure(e.message));
     }
+  }
+
+  void _onReaderState(ReaderState state) {
+    switch (state) {
+      case ReaderSuccess(:final result):
+        _log.i(
+          'reader: success, verified: ${[
+            for (final document in result.documents)
+              '${document.docType} ${[
+                for (final elements in document.nameSpaces.values)
+                  ...elements.keys,
+              ]}',
+          ]}, failed: ${result.failedDocTypes}, '
+          'documentErrors: ${result.documentErrors}, '
+          'responseErrors: ${result.responseErrors}, '
+          'unrequested: ${result.unrequestedDocTypes}',
+        );
+      case ReaderFailure(:final message):
+        _log.e('reader: failure: $message');
+      default:
+        _log.i('reader: $state');
+    }
+    emit(state);
   }
 
   @override
