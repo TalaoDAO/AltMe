@@ -113,8 +113,6 @@ dependencies:
   url_launcher: ^6.1.11
   uuid: ^4.6.0
   visibility_detector: ^0.4.0+2
-  wallet: ^0.0.18
-  web3dart: ^3.0.3
   webview_flutter: ^4.14.1
   webview_flutter_android: ^4.14.1
   webview_flutter_wkwebview: ^3.26.1
