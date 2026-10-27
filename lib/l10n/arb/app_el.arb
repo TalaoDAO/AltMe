@@ -2145,5 +2145,47 @@
   "onlyInformationShownWillBeShared": "Θα κοινοποιηθούν μόνο οι πληροφορίες που εμφανίζονται παραπάνω.",
   "shareInformationButtonLabel": "Κοινοποίηση πληροφοριών",
   "dontShareLabel": "Μην κοινοποιήσετε",
-  "policyViolation": "Αυτή η υπηρεσία δεν πληροί τις απαιτήσεις ασφαλείας του προφίλ του πορτοφολιού σας."
+  "policyViolation": "Αυτή η υπηρεσία δεν πληροί τις απαιτήσεις ασφαλείας του προφίλ του πορτοφολιού σας.",
+  "proximityBleSettings": "Εγγύτητα (BLE)",
+  "proximityBleSettingsSubtitle": "Λειτουργίες Bluetooth που μπορεί να χρησιμοποιήσει ένας αναγνώστης για να συνδεθεί όταν παρουσιάζετε αυτοπροσώπως. Διατηρήστε και τις δύο, εκτός αν ένας αναγνώστης δεν μπορεί να συνδεθεί. Μία παραμένει πάντα ενεργή.",
+  "proximityBlePeripheralServer": "Περιφερειακός διακομιστής",
+  "proximityBlePeripheralServerSubtitle": "Ο αναγνώστης συνδέεται στο τηλέφωνό σας.",
+  "proximityBleCentralClient": "Κεντρικός πελάτης",
+  "proximityBleCentralClientSubtitle": "Το τηλέφωνό σας συνδέεται στον αναγνώστη.",
+  "mdocReaderMyRequests": "Τα αιτήματά μου",
+  "mdocReaderAddRequest": "Προσθήκη αιτήματος",
+  "mdocReaderRequestNewTitle": "Νέο αίτημα",
+  "mdocReaderRequestEditTitle": "Επεξεργασία αιτήματος",
+  "mdocReaderRequestName": "Όνομα",
+  "mdocReaderRequestRequired": "Υποχρεωτικό",
+  "mdocReaderRequestDocument": "Έγγραφο {number}",
+  "@mdocReaderRequestDocument": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "mdocReaderRequestAddDocument": "Προσθήκη εγγράφου",
+  "mdocReaderRequestDocType": "Τύπος εγγράφου",
+  "mdocReaderRequestNameSpace": "Χώρος ονομάτων",
+  "mdocReaderRequestClaims": "Χαρακτηριστικά",
+  "mdocReaderRequestRetain": "Διατήρηση",
+  "mdocReaderRequestRetainHint": "Η διατήρηση ενημερώνει τον κάτοχο ότι κρατάτε την τιμή.",
+  "mdocReaderRequestNoClaims": "Δεν έχει επιλεγεί κανένα",
+  "mdocReaderRequestClaimsRequired": "Επιλέξτε τουλάχιστον ένα χαρακτηριστικό.",
+  "mdocReaderRequestAddClaim": "Προσθήκη χαρακτηριστικού",
+  "mdocReaderRequestClaimHint": "Αναγνωριστικό, π.χ. family_name",
+  "mdocReaderRequestSuggestedClaims": "Προτεινόμενα χαρακτηριστικά",
+  "mdocReaderRequestDeleteTitle": "Διαγραφή αυτού του αιτήματος;",
+  "mdocReaderRequestClaimCount": "{count, plural, =1{1 χαρακτηριστικό} other{{count} χαρακτηριστικά}}",
+  "@mdocReaderRequestClaimCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mdocReaderRequestsTitle": "Αναγνώστης",
+  "mdocReaderRequestsSubtitle": "Επιλέξτε τι θα ζητήσετε και στη συνέχεια σαρώστε τον κωδικό QR του κατόχου."
 }

@@ -61,6 +61,9 @@ class SecureStorageKeys {
 
   static const String savedDaaps = 'savedDaaps';
 
+  /// The reader requests the user defined, as a JSON list.
+  static const String customReaderRequests = 'customReaderRequests';
+
   static const String importAccountStep2Mnemonics =
       'importAccountStep2Mnemonics';
 

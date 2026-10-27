@@ -6345,34 +6345,28 @@ abstract class AppLocalizations {
   /// **'Let the reader scan this QR code'**
   String get mdocProximityScanQrCode;
 
-  /// No description provided for @mdocProximityWaitingForTap.
-  ///
-  /// In en, this message translates to:
-  /// **'Hold your phone against the reader'**
-  String get mdocProximityWaitingForTap;
-
   /// No description provided for @mdocProximityConnected.
   ///
   /// In en, this message translates to:
   /// **'Reader connected, waiting for its request…'**
   String get mdocProximityConnected;
 
-  /// No description provided for @mdocProximityRequestTitle.
+  /// No description provided for @mdocProximityRequestedBy.
   ///
   /// In en, this message translates to:
-  /// **'The reader asks for'**
-  String get mdocProximityRequestTitle;
+  /// **'Requested by'**
+  String get mdocProximityRequestedBy;
 
-  /// No description provided for @mdocProximityUnverifiedReader.
+  /// No description provided for @mdocProximityUnknownReader.
   ///
   /// In en, this message translates to:
-  /// **'The identity of this reader is not verified.'**
-  String get mdocProximityUnverifiedReader;
+  /// **'Unknown reader'**
+  String get mdocProximityUnknownReader;
 
   /// No description provided for @mdocProximityDocumentUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'Cannot be shared in this session'**
+  /// **'You don\'t have the requested attestation'**
   String get mdocProximityDocumentUnavailable;
 
   /// No description provided for @mdocProximityWillRetain.
@@ -6423,29 +6417,17 @@ abstract class AppLocalizations {
   /// **'The reader disconnected.'**
   String get mdocProximityReaderDisconnected;
 
-  /// No description provided for @mdocProximityNfcUnavailable.
+  /// No description provided for @mdocProximityChooseAttestation.
   ///
   /// In en, this message translates to:
-  /// **'NFC is turned off. Use the QR code instead.'**
-  String get mdocProximityNfcUnavailable;
+  /// **'Attestation to share'**
+  String get mdocProximityChooseAttestation;
 
   /// No description provided for @mdocProximityError.
   ///
   /// In en, this message translates to:
   /// **'The presentation failed.'**
   String get mdocProximityError;
-
-  /// No description provided for @mdocProximityTapInstead.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap the reader instead'**
-  String get mdocProximityTapInstead;
-
-  /// No description provided for @mdocProximityQrCodeInstead.
-  ///
-  /// In en, this message translates to:
-  /// **'Show a QR code instead'**
-  String get mdocProximityQrCodeInstead;
 
   /// No description provided for @mdocReaderTitle.
   ///
@@ -6525,6 +6507,126 @@ abstract class AppLocalizations {
   /// **'This is not a wallet QR code to read in person.'**
   String get mdocReaderNotHolderQrCode;
 
+  /// No description provided for @mdocReaderMyRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'My requests'**
+  String get mdocReaderMyRequests;
+
+  /// No description provided for @mdocReaderAddRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a request'**
+  String get mdocReaderAddRequest;
+
+  /// No description provided for @mdocReaderRequestNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New request'**
+  String get mdocReaderRequestNewTitle;
+
+  /// No description provided for @mdocReaderRequestEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit request'**
+  String get mdocReaderRequestEditTitle;
+
+  /// No description provided for @mdocReaderRequestName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get mdocReaderRequestName;
+
+  /// No description provided for @mdocReaderRequestRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get mdocReaderRequestRequired;
+
+  /// No description provided for @mdocReaderRequestDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Document {number}'**
+  String mdocReaderRequestDocument(int number);
+
+  /// No description provided for @mdocReaderRequestAddDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a document'**
+  String get mdocReaderRequestAddDocument;
+
+  /// No description provided for @mdocReaderRequestDocType.
+  ///
+  /// In en, this message translates to:
+  /// **'Document type'**
+  String get mdocReaderRequestDocType;
+
+  /// No description provided for @mdocReaderRequestNameSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Name space'**
+  String get mdocReaderRequestNameSpace;
+
+  /// No description provided for @mdocReaderRequestClaims.
+  ///
+  /// In en, this message translates to:
+  /// **'Claims'**
+  String get mdocReaderRequestClaims;
+
+  /// No description provided for @mdocReaderRequestRetain.
+  ///
+  /// In en, this message translates to:
+  /// **'Retain'**
+  String get mdocReaderRequestRetain;
+
+  /// No description provided for @mdocReaderRequestRetainHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Retain tells the holder that you keep the value.'**
+  String get mdocReaderRequestRetainHint;
+
+  /// No description provided for @mdocReaderRequestNoClaims.
+  ///
+  /// In en, this message translates to:
+  /// **'None selected'**
+  String get mdocReaderRequestNoClaims;
+
+  /// No description provided for @mdocReaderRequestClaimsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose at least one claim.'**
+  String get mdocReaderRequestClaimsRequired;
+
+  /// No description provided for @mdocReaderRequestAddClaim.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a claim'**
+  String get mdocReaderRequestAddClaim;
+
+  /// No description provided for @mdocReaderRequestClaimHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Identifier, e.g. family_name'**
+  String get mdocReaderRequestClaimHint;
+
+  /// No description provided for @mdocReaderRequestSuggestedClaims.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested claims'**
+  String get mdocReaderRequestSuggestedClaims;
+
+  /// No description provided for @mdocReaderRequestDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this request?'**
+  String get mdocReaderRequestDeleteTitle;
+
+  /// No description provided for @mdocReaderRequestClaimCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 claim} other{{count} claims}}'**
+  String mdocReaderRequestClaimCount(int count);
+
   /// No description provided for @mdocPresent.
   ///
   /// In en, this message translates to:
@@ -6543,11 +6645,53 @@ abstract class AppLocalizations {
   /// **'Scan'**
   String get scanTabScan;
 
+  /// No description provided for @mdocReadTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get mdocReadTab;
+
   /// Shown when an issuer or verifier fails the wallet profile's policy
   ///
   /// In en, this message translates to:
   /// **'This service does not meet the security requirements of your wallet profile.'**
   String get policyViolation;
+
+  /// No description provided for @proximityBleSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Proximity (BLE)'**
+  String get proximityBleSettings;
+
+  /// No description provided for @proximityBleSettingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth modes a reader can use to connect when you present in person. Keep both unless a reader fails to connect. One always stays on.'**
+  String get proximityBleSettingsSubtitle;
+
+  /// No description provided for @proximityBlePeripheralServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Peripheral server'**
+  String get proximityBlePeripheralServer;
+
+  /// No description provided for @proximityBlePeripheralServerSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The reader connects to your phone.'**
+  String get proximityBlePeripheralServerSubtitle;
+
+  /// No description provided for @proximityBleCentralClient.
+  ///
+  /// In en, this message translates to:
+  /// **'Central client'**
+  String get proximityBleCentralClient;
+
+  /// No description provided for @proximityBleCentralClientSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your phone connects to the reader.'**
+  String get proximityBleCentralClientSubtitle;
 }
 
 class _AppLocalizationsDelegate

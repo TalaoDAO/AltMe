@@ -674,6 +674,8 @@ class SelfSovereignIdentityOptions extends Equatable {
   const SelfSovereignIdentityOptions({
     required this.customOidc4vcProfile,
     required this.displayManageDecentralizedId,
+    this.proximityPeripheralServer = true,
+    this.proximityCentralClient = true,
   });
 
   factory SelfSovereignIdentityOptions.fromJson(Map<String, dynamic> json) =>
@@ -694,21 +696,41 @@ class SelfSovereignIdentityOptions extends Equatable {
   final CustomOidc4VcProfile customOidc4vcProfile;
   final bool displayManageDecentralizedId;
 
+  /// Whether the mdoc proximity holder offers BLE mdoc peripheral server mode.
+  final bool proximityPeripheralServer;
+
+  /// Whether the mdoc proximity holder offers BLE mdoc central client mode.
+  final bool proximityCentralClient;
+
+  /// The BLE modes the mdoc proximity holder offers.
+  Set<ProximityBleMode> get proximityBleModes => {
+    if (proximityPeripheralServer) ProximityBleMode.peripheralServer,
+    if (proximityCentralClient) ProximityBleMode.centralClient,
+  };
+
   Map<String, dynamic> toJson() => _$SelfSovereignIdentityOptionsToJson(this);
 
   SelfSovereignIdentityOptions copyWith({
     CustomOidc4VcProfile? customOidc4vcProfile,
     bool? displayManageDecentralizedId,
+    bool? proximityPeripheralServer,
+    bool? proximityCentralClient,
   }) => SelfSovereignIdentityOptions(
     customOidc4vcProfile: customOidc4vcProfile ?? this.customOidc4vcProfile,
     displayManageDecentralizedId:
         displayManageDecentralizedId ?? this.displayManageDecentralizedId,
+    proximityPeripheralServer:
+        proximityPeripheralServer ?? this.proximityPeripheralServer,
+    proximityCentralClient:
+        proximityCentralClient ?? this.proximityCentralClient,
   );
 
   @override
   List<Object?> get props => [
     customOidc4vcProfile,
     displayManageDecentralizedId,
+    proximityPeripheralServer,
+    proximityCentralClient,
   ];
 }
 

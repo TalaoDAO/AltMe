@@ -239,6 +239,8 @@ SelfSovereignIdentityOptions _$SelfSovereignIdentityOptionsFromJson(
     json['customOidc4vcProfile'] as Map<String, dynamic>,
   ),
   displayManageDecentralizedId: json['displayManageDecentralizedId'] as bool,
+  proximityPeripheralServer: json['proximityPeripheralServer'] as bool? ?? true,
+  proximityCentralClient: json['proximityCentralClient'] as bool? ?? true,
 );
 
 Map<String, dynamic> _$SelfSovereignIdentityOptionsToJson(
@@ -246,6 +248,8 @@ Map<String, dynamic> _$SelfSovereignIdentityOptionsToJson(
 ) => <String, dynamic>{
   'customOidc4vcProfile': instance.customOidc4vcProfile,
   'displayManageDecentralizedId': instance.displayManageDecentralizedId,
+  'proximityPeripheralServer': instance.proximityPeripheralServer,
+  'proximityCentralClient': instance.proximityCentralClient,
 };
 
 CustomOidc4VcProfile _$CustomOidc4VcProfileFromJson(

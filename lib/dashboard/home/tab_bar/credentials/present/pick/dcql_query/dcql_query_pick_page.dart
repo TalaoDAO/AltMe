@@ -575,7 +575,6 @@ class _CredentialTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final languageCode = context.read<LangCubit>().state.locale.languageCode;
     final selectiveDisclosure = SelectiveDisclosure(credentialModel);
-    final credentialImage = selectiveDisclosure.getPicture;
 
     // Top-level keys already covered by the DCQL-disclosed claims below,
     // so they aren't duplicated among the "not in a disclosure" claims.
@@ -599,46 +598,26 @@ class _CredentialTile extends StatelessWidget {
 
     final onSurface = Theme.of(context).colorScheme.onSurface;
 
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (credentialImage != null)
-              PictureDisplay(credentialImage: credentialImage)
-            else
-              CredentialDisplay(
-                credentialModel: credentialModel,
-                credDisplayType: CredDisplayType.List,
-                profileSetting: profileSetting,
-                isDiscover: false,
-                showPortrait: true,
-              ),
-            const SizedBox(height: 20),
-            for (final path in requestedPaths)
-              CredentialField(
-                title: _translatedTitle(credentialModel, path, languageCode),
-                value: _valueLabel(credential.getValueByPath(path) ?? '—'),
-                titleColor: onSurface,
-                valueColor: onSurface,
-                showVertically: true,
-              ),
-            for (final entry in plainClaims)
-              CredentialField(
-                title: _translatedTitle(credentialModel, [
-                  entry.key,
-                ], languageCode),
-                value: _valueLabel(entry.value),
-                titleColor: onSurface,
-                valueColor: onSurface,
-                showVertically: true,
-              ),
-          ],
-        ),
-      ),
+    return CredentialShareCard(
+      credentialModel: credentialModel,
+      children: [
+        for (final path in requestedPaths)
+          CredentialField(
+            title: _translatedTitle(credentialModel, path, languageCode),
+            value: _valueLabel(credential.getValueByPath(path) ?? '—'),
+            titleColor: onSurface,
+            valueColor: onSurface,
+            showVertically: true,
+          ),
+        for (final entry in plainClaims)
+          CredentialField(
+            title: _translatedTitle(credentialModel, [entry.key], languageCode),
+            value: _valueLabel(entry.value),
+            titleColor: onSurface,
+            valueColor: onSurface,
+            showVertically: true,
+          ),
+      ],
     );
   }
 }

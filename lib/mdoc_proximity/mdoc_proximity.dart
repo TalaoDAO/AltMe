@@ -1,9 +1,17 @@
+export 'cubit/custom_reader_requests_cubit.dart';
 export 'cubit/mdoc_proximity_cubit.dart';
 export 'cubit/mdoc_reader_cubit.dart';
+export 'cubit/reader_issuer_cubit.dart';
+export 'cubit/reader_request_editor_cubit.dart';
 export 'helpers/mdoc_credential_model.dart';
+export 'helpers/proximity_reader.dart';
+export 'helpers/reader_credential_model.dart';
+export 'helpers/reader_document_presets.dart';
+export 'helpers/reader_issuer.dart';
 export 'helpers/reader_trusted_roots.dart';
 export 'view/mdoc_present_view.dart';
 export 'view/mdoc_reader_page.dart';
+export 'view/mdoc_reader_request_editor_page.dart';
 export 'view/mdoc_reader_requests_view.dart';
 export 'widgets/mdoc_request_view.dart';
 export 'widgets/proximity_message.dart';

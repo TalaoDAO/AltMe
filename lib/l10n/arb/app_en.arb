@@ -1244,11 +1244,10 @@
   "mdocProximityTitle": "Share in person",
   "mdocProximityPreparing": "Preparing the connection…",
   "mdocProximityScanQrCode": "Let the reader scan this QR code",
-  "mdocProximityWaitingForTap": "Hold your phone against the reader",
   "mdocProximityConnected": "Reader connected, waiting for its request…",
-  "mdocProximityRequestTitle": "The reader asks for",
-  "mdocProximityUnverifiedReader": "The identity of this reader is not verified.",
-  "mdocProximityDocumentUnavailable": "Cannot be shared in this session",
+  "mdocProximityRequestedBy": "Requested by",
+  "mdocProximityUnknownReader": "Unknown reader",
+  "mdocProximityDocumentUnavailable": "You don't have the requested attestation",
   "mdocProximityWillRetain": "Kept by the reader",
   "mdocProximitySending": "Sending…",
   "mdocProximitySuccess": "Your information was shared with the reader.",
@@ -1257,10 +1256,8 @@
   "mdocProximityOpenSettings": "Open settings",
   "mdocProximityTimeout": "The reader did not respond in time.",
   "mdocProximityReaderDisconnected": "The reader disconnected.",
-  "mdocProximityNfcUnavailable": "NFC is turned off. Use the QR code instead.",
+  "mdocProximityChooseAttestation": "Attestation to share",
   "mdocProximityError": "The presentation failed.",
-  "mdocProximityTapInstead": "Tap the reader instead",
-  "mdocProximityQrCodeInstead": "Show a QR code instead",
   "mdocReaderTitle": "Read in person",
   "mdocReaderConnecting": "Connecting to the wallet…",
   "mdocReaderWaitingForResponse": "Connected. Waiting for the holder to share…",
@@ -1274,11 +1271,52 @@
   "mdocReaderRequestsTitle": "Reader",
   "mdocReaderRequestsSubtitle": "Choose what to ask for, then scan the holder's QR code.",
   "mdocReaderNotHolderQrCode": "This is not a wallet QR code to read in person.",
+  "mdocReaderMyRequests": "My requests",
+  "mdocReaderAddRequest": "Add a request",
+  "mdocReaderRequestNewTitle": "New request",
+  "mdocReaderRequestEditTitle": "Edit request",
+  "mdocReaderRequestName": "Name",
+  "mdocReaderRequestRequired": "Required",
+  "mdocReaderRequestDocument": "Document {number}",
+  "@mdocReaderRequestDocument": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "mdocReaderRequestAddDocument": "Add a document",
+  "mdocReaderRequestDocType": "Document type",
+  "mdocReaderRequestNameSpace": "Name space",
+  "mdocReaderRequestClaims": "Claims",
+  "mdocReaderRequestRetain": "Retain",
+  "mdocReaderRequestRetainHint": "Retain tells the holder that you keep the value.",
+  "mdocReaderRequestNoClaims": "None selected",
+  "mdocReaderRequestClaimsRequired": "Choose at least one claim.",
+  "mdocReaderRequestAddClaim": "Add a claim",
+  "mdocReaderRequestClaimHint": "Identifier, e.g. family_name",
+  "mdocReaderRequestSuggestedClaims": "Suggested claims",
+  "mdocReaderRequestDeleteTitle": "Delete this request?",
+  "mdocReaderRequestClaimCount": "{count, plural, =1{1 claim} other{{count} claims}}",
+  "@mdocReaderRequestClaimCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "mdocPresent": "Present",
   "mdocPresentNoAttestation": "No attestation in your wallet can be shown to a reader in person.",
   "scanTabScan": "Scan",
+  "mdocReadTab": "Read",
   "policyViolation": "This service does not meet the security requirements of your wallet profile.",
   "@policyViolation": {
     "description": "Shown when an issuer or verifier fails the wallet profile's policy"
-  }
+  },
+  "proximityBleSettings": "Proximity (BLE)",
+  "proximityBleSettingsSubtitle": "Bluetooth modes a reader can use to connect when you present in person. Keep both unless a reader fails to connect. One always stays on.",
+  "proximityBlePeripheralServer": "Peripheral server",
+  "proximityBlePeripheralServerSubtitle": "The reader connects to your phone.",
+  "proximityBleCentralClient": "Central client",
+  "proximityBleCentralClientSubtitle": "Your phone connects to the reader."
 }

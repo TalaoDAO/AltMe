@@ -1,6 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
-import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/dashboard/profile/profile.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/mdoc_proximity/cubit/mdoc_proximity_cubit.dart';
 import 'package:altme/mdoc_proximity/helpers/mdoc_credential_model.dart';
@@ -15,36 +15,45 @@ import 'package:qr_flutter/qr_flutter.dart';
 /// Presents the wallet's mdocs to a reader in person (ISO/IEC 18013-5): the
 /// device engagement QR code, then the reader's request.
 ///
-/// The QR code names no document: the session holds every mdoc the wallet
-/// can present, and the request, once it arrives, says which ones answer.
+/// The QR code names no document: the request, once it arrives, says which
+/// ones the reader wants, and the wallet's mdocs that can answer are matched
+/// to it then.
 class MdocPresentView extends StatelessWidget {
   /// Creates the view.
   const MdocPresentView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final credentials = context.select<CredentialsCubit, List<CredentialModel>>(
-      (cubit) => [
-        for (final credential in cubit.state.credentials)
-          if (credential.canPresentInProximity) credential,
-      ],
+    final canPresent = context.select<CredentialsCubit, bool>(
+      (cubit) => cubit.state.credentials.any(
+        (credential) => credential.canPresentInProximity,
+      ),
     );
-    if (credentials.isEmpty) {
+    if (!canPresent) {
       return ProximityMessage(
         icon: Icons.contactless_outlined,
         text: context.l10n.mdocPresentNoAttestation,
       );
     }
     return BlocProvider(
-      // A new session when the wallet's mdocs change.
-      key: ValueKey(credentials.map((credential) => credential.id).join('|')),
-      create: (_) => MdocProximityCubit(proximity: MdocProximity())
-        ..start(
-          mdocs: [
-            for (final credential in credentials) credential.proximityMdoc,
-          ],
-        ),
-      child: MdocProximityView(credentials: credentials),
+      create: (context) => MdocProximityCubit(
+        proximity: MdocProximity(),
+        credentials: () => context.read<CredentialsCubit>().state.credentials,
+        trustedList: () {
+          final profile = context.read<ProfileCubit>().state.model;
+          return profile.profileSetting.walletSecurityOptions.trustedList
+              ? profile.trustedList
+              : null;
+        },
+        bleModes: () => context
+            .read<ProfileCubit>()
+            .state
+            .model
+            .profileSetting
+            .selfSovereignIdentityOptions
+            .proximityBleModes,
+      )..start(),
+      child: const MdocProximityView(),
     );
   }
 }
@@ -52,19 +61,17 @@ class MdocPresentView extends StatelessWidget {
 /// The proximity session, one screen per state.
 class MdocProximityView extends StatelessWidget {
   /// Creates the view.
-  const MdocProximityView({super.key, required this.credentials});
-
-  /// The mdocs the session presents.
-  final List<CredentialModel> credentials;
+  const MdocProximityView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return BlocConsumer<MdocProximityCubit, ProximityState>(
+    return BlocConsumer<MdocProximityCubit, MdocProximityState>(
       // Like an OIDC4VP presentation, success is a snackbar on the
       // dashboard rather than a screen of its own.
       listenWhen: (previous, current) =>
-          current is ProximitySuccess && previous is! ProximitySuccess,
+          current.session is ProximitySuccess &&
+          previous.session is! ProximitySuccess,
       listener: (context, state) {
         AlertMessage.showStateMessage(
           context: context,
@@ -82,21 +89,10 @@ class MdocProximityView extends StatelessWidget {
       },
       builder: (context, state) {
         final cubit = context.read<MdocProximityCubit>();
-        return switch (state) {
+        return switch (state.session) {
           ProximityPreparing() => ProximityWaiting(l10n.mdocProximityPreparing),
           ProximityConnected() => ProximityWaiting(l10n.mdocProximityConnected),
           ProximitySending() => ProximityWaiting(l10n.mdocProximitySending),
-          ProximityWaitingForTap() => ProximityMessage(
-            icon: Icons.nfc,
-            text: l10n.mdocProximityWaitingForTap,
-            actions: [
-              MyOutlinedButton(
-                text: l10n.mdocProximityQrCodeInstead,
-                onPressed: () =>
-                    cubit.restart(engagement: ProximityEngagement.qrCode),
-              ),
-            ],
-          ),
           ProximityShowQrCode(:final uri) => _QrCode(uri: uri),
           ProximityBluetoothRequired(:final authorization) => ProximityMessage(
             icon: Icons.bluetooth_disabled,
@@ -113,10 +109,14 @@ class MdocProximityView extends StatelessWidget {
             ],
           ),
           ProximityRequest(:final documents) => MdocRequestView(
-            credentials: credentials,
             documents: documents,
+            candidates: state.candidates,
+            reader: state.reader,
             onShare: cubit.approve,
-            onCancel: () => Navigator.of(context).pop(),
+            onDecline: () async {
+              await cubit.decline();
+              if (context.mounted) Navigator.of(context).pop();
+            },
           ),
           // The listener pops back to the dashboard.
           ProximitySuccess() => const SizedBox.shrink(),
@@ -126,20 +126,11 @@ class MdocProximityView extends StatelessWidget {
               ProximityFailureReason.timeout => l10n.mdocProximityTimeout,
               ProximityFailureReason.readerDisconnected =>
                 l10n.mdocProximityReaderDisconnected,
-              ProximityFailureReason.nfcUnavailable =>
-                l10n.mdocProximityNfcUnavailable,
               ProximityFailureReason.error => l10n.mdocProximityError,
             },
             detail: message,
             actions: [
-              MyElevatedButton(
-                text: l10n.tryAgain,
-                onPressed: () => cubit.restart(
-                  engagement: reason == ProximityFailureReason.nfcUnavailable
-                      ? ProximityEngagement.qrCode
-                      : null,
-                ),
-              ),
+              MyElevatedButton(text: l10n.tryAgain, onPressed: cubit.restart),
               MyOutlinedButton(
                 text: l10n.close,
                 onPressed: () => Navigator.of(context).pop(),
@@ -152,29 +143,17 @@ class MdocProximityView extends StatelessWidget {
   }
 }
 
-class _QrCode extends StatefulWidget {
+class _QrCode extends StatelessWidget {
   const _QrCode({required this.uri});
 
   final String uri;
 
   @override
-  State<_QrCode> createState() => _QrCodeState();
-}
-
-class _QrCodeState extends State<_QrCode> {
-  late final Future<ProximityNfcAvailability> _nfcAvailability = context
-      .read<MdocProximityCubit>()
-      .nfcAvailability();
-
-  String get uri => widget.uri;
-
-  @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(l10n.mdocProximityScanQrCode, textAlign: TextAlign.center),
+        Text(context.l10n.mdocProximityScanQrCode, textAlign: TextAlign.center),
         const SizedBox(height: 20),
         Center(
           child: QrImageView(
@@ -182,21 +161,6 @@ class _QrCodeState extends State<_QrCode> {
             size: 260,
             backgroundColor: Colors.white,
           ),
-        ),
-        const SizedBox(height: 20),
-        // NFC engagement is Android only; the plugin reports it unsupported
-        // on iOS and on phones without host card emulation.
-        FutureBuilder<ProximityNfcAvailability>(
-          future: _nfcAvailability,
-          builder: (context, snapshot) =>
-              snapshot.data == ProximityNfcAvailability.available
-              ? MyOutlinedButton(
-                  text: l10n.mdocProximityTapInstead,
-                  onPressed: () => context.read<MdocProximityCubit>().restart(
-                    engagement: ProximityEngagement.nfc,
-                  ),
-                )
-              : const SizedBox.shrink(),
         ),
       ],
     );

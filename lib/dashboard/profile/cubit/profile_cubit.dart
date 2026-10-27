@@ -429,6 +429,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     bool? displayNotification,
     bool? dpopSupport,
     bool? displayMode,
+    bool? proximityPeripheralServer,
+    bool? proximityCentralClient,
   }) async {
     late TrustedList? trustedListContent;
     if (trustedList != null) {
@@ -469,6 +471,8 @@ class ProfileCubit extends Cubit<ProfileState> {
             .profileSetting
             .selfSovereignIdentityOptions
             .copyWith(
+              proximityPeripheralServer: proximityPeripheralServer,
+              proximityCentralClient: proximityCentralClient,
               customOidc4vcProfile: state
                   .model
                   .profileSetting

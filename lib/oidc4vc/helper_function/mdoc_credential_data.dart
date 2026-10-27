@@ -171,12 +171,18 @@ Map<String, Map<String, Object?>> _displayClaims(IssuerSigned mdoc) => {
 
 Object? _displayValue(Object? value) {
   if (value is Uint8List) {
-    final mimeType = _imageMimeType(value);
-    if (mimeType != null) {
-      return 'data:$mimeType;base64,${base64.encode(value)}';
-    }
+    final dataUri = mdocImageDataUri(value);
+    if (dataUri != null) return dataUri;
   }
   return cborToJson(value);
+}
+
+/// [bytes] as a `data:` URI when they are a JPEG or PNG image, else `null`.
+String? mdocImageDataUri(Uint8List bytes) {
+  final mimeType = _imageMimeType(bytes);
+  return mimeType == null
+      ? null
+      : 'data:$mimeType;base64,${base64.encode(bytes)}';
 }
 
 String? _imageMimeType(Uint8List bytes) {

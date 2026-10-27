@@ -5,6 +5,16 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+    <!-- mdoc proximity presentation and reading over BLE. Up to Android 11,
+         scanning needs location. From Android 12, BLUETOOTH_SCAN must say
+         neverForLocation, or scans find nothing without location. -->
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <queries>
         <!-- If your app opens https URLs -->
         <intent>
@@ -176,19 +186,5 @@
         </activity><meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <!-- ISO 18013-5 NFC device engagement (mdoc AID A0000002480400), from
-             sprucekit_mobile. Answers readers only while a tap is armed by the
-             mdoc proximity page and the phone is unlocked. -->
-        <service
-            android:name="com.spruceid.sprucekit_mobile.NfcPresentationService"
-            android:exported="true"
-            android:permission="android.permission.BIND_NFC_SERVICE">
-            <intent-filter>
-                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
-            </intent-filter>
-            <meta-data
-                android:name="android.nfc.cardemulation.host_apdu_service"
-                android:resource="@xml/sprucekit_nfc_hce_service" />
-        </service>
     </application>
 </manifest>

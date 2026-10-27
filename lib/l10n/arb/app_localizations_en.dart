@@ -3492,22 +3492,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mdocProximityScanQrCode => 'Let the reader scan this QR code';
 
   @override
-  String get mdocProximityWaitingForTap => 'Hold your phone against the reader';
-
-  @override
   String get mdocProximityConnected =>
       'Reader connected, waiting for its request…';
 
   @override
-  String get mdocProximityRequestTitle => 'The reader asks for';
+  String get mdocProximityRequestedBy => 'Requested by';
 
   @override
-  String get mdocProximityUnverifiedReader =>
-      'The identity of this reader is not verified.';
+  String get mdocProximityUnknownReader => 'Unknown reader';
 
   @override
   String get mdocProximityDocumentUnavailable =>
-      'Cannot be shared in this session';
+      'You don\'t have the requested attestation';
 
   @override
   String get mdocProximityWillRetain => 'Kept by the reader';
@@ -3537,17 +3533,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mdocProximityReaderDisconnected => 'The reader disconnected.';
 
   @override
-  String get mdocProximityNfcUnavailable =>
-      'NFC is turned off. Use the QR code instead.';
+  String get mdocProximityChooseAttestation => 'Attestation to share';
 
   @override
   String get mdocProximityError => 'The presentation failed.';
-
-  @override
-  String get mdocProximityTapInstead => 'Tap the reader instead';
-
-  @override
-  String get mdocProximityQrCodeInstead => 'Show a QR code instead';
 
   @override
   String get mdocReaderTitle => 'Read in person';
@@ -3594,6 +3583,77 @@ class AppLocalizationsEn extends AppLocalizations {
       'This is not a wallet QR code to read in person.';
 
   @override
+  String get mdocReaderMyRequests => 'My requests';
+
+  @override
+  String get mdocReaderAddRequest => 'Add a request';
+
+  @override
+  String get mdocReaderRequestNewTitle => 'New request';
+
+  @override
+  String get mdocReaderRequestEditTitle => 'Edit request';
+
+  @override
+  String get mdocReaderRequestName => 'Name';
+
+  @override
+  String get mdocReaderRequestRequired => 'Required';
+
+  @override
+  String mdocReaderRequestDocument(int number) {
+    return 'Document $number';
+  }
+
+  @override
+  String get mdocReaderRequestAddDocument => 'Add a document';
+
+  @override
+  String get mdocReaderRequestDocType => 'Document type';
+
+  @override
+  String get mdocReaderRequestNameSpace => 'Name space';
+
+  @override
+  String get mdocReaderRequestClaims => 'Claims';
+
+  @override
+  String get mdocReaderRequestRetain => 'Retain';
+
+  @override
+  String get mdocReaderRequestRetainHint =>
+      'Retain tells the holder that you keep the value.';
+
+  @override
+  String get mdocReaderRequestNoClaims => 'None selected';
+
+  @override
+  String get mdocReaderRequestClaimsRequired => 'Choose at least one claim.';
+
+  @override
+  String get mdocReaderRequestAddClaim => 'Add a claim';
+
+  @override
+  String get mdocReaderRequestClaimHint => 'Identifier, e.g. family_name';
+
+  @override
+  String get mdocReaderRequestSuggestedClaims => 'Suggested claims';
+
+  @override
+  String get mdocReaderRequestDeleteTitle => 'Delete this request?';
+
+  @override
+  String mdocReaderRequestClaimCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count claims',
+      one: '1 claim',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get mdocPresent => 'Present';
 
   @override
@@ -3604,6 +3664,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scanTabScan => 'Scan';
 
   @override
+  String get mdocReadTab => 'Read';
+
+  @override
   String get policyViolation =>
       'This service does not meet the security requirements of your wallet profile.';
+
+  @override
+  String get proximityBleSettings => 'Proximity (BLE)';
+
+  @override
+  String get proximityBleSettingsSubtitle =>
+      'Bluetooth modes a reader can use to connect when you present in person. Keep both unless a reader fails to connect. One always stays on.';
+
+  @override
+  String get proximityBlePeripheralServer => 'Peripheral server';
+
+  @override
+  String get proximityBlePeripheralServerSubtitle =>
+      'The reader connects to your phone.';
+
+  @override
+  String get proximityBleCentralClient => 'Central client';
+
+  @override
+  String get proximityBleCentralClientSubtitle =>
+      'Your phone connects to the reader.';
 }

@@ -1206,11 +1206,10 @@
   "mdocProximityTitle": "Partager en personne",
   "mdocProximityPreparing": "Préparation de la connexion…",
   "mdocProximityScanQrCode": "Faites scanner ce QR code par le lecteur",
-  "mdocProximityWaitingForTap": "Approchez votre téléphone du lecteur",
   "mdocProximityConnected": "Lecteur connecté, en attente de sa demande…",
-  "mdocProximityRequestTitle": "Le lecteur demande",
-  "mdocProximityUnverifiedReader": "L'identité de ce lecteur n'est pas vérifiée.",
-  "mdocProximityDocumentUnavailable": "Ne peut pas être partagé dans cette session",
+  "mdocProximityRequestedBy": "Demandé par",
+  "mdocProximityUnknownReader": "Lecteur inconnu",
+  "mdocProximityDocumentUnavailable": "Vous n'avez pas l'attestation demandée",
   "mdocProximityWillRetain": "Conservé par le lecteur",
   "mdocProximitySending": "Envoi…",
   "mdocProximitySuccess": "Vos informations ont été partagées avec le lecteur.",
@@ -1219,10 +1218,8 @@
   "mdocProximityOpenSettings": "Ouvrir les réglages",
   "mdocProximityTimeout": "Le lecteur n'a pas répondu à temps.",
   "mdocProximityReaderDisconnected": "Le lecteur s'est déconnecté.",
-  "mdocProximityNfcUnavailable": "Le NFC est désactivé. Utilisez plutôt le QR code.",
+  "mdocProximityChooseAttestation": "Attestation à partager",
   "mdocProximityError": "La présentation a échoué.",
-  "mdocProximityTapInstead": "Approcher du lecteur à la place",
-  "mdocProximityQrCodeInstead": "Afficher un QR code à la place",
   "mdocReaderTitle": "Lire en personne",
   "mdocReaderConnecting": "Connexion au wallet…",
   "mdocReaderWaitingForResponse": "Connecté. En attente du partage par le détenteur…",
@@ -1236,8 +1233,49 @@
   "mdocReaderRequestsTitle": "Lecteur",
   "mdocReaderRequestsSubtitle": "Choisissez ce que vous demandez, puis scannez le QR code du détenteur.",
   "mdocReaderNotHolderQrCode": "Ce QR code n'est pas celui d'un wallet à lire en personne.",
+  "mdocReaderMyRequests": "Mes demandes",
+  "mdocReaderAddRequest": "Ajouter une demande",
+  "mdocReaderRequestNewTitle": "Nouvelle demande",
+  "mdocReaderRequestEditTitle": "Modifier la demande",
+  "mdocReaderRequestName": "Nom",
+  "mdocReaderRequestRequired": "Obligatoire",
+  "mdocReaderRequestDocument": "Document {number}",
+  "@mdocReaderRequestDocument": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "mdocReaderRequestAddDocument": "Ajouter un document",
+  "mdocReaderRequestDocType": "Type de document",
+  "mdocReaderRequestNameSpace": "Espace de noms",
+  "mdocReaderRequestClaims": "Attributs",
+  "mdocReaderRequestRetain": "Conserver",
+  "mdocReaderRequestRetainHint": "Conserver indique au détenteur que vous gardez la valeur.",
+  "mdocReaderRequestNoClaims": "Aucun sélectionné",
+  "mdocReaderRequestClaimsRequired": "Choisissez au moins un attribut.",
+  "mdocReaderRequestAddClaim": "Ajouter un attribut",
+  "mdocReaderRequestClaimHint": "Identifiant, p. ex. family_name",
+  "mdocReaderRequestSuggestedClaims": "Attributs suggérés",
+  "mdocReaderRequestDeleteTitle": "Supprimer cette demande ?",
+  "mdocReaderRequestClaimCount": "{count, plural, =1{1 attribut} other{{count} attributs}}",
+  "@mdocReaderRequestClaimCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "mdocPresent": "Présenter",
   "mdocPresentNoAttestation": "Aucune attestation de votre wallet ne peut être présentée en personne à un lecteur.",
   "scanTabScan": "Scanner",
-  "policyViolation": "Ce service ne respecte pas les exigences de sécurité du profil de votre wallet."
+  "mdocReadTab": "Lire",
+  "policyViolation": "Ce service ne respecte pas les exigences de sécurité du profil de votre wallet.",
+  "proximityBleSettings": "Proximité (BLE)",
+  "proximityBleSettingsSubtitle": "Modes Bluetooth qu'un lecteur peut utiliser pour se connecter lors d'une présentation en personne. Gardez les deux sauf si un lecteur n'arrive pas à se connecter. Un mode reste toujours activé.",
+  "proximityBlePeripheralServer": "Serveur périphérique",
+  "proximityBlePeripheralServerSubtitle": "Le lecteur se connecte à votre téléphone.",
+  "proximityBleCentralClient": "Client central",
+  "proximityBleCentralClientSubtitle": "Votre téléphone se connecte au lecteur."
 }

@@ -3540,23 +3540,18 @@ class AppLocalizationsFr extends AppLocalizations {
       'Faites scanner ce QR code par le lecteur';
 
   @override
-  String get mdocProximityWaitingForTap =>
-      'Approchez votre téléphone du lecteur';
-
-  @override
   String get mdocProximityConnected =>
       'Lecteur connecté, en attente de sa demande…';
 
   @override
-  String get mdocProximityRequestTitle => 'Le lecteur demande';
+  String get mdocProximityRequestedBy => 'Demandé par';
 
   @override
-  String get mdocProximityUnverifiedReader =>
-      'L\'identité de ce lecteur n\'est pas vérifiée.';
+  String get mdocProximityUnknownReader => 'Lecteur inconnu';
 
   @override
   String get mdocProximityDocumentUnavailable =>
-      'Ne peut pas être partagé dans cette session';
+      'Vous n\'avez pas l\'attestation demandée';
 
   @override
   String get mdocProximityWillRetain => 'Conservé par le lecteur';
@@ -3586,17 +3581,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mdocProximityReaderDisconnected => 'Le lecteur s\'est déconnecté.';
 
   @override
-  String get mdocProximityNfcUnavailable =>
-      'Le NFC est désactivé. Utilisez plutôt le QR code.';
+  String get mdocProximityChooseAttestation => 'Attestation à partager';
 
   @override
   String get mdocProximityError => 'La présentation a échoué.';
-
-  @override
-  String get mdocProximityTapInstead => 'Approcher du lecteur à la place';
-
-  @override
-  String get mdocProximityQrCodeInstead => 'Afficher un QR code à la place';
 
   @override
   String get mdocReaderTitle => 'Lire en personne';
@@ -3645,6 +3633,78 @@ class AppLocalizationsFr extends AppLocalizations {
       'Ce QR code n\'est pas celui d\'un wallet à lire en personne.';
 
   @override
+  String get mdocReaderMyRequests => 'Mes demandes';
+
+  @override
+  String get mdocReaderAddRequest => 'Ajouter une demande';
+
+  @override
+  String get mdocReaderRequestNewTitle => 'Nouvelle demande';
+
+  @override
+  String get mdocReaderRequestEditTitle => 'Modifier la demande';
+
+  @override
+  String get mdocReaderRequestName => 'Nom';
+
+  @override
+  String get mdocReaderRequestRequired => 'Obligatoire';
+
+  @override
+  String mdocReaderRequestDocument(int number) {
+    return 'Document $number';
+  }
+
+  @override
+  String get mdocReaderRequestAddDocument => 'Ajouter un document';
+
+  @override
+  String get mdocReaderRequestDocType => 'Type de document';
+
+  @override
+  String get mdocReaderRequestNameSpace => 'Espace de noms';
+
+  @override
+  String get mdocReaderRequestClaims => 'Attributs';
+
+  @override
+  String get mdocReaderRequestRetain => 'Conserver';
+
+  @override
+  String get mdocReaderRequestRetainHint =>
+      'Conserver indique au détenteur que vous gardez la valeur.';
+
+  @override
+  String get mdocReaderRequestNoClaims => 'Aucun sélectionné';
+
+  @override
+  String get mdocReaderRequestClaimsRequired =>
+      'Choisissez au moins un attribut.';
+
+  @override
+  String get mdocReaderRequestAddClaim => 'Ajouter un attribut';
+
+  @override
+  String get mdocReaderRequestClaimHint => 'Identifiant, p. ex. family_name';
+
+  @override
+  String get mdocReaderRequestSuggestedClaims => 'Attributs suggérés';
+
+  @override
+  String get mdocReaderRequestDeleteTitle => 'Supprimer cette demande ?';
+
+  @override
+  String mdocReaderRequestClaimCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count attributs',
+      one: '1 attribut',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get mdocPresent => 'Présenter';
 
   @override
@@ -3655,6 +3715,30 @@ class AppLocalizationsFr extends AppLocalizations {
   String get scanTabScan => 'Scanner';
 
   @override
+  String get mdocReadTab => 'Lire';
+
+  @override
   String get policyViolation =>
       'Ce service ne respecte pas les exigences de sécurité du profil de votre wallet.';
+
+  @override
+  String get proximityBleSettings => 'Proximité (BLE)';
+
+  @override
+  String get proximityBleSettingsSubtitle =>
+      'Modes Bluetooth qu\'un lecteur peut utiliser pour se connecter lors d\'une présentation en personne. Gardez les deux sauf si un lecteur n\'arrive pas à se connecter. Un mode reste toujours activé.';
+
+  @override
+  String get proximityBlePeripheralServer => 'Serveur périphérique';
+
+  @override
+  String get proximityBlePeripheralServerSubtitle =>
+      'Le lecteur se connecte à votre téléphone.';
+
+  @override
+  String get proximityBleCentralClient => 'Client central';
+
+  @override
+  String get proximityBleCentralClientSubtitle =>
+      'Votre téléphone se connecte au lecteur.';
 }

@@ -22,6 +22,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/lang/cubit/lang_state.dart';
 import 'package:altme/matrix_notification/cubit/matrix_notification_cubit.dart';
+import 'package:altme/mdoc_proximity/cubit/custom_reader_requests_cubit.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/route/route.dart';
@@ -40,6 +41,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:protocol_trace/protocol_trace.dart';
 import 'package:secure_storage/secure_storage.dart';
 
 class App extends StatelessWidget {
@@ -72,6 +74,10 @@ class App extends StatelessWidget {
                 LangCubit(secureStorageProvider: getSecureStorage),
           ),
           BlocProvider<RouteCubit>(create: (context) => RouteCubit()),
+          BlocProvider<CustomReaderRequestsCubit>(
+            create: (context) =>
+                CustomReaderRequestsCubit(secureStorage: secureStorageProvider),
+          ),
           BlocProvider<BeaconCubit>(
             create: (context) => BeaconCubit(beacon: Beacon()),
           ),
@@ -307,56 +313,65 @@ class MaterialAppDefinition extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LangCubit, LangState>(
-      builder: (context, state) {
-        if (state.locale == const Locale('en')) {
-          context.read<LangCubit>().checkLocale();
-        }
+    // The protocol trace follows developer mode, switched on or off here and
+    // when the profile loads (it can hide developer mode).
+    return BlocListener<ProfileCubit, ProfileState>(
+      listenWhen: (previous, current) =>
+          current.status == AppStatus.success &&
+          current.model.isDeveloperMode != (ProtocolTrace.current != null),
+      listener: (context, state) =>
+          setProtocolTraceEnabled(enabled: state.model.isDeveloperMode),
+      child: BlocBuilder<LangCubit, LangState>(
+        builder: (context, state) {
+          if (state.locale == const Locale('en')) {
+            context.read<LangCubit>().checkLocale();
+          }
 
-        return BlocBuilder<ThemeCubit, ThemeState>(
-          builder: (themeContext, themeState) {
-            return BlocBuilder<ProfileCubit, ProfileState>(
-              buildWhen: (previousState, currentState) =>
-                  currentState.status == AppStatus.success,
-              builder: (profileContext, profileState) {
-                return MaterialApp(
-                  locale: state.locale,
-                  title: 'AltMe',
-                  theme: AppTheme.seedThemeData(
-                    Brightness.light,
-                    profileState
-                        .model
-                        .profileSetting
-                        .generalOptions
-                        .primaryColor,
-                  ),
-                  darkTheme: AppTheme.seedThemeData(
-                    Brightness.dark,
-                    profileState
-                        .model
-                        .profileSetting
-                        .generalOptions
-                        .primaryColor,
-                  ),
-                  navigatorObservers: [MyRouteObserver(context)],
-                  themeMode: themeState.themeMode,
-                  localizationsDelegates: const [
-                    AppLocalizations.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  supportedLocales: AppLocalizations.supportedLocales,
-                  home: const SplashPage(),
-                  onUnknownRoute: (settings) => MaterialPageRoute(
-                    builder: (context) => const PageNotFound(),
-                  ),
-                );
-              },
-            );
-          },
-        );
-      },
+          return BlocBuilder<ThemeCubit, ThemeState>(
+            builder: (themeContext, themeState) {
+              return BlocBuilder<ProfileCubit, ProfileState>(
+                buildWhen: (previousState, currentState) =>
+                    currentState.status == AppStatus.success,
+                builder: (profileContext, profileState) {
+                  return MaterialApp(
+                    locale: state.locale,
+                    title: 'AltMe',
+                    theme: AppTheme.seedThemeData(
+                      Brightness.light,
+                      profileState
+                          .model
+                          .profileSetting
+                          .generalOptions
+                          .primaryColor,
+                    ),
+                    darkTheme: AppTheme.seedThemeData(
+                      Brightness.dark,
+                      profileState
+                          .model
+                          .profileSetting
+                          .generalOptions
+                          .primaryColor,
+                    ),
+                    navigatorObservers: [MyRouteObserver(context)],
+                    themeMode: themeState.themeMode,
+                    localizationsDelegates: const [
+                      AppLocalizations.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    supportedLocales: AppLocalizations.supportedLocales,
+                    home: const SplashPage(),
+                    onUnknownRoute: (settings) => MaterialPageRoute(
+                      builder: (context) => const PageNotFound(),
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

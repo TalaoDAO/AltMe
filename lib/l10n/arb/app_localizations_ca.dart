@@ -3509,22 +3509,18 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mdocProximityScanQrCode => 'Let the reader scan this QR code';
 
   @override
-  String get mdocProximityWaitingForTap => 'Hold your phone against the reader';
-
-  @override
   String get mdocProximityConnected =>
       'Reader connected, waiting for its request…';
 
   @override
-  String get mdocProximityRequestTitle => 'The reader asks for';
+  String get mdocProximityRequestedBy => 'Requested by';
 
   @override
-  String get mdocProximityUnverifiedReader =>
-      'The identity of this reader is not verified.';
+  String get mdocProximityUnknownReader => 'Unknown reader';
 
   @override
   String get mdocProximityDocumentUnavailable =>
-      'Cannot be shared in this session';
+      'You don\'t have the requested attestation';
 
   @override
   String get mdocProximityWillRetain => 'Kept by the reader';
@@ -3554,17 +3550,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mdocProximityReaderDisconnected => 'The reader disconnected.';
 
   @override
-  String get mdocProximityNfcUnavailable =>
-      'NFC is turned off. Use the QR code instead.';
+  String get mdocProximityChooseAttestation => 'Attestation to share';
 
   @override
   String get mdocProximityError => 'The presentation failed.';
-
-  @override
-  String get mdocProximityTapInstead => 'Tap the reader instead';
-
-  @override
-  String get mdocProximityQrCodeInstead => 'Show a QR code instead';
 
   @override
   String get mdocReaderTitle => 'Read in person';
@@ -3600,15 +3589,87 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mdocReaderResponseErrors => 'Response';
 
   @override
-  String get mdocReaderRequestsTitle => 'Reader';
+  String get mdocReaderRequestsTitle => 'Lector';
 
   @override
   String get mdocReaderRequestsSubtitle =>
-      'Choose what to ask for, then scan the holder\'s QR code.';
+      'Trieu què voleu demanar i, tot seguit, escanegeu el codi QR del titular.';
 
   @override
   String get mdocReaderNotHolderQrCode =>
       'This is not a wallet QR code to read in person.';
+
+  @override
+  String get mdocReaderMyRequests => 'Les meves sol·licituds';
+
+  @override
+  String get mdocReaderAddRequest => 'Afegeix una sol·licitud';
+
+  @override
+  String get mdocReaderRequestNewTitle => 'Nova sol·licitud';
+
+  @override
+  String get mdocReaderRequestEditTitle => 'Editar sol·licitud';
+
+  @override
+  String get mdocReaderRequestName => 'Nom';
+
+  @override
+  String get mdocReaderRequestRequired => 'Obligatori';
+
+  @override
+  String mdocReaderRequestDocument(int number) {
+    return 'Document $number';
+  }
+
+  @override
+  String get mdocReaderRequestAddDocument => 'Afegeix un document';
+
+  @override
+  String get mdocReaderRequestDocType => 'Tipus de document';
+
+  @override
+  String get mdocReaderRequestNameSpace => 'Espai de noms';
+
+  @override
+  String get mdocReaderRequestClaims => 'Atributs';
+
+  @override
+  String get mdocReaderRequestRetain => 'Conservar';
+
+  @override
+  String get mdocReaderRequestRetainHint =>
+      'Conservar indica al titular que en guardeu el valor.';
+
+  @override
+  String get mdocReaderRequestNoClaims => 'Cap seleccionat';
+
+  @override
+  String get mdocReaderRequestClaimsRequired => 'Trieu almenys un atribut.';
+
+  @override
+  String get mdocReaderRequestAddClaim => 'Afegeix un atribut';
+
+  @override
+  String get mdocReaderRequestClaimHint => 'Identificador, p. ex. family_name';
+
+  @override
+  String get mdocReaderRequestSuggestedClaims => 'Atributs suggerits';
+
+  @override
+  String get mdocReaderRequestDeleteTitle =>
+      'Voleu esborrar aquesta sol·licitud?';
+
+  @override
+  String mdocReaderRequestClaimCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count atributs',
+      one: '1 atribut',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get mdocPresent => 'Present';
@@ -3621,6 +3682,30 @@ class AppLocalizationsCa extends AppLocalizations {
   String get scanTabScan => 'Scan';
 
   @override
+  String get mdocReadTab => 'Read';
+
+  @override
   String get policyViolation =>
       'Aquest servei no compleix els requisits de seguretat del perfil de la vostra cartera.';
+
+  @override
+  String get proximityBleSettings => 'Proximitat (BLE)';
+
+  @override
+  String get proximityBleSettingsSubtitle =>
+      'Modes Bluetooth que un lector pot fer servir per connectar-se quan presenteu en persona. Mantingueu-los tots dos tret que un lector no es pugui connectar. Sempre en queda un d\'activat.';
+
+  @override
+  String get proximityBlePeripheralServer => 'Servidor perifèric';
+
+  @override
+  String get proximityBlePeripheralServerSubtitle =>
+      'El lector es connecta al vostre telèfon.';
+
+  @override
+  String get proximityBleCentralClient => 'Client central';
+
+  @override
+  String get proximityBleCentralClientSubtitle =>
+      'El vostre telèfon es connecta al lector.';
 }
