@@ -1,0 +1,35 @@
+// A test PKI, made with openssl: a P-256 IACA, a document signer it
+// issued with a subjectAltName (URI https://issuer.example/mdl, DNS
+// issuer.example) and an issuerAltName (an email), and a self-signed signer
+// no root issued. Base64 DER.
+
+/// The IACA.
+const testIaca =
+    'MIIBkzCCATigAwIBAgIUNSqmXq7mMK6WTEgVO9iRMayRfwEwCgYIKoZIzj0EAwIwNTELMA'
+    'kGA1UEBhMCRlIxDTALBgNVBAoMBFRlc3QxFzAVBgNVBAMMDlRlc3QgbWRvYyBJQUNBMB4X'
+    'DTI2MTAyNzExMjg1OFoXDTQ2MTAyMjExMjg1OFowNTELMAkGA1UEBhMCRlIxDTALBgNVBA'
+    'oMBFRlc3QxFzAVBgNVBAMMDlRlc3QgbWRvYyBJQUNBMFkwEwYHKoZIzj0CAQYIKoZIzj0D'
+    'AQcDQgAE2gIfNEoM1QTvi3WT/85sHnVPYzxlMHuzn4L1e/5WGX0CVhZtFA8Vkx2AiENmjN'
+    'OQvaS/8oAK8CcMtlQFvXGYgaMmMCQwEgYDVR0TAQH/BAgwBgEB/wIBADAOBgNVHQ8BAf8E'
+    'BAMCAQYwCgYIKoZIzj0EAwIDSQAwRgIhAI9gNvI9/wIPYfdxUCvVBBgmZocS7dDR/l7pIl'
+    '0gxPeLAiEArJZ5CGcwZfPf9mvw4QbY2d6FCERsEUusbs+qR1zBfpA=';
+/// The document signer the IACA issued.
+const testDs =
+    'MIIBwTCCAWegAwIBAgIUBaqinWXdh8HyyJzMRFGjeZ2eWnswCgYIKoZIzj0EAwIwNTELMA'
+    'kGA1UEBhMCRlIxDTALBgNVBAoMBFRlc3QxFzAVBgNVBAMMDlRlc3QgbWRvYyBJQUNBMB4X'
+    'DTI2MTAyNzExMjg1OFoXDTQ1MTIyNjExMjg1OFowLjELMAkGA1UEBhMCRlIxDTALBgNVBA'
+    'oMBFRlc3QxEDAOBgNVBAMMB1Rlc3QgRFMwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAARE'
+    'FB2Bqz45u4V2Cf3PsIqiUxzUVVHO1PUzVyZ54tPdoyhzSgndGbb3Nlgh/lJ/iZcSdfParJ'
+    '74inWUvUg84H1mo1wwWjA1BgNVHREELjAshhpodHRwczovL2lzc3Vlci5leGFtcGxlL21k'
+    'bIIOaXNzdWVyLmV4YW1wbGUwIQYDVR0SBBowGIEWY29udGFjdEBpc3N1ZXIuZXhhbXBsZT'
+    'AKBggqhkjOPQQDAgNIADBFAiEAvl4B//tQTkOYMzC7i1/992xoMvXATVwvw2fZ/9tWq7oC'
+    'IGrFfAvgC6eyhpeX/gc0pURXfRj76h30EVEKvugNKiuC';
+/// A self-signed document signer.
+const rogueDs =
+    'MIIBWTCB/wIUJccSUvErv5z76rpW+gk5/picDfMwCgYIKoZIzj0EAwIwLzELMAkGA1UEBh'
+    'MCRlIxDTALBgNVBAoMBFRlc3QxETAPBgNVBAMMCFJvZ3VlIERTMB4XDTI2MTAyNzExMjg1'
+    'OFoXDTQ1MTIyNjExMjg1OFowLzELMAkGA1UEBhMCRlIxDTALBgNVBAoMBFRlc3QxETAPBg'
+    'NVBAMMCFJvZ3VlIERTMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEYBGCf9PhZzn5xxf3'
+    'UUydyflmI+B756VqSvY7TthgNU/pcqN72TWGHCDNHFgAqT+ZzIMaLAW8aYEmQFnRxvjrSD'
+    'AKBggqhkjOPQQDAgNJADBGAiEAiM6+ZYD4ueh7CvkKRRW50qJ7vJCXs86x/269Smhg1loC'
+    'IQCAN1Ds35OELgmYIuAYPvJltM3yvkrV+t3yHNnzRKX8Pg==';

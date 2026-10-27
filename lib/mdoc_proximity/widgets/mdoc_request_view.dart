@@ -5,9 +5,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/mdoc_proximity/helpers/mdoc_credential_model.dart';
 import 'package:altme/mdoc_proximity/helpers/proximity_reader.dart';
-import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdoc_proximity/mdoc_proximity.dart';
 
 /// What a reader asks for: who asks and whether the trusted list knows it,
@@ -266,9 +264,6 @@ class _DocumentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final credential = this.credential;
-    final picture = credential == null
-        ? null
-        : SelectiveDisclosure(credential).getPicture;
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 4),
@@ -287,20 +282,8 @@ class _DocumentCard extends StatelessWidget {
                 title: Text(docType),
                 subtitle: Text(context.l10n.mdocProximityDocumentUnavailable),
               )
-            else if (picture != null)
-              PictureDisplay(credentialImage: picture)
             else
-              CredentialDisplay(
-                credentialModel: credential,
-                credDisplayType: CredDisplayType.List,
-                profileSetting: context
-                    .read<ProfileCubit>()
-                    .state
-                    .model
-                    .profileSetting,
-                isDiscover: false,
-                showPortrait: true,
-              ),
+              CredentialCardImage(credentialModel: credential),
             if (selector != null) ...[const SizedBox(height: 8), selector!],
             const SizedBox(height: 12),
             ...elements,
