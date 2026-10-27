@@ -60,14 +60,6 @@ class SSIView extends StatelessWidget {
               Navigator.of(context).push<void>(SearchPage.route());
             },
           ),
-          DrawerItem(
-            title: l10n.proximityBleSettings,
-            onTap: () {
-              Navigator.of(
-                context,
-              ).push<void>(ProximityBleSettingsPage.route());
-            },
-          ),
           if (context.read<ProfileCubit>().state.model.profileType ==
               ProfileType.custom) ...[
             DrawerItem(

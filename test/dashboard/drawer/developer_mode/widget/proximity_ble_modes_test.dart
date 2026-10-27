@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../../../../helpers/helpers.dart';
+import '../../../../helpers/helpers.dart';
 
 class _MockProfileCubit extends MockCubit<ProfileState>
     implements ProfileCubit {}
@@ -47,7 +47,9 @@ void main() {
     return tester.pumpApp(
       BlocProvider<ProfileCubit>.value(
         value: profileCubit,
-        child: const ProximityBleSettingsPage(),
+        child: const Scaffold(
+          body: SingleChildScrollView(child: ProximityBleModes()),
+        ),
       ),
     );
   }
@@ -60,7 +62,7 @@ void main() {
         ),
       );
 
-  group('ProximityBleSettingsPage', () {
+  group('ProximityBleModes', () {
     testWidgets('shows both modes ticked by default', (tester) async {
       await pumpPage(tester, ProfileState(model: ProfileModel.empty()));
 

@@ -12,18 +12,12 @@ class DrawerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
-        return DrawerView(profileCubit: context.read<ProfileCubit>());
-      },
-    );
+    return const DrawerView();
   }
 }
 
 class DrawerView extends StatelessWidget {
-  const DrawerView({super.key, required this.profileCubit});
-
-  final ProfileCubit profileCubit;
+  const DrawerView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -127,32 +121,21 @@ class DrawerView extends StatelessWidget {
                         ),
                         const SizedBox(height: Sizes.spaceSmall),
                       ],
+                      // Debug builds keep the menu for the protocol trace logs
+                      // even when the profile hides developer mode.
                       if (profileModel
-                          .profileSetting
-                          .settingsMenu
-                          .displayDeveloperMode) ...[
+                              .profileSetting
+                              .settingsMenu
+                              .displayDeveloperMode ||
+                          ProtocolTrace.current != null) ...[
                         DrawerCategoryItem(
                           title: l10n.developerMode,
                           subTitle: l10n.developerModeSubtitle,
-                          trailing: SizedBox(
-                            height: 25,
-                            child: BlocBuilder<ProfileCubit, ProfileState>(
-                              builder: (context, state) {
-                                return Switch(
-                                  key: const Key('developerMode'),
-                                  onChanged: (value) async {
-                                    await profileCubit.setDeveloperModeStatus(
-                                      enabled: value,
-                                    );
-                                  },
-                                  value: state.model.isDeveloperMode,
-                                  activeThumbColor: Theme.of(
-                                    context,
-                                  ).colorScheme.primary,
-                                );
-                              },
-                            ),
-                          ),
+                          onClick: () {
+                            Navigator.of(
+                              context,
+                            ).push<void>(DeveloperModeMenu.route());
+                          },
                         ),
                         const SizedBox(height: Sizes.spaceSmall),
                       ],
@@ -192,18 +175,6 @@ class DrawerView extends StatelessWidget {
                             Navigator.of(
                               context,
                             ).push<void>(ActivityLogPage.route());
-                          },
-                        ),
-                        const SizedBox(height: Sizes.spaceSmall),
-                      ],
-                      if (ProtocolTrace.current != null) ...[
-                        DrawerCategoryItem(
-                          title: l10n.protocolTraceLogs,
-                          subTitle: l10n.protocolTraceLogsDescription,
-                          onClick: () {
-                            Navigator.of(
-                              context,
-                            ).push<void>(ProtocolTraceLogsPage.route());
                           },
                         ),
                         const SizedBox(height: Sizes.spaceSmall),
