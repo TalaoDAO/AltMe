@@ -128,14 +128,34 @@ class MdocReaderResultView extends StatelessWidget {
         for (final document in result.documents) ...[
           Row(
             children: [
-              Icon(Icons.verified_outlined, color: colorScheme.primary),
+              Icon(
+                document.isIssuerTrusted
+                    ? Icons.verified_outlined
+                    : Icons.gpp_maybe_outlined,
+                color: document.isIssuerTrusted
+                    ? colorScheme.primary
+                    : colorScheme.error,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(document.docType, style: textTheme.titleMedium),
               ),
             ],
           ),
-          Text(l10n.mdocReaderDocumentVerified, style: textTheme.bodySmall),
+          const SizedBox(height: 8),
+          // The document is read either way; only the badge differs, as for an
+          // OIDC4VP issuer missing from the trusted list.
+          TrustBadge(
+            isTrusted: document.isIssuerTrusted,
+            trustedLabel: l10n.trustedIssuerLabel,
+            notTrustedLabel: l10n.issuerNotVerifiedLabel,
+            notTrustedDescription: l10n.issuerNotVerifiedDescription,
+          ),
+          if (document.isIssuerTrusted)
+            Text(l10n.mdocReaderDocumentVerified, style: textTheme.bodySmall)
+          else
+            for (final error in document.issuerTrustErrors)
+              Text(error, style: textTheme.bodySmall),
           for (final nameSpace in document.nameSpaces.values)
             for (final MapEntry(:key, :value) in nameSpace.entries)
               _ElementRow(identifier: key, value: value),

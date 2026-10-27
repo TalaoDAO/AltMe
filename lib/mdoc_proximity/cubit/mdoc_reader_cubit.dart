@@ -61,13 +61,8 @@ class MdocReaderCubit extends Cubit<ReaderState> {
     switch (state) {
       case ReaderSuccess(:final result):
         _log.i(
-          'reader: success, verified: ${[
-            for (final document in result.documents)
-              '${document.docType} ${[
-                for (final elements in document.nameSpaces.values)
-                  ...elements.keys,
-              ]}',
-          ]}, failed: ${result.failedDocTypes}, '
+          'reader: success, verified: ${result.documents.map(_describe)}, '
+          'failed: ${result.failedDocTypes}, '
           'documentErrors: ${result.documentErrors}, '
           'responseErrors: ${result.responseErrors}, '
           'unrequested: ${result.unrequestedDocTypes}',
@@ -78,6 +73,16 @@ class MdocReaderCubit extends Cubit<ReaderState> {
         _log.i('reader: $state');
     }
     emit(state);
+  }
+
+  /// The document type, its element identifiers and whether its issuer is
+  /// trusted, for the log.
+  static String _describe(ReaderDocument document) {
+    final elements = [
+      for (final nameSpace in document.nameSpaces.values) ...nameSpace.keys,
+    ];
+    return '${document.docType} $elements, issuer trusted: '
+        '${document.isIssuerTrusted} ${document.issuerTrustErrors}';
   }
 
   @override
