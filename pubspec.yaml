@@ -1,7 +1,7 @@
 name: altme
 description: AltMe Flutter App
 resolution: workspace
-version: 3.7.9+5716
+version: 4.0.0+5717
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 environment:
