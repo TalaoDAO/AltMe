@@ -50,12 +50,17 @@ class QueryByExampleCredentialPickPage extends StatelessWidget {
             .read<QueryByExampleCubit>()
             .state
             .credentialQuery;
-        return QueryByExampleCredentialPickCubit(
-          credentialQuery: credentialQueryList.isNotEmpty
-              ? credentialQueryList[credentialQueryIndex]
-              : null,
-          credentialList: context.read<CredentialsCubit>().state.credentials,
-        );
+        final queryByExampleCredentialPickCubit =
+            QueryByExampleCredentialPickCubit(
+              credentialQuery: credentialQueryList.isNotEmpty
+                  ? credentialQueryList[credentialQueryIndex]
+                  : null,
+              credentialList: context
+                  .read<CredentialsCubit>()
+                  .state
+                  .credentials,
+            );
+        return queryByExampleCredentialPickCubit;
       },
       child: QueryByExampleCredentialPickView(
         uri: uri,

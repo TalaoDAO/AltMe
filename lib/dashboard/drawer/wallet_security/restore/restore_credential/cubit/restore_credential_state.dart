@@ -18,25 +18,27 @@ class RestoreCredentialState extends Equatable {
   final String? backupFilePath;
 
   RestoreCredentialState loading() {
-    return copyWith(
+    final loadingState = copyWith(
       status: AppStatus.loading,
       recoveredCredentialLength: recoveredCredentialLength,
     );
+    return loadingState;
   }
 
   RestoreCredentialState error({required MessageHandler messageHandler}) {
-    return copyWith(
+    final errorState = copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       recoveredCredentialLength: recoveredCredentialLength,
     );
+    return errorState;
   }
 
   RestoreCredentialState success({
     MessageHandler? messageHandler,
     int? recoveredCredentialLength,
   }) {
-    return copyWith(
+    final successState = copyWith(
       status: AppStatus.success,
       message: messageHandler == null
           ? null
@@ -44,6 +46,7 @@ class RestoreCredentialState extends Equatable {
       recoveredCredentialLength:
           recoveredCredentialLength ?? this.recoveredCredentialLength,
     );
+    return successState;
   }
 
   RestoreCredentialState copyWith({
@@ -52,13 +55,14 @@ class RestoreCredentialState extends Equatable {
     int? recoveredCredentialLength,
     String? backupFilePath,
   }) {
-    return RestoreCredentialState(
+    final updatedState = RestoreCredentialState(
       status: status ?? this.status,
       message: message ?? this.message,
       recoveredCredentialLength:
           recoveredCredentialLength ?? this.recoveredCredentialLength,
       backupFilePath: backupFilePath ?? this.backupFilePath,
     );
+    return updatedState;
   }
 
   Map<String, dynamic> toJson() => _$RestoreCredentialStateToJson(this);

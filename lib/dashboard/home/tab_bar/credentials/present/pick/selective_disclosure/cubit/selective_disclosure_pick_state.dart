@@ -26,13 +26,14 @@ class SelectiveDisclosureState extends Equatable {
     String? limitDisclosure,
     Map<String, dynamic>? filters,
   }) {
-    return SelectiveDisclosureState(
+    final newState = SelectiveDisclosureState(
       selectedClaimsKeyIds: selectedClaimsKeyIds ?? this.selectedClaimsKeyIds,
       selectedSDIndexInJWT: selectedSDIndexInJWT ?? this.selectedSDIndexInJWT,
       limitDisclosure: limitDisclosure ?? this.limitDisclosure,
       filters: filters ?? this.filters,
       message: message,
     );
+    return newState;
   }
 
   Map<String, dynamic> toJson() => _$SelectiveDisclosureStateToJson(this);
@@ -58,10 +59,11 @@ class SelectedClaimsKeyIds extends Equatable {
   final bool isSelected;
 
   SelectedClaimsKeyIds copyWith({String? keyId, bool? isSelected}) {
-    return SelectedClaimsKeyIds(
+    final newClaimsKeyIds = SelectedClaimsKeyIds(
       keyId: keyId ?? this.keyId,
       isSelected: isSelected ?? this.isSelected,
     );
+    return newClaimsKeyIds;
   }
 
   Map<String, dynamic> toJson() => _$SelectedClaimsKeyIdsToJson(this);

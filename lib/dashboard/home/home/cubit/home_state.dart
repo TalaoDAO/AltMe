@@ -20,11 +20,12 @@ class HomeState extends Equatable {
   final dynamic data;
 
   HomeState loading() {
-    return HomeState(
+    final loadingState = HomeState(
       status: AppStatus.loading,
       homeStatus: homeStatus,
       link: link,
     );
+    return loadingState;
   }
 
   HomeState copyWith({
@@ -35,13 +36,14 @@ class HomeState extends Equatable {
     dynamic data,
     bool? needToVerifyMnemonics,
   }) {
-    return HomeState(
+    final homeState = HomeState(
       status: status,
       message: message,
       homeStatus: homeStatus ?? this.homeStatus,
       link: link ?? this.link,
       data: data ?? this.data,
     );
+    return homeState;
   }
 
   Map<String, dynamic> toJson() => _$HomeStateToJson(this);

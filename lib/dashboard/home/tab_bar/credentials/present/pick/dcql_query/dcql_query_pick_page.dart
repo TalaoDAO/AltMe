@@ -5,8 +5,10 @@ import 'package:altme/app/shared/helper_functions/get_display.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_helper.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_mdoc_helper.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
+import 'package:altme/mdoc_proximity/helpers/mdoc_credential_model.dart';
 import 'package:altme/oidc4vc/model/verifier_trust_info.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
@@ -43,7 +45,7 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
     required List<CredentialModel> credentialsToBePresented,
     VerifierTrustInfo? verifierTrustInfo,
   }) {
-    return MaterialPageRoute<void>(
+    final pageRoute = MaterialPageRoute<void>(
       builder: (context) => DcqlQueryOfferPickPage(
         uri: uri,
         credential: credential,
@@ -54,6 +56,7 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
       ),
       settings: const RouteSettings(name: '/DcqlQueryOfferPickPage'),
     );
+    return pageRoute;
   }
 
   @override
@@ -61,7 +64,7 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final profileModel = context.read<ProfileCubit>().state.model;
-        return CredentialManifestPickCubit(
+        final credentialManifestPickCubit = CredentialManifestPickCubit(
           credential: credential,
           credentialList: context.read<CredentialsCubit>().state.credentials,
           inputDescriptorIndex: inputDescriptorIndex,
@@ -74,14 +77,32 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
               [],
           profileType: profileModel.profileType,
         );
+        return credentialManifestPickCubit;
       },
-      child: DcqlQueryOfferPickView(
-        uri: uri,
-        credential: credential,
-        issuer: issuer,
-        inputDescriptorIndex: inputDescriptorIndex,
-        credentialsToBePresented: credentialsToBePresented,
-        verifierTrustInfo: verifierTrustInfo,
+      // The app-wide scan listener pops the dialog it shows on an error, so
+      // this page shows the message itself, like the other pick pages.
+      child: BlocListener<ScanCubit, ScanState>(
+        listener: (context, scanState) {
+          if (scanState.status == ScanStatus.loading) {
+            LoadingView().show(context: context);
+          } else {
+            LoadingView().hide();
+          }
+          if (scanState.message != null) {
+            AlertMessage.showStateMessage(
+              context: context,
+              stateMessage: scanState.message!,
+            );
+          }
+        },
+        child: DcqlQueryOfferPickView(
+          uri: uri,
+          credential: credential,
+          issuer: issuer,
+          inputDescriptorIndex: inputDescriptorIndex,
+          credentialsToBePresented: credentialsToBePresented,
+          verifierTrustInfo: verifierTrustInfo,
+        ),
       ),
     );
   }
@@ -110,6 +131,10 @@ class DcqlQueryOfferPickView extends StatefulWidget {
 }
 
 class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
+  /// Set once Confirm is pressed: the button is disabled from then on, so a
+  /// presentation cannot be sent twice.
+  bool _presenting = false;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -128,15 +153,21 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       final query = DcqlCredentialQuery.fromJson(rawQuery);
       final credentials = context.read<CredentialsCubit>().state.credentials;
       final candidates = <CredentialModel>[];
-      final packageFormatCredentials = <SdJwtDigitalCredential>[];
-      for (final e in credentials.where(
-        (e) => e.format == VCFormatType.dcSdJWT.vpValue,
-      )) {
+      final packageFormatCredentials = <DigitalCredential>[];
+      for (final e in credentials) {
         try {
-          packageFormatCredentials.add(
-            SdJwtDigitalCredential.fromSdJwt(sdJwtToken: e.jwt!),
-          );
-          candidates.add(e);
+          if (e.format == VCFormatType.dcSdJWT.vpValue) {
+            packageFormatCredentials.add(
+              SdJwtDigitalCredential.fromSdJwt(sdJwtToken: e.jwt!),
+            );
+            candidates.add(e);
+          } else if (e.canPresentInProximity) {
+            // an mdoc bound to a platform key, which signs DeviceAuth
+            final mdoc = mdocDigitalCredential(e);
+            if (mdoc == null) continue;
+            packageFormatCredentials.add(mdoc);
+            candidates.add(e);
+          }
         } catch (_) {
           // skip candidates that fail to parse rather than aborting the
           // whole screen
@@ -167,15 +198,27 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
           child: Container(
             padding: const EdgeInsets.all(16),
             child: MyElevatedButton(
-              onPressed: () {
-                present(
-                  context: context,
-                  uri: widget.uri,
-                  result: result,
-                  packageFormatCredentials: packageFormatCredentials,
-                  candidates: candidates,
-                );
-              },
+              onPressed: _presenting
+                  ? null
+                  : () async {
+                      setState(() => _presenting = true);
+                      try {
+                        await present(
+                          context: context,
+                          uri: widget.uri,
+                          result: result,
+                          packageFormatCredentials: packageFormatCredentials,
+                          candidates: candidates,
+                        );
+                      } catch (e) {
+                        // Nothing was sent (key, VP token): the user may try
+                        // again.
+                        if (mounted) {
+                          setState(() => _presenting = false);
+                          context.read<ScanCubit>().emitError(e);
+                        }
+                      }
+                    },
               text: l10n.confirm,
             ),
           ),
@@ -190,7 +233,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
     required BuildContext context,
     required Uri uri,
     required DcqlQueryResult result,
-    required List<SdJwtDigitalCredential> packageFormatCredentials,
+    required List<DigitalCredential> packageFormatCredentials,
     required List<CredentialModel> candidates,
   }) async {
     final profileCubit = context.read<ProfileCubit>();
@@ -206,6 +249,21 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       didKeyType: customOidc4vcProfile.defaultDid,
     );
 
+    // An mdoc's DeviceAuth signs over the request: client_id, nonce,
+    // response_uri and, when encrypted, the verifier's encryption key.
+    final presentsMdoc = result.verifiableCredentials.values.any(
+      (matches) => matches.any((c) => c is MdocDigitalCredential),
+    );
+    final mdocSessionTranscript = presentsMdoc
+        ? oid4vpSessionTranscript(
+            uri: uri,
+            clientMetadata: await getClientMetada(
+              client: context.read<ScanCubit>().client,
+              uri: uri,
+            ),
+          )
+        : null;
+
     final vpToken = await buildVpToken(
       result,
       packageFormatCredentials,
@@ -213,6 +271,8 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       uri,
       jsonDecode(privateKeyString) as Map<String, dynamic>,
       customOidc4vcProfile.proofHeader,
+      credentialKeySigner: profileCubit.credentialKeySigner,
+      mdocSessionTranscript: mdocSessionTranscript,
     );
 
     await context.read<ScanCubit>().presentOidc4vpFinal(
@@ -305,7 +365,7 @@ class _DcqlQueryFailureView extends StatelessWidget {
   ) {
     final claims = credential.claims;
     if (claims != null && claims.isNotEmpty) {
-      return claims.map((claim) {
+      final labels = claims.map((claim) {
         final path = claim.path.whereType<String>().toList();
         final credentialModel = credentialModels
             .cast<CredentialModel?>()
@@ -325,10 +385,15 @@ class _DcqlQueryFailureView extends StatelessWidget {
               orElse: () => null,
             );
         if (credentialModel != null) {
-          return _translatedTitle(credentialModel, claim.path, languageCode);
+          final translatedTitle = _translatedTitle(
+            credentialModel,
+            claim.path,
+            languageCode,
+          );
+          return translatedTitle;
         }
         final value = path.isEmpty ? credential.id : path.last;
-        return value
+        final formattedValue = value
             .replaceAll(RegExp('([a-z])([A-Z])'), r'$1 $2')
             .replaceAll(RegExp('[_-]+'), ' ')
             .split(' ')
@@ -338,7 +403,9 @@ class _DcqlQueryFailureView extends StatelessWidget {
                   : '${word[0].toUpperCase()}${word.substring(1)}',
             )
             .join(' ');
+        return formattedValue;
       });
+      return labels;
     }
     return [credential.meta?.vctValues?.join(', ') ?? credential.id];
   }
@@ -373,7 +440,10 @@ String _translatedTitle(
       }
     }
   }
-  return path.map((item) => item == null ? '*' : item.toString()).join(' > ');
+  final joinedPath = path
+      .map((item) => item == null ? '*' : item.toString())
+      .join(' > ');
+  return joinedPath;
 }
 
 class VerifiableCredentialsColumn extends StatelessWidget {
@@ -385,7 +455,7 @@ class VerifiableCredentialsColumn extends StatelessWidget {
   });
 
   final DcqlQueryResult result;
-  final List<SdJwtDigitalCredential> packageFormatCredentials;
+  final List<DigitalCredential> packageFormatCredentials;
   final List<CredentialModel> candidates;
 
   // Label a missing (zero-match) credential-query requirement: the claims
@@ -394,18 +464,20 @@ class VerifiableCredentialsColumn extends StatelessWidget {
   static String _missingCredentialLabel(DcqlCredential missing) {
     final claims = missing.claims;
     if (claims != null && claims.isNotEmpty) {
-      return claims
+      final claimLabels = claims
           .map(
             (c) =>
                 c.path.map((s) => s == null ? '*' : s.toString()).join(' › '),
           )
           .join(', ');
+      return claimLabels;
     }
     final vctValues = missing.meta?.vctValues;
     if (vctValues != null && vctValues.isNotEmpty) {
-      return vctValues.join(', ');
+      final joinedVctValues = vctValues.join(', ');
+      return joinedVctValues;
     }
-    return missing.id;
+    return missing.meta?.doctypeValue ?? missing.id;
   }
 
   @override
@@ -503,7 +575,6 @@ class _CredentialTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final languageCode = context.read<LangCubit>().state.locale.languageCode;
     final selectiveDisclosure = SelectiveDisclosure(credentialModel);
-    final credentialImage = selectiveDisclosure.getPicture;
 
     // Top-level keys already covered by the DCQL-disclosed claims below,
     // so they aren't duplicated among the "not in a disclosure" claims.
@@ -527,45 +598,26 @@ class _CredentialTile extends StatelessWidget {
 
     final onSurface = Theme.of(context).colorScheme.onSurface;
 
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (credentialImage != null)
-              PictureDisplay(credentialImage: credentialImage)
-            else
-              CredentialDisplay(
-                credentialModel: credentialModel,
-                credDisplayType: CredDisplayType.List,
-                profileSetting: profileSetting,
-                isDiscover: false,
-              ),
-            const SizedBox(height: 20),
-            for (final path in requestedPaths)
-              CredentialField(
-                title: _translatedTitle(credentialModel, path, languageCode),
-                value: _valueLabel(credential.getValueByPath(path) ?? '—'),
-                titleColor: onSurface,
-                valueColor: onSurface,
-                showVertically: true,
-              ),
-            for (final entry in plainClaims)
-              CredentialField(
-                title: _translatedTitle(credentialModel, [
-                  entry.key,
-                ], languageCode),
-                value: _valueLabel(entry.value),
-                titleColor: onSurface,
-                valueColor: onSurface,
-                showVertically: true,
-              ),
-          ],
-        ),
-      ),
+    return CredentialShareCard(
+      credentialModel: credentialModel,
+      children: [
+        for (final path in requestedPaths)
+          CredentialField(
+            title: _translatedTitle(credentialModel, path, languageCode),
+            value: _valueLabel(credential.getValueByPath(path) ?? '—'),
+            titleColor: onSurface,
+            valueColor: onSurface,
+            showVertically: true,
+          ),
+        for (final entry in plainClaims)
+          CredentialField(
+            title: _translatedTitle(credentialModel, [entry.key], languageCode),
+            value: _valueLabel(entry.value),
+            titleColor: onSurface,
+            valueColor: onSurface,
+            showVertically: true,
+          ),
+      ],
     );
   }
 }

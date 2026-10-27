@@ -43,15 +43,12 @@ class _SplashViewState extends State<SplashView> {
     _appLinks = AppLinks();
 
     // Handle links
-    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+    _linkSubscription = _appLinks.uriLinkStream.listen((uri) async {
       debugPrint('onAppLink: $uri');
-      Timer.periodic(const Duration(seconds: 1), (timer) {
-        if (context.read<SplashCubit>().state.status ==
-            SplashStatus.authenticated) {
-          timer.cancel();
-          processIncomingUri(uri);
-        }
-      });
+      // A link that arrives before the wallet is unlocked waits for it.
+      await context.read<SplashCubit>().whenAuthenticated();
+      if (!mounted) return;
+      await processIncomingUri(uri);
     });
   }
 

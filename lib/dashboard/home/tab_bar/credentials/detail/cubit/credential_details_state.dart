@@ -18,11 +18,13 @@ class CredentialDetailsState extends Equatable {
   final CredentialDetailTabStatus credentialDetailTabStatus;
 
   CredentialDetailsState loading() {
-    return copyWith(status: AppStatus.loading);
+    final loadingState = copyWith(status: AppStatus.loading);
+    return loadingState;
   }
 
   CredentialDetailsState error({required StateMessage message}) {
-    return copyWith(status: AppStatus.error, message: message);
+    final errorState = copyWith(status: AppStatus.error, message: message);
+    return errorState;
   }
 
   CredentialDetailsState copyWith({
@@ -31,13 +33,14 @@ class CredentialDetailsState extends Equatable {
     CredentialStatus? credentialStatus,
     CredentialDetailTabStatus? credentialDetailTabStatus,
   }) {
-    return CredentialDetailsState(
+    final newState = CredentialDetailsState(
       status: status ?? this.status,
       message: message,
       credentialStatus: credentialStatus ?? this.credentialStatus,
       credentialDetailTabStatus:
           credentialDetailTabStatus ?? this.credentialDetailTabStatus,
     );
+    return newState;
   }
 
   Map<String, dynamic> toJson() => _$CredentialDetailsStateToJson(this);

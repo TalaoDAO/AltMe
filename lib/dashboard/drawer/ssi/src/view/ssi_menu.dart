@@ -9,10 +9,11 @@ class SSIMenu extends StatelessWidget {
   const SSIMenu({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/ssiMenu'),
       builder: (_) => const SSIMenu(),
     );
+    return route;
   }
 
   @override

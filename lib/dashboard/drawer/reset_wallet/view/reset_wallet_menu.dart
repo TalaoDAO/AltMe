@@ -8,10 +8,11 @@ class ResetWalletMenu extends StatelessWidget {
   const ResetWalletMenu({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => const ResetWalletMenu(),
       settings: const RouteSettings(name: '/ResetWalletMenu'),
     );
+    return route;
   }
 
   @override

@@ -1,19 +1,50 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/profile/models/profile_setting.dart';
 import 'package:altme/oidc4vc/model/oidc4vci_stack.dart';
-import 'package:altme/trusted_list/model/trusted_list.dart';
 // import 'package:http/http.dart' as http;
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mdoc_proximity/mdoc_proximity.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:trusted_list/trusted_list.dart';
 
 part 'profile.g.dart';
+
+/// What the Default profile, as a reader, can ask a holder for.
+const defaultReaderRequests = [
+  ReaderRequest(
+    id: 'pid-basic',
+    name: 'PID',
+    query: {
+      eudiPidDocType: {
+        eudiPidDocType: {
+          'family_name': false,
+          'given_name': false,
+          'birth_date': false,
+        },
+      },
+    },
+  ),
+  ReaderRequest(
+    id: 'mdl-basic',
+    name: 'mDL',
+    query: {
+      'org.iso.18013.5.1.mDL': {
+        'org.iso.18013.5.1': {
+          'family_name': false,
+          'given_name': false,
+          'birth_date': false,
+          'portrait': false,
+        },
+      },
+    },
+  ),
+];
 
 @JsonSerializable()
 // ignore: must_be_immutable
 class ProfileModel extends Equatable {
   ProfileModel({
-    required this.walletType,
     required this.walletProtectionType,
     required this.isDeveloperMode,
     required this.profileType,
@@ -30,7 +61,6 @@ class ProfileModel extends Equatable {
       _$ProfileModelFromJson(json);
 
   factory ProfileModel.empty() => ProfileModel(
-    walletType: WalletType.personal,
     walletProtectionType: WalletProtectionType.pinCode,
     isDeveloperMode: false,
     profileType: ProfileType.custom,
@@ -38,7 +68,6 @@ class ProfileModel extends Equatable {
   );
 
   factory ProfileModel.defaultOne({
-    required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
     required String? clientId,
@@ -46,7 +75,6 @@ class ProfileModel extends Equatable {
     String? enterpriseWalletName,
   }) => ProfileModel(
     enterpriseWalletName: enterpriseWalletName,
-    walletType: walletType,
     walletProtectionType: walletProtectionType,
     isDeveloperMode: isDeveloperMode,
     profileType: ProfileType.defaultOne,
@@ -102,10 +130,12 @@ class ProfileModel extends Equatable {
             VCFormatType.jwtVcJson,
             VCFormatType.dcSdJWT,
             VCFormatType.ldpVc,
+            VCFormatType.mdoc,
           ],
           displayMode: false,
         ),
       ),
+      readerRequests: defaultReaderRequests,
       settingsMenu: SettingsMenu.initial(),
       version: '',
       walletSecurityOptions: const WalletSecurityOptions(
@@ -119,7 +149,6 @@ class ProfileModel extends Equatable {
   );
 
   factory ProfileModel.diipv5({
-    required WalletType walletType,
     required WalletProtectionType walletProtectionType,
     required bool isDeveloperMode,
     required String? clientId,
@@ -127,7 +156,6 @@ class ProfileModel extends Equatable {
     String? enterpriseWalletName,
   }) => ProfileModel(
     enterpriseWalletName: enterpriseWalletName,
-    walletType: walletType,
     walletProtectionType: walletProtectionType,
     isDeveloperMode: isDeveloperMode,
     profileType: ProfileType.diipv5,
@@ -199,18 +227,20 @@ class ProfileModel extends Equatable {
     ),
   );
 
-  final WalletType walletType;
   final WalletProtectionType walletProtectionType;
   final bool isDeveloperMode;
   final ProfileSetting profileSetting;
   final ProfileType profileType;
   final String? enterpriseWalletName;
+
+  /// Whether an enterprise profile is installed on this wallet: it keeps the
+  /// name of that profile, whichever profile is currently selected.
+  bool get hasEnterpriseProfile => enterpriseWalletName != null;
   late Oidc4VCIStack? oidc4VCIStack;
   final TrustedList? trustedList;
 
   @override
   List<Object?> get props => [
-    walletType,
     walletProtectionType,
     isDeveloperMode,
     profileType,
@@ -223,7 +253,6 @@ class ProfileModel extends Equatable {
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
 
   ProfileModel copyWith({
-    WalletType? walletType,
     WalletProtectionType? walletProtectionType,
     bool? isDeveloperMode,
     ProfileType? profileType,
@@ -232,8 +261,7 @@ class ProfileModel extends Equatable {
     Oidc4VCIStack? oidc4VCIStack,
     TrustedList? trustedList,
   }) {
-    return ProfileModel(
-      walletType: walletType ?? this.walletType,
+    final profileModel = ProfileModel(
       walletProtectionType: walletProtectionType ?? this.walletProtectionType,
       isDeveloperMode: isDeveloperMode ?? this.isDeveloperMode,
       profileType: profileType ?? this.profileType,
@@ -242,5 +270,6 @@ class ProfileModel extends Equatable {
       oidc4VCIStack: oidc4VCIStack ?? this.oidc4VCIStack,
       trustedList: trustedList ?? this.trustedList,
     );
+    return profileModel;
   }
 }

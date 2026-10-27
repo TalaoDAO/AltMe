@@ -10,10 +10,15 @@ class CredentialDetailTabbar extends StatelessWidget {
     required this.title,
     required this.onTap,
     this.badgeCount = 0,
+    this.icon,
   });
 
   final bool isSelected;
+
   final String title;
+
+  /// Shown above the [title] text.
+  final IconData? icon;
   final GestureTapCallback onTap;
   final int badgeCount;
 
@@ -45,14 +50,37 @@ class CredentialDetailTabbar extends StatelessWidget {
                 )
               : null,
           child: Center(
-            child: Text(
-              title,
-              style: isSelected
-                  ? textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold)
-                  : textTheme.bodyMedium!.copyWith(
-                      color: colorScheme.onSurface,
-                    ),
-            ),
+            child: icon != null
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        icon,
+                        color: isSelected
+                            ? colorScheme.onSurface
+                            : colorScheme.outline,
+                      ),
+                      Text(
+                        title,
+                        style: textTheme.bodyMedium!.copyWith(
+                          fontWeight: isSelected ? FontWeight.bold : null,
+                          color: isSelected
+                              ? colorScheme.onSurface
+                              : colorScheme.outline,
+                        ),
+                      ),
+                    ],
+                  )
+                : Text(
+                    title,
+                    style: isSelected
+                        ? textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          )
+                        : textTheme.bodyMedium!.copyWith(
+                            color: colorScheme.onSurface,
+                          ),
+                  ),
           ),
         ),
       ),

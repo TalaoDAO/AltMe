@@ -1,4 +1,5 @@
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_mdoc_helper.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:dcql/dcql.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -14,7 +15,7 @@ DcqlQueryResult keepFirstMatchPerCredential(DcqlQueryResult result) {
       entry.key: entry.value.take(1),
   };
 
-  return DcqlQueryResult(
+  final trimmedResult = DcqlQueryResult(
     query: result.query,
     verifiableCredentials: trimmedVerifiableCredentials,
     satisfiedClaimsByCredential: result.satisfiedClaimsByCredential,
@@ -24,14 +25,15 @@ DcqlQueryResult keepFirstMatchPerCredential(DcqlQueryResult result) {
     unsatisfiedMeta: result.unsatisfiedMeta,
     matchedCredentialSets: result.matchedCredentialSets,
   );
+  return trimmedResult;
 }
 
 // Map the DCQL-matched DigitalCredential objects back to your original
 // candidate (which still has the raw jwt string), using identity equality
 // — same trick you already use.
-SdJwtDigitalCredential? findOriginal(
+DigitalCredential? findOriginal(
   DigitalCredential matched,
-  List<SdJwtDigitalCredential> packageFormatCredentials,
+  List<DigitalCredential> packageFormatCredentials,
 ) => packageFormatCredentials.firstWhere((e) => identical(e, matched));
 
 // Resolve a DCQL path (which may contain `null` wildcards) against the
@@ -48,7 +50,8 @@ List<dynamic>? resolveConcretePath(
 
   if (current is Map<String, dynamic>) {
     if (!current.containsKey(head)) return null;
-    return resolveConcretePath(current[head], rest, [...acc, head]);
+    final mapResult = resolveConcretePath(current[head], rest, [...acc, head]);
+    return mapResult;
   }
   if (current is List) {
     if (head == null) {
@@ -58,7 +61,11 @@ List<dynamic>? resolveConcretePath(
       }
       return null;
     } else if (head is int && head >= 0 && head < current.length) {
-      return resolveConcretePath(current[head], rest, [...acc, head]);
+      final indexResult = resolveConcretePath(current[head], rest, [
+        ...acc,
+        head,
+      ]);
+      return indexResult;
     }
   }
   return null;
@@ -78,6 +85,7 @@ Future<String> buildPresentation({
   required Uri uri,
   required Map<String, dynamic> privateKey,
   required ProofHeaderType proofHeaderType,
+  JwtSigner Function(String keyId)? credentialKeySigner,
 }) async {
   final sdJwt = SelectiveDisclosure(credential);
 
@@ -95,15 +103,6 @@ Future<String> buildPresentation({
   // A Key Binding JWT is REQUIRED by the SD-JWT VC presentation format
   // whenever the credential carries a holder-binding key (`cnf`).
   if (credential.data['cnf'] != null) {
-    final tokenParameters = TokenParameters(
-      privateKey: privateKey,
-      did: '', // not used for the embedded-jwk KB-JWT header
-      mediaType: MediaType.selectiveDisclosure,
-      clientType: ClientType.p256JWKThumprint,
-      proofHeaderType: proofHeaderType,
-      clientId: '', // not used for the embedded-jwk KB-JWT header
-    );
-
     final iat = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     final sdHash = sh256Hash(newJwt);
 
@@ -114,10 +113,27 @@ Future<String> buildPresentation({
       'sd_hash': sdHash,
     };
 
-    final kbJwt = generateToken(
+    // A credential issued with a Wallet Key Attestation is bound to a key
+    // this wallet's usual private key never signs with (Wallet Provider
+    // Protocol §12) - its key store signs the Key Binding JWT directly,
+    // instead of handing out a raw key to sign locally.
+    final keyId = credential.keyId;
+    final signer = keyId != null ? credentialKeySigner?.call(keyId) : null;
+
+    final kbJwt = await signKeyBindingJwt(
       payload: kbPayload,
-      tokenParameters: tokenParameters,
-      ignoreProofHeaderType: true,
+      mediaType: MediaType.selectiveDisclosure,
+      signer: signer,
+      tokenParameters: signer == null
+          ? TokenParameters(
+              privateKey: privateKey,
+              did: '', // not used for the embedded-jwk KB-JWT header
+              mediaType: MediaType.selectiveDisclosure,
+              clientType: ClientType.p256JWKThumprint,
+              proofHeaderType: proofHeaderType,
+              clientId: '', // not used for the embedded-jwk KB-JWT header
+            )
+          : null,
     );
 
     newJwt = '$newJwt$kbJwt';
@@ -127,14 +143,20 @@ Future<String> buildPresentation({
 }
 
 // --- Build the vp_token itself ---
+//
+// SD-JWT credentials present as SD-JWT + KB-JWT; mso_mdoc credentials as a
+// DeviceResponse signed over [mdocSessionTranscript], which is required as
+// soon as one is presented.
 Future<Map<String, List<String>>> buildVpToken(
   DcqlQueryResult result,
-  List<SdJwtDigitalCredential> packageFormatCredentials,
+  List<DigitalCredential> packageFormatCredentials,
   List<CredentialModel> candidates, // your wallet-side objects, same order
   Uri uri,
   Map<String, dynamic> privateKey,
-  ProofHeaderType proofHeaderType,
-) async {
+  ProofHeaderType proofHeaderType, {
+  JwtSigner Function(String keyId)? credentialKeySigner,
+  List<Object?>? mdocSessionTranscript,
+}) async {
   final vpToken = <String, List<String>>{};
 
   for (final entry in result.verifiableCredentials.entries) {
@@ -153,6 +175,20 @@ Future<Map<String, List<String>>> buildVpToken(
       if (original == null) continue;
       final index = packageFormatCredentials.indexOf(original);
 
+      if (original is MdocDigitalCredential) {
+        if (mdocSessionTranscript == null) {
+          throw StateError('an mdoc presentation needs a SessionTranscript');
+        }
+        presentations.add(
+          await buildMdocPresentation(
+            credential: candidates[index],
+            requestedPaths: requestedPaths,
+            sessionTranscript: mdocSessionTranscript,
+          ),
+        );
+        continue;
+      }
+
       presentations.add(
         await buildPresentation(
           credential: candidates[index],
@@ -160,6 +196,7 @@ Future<Map<String, List<String>>> buildVpToken(
           uri: uri,
           privateKey: privateKey,
           proofHeaderType: proofHeaderType,
+          credentialKeySigner: credentialKeySigner,
         ),
       );
     }

@@ -6,3 +6,4 @@ export 'helper_function/get_credential.dart';
 export 'helper_function/get_credential_offer_json.dart';
 export 'helper_function/initiate_oidv4vc_credential_issuance.dart';
 export 'helper_function/verify_encoded_data.dart';
+export 'policy/profile_policy_context.dart';

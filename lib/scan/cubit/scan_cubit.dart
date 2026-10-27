@@ -419,6 +419,7 @@ class ScanCubit extends Cubit<ScanState> {
   }
 
   void emitError(dynamic e) {
+    traceFlowFailure(e);
     final messageHandler = getMessageHandler(e);
 
     emit(
@@ -905,7 +906,8 @@ class ScanCubit extends Cubit<ScanState> {
       if (credentialListJwt.length == 1) {
         return credentialListJwt.first;
       } else {
-        return jsonEncode(credentialListJwt);
+        final encodedCredentialListJwt = jsonEncode(credentialListJwt);
+        return encodedCredentialListJwt;
       }
     } else if (formatFromPresentationSubmission == VCFormatType.jwtVc ||
         formatFromPresentationSubmission == VCFormatType.jwtVcJson ||
@@ -1107,9 +1109,7 @@ class ScanCubit extends Cubit<ScanState> {
               ? ClientMetadata.fromJson(clientMetaDataJson)
               : null;
           if (clientMetaData == null) {
-            throw StateError(
-              'Client metadata is required for direct_post.jwt',
-            );
+            throw StateError('Client metadata is required for direct_post.jwt');
           }
 
           // Per OpenID4VP ("Encrypted Responses"): the JWE plaintext MUST be
@@ -1243,12 +1243,8 @@ class ScanCubit extends Cubit<ScanState> {
     } catch (e, s) {
       final log = getLogger('ScanCubit - presentOidc4vpFinal');
       log.e('something went wrong - $e', error: e, stackTrace: s);
-      throw ResponseMessage(
-        data: {
-          'error': 'something went wrong during presentation',
-          'error_description': '$e /n $s',
-        },
-      );
+      // The pick page shows it, with the verifier's own error if any.
+      emitError(e);
     }
   }
 }

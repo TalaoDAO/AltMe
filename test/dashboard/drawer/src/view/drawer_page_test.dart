@@ -60,7 +60,7 @@ void main() {
             BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
             BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
           ],
-          child: DrawerView(profileCubit: mockProfileCubit),
+          child: const DrawerView(),
         ),
       );
       expect(find.byType(Drawer), findsOneWidget);
@@ -84,7 +84,7 @@ void main() {
                 BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
                 BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
               ],
-              child: DrawerView(profileCubit: mockProfileCubit),
+              child: const DrawerView(),
             ),
           ),
         );
@@ -118,7 +118,7 @@ void main() {
               BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
               BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
             ],
-            child: DrawerView(profileCubit: mockProfileCubit),
+            child: const DrawerView(),
           ),
         ),
       );
@@ -149,7 +149,7 @@ void main() {
               BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
               BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
             ],
-            child: DrawerView(profileCubit: mockProfileCubit),
+            child: const DrawerView(),
           ),
         ),
       );
@@ -177,24 +177,23 @@ void main() {
     });
 
     testWidgets(
-      'setDeveloperModeStatus is called when displayDeveloperMode is enabled '
-      'and "developerMode" is tapped',
+      'navigates to DeveloperModeMenu when displayDeveloperMode is enabled '
+      'and "Developer Mode" is tapped',
       (tester) async {
         when(
           () => mockProfileCubit.state,
         ).thenReturn(ProfileState(model: ProfileModel.empty()));
 
-        when(
-          () => mockProfileCubit.setDeveloperModeStatus(enabled: true),
-        ).thenAnswer((_) async => {});
-
         await tester.pumpApp(
-          MultiBlocProvider(
-            providers: [
-              BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
-              BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
-            ],
-            child: DrawerView(profileCubit: mockProfileCubit),
+          MockNavigatorProvider(
+            navigator: navigator,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
+                BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
+              ],
+              child: const DrawerView(),
+            ),
           ),
         );
 
@@ -203,17 +202,51 @@ void main() {
           find.text('Enable developer mode to access advanced debugging tools'),
           findsOneWidget,
         );
+        // The switch lives in the menu, not on the root.
+        expect(find.byKey(const Key('developerMode')), findsNothing);
+        expect(find.text('Protocol Trace Logs'), findsNothing);
 
         await tester.scrollUntilVisible(find.text('Developer Mode'), 0);
 
-        await tester.tap(find.byKey(const Key('developerMode')));
+        await tester.tap(find.text('Developer Mode'));
         await tester.pumpAndSettle();
 
         verify(
-          () => mockProfileCubit.setDeveloperModeStatus(enabled: true),
+          () => navigator.push<void>(
+            any(that: isRoute<void>(whereName: equals('/DeveloperModeMenu'))),
+          ),
         ).called(1);
       },
     );
+
+    testWidgets('has no Developer Mode entry when the profile hides it', (
+      tester,
+    ) async {
+      final model = ProfileModel.empty();
+      when(() => mockProfileCubit.state).thenReturn(
+        ProfileState(
+          model: model.copyWith(
+            profileSetting: model.profileSetting.copyWith(
+              settingsMenu: model.profileSetting.settingsMenu.copyWith(
+                displayDeveloperMode: false,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpApp(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
+            BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
+          ],
+          child: const DrawerView(),
+        ),
+      );
+
+      expect(find.text('Developer Mode'), findsNothing);
+    });
 
     testWidgets('navigates to HelpCenterMenu when displayHelpCenter is enabled '
         'and "helpCenter" is tapped', (tester) async {
@@ -229,7 +262,7 @@ void main() {
               BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
               BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
             ],
-            child: DrawerView(profileCubit: mockProfileCubit),
+            child: const DrawerView(),
           ),
         ),
       );
@@ -270,7 +303,7 @@ void main() {
               BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
               BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
             ],
-            child: DrawerView(profileCubit: mockProfileCubit),
+            child: const DrawerView(),
           ),
         ),
       );
@@ -308,7 +341,7 @@ void main() {
               BlocProvider<ProfileCubit>.value(value: mockProfileCubit),
               BlocProvider<FlavorCubit>.value(value: mockFlavorCubit),
             ],
-            child: DrawerView(profileCubit: mockProfileCubit),
+            child: const DrawerView(),
           ),
         ),
       );

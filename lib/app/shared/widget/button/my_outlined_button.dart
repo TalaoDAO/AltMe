@@ -113,7 +113,7 @@ ButtonStyle outlinedStyleFrom({
   required BuildContext context,
   required GestureTapCallback? onPressed,
 }) {
-  return OutlinedButton.styleFrom(
+  final buttonStyle = OutlinedButton.styleFrom(
     padding: EdgeInsets.symmetric(vertical: verticalSpacing),
     elevation: elevation,
     backgroundColor: backgroundColor ?? Colors.transparent,
@@ -127,6 +127,7 @@ ButtonStyle outlinedStyleFrom({
       borderRadius: BorderRadius.circular(borderRadius),
     ),
   );
+  return buttonStyle;
 }
 
 class OutlinedButtonText extends StatelessWidget {

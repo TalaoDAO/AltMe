@@ -12,10 +12,11 @@ class DidPrivateKeyPage extends StatefulWidget {
   final DidKeyType didKeyType;
 
   static Route<dynamic> route({required DidKeyType didKeyType}) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => DidPrivateKeyPage(didKeyType: didKeyType),
       settings: const RouteSettings(name: '/DidPrivateKeyPage'),
     );
+    return route;
   }
 
   @override

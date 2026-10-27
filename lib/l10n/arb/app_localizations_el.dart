@@ -3069,7 +3069,8 @@ class AppLocalizationsEl extends AppLocalizations {
   String get statusListIndex => 'Ευρετήριο καταλόγου κατάστασης';
 
   @override
-  String get theWalletIsSuspended => 'Το πορτοφόλι έχει ανασταλεί.';
+  String get theWalletIsSuspended =>
+      'Αυτό το πορτοφόλι έχει απενεργοποιηθεί. Δεν μπορείτε πλέον να λαμβάνετε νέες βεβαιώσεις. Επικοινωνήστε με την υποστήριξη για βοήθεια.';
 
   @override
   String get jwkThumbprintP256Key => 'JWK αποτύπωμα αντίχειρα P-256';
@@ -3226,6 +3227,25 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get activityLogDescription => 'Δείτε τις δραστηριότητές σας';
+
+  @override
+  String get protocolTraceLogs => 'Protocol Trace Logs';
+
+  @override
+  String get protocolTraceLogsDescription =>
+      'View and delete recorded trace files';
+
+  @override
+  String get protocolTraceLogsEmpty => 'No trace files recorded yet';
+
+  @override
+  String get deleteAllTraceLogs => 'Delete all';
+
+  @override
+  String get deleteAllTraceLogsConfirmationTitle => 'Delete all trace logs?';
+
+  @override
+  String get deleteAllTraceLogsConfirmationSubtitle => 'This cannot be undone.';
 
   @override
   String get walletInitialized => 'Αρχικοποίηση πορτοφολιού';
@@ -3502,4 +3522,214 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get dontShareLabel => 'Μην κοινοποιήσετε';
+
+  @override
+  String get mdocProximityTitle => 'Share in person';
+
+  @override
+  String get mdocProximityPreparing => 'Preparing the connection…';
+
+  @override
+  String get mdocProximityScanQrCode => 'Let the reader scan this QR code';
+
+  @override
+  String get mdocProximityConnected =>
+      'Reader connected, waiting for its request…';
+
+  @override
+  String get mdocProximityRequestedBy => 'Requested by';
+
+  @override
+  String get mdocProximityUnknownReader => 'Unknown reader';
+
+  @override
+  String get mdocProximityDocumentUnavailable =>
+      'You don\'t have the requested attestation';
+
+  @override
+  String get mdocProximityWillRetain => 'Kept by the reader';
+
+  @override
+  String get mdocProximitySending => 'Sending…';
+
+  @override
+  String get mdocProximitySuccess =>
+      'Your information was shared with the reader.';
+
+  @override
+  String get mdocProximityBluetoothOff =>
+      'Turn on Bluetooth to share with the reader.';
+
+  @override
+  String get mdocProximityBluetoothPermission =>
+      'Allow Bluetooth access to share with the reader.';
+
+  @override
+  String get mdocProximityOpenSettings => 'Open settings';
+
+  @override
+  String get mdocProximityTimeout => 'The reader did not respond in time.';
+
+  @override
+  String get mdocProximityReaderDisconnected => 'The reader disconnected.';
+
+  @override
+  String get mdocProximityChooseAttestation => 'Attestation to share';
+
+  @override
+  String get mdocProximityError => 'The presentation failed.';
+
+  @override
+  String get mdocReaderTitle => 'Read in person';
+
+  @override
+  String get mdocReaderConnecting => 'Connecting to the wallet…';
+
+  @override
+  String get mdocReaderWaitingForResponse =>
+      'Connected. Waiting for the holder to share…';
+
+  @override
+  String get mdocReaderBluetoothPermission =>
+      'Allow Bluetooth access to read the holder\'s attestations.';
+
+  @override
+  String get mdocReaderError => 'The reading failed.';
+
+  @override
+  String get mdocReaderNothingShared => 'The holder shared no data.';
+
+  @override
+  String get mdocReaderDocumentVerified =>
+      'Issuer and device signatures verified';
+
+  @override
+  String get mdocReaderNotVerified => 'Not verified';
+
+  @override
+  String get mdocReaderUnrequested => 'Sent without being asked, not verified.';
+
+  @override
+  String get mdocReaderResponseErrors => 'Response';
+
+  @override
+  String get mdocReaderRequestsTitle => 'Αναγνώστης';
+
+  @override
+  String get mdocReaderRequestsSubtitle =>
+      'Επιλέξτε τι θα ζητήσετε και στη συνέχεια σαρώστε τον κωδικό QR του κατόχου.';
+
+  @override
+  String get mdocReaderNotHolderQrCode =>
+      'This is not a wallet QR code to read in person.';
+
+  @override
+  String get mdocReaderMyRequests => 'Τα αιτήματά μου';
+
+  @override
+  String get mdocReaderAddRequest => 'Προσθήκη αιτήματος';
+
+  @override
+  String get mdocReaderRequestNewTitle => 'Νέο αίτημα';
+
+  @override
+  String get mdocReaderRequestEditTitle => 'Επεξεργασία αιτήματος';
+
+  @override
+  String get mdocReaderRequestName => 'Όνομα';
+
+  @override
+  String get mdocReaderRequestRequired => 'Υποχρεωτικό';
+
+  @override
+  String mdocReaderRequestDocument(int number) {
+    return 'Έγγραφο $number';
+  }
+
+  @override
+  String get mdocReaderRequestAddDocument => 'Προσθήκη εγγράφου';
+
+  @override
+  String get mdocReaderRequestDocType => 'Τύπος εγγράφου';
+
+  @override
+  String get mdocReaderRequestNameSpace => 'Χώρος ονομάτων';
+
+  @override
+  String get mdocReaderRequestClaims => 'Χαρακτηριστικά';
+
+  @override
+  String get mdocReaderRequestRetain => 'Διατήρηση';
+
+  @override
+  String get mdocReaderRequestRetainHint =>
+      'Η διατήρηση ενημερώνει τον κάτοχο ότι κρατάτε την τιμή.';
+
+  @override
+  String get mdocReaderRequestNoClaims => 'Δεν έχει επιλεγεί κανένα';
+
+  @override
+  String get mdocReaderRequestClaimsRequired =>
+      'Επιλέξτε τουλάχιστον ένα χαρακτηριστικό.';
+
+  @override
+  String get mdocReaderRequestAddClaim => 'Προσθήκη χαρακτηριστικού';
+
+  @override
+  String get mdocReaderRequestClaimHint => 'Αναγνωριστικό, π.χ. family_name';
+
+  @override
+  String get mdocReaderRequestSuggestedClaims => 'Προτεινόμενα χαρακτηριστικά';
+
+  @override
+  String get mdocReaderRequestDeleteTitle => 'Διαγραφή αυτού του αιτήματος;';
+
+  @override
+  String mdocReaderRequestClaimCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count χαρακτηριστικά',
+      one: '1 χαρακτηριστικό',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mdocPresent => 'Present';
+
+  @override
+  String get mdocPresentNoAttestation =>
+      'No attestation in your wallet can be shown to a reader in person.';
+
+  @override
+  String get scanTabScan => 'Scan';
+
+  @override
+  String get mdocReadTab => 'Read';
+
+  @override
+  String get policyViolation =>
+      'Αυτή η υπηρεσία δεν πληροί τις απαιτήσεις ασφαλείας του προφίλ του πορτοφολιού σας.';
+
+  @override
+  String get proximityBleSettings => 'Εγγύτητα (BLE)';
+
+  @override
+  String get proximityBleSettingsSubtitle =>
+      'Λειτουργίες Bluetooth που μπορεί να χρησιμοποιήσει ένας αναγνώστης για να συνδεθεί όταν παρουσιάζετε αυτοπροσώπως. Διατηρήστε και τις δύο, εκτός αν ένας αναγνώστης δεν μπορεί να συνδεθεί. Μία παραμένει πάντα ενεργή.';
+
+  @override
+  String get proximityBlePeripheralServer => 'Περιφερειακός διακομιστής';
+
+  @override
+  String get proximityBlePeripheralServerSubtitle =>
+      'Ο αναγνώστης συνδέεται στο τηλέφωνό σας.';
+
+  @override
+  String get proximityBleCentralClient => 'Κεντρικός πελάτης';
+
+  @override
+  String get proximityBleCentralClientSubtitle =>
+      'Το τηλέφωνό σας συνδέεται στον αναγνώστη.';
 }

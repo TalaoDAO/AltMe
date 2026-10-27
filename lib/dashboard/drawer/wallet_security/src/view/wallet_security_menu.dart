@@ -10,10 +10,11 @@ class WalletSecurityMenu extends StatelessWidget {
   const WalletSecurityMenu({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => const WalletSecurityMenu(),
       settings: const RouteSettings(name: '/WalletSecurityMenu'),
     );
+    return route;
   }
 
   @override

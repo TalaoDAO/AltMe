@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/selective_disclosure/dc_selective_disclosure.dart';
+import 'package:altme/selective_disclosure/mdoc_selective_disclosure.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
 import 'package:altme/selective_disclosure/vc_selective_disclosure.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -15,6 +16,8 @@ class SelectiveDisclosure {
     final format = credentialModel.format.toString();
     if (format == VCFormatType.dcSdJWT.vcValue) {
       _delegate = DcSelectiveDisclosure(credentialModel);
+    } else if (format == VCFormatType.mdoc.vcValue) {
+      _delegate = MdocSelectiveDisclosure(credentialModel);
     } else {
       _delegate = VcSelectiveDisclosure(credentialModel);
     }
@@ -34,6 +37,7 @@ class SelectiveDisclosure {
   Map<String, dynamic> get sh256HashToContent => _delegate.sh256HashToContent;
   List<String> get contents => _delegate.contents;
   String? get getPicture => _delegate.getPicture;
+  PortraitClaim? get portrait => _delegate.portrait;
 
   (List<ClaimsData>, String?) getClaimsData({
     required String key,

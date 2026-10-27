@@ -1004,7 +1004,7 @@
   "statuslListSignatureFailed": "Error en la firma de la lista de estado",
   "statusList": "Lista de estados",
   "statusListIndex": "Índice de lista de estados",
-  "theWalletIsSuspended": "La cartera digital está suspendida.",
+  "theWalletIsSuspended": "Esta cartera ha sido desactivada. Ya no puede obtener nuevas atestaciones. Póngase en contacto con el servicio de asistencia.",
   "jwkThumbprintP256Key": "Huella digital JWK P-256",
   "walletBlockedPopupTitle": "Bloqueado 10 minutos",
   "walletBlockedPopupDescription": "Demasiados intentos fallidos, tu cartera digital está bloqueada por seguridad.\nReinicia tu cartera para usar los servicios nuevamente.",
@@ -1067,6 +1067,12 @@
   "noNotificationsYet": "Aún no hay notificaciones",
   "activityLog": "Registro de Actividad",
   "activityLogDescription": "Ver tus actividades",
+  "protocolTraceLogs": "Registros de Trazas del Protocolo",
+  "protocolTraceLogsDescription": "Ver y eliminar los archivos de traza grabados",
+  "protocolTraceLogsEmpty": "Todavía no se ha grabado ningún archivo de traza",
+  "deleteAllTraceLogs": "Eliminar todos",
+  "deleteAllTraceLogsConfirmationTitle": "¿Eliminar todos los registros de traza?",
+  "deleteAllTraceLogsConfirmationSubtitle": "Esta acción no se puede deshacer.",
   "walletInitialized": "Cartera digital inicializada",
   "backupCredentials": "Credenciales de respaldo",
   "restoredCredentials": "Credenciales restauradas",
@@ -1244,5 +1250,48 @@
   "notVerifiedLabel": "No verificado",
   "onlyInformationShownWillBeShared": "Solo se compartirá la información mostrada arriba.",
   "shareInformationButtonLabel": "Compartir información",
-  "dontShareLabel": "No compartir"
+  "dontShareLabel": "No compartir",
+  "policyViolation": "Este servicio no cumple los requisitos de seguridad del perfil de su cartera.",
+  "proximityBleSettings": "Proximidad (BLE)",
+  "proximityBleSettingsSubtitle": "Modos Bluetooth que un lector puede usar para conectarse cuando presenta en persona. Mantenga ambos salvo que un lector no logre conectarse. Siempre queda uno activado.",
+  "proximityBlePeripheralServer": "Servidor periférico",
+  "proximityBlePeripheralServerSubtitle": "El lector se conecta a su teléfono.",
+  "proximityBleCentralClient": "Cliente central",
+  "proximityBleCentralClientSubtitle": "Su teléfono se conecta al lector.",
+  "mdocReaderMyRequests": "Mis solicitudes",
+  "mdocReaderAddRequest": "Añadir una solicitud",
+  "mdocReaderRequestNewTitle": "Nueva solicitud",
+  "mdocReaderRequestEditTitle": "Editar solicitud",
+  "mdocReaderRequestName": "Nombre",
+  "mdocReaderRequestRequired": "Obligatorio",
+  "mdocReaderRequestDocument": "Documento {number}",
+  "@mdocReaderRequestDocument": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "mdocReaderRequestAddDocument": "Añadir un documento",
+  "mdocReaderRequestDocType": "Tipo de documento",
+  "mdocReaderRequestNameSpace": "Espacio de nombres",
+  "mdocReaderRequestClaims": "Atributos",
+  "mdocReaderRequestRetain": "Conservar",
+  "mdocReaderRequestRetainHint": "Conservar indica al titular que usted guarda el valor.",
+  "mdocReaderRequestNoClaims": "Ninguno seleccionado",
+  "mdocReaderRequestClaimsRequired": "Elija al menos un atributo.",
+  "mdocReaderRequestAddClaim": "Añadir un atributo",
+  "mdocReaderRequestClaimHint": "Identificador, p. ej. family_name",
+  "mdocReaderRequestSuggestedClaims": "Atributos sugeridos",
+  "mdocReaderRequestDeleteTitle": "¿Eliminar esta solicitud?",
+  "mdocReaderRequestClaimCount": "{count, plural, =1{1 atributo} other{{count} atributos}}",
+  "@mdocReaderRequestClaimCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mdocReaderRequestsTitle": "Lector",
+  "mdocReaderRequestsSubtitle": "Elija qué solicitar y luego escanee el código QR del titular."
 }

@@ -24,11 +24,12 @@ class QueryByExamplePresentPage extends StatefulWidget {
     required Map<String, dynamic> preview,
     required Issuer issuer,
   }) {
-    return MaterialPageRoute<void>(
+    final pageRoute = MaterialPageRoute<void>(
       builder: (context) =>
           QueryByExamplePresentPage(uri: uri, preview: preview, issuer: issuer),
       settings: const RouteSettings(name: '/QueryByExamplePresent'),
     );
+    return pageRoute;
   }
 
   @override

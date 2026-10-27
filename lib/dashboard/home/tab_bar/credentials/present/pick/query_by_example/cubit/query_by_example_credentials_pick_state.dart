@@ -18,11 +18,12 @@ class QueryByExampleCredentialPickState extends Equatable {
     int? selected,
     List<CredentialModel>? filteredCredentialList,
   }) {
-    return QueryByExampleCredentialPickState(
+    final newState = QueryByExampleCredentialPickState(
       selected: selected ?? this.selected,
       filteredCredentialList:
           filteredCredentialList ?? this.filteredCredentialList,
     );
+    return newState;
   }
 
   Map<String, dynamic> toJson() =>

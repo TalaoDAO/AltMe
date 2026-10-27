@@ -13,9 +13,10 @@ class LangState extends Equatable {
   List<Object?> get props => [locale, languageType];
 
   LangState copyWith({Locale? locale, LanguageType? languageType}) {
-    return LangState(
+    final langState = LangState(
       languageType: languageType ?? this.languageType,
       locale: locale ?? this.locale,
     );
+    return langState;
   }
 }

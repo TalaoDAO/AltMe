@@ -8,10 +8,11 @@ class Oidc4vcSettingMenu extends StatelessWidget {
   const Oidc4vcSettingMenu({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/Oidc4vcSettingMenu'),
       builder: (_) => const Oidc4vcSettingMenu(),
     );
+    return route;
   }
 
   @override

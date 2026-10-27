@@ -16,15 +16,20 @@ class BackupCredentialState extends Equatable {
   final String filePath;
 
   BackupCredentialState loading() {
-    return BackupCredentialState(status: AppStatus.loading, filePath: filePath);
+    final loadingState = BackupCredentialState(
+      status: AppStatus.loading,
+      filePath: filePath,
+    );
+    return loadingState;
   }
 
   BackupCredentialState error({required MessageHandler messageHandler}) {
-    return BackupCredentialState(
+    final errorState = BackupCredentialState(
       status: AppStatus.error,
       filePath: filePath,
       message: StateMessage.error(messageHandler: messageHandler),
     );
+    return errorState;
   }
 
   BackupCredentialState copyWith({
@@ -32,13 +37,14 @@ class BackupCredentialState extends Equatable {
     MessageHandler? messageHandler,
     String? filePath,
   }) {
-    return BackupCredentialState(
+    final updatedState = BackupCredentialState(
       status: status,
       filePath: filePath ?? this.filePath,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
     );
+    return updatedState;
   }
 
   Map<String, dynamic> toJson() => _$BackupCredentialStateToJson(this);

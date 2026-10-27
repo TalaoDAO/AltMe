@@ -45,9 +45,10 @@ class ProfessionalSkillAssessmentModel extends CredentialSubjectModel {
       return [];
     }
     if (json is List) {
-      return json
+      final signatures = json
           .map((dynamic e) => Signature.fromJson(e as Map<String, dynamic>))
           .toList();
+      return signatures;
     }
     return [Signature.fromJson(json as Map<String, dynamic>)];
   }

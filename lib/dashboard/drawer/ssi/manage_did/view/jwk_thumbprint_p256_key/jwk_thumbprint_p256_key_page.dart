@@ -10,10 +10,11 @@ class JWKThumbprintP256KeyPage extends StatefulWidget {
   const JWKThumbprintP256KeyPage({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => const JWKThumbprintP256KeyPage(),
       settings: const RouteSettings(name: '/JWKThumbprintP256KeyPage'),
     );
+    return route;
   }
 
   @override

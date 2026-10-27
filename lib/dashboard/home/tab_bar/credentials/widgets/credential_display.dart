@@ -11,6 +11,7 @@ class CredentialDisplay extends StatelessWidget {
     required this.profileSetting,
     required this.isDiscover,
     this.displyalDescription = true,
+    this.showPortrait = false,
   });
 
   final CredentialModel credentialModel;
@@ -18,6 +19,18 @@ class CredentialDisplay extends StatelessWidget {
   final ProfileSetting profileSetting;
   final bool displyalDescription;
   final bool isDiscover;
+
+  /// Whether the default card shows the credential's portrait.
+  final bool showPortrait;
+
+  /// The subject types displayed with the default card, the only one
+  /// [showPortrait] applies to.
+  static const portraitSubjectTypes = [
+    CredentialSubjectType.defaultCredential,
+    CredentialSubjectType.identityCredential,
+    CredentialSubjectType.eudiPid,
+    CredentialSubjectType.pid,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +103,7 @@ class CredentialDisplay extends StatelessWidget {
                 showBgDecoration: false,
                 displyalDescription: displyalDescription,
                 isDiscover: isDiscover,
+                showPortrait: showPortrait,
               );
             case CredDisplayType.Detail:
               return DefaultCredentialWidget(
@@ -97,6 +111,7 @@ class CredentialDisplay extends StatelessWidget {
                 showBgDecoration: false,
                 descriptionMaxLine: 5,
                 isDiscover: isDiscover,
+                showPortrait: showPortrait,
               );
           }
         }
@@ -111,6 +126,7 @@ class CredentialDisplay extends StatelessWidget {
               showBgDecoration: false,
               displyalDescription: displyalDescription,
               isDiscover: isDiscover,
+              showPortrait: showPortrait,
             );
           case CredDisplayType.Detail:
             return DefaultCredentialWidget(
@@ -118,6 +134,7 @@ class CredentialDisplay extends StatelessWidget {
               showBgDecoration: false,
               descriptionMaxLine: 5,
               isDiscover: isDiscover,
+              showPortrait: showPortrait,
             );
         }
 

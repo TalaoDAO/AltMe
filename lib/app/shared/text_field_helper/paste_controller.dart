@@ -8,7 +8,8 @@ class AppCupertinoTextSelectionControls extends CupertinoTextSelectionControls {
   @override
   Future<void> handlePaste(TextSelectionDelegate delegate) {
     onPaste(delegate);
-    return super.handlePaste(delegate);
+    final pasteFuture = super.handlePaste(delegate);
+    return pasteFuture;
   }
 }
 
@@ -18,6 +19,7 @@ class AppMaterialTextSelectionControls extends MaterialTextSelectionControls {
   @override
   Future<void> handlePaste(TextSelectionDelegate delegate) {
     onPaste(delegate);
-    return super.handlePaste(delegate);
+    final pasteFuture = super.handlePaste(delegate);
+    return pasteFuture;
   }
 }

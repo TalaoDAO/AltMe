@@ -2,7 +2,8 @@ import 'package:tezart/tezart.dart';
 
 class TezosService {
   Future<Keystore> getKeystore({required String secretKey}) async {
-    return Keystore.fromSecretKey(secretKey);
+    final keystore = Keystore.fromSecretKey(secretKey);
+    return keystore;
   }
 
   Future<List<String>> getKeysFromSecretKey({required String secretKey}) async {

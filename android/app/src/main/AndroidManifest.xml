@@ -4,6 +4,16 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+    <!-- mdoc proximity presentation and reading over BLE. Up to Android 11,
+         scanning needs location. From Android 12, BLUETOOTH_SCAN must say
+         neverForLocation, or scans find nothing without location. -->
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <queries>
         <!-- If your app opens https URLs -->
         <intent>
@@ -115,6 +125,12 @@
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="eu-eaap" />
+			</intent-filter>
+            <intent-filter android:autoVerify="true">
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
 				<data android:scheme="talao-openid-credential-offer" />
 			</intent-filter>
             <intent-filter android:autoVerify="true">
@@ -147,6 +163,19 @@
 				<category android:name="android.intent.category.BROWSABLE" />
 				<data android:scheme="openid-credential-offer" />
 			</intent-filter>
+            <intent-filter android:autoVerify="true">
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="haip-vci" />
+			</intent-filter>
+            <intent-filter android:autoVerify="true">
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="eu-eaa-offer" />
+			</intent-filter>
+            
             <intent-filter android:autoVerify="true">
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />

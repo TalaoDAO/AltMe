@@ -3,10 +3,7 @@ import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 class IssuerDisplayInfo {
-  const IssuerDisplayInfo({
-    required this.name,
-    this.logoUri,
-  });
+  const IssuerDisplayInfo({required this.name, this.logoUri});
 
   final String name;
   final String? logoUri;
@@ -35,7 +32,10 @@ IssuerDisplayInfo resolveIssuerDisplay({
         ? x509SubjectField(leafCert, oidName: 'commonName')
         : null;
 
-    return IssuerDisplayInfo(name: commonName ?? fallbackHost);
+    final issuerDisplayInfo = IssuerDisplayInfo(
+      name: commonName ?? fallbackHost,
+    );
+    return issuerDisplayInfo;
   }
 
   final displays = issuerOpenIdConfiguration.display;
@@ -43,10 +43,11 @@ IssuerDisplayInfo resolveIssuerDisplay({
       ? null
       : extractDisplay(displays, locale);
 
-  return IssuerDisplayInfo(
+  final issuerDisplayInfo = IssuerDisplayInfo(
     name: display?.name ?? fallbackHost,
     logoUri: display?.logo?.uri,
   );
+  return issuerDisplayInfo;
 }
 
 /// Resolves the display name(s) of the credential type(s) offered, for the
@@ -67,5 +68,6 @@ String resolveOfferedCredentialDisplayName({
     return display?.name ?? id.toString();
   });
 
-  return names.join(', ');
+  final joinedNames = names.join(', ');
+  return joinedNames;
 }

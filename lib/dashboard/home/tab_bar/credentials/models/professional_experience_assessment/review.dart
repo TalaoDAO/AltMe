@@ -23,8 +23,10 @@ class Review {
 
   static ReviewRating _reviewRatingFromJson(dynamic json) {
     if (json == null || json == '') {
-      return ReviewRating('', '', '', '');
+      final emptyReviewRating = ReviewRating('', '', '', '');
+      return emptyReviewRating;
     }
-    return ReviewRating.fromJson(json as Map<String, dynamic>);
+    final reviewRating = ReviewRating.fromJson(json as Map<String, dynamic>);
+    return reviewRating;
   }
 }

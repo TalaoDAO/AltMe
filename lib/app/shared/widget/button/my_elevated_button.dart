@@ -98,7 +98,7 @@ ButtonStyle elevatedStyleFrom({
   required BuildContext context,
   GestureTapCallback? onPressed,
 }) {
-  return ButtonStyle(
+  final buttonStyle = ButtonStyle(
     elevation: WidgetStateProperty.all(elevation),
     padding: WidgetStateProperty.all(
       EdgeInsets.symmetric(vertical: verticalSpacing),
@@ -120,6 +120,7 @@ ButtonStyle elevatedStyleFrom({
       RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius)),
     ),
   );
+  return buttonStyle;
 }
 
 // @TODO(hawkbee): remove if buttons OK

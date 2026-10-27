@@ -8,10 +8,11 @@ class AdvancedSecuritySettingsMenu extends StatelessWidget {
   const AdvancedSecuritySettingsMenu({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => const AdvancedSecuritySettingsMenu(),
       settings: const RouteSettings(name: '/AdvancedSecuritySettingsMenu'),
     );
+    return route;
   }
 
   @override

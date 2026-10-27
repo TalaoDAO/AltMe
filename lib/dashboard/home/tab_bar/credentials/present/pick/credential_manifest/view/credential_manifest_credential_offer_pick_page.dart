@@ -38,7 +38,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
     required List<CredentialModel> credentialsToBePresented,
     VerifierTrustInfo? verifierTrustInfo,
   }) {
-    return MaterialPageRoute<void>(
+    final pageRoute = MaterialPageRoute<void>(
       builder: (context) => CredentialManifestOfferPickPage(
         uri: uri,
         credential: credential,
@@ -49,6 +49,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
       ),
       settings: const RouteSettings(name: '/CredentialManifestOfferPickPage'),
     );
+    return pageRoute;
   }
 
   @override
@@ -56,7 +57,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final profileModel = context.read<ProfileCubit>().state.model;
-        return CredentialManifestPickCubit(
+        final credentialManifestPickCubit = CredentialManifestPickCubit(
           credential: credential,
           credentialList: context.read<CredentialsCubit>().state.credentials,
           inputDescriptorIndex: inputDescriptorIndex,
@@ -69,6 +70,7 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
               [],
           profileType: profileModel.profileType,
         );
+        return credentialManifestPickCubit;
       },
       child: CredentialManifestOfferPickView(
         uri: uri,
@@ -400,7 +402,7 @@ class _CredentialManifestOfferPickViewState
       final firstOne = credentialManifestState
           .filteredCredentialList[credentialManifestState.selected.first];
 
-      return Navigator.of(context).pushReplacement<void, void>(
+      final navigation = Navigator.of(context).pushReplacement<void, void>(
         SelectiveDisclosurePickPage.route(
           uri: widget.uri,
           issuer: widget.issuer,
@@ -414,6 +416,7 @@ class _CredentialManifestOfferPickViewState
           verifierTrustInfo: widget.verifierTrustInfo,
         ),
       );
+      return navigation;
     }
 
     late List<CredentialModel> updatedCredentials;

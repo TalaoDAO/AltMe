@@ -18,10 +18,14 @@ class CredentialSubjectModel {
   factory CredentialSubjectModel.fromJson(Map<String, dynamic> json) {
     for (final element in CredentialSubjectType.values) {
       if (json['type'] == element.name) {
-        return element.modelFromJson(json);
+        final model = element.modelFromJson(json);
+        return model;
       }
     }
-    return CredentialSubjectType.defaultCredential.modelFromJson(json);
+    final defaultModel = CredentialSubjectType.defaultCredential.modelFromJson(
+      json,
+    );
+    return defaultModel;
   }
 
   final String? id;
@@ -41,7 +45,7 @@ class CredentialSubjectModel {
     CredentialSubjectType? credentialSubjectType,
     CredentialCategory? credentialCategory,
   }) {
-    return CredentialSubjectModel(
+    final credentialSubjectModel = CredentialSubjectModel(
       id: id ?? this.id,
       type: type ?? this.type,
       issuedBy: issuedBy ?? this.issuedBy,
@@ -50,14 +54,17 @@ class CredentialSubjectModel {
           credentialSubjectType ?? this.credentialSubjectType,
       credentialCategory: credentialCategory ?? this.credentialCategory,
     );
+    return credentialSubjectModel;
   }
 
   Map<String, dynamic> toJson() => _$CredentialSubjectModelToJson(this);
 
   static Author fromJsonAuthor(dynamic json) {
     if (json == null || json == '') {
-      return const Author('');
+      const emptyAuthor = Author('');
+      return emptyAuthor;
     }
-    return Author.fromJson(json as Map<String, dynamic>);
+    final author = Author.fromJson(json as Map<String, dynamic>);
+    return author;
   }
 }

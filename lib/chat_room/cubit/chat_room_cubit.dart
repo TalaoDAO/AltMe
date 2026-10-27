@@ -45,7 +45,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
   }
 
   Future<void> onSendPressed(PartialText partialText) async {
-    return matrixChat.onSendPressed(
+    final sendPressedFuture = matrixChat.onSendPressed(
       partialText: partialText,
       onMessageCreated: (message) async {
         emit(state.copyWith(messages: [message, ...state.messages]));
@@ -54,6 +54,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
         return _roomId!;
       },
     );
+    return sendPressedFuture;
   }
 
   Future<void> handleMessageTap(Message message) async {
@@ -109,17 +110,18 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
   }
 
   Future<void> handleFileSelection() {
-    return matrixChat.handleFileSelection(
+    final fileSelectionFuture = matrixChat.handleFileSelection(
       onMessageCreated: (message) async {
         emit(state.copyWith(messages: [message, ...state.messages]));
         await _checkIfRoomNotExistThenCreateIt();
         return _roomId!;
       },
     );
+    return fileSelectionFuture;
   }
 
   Future<void> handleImageSelection() {
-    return matrixChat.handleImageSelection(
+    final imageSelectionFuture = matrixChat.handleImageSelection(
       onMessageCreated: (message) async {
         emit(state.copyWith(messages: [message, ...state.messages]));
 
@@ -127,6 +129,7 @@ abstract class ChatRoomCubit extends Cubit<ChatRoomState> {
         return _roomId!;
       },
     );
+    return imageSelectionFuture;
   }
 
   Future<String?> getRoomIdFromStorage() async {

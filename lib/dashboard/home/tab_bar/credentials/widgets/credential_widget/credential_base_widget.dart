@@ -162,6 +162,15 @@ class CredentialBaseWidgetDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
+    // Texts in the middle of the card move right of a portrait.
+    final hasPortrait = hasChild('portrait');
+    final middleLeft = size.width * (hasPortrait ? 0.38 : 0.06);
+
+    if (hasPortrait) {
+      layoutChild('portrait', BoxConstraints.loose(size));
+      positionChild('portrait', Offset(size.width * 0.06, size.height * 0.27));
+    }
+
     if (hasChild('title')) {
       layoutChild('title', BoxConstraints.loose(size));
       positionChild('title', Offset(size.width * 0.06, size.height * 0.08));
@@ -169,15 +178,12 @@ class CredentialBaseWidgetDelegate extends MultiChildLayoutDelegate {
 
     if (hasChild('provided-by')) {
       layoutChild('provided-by', BoxConstraints.loose(size));
-      positionChild(
-        'provided-by',
-        Offset(size.width * 0.06, size.height * 0.28),
-      );
+      positionChild('provided-by', Offset(middleLeft, size.height * 0.28));
     }
 
     if (hasChild('value')) {
       layoutChild('value', BoxConstraints.loose(size));
-      positionChild('value', Offset(size.width * 0.06, size.height * 0.48));
+      positionChild('value', Offset(middleLeft, size.height * 0.48));
     }
 
     if (hasChild('issued-on')) {

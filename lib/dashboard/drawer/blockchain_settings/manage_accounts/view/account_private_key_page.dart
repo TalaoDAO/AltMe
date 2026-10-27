@@ -8,10 +8,11 @@ class AccountPrivateKeyPage extends StatefulWidget {
   const AccountPrivateKeyPage({super.key, required this.privateKey});
 
   static Route<dynamic> route({required String privateKey}) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => AccountPrivateKeyPage(privateKey: privateKey),
       settings: const RouteSettings(name: '/AccountPrivateKeyPage'),
     );
+    return route;
   }
 
   final String privateKey;

@@ -14,6 +14,11 @@ import 'package:uuid/uuid.dart';
 /// skipped rather than aborting the others. Deferred/pending tokens are
 /// still inserted immediately as placeholder cards, since there's nothing
 /// to review yet.
+///
+/// When a Credential Response carries a `notification_id`, the
+/// [IssuanceNotification] the issuer asked for is registered with
+/// [credentialsCubit], which sends it with [accessToken] (DPoP-bound to
+/// [dpopKey], if any) once the user's choice is stored.
 Future<List<CredentialAcceptanceItem>> addCredentialData({
   required List<dynamic> encodedCredentialOrFutureTokens,
   required String accessToken,
@@ -27,6 +32,8 @@ Future<List<CredentialAcceptanceItem>> addCredentialData({
   required String issuer,
   required JWTDecode jwtDecode,
   required QRCodeScanCubit qrCodeScanCubit,
+  List<String?>? credentialKeyIds,
+  String? dpopKey,
 }) async {
   final profileModel = credentialsCubit.profileCubit.state.model;
   final items = <CredentialAcceptanceItem>[];
@@ -108,7 +115,22 @@ Future<List<CredentialAcceptanceItem>> addCredentialData({
           format: format,
           openIdConfiguration: openIdConfiguration,
           jwtDecode: jwtDecode,
+          keyId: credentialKeyIds != null && i < credentialKeyIds.length
+              ? credentialKeyIds[i]
+              : null,
         );
+        final notification = credentialsCubit.oidc4vc.issuanceNotification(
+          credentialResponse: data,
+          openIdConfiguration: openIdConfiguration,
+          accessToken: accessToken,
+          dpopKey: dpopKey,
+        );
+        if (notification != null) {
+          credentialsCubit.expectIssuanceNotification(
+            credentialId: item.credentialModel.id,
+            notification: notification,
+          );
+        }
         items.add(item);
       } catch (_) {
         // skip credentials that fail to fetch/decode rather than blocking

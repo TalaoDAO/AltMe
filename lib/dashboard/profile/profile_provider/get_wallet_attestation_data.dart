@@ -44,16 +44,29 @@ Future<String> getWalletAttestationData({
 
   /// parse
   final header = jwtDecode.parseJwtHeader(jwtVc);
-  final issuerKid = header['kid'].toString();
-  final did = issuerKid.split('#')[0];
+  final payload = jwtDecode.parseJwt(jwtVc);
+  final x5c = header['x5c'];
 
-  /// verify
-  final VerificationType isVerified = await verifyEncodedData(
-    issuer: did,
-    jwtDecode: jwtDecode,
-    jwt: jwtVc,
-    useOAuthAuthorizationServerLink: useOauthServerAuthEndPoint(profileModel),
-  );
+  /// verify: the standard Wallet Instance Attestation is signed with the key
+  /// of its `x5c` leaf certificate; the older one with a DID, named by `kid`.
+  final VerificationType isVerified = x5c is List && x5c.isNotEmpty
+      ? await verifyEncodedData(
+          issuer: payload['iss'].toString(),
+          jwtDecode: jwtDecode,
+          jwt: jwtVc,
+          publicKeyJwk: leafCertificateJwk(x5c.first.toString()),
+          useOAuthAuthorizationServerLink: useOauthServerAuthEndPoint(
+            profileModel,
+          ),
+        )
+      : await verifyEncodedData(
+          issuer: header['kid'].toString().split('#')[0],
+          jwtDecode: jwtDecode,
+          jwt: jwtVc,
+          useOAuthAuthorizationServerLink: useOauthServerAuthEndPoint(
+            profileModel,
+          ),
+        );
 
   if (isVerified != VerificationType.verified) {
     throw ResponseMessage(
@@ -61,8 +74,11 @@ Future<String> getWalletAttestationData({
     );
   }
 
-  final payload = jwtDecode.parseJwt(jwtVc);
-  final status = payload['status'];
+  // The standard attestation carries its status under `client_status`.
+  final clientStatus = payload['client_status'];
+  final status =
+      payload['status'] ??
+      (clientStatus is Map<String, dynamic> ? clientStatus['status'] : null);
 
   if (status != null && status is Map<String, dynamic>) {
     final statusList = status['status_list'];
@@ -87,12 +103,11 @@ Future<String> getWalletAttestationData({
 
         final payload = jwtDecode.parseJwt(response.toString());
 
-        /// verify the signature of the VC with the kid of the JWT
-        final VerificationType isVerified = await verifyEncodedData(
+        final VerificationType isVerified = await verifyStatusListToken(
+          statusListToken: response.toString(),
           issuer: payload['iss'].toString(),
           jwtDecode: jwtDecode,
-          jwt: response.toString(),
-          fromStatusList: true,
+          referencedTokenKey: x5cLeafKey(jwt: jwtVc, jwtDecode: jwtDecode),
           useOAuthAuthorizationServerLink: useOauthServerAuthEndPoint(
             profileModel,
           ),

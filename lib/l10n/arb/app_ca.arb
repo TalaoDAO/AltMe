@@ -1002,7 +1002,7 @@
   "statuslListSignatureFailed": "Error en la signatura de la llista d'estats",
   "statusList": "Llista d'estats",
   "statusListIndex": "Índex de la llista d'estats",
-  "theWalletIsSuspended": "La cartera està suspesa.",
+  "theWalletIsSuspended": "Aquesta cartera ha estat desactivada. Ja no podeu obtenir noves atestacions. Contacteu amb el servei d'assistència.",
   "jwkThumbprintP256Key": "Empremta digital JWK P-256",
   "walletBlockedPopupTitle": "Bloquejat 10 minuts",
   "walletBlockedPopupDescription": "Massa intents fallits, la teva cartera digital està bloquejada per seguretat.\nReinicia la teva cartera per utilitzar els serveis de nou.",
@@ -1065,6 +1065,12 @@
   "noNotificationsYet": "Encara no hi ha notificacions",
   "activityLog": "Registre d'Activitat",
   "activityLogDescription": "Veure les teves activitats",
+  "protocolTraceLogs": "Registres de Traça del Protocol",
+  "protocolTraceLogsDescription": "Veure i eliminar els fitxers de traça enregistrats",
+  "protocolTraceLogsEmpty": "Encara no s'ha enregistrat cap fitxer de traça",
+  "deleteAllTraceLogs": "Eliminar-ho tot",
+  "deleteAllTraceLogsConfirmationTitle": "Eliminar tots els registres de traça?",
+  "deleteAllTraceLogsConfirmationSubtitle": "Aquesta acció no es pot desfer.",
   "walletInitialized": "Cartera digital inicialitzada",
   "backupCredentials": "Credencials de còpia de seguretat",
   "restoredCredentials": "Credencials restaurades",
@@ -1242,5 +1248,48 @@
   "notVerifiedLabel": "No verificat",
   "onlyInformationShownWillBeShared": "Només es compartirà la informació mostrada a dalt.",
   "shareInformationButtonLabel": "Compartir informació",
-  "dontShareLabel": "No comparteixis"
+  "dontShareLabel": "No comparteixis",
+  "policyViolation": "Aquest servei no compleix els requisits de seguretat del perfil de la vostra cartera.",
+  "proximityBleSettings": "Proximitat (BLE)",
+  "proximityBleSettingsSubtitle": "Modes Bluetooth que un lector pot fer servir per connectar-se quan presenteu en persona. Mantingueu-los tots dos tret que un lector no es pugui connectar. Sempre en queda un d'activat.",
+  "proximityBlePeripheralServer": "Servidor perifèric",
+  "proximityBlePeripheralServerSubtitle": "El lector es connecta al vostre telèfon.",
+  "proximityBleCentralClient": "Client central",
+  "proximityBleCentralClientSubtitle": "El vostre telèfon es connecta al lector.",
+  "mdocReaderMyRequests": "Les meves sol·licituds",
+  "mdocReaderAddRequest": "Afegeix una sol·licitud",
+  "mdocReaderRequestNewTitle": "Nova sol·licitud",
+  "mdocReaderRequestEditTitle": "Editar sol·licitud",
+  "mdocReaderRequestName": "Nom",
+  "mdocReaderRequestRequired": "Obligatori",
+  "mdocReaderRequestDocument": "Document {number}",
+  "@mdocReaderRequestDocument": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "mdocReaderRequestAddDocument": "Afegeix un document",
+  "mdocReaderRequestDocType": "Tipus de document",
+  "mdocReaderRequestNameSpace": "Espai de noms",
+  "mdocReaderRequestClaims": "Atributs",
+  "mdocReaderRequestRetain": "Conservar",
+  "mdocReaderRequestRetainHint": "Conservar indica al titular que en guardeu el valor.",
+  "mdocReaderRequestNoClaims": "Cap seleccionat",
+  "mdocReaderRequestClaimsRequired": "Trieu almenys un atribut.",
+  "mdocReaderRequestAddClaim": "Afegeix un atribut",
+  "mdocReaderRequestClaimHint": "Identificador, p. ex. family_name",
+  "mdocReaderRequestSuggestedClaims": "Atributs suggerits",
+  "mdocReaderRequestDeleteTitle": "Voleu esborrar aquesta sol·licitud?",
+  "mdocReaderRequestClaimCount": "{count, plural, =1{1 atribut} other{{count} atributs}}",
+  "@mdocReaderRequestClaimCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mdocReaderRequestsTitle": "Lector",
+  "mdocReaderRequestsSubtitle": "Trieu què voleu demanar i, tot seguit, escanegeu el codi QR del titular."
 }

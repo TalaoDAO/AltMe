@@ -20,20 +20,22 @@ class ProfileState extends Equatable {
   Map<String, dynamic> toJson() => _$ProfileStateToJson(this);
 
   ProfileState loading() {
-    return ProfileState(
+    final loadingState = ProfileState(
       status: AppStatus.loading,
       model: model,
       allowLogin: allowLogin,
     );
+    return loadingState;
   }
 
   ProfileState error({required MessageHandler messageHandler}) {
-    return ProfileState(
+    final errorState = ProfileState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       model: model,
       allowLogin: allowLogin,
     );
+    return errorState;
   }
 
   ProfileState copyWith({
@@ -42,7 +44,7 @@ class ProfileState extends Equatable {
     ProfileModel? model,
     bool? allowLogin,
   }) {
-    return ProfileState(
+    final profileState = ProfileState(
       status: status,
       message: messageHandler == null
           ? null
@@ -50,6 +52,7 @@ class ProfileState extends Equatable {
       model: model ?? this.model,
       allowLogin: allowLogin ?? this.allowLogin,
     );
+    return profileState;
   }
 
   @override

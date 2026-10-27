@@ -5,9 +5,8 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/oidc4vc/helper_function/flatten_claims_for_display.dart';
-import 'package:altme/oidc4vc/helper_function/resolve_issuer_display.dart';
+import 'package:altme/oidc4vc/helper_function/mdoc_credential_data.dart';
 import 'package:altme/oidc4vc/model/credential_acceptance_data.dart';
-import 'package:altme/trusted_list/function/is_issuer_trusted.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -22,6 +21,7 @@ Future<CredentialAcceptanceItem> buildCredentialAcceptanceItem({
   required String format,
   required OpenIdConfiguration? openIdConfiguration,
   required JWTDecode jwtDecode,
+  String? keyId,
 }) async {
   late Map<String, dynamic> credentialFromOIDC4VC;
   late VCFormatType vcFormatType;
@@ -107,8 +107,33 @@ Future<CredentialAcceptanceItem> buildCredentialAcceptanceItem({
         credentialType: credentialType,
       );
     case VCFormatType.mdoc:
-      // TODO(hawkbee): Handle this case. mdoc
-      throw UnimplementedError();
+      // final / draft15+: `credentials: [{credential}]`; draft13: `credential`.
+      final credentials = encodedCredentialFromOIDC4VC['credentials'];
+      final issuerSigned = credentials is List && credentials.isNotEmpty
+          ? credentials.first['credential']
+          : encodedCredentialFromOIDC4VC['credential'];
+      if (issuerSigned is! String) {
+        throw ResponseMessage(
+          data: {
+            'error': 'invalid_format',
+            'error_description': 'The format of vc is incorrect.',
+          },
+        );
+      }
+      // The docType the issuer offered for this credential configuration.
+      final configurations =
+          openIdConfiguration?.credentialConfigurationsSupported;
+      final configuration = configurations is Map<String, dynamic>
+          ? configurations[credentialType]
+          : null;
+      credentialFromOIDC4VC = await getMdocCredentialData(
+        issuerSigned: issuerSigned,
+        credentialType: credentialType,
+        keyId: keyId,
+        expectedDocType: configuration is Map<String, dynamic>
+            ? configuration['doctype'] as String?
+            : null,
+      );
   }
   final Map<String, dynamic> newCredential = Map<String, dynamic>.from(
     credentialFromOIDC4VC,
@@ -157,9 +182,9 @@ Future<CredentialAcceptanceItem> buildCredentialAcceptanceItem({
     activities: [Activity(acquisitionAt: DateTime.now())],
     display: display,
     profileType: credentialsCubit.profileCubit.state.model.profileType,
-  );
+  ).copyWith(keyId: keyId);
 
-  return CredentialAcceptanceItem(
+  final credentialAcceptanceItem = CredentialAcceptanceItem(
     credentialDisplayName: display?.name ?? credentialType,
     claims: buildTranslatedClaims(
       credentialModel: credentialModel,
@@ -167,6 +192,7 @@ Future<CredentialAcceptanceItem> buildCredentialAcceptanceItem({
     ),
     credentialModel: credentialModel,
   );
+  return credentialAcceptanceItem;
 }
 
 /// Used by the deferred-credential path, where exactly one credential is
@@ -183,7 +209,8 @@ Future<void> addOIDC4VCCredential({
   String? credentialIdToBeDeleted,
   String? issuer,
 }) async {
-  final item = await buildCredentialAcceptanceItem(
+  // Rejects a credential the wallet cannot read.
+  await buildCredentialAcceptanceItem(
     encodedCredentialFromOIDC4VC: encodedCredentialFromOIDC4VC,
     credentialsCubit: credentialsCubit,
     credentialType: credentialType,
@@ -191,28 +218,6 @@ Future<void> addOIDC4VCCredential({
     openIdConfiguration: openIdConfiguration,
     jwtDecode: jwtDecode,
   );
-
-  final profileModel = credentialsCubit.profileCubit.state.model;
-  final languageCode =
-      credentialsCubit.profileCubit.langCubit.state.locale.languageCode;
-  final fallbackHost = Uri.tryParse(issuer ?? '')?.host ?? issuer ?? '';
-
-  final issuerName = openIdConfiguration != null
-      ? resolveIssuerDisplay(
-          issuerOpenIdConfiguration: openIdConfiguration,
-          locale: languageCode,
-          fallbackHost: fallbackHost,
-        ).name
-      : fallbackHost;
-
-  final isTrusted =
-      openIdConfiguration != null &&
-      isIssuerTrusted(
-        issuerOpenIdConfiguration: openIdConfiguration,
-        trustedList: profileModel.trustedList,
-        trustedListEnabled:
-            profileModel.profileSetting.walletSecurityOptions.trustedList,
-      );
 
   if (credentialIdToBeDeleted != null) {
     ///delete pending dummy credential
@@ -222,7 +227,10 @@ Future<void> addOIDC4VCCredential({
     );
   }
   // TODO(hawkbee): Pick the old process for defered credential.
-  // the pick page inserts the credential itself once the user accepts
+  // the pick page inserts the credential itself once the user accepts.
+  // It needs the item built above, the issuer's display name
+  // (resolveIssuerDisplay) and whether the trusted list names the issuer
+  // (oidc4vc.findTrustedIssuer), as computed before commit 63509c0b7.
   // qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
   //   items: [item],
   //   issuerName: issuerName,

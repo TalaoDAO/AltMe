@@ -7,10 +7,11 @@ class BlockchainSettingsMenu extends StatelessWidget {
   const BlockchainSettingsMenu({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => const BlockchainSettingsMenu(),
       settings: const RouteSettings(name: '/BlockchainSettingsMenu'),
     );
+    return route;
   }
 
   @override

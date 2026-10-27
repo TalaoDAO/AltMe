@@ -9,10 +9,10 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:altme/app/shared/enum/flavor.dart';
+import 'package:altme/app/shared/protocol_trace/start_protocol_trace.dart';
 import 'package:altme/app/view/app.dart';
 import 'package:altme/theme/theme_repository.dart';
 import 'package:bloc/bloc.dart';
-
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:secure_storage/secure_storage.dart';
@@ -49,6 +49,10 @@ Future<void> bootstrap(FlavorMode flavor) async {
     );
 
     await initSecureStorage;
+
+    // Only if developer mode is on; before anything opens an HttpClient, so
+    // the wallet provider onboarding at startup is traced too.
+    await startProtocolTrace();
 
     /// Disable Http google font
     GoogleFonts.config.allowRuntimeFetching = true;

@@ -22,6 +22,7 @@ class SelectiveDisclosureDisplayMap {
     this.parentKeyId,
     required this.selectedClaimsKeyIds,
     this.onPressed,
+    this.hiddenClaim,
   });
 
   final CredentialModel credentialModel;
@@ -36,6 +37,9 @@ class SelectiveDisclosureDisplayMap {
   final bool displayMode;
   final void Function(String?, String, String?, String?)? onPressed;
 
+  /// A claim left out of the map, e.g. the portrait shown on the card.
+  final PortraitClaim? hiddenClaim;
+
   Map<String, dynamic> get buildMap {
     final builtMap = <String, dynamic>{};
     final selectiveDisclosure = SelectiveDisclosure(credentialModel);
@@ -49,6 +53,11 @@ class SelectiveDisclosureDisplayMap {
       final mapValue = value;
 
       if (mapValue is! Map<String, dynamic>) return;
+      if (hiddenClaim != null &&
+          hiddenClaim!.key == mapKey &&
+          hiddenClaim!.parentKeyId == parentKeyId) {
+        return;
+      }
 
       final display = getDisplay(mapValue, languageCode);
       if (displayMode && display == null && !isPresentation) return;
@@ -74,6 +83,7 @@ class SelectiveDisclosureDisplayMap {
           selectedClaimsKeyIds: selectedClaimsKeyIds,
           onPressed: onPressed,
           displayMode: displayMode,
+          hiddenClaim: hiddenClaim,
         ).buildMap;
         if (nestedMap.isNotEmpty) {
           final fundation = claimData(mapKey, title, type, parentKeyId);

@@ -17,12 +17,13 @@ class ActivityLogManager {
 
     if (logDataJson != null) {
       final logStrings = logDataJson.split('\n');
-      return logStrings
+      final logDataList = logStrings
           .map(
             (logString) =>
                 LogData.fromJson(jsonDecode(logString) as Map<String, dynamic>),
           )
           .toList();
+      return logDataList;
     }
     return [];
   }
@@ -101,7 +102,8 @@ class ActivityLogManager {
   Future<int> _getCurrentBatchIndex() async {
     final index = await _secureStorageProvider.get('currentBatchIndex');
     if (index != null) {
-      return int.parse(index);
+      final parsedIndex = int.parse(index);
+      return parsedIndex;
     }
 
     return 0;

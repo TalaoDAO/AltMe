@@ -11,6 +11,7 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
 import 'package:did_kit/did_kit.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -50,8 +51,48 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   final OIDC4VCIClient oidc4vc;
   final WalletCubit walletCubit;
   final ActivityLogManager activityLogManager;
+  final _dio = Dio();
 
   final log = getLogger('CredentialsCubit');
+
+  /// The notifications issuers expect about credentials not stored yet, by
+  /// credential id.
+  final _issuanceNotifications = <String, IssuanceNotification>{};
+
+  /// Registers the [notification] the issuer of the credential
+  /// [credentialId] expects (OpenID4VCI 1.0 §11): [insertCredential] sends
+  /// `credential_accepted` once it is stored, `credential_failure` if storing
+  /// it fails.
+  void expectIssuanceNotification({
+    required String credentialId,
+    required IssuanceNotification notification,
+  }) => _issuanceNotifications[credentialId] = notification;
+
+  /// Sends `credential_deleted` for every credential registered with
+  /// [expectIssuanceNotification] that was not stored: the ones the user
+  /// declined, once the screen offering them is closed.
+  void notifyDeclinedCredentials() {
+    for (final credentialId in _issuanceNotifications.keys.toList()) {
+      _notifyIssuer(credentialId, IssuanceNotificationEvent.credentialDeleted);
+    }
+  }
+
+  void _notifyIssuer(String credentialId, IssuanceNotificationEvent event) {
+    final notification = _issuanceNotifications.remove(credentialId);
+    if (notification == null) return;
+    // the credentials of one Credential Response share its notification_id:
+    // the issuer hears about them once
+    _issuanceNotifications.removeWhere(
+      (_, other) => other.notificationId == notification.notificationId,
+    );
+    unawaited(
+      oidc4vc
+          .sendNotification(notification: notification, event: event, dio: _dio)
+          .catchError((Object e, StackTrace s) {
+            log.e('${event.value} not delivered', error: e, stackTrace: s);
+          }),
+    );
+  }
 
   Future<void> loadAllCredentials() async {
     final log = getLogger('loadAllCredentials');
@@ -265,27 +306,36 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   }) async {
     late final List<CredentialModel> credentials;
 
-    if (credential.isDefaultCredential && credential.isVerifiableDiplomaType) {
-      final updatedCredential = credential.copyWith(
-        credentialPreview: credential.credentialPreview.copyWith(
-          credentialSubjectModel: credential
-              .credentialPreview
-              .credentialSubjectModel
-              .copyWith(credentialCategory: CredentialCategory.educationCards),
-        ),
-      );
-      if (!isPendingCredential) {
-        await modifyCredential(credential: updatedCredential);
+    try {
+      if (credential.isDefaultCredential &&
+          credential.isVerifiableDiplomaType) {
+        final updatedCredential = credential.copyWith(
+          credentialPreview: credential.credentialPreview.copyWith(
+            credentialSubjectModel: credential
+                .credentialPreview
+                .credentialSubjectModel
+                .copyWith(
+                  credentialCategory: CredentialCategory.educationCards,
+                ),
+          ),
+        );
+        if (!isPendingCredential) {
+          await modifyCredential(credential: updatedCredential);
+        }
+        await credentialsRepository.insert(updatedCredential);
+        credentials = List.of(state.credentials)..add(updatedCredential);
+      } else {
+        if (!isPendingCredential) {
+          await modifyCredential(credential: credential);
+        }
+        await credentialsRepository.insert(credential);
+        credentials = List.of(state.credentials)..add(credential);
       }
-      await credentialsRepository.insert(updatedCredential);
-      credentials = List.of(state.credentials)..add(updatedCredential);
-    } else {
-      if (!isPendingCredential) {
-        await modifyCredential(credential: credential);
-      }
-      await credentialsRepository.insert(credential);
-      credentials = List.of(state.credentials)..add(credential);
+    } catch (_) {
+      _notifyIssuer(credential.id, IssuanceNotificationEvent.credentialFailure);
+      rethrow;
     }
+    _notifyIssuer(credential.id, IssuanceNotificationEvent.credentialAccepted);
 
     final CredentialCategory credentialCategory =
         credential.credentialPreview.credentialSubjectModel.credentialCategory;
@@ -478,7 +528,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required CryptoAccountData cryptoAccountData,
   }) async {
     final walletContainsEnterpriseProfile =
-        profileCubit.state.model.walletType == WalletType.enterprise;
+        profileCubit.state.model.hasEnterpriseProfile;
 
     final ProfileType currentProfileType = profileCubit.state.model.profileType;
     // for each profileType create the crypto ownership proofs
@@ -490,9 +540,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
           profileType == ProfileType.enterprise) {
         continue;
       }
-      final doNotGenerateProfileType = [
-        ProfileType.EUDIW,
-      ];
+      final doNotGenerateProfileType = [ProfileType.EUDIW];
 
       if (doNotGenerateProfileType.contains(profileType)) {
         continue;
@@ -1055,7 +1103,7 @@ List<DiscoverDummyCredential> getDummiesFromExternalIssuerList(
   // filtering the external issuer list
   final List<DisplayExternalIssuer> list = List.from(externalIssuers);
   list.removeWhere((element) => element.category != category.name);
-  return list
+  final dummyCredentials = list
       .map(
         (e) => DiscoverDummyCredential(
           credentialSubjectType: CredentialSubjectType.defaultCredential,
@@ -1079,4 +1127,5 @@ List<DiscoverDummyCredential> getDummiesFromExternalIssuerList(
         ),
       )
       .toList();
+  return dummyCredentials;
 }

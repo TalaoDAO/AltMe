@@ -7,6 +7,8 @@ import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/matrix_notification/matrix_notification.dart';
+import 'package:altme/splash/splash.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,6 +42,9 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Whatever the way here (PIN, onboarding, wallet import), the wallet is
+      // unlocked: the links waiting for it can be processed.
+      context.read<SplashCubit>().authenticated();
       Future.delayed(Duration.zero, () {
         /// If there is a deepLink we give do as if it coming from QRCode
         context.read<QRCodeScanCubit>().deepLink();
@@ -71,6 +76,31 @@ class _DashboardViewState extends State<DashboardView> {
     }
     context.read<DashboardCubit>().onPageChanged(index);
     pageController.jumpToPage(index);
+  }
+
+  /// Opens the in-person presentation QR code, like the scan button does
+  /// for scanning.
+  void _openPresent(BuildContext context) {
+    if (kIsWeb) {
+      final l10n = context.l10n;
+      showDialog<void>(
+        context: context,
+        builder: (_) => ConfirmDialog(
+          title: l10n.unavailable_feature_title,
+          subtitle: l10n.unavailable_feature_message,
+          yes: l10n.ok,
+          showNoButton: false,
+        ),
+      );
+      return;
+    }
+    if (context.read<HomeCubit>().state.homeStatus == HomeStatus.hasNoWallet) {
+      showDialog<void>(context: context, builder: (_) => const WalletDialog());
+      return;
+    }
+    Navigator.of(
+      context,
+    ).push<void>(QrCodeScanPage.route(initialTab: ScanPageTab.present));
   }
 
   String _getTitle(int selectedIndex, AppLocalizations l10n) {
@@ -161,17 +191,12 @@ class _DashboardViewState extends State<DashboardView> {
             builder: (context, profileState) {
               final profileModel = profileState.model;
 
-              final isEnterprise =
-                  profileModel.walletType == WalletType.enterprise;
-
               final helpCenterOptions =
                   profileModel.profileSetting.helpCenterOptions;
 
-              final displayChatSupport =
-                  isEnterprise && helpCenterOptions.displayChatSupport;
+              final displayChatSupport = helpCenterOptions.displayChatSupport;
 
-              final displayNotification =
-                  isEnterprise && helpCenterOptions.displayNotification;
+              final displayNotification = helpCenterOptions.displayNotification;
 
               return PopScope(
                 canPop: false,
@@ -303,7 +328,7 @@ class _DashboardViewState extends State<DashboardView> {
                                     isSelected:
                                         dashboardState.selectedIndex == 2,
                                   ),
-                                if (displayChatSupport && isEnterprise) ...[
+                                if (displayChatSupport) ...[
                                   StreamBuilder(
                                     initialData: context
                                         .read<AltmeChatSupportCubit>()
@@ -324,10 +349,9 @@ class _DashboardViewState extends State<DashboardView> {
                                   ),
                                 ] else ...[
                                   BottomBarItem(
-                                    icon: IconStrings.settings,
-                                    text: l10n.settings,
-                                    onTap: () =>
-                                        scaffoldKey.currentState!.openDrawer(),
+                                    iconData: Icons.contactless_outlined,
+                                    text: l10n.mdocPresent,
+                                    onTap: () => _openPresent(context),
                                     isSelected: false,
                                   ),
                                 ],

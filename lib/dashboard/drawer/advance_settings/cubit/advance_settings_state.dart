@@ -65,7 +65,7 @@ class AdvanceSettingsState extends Equatable {
     bool? isHumanityProofEnabled,
     bool? isWalletIntegrityEnabled,
   }) {
-    return AdvanceSettingsState(
+    final updatedState = AdvanceSettingsState(
       isGamingEnabled: isGamingEnabled ?? this.isGamingEnabled,
       isIdentityEnabled: isIdentityEnabled ?? this.isIdentityEnabled,
       isProfessionalEnabled:
@@ -83,6 +83,7 @@ class AdvanceSettingsState extends Equatable {
       isWalletIntegrityEnabled:
           isWalletIntegrityEnabled ?? this.isWalletIntegrityEnabled,
     );
+    return updatedState;
   }
 
   @override

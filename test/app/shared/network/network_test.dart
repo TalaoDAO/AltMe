@@ -104,6 +104,37 @@ void main() {
 
         expect(response, successMessage);
       });
+
+      test('request headers are not left on the shared Dio', () async {
+        dioAdapter.onPost(
+          baseUrl + testPath,
+          (request) => request.reply(201, successMessage),
+          data: Matchers.any,
+        );
+
+        await service.post(
+          baseUrl + testPath,
+          data: 'request=par',
+          headers: const <String, dynamic>{
+            'OAuth-Client-Attestation': 'wia',
+            'OAuth-Client-Attestation-PoP': 'pop',
+            'DPoP': 'proof',
+          },
+        );
+
+        expect(
+          service.dio.options.headers.keys.map((key) => key.toLowerCase()),
+          isNot(
+            anyElement(
+              isIn([
+                'oauth-client-attestation',
+                'oauth-client-attestation-pop',
+                'dpop',
+              ]),
+            ),
+          ),
+        );
+      });
     });
   });
 }

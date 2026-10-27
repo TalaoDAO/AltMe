@@ -23,7 +23,7 @@ class ConfirmPinCodePage extends StatelessWidget {
     required VoidCallback isValidCallback,
     required bool isFromOnboarding,
   }) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => ConfirmPinCodePage(
         storedPassword: storedPassword,
         isValidCallback: isValidCallback,
@@ -31,6 +31,7 @@ class ConfirmPinCodePage extends StatelessWidget {
       ),
       settings: const RouteSettings(name: '/confirmPinCodePage'),
     );
+    return route;
   }
 
   @override

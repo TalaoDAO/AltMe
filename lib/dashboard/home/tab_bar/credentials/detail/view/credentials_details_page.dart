@@ -36,7 +36,7 @@ class CredentialsDetailsPage extends StatelessWidget {
     CardChatSupportCubit? cardChatSupportCubit,
     bool readOnly = false,
   }) {
-    return MaterialPageRoute<void>(
+    final pageRoute = MaterialPageRoute<void>(
       builder: (context) => CredentialsDetailsPage(
         credentialModel: credentialModel,
         readOnly: readOnly,
@@ -44,6 +44,7 @@ class CredentialsDetailsPage extends StatelessWidget {
       ),
       settings: const RouteSettings(name: '/credentialsDetailsPages'),
     );
+    return pageRoute;
   }
 
   @override
@@ -135,6 +136,11 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
         .credentialSubjectModel
         .credentialSubjectType;
 
+    // Shown on the default card, so left out of the claims listed below it.
+    final showPortrait =
+        credentialImage == null &&
+        CredentialDisplay.portraitSubjectTypes.contains(credentialSubjectType);
+
     final showVerticalDescription =
         credentialSubjectType == CredentialSubjectType.eudiPid ||
         credentialSubjectType == CredentialSubjectType.identityCredential ||
@@ -197,6 +203,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             credDisplayType: CredDisplayType.Detail,
                             profileSetting: profileSetting,
                             isDiscover: false,
+                            showPortrait: showPortrait,
                           ),
                         const SizedBox(height: 20),
                         Column(
@@ -304,6 +311,7 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                               credentialModel: widget.credentialModel,
                               claims: null,
                               showVertically: showVerticalDescription,
+                              hidePortrait: showPortrait,
                             ),
 
                           // /// normal claims data

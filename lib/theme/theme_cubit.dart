@@ -33,6 +33,7 @@ class ThemeCubit extends Cubit<ThemeState> {
   Future<void> close() {
     _themeSubscription.cancel();
     _themeRepository.dispose();
-    return super.close();
+    final closeFuture = super.close();
+    return closeFuture;
   }
 }

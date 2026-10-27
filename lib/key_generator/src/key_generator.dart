@@ -84,7 +84,8 @@ class KeyGenerator {
     }
 
     final key = jwkFromSeed(seedBytes: seedBytes, accountType: accountType);
-    return jsonEncode(key);
+    final jwkJson = jsonEncode(key);
+    return jwkJson;
   }
 
   Map<String, String> jwkFromSeed({
@@ -205,10 +206,11 @@ class KeyGenerator {
 
         final tezosSecretKey = crypto.seedToSecretKey(tezosSeed);
 
-        return walletAddressFromSecretKey(
+        final walletAddress = await walletAddressFromSecretKey(
           secretKey: tezosSecretKey,
           accountType: AccountType.tezos,
         );
+        return walletAddress;
 
       case AccountType.ethereum:
       case AccountType.fantom:
@@ -282,7 +284,8 @@ class KeyGenerator {
       accountType: accountType,
       alg: alg,
     );
-    return jsonEncode(jwk);
+    final jwkJson = jsonEncode(jwk);
+    return jwkJson;
   }
 
   Future<String> hexPubKey({

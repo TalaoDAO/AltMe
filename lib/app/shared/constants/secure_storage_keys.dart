@@ -41,6 +41,10 @@ class SecureStorageKeys {
   static const String p256PrivateKeyToGetAndPresentVC =
       'p256PrivateKeyToGetAndPresentVC';
 
+  /// used only with wallet providers
+  static const String p256PrivateKeyForIntegrityToken =
+      'p256PrivateKeyForIntegrityToken';
+
   static const String cryptoAccount = 'cryptoAccount';
   static const String cryptoAccounTrackingIndex = 'cryptoAccounTrackingIndex';
   static const String currentCryptoIndex = 'currentCryptoIndex';
@@ -57,6 +61,9 @@ class SecureStorageKeys {
 
   static const String savedDaaps = 'savedDaaps';
 
+  /// The reader requests the user defined, as a JSON list.
+  static const String customReaderRequests = 'customReaderRequests';
+
   static const String importAccountStep2Mnemonics =
       'importAccountStep2Mnemonics';
 
@@ -66,7 +73,6 @@ class SecureStorageKeys {
 
   static const String hasVerifiedMnemonics = 'hasVerifiedMnemonics';
 
-  static const String walletType = 'walletType';
   static const String walletAttestationData = 'walletAttestationData';
 
   static const String customProfileSettings = 'customProfileSettings';

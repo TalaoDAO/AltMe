@@ -1,6 +1,7 @@
 import 'package:altme/app/shared/enum/enum.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:oidc4vc/oidc4vc.dart';
 
 class Parameters {
   static const int multipleCredentialsProcessDelay = 1;
@@ -157,8 +158,41 @@ class Parameters {
 
   static const String doNotDisplayMe = 'doNotDisplayMeMggK5GvU7';
 
-  // Used to display picture on the card. This picture is found in the 
+  // Used to display picture on the card. This picture is found in the
   // credential data
   static const pictureOnCardKeyList = ['picture', 'face', 'portrait'];
   static const pictureOnCardValueTypeList = ['image/jpeg', 'image/png'];
+
+  // An SD-JWT or mdoc claim with this name and an image value is shown on
+  // the card of the credential details, not in the attribute list.
+  static const portraitOnCardKey = 'portrait';
+
+  /// The profile policy (a policy file of `package:oidc4vc`) and mode that
+  /// govern the protocol flows of a [ProfileType].
+  ///
+  /// [ProfileType] alone cannot tell this app's Custom profile from another
+  /// app's profile running as `custom`, so each app keeps its own mapping.
+  /// `hasWalletAttestation` is false for a profile that has no Wallet
+  /// Instance Attestation to present, whatever the authorization server
+  /// asks.
+  static ({String id, PolicyMode mode, bool hasWalletAttestation}) policyFor(
+    ProfileType type,
+  ) => switch (type) {
+    ProfileType.defaultOne => (
+      id: 'core',
+      mode: PolicyMode.lenient,
+      hasWalletAttestation: false,
+    ),
+    ProfileType.custom || ProfileType.enterprise || ProfileType.diipv5 => (
+      id: 'core',
+      mode: PolicyMode.lenient,
+      hasWalletAttestation: true,
+    ),
+    // TODO(hawkbee): lenient until the Light EUDIW mode is decided (#3488).
+    ProfileType.EUDIW => (
+      id: 'haip',
+      mode: PolicyMode.lenient,
+      hasWalletAttestation: true,
+    ),
+  };
 }

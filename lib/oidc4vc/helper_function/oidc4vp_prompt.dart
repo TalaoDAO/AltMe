@@ -4,9 +4,9 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vc/helper_function/resolve_verifier_display.dart';
 import 'package:altme/oidc4vc/model/verifier_trust_info.dart';
 import 'package:altme/oidc4vc/widget/verifier_connect_dialog.dart';
-import 'package:altme/trusted_list/model/trusted_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trusted_list/trusted_list.dart';
 
 class Oidc4VpPrompt {
   Oidc4VpPrompt({

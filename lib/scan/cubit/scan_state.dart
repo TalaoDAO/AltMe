@@ -31,7 +31,7 @@ class ScanState extends Equatable {
   final dynamic Function(String)? done;
 
   ScanState loading() {
-    return copyWith(
+    final loadingState = copyWith(
       status: ScanStatus.loading,
       uri: uri,
       keyId: keyId,
@@ -39,6 +39,7 @@ class ScanState extends Equatable {
       domain: domain,
       done: done,
     );
+    return loadingState;
   }
 
   ScanState scanPermission({
@@ -48,7 +49,7 @@ class ScanState extends Equatable {
     String? domain,
     required dynamic Function(String) done,
   }) {
-    return copyWith(
+    final permissionState = copyWith(
       status: ScanStatus.askPermissionDidAuth,
       uri: uri,
       keyId: keyId,
@@ -56,17 +57,20 @@ class ScanState extends Equatable {
       domain: domain,
       done: done,
     );
+    return permissionState;
   }
 
   ScanState warning({required MessageHandler messageHandler}) {
-    return copyWith(
+    final warningState = copyWith(
       status: ScanStatus.warning,
       message: StateMessage.warning(messageHandler: messageHandler),
     );
+    return warningState;
   }
 
   ScanState error({required StateMessage message}) {
-    return copyWith(status: ScanStatus.error, message: message);
+    final errorState = copyWith(status: ScanStatus.error, message: message);
+    return errorState;
   }
 
   ScanState copyWith({
@@ -102,7 +106,7 @@ class ScanState extends Equatable {
       newCredentialPresentation = null;
     }
 
-    return ScanState(
+    final newState = ScanState(
       status: status ?? this.status,
       message: message ?? this.message,
       uri: uri ?? this.uri,
@@ -116,6 +120,7 @@ class ScanState extends Equatable {
       presentationIssuer: newPresentationIssuer,
       credentialsToBePresented: newCredentialsToBePresented,
     );
+    return newState;
   }
 
   @override

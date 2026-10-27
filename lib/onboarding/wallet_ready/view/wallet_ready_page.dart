@@ -13,10 +13,11 @@ class WalletReadyPage extends StatelessWidget {
   const WalletReadyPage({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/walletReadyPage'),
       builder: (_) => const WalletReadyPage(),
     );
+    return route;
   }
 
   @override

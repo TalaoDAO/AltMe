@@ -18,22 +18,24 @@ class ImportTalaoCommunityCardState extends Equatable {
   final bool isPrivateKeyValid;
 
   ImportTalaoCommunityCardState loading() {
-    return ImportTalaoCommunityCardState(
+    final loadingState = ImportTalaoCommunityCardState(
       status: AppStatus.loading,
       isTextFieldEdited: isTextFieldEdited,
       isPrivateKeyValid: isPrivateKeyValid,
     );
+    return loadingState;
   }
 
   ImportTalaoCommunityCardState error({
     required MessageHandler messageHandler,
   }) {
-    return ImportTalaoCommunityCardState(
+    final errorState = ImportTalaoCommunityCardState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       isTextFieldEdited: isTextFieldEdited,
       isPrivateKeyValid: isPrivateKeyValid,
     );
+    return errorState;
   }
 
   ImportTalaoCommunityCardState populating({
@@ -41,18 +43,19 @@ class ImportTalaoCommunityCardState extends Equatable {
     bool? isPrivateKeyValid,
     int? recoveredCredentialLength,
   }) {
-    return ImportTalaoCommunityCardState(
+    final populatingState = ImportTalaoCommunityCardState(
       status: AppStatus.populate,
       isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
       isPrivateKeyValid: isPrivateKeyValid ?? this.isPrivateKeyValid,
     );
+    return populatingState;
   }
 
   ImportTalaoCommunityCardState success({
     MessageHandler? messageHandler,
     int? recoveredCredentialLength,
   }) {
-    return ImportTalaoCommunityCardState(
+    final successState = ImportTalaoCommunityCardState(
       status: AppStatus.success,
       message: messageHandler == null
           ? null
@@ -60,6 +63,7 @@ class ImportTalaoCommunityCardState extends Equatable {
       isTextFieldEdited: isTextFieldEdited,
       isPrivateKeyValid: isPrivateKeyValid,
     );
+    return successState;
   }
 
   Map<String, dynamic> toJson() => _$ImportTalaoCommunityCardStateToJson(this);

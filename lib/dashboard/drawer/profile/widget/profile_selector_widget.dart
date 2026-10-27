@@ -13,8 +13,7 @@ class ProfileSelectorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final profile = context.read<ProfileCubit>().state.model;
 
-    final walletContainsEnterpriseProfile =
-        profile.walletType == WalletType.enterprise;
+    final walletContainsEnterpriseProfile = profile.hasEnterpriseProfile;
 
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (buildContext, state) {
@@ -63,6 +62,11 @@ class ProfileSelectorWidget extends StatelessWidget {
                         return Container();
                       }
 
+                      // Not offered for now; the profile itself is kept.
+                      if (profileType == ProfileType.diipv5) {
+                        return Container();
+                      }
+
                       return Column(
                         children: [
                           ListTile(
@@ -87,17 +91,37 @@ class ProfileSelectorWidget extends StatelessWidget {
                               }
                               LoadingView().show(context: buildContext);
 
-                              await context.read<ProfileCubit>().setProfile(
-                                profileType,
-                              );
-                              await context
-                                  .read<CredentialsCubit>()
-                                  .loadAllCredentials();
+                              try {
+                                await context.read<ProfileCubit>().setProfile(
+                                  profileType,
+                                );
+                                await context
+                                    .read<CredentialsCubit>()
+                                    .loadAllCredentials();
+                              } catch (e) {
+                                // The previous profile stays selected.
+                                LoadingView().hide();
+                                if (!context.mounted) return;
+                                const failedToLoad = ResponseString
+                                    .RESPONSE_STRING_FAILED_TO_LOAD_PROFILE;
+                                AlertMessage.showStateMessage(
+                                  context: context,
+                                  stateMessage: StateMessage.error(
+                                    messageHandler: ResponseMessage(
+                                      message: failedToLoad,
+                                      data: {'error_description': '$e'},
+                                    ),
+                                    showDialog: true,
+                                  ),
+                                );
+                                return;
+                              }
 
                               if (profileType == ProfileType.custom) {
-                                return Navigator.of(
+                                final navigation = Navigator.of(
                                   context,
                                 ).push<void>(Oidc4vcSettingMenu.route());
+                                return navigation;
                               }
                               LoadingView().hide();
                             },

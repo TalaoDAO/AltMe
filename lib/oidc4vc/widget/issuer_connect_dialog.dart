@@ -1,6 +1,5 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/profile/cubit/profile_cubit.dart';
-import 'package:altme/dashboard/profile/models/profile.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

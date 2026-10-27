@@ -18,28 +18,31 @@ class SearchState extends Equatable {
   final StateMessage? message;
 
   SearchState loading({String? searchText}) {
-    return SearchState(
+    final loadingState = SearchState(
       status: AppStatus.loading,
       credentials: credentials,
       searchText: searchText ?? this.searchText,
     );
+    return loadingState;
   }
 
   SearchState error({required MessageHandler messageHandler}) {
-    return SearchState(
+    final errorState = SearchState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       credentials: credentials,
       searchText: searchText,
     );
+    return errorState;
   }
 
   SearchState populate({List<CredentialModel>? credentials}) {
-    return SearchState(
+    final populatedState = SearchState(
       status: AppStatus.populate,
       credentials: credentials ?? this.credentials,
       searchText: searchText,
     );
+    return populatedState;
   }
 
   SearchState copuWith({
@@ -47,7 +50,7 @@ class SearchState extends Equatable {
     MessageHandler? messageHandler,
     List<CredentialModel>? credentials,
   }) {
-    return SearchState(
+    final searchState = SearchState(
       status: status,
       message: messageHandler == null
           ? null
@@ -55,6 +58,7 @@ class SearchState extends Equatable {
       credentials: credentials ?? this.credentials,
       searchText: searchText,
     );
+    return searchState;
   }
 
   Map<String, dynamic> toJson() => _$SearchStateToJson(this);

@@ -10,10 +10,11 @@ class StarterPage extends StatelessWidget {
   const StarterPage({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       settings: const RouteSettings(name: '/starterPage'),
       builder: (_) => const StarterPage(),
     );
+    return route;
   }
 
   @override
@@ -71,7 +72,6 @@ class StarterView extends StatelessWidget {
                             await profileCubit.setProfileSetting(
                               profileSetting: ProfileSetting.initial(),
                               profileType: ProfileType.defaultOne,
-                              walletType: WalletType.personal,
                             );
                             await Navigator.of(context).push<void>(
                               ProtectWalletPage.route(
@@ -88,7 +88,6 @@ class StarterView extends StatelessWidget {
                             await profileCubit.setProfileSetting(
                               profileSetting: ProfileSetting.initial(),
                               profileType: ProfileType.defaultOne,
-                              walletType: WalletType.personal,
                             );
 
                             await Navigator.of(context).push<void>(

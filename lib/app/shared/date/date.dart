@@ -25,13 +25,15 @@ class UiDate {
       return '';
     }
 
-    return DateFormat.yMd(localizations.localeName).format(date);
+    final formattedDate = DateFormat.yMd(localizations.localeName).format(date);
+    return formattedDate;
   }
 
   static String formatStringDate(String dateTime) {
     try {
       final DateTime dt = DateTime.parse(dateTime);
-      return formatDate(dt);
+      final formattedDate = formatDate(dt);
+      return formattedDate;
     } catch (e) {
       return '';
     }
@@ -39,7 +41,8 @@ class UiDate {
 
   static String formatDate(DateTime? dateTime) {
     if (dateTime == null) return '';
-    return outputFormat.format(dateTime);
+    final formattedDate = outputFormat.format(dateTime);
+    return formattedDate;
   }
 
   static String formatDatetime(DateTime dateTime) {
@@ -54,7 +57,8 @@ class UiDate {
       final DateTime dt = DateFormat(
         'hh:mm:ss',
       ).parse(formattedString, true).toLocal();
-      return DateFormat.jm().format(dt);
+      final formattedTime = DateFormat.jm().format(dt);
+      return formattedTime;
     } on FormatException {
       return null;
     }
@@ -68,11 +72,13 @@ class UiDate {
         final DateTime dt = DateTime.fromMillisecondsSinceEpoch(
           intValue * 1000,
         );
-        return formatDate(dt);
+        final formattedDate = formatDate(dt);
+        return formattedDate;
       } else {
-        return outputFormat.format(
+        final formattedDate = outputFormat.format(
           DateFormat('y-M-dThh:mm:ssZ').parse(date, true).toLocal(),
         );
+        return formattedDate;
       }
     } catch (e) {
       //getLogger('date').e('e: $e, s: $s');
@@ -95,9 +101,10 @@ class UiDate {
       if (date?.isEmpty ?? true) {
         return null;
       }
-      return DateFormat(
+      final formattedDate = DateFormat(
         'dd-MM-yyyy HH:mm',
       ).format(DateFormat('y-M-dThh:mm:ssZ').parse(date!, true).toLocal());
+      return formattedDate;
     } catch (e, s) {
       getLogger('date').e('e: $e, s: $s');
       return null;
@@ -108,10 +115,12 @@ class UiDate {
     if (RegExp(r'^\d+$').hasMatch(input)) {
       // numeric date string
       final int timestamp = int.parse(input);
-      return DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+      final parsedDate = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+      return parsedDate;
     } else {
       // ISO 8601 formatted date string
-      return DateTime.parse(input);
+      final parsedDate = DateTime.parse(input);
+      return parsedDate;
     }
   }
 }

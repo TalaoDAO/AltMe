@@ -18,21 +18,23 @@ class CredentialsState extends Equatable {
   final StateMessage? message;
 
   CredentialsState loading() {
-    return CredentialsState(
+    final credentialsState = CredentialsState(
       status: CredentialsStatus.loading,
       credentials: credentials,
       message: null,
       dummyCredentials: dummyCredentials,
     );
+    return credentialsState;
   }
 
   CredentialsState error({required MessageHandler messageHandler}) {
-    return CredentialsState(
+    final credentialsState = CredentialsState(
       status: CredentialsStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       credentials: credentials,
       dummyCredentials: dummyCredentials,
     );
+    return credentialsState;
   }
 
   CredentialsState copyWith({
@@ -41,7 +43,7 @@ class CredentialsState extends Equatable {
     List<CredentialModel>? credentials,
     Map<CredentialCategory, List<DiscoverDummyCredential>>? dummyCredentials,
   }) {
-    return CredentialsState(
+    final credentialsState = CredentialsState(
       status: status,
       message: messageHandler == null
           ? null
@@ -49,6 +51,7 @@ class CredentialsState extends Equatable {
       credentials: credentials ?? this.credentials,
       dummyCredentials: dummyCredentials ?? this.dummyCredentials,
     );
+    return credentialsState;
   }
 
   Map<String, dynamic> toJson() => _$CredentialsStateToJson(this);

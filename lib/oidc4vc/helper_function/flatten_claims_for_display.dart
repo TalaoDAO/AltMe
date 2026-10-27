@@ -28,9 +28,11 @@ const _excludedTopLevelClaimKeys = {
 List<ClaimEntry> flattenClaimsForDisplay(Map<String, dynamic> data) {
   final subject = data['credentialSubject'];
   if (subject is Map<String, dynamic>) {
-    return _flatten(subject, excludeTopLevel: {'id', 'type'});
+    final subjectClaims = _flatten(subject, excludeTopLevel: {'id', 'type'});
+    return subjectClaims;
   }
-  return _flatten(data, excludeTopLevel: _excludedTopLevelClaimKeys);
+  final claims = _flatten(data, excludeTopLevel: _excludedTopLevelClaimKeys);
+  return claims;
 }
 
 /// Flattens the claim name/value pairs of one or more credentials about to
@@ -74,7 +76,8 @@ List<ClaimEntry> buildTranslatedClaims({
       credentialSupported?['claims'];
 
   if (claimsList is! List || claimsList.isEmpty) {
-    return flattenClaimsForDisplay(credentialModel.data);
+    final claims = flattenClaimsForDisplay(credentialModel.data);
+    return claims;
   }
 
   final entries = <ClaimEntry>[];
@@ -83,7 +86,11 @@ List<ClaimEntry> buildTranslatedClaims({
     final path = claim['path'];
     if (path is! List) continue;
 
-    final value = _valueAtPath(credentialModel.data, path);
+    // mso_mdoc data elements live under credentialSubject, keyed by name
+    // space, while their claim paths start at the name space.
+    final value =
+        _valueAtPath(credentialModel.data, path) ??
+        _valueAtPath(credentialModel.data['credentialSubject'], path);
     if (value == null) continue;
 
     final display = getDisplay(claim, languageCode);

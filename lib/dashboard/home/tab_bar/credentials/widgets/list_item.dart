@@ -111,6 +111,7 @@ class CredentialsDisplayItem extends StatelessWidget {
               credDisplayType: CredDisplayType.List,
               profileSetting: profileSetting,
               isDiscover: isDiscover,
+              showPortrait: true,
             )
           : DisplaySelectionElement(
               credentialModel: credentialModel,
@@ -148,6 +149,7 @@ class DisplaySelectionElement extends StatelessWidget {
             credDisplayType: CredDisplayType.List,
             profileSetting: profileSetting,
             isDiscover: isDiscover,
+            showPortrait: true,
           ),
           Align(
             alignment: Alignment.centerRight,

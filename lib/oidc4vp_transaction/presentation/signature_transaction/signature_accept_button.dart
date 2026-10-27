@@ -96,10 +96,21 @@ class SignatureAcceptButton extends StatelessWidget {
           // If there no cnf in the payload, then no need to add signature
           if (credential.data['cnf'] != null) {
             /// sign and get token
-            final jwtToken = generateToken(
+            // A credential issued with a Wallet Key Attestation is bound to
+            // a key this wallet's usual private key never signs with
+            // (Wallet Provider Protocol §12) - its key store signs the Key
+            // Binding JWT directly, instead of handing out a raw key to
+            // sign locally.
+            final keyId = credential.keyId;
+            final signer = keyId != null
+                ? profileCubit.credentialKeySigner?.call(keyId)
+                : null;
+
+            final jwtToken = await signKeyBindingJwt(
               payload: payload,
-              tokenParameters: tokenParameters,
-              ignoreProofHeaderType: true,
+              mediaType: MediaType.selectiveDisclosure,
+              signer: signer,
+              tokenParameters: signer == null ? tokenParameters : null,
             );
 
             newJwt = '$newJwt$jwtToken';

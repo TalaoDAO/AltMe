@@ -18,40 +18,43 @@ class RestoreCredentialMnemonicState extends Equatable {
   final bool isMnemonicValid;
 
   RestoreCredentialMnemonicState loading() {
-    return copyWith(
+    final loadingState = copyWith(
       status: AppStatus.loading,
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicValid: isMnemonicValid,
     );
+    return loadingState;
   }
 
   RestoreCredentialMnemonicState error({
     required MessageHandler messageHandler,
   }) {
-    return copyWith(
+    final errorState = copyWith(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicValid: isMnemonicValid,
     );
+    return errorState;
   }
 
   RestoreCredentialMnemonicState populating({
     bool? isTextFieldEdited,
     bool? isMnemonicValid,
   }) {
-    return copyWith(
+    final populatingState = copyWith(
       status: AppStatus.populate,
       isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
       isMnemonicValid: isMnemonicValid ?? this.isMnemonicValid,
     );
+    return populatingState;
   }
 
   RestoreCredentialMnemonicState success({
     MessageHandler? messageHandler,
     int? recoveredCredentialLength,
   }) {
-    return copyWith(
+    final successState = copyWith(
       status: AppStatus.success,
       message: messageHandler == null
           ? null
@@ -59,6 +62,7 @@ class RestoreCredentialMnemonicState extends Equatable {
       isTextFieldEdited: isTextFieldEdited,
       isMnemonicValid: isMnemonicValid,
     );
+    return successState;
   }
 
   RestoreCredentialMnemonicState copyWith({
@@ -69,12 +73,13 @@ class RestoreCredentialMnemonicState extends Equatable {
     int? recoveredCredentialLength,
     String? backupFilePath,
   }) {
-    return RestoreCredentialMnemonicState(
+    final updatedState = RestoreCredentialMnemonicState(
       status: status ?? this.status,
       isTextFieldEdited: isTextFieldEdited ?? this.isTextFieldEdited,
       isMnemonicValid: isMnemonicValid ?? this.isMnemonicValid,
       message: message ?? this.message,
     );
+    return updatedState;
   }
 
   Map<String, dynamic> toJson() => _$RestoreCredentialMnemonicStateToJson(this);

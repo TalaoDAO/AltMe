@@ -24,6 +24,9 @@ ProfileSetting _$ProfileSettingFromJson(Map<String, dynamic> json) =>
       helpCenterOptions: HelpCenterOptions.fromJson(
         json['helpCenterOptions'] as Map<String, dynamic>,
       ),
+      readerRequests: (json['readerRequests'] as List<dynamic>?)
+          ?.map((e) => ReaderRequest.fromJson(e as Map<String, dynamic>))
+          .toList(),
       selfSovereignIdentityOptions: SelfSovereignIdentityOptions.fromJson(
         json['selfSovereignIdentityOptions'] as Map<String, dynamic>,
       ),
@@ -42,6 +45,7 @@ Map<String, dynamic> _$ProfileSettingToJson(ProfileSetting instance) =>
       'discoverCardsOptions': instance.discoverCardsOptions,
       'generalOptions': instance.generalOptions,
       'helpCenterOptions': instance.helpCenterOptions,
+      'readerRequests': instance.readerRequests,
       'selfSovereignIdentityOptions': instance.selfSovereignIdentityOptions,
       'settingsMenu': instance.settingsMenu,
       'version': instance.version,
@@ -95,7 +99,7 @@ const _$VCFormatTypeEnumMap = {
   VCFormatType.jwtVcJsonLd: 'jwt_vc_json-ld',
   VCFormatType.vcSdJWT: 'vc+sd-jwt',
   VCFormatType.dcSdJWT: 'dc+sd-jwt',
-  VCFormatType.mdoc: 'mdoc',
+  VCFormatType.mdoc: 'mso_mdoc',
   VCFormatType.auto: 'auto',
 };
 
@@ -199,6 +203,7 @@ const _$WalletAppTypeEnumMap = {
   WalletAppType.altme: 'altme',
   WalletAppType.talao: 'talao',
   WalletAppType.talao4eu: 'talao4eu',
+  WalletAppType.istec: 'istec',
 };
 
 HelpCenterOptions _$HelpCenterOptionsFromJson(Map<String, dynamic> json) =>
@@ -234,6 +239,8 @@ SelfSovereignIdentityOptions _$SelfSovereignIdentityOptionsFromJson(
     json['customOidc4vcProfile'] as Map<String, dynamic>,
   ),
   displayManageDecentralizedId: json['displayManageDecentralizedId'] as bool,
+  proximityPeripheralServer: json['proximityPeripheralServer'] as bool? ?? true,
+  proximityCentralClient: json['proximityCentralClient'] as bool? ?? true,
 );
 
 Map<String, dynamic> _$SelfSovereignIdentityOptionsToJson(
@@ -241,6 +248,8 @@ Map<String, dynamic> _$SelfSovereignIdentityOptionsToJson(
 ) => <String, dynamic>{
   'customOidc4vcProfile': instance.customOidc4vcProfile,
   'displayManageDecentralizedId': instance.displayManageDecentralizedId,
+  'proximityPeripheralServer': instance.proximityPeripheralServer,
+  'proximityCentralClient': instance.proximityCentralClient,
 };
 
 CustomOidc4VcProfile _$CustomOidc4VcProfileFromJson(

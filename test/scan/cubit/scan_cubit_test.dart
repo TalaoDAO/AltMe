@@ -9,6 +9,7 @@ import 'package:altme/dashboard/home/tab_bar/credentials/models/credential/crede
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_subject/credential_subject_model.dart';
 import 'package:altme/dashboard/profile/profile.dart';
+import 'package:altme/dashboard/qr_code/qr_code.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -48,6 +49,8 @@ class MockCredentialSubjectModel extends Mock
     'credentialSubjectType': 'defaultCredential',
   };
 }
+
+class MockQRCodeScanCubit extends Mock implements QRCodeScanCubit {}
 
 class MockCredentialPreview extends Mock implements Credential {
   @override
@@ -346,6 +349,34 @@ void main() {
           );
         },
       );
+    });
+
+    group('presentOidc4vpFinal', () {
+      test('reports a failed presentation through the state, '
+          'without throwing', () async {
+        await scanCubit.presentOidc4vpFinal(
+          uri: Uri.parse('openid4vp://?response_type=id_token'),
+          credentialModel: CredentialModel(
+            id: 'credential_id',
+            data: const {},
+            credentialPreview: MockCredentialPreview(),
+            shareLink: '',
+            image: '',
+          ),
+          keyId: 'key_id',
+          vpToken: const {},
+          issuer: Issuer.emptyIssuer('verifier.example.com'),
+          qrCodeScanCubit: MockQRCodeScanCubit(),
+        );
+
+        expect(scanCubit.state.status, ScanStatus.error);
+        final messageHandler = scanCubit.state.message?.messageHandler;
+        expect(messageHandler, isA<ResponseMessage>());
+        expect(
+          (messageHandler! as ResponseMessage).data,
+          containsPair('error', 'invalid_request'),
+        );
+      });
     });
   });
 }

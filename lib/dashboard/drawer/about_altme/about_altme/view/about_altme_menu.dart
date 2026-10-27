@@ -9,10 +9,11 @@ class AboutAltmeMenu extends StatelessWidget {
   const AboutAltmeMenu({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => const AboutAltmeMenu(),
       settings: const RouteSettings(name: '/AboutAltmeMenu'),
     );
+    return route;
   }
 
   @override

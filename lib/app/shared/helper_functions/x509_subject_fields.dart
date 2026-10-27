@@ -7,7 +7,8 @@ import 'package:x509_plus/x509.dart' as x509;
 String? leafCertFromX5c(Map<String, dynamic> jwtHeader) {
   final x5c = jwtHeader['x5c'];
   if (x5c is List && x5c.isNotEmpty) {
-    return x5c.first.toString();
+    final leafCert = x5c.first.toString();
+    return leafCert;
   }
   return null;
 }
@@ -26,7 +27,8 @@ String? x509SubjectField(String certBase64, {required String oidName}) {
     for (final entry in subject.names) {
       for (final key in entry.keys) {
         if (key?.name == oidName) {
-          return entry[key]?.toString();
+          final fieldValue = entry[key]?.toString();
+          return fieldValue;
         }
       }
     }

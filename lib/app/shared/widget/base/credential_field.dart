@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:altme/app/shared/helper_functions/value_type_if_null.dart';
 import 'package:altme/app/shared/launch_url/launch_url.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -72,7 +73,9 @@ class DisplayCredentialField extends StatelessWidget {
         fontWeight: FontWeight.bold,
       ),
     );
-    switch (type) {
+    // A data: URI image (e.g. an mdoc portrait) is shown as a picture
+    // whatever value_type the issuer metadata declares, if any.
+    switch (valueTypeIfNull(value) ?? type) {
       case 'email':
         return Padding(
           padding: padding,
@@ -134,7 +137,7 @@ class DisplayCredentialField extends StatelessWidget {
                   ),
                 ),
               ],
-              image,
+              Flexible(child: image),
             ],
           ),
         );
@@ -159,14 +162,15 @@ class DisplayCredentialField extends StatelessWidget {
   }
 
   TextSpan stringValue(TextTheme textTheme, BuildContext context) {
-    return TextSpan(
+    final span = TextSpan(
       text: value,
       style: textTheme.bodyMedium!.copyWith(color: valueColor),
     );
+    return span;
   }
 
   TextSpan uriValue(TextTheme textTheme, BuildContext context) {
-    return TextSpan(
+    final span = TextSpan(
       text: value,
       style: textTheme.bodyMedium!.copyWith(
         color: Theme.of(context).colorScheme.primary,
@@ -176,10 +180,11 @@ class DisplayCredentialField extends StatelessWidget {
           await LaunchUrl.launch(value);
         },
     );
+    return span;
   }
 
   TextSpan emailValue(TextTheme textTheme, BuildContext context) {
-    return TextSpan(
+    final span = TextSpan(
       text: value,
       style: textTheme.bodyMedium!.copyWith(
         color: Theme.of(context).colorScheme.primary,
@@ -189,6 +194,7 @@ class DisplayCredentialField extends StatelessWidget {
           await LaunchUrl.launch('mailto:$value');
         },
     );
+    return span;
   }
 }
 

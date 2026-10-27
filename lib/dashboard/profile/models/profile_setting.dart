@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mdoc_proximity/mdoc_proximity.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:random_string/random_string.dart';
 
@@ -14,6 +15,7 @@ class ProfileSetting extends Equatable {
     this.discoverCardsOptions,
     required this.generalOptions,
     required this.helpCenterOptions,
+    this.readerRequests,
     required this.selfSovereignIdentityOptions,
     required this.settingsMenu,
     required this.version,
@@ -34,10 +36,25 @@ class ProfileSetting extends Equatable {
     walletSecurityOptions: WalletSecurityOptions.initial(),
   );
 
+  factory ProfileSetting.provider() => ProfileSetting(
+    blockchainOptions: BlockchainOptions.initial(),
+    discoverCardsOptions: DiscoverCardsOptions.initial(),
+    generalOptions: GeneralOptions.empty(),
+    helpCenterOptions: HelpCenterOptions.initial(),
+    selfSovereignIdentityOptions: SelfSovereignIdentityOptions.provider(),
+    settingsMenu: SettingsMenu.initial(),
+    version: '',
+    walletSecurityOptions: WalletSecurityOptions.provider(),
+  );
+
   final BlockchainOptions? blockchainOptions;
   final DiscoverCardsOptions? discoverCardsOptions;
   final GeneralOptions generalOptions;
   final HelpCenterOptions helpCenterOptions;
+
+  /// What the wallet, as an ISO/IEC 18013-5 reader, can ask a holder for.
+  /// Without any, the wallet offers no reader.
+  final List<ReaderRequest>? readerRequests;
   final SelfSovereignIdentityOptions selfSovereignIdentityOptions;
   final SettingsMenu settingsMenu;
   final String version;
@@ -50,6 +67,7 @@ class ProfileSetting extends Equatable {
     DiscoverCardsOptions? discoverCardsOptions,
     GeneralOptions? generalOptions,
     HelpCenterOptions? helpCenterOptions,
+    List<ReaderRequest>? readerRequests,
     SelfSovereignIdentityOptions? selfSovereignIdentityOptions,
     SettingsMenu? settingsMenu,
     String? version,
@@ -59,6 +77,7 @@ class ProfileSetting extends Equatable {
     discoverCardsOptions: discoverCardsOptions ?? this.discoverCardsOptions,
     generalOptions: generalOptions ?? this.generalOptions,
     helpCenterOptions: helpCenterOptions ?? this.helpCenterOptions,
+    readerRequests: readerRequests ?? this.readerRequests,
     selfSovereignIdentityOptions:
         selfSovereignIdentityOptions ?? this.selfSovereignIdentityOptions,
     settingsMenu: settingsMenu ?? this.settingsMenu,
@@ -72,6 +91,7 @@ class ProfileSetting extends Equatable {
     discoverCardsOptions,
     generalOptions,
     helpCenterOptions,
+    readerRequests,
     selfSovereignIdentityOptions,
     settingsMenu,
     version,
@@ -145,7 +165,7 @@ class BlockchainOptions extends Equatable {
     bool? tzproRpcNode,
     bool? testnet,
   }) {
-    return BlockchainOptions(
+    final blockchainOptions = BlockchainOptions(
       associatedAddressFormat:
           associatedAddressFormat ?? this.associatedAddressFormat,
       bnbSupport: bnbSupport ?? this.bnbSupport,
@@ -161,6 +181,7 @@ class BlockchainOptions extends Equatable {
       tzproApiKey: tzproApiKey ?? this.tzproApiKey,
       testnet: testnet ?? this.testnet,
     );
+    return blockchainOptions;
   }
 
   @override
@@ -310,7 +331,7 @@ class DiscoverCardsOptions extends Equatable {
     bool? displayTezotopia,
     bool? displayEmailPassSdJwt,
   }) {
-    return DiscoverCardsOptions(
+    final discoverCardsOptions = DiscoverCardsOptions(
       displayDefi: displayDefi ?? this.displayDefi,
       displayHumanity: displayHumanity ?? this.displayHumanity,
       displayHumanityJwt: displayHumanityJwt ?? this.displayHumanityJwt,
@@ -342,6 +363,7 @@ class DiscoverCardsOptions extends Equatable {
       displayEmailPassSdJwt:
           displayEmailPassSdJwt ?? this.displayEmailPassSdJwt,
     );
+    return discoverCardsOptions;
   }
 
   VCFormatType vcFormatTypeForAuto({
@@ -537,7 +559,7 @@ class GeneralOptions extends Equatable {
     String? customerPlan,
     String? primaryColor,
   }) {
-    return GeneralOptions(
+    final generalOptions = GeneralOptions(
       walletType: walletType ?? this.walletType,
       companyName: companyName ?? this.companyName,
       companyWebsite: companyWebsite ?? this.companyWebsite,
@@ -552,6 +574,7 @@ class GeneralOptions extends Equatable {
       customerPlan: customerPlan ?? this.customerPlan,
       primaryColor: primaryColor ?? this.primaryColor,
     );
+    return generalOptions;
   }
 
   @override
@@ -591,9 +614,9 @@ class HelpCenterOptions extends Equatable {
   factory HelpCenterOptions.initial() => const HelpCenterOptions(
     customChatSupport: false,
     customEmailSupport: false,
-    displayChatSupport: true,
+    displayChatSupport: false,
     displayEmailSupport: true,
-    displayNotification: true,
+    displayNotification: false,
   );
 
   final bool customChatSupport;
@@ -651,6 +674,8 @@ class SelfSovereignIdentityOptions extends Equatable {
   const SelfSovereignIdentityOptions({
     required this.customOidc4vcProfile,
     required this.displayManageDecentralizedId,
+    this.proximityPeripheralServer = true,
+    this.proximityCentralClient = true,
   });
 
   factory SelfSovereignIdentityOptions.fromJson(Map<String, dynamic> json) =>
@@ -662,24 +687,50 @@ class SelfSovereignIdentityOptions extends Equatable {
         displayManageDecentralizedId: true,
       );
 
+  factory SelfSovereignIdentityOptions.provider() =>
+      SelfSovereignIdentityOptions(
+        customOidc4vcProfile: CustomOidc4VcProfile.provider(),
+        displayManageDecentralizedId: true,
+      );
+
   final CustomOidc4VcProfile customOidc4vcProfile;
   final bool displayManageDecentralizedId;
+
+  /// Whether the mdoc proximity holder offers BLE mdoc peripheral server mode.
+  final bool proximityPeripheralServer;
+
+  /// Whether the mdoc proximity holder offers BLE mdoc central client mode.
+  final bool proximityCentralClient;
+
+  /// The BLE modes the mdoc proximity holder offers.
+  Set<ProximityBleMode> get proximityBleModes => {
+    if (proximityPeripheralServer) ProximityBleMode.peripheralServer,
+    if (proximityCentralClient) ProximityBleMode.centralClient,
+  };
 
   Map<String, dynamic> toJson() => _$SelfSovereignIdentityOptionsToJson(this);
 
   SelfSovereignIdentityOptions copyWith({
     CustomOidc4VcProfile? customOidc4vcProfile,
     bool? displayManageDecentralizedId,
+    bool? proximityPeripheralServer,
+    bool? proximityCentralClient,
   }) => SelfSovereignIdentityOptions(
     customOidc4vcProfile: customOidc4vcProfile ?? this.customOidc4vcProfile,
     displayManageDecentralizedId:
         displayManageDecentralizedId ?? this.displayManageDecentralizedId,
+    proximityPeripheralServer:
+        proximityPeripheralServer ?? this.proximityPeripheralServer,
+    proximityCentralClient:
+        proximityCentralClient ?? this.proximityCentralClient,
   );
 
   @override
   List<Object?> get props => [
     customOidc4vcProfile,
     displayManageDecentralizedId,
+    proximityPeripheralServer,
+    proximityCentralClient,
   ];
 }
 
@@ -724,12 +775,40 @@ class CustomOidc4VcProfile extends Equatable {
     displayMode: false,
   );
 
+  factory CustomOidc4VcProfile.provider() => CustomOidc4VcProfile(
+    pushAuthorizationRequest: false,
+    statusListCache: true,
+    clientAuthentication: ClientAuthentication.wia,
+    credentialManifestSupport: false,
+    cryptoHolderBinding: true,
+    defaultDid: DidKeyType.p256,
+    dpopSupport: true,
+    oidc4vciDraft: OIDC4VCIDraftType.final1,
+    oidc4vpDraft: OIDC4VPDraftType.final1,
+    scope: true,
+    securityLevel: false,
+    proofHeader: ProofHeaderType.jwk, // N/A
+    siopv2Draft: SIOPV2DraftType.draft12,
+    clientType: ClientType.p256JWKThumprint,
+    clientSecret: randomString(12),
+    vcFormatType: VCFormatType.dcSdJWT,
+    proofType: ProofType.jwt,
+    formatsSupported: const [
+      VCFormatType.jwtVcJson,
+      VCFormatType.dcSdJWT,
+      VCFormatType.ldpVc,
+      VCFormatType.mdoc,
+    ],
+    displayMode: false,
+  );
+
   factory CustomOidc4VcProfile.fromJson(Map<String, dynamic> json) {
     final profileFromJson = _$CustomOidc4VcProfileFromJson(json);
     if (profileFromJson.formatsSupported!.isEmpty) {
-      return profileFromJson.copyWith(
+      final updatedProfile = profileFromJson.copyWith(
         formatsSupported: <VCFormatType>[profileFromJson.vcFormatType],
       );
+      return updatedProfile;
     }
     return profileFromJson;
   }
@@ -900,6 +979,14 @@ class WalletSecurityOptions extends Equatable {
       _$WalletSecurityOptionsFromJson(json);
 
   factory WalletSecurityOptions.initial() => const WalletSecurityOptions(
+    confirmSecurityVerifierAccess: false,
+    displaySecurityAdvancedSettings: true,
+    secureSecurityAuthenticationWithPinCode: false,
+    verifySecurityIssuerWebsiteIdentity: false,
+    trustedList: false,
+  );
+
+  factory WalletSecurityOptions.provider() => const WalletSecurityOptions(
     confirmSecurityVerifierAccess: false,
     displaySecurityAdvancedSettings: true,
     secureSecurityAuthenticationWithPinCode: false,

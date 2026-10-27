@@ -102,7 +102,8 @@ List<CredentialModel> getCredentialsFromFilterList({
           b.display?.name ??
           b.credentialPreview.credentialSubjectModel.credentialSubjectType.name;
 
-      return firstCredName.compareTo(secondCredName);
+      final comparison = firstCredName.compareTo(secondCredName);
+      return comparison;
     });
 
     return credentials;

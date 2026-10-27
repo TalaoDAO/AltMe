@@ -11,7 +11,7 @@ class ManageAccountsPage extends StatefulWidget {
   const ManageAccountsPage({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => BlocProvider(
         create: (context) => ManageAccountsCubit(
           credentialsCubit: context.read<CredentialsCubit>(),
@@ -21,6 +21,7 @@ class ManageAccountsPage extends StatefulWidget {
       ),
       settings: const RouteSettings(name: '/ManageAccountsPage'),
     );
+    return route;
   }
 
   @override

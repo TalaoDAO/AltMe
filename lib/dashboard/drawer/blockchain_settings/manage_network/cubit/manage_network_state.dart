@@ -10,7 +10,8 @@ class ManageNetworkState extends Equatable {
   final BlockchainNetwork network;
 
   ManageNetworkState copyWith({BlockchainNetwork? network}) {
-    return ManageNetworkState(network: network ?? this.network);
+    final updatedState = ManageNetworkState(network: network ?? this.network);
+    return updatedState;
   }
 
   Map<String, dynamic> toJson() => _$ManageNetworkStateToJson(this);

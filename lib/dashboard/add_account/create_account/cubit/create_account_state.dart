@@ -11,26 +11,29 @@ class CreateAccountState extends Equatable {
   final StateMessage? message;
 
   CreateAccountState loading() {
-    return const CreateAccountState(status: AppStatus.loading);
+    const loadingState = CreateAccountState(status: AppStatus.loading);
+    return loadingState;
   }
 
   CreateAccountState error({required MessageHandler messageHandler}) {
-    return CreateAccountState(
+    final errorState = CreateAccountState(
       status: AppStatus.error,
       message: StateMessage.error(messageHandler: messageHandler),
     );
+    return errorState;
   }
 
   CreateAccountState success({
     MessageHandler? messageHandler,
     CryptoAccount? cryptoAccount,
   }) {
-    return CreateAccountState(
+    final successState = CreateAccountState(
       status: AppStatus.success,
       message: messageHandler == null
           ? null
           : StateMessage.success(messageHandler: messageHandler),
     );
+    return successState;
   }
 
   Map<String, dynamic> toJson() => _$CreateAccountStateToJson(this);

@@ -9,10 +9,11 @@ class FAQsPage extends StatelessWidget {
   const FAQsPage({super.key});
 
   static Route<dynamic> route() {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => const FAQsPage(),
       settings: const RouteSettings(name: '/FAQsPage'),
     );
+    return route;
   }
 
   @override

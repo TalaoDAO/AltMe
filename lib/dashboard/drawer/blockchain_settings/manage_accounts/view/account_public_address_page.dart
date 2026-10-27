@@ -16,13 +16,14 @@ class AccountPublicAddressPage extends StatelessWidget {
     required String accountName,
     required String accountAddress,
   }) {
-    return MaterialPageRoute<void>(
+    final route = MaterialPageRoute<void>(
       builder: (_) => AccountPublicAddressPage(
         accountName: accountName,
         accountAddress: accountAddress,
       ),
       settings: const RouteSettings(name: '/AccountPublicAddressPage'),
     );
+    return route;
   }
 
   final String accountName;

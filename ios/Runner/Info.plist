@@ -70,6 +70,26 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
+			<string>haip-vci</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>haip-vci</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>eu-eaa-offer</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>eu-eaa-offer</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
 			<string>openid</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
@@ -124,6 +144,16 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>eudi-openid4vp</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>eu-eaap</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>eu-eaap</string>
 			</array>
 		</dict>
 		<dict>
@@ -214,6 +244,8 @@
 	<array>
 		<string>_dartobservatory._tcp</string>
 	</array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Bluetooth is used to share your documents with a nearby reader.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Please give us access to your camera, to complete the verification.</string>
 	<key>NSFaceIDUsageDescription</key>
