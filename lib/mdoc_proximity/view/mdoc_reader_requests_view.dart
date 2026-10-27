@@ -9,9 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdoc_proximity/mdoc_proximity.dart';
 
 /// What the wallet, as a reader, can ask a holder for: the profile's requests,
-/// then the ones the user defined, which the user can add, change and delete.
-/// Picking a request opens the camera on the holder's QR code, then reads it
-/// in person.
+/// then the ones the user defined, which the user can change and delete, and
+/// add to in developer mode only. Picking a request opens the camera on the
+/// holder's QR code, then reads it in person.
 class MdocReaderRequestsView extends StatelessWidget {
   /// Creates the view.
   const MdocReaderRequestsView({
@@ -51,6 +51,9 @@ class MdocReaderRequestsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
+    final developerMode = context.select<ProfileCubit, bool>(
+      (cubit) => cubit.state.model.isDeveloperMode,
+    );
     return BlocBuilder<CustomReaderRequestsCubit, CustomReaderRequestsState>(
       builder: (context, state) => ListView(
         children: [
@@ -64,9 +67,13 @@ class MdocReaderRequestsView extends StatelessWidget {
               trailing: const Icon(Icons.qr_code_scanner),
               onTap: () => _read(context, request),
             ),
-          const SizedBox(height: 16),
-          Text(l10n.mdocReaderMyRequests, style: textTheme.titleMedium),
-          const SizedBox(height: 8),
+          // Without developer mode a user cannot add a request, but keeps the
+          // ones they have.
+          if (developerMode || state.requests.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            Text(l10n.mdocReaderMyRequests, style: textTheme.titleMedium),
+            const SizedBox(height: 8),
+          ],
           for (final request in state.requests)
             ListTile(
               leading: const Icon(Icons.badge_outlined),
@@ -98,12 +105,15 @@ class MdocReaderRequestsView extends StatelessWidget {
               ),
               onTap: () => _read(context, request),
             ),
-          const SizedBox(height: 8),
-          MyOutlinedButton(
-            text: l10n.mdocReaderAddRequest,
-            onPressed: () =>
-                Navigator.of(context).push(MdocReaderRequestEditorPage.route()),
-          ),
+          if (developerMode) ...[
+            const SizedBox(height: 8),
+            MyOutlinedButton(
+              text: l10n.mdocReaderAddRequest,
+              onPressed: () => Navigator.of(
+                context,
+              ).push(MdocReaderRequestEditorPage.route()),
+            ),
+          ],
         ],
       ),
     );

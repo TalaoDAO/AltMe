@@ -1,5 +1,7 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/mdoc_proximity/mdoc_proximity.dart';
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,6 +12,18 @@ import 'package:secure_storage/secure_storage.dart';
 import '../helpers/helpers.dart';
 
 class _MockSecureStorage extends Mock implements SecureStorageProvider {}
+
+class _MockProfileCubit extends MockCubit<ProfileState>
+    implements ProfileCubit {}
+
+class _MockProfileModel extends Mock implements ProfileModel {}
+
+class _FakeProfileState extends Fake implements ProfileState {
+  _FakeProfileState(this.model);
+
+  @override
+  final ProfileModel model;
+}
 
 void main() {
   const requests = [
@@ -40,12 +54,14 @@ void main() {
     (widget) => widget is PopupMenuButton,
   );
 
-  /// Pumps the view with the custom requests [saved] already stored. The
-  /// cubit is made here, not in `setUp`: its storage work has to run in the
-  /// test's fake async zone to be pumped.
+  /// Pumps the view with the custom requests [saved] already stored, and the
+  /// developer mode [developerMode] of the profile. The cubit is made here,
+  /// not in `setUp`: its storage work has to run in the test's fake async zone
+  /// to be pumped.
   Future<CustomReaderRequestsCubit> pumpView(
     WidgetTester tester, {
     List<ReaderRequest> saved = const [],
+    bool developerMode = false,
     Future<String?> Function(BuildContext context)? scan,
   }) async {
     final storage = _MockSecureStorage();
@@ -58,6 +74,11 @@ void main() {
       await custom.save(request);
     }
 
+    final profileModel = _MockProfileModel();
+    when(() => profileModel.isDeveloperMode).thenReturn(developerMode);
+    final profileCubit = _MockProfileCubit();
+    when(() => profileCubit.state).thenReturn(_FakeProfileState(profileModel));
+
     tester.view
       ..physicalSize = const Size(800, 2400)
       ..devicePixelRatio = 1;
@@ -69,7 +90,13 @@ void main() {
             ? const MdocReaderRequestsView(requests: requests)
             : MdocReaderRequestsView(requests: requests, scan: scan),
       ),
-      wrapApp: (app) => BlocProvider.value(value: custom, child: app),
+      wrapApp: (app) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: custom),
+          BlocProvider<ProfileCubit>.value(value: profileCubit),
+        ],
+        child: app,
+      ),
     );
     return custom;
   }
@@ -117,12 +144,46 @@ void main() {
     });
 
     group('my requests', () {
-      testWidgets('offers to add one when there is none', (tester) async {
-        await pumpView(tester);
+      testWidgets('offers to add one in developer mode when there is none', (
+        tester,
+      ) async {
+        await pumpView(tester, developerMode: true);
 
         expect(find.text('My requests'), findsOneWidget);
         expect(find.text('ADD A REQUEST'), findsOneWidget);
         expect(requestMenu, findsNothing);
+      });
+
+      testWidgets('offers no way to add one without developer mode', (
+        tester,
+      ) async {
+        await pumpView(tester);
+
+        expect(find.text('ADD A REQUEST'), findsNothing);
+        // Nor an empty heading above nothing.
+        expect(find.text('My requests'), findsNothing);
+        // The profile's requests are not affected.
+        expect(find.text('PID'), findsOneWidget);
+        expect(find.text('mDL'), findsOneWidget);
+      });
+
+      testWidgets('keeps the ones saved, but offers no add button, without '
+          'developer mode', (tester) async {
+        await pumpView(tester, saved: [badge]);
+
+        expect(find.text('ADD A REQUEST'), findsNothing);
+        expect(find.text('My requests'), findsOneWidget);
+        expect(find.text('Badge'), findsOneWidget);
+        expect(requestMenu, findsOneWidget);
+      });
+
+      testWidgets('offers to add one beside the ones saved in developer mode', (
+        tester,
+      ) async {
+        await pumpView(tester, saved: [badge], developerMode: true);
+
+        expect(find.text('Badge'), findsOneWidget);
+        expect(find.text('ADD A REQUEST'), findsOneWidget);
       });
 
       testWidgets("lists them after the profile's with their claim count", (
@@ -157,7 +218,7 @@ void main() {
       });
 
       testWidgets('adds one through the editor', (tester) async {
-        final custom = await pumpView(tester);
+        final custom = await pumpView(tester, developerMode: true);
 
         await tester.tap(find.text('ADD A REQUEST'));
         await tester.pumpAndSettle();

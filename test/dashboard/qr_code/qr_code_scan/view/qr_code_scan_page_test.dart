@@ -32,11 +32,12 @@ void main() {
   late _MockScanCubit scanCubit;
   late _MockCustomReaderRequestsCubit customReaderRequestsCubit;
 
-  void withProfile({required bool readerRequests}) {
+  void withProfile({required bool readerRequests, bool developerMode = false}) {
     final model = ProfileModel.empty();
     when(() => profileCubit.state).thenReturn(
       ProfileState(
         model: model.copyWith(
+          isDeveloperMode: developerMode,
           profileSetting: model.profileSetting.copyWith(
             readerRequests: readerRequests ? defaultReaderRequests : null,
           ),
@@ -92,7 +93,22 @@ void main() {
       expect(find.byType(MdocReaderRequestsView), findsOneWidget);
       expect(find.text('PID'), findsOneWidget);
       expect(find.text('mDL'), findsOneWidget);
+      // Adding a request is for developers.
+      expect(find.text('My requests'), findsNothing);
+      expect(find.text('ADD A REQUEST'), findsNothing);
+    });
+
+    testWidgets('offers to add a reader request in developer mode', (
+      tester,
+    ) async {
+      withProfile(readerRequests: true, developerMode: true);
+      await pump(tester);
+
+      await tester.tap(find.byIcon(Icons.fact_check_outlined));
+      await tester.pump();
+
       expect(find.text('My requests'), findsOneWidget);
+      expect(find.text('ADD A REQUEST'), findsOneWidget);
     });
 
     testWidgets('has no Read tab without reader requests', (tester) async {
