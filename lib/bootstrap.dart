@@ -50,8 +50,8 @@ Future<void> bootstrap(FlavorMode flavor) async {
 
     await initSecureStorage;
 
-    // Debug builds only; before anything opens an HttpClient, so the wallet
-    // provider onboarding at startup is traced too.
+    // Only if developer mode is on; before anything opens an HttpClient, so
+    // the wallet provider onboarding at startup is traced too.
     await startProtocolTrace();
 
     /// Disable Http google font

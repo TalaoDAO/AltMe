@@ -5,7 +5,6 @@ import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:protocol_trace/protocol_trace.dart';
 
 class DrawerPage extends StatelessWidget {
   const DrawerPage({super.key});
@@ -121,13 +120,10 @@ class DrawerView extends StatelessWidget {
                         ),
                         const SizedBox(height: Sizes.spaceSmall),
                       ],
-                      // Debug builds keep the menu for the protocol trace logs
-                      // even when the profile hides developer mode.
                       if (profileModel
-                              .profileSetting
-                              .settingsMenu
-                              .displayDeveloperMode ||
-                          ProtocolTrace.current != null) ...[
+                          .profileSetting
+                          .settingsMenu
+                          .displayDeveloperMode) ...[
                         DrawerCategoryItem(
                           title: l10n.developerMode,
                           subTitle: l10n.developerModeSubtitle,
