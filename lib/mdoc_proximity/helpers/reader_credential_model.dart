@@ -9,10 +9,16 @@ import 'package:oidc4vc/oidc4vc.dart';
 /// A document a holder showed the reader, as a [CredentialModel], so that the
 /// wallet's own credential widgets display it as they display a stored one.
 ///
-/// The model is only displayed: it is never stored. The reader has no issuer
-/// metadata, so the card is the default one named after the document, and the
-/// claims are listed without labels of their own.
-CredentialModel readerCredentialModel(ReaderDocument document) {
+/// The model is only displayed: it is never stored. As an issued credential,
+/// it takes its card ([display]) and the display names of its elements
+/// ([credentialSupported]) from the issuer's credential configuration (see
+/// `ReaderIssuerCubit`). Without one, the card is the default one named after
+/// the document.
+CredentialModel readerCredentialModel(
+  ReaderDocument document, {
+  Display? display,
+  Map<String, dynamic>? credentialSupported,
+}) {
   final data = <String, dynamic>{
     'id': 'reader:${document.docType}',
     'type': [document.docType],
@@ -38,17 +44,23 @@ CredentialModel readerCredentialModel(ReaderDocument document) {
     shareLink: '',
     data: data,
     format: VCFormatType.mdoc.vcValue,
-    display: Display(name: name ?? document.docType),
+    display: display ?? Display(name: name ?? document.docType),
     // The claim paths let the credential display find the portrait.
-    credentialSupported: {
-      'claims': [
-        for (final nameSpace in document.nameSpaces.entries)
-          for (final element in nameSpace.value.keys)
-            {
-              'path': [nameSpace.key, element],
-            },
-      ],
-    },
+    credentialSupported:
+        (credentialSupported?['credential_metadata']?['claims'] ??
+                credentialSupported?['claims'])
+            is List
+        ? credentialSupported
+        : {
+            ...?credentialSupported,
+            'claims': [
+              for (final nameSpace in document.nameSpaces.entries)
+                for (final element in nameSpace.value.keys)
+                  {
+                    'path': [nameSpace.key, element],
+                  },
+            ],
+          },
   );
 }
 

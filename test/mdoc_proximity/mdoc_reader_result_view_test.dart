@@ -187,10 +187,7 @@ void main() {
             ReaderDocument(
               docType: 'org.iso.18013.5.1.mDL',
               nameSpaces: {
-                'org.iso.18013.5.1': {
-                  'family_name': 'DOE',
-                  'portrait': _png,
-                },
+                'org.iso.18013.5.1': {'family_name': 'DOE', 'portrait': _png},
               },
             ),
           ],
@@ -245,17 +242,16 @@ void main() {
           await pump(
             tester,
             ReaderResult(documents: [signedDocument]),
-            fetchIssuerMetadata: (url) async => OpenIdConfiguration.fromJson(
-              const {
-                'credential_issuer': 'https://issuer.example/mdl',
-                'display': [
-                  {
-                    'name': 'Example Issuer',
-                    'logo': {'uri': 'https://issuer.example/logo.png'},
-                  },
-                ],
-              },
-            ),
+            fetchIssuerMetadata: (url) async =>
+                OpenIdConfiguration.fromJson(const {
+                  'credential_issuer': 'https://issuer.example/mdl',
+                  'display': [
+                    {
+                      'name': 'Example Issuer',
+                      'logo': {'uri': 'https://issuer.example/logo.png'},
+                    },
+                  ],
+                }),
           );
           await tester.pump();
 
@@ -271,6 +267,48 @@ void main() {
         });
       });
 
+      testWidgets('shows the card and the element names of the credential '
+          'configuration of its document type', (tester) async {
+        listIaca();
+        await pump(
+          tester,
+          ReaderResult(documents: [signedDocument]),
+          // Decoded, as metadata from the network: untyped lists and maps.
+          fetchIssuerMetadata: (url) async => OpenIdConfiguration.fromJson(
+            _decoded(const {
+              'credential_issuer': 'https://issuer.example/mdl',
+              'credential_configurations_supported': {
+                'mdl': {
+                  'format': 'mso_mdoc',
+                  'doctype': 'org.iso.18013.5.1.mDL',
+                  'credential_metadata': {
+                    'display': [
+                      {'name': 'Permis de conduire', 'locale': 'fr'},
+                      {'name': 'Driving licence', 'locale': 'en'},
+                    ],
+                    'claims': [
+                      {
+                        'path': ['org.iso.18013.5.1', 'family_name'],
+                        'display': [
+                          {'name': 'Nom', 'locale': 'fr'},
+                          {'name': 'Surname', 'locale': 'en'},
+                        ],
+                      },
+                    ],
+                  },
+                },
+              },
+            }),
+          ),
+        );
+        await tester.pump();
+
+        expect(find.text('Driving licence'), findsOneWidget);
+        expect(find.text('mDL'), findsNothing);
+        expect(find.textContaining('Surname'), findsOneWidget);
+        expect(find.textContaining('Family Name'), findsNothing);
+      });
+
       testWidgets('shows no logo when no metadata is found', (tester) async {
         await pump(tester, ReaderResult(documents: [signedDocument]));
         await tester.pump();
@@ -282,6 +320,9 @@ void main() {
     });
   });
 }
+
+Map<String, dynamic> _decoded(Map<String, dynamic> json) =>
+    jsonDecode(jsonEncode(json)) as Map<String, dynamic>;
 
 // A PNG signature followed by padding: enough to be taken for an image.
 final _png = <int>[0x89, 0x50, 0x4e, 0x47, ...List.filled(16, 0)];

@@ -123,8 +123,59 @@ void main() {
       );
     });
 
+    test("tries the trusted entry's endpoint before its identifier", () {
+      final document = _document(chain: [rogueDs]);
+      expect(
+        readerIssuerUrls(
+          document: document,
+          trustedIssuer: TrustedEntity(
+            id: 'https://hub.example/',
+            type: TrustedEntityType.issuer,
+            rootCertificates: const [testIaca],
+            vcTypes: const [_mdl],
+            endpoint: 'https://hub.example/issuer/core-mdl-issuer',
+          ),
+        ),
+        ['https://hub.example/issuer/core-mdl-issuer', 'https://hub.example'],
+      );
+    });
+
     test('is empty for a signer without names and no trusted entry', () {
       expect(readerIssuerUrls(document: _document(chain: [rogueDs])), isEmpty);
+    });
+  });
+
+  group('readerCredentialConfigurationId', () {
+    OpenIdConfiguration metadata(Object? configurations) =>
+        OpenIdConfiguration.fromJson({
+          'credential_issuer': 'https://issuer.example',
+          'credential_configurations_supported': configurations,
+        });
+
+    test('is the configuration issuing the document type', () {
+      expect(
+        readerCredentialConfigurationId(
+          metadata({
+            'pid': {'format': 'mso_mdoc', 'doctype': 'eu.europa.ec.eudi.pid.1'},
+            'mdl': {'format': 'mso_mdoc', 'doctype': _mdl},
+          }),
+          _mdl,
+        ),
+        'mdl',
+      );
+    });
+
+    test('is null when no configuration issues the document type', () {
+      expect(
+        readerCredentialConfigurationId(
+          metadata({
+            'pid': {'format': 'dc+sd-jwt', 'vct': 'urn:eudi:pid:1'},
+          }),
+          _mdl,
+        ),
+        isNull,
+      );
+      expect(readerCredentialConfigurationId(metadata(null), _mdl), isNull);
     });
   });
 
@@ -198,6 +249,61 @@ void main() {
         );
       },
     );
+
+    test('takes the card and the element names from the credential '
+        'configuration of the document type', () async {
+      const configuration = {
+        'format': 'mso_mdoc',
+        'doctype': _mdl,
+        'credential_metadata': {
+          'display': [
+            {'name': 'Driving licence', 'locale': 'en'},
+          ],
+          'claims': [
+            {
+              'path': ['org.iso.18013.5.1', 'family_name'],
+              'display': [
+                {'name': 'Surname', 'locale': 'en'},
+              ],
+            },
+          ],
+        },
+      };
+      final issuerCubit = cubit(
+        trustedList: _trustedList(),
+        fetch: (url) async => OpenIdConfiguration.fromJson(const {
+          'credential_issuer': 'https://issuer.example',
+          'credential_configurations_supported': {'mdl': configuration},
+        }),
+      );
+
+      await issuerCubit.resolveDisplay();
+
+      expect(issuerCubit.state.credentialDisplay?.name, 'Driving licence');
+      expect(issuerCubit.state.credentialSupported, configuration);
+    });
+
+    test('keeps the default card when the metadata does not issue the '
+        'document type', () async {
+      final issuerCubit = cubit(
+        trustedList: _trustedList(),
+        fetch: (url) async => OpenIdConfiguration.fromJson(const {
+          'credential_issuer': 'https://issuer.example',
+          'display': [
+            {'name': 'Example Issuer', 'locale': 'en'},
+          ],
+          'credential_configurations_supported': {
+            'pid': {'format': 'mso_mdoc', 'doctype': 'eu.europa.ec.eudi.pid.1'},
+          },
+        }),
+      );
+
+      await issuerCubit.resolveDisplay();
+
+      expect(issuerCubit.state.name, 'Example Issuer');
+      expect(issuerCubit.state.credentialDisplay, isNull);
+      expect(issuerCubit.state.credentialSupported, isNull);
+    });
 
     test('keeps no name and no logo when no URL serves metadata', () async {
       final issuerCubit = cubit(trustedList: _trustedList());

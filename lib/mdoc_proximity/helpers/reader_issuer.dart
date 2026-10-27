@@ -37,7 +37,7 @@ TrustedEntity? readerTrustedIssuer({
 /// Where the metadata of the issuer of [document] may be served, most
 /// specific first: the `https` URIs and the DNS names of the document signer
 /// certificate's subject and issuer alternative names, then the
-/// [trustedIssuer] entry's identifier.
+/// [trustedIssuer] entry's endpoint and identifier.
 List<String> readerIssuerUrls({
   required ReaderDocument document,
   TrustedEntity? trustedIssuer,
@@ -58,10 +58,28 @@ List<String> readerIssuerUrls({
       // No names to read: the trusted-list entry may still say.
     }
   }
-  if (trustedIssuer != null && _isHttps(trustedIssuer.id)) {
-    urls.add(trustedIssuer.id);
+  if (trustedIssuer != null) {
+    urls.addAll(
+      [trustedIssuer.endpoint, trustedIssuer.id].nonNulls.where(_isHttps),
+    );
   }
   return [for (final url in urls) _withoutTrailingSlash(url)];
+}
+
+/// The identifier of the credential configuration of [metadata] that issues
+/// mdocs of [docType], or `null`.
+String? readerCredentialConfigurationId(
+  OpenIdConfiguration metadata,
+  String docType,
+) {
+  final configurations = metadata.credentialConfigurationsSupported;
+  if (configurations is! Map<String, dynamic>) return null;
+  for (final MapEntry(:key, :value) in configurations.entries) {
+    if (value is Map<String, dynamic> && value['doctype'] == docType) {
+      return key;
+    }
+  }
+  return null;
 }
 
 bool _isHttps(String url) => Uri.tryParse(url)?.scheme == 'https';

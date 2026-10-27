@@ -5,6 +5,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/mdoc_proximity/cubit/mdoc_reader_cubit.dart';
 import 'package:altme/mdoc_proximity/cubit/reader_issuer_cubit.dart';
+import 'package:altme/mdoc_proximity/helpers/mdoc_credential_model.dart';
 import 'package:altme/mdoc_proximity/helpers/reader_credential_model.dart';
 import 'package:altme/mdoc_proximity/helpers/reader_issuer.dart';
 import 'package:altme/mdoc_proximity/helpers/reader_trusted_roots.dart';
@@ -261,7 +262,7 @@ class _DocumentSection extends StatelessWidget {
               for (final error in document.issuerTrustErrors)
                 Text(error, style: textTheme.bodySmall),
             const SizedBox(height: 8),
-            _DocumentCard(document: document),
+            _DocumentCard(document: document, issuer: issuer),
           ],
         );
       },
@@ -270,20 +271,26 @@ class _DocumentSection extends StatelessWidget {
 }
 
 /// A document the holder shared, shown as the OIDC4VP presentation screens
-/// show a credential: its card, then its elements.
+/// show a credential: its card, then its elements, with the issuer's design
+/// and element names when its metadata has them.
 class _DocumentCard extends StatelessWidget {
-  const _DocumentCard({required this.document});
+  const _DocumentCard({required this.document, required this.issuer});
 
   final ReaderDocument document;
+  final ReaderIssuerState issuer;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final onSurface = Theme.of(context).colorScheme.onSurface;
-    final credentialModel = readerCredentialModel(document);
+    final languageCode = Localizations.localeOf(context).languageCode;
+    final credentialModel = readerCredentialModel(
+      document,
+      display: issuer.credentialDisplay,
+      credentialSupported: issuer.credentialSupported,
+    );
     // The card shows the portrait when it can; the field is then not repeated.
-    final portraitOnCard =
-        SelectiveDisclosure(credentialModel).portrait?.key;
+    final portraitOnCard = SelectiveDisclosure(credentialModel).portrait?.key;
 
     return CredentialShareCard(
       credentialModel: credentialModel,
@@ -292,7 +299,12 @@ class _DocumentCard extends StatelessWidget {
           for (final element in nameSpace.value.entries)
             if (element.key != portraitOnCard)
               CredentialField(
-                title: readerElementLabel(element.key),
+                title: _label(
+                  credentialModel,
+                  nameSpace.key,
+                  element.key,
+                  languageCode,
+                ),
                 value: _valueText(l10n, readerDisplayValue(element.value)),
                 titleColor: onSurface,
                 valueColor: onSurface,
@@ -301,6 +313,17 @@ class _DocumentCard extends StatelessWidget {
       ],
     );
   }
+}
+
+/// The issuer's display name of [element], else its identifier made readable.
+String _label(
+  CredentialModel credentialModel,
+  String nameSpace,
+  String element,
+  String languageCode,
+) {
+  final label = credentialModel.mdocLabel(nameSpace, element, languageCode);
+  return label == element ? readerElementLabel(element) : label;
 }
 
 /// How a received element reads; a `data:` image URI is shown as the picture.
