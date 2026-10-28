@@ -1111,6 +1111,8 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
     bool? displayNotification,
     bool? dpopSupport,
     bool? displayMode,
+    bool? proximityPeripheralServer,
+    bool? proximityCentralClient,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#updateProfileSetting, [], {
@@ -1140,6 +1142,8 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
               #displayNotification: displayNotification,
               #dpopSupport: dpopSupport,
               #displayMode: displayMode,
+              #proximityPeripheralServer: proximityPeripheralServer,
+              #proximityCentralClient: proximityCentralClient,
             }),
             returnValue: _i17.Future<void>.value(),
             returnValueForMissingStub: _i17.Future<void>.value(),
