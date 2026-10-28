@@ -11,7 +11,7 @@ class Urls {
   static const String phonePassUrl = 'https://issuer.talao.co/phonepass';
 
   /// email pass
-  static const String emailPassUrl = 'https://issuer.talao.co/emailpass';
+  static const String emailPassUrl = 'https://issuer.talao.co/emailpass/altme';
 
   /// tezotopia voucher
   static const String tezotopiaVoucherUrl =
