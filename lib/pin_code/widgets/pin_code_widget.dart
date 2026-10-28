@@ -10,7 +10,7 @@ class PinCodeWidget extends StatefulWidget {
   const PinCodeWidget({
     super.key,
     required this.title,
-    this.passwordDigits = 4,
+    this.passwordDigits = 6,
     required this.cancelButton,
     required this.deleteButton,
     this.isValidCallback,

@@ -7,7 +7,7 @@ class NumKeyboard extends StatelessWidget {
   const NumKeyboard({
     super.key,
     KeyboardUIConfig? keyboardUIConfig,
-    this.passwordDigits = 4,
+    this.passwordDigits = 6,
     this.cancelCallback,
     required this.allowAction,
     this.isNewCode = false,
