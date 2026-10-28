@@ -752,10 +752,7 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       case CredentialSubjectType.emailPass:
         image = ImageStrings.dummyEmailPassCard;
 
-        link =
-            '${Urls.emailPassUrl}'
-            '?draft=${oidc4vcDraftType.numbering}'
-            '&format=$format';
+        link = Urls.emailPassUrl;
 
         whyGetThisCard = ResponseString.RESPONSE_STRING_emailPassWhyGetThisCard;
         expirationDateDetails =
