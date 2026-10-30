@@ -6692,6 +6692,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your phone connects to the reader.'**
   String get proximityBleCentralClientSubtitle;
+
+  /// No description provided for @qesApprovalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Signature request'**
+  String get qesApprovalTitle;
+
+  /// No description provided for @qesApprovalDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents to sign'**
+  String get qesApprovalDocuments;
+
+  /// No description provided for @qesApprovalSignatureLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Signature level'**
+  String get qesApprovalSignatureLevel;
+
+  /// No description provided for @qesApprovalNumberOfSignatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of signatures'**
+  String get qesApprovalNumberOfSignatures;
+
+  /// No description provided for @qesApprovalSigningService.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing service'**
+  String get qesApprovalSigningService;
+
+  /// No description provided for @qesApprovalConsent.
+  ///
+  /// In en, this message translates to:
+  /// **'By signing, you authorise the signing service to create a qualified electronic signature on these documents with your certificate.'**
+  String get qesApprovalConsent;
+
+  /// No description provided for @qesSignatureQualifierQes.
+  ///
+  /// In en, this message translates to:
+  /// **'Qualified electronic signature (eIDAS)'**
+  String get qesSignatureQualifierQes;
 }
 
 class _AppLocalizationsDelegate

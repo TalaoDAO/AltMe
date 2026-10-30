@@ -3732,4 +3732,27 @@ class AppLocalizationsEl extends AppLocalizations {
   @override
   String get proximityBleCentralClientSubtitle =>
       'Το τηλέφωνό σας συνδέεται στον αναγνώστη.';
+
+  @override
+  String get qesApprovalTitle => 'Αίτημα υπογραφής';
+
+  @override
+  String get qesApprovalDocuments => 'Έγγραφα προς υπογραφή';
+
+  @override
+  String get qesApprovalSignatureLevel => 'Επίπεδο υπογραφής';
+
+  @override
+  String get qesApprovalNumberOfSignatures => 'Αριθμός υπογραφών';
+
+  @override
+  String get qesApprovalSigningService => 'Υπηρεσία υπογραφής';
+
+  @override
+  String get qesApprovalConsent =>
+      'Υπογράφοντας, εξουσιοδοτείτε την υπηρεσία υπογραφής να δημιουργήσει εγκεκριμένη ηλεκτρονική υπογραφή σε αυτά τα έγγραφα με το πιστοποιητικό σας.';
+
+  @override
+  String get qesSignatureQualifierQes =>
+      'Εγκεκριμένη ηλεκτρονική υπογραφή (eIDAS)';
 }

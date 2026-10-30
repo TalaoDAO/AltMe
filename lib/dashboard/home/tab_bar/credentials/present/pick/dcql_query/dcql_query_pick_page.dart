@@ -6,6 +6,7 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_helper.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_mdoc_helper.dart';
+import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/qes_approval_card.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/mdoc_proximity/helpers/mdoc_credential_model.dart';
@@ -151,6 +152,11 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
         throw Exception('dcql_query is not a Map<String, dynamic>');
       }
       final query = DcqlCredentialQuery.fromJson(rawQuery);
+      // Already checked against the query when the request was scanned.
+      final transactionData = parseTransactionData(
+        token.payload['transaction_data'],
+        credentialQueryIds: {for (final c in query.credentials) c.id},
+      );
       final credentials = context.read<CredentialsCubit>().state.credentials;
       final candidates = <CredentialModel>[];
       final packageFormatCredentials = <DigitalCredential>[];
@@ -189,10 +195,19 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
         titleAlignment: Alignment.topCenter,
         titleTrailing: const WhiteCloseButton(),
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-        body: VerifiableCredentialsColumn(
-          result: result,
-          packageFormatCredentials: packageFormatCredentials,
-          candidates: candidates,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final item in transactionData)
+              if (item.type == qesApprovalTransactionType)
+                QesApprovalCard(request: QesApprovalRequest.fromItem(item)),
+            VerifiableCredentialsColumn(
+              result: result,
+              packageFormatCredentials: packageFormatCredentials,
+              candidates: candidates,
+            ),
+          ],
         ),
         navigation: SafeArea(
           child: Container(
@@ -209,6 +224,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
                           result: result,
                           packageFormatCredentials: packageFormatCredentials,
                           candidates: candidates,
+                          transactionData: transactionData,
                         );
                       } catch (e) {
                         // Nothing was sent (key, VP token): the user may try
@@ -219,7 +235,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
                         }
                       }
                     },
-              text: l10n.confirm,
+              text: transactionData.isEmpty ? l10n.confirm : l10n.sign,
             ),
           ),
         ),
@@ -235,6 +251,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
     required DcqlQueryResult result,
     required List<DigitalCredential> packageFormatCredentials,
     required List<CredentialModel> candidates,
+    required List<TransactionDataItem> transactionData,
   }) async {
     final profileCubit = context.read<ProfileCubit>();
     final customOidc4vcProfile = profileCubit
@@ -273,6 +290,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       customOidc4vcProfile.proofHeader,
       credentialKeySigner: profileCubit.credentialKeySigner,
       mdocSessionTranscript: mdocSessionTranscript,
+      transactionData: transactionData,
     );
 
     await context.read<ScanCubit>().presentOidc4vpFinal(

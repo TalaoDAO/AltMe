@@ -2124,6 +2124,35 @@ ${state.uri}
   }
 
   /// check the validity of the request and prepare for OIDC4VP flow
+  /// Refuses an OpenID4VP 1.0 request whose `transaction_data` the wallet
+  /// cannot show or bind to the credentials its DCQL query asks for, before
+  /// the user is asked anything (OpenID4VP 1.0 §8.4).
+  @visibleForTesting
+  void checkTransactionData({
+    required Uri uri,
+    required Map<String, dynamic> requestObject,
+  }) {
+    final dcqlQuery = requestObject['dcql_query'];
+    final credentialQueries = dcqlQuery is Map<String, dynamic>
+        ? dcqlQuery['credentials']
+        : null;
+    try {
+      parseTransactionData(
+        requestObject['transaction_data'],
+        credentialQueryIds: {
+          if (credentialQueries is List)
+            for (final query in credentialQueries)
+              if (query is Map<String, dynamic> && query['id'] is String)
+                query['id'] as String,
+        },
+      );
+    } on TransactionDataException catch (e) {
+      final error = {'error': e.error, 'error_description': e.message};
+      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
+      throw ResponseMessage(data: error);
+    }
+  }
+
   Future<(CredentialModel credentialPreview, String host)> prepareOIDC4VPFlow({
     required List<String> keys,
     required Uri uri,
@@ -2143,6 +2172,10 @@ ${state.uri}
       if (dcqlQuery is! String || dcqlQuery.isEmpty) {
         throw Exception('ERROR_FETCHING_DCQL_QUERY');
       }
+      checkTransactionData(
+        uri: uri,
+        requestObject: jwtDecode.decodePayload(token: dcqlQuery),
+      );
       final CredentialModel credentialPreview = CredentialModel(
         id: 'id',
         image: 'image',

@@ -1291,5 +1291,12 @@
     }
   },
   "mdocReaderRequestsTitle": "Lector",
-  "mdocReaderRequestsSubtitle": "Trieu què voleu demanar i, tot seguit, escanegeu el codi QR del titular."
+  "mdocReaderRequestsSubtitle": "Trieu què voleu demanar i, tot seguit, escanegeu el codi QR del titular.",
+  "qesApprovalTitle": "Sol·licitud de signatura",
+  "qesApprovalDocuments": "Documents per signar",
+  "qesApprovalSignatureLevel": "Nivell de signatura",
+  "qesApprovalNumberOfSignatures": "Nombre de signatures",
+  "qesApprovalSigningService": "Servei de signatura",
+  "qesApprovalConsent": "En signar, autoritzeu el servei de signatura a crear una signatura electrònica qualificada en aquests documents amb el vostre certificat.",
+  "qesSignatureQualifierQes": "Signatura electrònica qualificada (eIDAS)"
 }

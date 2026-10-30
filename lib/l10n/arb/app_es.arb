@@ -1293,5 +1293,12 @@
     }
   },
   "mdocReaderRequestsTitle": "Lector",
-  "mdocReaderRequestsSubtitle": "Elija qué solicitar y luego escanee el código QR del titular."
+  "mdocReaderRequestsSubtitle": "Elija qué solicitar y luego escanee el código QR del titular.",
+  "qesApprovalTitle": "Solicitud de firma",
+  "qesApprovalDocuments": "Documentos para firmar",
+  "qesApprovalSignatureLevel": "Nivel de firma",
+  "qesApprovalNumberOfSignatures": "Número de firmas",
+  "qesApprovalSigningService": "Servicio de firma",
+  "qesApprovalConsent": "Al firmar, autoriza al servicio de firma a crear una firma electrónica cualificada en estos documentos con su certificado.",
+  "qesSignatureQualifierQes": "Firma electrónica cualificada (eIDAS)"
 }

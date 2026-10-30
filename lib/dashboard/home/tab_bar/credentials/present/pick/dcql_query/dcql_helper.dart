@@ -1,3 +1,4 @@
+import 'package:altme/app/shared/message_handler/response_message.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_mdoc_helper.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
@@ -86,7 +87,19 @@ Future<String> buildPresentation({
   required Map<String, dynamic> privateKey,
   required ProofHeaderType proofHeaderType,
   JwtSigner Function(String keyId)? credentialKeySigner,
+  Map<String, dynamic> transactionClaims = const {},
 }) async {
+  // Transaction data is approved by the Key Binding JWT alone.
+  if (transactionClaims.isNotEmpty && credential.data['cnf'] == null) {
+    throw ResponseMessage(
+      data: {
+        'error': 'invalid_transaction_data',
+        'error_description':
+            'The credential the transaction is bound to has no holder key.',
+      },
+    );
+  }
+
   final sdJwt = SelectiveDisclosure(credential);
 
   final encryptedValues = credential.jwt
@@ -111,6 +124,7 @@ Future<String> buildPresentation({
       'aud': uri.queryParameters['client_id'] ?? '',
       'iat': iat,
       'sd_hash': sdHash,
+      ...transactionClaims,
     };
 
     // A credential issued with a Wallet Key Attestation is bound to a key
@@ -146,7 +160,8 @@ Future<String> buildPresentation({
 //
 // SD-JWT credentials present as SD-JWT + KB-JWT; mso_mdoc credentials as a
 // DeviceResponse signed over [mdocSessionTranscript], which is required as
-// soon as one is presented.
+// soon as one is presented. The KB-JWT of a credential that
+// [transactionData] binds to carries its hashes.
 Future<Map<String, List<String>>> buildVpToken(
   DcqlQueryResult result,
   List<DigitalCredential> packageFormatCredentials,
@@ -156,6 +171,7 @@ Future<Map<String, List<String>>> buildVpToken(
   ProofHeaderType proofHeaderType, {
   JwtSigner Function(String keyId)? credentialKeySigner,
   List<Object?>? mdocSessionTranscript,
+  List<TransactionDataItem> transactionData = const [],
 }) async {
   final vpToken = <String, List<String>>{};
 
@@ -168,6 +184,10 @@ Future<Map<String, List<String>>> buildVpToken(
         .claims!
         .map((c) => c.path)
         .toList();
+    final transactionClaims = keyBindingTransactionClaims(
+      transactionData,
+      queryId,
+    );
 
     final presentations = <String>[];
     for (final matched in matchedList) {
@@ -176,6 +196,17 @@ Future<Map<String, List<String>>> buildVpToken(
       final index = packageFormatCredentials.indexOf(original);
 
       if (original is MdocDigitalCredential) {
+        // CSC binds a QES approval to an mdoc in DeviceSigned, which this
+        // wallet doesn't build.
+        if (transactionClaims.isNotEmpty) {
+          throw ResponseMessage(
+            data: {
+              'error': 'invalid_transaction_data',
+              'error_description':
+                  'Transaction data cannot be bound to an mdoc credential.',
+            },
+          );
+        }
         if (mdocSessionTranscript == null) {
           throw StateError('an mdoc presentation needs a SessionTranscript');
         }
@@ -197,6 +228,7 @@ Future<Map<String, List<String>>> buildVpToken(
           privateKey: privateKey,
           proofHeaderType: proofHeaderType,
           credentialKeySigner: credentialKeySigner,
+          transactionClaims: transactionClaims,
         ),
       );
     }
