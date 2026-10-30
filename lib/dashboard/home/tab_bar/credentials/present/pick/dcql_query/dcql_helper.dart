@@ -89,17 +89,6 @@ Future<String> buildPresentation({
   JwtSigner Function(String keyId)? credentialKeySigner,
   Map<String, dynamic> transactionClaims = const {},
 }) async {
-  // Transaction data is approved by the Key Binding JWT alone.
-  if (transactionClaims.isNotEmpty && credential.data['cnf'] == null) {
-    throw ResponseMessage(
-      data: {
-        'error': 'invalid_transaction_data',
-        'error_description':
-            'The credential the transaction is bound to has no holder key.',
-      },
-    );
-  }
-
   final sdJwt = SelectiveDisclosure(credential);
 
   final encryptedValues = credential.jwt
@@ -161,7 +150,7 @@ Future<String> buildPresentation({
 // SD-JWT credentials present as SD-JWT + KB-JWT; mso_mdoc credentials as a
 // DeviceResponse signed over [mdocSessionTranscript], which is required as
 // soon as one is presented. The KB-JWT of a credential that
-// [transactionData] binds to carries its hashes.
+// [transactionData] binds to carries the claims [transactionDataTypes] gives.
 Future<Map<String, List<String>>> buildVpToken(
   DcqlQueryResult result,
   List<DigitalCredential> packageFormatCredentials,
@@ -169,6 +158,7 @@ Future<Map<String, List<String>>> buildVpToken(
   Uri uri,
   Map<String, dynamic> privateKey,
   ProofHeaderType proofHeaderType, {
+  required TransactionDataTypes transactionDataTypes,
   JwtSigner Function(String keyId)? credentialKeySigner,
   List<Object?>? mdocSessionTranscript,
   List<TransactionDataItem> transactionData = const [],
@@ -184,35 +174,36 @@ Future<Map<String, List<String>>> buildVpToken(
         .claims!
         .map((c) => c.path)
         .toList();
-    final transactionClaims = keyBindingTransactionClaims(
-      transactionData,
-      queryId,
-    );
 
     final presentations = <String>[];
     for (final matched in matchedList) {
       final original = findOriginal(matched, packageFormatCredentials);
       if (original == null) continue;
       final index = packageFormatCredentials.indexOf(original);
+      final credential = candidates[index];
+
+      final List<TransactionDataItem> boundTransactionData;
+      try {
+        boundTransactionData = transactionDataTypes.boundTo(
+          transactionData,
+          queryId,
+          format: credential.format ?? '',
+          // An mdoc is always bound to its device key.
+          holderBound:
+              original is MdocDigitalCredential ||
+              credential.data['cnf'] != null,
+        );
+      } on TransactionDataException catch (e) {
+        throw ResponseMessage(data: e.toJson());
+      }
 
       if (original is MdocDigitalCredential) {
-        // CSC binds a QES approval to an mdoc in DeviceSigned, which this
-        // wallet doesn't build.
-        if (transactionClaims.isNotEmpty) {
-          throw ResponseMessage(
-            data: {
-              'error': 'invalid_transaction_data',
-              'error_description':
-                  'Transaction data cannot be bound to an mdoc credential.',
-            },
-          );
-        }
         if (mdocSessionTranscript == null) {
           throw StateError('an mdoc presentation needs a SessionTranscript');
         }
         presentations.add(
           await buildMdocPresentation(
-            credential: candidates[index],
+            credential: credential,
             requestedPaths: requestedPaths,
             sessionTranscript: mdocSessionTranscript,
           ),
@@ -222,13 +213,15 @@ Future<Map<String, List<String>>> buildVpToken(
 
       presentations.add(
         await buildPresentation(
-          credential: candidates[index],
+          credential: credential,
           requestedPaths: requestedPaths,
           uri: uri,
           privateKey: privateKey,
           proofHeaderType: proofHeaderType,
           credentialKeySigner: credentialKeySigner,
-          transactionClaims: transactionClaims,
+          transactionClaims: transactionDataTypes.keyBindingClaims(
+            boundTransactionData,
+          ),
         ),
       );
     }

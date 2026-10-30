@@ -2137,7 +2137,7 @@ ${state.uri}
         ? dcqlQuery['credentials']
         : null;
     try {
-      parseTransactionData(
+      Parameters.transactionHandlers.dataTypes.parse(
         requestObject['transaction_data'],
         credentialQueryIds: {
           if (credentialQueries is List)
@@ -2147,9 +2147,8 @@ ${state.uri}
         },
       );
     } on TransactionDataException catch (e) {
-      final error = {'error': e.error, 'error_description': e.message};
-      unawaited(scanCubit.sendErrorToServer(uri: uri, data: error));
-      throw ResponseMessage(data: error);
+      unawaited(scanCubit.sendErrorToServer(uri: uri, data: e.toJson()));
+      throw ResponseMessage(data: e.toJson());
     }
   }
 

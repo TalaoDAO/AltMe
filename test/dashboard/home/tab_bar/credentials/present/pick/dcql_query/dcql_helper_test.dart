@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:altme/app/shared/message_handler/response_message.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_helper.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,7 +19,10 @@ void main() {
   final uri = Uri.parse(
     'openid4vp://?client_id=x509_hash%3Aabc&nonce=n-0S6_WzA2Mj',
   );
-  final transactionData = parseTransactionData(
+  final transactionDataTypes = TransactionDataTypes([
+    const QesApprovalTransactionType(),
+  ]);
+  final transactionData = transactionDataTypes.parse(
     [
       _encode({
         'type': qesApprovalTransactionType,
@@ -32,20 +34,18 @@ void main() {
     ],
     credentialQueryIds: {'qes_attestation'},
   );
-  final transactionClaims = keyBindingTransactionClaims(
+  final transactionClaims = transactionDataTypes.keyBindingClaims(
     transactionData,
-    'qes_attestation',
   );
 
-  CredentialModel credential({bool holderBound = true}) => CredentialModel(
+  CredentialModel credential() => CredentialModel(
     id: 'qes',
     image: '',
     shareLink: '',
-    data: {
-      if (holderBound)
-        'cnf': {
-          'jwk': {'kty': 'EC', 'crv': 'P-256', 'x': 'x', 'y': 'y'},
-        },
+    data: const {
+      'cnf': {
+        'jwk': {'kty': 'EC', 'crv': 'P-256', 'x': 'x', 'y': 'y'},
+      },
     },
     credentialPreview: _MockCredential(),
     jwt: '$issuerJwt~',
@@ -103,27 +103,6 @@ void main() {
       expect(
         signedPayloads.single.keys,
         unorderedEquals(['nonce', 'aud', 'iat', 'sd_hash']),
-      );
-    });
-
-    test('refuses to bind a transaction to a credential without cnf', () {
-      expect(
-        () => buildPresentation(
-          credential: credential(holderBound: false),
-          requestedPaths: const [],
-          uri: uri,
-          privateKey: const {},
-          proofHeaderType: ProofHeaderType.jwk,
-          credentialKeySigner: signer,
-          transactionClaims: transactionClaims,
-        ),
-        throwsA(
-          isA<ResponseMessage>().having(
-            (e) => (e.data as Map)['error'],
-            'error',
-            'invalid_transaction_data',
-          ),
-        ),
       );
     });
   });

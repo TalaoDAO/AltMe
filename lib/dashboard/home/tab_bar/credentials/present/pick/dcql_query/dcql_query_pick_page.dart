@@ -6,7 +6,6 @@ import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_helper.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_mdoc_helper.dart';
-import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/qes_approval_card.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/mdoc_proximity/helpers/mdoc_credential_model.dart';
@@ -153,7 +152,8 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       }
       final query = DcqlCredentialQuery.fromJson(rawQuery);
       // Already checked against the query when the request was scanned.
-      final transactionData = parseTransactionData(
+      const transactionHandlers = Parameters.transactionHandlers;
+      final transactionData = transactionHandlers.dataTypes.parse(
         token.payload['transaction_data'],
         credentialQueryIds: {for (final c in query.credentials) c.id},
       );
@@ -200,8 +200,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
           mainAxisSize: MainAxisSize.min,
           children: [
             for (final item in transactionData)
-              if (item.type == qesApprovalTransactionType)
-                QesApprovalCard(request: QesApprovalRequest.fromItem(item)),
+              transactionHandlers.of(item).buildConsent(context, item),
             VerifiableCredentialsColumn(
               result: result,
               packageFormatCredentials: packageFormatCredentials,
@@ -235,7 +234,11 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
                         }
                       }
                     },
-              text: transactionData.isEmpty ? l10n.confirm : l10n.sign,
+              text: transactionData.isEmpty
+                  ? l10n.confirm
+                  : transactionHandlers
+                        .of(transactionData.first)
+                        .confirmLabel(l10n),
             ),
           ),
         ),
@@ -290,6 +293,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       customOidc4vcProfile.proofHeader,
       credentialKeySigner: profileCubit.credentialKeySigner,
       mdocSessionTranscript: mdocSessionTranscript,
+      transactionDataTypes: Parameters.transactionHandlers.dataTypes,
       transactionData: transactionData,
     );
 

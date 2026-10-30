@@ -1,9 +1,9 @@
-import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/qes_approval_card.dart';
+import 'package:altme/oidc4vp_transaction/qes_approval/qes_approval_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
-import '../../../../../../../helpers/helpers.dart';
+import '../../helpers/helpers.dart';
 
 Finder _text(String text) => find.textContaining(text, findRichText: true);
 
