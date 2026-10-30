@@ -6734,6 +6734,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Qualified electronic signature (eIDAS)'**
   String get qesSignatureQualifierQes;
+
+  /// No description provided for @qesDocumentNoContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The verifier did not provide the content of this document.'**
+  String get qesDocumentNoContent;
+
+  /// No description provided for @qesDocumentNotText.
+  ///
+  /// In en, this message translates to:
+  /// **'This document cannot be shown as text.'**
+  String get qesDocumentNotText;
+
+  /// No description provided for @qesDocumentLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The document could not be loaded.'**
+  String get qesDocumentLoadFailed;
+
+  /// No description provided for @qesDocumentIntegrityVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Integrity verified'**
+  String get qesDocumentIntegrityVerified;
+
+  /// No description provided for @qesDocumentIntegrityNotVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Integrity not verified: the verifier gave no checksum.'**
+  String get qesDocumentIntegrityNotVerified;
+
+  /// No description provided for @qesDocumentIntegrityFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'This document does not match its checksum. The signature cannot be approved.'**
+  String get qesDocumentIntegrityFailed;
+
+  /// No description provided for @qesDocumentOneTimePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time password'**
+  String get qesDocumentOneTimePassword;
 }
 
 class _AppLocalizationsDelegate

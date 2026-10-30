@@ -1,5 +1,6 @@
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vp_transaction/qes_approval/qes_approval_card.dart';
+import 'package:altme/oidc4vp_transaction/qes_approval/qes_documents_review.dart';
 import 'package:altme/oidc4vp_transaction/transaction_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -11,6 +12,16 @@ class QesApprovalHandler extends TransactionHandler {
 
   @override
   TransactionDataType get dataType => const QesApprovalTransactionType();
+
+  @override
+  Widget buildReview(
+    BuildContext context,
+    TransactionDataItem item, {
+    required VoidCallback onContinue,
+  }) => QesDocumentsReview(
+    request: QesApprovalRequest.fromItem(item),
+    onContinue: onContinue,
+  );
 
   @override
   Widget buildConsent(BuildContext context, TransactionDataItem item) =>

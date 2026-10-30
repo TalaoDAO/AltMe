@@ -1298,5 +1298,12 @@
   "qesApprovalNumberOfSignatures": "Nombre de signatures",
   "qesApprovalSigningService": "Servei de signatura",
   "qesApprovalConsent": "En signar, autoritzeu el servei de signatura a crear una signatura electrònica qualificada en aquests documents amb el vostre certificat.",
-  "qesSignatureQualifierQes": "Signatura electrònica qualificada (eIDAS)"
+  "qesSignatureQualifierQes": "Signatura electrònica qualificada (eIDAS)",
+  "qesDocumentNoContent": "El verificador no ha proporcionat el contingut d'aquest document.",
+  "qesDocumentNotText": "Aquest document no es pot mostrar com a text.",
+  "qesDocumentLoadFailed": "No s'ha pogut carregar el document.",
+  "qesDocumentIntegrityVerified": "Integritat verificada",
+  "qesDocumentIntegrityNotVerified": "Integritat no verificada: el verificador no ha proporcionat cap suma de comprovació.",
+  "qesDocumentIntegrityFailed": "Aquest document no coincideix amb la seva suma de comprovació. No es pot aprovar la signatura.",
+  "qesDocumentOneTimePassword": "Contrasenya d'un sol ús"
 }

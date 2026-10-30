@@ -11,6 +11,15 @@ abstract class TransactionHandler {
 
   TransactionDataType get dataType;
 
+  /// A screen shown before the consent, such as the documents to sign, or
+  /// null when the type has none. It calls [onContinue] when the user moves
+  /// on to the consent.
+  Widget? buildReview(
+    BuildContext context,
+    TransactionDataItem item, {
+    required VoidCallback onContinue,
+  }) => null;
+
   /// What the user approves, shown above the credentials of the request.
   Widget buildConsent(BuildContext context, TransactionDataItem item);
 

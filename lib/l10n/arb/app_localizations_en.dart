@@ -3713,4 +3713,28 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get qesSignatureQualifierQes =>
       'Qualified electronic signature (eIDAS)';
+
+  @override
+  String get qesDocumentNoContent =>
+      'The verifier did not provide the content of this document.';
+
+  @override
+  String get qesDocumentNotText => 'This document cannot be shown as text.';
+
+  @override
+  String get qesDocumentLoadFailed => 'The document could not be loaded.';
+
+  @override
+  String get qesDocumentIntegrityVerified => 'Integrity verified';
+
+  @override
+  String get qesDocumentIntegrityNotVerified =>
+      'Integrity not verified: the verifier gave no checksum.';
+
+  @override
+  String get qesDocumentIntegrityFailed =>
+      'This document does not match its checksum. The signature cannot be approved.';
+
+  @override
+  String get qesDocumentOneTimePassword => 'One-time password';
 }

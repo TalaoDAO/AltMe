@@ -1284,5 +1284,12 @@
   "qesApprovalNumberOfSignatures": "Nombre de signatures",
   "qesApprovalSigningService": "Service de signature",
   "qesApprovalConsent": "En signant, vous autorisez le service de signature à créer une signature électronique qualifiée sur ces documents avec votre certificat.",
-  "qesSignatureQualifierQes": "Signature électronique qualifiée (eIDAS)"
+  "qesSignatureQualifierQes": "Signature électronique qualifiée (eIDAS)",
+  "qesDocumentNoContent": "Le vérificateur n'a pas fourni le contenu de ce document.",
+  "qesDocumentNotText": "Ce document ne peut pas être affiché sous forme de texte.",
+  "qesDocumentLoadFailed": "Le document n'a pas pu être chargé.",
+  "qesDocumentIntegrityVerified": "Intégrité vérifiée",
+  "qesDocumentIntegrityNotVerified": "Intégrité non vérifiée : le vérificateur n'a fourni aucune empreinte.",
+  "qesDocumentIntegrityFailed": "Ce document ne correspond pas à son empreinte. La signature ne peut pas être approuvée.",
+  "qesDocumentOneTimePassword": "Mot de passe à usage unique"
 }

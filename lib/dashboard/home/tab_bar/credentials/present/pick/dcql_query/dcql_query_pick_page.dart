@@ -135,6 +135,10 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
   /// presentation cannot be sent twice.
   bool _presenting = false;
 
+  /// How many of the transaction types' screens shown before the consent
+  /// the user has gone through.
+  int _reviewsSeen = 0;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -189,6 +193,22 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
           credentialModels: candidates,
         );
       }
+
+      // The screens some transaction types show before the consent, such as
+      // the documents a QES approval signs, one after the other.
+      final reviews = [
+        for (final item in transactionData)
+          if (transactionHandlers
+                  .of(item)
+                  .buildReview(
+                    context,
+                    item,
+                    onContinue: () => setState(() => _reviewsSeen++),
+                  )
+              case final review?)
+            review,
+      ];
+      if (_reviewsSeen < reviews.length) return reviews[_reviewsSeen];
 
       return BasePage(
         title: l10n.credentialShareTitle,

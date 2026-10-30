@@ -3742,4 +3742,29 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get qesSignatureQualifierQes =>
       'Firma electrónica cualificada (eIDAS)';
+
+  @override
+  String get qesDocumentNoContent =>
+      'El verificador no ha proporcionado el contenido de este documento.';
+
+  @override
+  String get qesDocumentNotText =>
+      'Este documento no se puede mostrar como texto.';
+
+  @override
+  String get qesDocumentLoadFailed => 'No se ha podido cargar el documento.';
+
+  @override
+  String get qesDocumentIntegrityVerified => 'Integridad verificada';
+
+  @override
+  String get qesDocumentIntegrityNotVerified =>
+      'Integridad no verificada: el verificador no ha proporcionado ninguna suma de comprobación.';
+
+  @override
+  String get qesDocumentIntegrityFailed =>
+      'Este documento no coincide con su suma de comprobación. No se puede aprobar la firma.';
+
+  @override
+  String get qesDocumentOneTimePassword => 'Contraseña de un solo uso';
 }

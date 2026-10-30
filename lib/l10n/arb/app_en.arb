@@ -1325,5 +1325,12 @@
   "qesApprovalNumberOfSignatures": "Number of signatures",
   "qesApprovalSigningService": "Signing service",
   "qesApprovalConsent": "By signing, you authorise the signing service to create a qualified electronic signature on these documents with your certificate.",
-  "qesSignatureQualifierQes": "Qualified electronic signature (eIDAS)"
+  "qesSignatureQualifierQes": "Qualified electronic signature (eIDAS)",
+  "qesDocumentNoContent": "The verifier did not provide the content of this document.",
+  "qesDocumentNotText": "This document cannot be shown as text.",
+  "qesDocumentLoadFailed": "The document could not be loaded.",
+  "qesDocumentIntegrityVerified": "Integrity verified",
+  "qesDocumentIntegrityNotVerified": "Integrity not verified: the verifier gave no checksum.",
+  "qesDocumentIntegrityFailed": "This document does not match its checksum. The signature cannot be approved.",
+  "qesDocumentOneTimePassword": "One-time password"
 }

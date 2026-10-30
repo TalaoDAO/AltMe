@@ -2194,5 +2194,12 @@
   "qesApprovalNumberOfSignatures": "Αριθμός υπογραφών",
   "qesApprovalSigningService": "Υπηρεσία υπογραφής",
   "qesApprovalConsent": "Υπογράφοντας, εξουσιοδοτείτε την υπηρεσία υπογραφής να δημιουργήσει εγκεκριμένη ηλεκτρονική υπογραφή σε αυτά τα έγγραφα με το πιστοποιητικό σας.",
-  "qesSignatureQualifierQes": "Εγκεκριμένη ηλεκτρονική υπογραφή (eIDAS)"
+  "qesSignatureQualifierQes": "Εγκεκριμένη ηλεκτρονική υπογραφή (eIDAS)",
+  "qesDocumentNoContent": "Ο επαληθευτής δεν παρείχε το περιεχόμενο αυτού του εγγράφου.",
+  "qesDocumentNotText": "Αυτό το έγγραφο δεν μπορεί να εμφανιστεί ως κείμενο.",
+  "qesDocumentLoadFailed": "Δεν ήταν δυνατή η φόρτωση του εγγράφου.",
+  "qesDocumentIntegrityVerified": "Η ακεραιότητα επαληθεύτηκε",
+  "qesDocumentIntegrityNotVerified": "Η ακεραιότητα δεν επαληθεύτηκε: ο επαληθευτής δεν έδωσε άθροισμα ελέγχου.",
+  "qesDocumentIntegrityFailed": "Αυτό το έγγραφο δεν ταιριάζει με το άθροισμα ελέγχου του. Η υπογραφή δεν μπορεί να εγκριθεί.",
+  "qesDocumentOneTimePassword": "Κωδικός μίας χρήσης"
 }

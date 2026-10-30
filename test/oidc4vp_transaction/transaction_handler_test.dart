@@ -4,6 +4,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/oidc4vp_transaction/qes_approval/qes_approval_card.dart';
 import 'package:altme/oidc4vp_transaction/qes_approval/qes_approval_handler.dart';
+import 'package:altme/oidc4vp_transaction/qes_approval/qes_documents_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -68,6 +69,25 @@ void main() {
 
       expect(find.byType(QesApprovalCard), findsOneWidget);
       expect(label, 'Sign');
+    });
+
+    testWidgets('shows the documents to sign before the consent', (
+      tester,
+    ) async {
+      final item = TransactionDataItem.parse(qesApproval);
+
+      await tester.pumpApp(
+        Builder(
+          builder: (context) => const QesApprovalHandler().buildReview(
+            context,
+            item,
+            onContinue: () {},
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(QesDocumentsReview), findsOneWidget);
     });
   });
 }

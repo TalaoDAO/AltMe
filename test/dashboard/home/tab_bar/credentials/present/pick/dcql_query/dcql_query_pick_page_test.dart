@@ -10,6 +10,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/lang/cubit/lang_state.dart';
 import 'package:altme/oidc4vp_transaction/qes_approval/qes_approval_card.dart';
+import 'package:altme/oidc4vp_transaction/qes_approval/qes_documents_review.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
 import 'package:altme/theme/app_theme/app_theme.dart';
 import 'package:bloc_test/bloc_test.dart';
@@ -69,7 +70,8 @@ String _qesRequestObject() =>
       'client_id': 'x509_hash:SGQeavcGgNWYdvv_fQX-Dtw7ABBU-0hbbpqYdP7F744',
       'response_type': 'vp_token',
       'response_mode': 'direct_post.jwt',
-      'response_uri': 'https://openid4vc-hub.com/verifier/haip-verifier-2/response/x',
+      'response_uri':
+          'https://openid4vc-hub.com/verifier/haip-verifier-2/response/x',
       'nonce': 'n-0S6_WzA2Mj',
       'dcql_query': {
         'credentials': [
@@ -77,7 +79,9 @@ String _qesRequestObject() =>
             'id': 'qes_attestation',
             'format': 'dc+sd-jwt',
             'meta': {
-              'vct_values': ['https://openid4vc-hub.com/credentials/qtsp-service-user'],
+              'vct_values': [
+                'https://openid4vc-hub.com/credentials/qtsp-service-user',
+              ],
             },
             'claims': [
               {
@@ -191,9 +195,8 @@ void main() {
     }
 
     for (final device in phoneScreenSizes) {
-      testWidgets('shows the signature request on ${device.name}', (
-        tester,
-      ) async {
+      testWidgets('shows the documents, then the signature request on '
+          '${device.name}', (tester) async {
         await tester.binding.setSurfaceSize(device.size);
         tester.view.devicePixelRatio = device.devicePixelRatio;
         addTearDown(() async {
@@ -204,6 +207,21 @@ void main() {
         await tester.pumpWidget(buildSubject());
         await tester.pumpAndSettle();
 
+        // The sandbox request names its document without its content.
+        expect(find.byType(QesDocumentsReview), findsOneWidget);
+        expect(find.byType(QesApprovalCard), findsNothing);
+        await expectLater(
+          find.byType(DcqlQueryOfferPickView),
+          matchesGoldenFile(
+            'goldens/qes_documents_screen/'
+            'qes_documents_screen_${device.name}.png',
+          ),
+        );
+
+        await tester.tap(find.byType(MyElevatedButton));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(QesDocumentsReview), findsNothing);
         expect(find.byType(QesApprovalCard), findsOneWidget);
         expect(
           find.byWidgetPredicate(
