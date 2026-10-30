@@ -1277,5 +1277,12 @@
   "proximityBlePeripheralServer": "Serveur périphérique",
   "proximityBlePeripheralServerSubtitle": "Le lecteur se connecte à votre téléphone.",
   "proximityBleCentralClient": "Client central",
-  "proximityBleCentralClientSubtitle": "Votre téléphone se connecte au lecteur."
+  "proximityBleCentralClientSubtitle": "Votre téléphone se connecte au lecteur.",
+  "qesApprovalTitle": "Demande de signature",
+  "qesApprovalDocuments": "Documents à signer",
+  "qesApprovalSignatureLevel": "Niveau de signature",
+  "qesApprovalNumberOfSignatures": "Nombre de signatures",
+  "qesApprovalSigningService": "Service de signature",
+  "qesApprovalConsent": "En signant, vous autorisez le service de signature à créer une signature électronique qualifiée sur ces documents avec votre certificat.",
+  "qesSignatureQualifierQes": "Signature électronique qualifiée (eIDAS)"
 }

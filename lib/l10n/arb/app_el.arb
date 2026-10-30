@@ -2187,5 +2187,12 @@
     }
   },
   "mdocReaderRequestsTitle": "Αναγνώστης",
-  "mdocReaderRequestsSubtitle": "Επιλέξτε τι θα ζητήσετε και στη συνέχεια σαρώστε τον κωδικό QR του κατόχου."
+  "mdocReaderRequestsSubtitle": "Επιλέξτε τι θα ζητήσετε και στη συνέχεια σαρώστε τον κωδικό QR του κατόχου.",
+  "qesApprovalTitle": "Αίτημα υπογραφής",
+  "qesApprovalDocuments": "Έγγραφα προς υπογραφή",
+  "qesApprovalSignatureLevel": "Επίπεδο υπογραφής",
+  "qesApprovalNumberOfSignatures": "Αριθμός υπογραφών",
+  "qesApprovalSigningService": "Υπηρεσία υπογραφής",
+  "qesApprovalConsent": "Υπογράφοντας, εξουσιοδοτείτε την υπηρεσία υπογραφής να δημιουργήσει εγκεκριμένη ηλεκτρονική υπογραφή σε αυτά τα έγγραφα με το πιστοποιητικό σας.",
+  "qesSignatureQualifierQes": "Εγκεκριμένη ηλεκτρονική υπογραφή (eIDAS)"
 }

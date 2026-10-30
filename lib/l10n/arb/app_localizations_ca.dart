@@ -3708,4 +3708,27 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get proximityBleCentralClientSubtitle =>
       'El vostre telèfon es connecta al lector.';
+
+  @override
+  String get qesApprovalTitle => 'Sol·licitud de signatura';
+
+  @override
+  String get qesApprovalDocuments => 'Documents per signar';
+
+  @override
+  String get qesApprovalSignatureLevel => 'Nivell de signatura';
+
+  @override
+  String get qesApprovalNumberOfSignatures => 'Nombre de signatures';
+
+  @override
+  String get qesApprovalSigningService => 'Servei de signatura';
+
+  @override
+  String get qesApprovalConsent =>
+      'En signar, autoritzeu el servei de signatura a crear una signatura electrònica qualificada en aquests documents amb el vostre certificat.';
+
+  @override
+  String get qesSignatureQualifierQes =>
+      'Signatura electrònica qualificada (eIDAS)';
 }

@@ -3719,4 +3719,27 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get proximityBleCentralClientSubtitle =>
       'Su teléfono se conecta al lector.';
+
+  @override
+  String get qesApprovalTitle => 'Solicitud de firma';
+
+  @override
+  String get qesApprovalDocuments => 'Documentos para firmar';
+
+  @override
+  String get qesApprovalSignatureLevel => 'Nivel de firma';
+
+  @override
+  String get qesApprovalNumberOfSignatures => 'Número de firmas';
+
+  @override
+  String get qesApprovalSigningService => 'Servicio de firma';
+
+  @override
+  String get qesApprovalConsent =>
+      'Al firmar, autoriza al servicio de firma a crear una firma electrónica cualificada en estos documentos con su certificado.';
+
+  @override
+  String get qesSignatureQualifierQes =>
+      'Firma electrónica cualificada (eIDAS)';
 }
