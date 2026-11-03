@@ -3741,4 +3741,52 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get proximityBleCentralClientSubtitle =>
       'Votre téléphone se connecte au lecteur.';
+
+  @override
+  String get qesApprovalTitle => 'Demande de signature';
+
+  @override
+  String get qesApprovalDocuments => 'Documents à signer';
+
+  @override
+  String get qesApprovalSignatureLevel => 'Niveau de signature';
+
+  @override
+  String get qesApprovalNumberOfSignatures => 'Nombre de signatures';
+
+  @override
+  String get qesApprovalSigningService => 'Service de signature';
+
+  @override
+  String get qesApprovalConsent =>
+      'En signant, vous autorisez le service de signature à créer une signature électronique qualifiée sur ces documents avec votre certificat.';
+
+  @override
+  String get qesSignatureQualifierQes =>
+      'Signature électronique qualifiée (eIDAS)';
+
+  @override
+  String get qesDocumentNoContent =>
+      'Le vérificateur n\'a pas fourni le contenu de ce document.';
+
+  @override
+  String get qesDocumentNotText =>
+      'Ce document ne peut pas être affiché sous forme de texte.';
+
+  @override
+  String get qesDocumentLoadFailed => 'Le document n\'a pas pu être chargé.';
+
+  @override
+  String get qesDocumentIntegrityVerified => 'Intégrité vérifiée';
+
+  @override
+  String get qesDocumentIntegrityNotVerified =>
+      'Intégrité non vérifiée : le vérificateur n\'a fourni aucune empreinte.';
+
+  @override
+  String get qesDocumentIntegrityFailed =>
+      'Ce document ne correspond pas à son empreinte. La signature ne peut pas être approuvée.';
+
+  @override
+  String get qesDocumentOneTimePassword => 'Mot de passe à usage unique';
 }

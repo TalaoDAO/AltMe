@@ -135,6 +135,10 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
   /// presentation cannot be sent twice.
   bool _presenting = false;
 
+  /// How many of the transaction types' screens shown before the consent
+  /// the user has gone through.
+  int _reviewsSeen = 0;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -151,6 +155,12 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
         throw Exception('dcql_query is not a Map<String, dynamic>');
       }
       final query = DcqlCredentialQuery.fromJson(rawQuery);
+      // Already checked against the query when the request was scanned.
+      const transactionHandlers = Parameters.transactionHandlers;
+      final transactionData = transactionHandlers.dataTypes.parse(
+        token.payload['transaction_data'],
+        credentialQueryIds: {for (final c in query.credentials) c.id},
+      );
       final credentials = context.read<CredentialsCubit>().state.credentials;
       final candidates = <CredentialModel>[];
       final packageFormatCredentials = <DigitalCredential>[];
@@ -184,15 +194,39 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
         );
       }
 
+      // The screens some transaction types show before the consent, such as
+      // the documents a QES approval signs, one after the other.
+      final reviews = [
+        for (final item in transactionData)
+          if (transactionHandlers
+                  .of(item)
+                  .buildReview(
+                    context,
+                    item,
+                    onContinue: () => setState(() => _reviewsSeen++),
+                  )
+              case final review?)
+            review,
+      ];
+      if (_reviewsSeen < reviews.length) return reviews[_reviewsSeen];
+
       return BasePage(
         title: l10n.credentialShareTitle,
         titleAlignment: Alignment.topCenter,
         titleTrailing: const WhiteCloseButton(),
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-        body: VerifiableCredentialsColumn(
-          result: result,
-          packageFormatCredentials: packageFormatCredentials,
-          candidates: candidates,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final item in transactionData)
+              transactionHandlers.of(item).buildConsent(context, item),
+            VerifiableCredentialsColumn(
+              result: result,
+              packageFormatCredentials: packageFormatCredentials,
+              candidates: candidates,
+            ),
+          ],
         ),
         navigation: SafeArea(
           child: Container(
@@ -209,6 +243,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
                           result: result,
                           packageFormatCredentials: packageFormatCredentials,
                           candidates: candidates,
+                          transactionData: transactionData,
                         );
                       } catch (e) {
                         // Nothing was sent (key, VP token): the user may try
@@ -219,7 +254,11 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
                         }
                       }
                     },
-              text: l10n.confirm,
+              text: transactionData.isEmpty
+                  ? l10n.confirm
+                  : transactionHandlers
+                        .of(transactionData.first)
+                        .confirmLabel(l10n),
             ),
           ),
         ),
@@ -235,6 +274,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
     required DcqlQueryResult result,
     required List<DigitalCredential> packageFormatCredentials,
     required List<CredentialModel> candidates,
+    required List<TransactionDataItem> transactionData,
   }) async {
     final profileCubit = context.read<ProfileCubit>();
     final customOidc4vcProfile = profileCubit
@@ -273,6 +313,8 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       customOidc4vcProfile.proofHeader,
       credentialKeySigner: profileCubit.credentialKeySigner,
       mdocSessionTranscript: mdocSessionTranscript,
+      transactionDataTypes: Parameters.transactionHandlers.dataTypes,
+      transactionData: transactionData,
     );
 
     await context.read<ScanCubit>().presentOidc4vpFinal(

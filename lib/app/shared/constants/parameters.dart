@@ -1,10 +1,17 @@
 import 'package:altme/app/shared/enum/enum.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/oidc4vp_transaction/qes_approval/qes_approval_handler.dart';
+import 'package:altme/oidc4vp_transaction/transaction_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 
 class Parameters {
   static const int multipleCredentialsProcessDelay = 1;
+
+  /// The OpenID4VP 1.0 transaction_data types this app supports.
+  static const transactionHandlers = TransactionHandlers([
+    QesApprovalHandler(),
+  ]);
 
   // 'false' for talao
   // 'true' for altme

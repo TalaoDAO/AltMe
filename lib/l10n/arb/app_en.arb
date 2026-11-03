@@ -1318,5 +1318,19 @@
   "proximityBlePeripheralServer": "Peripheral server",
   "proximityBlePeripheralServerSubtitle": "The reader connects to your phone.",
   "proximityBleCentralClient": "Central client",
-  "proximityBleCentralClientSubtitle": "Your phone connects to the reader."
+  "proximityBleCentralClientSubtitle": "Your phone connects to the reader.",
+  "qesApprovalTitle": "Signature request",
+  "qesApprovalDocuments": "Documents to sign",
+  "qesApprovalSignatureLevel": "Signature level",
+  "qesApprovalNumberOfSignatures": "Number of signatures",
+  "qesApprovalSigningService": "Signing service",
+  "qesApprovalConsent": "By signing, you authorise the signing service to create a qualified electronic signature on these documents with your certificate.",
+  "qesSignatureQualifierQes": "Qualified electronic signature (eIDAS)",
+  "qesDocumentNoContent": "The verifier did not provide the content of this document.",
+  "qesDocumentNotText": "This document cannot be shown as text.",
+  "qesDocumentLoadFailed": "The document could not be loaded.",
+  "qesDocumentIntegrityVerified": "Integrity verified",
+  "qesDocumentIntegrityNotVerified": "Integrity not verified: the verifier gave no checksum.",
+  "qesDocumentIntegrityFailed": "This document does not match its checksum. The signature cannot be approved.",
+  "qesDocumentOneTimePassword": "One-time password"
 }

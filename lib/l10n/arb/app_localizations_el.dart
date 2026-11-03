@@ -3732,4 +3732,52 @@ class AppLocalizationsEl extends AppLocalizations {
   @override
   String get proximityBleCentralClientSubtitle =>
       'Το τηλέφωνό σας συνδέεται στον αναγνώστη.';
+
+  @override
+  String get qesApprovalTitle => 'Αίτημα υπογραφής';
+
+  @override
+  String get qesApprovalDocuments => 'Έγγραφα προς υπογραφή';
+
+  @override
+  String get qesApprovalSignatureLevel => 'Επίπεδο υπογραφής';
+
+  @override
+  String get qesApprovalNumberOfSignatures => 'Αριθμός υπογραφών';
+
+  @override
+  String get qesApprovalSigningService => 'Υπηρεσία υπογραφής';
+
+  @override
+  String get qesApprovalConsent =>
+      'Υπογράφοντας, εξουσιοδοτείτε την υπηρεσία υπογραφής να δημιουργήσει εγκεκριμένη ηλεκτρονική υπογραφή σε αυτά τα έγγραφα με το πιστοποιητικό σας.';
+
+  @override
+  String get qesSignatureQualifierQes =>
+      'Εγκεκριμένη ηλεκτρονική υπογραφή (eIDAS)';
+
+  @override
+  String get qesDocumentNoContent =>
+      'Ο επαληθευτής δεν παρείχε το περιεχόμενο αυτού του εγγράφου.';
+
+  @override
+  String get qesDocumentNotText =>
+      'Αυτό το έγγραφο δεν μπορεί να εμφανιστεί ως κείμενο.';
+
+  @override
+  String get qesDocumentLoadFailed => 'Δεν ήταν δυνατή η φόρτωση του εγγράφου.';
+
+  @override
+  String get qesDocumentIntegrityVerified => 'Η ακεραιότητα επαληθεύτηκε';
+
+  @override
+  String get qesDocumentIntegrityNotVerified =>
+      'Η ακεραιότητα δεν επαληθεύτηκε: ο επαληθευτής δεν έδωσε άθροισμα ελέγχου.';
+
+  @override
+  String get qesDocumentIntegrityFailed =>
+      'Αυτό το έγγραφο δεν ταιριάζει με το άθροισμα ελέγχου του. Η υπογραφή δεν μπορεί να εγκριθεί.';
+
+  @override
+  String get qesDocumentOneTimePassword => 'Κωδικός μίας χρήσης';
 }
