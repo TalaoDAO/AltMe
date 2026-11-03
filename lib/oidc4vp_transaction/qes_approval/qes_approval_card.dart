@@ -17,7 +17,6 @@ class QesApprovalCard extends StatelessWidget {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final onSurface = theme.colorScheme.onSurface;
-    final signatureQualifier = request.signatureQualifier;
     final signingServices = request.locations
         .map((location) => Uri.tryParse(location)?.host ?? location)
         .where((host) => host.isNotEmpty)
@@ -43,24 +42,6 @@ class QesApprovalCard extends StatelessWidget {
             valueColor: onSurface,
             showVertically: true,
           ),
-          if (signatureQualifier != null)
-            CredentialField(
-              title: l10n.qesApprovalSignatureLevel,
-              value: signatureQualifier == 'eu_eidas_qes'
-                  ? l10n.qesSignatureQualifierQes
-                  : signatureQualifier,
-              titleColor: onSurface,
-              valueColor: onSurface,
-              showVertically: true,
-            ),
-          if (request.numSignatures != null)
-            CredentialField(
-              title: l10n.qesApprovalNumberOfSignatures,
-              value: '${request.numSignatures}',
-              titleColor: onSurface,
-              valueColor: onSurface,
-              showVertically: true,
-            ),
           if (signingServices.isNotEmpty)
             CredentialField(
               title: l10n.qesApprovalSigningService,
@@ -73,7 +54,9 @@ class QesApprovalCard extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             child: Text(
               l10n.qesApprovalConsent,
-              style: theme.textTheme.bodyMedium,
+              style: theme.textTheme.bodyMedium!.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ],

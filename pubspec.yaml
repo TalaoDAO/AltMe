@@ -60,6 +60,7 @@ dependencies:
   flutter_image_compress: ^2.0.3
   flutter_localizations:
     sdk: flutter
+  flutter_pdfview: ^1.4.5
   flutter_slidable: ^3.1.1
   flutter_svg: ^2.0.6
   google_fonts: ^6.2.1

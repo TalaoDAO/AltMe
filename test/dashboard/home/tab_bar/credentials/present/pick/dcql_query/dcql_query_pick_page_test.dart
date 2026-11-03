@@ -62,16 +62,30 @@ const _sandboxQesApproval =
     'NDAuMS4xMDEuMy40LjIuMSIsInNpZ25hdHVyZVF1YWxpZmllciI6ImV1X2VpZGFzX3FlcyIs'
     'InRyYW5zYWN0aW9uX2RhdGFfaGFzaGVzX2FsZyI6WyJzaGEtMjU2Il19';
 
+/// The sandbox request with the content of its document in an `href`, as a
+/// verifier that wants the user to read the document sends it.
+final _qesApprovalWithHref = _encode({
+  'type': 'https://cloudsignatureconsortium.org/2025/qes-approval',
+  'credential_ids': ['qes_attestation'],
+  'documentInfos': [
+    {
+      'label': 'Documento de prueba',
+      'hash': 'sTOgwOm+474gFj0q0x1iSNspKqbcse4IeiqlDg/HWuI=',
+      'href':
+          'data:text/plain;base64,${base64.encode(utf8.encode('Contrato'))}',
+    },
+  ],
+});
+
 /// The request object of haip-verifier-2's document signature test: its
 /// DCQL query and transaction_data, unsigned.
-String _qesRequestObject() =>
+String _qesRequestObject(String qesApproval) =>
     '${_encode(const {'alg': 'ES256', 'typ': 'oauth-authz-req+jwt'})}.'
     '${_encode({
       'client_id': 'x509_hash:SGQeavcGgNWYdvv_fQX-Dtw7ABBU-0hbbpqYdP7F744',
       'response_type': 'vp_token',
       'response_mode': 'direct_post.jwt',
-      'response_uri':
-          'https://openid4vc-hub.com/verifier/haip-verifier-2/response/x',
+      'response_uri': 'https://openid4vc-hub.com/verifier/haip-verifier-2/response/x',
       'nonce': 'n-0S6_WzA2Mj',
       'dcql_query': {
         'credentials': [
@@ -79,9 +93,7 @@ String _qesRequestObject() =>
             'id': 'qes_attestation',
             'format': 'dc+sd-jwt',
             'meta': {
-              'vct_values': [
-                'https://openid4vc-hub.com/credentials/qtsp-service-user',
-              ],
+              'vct_values': ['https://openid4vc-hub.com/credentials/qtsp-service-user'],
             },
             'claims': [
               {
@@ -101,7 +113,7 @@ String _qesRequestObject() =>
           },
         ],
       },
-      'transaction_data': [_sandboxQesApproval],
+      'transaction_data': [qesApproval],
     })}.c2lnbmF0dXJl';
 
 /// The sandbox QES attestation, as the wallet stores it, with a synthetic
@@ -157,14 +169,14 @@ void main() {
       );
     });
 
-    Widget buildSubject() {
+    Widget buildSubject(String qesApproval) {
       final requestObject = CredentialModel(
         id: 'id',
         image: 'image',
         credentialPreview: Credential.dummy(),
         shareLink: 'shareLink',
         data: const {},
-        jwt: _qesRequestObject(),
+        jwt: _qesRequestObject(qesApproval),
       );
       return MultiBlocProvider(
         providers: [
@@ -195,7 +207,7 @@ void main() {
     }
 
     for (final device in phoneScreenSizes) {
-      testWidgets('shows the documents, then the signature request on '
+      testWidgets('goes straight to the signature request without an href on '
           '${device.name}', (tester) async {
         await tester.binding.setSurfaceSize(device.size);
         tester.view.devicePixelRatio = device.devicePixelRatio;
@@ -204,23 +216,11 @@ void main() {
           await tester.binding.setSurfaceSize(null);
         });
 
-        await tester.pumpWidget(buildSubject());
+        await tester.pumpWidget(buildSubject(_sandboxQesApproval));
         await tester.pumpAndSettle();
 
-        // The sandbox request names its document without its content.
-        expect(find.byType(QesDocumentsReview), findsOneWidget);
-        expect(find.byType(QesApprovalCard), findsNothing);
-        await expectLater(
-          find.byType(DcqlQueryOfferPickView),
-          matchesGoldenFile(
-            'goldens/qes_documents_screen/'
-            'qes_documents_screen_${device.name}.png',
-          ),
-        );
-
-        await tester.tap(find.byType(MyElevatedButton));
-        await tester.pumpAndSettle();
-
+        // The sandbox request names its document without an href: there is
+        // nothing to read, so the signature request comes first.
         expect(find.byType(QesDocumentsReview), findsNothing);
         expect(find.byType(QesApprovalCard), findsOneWidget);
         expect(
@@ -238,5 +238,20 @@ void main() {
         );
       });
     }
+
+    testWidgets('shows the documents, then the signature request, when the '
+        'request gives an href', (tester) async {
+      await tester.pumpWidget(buildSubject(_qesApprovalWithHref));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(QesDocumentsReview), findsOneWidget);
+      expect(find.byType(QesApprovalCard), findsNothing);
+
+      await tester.tap(find.byType(MyElevatedButton));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(QesDocumentsReview), findsNothing);
+      expect(find.byType(QesApprovalCard), findsOneWidget);
+    });
   });
 }

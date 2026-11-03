@@ -74,7 +74,19 @@ void main() {
     testWidgets('shows the documents to sign before the consent', (
       tester,
     ) async {
-      final item = TransactionDataItem.parse(qesApproval);
+      final item = TransactionDataItem.parse(
+        _encode({
+          'type': qesApprovalTransactionType,
+          'credential_ids': ['qes_attestation'],
+          'documentInfos': [
+            {
+              'label': 'Contract',
+              'hash': 'aGFzaA==',
+              'href': 'data:text/plain;base64,Y29udHJhY3Q=',
+            },
+          ],
+        }),
+      );
 
       await tester.pumpApp(
         Builder(
@@ -82,12 +94,32 @@ void main() {
             context,
             item,
             onContinue: () {},
-          ),
+          )!,
         ),
       );
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       expect(find.byType(QesDocumentsReview), findsOneWidget);
+    });
+
+    testWidgets('has no review when no document has an href', (tester) async {
+      final item = TransactionDataItem.parse(qesApproval);
+      Widget? review;
+
+      await tester.pumpApp(
+        Builder(
+          builder: (context) {
+            review = const QesApprovalHandler().buildReview(
+              context,
+              item,
+              onContinue: () {},
+            );
+            return const SizedBox();
+          },
+        ),
+      );
+
+      expect(review, isNull);
     });
   });
 }

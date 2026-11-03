@@ -14,14 +14,19 @@ class QesApprovalHandler extends TransactionHandler {
   TransactionDataType get dataType => const QesApprovalTransactionType();
 
   @override
-  Widget buildReview(
+  Widget? buildReview(
     BuildContext context,
     TransactionDataItem item, {
     required VoidCallback onContinue,
-  }) => QesDocumentsReview(
-    request: QesApprovalRequest.fromItem(item),
-    onContinue: onContinue,
-  );
+  }) {
+    final request = QesApprovalRequest.fromItem(item);
+    // Without a document to load there is nothing to read: go on to the
+    // signature.
+    if (request.documentInfos.every((document) => document.href == null)) {
+      return null;
+    }
+    return QesDocumentsReview(request: request, onContinue: onContinue);
+  }
 
   @override
   Widget buildConsent(BuildContext context, TransactionDataItem item) =>
