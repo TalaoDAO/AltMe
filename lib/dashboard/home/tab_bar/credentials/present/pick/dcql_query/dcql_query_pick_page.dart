@@ -139,6 +139,10 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
   /// the user has gone through.
   int _reviewsSeen = 0;
 
+  /// The match the user picked for each credential query, by query id and
+  /// index in its list of matches. The first match when absent.
+  final _selection = <String, int>{};
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -183,13 +187,11 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
           // whole screen
         }
       }
-      final result = keepFirstMatchPerCredential(
-        query.query(packageFormatCredentials),
-      );
+      final matches = query.query(packageFormatCredentials);
 
-      if (!result.fulfilled) {
+      if (!matches.fulfilled) {
         return _DcqlQueryFailureView(
-          missingCredentials: result.unsatisfiedQueryCredentialSets.toList(),
+          missingCredentials: matches.unsatisfiedQueryCredentialSets.toList(),
           credentialModels: candidates,
         );
       }
@@ -222,9 +224,12 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
             for (final item in transactionData)
               transactionHandlers.of(item).buildConsent(context, item),
             VerifiableCredentialsColumn(
-              result: result,
+              result: matches,
               packageFormatCredentials: packageFormatCredentials,
               candidates: candidates,
+              selection: _selection,
+              onSelected: (queryId, index) =>
+                  setState(() => _selection[queryId] = index),
             ),
           ],
         ),
@@ -240,7 +245,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
                         await present(
                           context: context,
                           uri: widget.uri,
-                          result: result,
+                          result: selectMatchPerCredential(matches, _selection),
                           packageFormatCredentials: packageFormatCredentials,
                           candidates: candidates,
                           transactionData: transactionData,
@@ -494,11 +499,21 @@ class VerifiableCredentialsColumn extends StatelessWidget {
     required this.result,
     required this.packageFormatCredentials,
     required this.candidates,
+    this.selection = const {},
+    this.onSelected,
   });
 
   final DcqlQueryResult result;
   final List<DigitalCredential> packageFormatCredentials;
   final List<CredentialModel> candidates;
+
+  /// The match picked for each credential query, by query id and index in
+  /// its matches. The first match when absent.
+  final Map<String, int> selection;
+
+  /// Called with the query id and the index of the match the user taps,
+  /// when a query matches several credentials.
+  final void Function(String queryId, int index)? onSelected;
 
   // Label a missing (zero-match) credential-query requirement: the claims
   // it asked for when it specified any, else the credential type it asked
@@ -571,22 +586,58 @@ class VerifiableCredentialsColumn extends StatelessWidget {
             ),
           ),
         for (final entry in entries) ...[
-          for (final credential in entry.value)
-            _CredentialTile(
-              credentialModel:
-                  candidates[packageFormatCredentials.indexOf(
-                    findOriginal(credential, packageFormatCredentials)!,
-                  )],
-              profileSetting: profileSetting,
-              credential: credential,
-              requestedPaths: result.query.credentials
-                  .firstWhere((c) => c.id == entry.key)
-                  .claims!
-                  .map((c) => c.path)
-                  .toList(),
+          for (final (index, credential) in entry.value.indexed)
+            _selectable(
+              context,
+              queryId: entry.key,
+              index: index,
+              matchCount: entry.value.length,
+              tile: _CredentialTile(
+                credentialModel:
+                    candidates[packageFormatCredentials.indexOf(
+                      findOriginal(credential, packageFormatCredentials)!,
+                    )],
+                profileSetting: profileSetting,
+                credential: credential,
+                requestedPaths: result.query.credentials
+                    .firstWhere((c) => c.id == entry.key)
+                    .claims!
+                    .map((c) => c.path)
+                    .toList(),
+              ),
             ),
         ],
       ],
+    );
+  }
+
+  /// [tile], with a radio mark the user taps to present it, when its query
+  /// matches several credentials.
+  Widget _selectable(
+    BuildContext context, {
+    required String queryId,
+    required int index,
+    required int matchCount,
+    required Widget tile,
+  }) {
+    if (matchCount < 2) return tile;
+    final selected = (selection[queryId] ?? 0) == index;
+    return Semantics(
+      selected: selected,
+      inMutuallyExclusiveGroup: true,
+      child: InkWell(
+        onTap: () => onSelected?.call(queryId, index),
+        child: Row(
+          children: [
+            Icon(
+              selected ? Icons.radio_button_checked : Icons.radio_button_off,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            const SizedBox(width: 8),
+            Expanded(child: tile),
+          ],
+        ),
+      ),
     );
   }
 }

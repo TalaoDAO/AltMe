@@ -8,12 +8,16 @@ import 'package:selective_disclosure_jwt/selective_disclosure_jwt.dart';
 
 // A single DCQL credential query can match several wallet credentials of
 // the same type (e.g. the user holds more than one instance of the
-// requested vct). Only one is ever presented, so trim every match list
-// down to its first entry before it reaches the UI or the vp_token builder.
-DcqlQueryResult keepFirstMatchPerCredential(DcqlQueryResult result) {
+// requested vct). Only one is presented per query: the one at the index
+// [selection] gives for the query id (the first by default). Trim every
+// match list down to it before the vp_token builder.
+DcqlQueryResult selectMatchPerCredential(
+  DcqlQueryResult result,
+  Map<String, int> selection,
+) {
   final trimmedVerifiableCredentials = {
     for (final entry in result.verifiableCredentials.entries)
-      entry.key: entry.value.take(1),
+      entry.key: entry.value.skip(selection[entry.key] ?? 0).take(1),
   };
 
   final trimmedResult = DcqlQueryResult(
