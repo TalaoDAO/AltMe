@@ -2,6 +2,7 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 
+import 'package:altme/oidc4vc/helper_function/credential_key_alias.dart';
 import 'package:altme/oidc4vc/model/credential_acceptance_data.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -32,7 +33,7 @@ Future<List<CredentialAcceptanceItem>> addCredentialData({
   required String issuer,
   required JWTDecode jwtDecode,
   required QRCodeScanCubit qrCodeScanCubit,
-  List<String?>? credentialKeyIds,
+  List<List<String>>? credentialKeyIds,
   String? dpopKey,
 }) async {
   final profileModel = credentialsCubit.profileCubit.state.model;
@@ -115,9 +116,9 @@ Future<List<CredentialAcceptanceItem>> addCredentialData({
           format: format,
           openIdConfiguration: openIdConfiguration,
           jwtDecode: jwtDecode,
-          keyId: credentialKeyIds != null && i < credentialKeyIds.length
+          keyIds: credentialKeyIds != null && i < credentialKeyIds.length
               ? credentialKeyIds[i]
-              : null,
+              : const [],
         );
         final notification = credentialsCubit.oidc4vc.issuanceNotification(
           credentialResponse: data,
@@ -130,6 +131,15 @@ Future<List<CredentialAcceptanceItem>> addCredentialData({
             credentialId: item.credentialModel.id,
             notification: notification,
           );
+        }
+        for (final credentialModel in item.credentialModels) {
+          final keyId = credentialModel.keyId;
+          if (keyId != null && isPlatformKeyAlias(keyId)) {
+            credentialsCubit.expectCredentialKey(
+              credentialId: credentialModel.id,
+              keyId: keyId,
+            );
+          }
         }
         items.add(item);
       } catch (_) {

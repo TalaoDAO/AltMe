@@ -39,6 +39,7 @@ CredentialModel _$CredentialModelFromJson(Map<String, dynamic> json) =>
       credentialSupported: json['credentialSupported'] as Map<String, dynamic>?,
       aiCredentialAnalysis: json['aiCredentialAnalysis'] as String?,
       keyId: json['keyId'] as String?,
+      batchId: json['batchId'] as String?,
     );
 
 Map<String, dynamic> _$CredentialModelToJson(CredentialModel instance) =>
@@ -63,4 +64,5 @@ Map<String, dynamic> _$CredentialModelToJson(CredentialModel instance) =>
       'profileLinkedId': instance.profileLinkedId,
       'aiCredentialAnalysis': instance.aiCredentialAnalysis,
       'keyId': instance.keyId,
+      'batchId': instance.batchId,
     };

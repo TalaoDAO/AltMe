@@ -3767,4 +3767,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get qesDocumentOneTimePassword => 'Contraseña de un solo uso';
+
+  @override
+  String batchCopiesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count copias de un solo uso',
+      one: '1 copia de un solo uso',
+    );
+    return '$_temp0';
+  }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
+import 'package:altme/oidc4vc/helper_function/credential_key_alias.dart';
 import 'package:altme/oidc4vc/helper_function/mdoc_credential_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -11,7 +12,8 @@ import 'package:platform_p256_keys/platform_p256_keys.dart';
 /// Retreive credential_type from url
 // encodedCredentialOrFutureTokens,deferredCredentialEndpoint,
 // format
-Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
+Future<(List<dynamic>?, String?, String?, List<List<String>>)?>
+getCredential({
   required Oidc4vcParameters oidc4vcParameters,
   required dynamic credential,
   required ProfileCubit profileCubit,
@@ -61,10 +63,12 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
   );
 
   final credentialResponseData = <dynamic>[];
-  // Parallel to credentialResponseData: credentialKeyIds[i] is the key
-  // credentialResponseData[i] is bound to, when it was issued with a Wallet
-  // Key Attestation, or null for every other credential.
-  final credentialKeyIds = <String?>[];
+  // Parallel to credentialResponseData: credentialKeyIds[i] are the keys the
+  // credentials of credentialResponseData[i] are bound to - the platform keys
+  // its proofs carried (mso_mdoc, batch copies) or the keys a Wallet Key
+  // Attestation covered - or empty for a credential bound to the wallet's
+  // own key.
+  final credentialKeyIds = <List<String>>[];
 
   final issuerTokenParameters = IssuerTokenParameters(
     privateKey: jsonDecode(privateKey) as Map<String, dynamic>,
@@ -147,6 +151,20 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
     oidc4vcParameters.issuerOpenIdConfiguration,
   );
 
+  /// OpenID4VCI 1.0 §12.2.4: an issuer that publishes a batch size issues
+  /// that many copies, one per proof, each bound to its own key, so that no
+  /// two presentations share a key. A key attestation already covers its
+  /// batch, and the singular `proof` of draft 15 and earlier carries a
+  /// single key.
+  final batchCopies =
+      cryptoHolderBinding &&
+          keyAttestationProvider == null &&
+          profileCubit.oidc4vc is Oidc4vciClientDraft16Plus &&
+          (format == VCFormatType.mdoc.vcValue ||
+              format == VCFormatType.dcSdJWT.vcValue)
+      ? batchSize
+      : 1;
+
   /// Builds the Credential Request for a single credential_identifier (or
   /// none, when the Token Response did not return any for this credential)
   /// and sends it. Returns false when the developer-mode preview was
@@ -187,33 +205,52 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
       );
     }
 
-    /// An mso_mdoc is bound to a fresh platform key (Android Keystore /
-    /// Secure Enclave) under a new alias, unless a key attestation already
-    /// names the key: the proof carries that key's public JWK and is signed
-    /// by the platform, and the alias becomes the credential's keyId.
-    String? mdocKeyAlias;
-    var proofTokenParameters = issuerTokenParameters;
-    JwtSigner? proofSigner;
-    if (format == VCFormatType.mdoc.vcValue &&
-        cryptoHolderBinding &&
-        keyAttestation == null) {
-      final alias = newMdocKeyAlias();
-      final key = await platformKeys.getOrCreate(alias);
-      mdocKeyAlias = alias;
-      proofTokenParameters = IssuerTokenParameters(
-        privateKey: key.publicJwk,
-        did: did,
-        issuer: oidc4vcParameters.issuer,
-        mediaType: MediaType.proofOfOwnership,
-        clientType: customOidc4vcProfile.clientType,
-        proofHeaderType: ProofHeaderType.jwk,
-        clientId: clientId ?? '',
-      );
-      proofSigner = (header, payload) => platformKeys.signCompactJws(
-        alias: alias,
-        header: header,
-        payload: payload,
-      );
+    /// An mso_mdoc, and every copy of a batch, is bound to a fresh platform
+    /// key (Android Keystore / Secure Enclave) under a new alias, unless a key
+    /// attestation already names the key: each proof carries its key's
+    /// public JWK and is signed by the platform, and the alias becomes the
+    /// keyId of the credential bound to it.
+    final keyAliases = <String>[];
+    final proofKeys = <JwtProofKey>[];
+    Future<void> deleteKeys() async {
+      for (final alias in keyAliases) {
+        await platformKeys.delete(alias);
+      }
+    }
+
+    if (cryptoHolderBinding &&
+        keyAttestation == null &&
+        (format == VCFormatType.mdoc.vcValue || batchCopies > 1)) {
+      try {
+        for (var i = 0; i < batchCopies; i++) {
+          final alias = format == VCFormatType.mdoc.vcValue
+              ? newMdocKeyAlias()
+              : newSdJwtKeyAlias();
+          final key = await platformKeys.getOrCreate(alias);
+          keyAliases.add(alias);
+          proofKeys.add(
+            JwtProofKey(
+              tokenParameters: IssuerTokenParameters(
+                privateKey: key.publicJwk,
+                did: did,
+                issuer: oidc4vcParameters.issuer,
+                mediaType: MediaType.proofOfOwnership,
+                clientType: customOidc4vcProfile.clientType,
+                proofHeaderType: ProofHeaderType.jwk,
+                clientId: clientId ?? '',
+              ),
+              signer: (header, payload) => platformKeys.signCompactJws(
+                alias: alias,
+                header: header,
+                payload: payload,
+              ),
+            ),
+          );
+        }
+      } catch (_) {
+        await deleteKeys();
+        rethrow;
+      }
     }
 
     final Map<String, dynamic> credentialData;
@@ -221,7 +258,7 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
       credentialData = await profileCubit.oidc4vc.buildCredentialData(
         nonce: nonce,
         keyAttestationProofs: keyAttestation?.proofs,
-        issuerTokenParameters: proofTokenParameters,
+        issuerTokenParameters: issuerTokenParameters,
         credentialType: credentialType,
         types: types,
         format: format,
@@ -230,7 +267,7 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
         credentialDefinition: credentialDefinition,
         clientAuthentication: clientAuthentication,
         vct: vct,
-        proofType: mdocKeyAlias != null
+        proofType: keyAliases.isNotEmpty
             ? ProofType.jwt
             : customOidc4vcProfile.proofType,
         did: did,
@@ -239,10 +276,10 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
         formatsSupported: customOidc4vcProfile.formatsSupported ?? [],
         oidc4vcParameters: oidc4vcParameters,
         clientId: clientId,
-        proofSigner: proofSigner,
+        batchProofKeys: proofKeys,
       );
     } catch (_) {
-      if (mdocKeyAlias != null) await platformKeys.delete(mdocKeyAlias);
+      await deleteKeys();
       rethrow;
     }
 
@@ -258,7 +295,7 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
         qrCodeScanCubit.completer = null;
         qrCodeScanCubit.resetNonceAndAccessTokenAndAuthorizationDetails();
         qrCodeScanCubit.goBack();
-        if (mdocKeyAlias != null) await platformKeys.delete(mdocKeyAlias);
+        await deleteKeys();
         return false;
       }
     }
@@ -278,7 +315,7 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
       );
     } catch (_) {
       // No credential will ever be bound to this key.
-      if (mdocKeyAlias != null) await platformKeys.delete(mdocKeyAlias);
+      await deleteKeys();
       rethrow;
     } finally {
       /// Wallet Provider Protocol §12.11: a key attestation is spent on the
@@ -299,10 +336,7 @@ Future<(List<dynamic>?, String?, String?, List<String?>)?> getCredential({
     }
 
     credentialResponseData.add(credentialResponseDataValue);
-    // Only the first credential of a batch response is ever turned into a
-    // CredentialModel (see buildCredentialAcceptanceItem's dcSdJWT branch),
-    // so the first attested key is the one that credential needs correlated.
-    credentialKeyIds.add(keyAttestation?.keyIds.firstOrNull ?? mdocKeyAlias);
+    credentialKeyIds.add([...?keyAttestation?.keyIds, ...keyAliases]);
     return true;
   }
 

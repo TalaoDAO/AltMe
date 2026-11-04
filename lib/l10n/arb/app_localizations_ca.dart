@@ -3756,4 +3756,15 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get qesDocumentOneTimePassword => 'Contrasenya d\'un sol ús';
+
+  @override
+  String batchCopiesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count còpies d\'un sol ús',
+      one: '1 còpia d\'un sol ús',
+    );
+    return '$_temp0';
+  }
 }

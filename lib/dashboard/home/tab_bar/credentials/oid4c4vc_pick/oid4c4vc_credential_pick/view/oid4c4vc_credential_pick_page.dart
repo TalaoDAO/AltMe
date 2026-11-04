@@ -167,6 +167,10 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
+                              if (item.credentialModels.length > 1)
+                                BatchCountBadge(
+                                  count: item.credentialModels.length,
+                                ),
                               Padding(
                                 padding: const EdgeInsets.all(8),
                                 child: Icon(
@@ -210,12 +214,17 @@ class Oidc4vcCredentialPickView extends StatelessWidget {
                           );
 
                           for (final index in state) {
-                            await credentialsCubit.insertCredential(
-                              credential: items[index].credentialModel,
-                              showStatus: true,
-                              showMessage: index == lastSelected,
-                              uri: uri,
-                            );
+                            final copies = items[index].credentialModels;
+                            for (final credential in copies) {
+                              await credentialsCubit.insertCredential(
+                                credential: credential,
+                                showStatus: true,
+                                showMessage:
+                                    index == lastSelected &&
+                                    credential == copies.last,
+                                uri: uri,
+                              );
+                            }
                           }
 
                           if (context.mounted) Navigator.of(context).pop();

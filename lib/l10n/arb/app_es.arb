@@ -1307,5 +1307,6 @@
   "qesDocumentIntegrityVerified": "Integridad verificada",
   "qesDocumentIntegrityNotVerified": "Integridad no verificada: el verificador no ha proporcionado ninguna suma de comprobación.",
   "qesDocumentIntegrityFailed": "Este documento no coincide con su suma de comprobación. No se puede aprobar la firma.",
-  "qesDocumentOneTimePassword": "Contraseña de un solo uso"
+  "qesDocumentOneTimePassword": "Contraseña de un solo uso",
+  "batchCopiesCount": "{count, plural, =1{1 copia de un solo uso} other{{count} copias de un solo uso}}"
 }

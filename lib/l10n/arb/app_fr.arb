@@ -1291,5 +1291,6 @@
   "qesDocumentIntegrityVerified": "Intégrité vérifiée",
   "qesDocumentIntegrityNotVerified": "Intégrité non vérifiée : le vérificateur n'a fourni aucune empreinte.",
   "qesDocumentIntegrityFailed": "Ce document ne correspond pas à son empreinte. La signature ne peut pas être approuvée.",
-  "qesDocumentOneTimePassword": "Mot de passe à usage unique"
+  "qesDocumentOneTimePassword": "Mot de passe à usage unique",
+  "batchCopiesCount": "{count, plural, =1{1 exemplaire à usage unique} other{{count} exemplaires à usage unique}}"
 }

@@ -6776,6 +6776,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'One-time password'**
   String get qesDocumentOneTimePassword;
+
+  /// How many copies of a batch-issued credential are left; each is destroyed once presented.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 single-use copy} other{{count} single-use copies}}'**
+  String batchCopiesCount(int count);
 }
 
 class _AppLocalizationsDelegate

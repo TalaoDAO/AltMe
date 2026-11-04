@@ -1729,7 +1729,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           /// get credentials - a credential type we can't fetch (even after
           /// the nonce retry below) is skipped rather than blocking the
           /// others
-          (List<dynamic>?, String?, String?, List<String?>)? result;
+          (List<dynamic>?, String?, String?, List<List<String>>)? result;
           try {
             try {
               result = await getCredential(

@@ -17,6 +17,7 @@ import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:platform_p256_keys/platform_p256_keys.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -38,6 +39,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required this.oidc4vc,
     required this.walletCubit,
     required this.activityLogManager,
+    this.platformKeys = const PlatformP256Keys(),
   }) : super(const CredentialsState());
 
   final CredentialsRepository credentialsRepository;
@@ -51,6 +53,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   final OIDC4VCIClient oidc4vc;
   final WalletCubit walletCubit;
   final ActivityLogManager activityLogManager;
+  final PlatformP256Keys platformKeys;
   final _dio = Dio();
 
   final log = getLogger('CredentialsCubit');
@@ -68,13 +71,34 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required IssuanceNotification notification,
   }) => _issuanceNotifications[credentialId] = notification;
 
+  /// The platform keys of credentials offered but not stored yet, by
+  /// credential id.
+  final _offeredCredentialKeys = <String, String>{};
+
+  /// Registers the platform key [keyId] the offered credential [credentialId]
+  /// is bound to, so that it is deleted if the credential is not stored.
+  void expectCredentialKey({
+    required String credentialId,
+    required String keyId,
+  }) => _offeredCredentialKeys[credentialId] = keyId;
+
   /// Sends `credential_deleted` for every credential registered with
-  /// [expectIssuanceNotification] that was not stored: the ones the user
-  /// declined, once the screen offering them is closed.
+  /// [expectIssuanceNotification] that was not stored, and deletes the key of
+  /// every credential registered with [expectCredentialKey] that was not
+  /// stored: the ones the user declined, once the screen offering them is
+  /// closed.
   void notifyDeclinedCredentials() {
     for (final credentialId in _issuanceNotifications.keys.toList()) {
       _notifyIssuer(credentialId, IssuanceNotificationEvent.credentialDeleted);
     }
+    for (final keyId in _offeredCredentialKeys.values) {
+      unawaited(
+        platformKeys.delete(keyId).catchError((Object e, StackTrace s) {
+          log.e('key $keyId not deleted', error: e, stackTrace: s);
+        }),
+      );
+    }
+    _offeredCredentialKeys.clear();
   }
 
   void _notifyIssuer(String credentialId, IssuanceNotificationEvent event) {
@@ -336,6 +360,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       rethrow;
     }
     _notifyIssuer(credential.id, IssuanceNotificationEvent.credentialAccepted);
+    _offeredCredentialKeys.remove(credential.id);
 
     final CredentialCategory credentialCategory =
         credential.credentialPreview.credentialSubjectModel.credentialCategory;

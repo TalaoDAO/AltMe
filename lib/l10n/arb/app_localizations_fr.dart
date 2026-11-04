@@ -3789,4 +3789,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get qesDocumentOneTimePassword => 'Mot de passe à usage unique';
+
+  @override
+  String batchCopiesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count exemplaires à usage unique',
+      one: '1 exemplaire à usage unique',
+    );
+    return '$_temp0';
+  }
 }

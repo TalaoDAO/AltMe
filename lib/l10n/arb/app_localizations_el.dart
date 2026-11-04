@@ -3780,4 +3780,15 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get qesDocumentOneTimePassword => 'Κωδικός μίας χρήσης';
+
+  @override
+  String batchCopiesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count αντίγραφα μίας χρήσης',
+      one: '1 αντίγραφο μίας χρήσης',
+    );
+    return '$_temp0';
+  }
 }
