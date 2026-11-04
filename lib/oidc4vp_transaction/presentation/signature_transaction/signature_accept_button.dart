@@ -103,7 +103,7 @@ class SignatureAcceptButton extends StatelessWidget {
             // sign locally.
             final keyId = credential.keyId;
             final signer = keyId != null
-                ? profileCubit.credentialKeySigner?.call(keyId)
+                ? profileCubit.signerForCredentialKey(keyId)
                 : null;
 
             final jwtToken = await signKeyBindingJwt(

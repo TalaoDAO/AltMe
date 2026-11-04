@@ -200,6 +200,7 @@ class MockCredentialModel extends _i1.Mock implements _i2.CredentialModel {
     String? profileLinkedId,
     String? aiCredentialAnalysis,
     String? keyId,
+    String? batchId,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#copyWith, [], {
@@ -224,6 +225,7 @@ class MockCredentialModel extends _i1.Mock implements _i2.CredentialModel {
               #profileLinkedId: profileLinkedId,
               #aiCredentialAnalysis: aiCredentialAnalysis,
               #keyId: keyId,
+              #batchId: batchId,
             }),
             returnValue: _FakeCredentialModel_1(
               this,
@@ -249,6 +251,7 @@ class MockCredentialModel extends _i1.Mock implements _i2.CredentialModel {
                 #profileLinkedId: profileLinkedId,
                 #aiCredentialAnalysis: aiCredentialAnalysis,
                 #keyId: keyId,
+                #batchId: batchId,
               }),
             ),
           )

@@ -59,7 +59,11 @@ class CredentialManifestOfferPickPage extends StatelessWidget {
         final profileModel = context.read<ProfileCubit>().state.model;
         final credentialManifestPickCubit = CredentialManifestPickCubit(
           credential: credential,
-          credentialList: context.read<CredentialsCubit>().state.credentials,
+          credentialList: context
+              .read<CredentialsCubit>()
+              .state
+              .credentials
+              .onePerBatch,
           inputDescriptorIndex: inputDescriptorIndex,
           formatsSupported:
               profileModel

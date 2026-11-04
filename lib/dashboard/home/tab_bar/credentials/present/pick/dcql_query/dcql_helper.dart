@@ -90,7 +90,7 @@ Future<String> buildPresentation({
   required Uri uri,
   required Map<String, dynamic> privateKey,
   required ProofHeaderType proofHeaderType,
-  JwtSigner Function(String keyId)? credentialKeySigner,
+  JwtSigner? Function(String keyId)? credentialKeySigner,
   Map<String, dynamic> transactionClaims = const {},
 }) async {
   final sdJwt = SelectiveDisclosure(credential);
@@ -163,7 +163,7 @@ Future<Map<String, List<String>>> buildVpToken(
   Map<String, dynamic> privateKey,
   ProofHeaderType proofHeaderType, {
   required TransactionDataTypes transactionDataTypes,
-  JwtSigner Function(String keyId)? credentialKeySigner,
+  JwtSigner? Function(String keyId)? credentialKeySigner,
   List<Object?>? mdocSessionTranscript,
   List<TransactionDataItem> transactionData = const [],
 }) async {

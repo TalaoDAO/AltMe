@@ -7,6 +7,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
 import 'package:altme/key_generator/key_generator.dart';
+import 'package:altme/oidc4vc/helper_function/credential_key_alias.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -252,6 +253,16 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         .first;
 
     await credentialsRepository.deleteById(id);
+    // A platform key binds this credential only: nothing will be presented
+    // with it again.
+    final keyId = credential.keyId;
+    if (keyId != null && isPlatformKeyAlias(keyId)) {
+      try {
+        await platformKeys.delete(keyId);
+      } catch (e, s) {
+        log.e('key $keyId not deleted', error: e, stackTrace: s);
+      }
+    }
     final credentials = List.of(state.credentials)
       ..removeWhere((element) => element.id == id);
     final dummies = _getAvalaibleDummyCredentials(credentials: credentials);
@@ -275,6 +286,22 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             : null,
       ),
     );
+  }
+
+  /// Deletes the credential [id] and, when it is a copy of a batch issuance,
+  /// every other copy of the batch: the user sees them as one credential.
+  Future<void> deleteWithCopies({
+    required String id,
+    bool showMessage = true,
+  }) async {
+    final credential = state.credentials.firstWhere((c) => c.id == id);
+    final copies = state.credentials.copiesOf(credential);
+    for (final copy in copies) {
+      await deleteById(
+        id: copy.id,
+        showMessage: showMessage && copy == copies.last,
+      );
+    }
   }
 
   Future<void> updateCredential({
@@ -451,6 +478,11 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         .findAll();
 
     for (final storedCredential in allCredentials) {
+      // The copies of one batch are stored one after the other.
+      if (credential.batchId != null &&
+          storedCredential.batchId == credential.batchId) {
+        continue;
+      }
       final iteratedCredentialSubjectModel =
           storedCredential.credentialPreview.credentialSubjectModel;
       final iteratedCredentialFormat = storedCredential.format;

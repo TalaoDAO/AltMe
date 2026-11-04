@@ -77,7 +77,11 @@ class AttestationList extends StatelessWidget {
     while (index < presentationDefinition.inputDescriptors.length) {
       final credentialManifestPickCubit = CredentialManifestPickCubit(
         credential: credentialPreview,
-        credentialList: context.read<CredentialsCubit>().state.credentials,
+        credentialList: context
+            .read<CredentialsCubit>()
+            .state
+            .credentials
+            .onePerBatch,
         inputDescriptorIndex: index,
         formatsSupported:
             profileModel

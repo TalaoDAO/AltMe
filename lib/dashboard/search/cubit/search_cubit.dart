@@ -39,7 +39,7 @@ class SearchCubit extends Cubit<SearchState> {
       //           .credentialSubjectType ==
       //       CredentialSubjectType.tezosAssociatedWallet,
       // );
-      emit(state.populate(credentials: values));
+      emit(state.populate(credentials: values.onePerBatch));
     });
   }
 

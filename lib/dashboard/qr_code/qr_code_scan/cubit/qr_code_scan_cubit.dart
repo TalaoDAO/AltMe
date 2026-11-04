@@ -990,7 +990,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         presentationDefinition,
       );
 
-      final credentialList = credentialsCubit.state.credentials;
+      final credentialList = credentialsCubit.state.credentials.onePerBatch;
       for (
         var index = 0;
         index < newPresentationDefinition.inputDescriptors.length;

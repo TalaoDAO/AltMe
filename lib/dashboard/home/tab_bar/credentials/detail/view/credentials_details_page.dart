@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:altme/ai/widget/ai_credential_analysis_button.dart';
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/delete_credential.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
@@ -181,6 +182,15 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
             .model
             .profileSetting;
 
+        final copyCount = widget.credentialModel.batchId == null
+            ? 1
+            : context
+                  .read<CredentialsCubit>()
+                  .state
+                  .credentials
+                  .copiesOf(widget.credentialModel)
+                  .length;
+
         return BasePage(
           title: l10n.cardDetails,
           titleAlignment: Alignment.topCenter,
@@ -205,6 +215,21 @@ class _CredentialsDetailsViewState extends State<CredentialsDetailsView> {
                             isDiscover: false,
                             showPortrait: showPortrait,
                           ),
+                        if (copyCount > 1) ...[
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              BatchCountBadge(count: copyCount),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  l10n.batchCopiesCount(copyCount),
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                         const SizedBox(height: 20),
                         Column(
                           children: [

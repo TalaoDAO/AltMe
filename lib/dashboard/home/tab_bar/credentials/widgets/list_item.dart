@@ -1,4 +1,5 @@
 import 'package:altme/app/app.dart';
+import 'package:altme/credentials/cubit/credentials_cubit.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/detail/helper_functions/delete_credential.dart';
 
@@ -99,25 +100,46 @@ class CredentialsDisplayItem extends StatelessWidget {
         .state
         .model
         .profileSetting;
+    // A batch is shown as one card, with the number of copies left.
+    final batchId = credentialModel.batchId;
+    final copyCount = batchId == null
+        ? 1
+        : context.select<CredentialsCubit, int>(
+            (cubit) => cubit.state.credentials
+                .where((credential) => credential.batchId == batchId)
+                .length,
+          );
+    final Widget display = selected == null
+        ? CredentialDisplay(
+            credentialModel: credentialModel,
+            credDisplayType: CredDisplayType.List,
+            profileSetting: profileSetting,
+            isDiscover: isDiscover,
+            showPortrait: true,
+          )
+        : DisplaySelectionElement(
+            credentialModel: credentialModel,
+            selected: selected,
+            isDiscover: isDiscover,
+          );
     return _BaseItem(
       enabled: true,
       onTap: onTap,
       onLongPress: credentialModel.disAllowDelete
           ? null
           : () => deleteCredential(context, credentialModel.id),
-      child: selected == null
-          ? CredentialDisplay(
-              credentialModel: credentialModel,
-              credDisplayType: CredDisplayType.List,
-              profileSetting: profileSetting,
-              isDiscover: isDiscover,
-              showPortrait: true,
+      child: copyCount > 1
+          ? Stack(
+              children: [
+                display,
+                Positioned(
+                  right: 12,
+                  bottom: 12,
+                  child: BatchCountBadge(count: copyCount),
+                ),
+              ],
             )
-          : DisplaySelectionElement(
-              credentialModel: credentialModel,
-              selected: selected,
-              isDiscover: isDiscover,
-            ),
+          : display,
     );
   }
 }

@@ -66,7 +66,11 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
         final profileModel = context.read<ProfileCubit>().state.model;
         final credentialManifestPickCubit = CredentialManifestPickCubit(
           credential: credential,
-          credentialList: context.read<CredentialsCubit>().state.credentials,
+          credentialList: context
+              .read<CredentialsCubit>()
+              .state
+              .credentials
+              .onePerBatch,
           inputDescriptorIndex: inputDescriptorIndex,
           formatsSupported:
               profileModel
@@ -165,7 +169,12 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
         token.payload['transaction_data'],
         credentialQueryIds: {for (final c in query.credentials) c.id},
       );
-      final credentials = context.read<CredentialsCubit>().state.credentials;
+      // One copy per batch: the user chooses among credentials, not copies.
+      final credentials = context
+          .read<CredentialsCubit>()
+          .state
+          .credentials
+          .onePerBatch;
       final candidates = <CredentialModel>[];
       final packageFormatCredentials = <DigitalCredential>[];
       for (final e in credentials) {
@@ -316,7 +325,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       uri,
       jsonDecode(privateKeyString) as Map<String, dynamic>,
       customOidc4vcProfile.proofHeader,
-      credentialKeySigner: profileCubit.credentialKeySigner,
+      credentialKeySigner: profileCubit.signerForCredentialKey,
       mdocSessionTranscript: mdocSessionTranscript,
       transactionDataTypes: Parameters.transactionHandlers.dataTypes,
       transactionData: transactionData,

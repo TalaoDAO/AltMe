@@ -327,7 +327,7 @@ class _SelectiveDisclosurePickViewState
         // directly, instead of handing out a raw key to sign locally.
         final keyId = widget.selectedCredential.keyId;
         final signer = keyId != null
-            ? profileCubit.credentialKeySigner?.call(keyId)
+            ? profileCubit.signerForCredentialKey(keyId)
             : null;
 
         final jwtToken = await signKeyBindingJwt(

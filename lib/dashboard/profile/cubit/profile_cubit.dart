@@ -8,6 +8,7 @@ import 'package:altme/dashboard/profile/models/models.dart';
 import 'package:altme/dashboard/profile/profile_provider/get_profile_from_provider.dart';
 import 'package:altme/dashboard/profile/profile_provider/get_wallet_attestation_data.dart';
 import 'package:altme/lang/cubit/lang_cubit.dart';
+import 'package:altme/oidc4vc/helper_function/credential_key_alias.dart';
 import 'package:altme/oidc4vc/model/oidc4vci_stack.dart';
 import 'package:altme/oidc4vc/model/oidc4vci_state.dart';
 import 'package:bloc/bloc.dart';
@@ -18,6 +19,7 @@ import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:platform_p256_keys/platform_p256_keys.dart';
 import 'package:random_string/random_string.dart';
 
 import 'package:secure_storage/secure_storage.dart';
@@ -36,6 +38,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     required this.jwtDecode,
     this.walletAttestationProvider,
     this.credentialKeySigner,
+    this.platformKeys = const PlatformP256Keys(),
   }) : super(ProfileState(model: ProfileModel.empty())) {
     load();
   }
@@ -66,6 +69,24 @@ class ProfileCubit extends Cubit<ProfileState> {
   /// (there is nothing to resolve), so every call site keeps presenting with
   /// the wallet's usual key exactly as before.
   final JwtSigner Function(String keyId)? credentialKeySigner;
+
+  /// The platform key store, which holds the keys of mso_mdoc credentials
+  /// and of batch copies.
+  final PlatformP256Keys platformKeys;
+
+  /// The signer of the credential-binding key [keyId], or `null` when this
+  /// wallet has none for it.
+  ///
+  /// The key of an mso_mdoc or of a batch copy is in the platform key store;
+  /// any other [keyId] is a Wallet Key Attestation key, which
+  /// [credentialKeySigner] signs with.
+  JwtSigner? signerForCredentialKey(String keyId) => isPlatformKeyAlias(keyId)
+      ? (header, payload) => platformKeys.signCompactJws(
+          alias: keyId,
+          header: header,
+          payload: payload,
+        )
+      : credentialKeySigner?.call(keyId);
 
   Timer? _timer;
 
