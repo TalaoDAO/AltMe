@@ -127,6 +127,8 @@ final credentialsBlocListener =
           LoadingView().hide();
         }
         if (state.status == CredentialsStatus.delete) {
+          // A silent delete (a presented batch copy) ends its loading too.
+          LoadingView().hide();
           if (state.message != null) {
             Navigator.popUntil(
               context,

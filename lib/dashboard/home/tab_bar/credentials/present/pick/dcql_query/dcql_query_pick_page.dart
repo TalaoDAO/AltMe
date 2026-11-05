@@ -658,55 +658,15 @@ class _CredentialTile extends StatelessWidget {
       onTap: selected == null ? null : onSelected,
       belowImage: selected == null
           ? null
-          : Semantics(
-              selected: selected,
-              inMutuallyExclusiveGroup: true,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Icon(
-                    selected!
-                        ? Icons.radio_button_checked
-                        : Icons.radio_button_off,
-                    size: 25,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ),
-            ),
+          : CredentialSelectionMark(selected: selected!),
       children: [
         Text(context.l10n.dcqlSharedDataLabel, style: textTheme.bodySmall),
         for (final path in requestedPaths)
-          _FoldedClaim(
+          FoldedClaim(
             title: _translatedTitle(credentialModel, path, languageCode),
             value: _valueLabel(credential.getValueByPath(path) ?? '—'),
           ),
       ],
-    );
-  }
-}
-
-/// The label of one shared claim, with its value one tap away.
-class _FoldedClaim extends StatelessWidget {
-  const _FoldedClaim({required this.title, required this.value});
-
-  final String title;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return ExpansionTile(
-      shape: const Border(),
-      collapsedShape: const Border(),
-      tilePadding: EdgeInsets.zero,
-      childrenPadding: const EdgeInsets.only(bottom: 8),
-      dense: true,
-      title: Text(title, style: textTheme.titleSmall),
-      expandedCrossAxisAlignment: CrossAxisAlignment.start,
-      expandedAlignment: Alignment.centerLeft,
-      children: [SelectableText(value, style: textTheme.bodyMedium)],
     );
   }
 }

@@ -121,9 +121,17 @@ CredentialModel _qesAttestation({String? id}) {
   return id == null ? credential : credential.copyWith(id: id);
 }
 
-Future<CredentialModel> _mdl() async {
+/// A 1×1 PNG.
+final _png = base64.decode(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGP4z8DwHwAFAAH/'
+  'iZk9HQAAAABJRU5ErkJggg==',
+);
+
+Future<CredentialModel> _mdl({Map<String, Object?>? elements}) async {
   final data = await getMdocCredentialData(
-    issuerSigned: testIssuerSigned(),
+    issuerSigned: elements == null
+        ? testIssuerSigned()
+        : testIssuerSigned(elements: elements),
     credentialType: 'mDL',
     platformKeys: _MockPlatformP256Keys(),
   );
@@ -313,6 +321,45 @@ void main() {
       expect(find.text('Doe'), findsOneWidget);
     });
 
+    testWidgets('unfolds an image claim as a picture, not its data: URI', (
+      tester,
+    ) async {
+      await pump(
+        tester,
+        buildSubject(
+          query: const {
+            'id': 'mdl',
+            'format': 'mso_mdoc',
+            'meta': {'doctype_value': mdlDocType},
+            'claims': [
+              {
+                'path': [mdlNameSpace, 'portrait'],
+              },
+            ],
+          },
+          stored: [
+            await _mdl(elements: {'family_name': 'Doe', 'portrait': _png}),
+          ],
+        ),
+      );
+
+      await tester.tap(find.text('Portrait'));
+      await tester.pumpAndSettle();
+
+      final row = find.byType(ExpansionTile);
+      expect(
+        find.descendant(of: row, matching: find.byType(Image)),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: row,
+          matching: find.textContaining('data:image', findRichText: true),
+        ),
+        findsNothing,
+      );
+    });
+
     testWidgets('puts the radio under the card, at the end, with several '
         'candidates', (tester) async {
       await pump(
@@ -348,6 +395,28 @@ void main() {
       expect(tester.getRect(card).right - radio.right, lessThan(24));
 
       await tester.tap(radios.last);
+      await tester.pumpAndSettle();
+      expect(tester.widget<Icon>(radios.last).icon, Icons.radio_button_checked);
+
+      // A tap on a card's picture picks it too.
+      await tester.tap(image);
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<Icon>(radios.first).icon,
+        Icons.radio_button_checked,
+      );
+      expect(tester.widget<Icon>(radios.last).icon, Icons.radio_button_off);
+
+      // Anywhere on the card picks it, e.g. the label above its data...
+      final secondCardLabel = find.text('Data shared from this attestation');
+      await tester.ensureVisible(secondCardLabel.last);
+      await tester.tap(secondCardLabel.last);
+      await tester.pumpAndSettle();
+      expect(tester.widget<Icon>(radios.last).icon, Icons.radio_button_checked);
+
+      // ...but a data row only unfolds.
+      await tester.ensureVisible(find.byType(ExpansionTile).first);
+      await tester.tap(find.byType(ExpansionTile).first);
       await tester.pumpAndSettle();
       expect(tester.widget<Icon>(radios.last).icon, Icons.radio_button_checked);
     });

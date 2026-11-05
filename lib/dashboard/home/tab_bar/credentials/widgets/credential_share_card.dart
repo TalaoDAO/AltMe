@@ -42,7 +42,8 @@ class CredentialShareCard extends StatelessWidget {
   /// Shown right under the card's picture, e.g. a selection mark.
   final Widget? belowImage;
 
-  /// Called when the picture or [belowImage] is tapped.
+  /// Called when the card is tapped anywhere a field does not handle the
+  /// tap itself.
   final VoidCallback? onTap;
 
   /// The fields shown under the card.
@@ -52,25 +53,19 @@ class CredentialShareCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 4),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _wrapInTap(
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CredentialCardImage(credentialModel: credentialModel),
-                  if (belowImage != null) belowImage!,
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            ...children,
-          ],
+      child: _wrapInTap(
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CredentialCardImage(credentialModel: credentialModel),
+              if (belowImage != null) belowImage!,
+              const SizedBox(height: 8),
+              ...children,
+            ],
+          ),
         ),
       ),
     );
