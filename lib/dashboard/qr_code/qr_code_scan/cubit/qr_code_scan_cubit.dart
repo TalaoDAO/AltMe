@@ -75,12 +75,43 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   final log = getLogger('QRCodeScanCubit');
 
+  /// Collects the wallet's deferred credentials while the app runs; the
+  /// credentials listener tells it which cards are pending.
+  late final deferredCredentialPoller = DeferredCredentialPoller(
+    fetch: _collectDeferredCredential,
+  );
+
   @override
   Future<void> close() async {
     //cancel streams
+    deferredCredentialPoller.dispose();
     final closeFuture = super.close();
     return closeFuture;
   }
+
+  /// Asks the issuer of [credentialModel], a pending card, for its
+  /// credential, without showing anything: see [DeferredCredentialPoller].
+  Future<Duration?> _collectDeferredCredential(
+    CredentialModel credentialModel,
+  ) => getAndAddDefferedCredential(
+    credentialModel: credentialModel,
+    credentialsCubit: credentialsCubit,
+    issuer: credentialModel.pendingInfo!.issuer,
+    oidc4vc: Oidc4vciClientFactory.create(
+      profileCubit
+          .state
+          .model
+          .profileSetting
+          .selfSovereignIdentityOptions
+          .customOidc4vcProfile
+          .oidc4vciDraft,
+    ),
+    jwtDecode: jwtDecode,
+    blockchainType: walletCubit.state.currentAccount?.blockchainType,
+    qrCodeScanCubit: this,
+    profileCubit: profileCubit,
+    confirm: false,
+  );
 
   Future<void> process({required String? scannedResponse}) async {
     log.i('processing scanned qr code - $scannedResponse');
@@ -933,6 +964,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required CredentialModel credentialModel,
     required QRCodeScanCubit qrCodeScanCubit,
   }) async {
+    // Asked by hand: no poll in the meantime.
+    deferredCredentialPoller.stop(credentialModel.id);
     try {
       emit(state.loading());
 
@@ -964,7 +997,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         clientType: customOidc4vcProfile.clientType,
       );
 
-      await getAndAddDefferedCredential(
+      final wait = await getAndAddDefferedCredential(
         credentialModel: credentialModel,
         credentialsCubit: credentialsCubit,
         issuer: oidc4vcParameters.issuer,
@@ -974,6 +1007,21 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         qrCodeScanCubit: qrCodeScanCubit,
         profileCubit: profileCubit,
       );
+      if (wait != null) {
+        // Not issued yet: say so, and keep polling.
+        deferredCredentialPoller.resume(credentialModel, wait);
+        emit(
+          state.copyWith(
+            qrScanStatus: QrScanStatus.idle,
+            message: StateMessage.info(
+              messageHandler: ResponseMessage(
+                message: ResponseString
+                    .RESPONSE_STRING_credentialIssuanceIsStillPending,
+              ),
+            ),
+          ),
+        );
+      }
     } catch (e) {
       emitError(error: e);
     }
@@ -1530,6 +1578,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     String? oAuthClientAttestationPop,
   }) async {
     final allItems = <CredentialAcceptanceItem>[];
+
+    /// How many credentials the issuer deferred: each is a pending card.
+    var deferredCount = 0;
     // Replaced by the client_id of the attestation fetched for the token
     // request, which the later credentials of this loop keep using.
     var effectiveClientId = clientId;
@@ -1833,6 +1884,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             dpopKey: dpop ? publicKeyForDPop : null,
           );
           allItems.addAll(items);
+          deferredCount += encodedCredentialOrFutureTokens
+              .where(
+                (token) => isDeferredCredentialResponse(
+                  token,
+                  deferredCredentialEndpoint,
+                ),
+              )
+              .length;
         } else {
           throw ResponseMessage(
             data: {
@@ -1846,6 +1905,23 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
 
       resetNonceAndAccessTokenAndAuthorizationDetails();
+
+      if (allItems.isEmpty && deferredCount > 0) {
+        // Nothing to accept now: the pending cards are stored and collected
+        // when the issuer is ready.
+        emit(
+          state.copyWith(
+            qrScanStatus: QrScanStatus.idle,
+            message: StateMessage.info(
+              messageHandler: ResponseMessage(
+                message: ResponseString
+                    .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending,
+              ),
+            ),
+          ),
+        );
+        return;
+      }
 
       if (allItems.isEmpty) {
         emitError(

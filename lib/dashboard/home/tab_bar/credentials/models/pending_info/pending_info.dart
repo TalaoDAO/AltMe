@@ -13,6 +13,7 @@ class PendingInfo extends Equatable {
     required this.url,
     required this.issuer,
     required this.requestedAt,
+    this.dpopKey,
   });
 
   factory PendingInfo.fromJson(Map<String, dynamic> json) =>
@@ -25,6 +26,11 @@ class PendingInfo extends Equatable {
   final String url;
   final String? issuer;
   final DateTime? requestedAt;
+
+  /// The private JWK (as JSON) [accessToken] is DPoP-bound to, or null for a
+  /// bearer token: the Deferred Credential Request needs a proof made with
+  /// it.
+  final String? dpopKey;
 
   Map<String, dynamic> toJson() => _$PendingInfoToJson(this);
 

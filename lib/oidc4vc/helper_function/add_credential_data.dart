@@ -10,6 +10,18 @@ import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
+/// Whether [data], one token of a Credential Response, defers the credential
+/// (OpenID4VCI §9): it carries a `transaction_id` (`acceptance_token` before
+/// draft 13) and the issuer has a [deferredCredentialEndpoint]. Such a token
+/// becomes a pending card, not an item to accept.
+bool isDeferredCredentialResponse(
+  dynamic data,
+  String? deferredCredentialEndpoint,
+) =>
+    deferredCredentialEndpoint != null &&
+    data is Map &&
+    (data['transaction_id'] != null || data['acceptance_token'] != null);
+
 /// Builds a [CredentialAcceptanceItem] for every fetched, non-deferred token
 /// in [encodedCredentialOrFutureTokens] - a token that fails to decode is
 /// skipped rather than aborting the others. Deferred/pending tokens are
@@ -43,13 +55,7 @@ Future<List<CredentialAcceptanceItem>> addCredentialData({
     final data = encodedCredentialOrFutureTokens[i];
     final String credentialName = getCredentialData(credential);
 
-    final acceptanceToken = data['acceptance_token'];
-
-    /// trasanction_id is NEW for draft 13. it was acceptance_token for draft 11
-    final transactionId = data['transaction_id'];
-
-    if ((acceptanceToken != null || transactionId != null) &&
-        deferredCredentialEndpoint != null) {
+    if (isDeferredCredentialResponse(data, deferredCredentialEndpoint)) {
       /// add deferred card
       final id = const Uuid().v4();
 
@@ -92,11 +98,13 @@ Future<List<CredentialAcceptanceItem>> addCredentialData({
         pendingInfo: PendingInfo(
           encodedCredentialFromOIDC4VC: data,
           accessToken: accessToken,
-          deferredCredentialEndpoint: deferredCredentialEndpoint,
+          // Not null: isDeferredCredentialResponse checked it.
+          deferredCredentialEndpoint: deferredCredentialEndpoint!,
           format: format,
           url: scannedResponse,
           issuer: issuer,
           requestedAt: DateTime.now(),
+          dpopKey: dpopKey,
         ),
         profileLinkedId: profileModel.profileType.getVCId,
       );

@@ -1878,6 +1878,40 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
           as _i18.Future<void>);
 
   @override
+  _i18.Future<_i9.DeferredCredentialResponse> requestDeferredCredential({
+    required String? deferredCredentialEndpoint,
+    required String? accessToken,
+    required String? transactionId,
+    required _i4.Dio? dio,
+    String? acceptanceToken,
+    String? dpopKey,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#requestDeferredCredential, [], {
+              #deferredCredentialEndpoint: deferredCredentialEndpoint,
+              #accessToken: accessToken,
+              #transactionId: transactionId,
+              #dio: dio,
+              #acceptanceToken: acceptanceToken,
+              #dpopKey: dpopKey,
+            }),
+            returnValue: _i18.Future<_i9.DeferredCredentialResponse>.value(
+              _i20.dummyValue<_i9.DeferredCredentialResponse>(
+                this,
+                Invocation.method(#requestDeferredCredential, [], {
+                  #deferredCredentialEndpoint: deferredCredentialEndpoint,
+                  #accessToken: accessToken,
+                  #transactionId: transactionId,
+                  #dio: dio,
+                  #acceptanceToken: acceptanceToken,
+                  #dpopKey: dpopKey,
+                }),
+              ),
+            ),
+          )
+          as _i18.Future<_i9.DeferredCredentialResponse>);
+
+  @override
   _i18.Future<dynamic> getDeferredCredential({
     required Map<String, dynamic>? credentialHeaders,
     required Map<String, dynamic>? body,

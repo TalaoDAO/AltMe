@@ -349,8 +349,10 @@ Future<CredentialModel> _credentialModel({
 }
 
 /// Used by the deferred-credential path, where exactly one credential is
-/// fetched at a time: builds it and triggers the same confirmation screen
-/// (with a single item) as the main issuance flow.
+/// fetched at a time: stores it in place of the pending card
+/// [credentialIdToBeDeleted], with the "credential added" message. The user
+/// accepted when the offer was scanned, and the credential may arrive while
+/// they are on any screen, so no confirmation screen opens.
 Future<void> addOIDC4VCCredential({
   required dynamic encodedCredentialFromOIDC4VC,
   required CredentialsCubit credentialsCubit,
@@ -363,7 +365,7 @@ Future<void> addOIDC4VCCredential({
   String? issuer,
 }) async {
   // Rejects a credential the wallet cannot read.
-  await buildCredentialAcceptanceItem(
+  final item = await buildCredentialAcceptanceItem(
     encodedCredentialFromOIDC4VC: encodedCredentialFromOIDC4VC,
     credentialsCubit: credentialsCubit,
     credentialType: credentialType,
@@ -377,17 +379,16 @@ Future<void> addOIDC4VCCredential({
     await credentialsCubit.deleteById(
       id: credentialIdToBeDeleted,
       showMessage: false,
+      logActivity: false,
     );
   }
-  // TODO(hawkbee): Pick the old process for defered credential.
-  // the pick page inserts the credential itself once the user accepts.
-  // It needs the item built above, the issuer's display name
-  // (resolveIssuerDisplay) and whether the trusted list names the issuer
-  // (oidc4vc.findTrustedIssuer), as computed before commit 63509c0b7.
-  // qrCodeScanCubit.navigateToOidc4vcCredentialPickPage(
-  //   items: [item],
-  //   issuerName: issuerName,
-  //   isTrusted: isTrusted,
-  //   uri: Uri.parse(issuer ?? ''),
-  // );
+
+  final copies = item.credentialModels;
+  for (final credential in copies) {
+    await credentialsCubit.insertCredential(
+      credential: credential,
+      showMessage: credential == copies.last,
+      uri: Uri.parse(issuer ?? ''),
+    );
+  }
 }
