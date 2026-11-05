@@ -5,7 +5,6 @@ import 'package:altme/flavor/flavor.dart';
 import 'package:altme/onboarding/cubit/onboarding_cubit.dart';
 import 'package:altme/onboarding/onboarding.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -22,19 +21,10 @@ class MockEnterpriseCubit extends MockCubit<EnterpriseState>
 class MockQRCodeScanCubit extends MockCubit<QRCodeScanState>
     implements QRCodeScanCubit {}
 
-class MockConfettiController extends Mock implements ConfettiController {
-  @override
-  final duration = const Duration(milliseconds: 100);
-
-  @override
-  final state = ConfettiControllerState.stopped;
-}
-
 void main() {
   late MockProfileCubit profileCubit;
   late WalletReadyCubit walletReadyCubit;
   late MockNavigator navigator;
-  late MockConfettiController confettiController;
   late MockEnterpriseCubit mockEnterpriseCubit;
   late MockQRCodeScanCubit mockQRCodeScanCubit;
 
@@ -49,7 +39,6 @@ void main() {
     ).thenReturn(ProfileState(model: ProfileModel.empty()));
     walletReadyCubit = WalletReadyCubit();
     navigator = MockNavigator();
-    confettiController = MockConfettiController();
     mockEnterpriseCubit = MockEnterpriseCubit();
     mockQRCodeScanCubit = MockQRCodeScanCubit();
 
@@ -128,13 +117,11 @@ void main() {
           child: WalletReadyView(
             profileCubit: profileCubit,
             walletReadyCubit: walletReadyCubit,
-            confettiController: confettiController,
           ),
         ),
       );
 
       expect(find.byType(BasePage), findsOneWidget);
-      expect(find.byType(ConfettiWidget), findsOneWidget);
     });
 
     testWidgets('toggles agreement value when checkbox is pressed', (
@@ -154,7 +141,6 @@ void main() {
           child: WalletReadyView(
             profileCubit: profileCubit,
             walletReadyCubit: walletReadyCubit,
-            confettiController: confettiController,
           ),
         ),
       );
@@ -183,7 +169,6 @@ void main() {
             child: WalletReadyView(
               profileCubit: profileCubit,
               walletReadyCubit: walletReadyCubit,
-              confettiController: confettiController,
             ),
           ),
         );
@@ -217,7 +202,6 @@ void main() {
               child: WalletReadyView(
                 profileCubit: profileCubit,
                 walletReadyCubit: walletReadyCubit,
-                confettiController: confettiController,
               ),
             ),
           ),
@@ -255,7 +239,6 @@ void main() {
             child: WalletReadyView(
               profileCubit: profileCubit,
               walletReadyCubit: walletReadyCubit,
-              confettiController: confettiController,
             ),
           ),
         ),
@@ -299,7 +282,6 @@ void main() {
               child: WalletReadyView(
                 profileCubit: profileCubit,
                 walletReadyCubit: walletReadyCubit,
-                confettiController: confettiController,
               ),
             ),
           ),

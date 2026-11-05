@@ -1,7 +1,6 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
@@ -45,7 +44,7 @@ class AiAgeResultPage extends StatelessWidget {
   }
 }
 
-class AiAgeResultView extends StatefulWidget {
+class AiAgeResultView extends StatelessWidget {
   const AiAgeResultView({
     super.key,
     required this.credentialSubjectType,
@@ -56,50 +55,20 @@ class AiAgeResultView extends StatefulWidget {
   final VCFormatType vcFormatType;
 
   @override
-  State<AiAgeResultView> createState() => _AiAgeResultViewState();
-}
-
-class _AiAgeResultViewState extends State<AiAgeResultView> {
-  late final ConfettiController confettiController;
-
-  @override
-  void initState() {
-    confettiController = ConfettiController();
-    Future<void>.delayed(
-      Duration.zero,
-    ).then((value) => confettiController.play());
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocBuilder<CameraCubit, CameraState>(
       builder: (context, state) {
-        return Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            BasePage(
-              scrollView: false,
-              body: Center(
-                child: state.acquiredCredentialsQuantity > 0
-                    ? SuccessWidget(
-                        ageEstimate: state.ageEstimate,
-                        credentialSubjectType: widget.credentialSubjectType,
-                        vcFormatType: widget.vcFormatType,
-                      )
-                    : FailureWidget(vcFormatType: widget.vcFormatType),
-              ),
-            ),
-            if (state.acquiredCredentialsQuantity > 0)
-              ConfettiWidget(
-                confettiController: confettiController,
-                canvas: Size.infinite,
-                shouldLoop: true,
-                blastDirectionality: BlastDirectionality.explosive,
-              )
-            else
-              const SizedBox.shrink(),
-          ],
+        return BasePage(
+          scrollView: false,
+          body: Center(
+            child: state.acquiredCredentialsQuantity > 0
+                ? SuccessWidget(
+                    ageEstimate: state.ageEstimate,
+                    credentialSubjectType: credentialSubjectType,
+                    vcFormatType: vcFormatType,
+                  )
+                : FailureWidget(vcFormatType: vcFormatType),
+          ),
         );
       },
     );
