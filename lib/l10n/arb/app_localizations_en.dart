@@ -3286,7 +3286,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get credentialPickTitle => 'Choose the credential(s) to get';
 
   @override
-  String get credentialShareTitle => 'Share information';
+  String get credentialShareTitle => 'Review the request';
 
   @override
   String get enterYourSecretCode => 'Enter your secret code.';
@@ -3690,4 +3690,65 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get proximityBleCentralClientSubtitle =>
       'Your phone connects to the reader.';
+
+  @override
+  String get qesApprovalTitle => 'Signature request';
+
+  @override
+  String get qesApprovalDocuments => 'Documents to sign';
+
+  @override
+  String get qesApprovalSignatureLevel => 'Signature level';
+
+  @override
+  String get qesApprovalNumberOfSignatures => 'Number of signatures';
+
+  @override
+  String get qesApprovalSigningService => 'Signing service';
+
+  @override
+  String get qesApprovalConsent =>
+      'By signing, you authorise the signing service to create a qualified electronic signature on these documents with your certificate.';
+
+  @override
+  String get qesSignatureQualifierQes =>
+      'Qualified electronic signature (eIDAS)';
+
+  @override
+  String get qesDocumentNoContent =>
+      'The verifier did not provide the content of this document.';
+
+  @override
+  String get qesDocumentNotText => 'This document cannot be shown as text.';
+
+  @override
+  String get qesDocumentLoadFailed => 'The document could not be loaded.';
+
+  @override
+  String get qesDocumentIntegrityVerified => 'Integrity verified';
+
+  @override
+  String get qesDocumentIntegrityNotVerified =>
+      'Integrity not verified: the verifier gave no checksum.';
+
+  @override
+  String get qesDocumentIntegrityFailed =>
+      'This document does not match its checksum. The signature cannot be approved.';
+
+  @override
+  String get qesDocumentOneTimePassword => 'One-time password';
+
+  @override
+  String batchCopiesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count single-use copies',
+      one: '1 single-use copy',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dcqlSharedDataLabel => 'Data shared from this attestation';
 }

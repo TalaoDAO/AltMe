@@ -21,6 +21,6 @@ Future<void> deleteCredential(BuildContext context, String id) async {
 
   if (confirm) {
     final credentialsCubit = context.read<CredentialsCubit>();
-    await credentialsCubit.deleteById(id: id);
+    await credentialsCubit.deleteWithCopies(id: id);
   }
 }

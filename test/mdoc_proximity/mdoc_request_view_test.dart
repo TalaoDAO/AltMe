@@ -158,11 +158,10 @@ void main() {
         find.text("You don't have the requested attestation"),
         findsOneWidget,
       );
-      expect(value('DOE'), findsWidgets);
-      expect(
-        find.byType(DropdownButtonFormField<CredentialModel>),
-        findsNothing,
-      );
+      expect(find.text('Data shared from this attestation'), findsOneWidget);
+      // A single candidate: nothing to pick.
+      expect(find.byIcon(Icons.radio_button_checked), findsNothing);
+      expect(find.byIcon(Icons.radio_button_off), findsNothing);
     });
 
     testWidgets('shares only what the answering attestation holds', (
@@ -207,7 +206,9 @@ void main() {
       expect(shared?.map((disclosure) => disclosure.mdoc.id), ['pid', 'mdl']);
     });
 
-    testWidgets('leaves out an element the user unticks', (tester) async {
+    testWidgets('folds each requested element, its value one tap away', (
+      tester,
+    ) async {
       await pump(
         tester,
         candidates: {
@@ -216,19 +217,45 @@ void main() {
         requested: [documents.first],
       );
 
-      await tester.tap(find.byType(Checkbox).first);
-      await tester.pump();
+      final rows = find.byType(FoldedClaim);
+      expect(rows, findsNWidgets(2));
+      Finder doe() =>
+          find.descendant(of: rows.first, matching: value('DOE'));
+      expect(doe(), findsNothing);
 
-      // The only element held is unticked: nothing left to share.
-      final button = tester.widget<MyElevatedButton>(
-        find.byType(MyElevatedButton),
+      await tester.tap(rows.first);
+      await tester.pumpAndSettle();
+      expect(doe(), findsOneWidget);
+      // Not held: listed, shown as missing.
+      await tester.tap(rows.last);
+      await tester.pumpAndSettle();
+      expect(
+        find.descendant(of: rows.last, matching: value('—')),
+        findsOneWidget,
       );
-      expect(button.onPressed, isNull);
     });
 
-    testWidgets('lets the user choose between two attestations of a type', (
-      tester,
-    ) async {
+    testWidgets('says which elements the reader will keep', (tester) async {
+      await pump(
+        tester,
+        candidates: {
+          eudiPidDocType: [pid],
+        },
+        requested: const [
+          ProximityDocumentRequest(
+            docType: eudiPidDocType,
+            nameSpaces: {
+              eudiPidDocType: {'family_name': true, 'given_name': false},
+            },
+          ),
+        ],
+      );
+
+      expect(find.text('Kept by the reader'), findsOneWidget);
+    });
+
+    testWidgets('lists every attestation of a type with a radio, the first '
+        'picked, and a tap on a card picks it', (tester) async {
       await pump(
         tester,
         candidates: {
@@ -237,16 +264,17 @@ void main() {
         requested: [documents.first],
       );
 
-      expect(value('DOE'), findsWidgets);
-      expect(value('ROE'), findsNothing);
+      final cards = find.byType(CredentialShareCard);
+      expect(cards, findsNWidgets(2));
+      final radios = find.byType(CredentialSelectionMark);
+      bool picked(int index) =>
+          tester.widget<CredentialSelectionMark>(radios.at(index)).selected;
+      expect([picked(0), picked(1)], [true, false]);
 
-      await tester.tap(find.byType(DropdownButtonFormField<CredentialModel>));
-      await tester.pumpAndSettle();
-      await tester.tap(find.textContaining('(2)').last);
-      await tester.pumpAndSettle();
-
-      expect(value('ROE'), findsWidgets);
-      expect(value('DOE'), findsNothing);
+      await tester.ensureVisible(find.byType(CredentialCardImage).last);
+      await tester.tap(find.byType(CredentialCardImage).last);
+      await tester.pump();
+      expect([picked(0), picked(1)], [false, true]);
 
       await tester.tap(find.byType(MyElevatedButton));
 

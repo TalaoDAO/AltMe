@@ -84,7 +84,7 @@ class _HomeCredentialsListPageState extends State<HomeCredentialsListPage>
               return ErrorView(message: message, onTap: onRefresh);
             } else {
               return HomeCredentialCategoryList(
-                credentials: state.credentials,
+                credentials: state.credentials.onePerBatch,
                 onRefresh: onRefresh,
               );
             }

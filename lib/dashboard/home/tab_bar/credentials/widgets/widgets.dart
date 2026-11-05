@@ -1,4 +1,5 @@
 export 'activity_widget.dart';
+export 'batch_count_badge.dart';
 export 'card_animation.dart';
 export 'credential_background.dart';
 export 'credential_container.dart';
@@ -23,6 +24,7 @@ export 'display_signature.dart';
 export 'display_title_widget.dart';
 export 'display_wiget.dart';
 export 'dummy_credential_image.dart';
+export 'folded_claim.dart';
 export 'labeled_display_mapping_widget.dart';
 export 'list_item.dart';
 export 'picture_display.dart';

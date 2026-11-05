@@ -186,7 +186,11 @@ Future<void> oidc4vpSiopV2AcceptHost({
     trustedEntity = null;
   }
   if (response != null) {
-    if (response.containsKey('transaction_data')) {
+    // The transaction page serves presentation_definition requests (crypto
+    // payment, local signature). A DCQL request shows and binds its
+    // transaction_data in the DCQL flow (QES approval).
+    if (response.containsKey('transaction_data') &&
+        !response.containsKey('dcql_query')) {
       LoadingView().hide();
       final transactionData = response['transaction_data'] as List<dynamic>;
       final transactionObjects = Oidc4vpTransactionFactory(

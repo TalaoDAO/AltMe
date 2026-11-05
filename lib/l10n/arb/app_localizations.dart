@@ -5988,7 +5988,7 @@ abstract class AppLocalizations {
   /// No description provided for @credentialShareTitle.
   ///
   /// In en, this message translates to:
-  /// **'Share information'**
+  /// **'Review the request'**
   String get credentialShareTitle;
 
   /// No description provided for @enterYourSecretCode.
@@ -6692,6 +6692,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your phone connects to the reader.'**
   String get proximityBleCentralClientSubtitle;
+
+  /// No description provided for @qesApprovalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Signature request'**
+  String get qesApprovalTitle;
+
+  /// No description provided for @qesApprovalDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents to sign'**
+  String get qesApprovalDocuments;
+
+  /// No description provided for @qesApprovalSignatureLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Signature level'**
+  String get qesApprovalSignatureLevel;
+
+  /// No description provided for @qesApprovalNumberOfSignatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of signatures'**
+  String get qesApprovalNumberOfSignatures;
+
+  /// No description provided for @qesApprovalSigningService.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing service'**
+  String get qesApprovalSigningService;
+
+  /// No description provided for @qesApprovalConsent.
+  ///
+  /// In en, this message translates to:
+  /// **'By signing, you authorise the signing service to create a qualified electronic signature on these documents with your certificate.'**
+  String get qesApprovalConsent;
+
+  /// No description provided for @qesSignatureQualifierQes.
+  ///
+  /// In en, this message translates to:
+  /// **'Qualified electronic signature (eIDAS)'**
+  String get qesSignatureQualifierQes;
+
+  /// No description provided for @qesDocumentNoContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The verifier did not provide the content of this document.'**
+  String get qesDocumentNoContent;
+
+  /// No description provided for @qesDocumentNotText.
+  ///
+  /// In en, this message translates to:
+  /// **'This document cannot be shown as text.'**
+  String get qesDocumentNotText;
+
+  /// No description provided for @qesDocumentLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The document could not be loaded.'**
+  String get qesDocumentLoadFailed;
+
+  /// No description provided for @qesDocumentIntegrityVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Integrity verified'**
+  String get qesDocumentIntegrityVerified;
+
+  /// No description provided for @qesDocumentIntegrityNotVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Integrity not verified: the verifier gave no checksum.'**
+  String get qesDocumentIntegrityNotVerified;
+
+  /// No description provided for @qesDocumentIntegrityFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'This document does not match its checksum. The signature cannot be approved.'**
+  String get qesDocumentIntegrityFailed;
+
+  /// No description provided for @qesDocumentOneTimePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time password'**
+  String get qesDocumentOneTimePassword;
+
+  /// How many copies of a batch-issued credential are left; each is destroyed once presented.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 single-use copy} other{{count} single-use copies}}'**
+  String batchCopiesCount(int count);
+
+  /// Small heading above the list of labels of the data the verifier asks for, under the card of the attestation.
+  ///
+  /// In en, this message translates to:
+  /// **'Data shared from this attestation'**
+  String get dcqlSharedDataLabel;
 }
 
 class _AppLocalizationsDelegate

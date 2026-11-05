@@ -1181,7 +1181,7 @@
   "keyBindingHeader": "Encapçalament de vinculació de clau",
   "keyBindingPayload": "Càrrega útil de vinculació de clau",
   "ebsiV4DecentralizedId": "ID descentralitzada de la v4 d'EBSI",
-  "credentialShareTitle": "Compartir informació",
+  "credentialShareTitle": "Revisa la sol·licitud",
   "reject": "Rebutjar",
   "operation": "Operació",
   "chooseYourSSIProfileOrCustomizeYourOwn": "Tria el perfil de la teva cartera o personalitza el teu propi",
@@ -1291,5 +1291,21 @@
     }
   },
   "mdocReaderRequestsTitle": "Lector",
-  "mdocReaderRequestsSubtitle": "Trieu què voleu demanar i, tot seguit, escanegeu el codi QR del titular."
+  "mdocReaderRequestsSubtitle": "Trieu què voleu demanar i, tot seguit, escanegeu el codi QR del titular.",
+  "qesApprovalTitle": "Sol·licitud de signatura",
+  "qesApprovalDocuments": "Documents per signar",
+  "qesApprovalSignatureLevel": "Nivell de signatura",
+  "qesApprovalNumberOfSignatures": "Nombre de signatures",
+  "qesApprovalSigningService": "Servei de signatura",
+  "qesApprovalConsent": "En signar, autoritzeu el servei de signatura a crear una signatura electrònica qualificada en aquests documents amb el vostre certificat.",
+  "qesSignatureQualifierQes": "Signatura electrònica qualificada (eIDAS)",
+  "qesDocumentNoContent": "El verificador no ha proporcionat el contingut d'aquest document.",
+  "qesDocumentNotText": "Aquest document no es pot mostrar com a text.",
+  "qesDocumentLoadFailed": "No s'ha pogut carregar el document.",
+  "qesDocumentIntegrityVerified": "Integritat verificada",
+  "qesDocumentIntegrityNotVerified": "Integritat no verificada: el verificador no ha proporcionat cap suma de comprovació.",
+  "qesDocumentIntegrityFailed": "Aquest document no coincideix amb la seva suma de comprovació. No es pot aprovar la signatura.",
+  "qesDocumentOneTimePassword": "Contrasenya d'un sol ús",
+  "batchCopiesCount": "{count, plural, =1{1 còpia d'un sol ús} other{{count} còpies d'un sol ús}}",
+  "dcqlSharedDataLabel": "Dades compartides d'aquesta atestació"
 }

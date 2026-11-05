@@ -1,3 +1,4 @@
+import 'package:altme/app/shared/message_handler/response_message.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/credential_model/credential_model.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/present/pick/dcql_query/dcql_mdoc_helper.dart';
 import 'package:altme/selective_disclosure/selective_disclosure.dart';
@@ -7,12 +8,16 @@ import 'package:selective_disclosure_jwt/selective_disclosure_jwt.dart';
 
 // A single DCQL credential query can match several wallet credentials of
 // the same type (e.g. the user holds more than one instance of the
-// requested vct). Only one is ever presented, so trim every match list
-// down to its first entry before it reaches the UI or the vp_token builder.
-DcqlQueryResult keepFirstMatchPerCredential(DcqlQueryResult result) {
+// requested vct). Only one is presented per query: the one at the index
+// [selection] gives for the query id (the first by default). Trim every
+// match list down to it before the vp_token builder.
+DcqlQueryResult selectMatchPerCredential(
+  DcqlQueryResult result,
+  Map<String, int> selection,
+) {
   final trimmedVerifiableCredentials = {
     for (final entry in result.verifiableCredentials.entries)
-      entry.key: entry.value.take(1),
+      entry.key: entry.value.skip(selection[entry.key] ?? 0).take(1),
   };
 
   final trimmedResult = DcqlQueryResult(
@@ -35,6 +40,20 @@ DigitalCredential? findOriginal(
   DigitalCredential matched,
   List<DigitalCredential> packageFormatCredentials,
 ) => packageFormatCredentials.firstWhere((e) => identical(e, matched));
+
+// The wallet-side credentials [result] presents, one per matched
+// DigitalCredential, in the order of [candidates].
+List<CredentialModel> presentedCandidates(
+  DcqlQueryResult result,
+  List<DigitalCredential> packageFormatCredentials,
+  List<CredentialModel> candidates,
+) => [
+  for (final matches in result.verifiableCredentials.values)
+    for (final matched in matches)
+      candidates[packageFormatCredentials.indexWhere(
+        (e) => identical(e, matched),
+      )],
+];
 
 // Resolve a DCQL path (which may contain `null` wildcards) against the
 // actual claims tree, returning the *concrete* path that was matched.
@@ -85,7 +104,8 @@ Future<String> buildPresentation({
   required Uri uri,
   required Map<String, dynamic> privateKey,
   required ProofHeaderType proofHeaderType,
-  JwtSigner Function(String keyId)? credentialKeySigner,
+  JwtSigner? Function(String keyId)? credentialKeySigner,
+  Map<String, dynamic> transactionClaims = const {},
 }) async {
   final sdJwt = SelectiveDisclosure(credential);
 
@@ -111,6 +131,7 @@ Future<String> buildPresentation({
       'aud': uri.queryParameters['client_id'] ?? '',
       'iat': iat,
       'sd_hash': sdHash,
+      ...transactionClaims,
     };
 
     // A credential issued with a Wallet Key Attestation is bound to a key
@@ -146,7 +167,8 @@ Future<String> buildPresentation({
 //
 // SD-JWT credentials present as SD-JWT + KB-JWT; mso_mdoc credentials as a
 // DeviceResponse signed over [mdocSessionTranscript], which is required as
-// soon as one is presented.
+// soon as one is presented. The KB-JWT of a credential that
+// [transactionData] binds to carries the claims [transactionDataTypes] gives.
 Future<Map<String, List<String>>> buildVpToken(
   DcqlQueryResult result,
   List<DigitalCredential> packageFormatCredentials,
@@ -154,8 +176,10 @@ Future<Map<String, List<String>>> buildVpToken(
   Uri uri,
   Map<String, dynamic> privateKey,
   ProofHeaderType proofHeaderType, {
-  JwtSigner Function(String keyId)? credentialKeySigner,
+  required TransactionDataTypes transactionDataTypes,
+  JwtSigner? Function(String keyId)? credentialKeySigner,
   List<Object?>? mdocSessionTranscript,
+  List<TransactionDataItem> transactionData = const [],
 }) async {
   final vpToken = <String, List<String>>{};
 
@@ -174,6 +198,22 @@ Future<Map<String, List<String>>> buildVpToken(
       final original = findOriginal(matched, packageFormatCredentials);
       if (original == null) continue;
       final index = packageFormatCredentials.indexOf(original);
+      final credential = candidates[index];
+
+      final List<TransactionDataItem> boundTransactionData;
+      try {
+        boundTransactionData = transactionDataTypes.boundTo(
+          transactionData,
+          queryId,
+          format: credential.format ?? '',
+          // An mdoc is always bound to its device key.
+          holderBound:
+              original is MdocDigitalCredential ||
+              credential.data['cnf'] != null,
+        );
+      } on TransactionDataException catch (e) {
+        throw ResponseMessage(data: e.toJson());
+      }
 
       if (original is MdocDigitalCredential) {
         if (mdocSessionTranscript == null) {
@@ -181,7 +221,7 @@ Future<Map<String, List<String>>> buildVpToken(
         }
         presentations.add(
           await buildMdocPresentation(
-            credential: candidates[index],
+            credential: credential,
             requestedPaths: requestedPaths,
             sessionTranscript: mdocSessionTranscript,
           ),
@@ -191,12 +231,15 @@ Future<Map<String, List<String>>> buildVpToken(
 
       presentations.add(
         await buildPresentation(
-          credential: candidates[index],
+          credential: credential,
           requestedPaths: requestedPaths,
           uri: uri,
           privateKey: privateKey,
           proofHeaderType: proofHeaderType,
           credentialKeySigner: credentialKeySigner,
+          transactionClaims: transactionDataTypes.keyBindingClaims(
+            boundTransactionData,
+          ),
         ),
       );
     }

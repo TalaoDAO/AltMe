@@ -69,12 +69,43 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
 
   final log = getLogger('QRCodeScanCubit');
 
+  /// Collects the wallet's deferred credentials while the app runs; the
+  /// credentials listener tells it which cards are pending.
+  late final deferredCredentialPoller = DeferredCredentialPoller(
+    fetch: _collectDeferredCredential,
+  );
+
   @override
   Future<void> close() async {
     //cancel streams
+    deferredCredentialPoller.dispose();
     final closeFuture = super.close();
     return closeFuture;
   }
+
+  /// Asks the issuer of [credentialModel], a pending card, for its
+  /// credential, without showing anything: see [DeferredCredentialPoller].
+  Future<Duration?> _collectDeferredCredential(
+    CredentialModel credentialModel,
+  ) => getAndAddDefferedCredential(
+    credentialModel: credentialModel,
+    credentialsCubit: credentialsCubit,
+    issuer: credentialModel.pendingInfo!.issuer,
+    oidc4vc: Oidc4vciClientFactory.create(
+      profileCubit
+          .state
+          .model
+          .profileSetting
+          .selfSovereignIdentityOptions
+          .customOidc4vcProfile
+          .oidc4vciDraft,
+    ),
+    jwtDecode: jwtDecode,
+    blockchainType: walletCubit.state.currentAccount?.blockchainType,
+    qrCodeScanCubit: this,
+    profileCubit: profileCubit,
+    confirm: false,
+  );
 
   Future<void> process({required String? scannedResponse}) async {
     log.i('processing scanned qr code - $scannedResponse');
@@ -914,6 +945,8 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     required CredentialModel credentialModel,
     required QRCodeScanCubit qrCodeScanCubit,
   }) async {
+    // Asked by hand: no poll in the meantime.
+    deferredCredentialPoller.stop(credentialModel.id);
     try {
       emit(state.loading());
 
@@ -945,7 +978,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         clientType: customOidc4vcProfile.clientType,
       );
 
-      await getAndAddDefferedCredential(
+      final wait = await getAndAddDefferedCredential(
         credentialModel: credentialModel,
         credentialsCubit: credentialsCubit,
         issuer: oidc4vcParameters.issuer,
@@ -955,6 +988,21 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         qrCodeScanCubit: qrCodeScanCubit,
         profileCubit: profileCubit,
       );
+      if (wait != null) {
+        // Not issued yet: say so, and keep polling.
+        deferredCredentialPoller.resume(credentialModel, wait);
+        emit(
+          state.copyWith(
+            qrScanStatus: QrScanStatus.idle,
+            message: StateMessage.info(
+              messageHandler: ResponseMessage(
+                message: ResponseString
+                    .RESPONSE_STRING_credentialIssuanceIsStillPending,
+              ),
+            ),
+          ),
+        );
+      }
     } catch (e) {
       emitError(error: e);
     }
@@ -971,7 +1019,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
         presentationDefinition,
       );
 
-      final credentialList = credentialsCubit.state.credentials;
+      final credentialList = credentialsCubit.state.credentials.onePerBatch;
       for (
         var index = 0;
         index < newPresentationDefinition.inputDescriptors.length;
@@ -1511,6 +1559,9 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
     String? oAuthClientAttestationPop,
   }) async {
     final allItems = <CredentialAcceptanceItem>[];
+
+    /// How many credentials the issuer deferred: each is a pending card.
+    var deferredCount = 0;
     // Replaced by the client_id of the attestation fetched for the token
     // request, which the later credentials of this loop keep using.
     var effectiveClientId = clientId;
@@ -1710,7 +1761,7 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
           /// get credentials - a credential type we can't fetch (even after
           /// the nonce retry below) is skipped rather than blocking the
           /// others
-          (List<dynamic>?, String?, String?, List<String?>)? result;
+          (List<dynamic>?, String?, String?, List<List<String>>)? result;
           try {
             try {
               result = await getCredential(
@@ -1814,6 +1865,14 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
             dpopKey: dpop ? publicKeyForDPop : null,
           );
           allItems.addAll(items);
+          deferredCount += encodedCredentialOrFutureTokens
+              .where(
+                (token) => isDeferredCredentialResponse(
+                  token,
+                  deferredCredentialEndpoint,
+                ),
+              )
+              .length;
         } else {
           throw ResponseMessage(
             data: {
@@ -1827,6 +1886,23 @@ class QRCodeScanCubit extends Cubit<QRCodeScanState> {
       }
 
       resetNonceAndAccessTokenAndAuthorizationDetails();
+
+      if (allItems.isEmpty && deferredCount > 0) {
+        // Nothing to accept now: the pending cards are stored and collected
+        // when the issuer is ready.
+        emit(
+          state.copyWith(
+            qrScanStatus: QrScanStatus.idle,
+            message: StateMessage.info(
+              messageHandler: ResponseMessage(
+                message: ResponseString
+                    .RESPONSE_STRING_theIssuanceOfThisCredentialIsPending,
+              ),
+            ),
+          ),
+        );
+        return;
+      }
 
       if (allItems.isEmpty) {
         emitError(
@@ -2105,6 +2181,34 @@ ${state.uri}
   }
 
   /// check the validity of the request and prepare for OIDC4VP flow
+  /// Refuses an OpenID4VP 1.0 request whose `transaction_data` the wallet
+  /// cannot show or bind to the credentials its DCQL query asks for, before
+  /// the user is asked anything (OpenID4VP 1.0 §8.4).
+  @visibleForTesting
+  void checkTransactionData({
+    required Uri uri,
+    required Map<String, dynamic> requestObject,
+  }) {
+    final dcqlQuery = requestObject['dcql_query'];
+    final credentialQueries = dcqlQuery is Map<String, dynamic>
+        ? dcqlQuery['credentials']
+        : null;
+    try {
+      Parameters.transactionHandlers.dataTypes.parse(
+        requestObject['transaction_data'],
+        credentialQueryIds: {
+          if (credentialQueries is List)
+            for (final query in credentialQueries)
+              if (query is Map<String, dynamic> && query['id'] is String)
+                query['id'] as String,
+        },
+      );
+    } on TransactionDataException catch (e) {
+      unawaited(scanCubit.sendErrorToServer(uri: uri, data: e.toJson()));
+      throw ResponseMessage(data: e.toJson());
+    }
+  }
+
   Future<(CredentialModel credentialPreview, String host)> prepareOIDC4VPFlow({
     required List<String> keys,
     required Uri uri,
@@ -2124,6 +2228,10 @@ ${state.uri}
       if (dcqlQuery is! String || dcqlQuery.isEmpty) {
         throw Exception('ERROR_FETCHING_DCQL_QUERY');
       }
+      checkTransactionData(
+        uri: uri,
+        requestObject: jwtDecode.decodePayload(token: dcqlQuery),
+      );
       final CredentialModel credentialPreview = CredentialModel(
         id: 'id',
         image: 'image',

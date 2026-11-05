@@ -23,6 +23,7 @@ export 'chainborn_membership/chainborn_membership_model.dart';
 export 'credential/credential.dart';
 export 'credential/evidence.dart';
 export 'credential/proof.dart';
+export 'credential_model/credential_batch.dart';
 export 'credential_model/credential_model.dart';
 export 'credential_status_field/credential_status_field.dart';
 export 'credential_subject/credential_subject_model.dart';

@@ -4,27 +4,30 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 
-import 'dart:async' as _i17;
+import 'dart:async' as _i18;
 
 import 'package:altme/activity_log/activity_log.dart' as _i11;
-import 'package:altme/app/app.dart' as _i16;
-import 'package:altme/credentials/credentials.dart' as _i12;
+import 'package:altme/app/app.dart' as _i17;
+import 'package:altme/connection_bridge/wallet_connect/cubit/wallet_connect_cubit.dart'
+    as _i22;
+import 'package:altme/credentials/credentials.dart' as _i13;
 import 'package:altme/dashboard/dashboard.dart' as _i5;
 import 'package:altme/key_generator/key_generator.dart' as _i7;
-import 'package:altme/lang/cubit/lang_cubit.dart' as _i14;
-import 'package:altme/oidc4vc/model/oidc4vci_state.dart' as _i20;
+import 'package:altme/lang/cubit/lang_cubit.dart' as _i15;
+import 'package:altme/oidc4vc/model/oidc4vci_state.dart' as _i21;
 import 'package:altme/wallet/wallet.dart' as _i10;
-import 'package:bloc/bloc.dart' as _i18;
+import 'package:bloc/bloc.dart' as _i19;
 import 'package:did_kit/did_kit.dart' as _i6;
-import 'package:did_kit/src/didkit_interface.dart' as _i13;
+import 'package:did_kit/src/didkit_interface.dart' as _i14;
 import 'package:dio/dio.dart' as _i4;
 import 'package:jwt_decode/jwt_decode.dart' as _i8;
 import 'package:logger/src/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i19;
+import 'package:mockito/src/dummies.dart' as _i20;
 import 'package:oidc4vc/oidc4vc.dart' as _i9;
+import 'package:platform_p256_keys/platform_p256_keys.dart' as _i12;
 import 'package:secure_storage/secure_storage.dart' as _i3;
-import 'package:trusted_list/trusted_list.dart' as _i15;
+import 'package:trusted_list/trusted_list.dart' as _i16;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -108,76 +111,82 @@ class _FakeActivityLogManager_11 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
-class _FakeCredentialsState_12 extends _i1.SmartFake
-    implements _i12.CredentialsState {
-  _FakeCredentialsState_12(Object parent, Invocation parentInvocation)
+class _FakePlatformP256Keys_12 extends _i1.SmartFake
+    implements _i12.PlatformP256Keys {
+  _FakePlatformP256Keys_12(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeDIDKitInterface_13 extends _i1.SmartFake
-    implements _i13.DIDKitInterface {
-  _FakeDIDKitInterface_13(Object parent, Invocation parentInvocation)
+class _FakeCredentialsState_13 extends _i1.SmartFake
+    implements _i13.CredentialsState {
+  _FakeCredentialsState_13(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeLangCubit_14 extends _i1.SmartFake implements _i14.LangCubit {
-  _FakeLangCubit_14(Object parent, Invocation parentInvocation)
+class _FakeDIDKitInterface_14 extends _i1.SmartFake
+    implements _i14.DIDKitInterface {
+  _FakeDIDKitInterface_14(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeProfileState_15 extends _i1.SmartFake implements _i5.ProfileState {
-  _FakeProfileState_15(Object parent, Invocation parentInvocation)
+class _FakeLangCubit_15 extends _i1.SmartFake implements _i15.LangCubit {
+  _FakeLangCubit_15(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeProfileModel_16 extends _i1.SmartFake implements _i5.ProfileModel {
-  _FakeProfileModel_16(Object parent, Invocation parentInvocation)
+class _FakeProfileState_16 extends _i1.SmartFake implements _i5.ProfileState {
+  _FakeProfileState_16(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeHomeCubit_17 extends _i1.SmartFake implements _i5.HomeCubit {
-  _FakeHomeCubit_17(Object parent, Invocation parentInvocation)
+class _FakeProfileModel_17 extends _i1.SmartFake implements _i5.ProfileModel {
+  _FakeProfileModel_17(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeWalletState_18 extends _i1.SmartFake implements _i10.WalletState {
-  _FakeWalletState_18(Object parent, Invocation parentInvocation)
+class _FakeHomeCubit_18 extends _i1.SmartFake implements _i5.HomeCubit {
+  _FakeHomeCubit_18(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeCryptoAccountData_19 extends _i1.SmartFake
+class _FakeWalletState_19 extends _i1.SmartFake implements _i10.WalletState {
+  _FakeWalletState_19(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeCryptoAccountData_20 extends _i1.SmartFake
     implements _i10.CryptoAccountData {
-  _FakeCryptoAccountData_19(Object parent, Invocation parentInvocation)
+  _FakeCryptoAccountData_20(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeOpenIdConfiguration_20 extends _i1.SmartFake
+class _FakeOpenIdConfiguration_21 extends _i1.SmartFake
     implements _i9.OpenIdConfiguration {
-  _FakeOpenIdConfiguration_20(Object parent, Invocation parentInvocation)
+  _FakeOpenIdConfiguration_21(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeTrustedEntityCriterion_21 extends _i1.SmartFake
-    implements _i15.TrustedEntityCriterion {
-  _FakeTrustedEntityCriterion_21(Object parent, Invocation parentInvocation)
+class _FakeTrustedEntityCriterion_22 extends _i1.SmartFake
+    implements _i16.TrustedEntityCriterion {
+  _FakeTrustedEntityCriterion_22(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeOidc4vcParameters_22 extends _i1.SmartFake
+class _FakeOidc4vcParameters_23 extends _i1.SmartFake
     implements _i9.Oidc4vcParameters {
-  _FakeOidc4vcParameters_22(Object parent, Invocation parentInvocation)
+  _FakeOidc4vcParameters_23(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeResponse_23<T> extends _i1.SmartFake implements _i4.Response<T> {
-  _FakeResponse_23(Object parent, Invocation parentInvocation)
+class _FakeResponse_24<T> extends _i1.SmartFake implements _i4.Response<T> {
+  _FakeResponse_24(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
 /// A class which mocks [DioClient].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDioClient extends _i1.Mock implements _i16.DioClient {
+class MockDioClient extends _i1.Mock implements _i17.DioClient {
   MockDioClient() {
     _i1.throwOnMissingStub(this);
   }
@@ -216,7 +225,7 @@ class MockDioClient extends _i1.Mock implements _i16.DioClient {
   );
 
   @override
-  _i17.Future<dynamic> get(
+  _i18.Future<dynamic> get(
     String? uri, {
     Map<String, dynamic>? queryParameters,
     _i4.Options? options,
@@ -240,12 +249,12 @@ class MockDioClient extends _i1.Mock implements _i16.DioClient {
                 #isCachingEnabled: isCachingEnabled,
               },
             ),
-            returnValue: _i17.Future<dynamic>.value(),
+            returnValue: _i18.Future<dynamic>.value(),
           )
-          as _i17.Future<dynamic>);
+          as _i18.Future<dynamic>);
 
   @override
-  _i17.Future<dynamic> post(
+  _i18.Future<dynamic> post(
     String? uri, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
@@ -273,9 +282,9 @@ class MockDioClient extends _i1.Mock implements _i16.DioClient {
                 #timeout: timeout,
               },
             ),
-            returnValue: _i17.Future<dynamic>.value(),
+            returnValue: _i18.Future<dynamic>.value(),
           )
-          as _i17.Future<dynamic>);
+          as _i18.Future<dynamic>);
 
   @override
   void resetTimeout(int? timeout) => super.noSuchMethod(
@@ -287,7 +296,7 @@ class MockDioClient extends _i1.Mock implements _i16.DioClient {
 /// A class which mocks [CredentialsCubit].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
+class MockCredentialsCubit extends _i1.Mock implements _i13.CredentialsCubit {
   MockCredentialsCubit() {
     _i1.throwOnMissingStub(this);
   }
@@ -400,6 +409,17 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
           as _i11.ActivityLogManager);
 
   @override
+  _i12.PlatformP256Keys get platformKeys =>
+      (super.noSuchMethod(
+            Invocation.getter(#platformKeys),
+            returnValue: _FakePlatformP256Keys_12(
+              this,
+              Invocation.getter(#platformKeys),
+            ),
+          )
+          as _i12.PlatformP256Keys);
+
+  @override
   _i2.Logger get log =>
       (super.noSuchMethod(
             Invocation.getter(#log),
@@ -408,23 +428,23 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
           as _i2.Logger);
 
   @override
-  _i12.CredentialsState get state =>
+  _i13.CredentialsState get state =>
       (super.noSuchMethod(
             Invocation.getter(#state),
-            returnValue: _FakeCredentialsState_12(
+            returnValue: _FakeCredentialsState_13(
               this,
               Invocation.getter(#state),
             ),
           )
-          as _i12.CredentialsState);
+          as _i13.CredentialsState);
 
   @override
-  _i17.Stream<_i12.CredentialsState> get stream =>
+  _i18.Stream<_i13.CredentialsState> get stream =>
       (super.noSuchMethod(
             Invocation.getter(#stream),
-            returnValue: _i17.Stream<_i12.CredentialsState>.empty(),
+            returnValue: _i18.Stream<_i13.CredentialsState>.empty(),
           )
-          as _i17.Stream<_i12.CredentialsState>);
+          as _i18.Stream<_i13.CredentialsState>);
 
   @override
   bool get isClosed =>
@@ -444,22 +464,34 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
   );
 
   @override
+  void expectCredentialKey({
+    required String? credentialId,
+    required String? keyId,
+  }) => super.noSuchMethod(
+    Invocation.method(#expectCredentialKey, [], {
+      #credentialId: credentialId,
+      #keyId: keyId,
+    }),
+    returnValueForMissingStub: null,
+  );
+
+  @override
   void notifyDeclinedCredentials() => super.noSuchMethod(
     Invocation.method(#notifyDeclinedCredentials, []),
     returnValueForMissingStub: null,
   );
 
   @override
-  _i17.Future<void> loadAllCredentials() =>
+  _i18.Future<void> loadAllCredentials() =>
       (super.noSuchMethod(
             Invocation.method(#loadAllCredentials, []),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> addWalletCredential({
+  _i18.Future<void> addWalletCredential({
     required _i5.QRCodeScanCubit? qrCodeScanCubit,
     required String? profileLinkedId,
   }) =>
@@ -468,10 +500,10 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
               #qrCodeScanCubit: qrCodeScanCubit,
               #profileLinkedId: profileLinkedId,
             }),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
   void reset() => super.noSuchMethod(
@@ -480,22 +512,48 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
   );
 
   @override
-  _i17.Future<void> deleteById({
+  _i18.Future<void> deleteById({
     required String? id,
     bool? showMessage = true,
+    bool? logActivity = true,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#deleteById, [], {
               #id: id,
               #showMessage: showMessage,
+              #logActivity: logActivity,
             }),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> updateCredential({
+  _i18.Future<void> deleteWithCopies({
+    required String? id,
+    bool? showMessage = true,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteWithCopies, [], {
+              #id: id,
+              #showMessage: showMessage,
+            }),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
+          )
+          as _i18.Future<void>);
+
+  @override
+  _i18.Future<void> deleteConsumedCopies(Iterable<String>? ids) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteConsumedCopies, [ids]),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
+          )
+          as _i18.Future<void>);
+
+  @override
+  _i18.Future<void> updateCredential({
     required _i5.CredentialModel? credential,
     bool? showMessage = true,
   }) =>
@@ -504,24 +562,24 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
               #credential: credential,
               #showMessage: showMessage,
             }),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> handleUnknownRevocationStatus(
+  _i18.Future<void> handleUnknownRevocationStatus(
     _i5.CredentialModel? credential,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#handleUnknownRevocationStatus, [credential]),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> insertCredential({
+  _i18.Future<void> insertCredential({
     required _i5.CredentialModel? credential,
     required Uri? uri,
     bool? showMessage = true,
@@ -536,20 +594,20 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
               #showStatus: showStatus,
               #isPendingCredential: isPendingCredential,
             }),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  void enableCredentialCategory({required _i16.CredentialCategory? category}) =>
+  void enableCredentialCategory({required _i17.CredentialCategory? category}) =>
       super.noSuchMethod(
         Invocation.method(#enableCredentialCategory, [], {#category: category}),
         returnValueForMissingStub: null,
       );
 
   @override
-  _i17.Future<void> modifyCredential({
+  _i18.Future<void> modifyCredential({
     required _i5.CredentialModel? credential,
     bool? showMessage = true,
   }) =>
@@ -558,52 +616,52 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
               #credential: credential,
               #showMessage: showMessage,
             }),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> recoverWallet({
+  _i18.Future<void> recoverWallet({
     required List<_i5.CredentialModel>? credentials,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#recoverWallet, [], {#credentials: credentials}),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<List<_i5.CredentialModel>>
+  _i18.Future<List<_i5.CredentialModel>>
   credentialListFromCredentialSubjectType(
-    _i16.CredentialSubjectType? credentialSubjectType,
+    _i17.CredentialSubjectType? credentialSubjectType,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#credentialListFromCredentialSubjectType, [
               credentialSubjectType,
             ]),
-            returnValue: _i17.Future<List<_i5.CredentialModel>>.value(
+            returnValue: _i18.Future<List<_i5.CredentialModel>>.value(
               <_i5.CredentialModel>[],
             ),
           )
-          as _i17.Future<List<_i5.CredentialModel>>);
+          as _i18.Future<List<_i5.CredentialModel>>);
 
   @override
-  _i17.Future<void> addCryptoProofsPerProfile({
+  _i18.Future<void> addCryptoProofsPerProfile({
     required _i10.CryptoAccountData? cryptoAccountData,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#addCryptoProofsPerProfile, [], {
               #cryptoAccountData: cryptoAccountData,
             }),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> addCryptoProofsPerFormat({
+  _i18.Future<void> addCryptoProofsPerFormat({
     required List<_i9.VCFormatType>? formatsSupported,
     required _i10.CryptoAccountData? cryptoAccountData,
     required String? did,
@@ -618,36 +676,36 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
               #private: private,
               #showStatus: showStatus,
             }),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> generateCryptoAccountsCards(
+  _i18.Future<void> generateCryptoAccountsCards(
     List<_i10.CryptoAccountData>? cryptoAccounts,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#generateCryptoAccountsCards, [cryptoAccounts]),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  void emitError(_i16.MessageHandler? error) => super.noSuchMethod(
+  void emitError(_i17.MessageHandler? error) => super.noSuchMethod(
     Invocation.method(#emitError, [error]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void emit(_i12.CredentialsState? state) => super.noSuchMethod(
+  void emit(_i13.CredentialsState? state) => super.noSuchMethod(
     Invocation.method(#emit, [state]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void onChange(_i18.Change<_i12.CredentialsState>? change) =>
+  void onChange(_i19.Change<_i13.CredentialsState>? change) =>
       super.noSuchMethod(
         Invocation.method(#onChange, [change]),
         returnValueForMissingStub: null,
@@ -666,13 +724,13 @@ class MockCredentialsCubit extends _i1.Mock implements _i12.CredentialsCubit {
   );
 
   @override
-  _i17.Future<void> close() =>
+  _i18.Future<void> close() =>
       (super.noSuchMethod(
             Invocation.method(#close, []),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 }
 
 /// A class which mocks [DIDKitProvider].
@@ -684,21 +742,21 @@ class MockDIDKitProvider extends _i1.Mock implements _i6.DIDKitProvider {
   }
 
   @override
-  _i13.DIDKitInterface get didKit =>
+  _i14.DIDKitInterface get didKit =>
       (super.noSuchMethod(
             Invocation.getter(#didKit),
-            returnValue: _FakeDIDKitInterface_13(
+            returnValue: _FakeDIDKitInterface_14(
               this,
               Invocation.getter(#didKit),
             ),
           )
-          as _i13.DIDKitInterface);
+          as _i14.DIDKitInterface);
 
   @override
   String getVersion() =>
       (super.noSuchMethod(
             Invocation.method(#getVersion, []),
-            returnValue: _i19.dummyValue<String>(
+            returnValue: _i20.dummyValue<String>(
               this,
               Invocation.method(#getVersion, []),
             ),
@@ -709,7 +767,7 @@ class MockDIDKitProvider extends _i1.Mock implements _i6.DIDKitProvider {
   String generateEd25519Key() =>
       (super.noSuchMethod(
             Invocation.method(#generateEd25519Key, []),
-            returnValue: _i19.dummyValue<String>(
+            returnValue: _i20.dummyValue<String>(
               this,
               Invocation.method(#generateEd25519Key, []),
             ),
@@ -720,7 +778,7 @@ class MockDIDKitProvider extends _i1.Mock implements _i6.DIDKitProvider {
   String keyToDID(String? methodName, String? key) =>
       (super.noSuchMethod(
             Invocation.method(#keyToDID, [methodName, key]),
-            returnValue: _i19.dummyValue<String>(
+            returnValue: _i20.dummyValue<String>(
               this,
               Invocation.method(#keyToDID, [methodName, key]),
             ),
@@ -728,61 +786,61 @@ class MockDIDKitProvider extends _i1.Mock implements _i6.DIDKitProvider {
           as String);
 
   @override
-  _i17.Future<String> keyToVerificationMethod(
+  _i18.Future<String> keyToVerificationMethod(
     String? methodName,
     String? key,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#keyToVerificationMethod, [methodName, key]),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#keyToVerificationMethod, [methodName, key]),
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 
   @override
-  _i17.Future<String> issueCredential(
+  _i18.Future<String> issueCredential(
     String? credential,
     String? options,
     String? key,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#issueCredential, [credential, options, key]),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#issueCredential, [credential, options, key]),
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 
   @override
-  _i17.Future<String> verifyCredential(String? credential, String? options) =>
+  _i18.Future<String> verifyCredential(String? credential, String? options) =>
       (super.noSuchMethod(
             Invocation.method(#verifyCredential, [credential, options]),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#verifyCredential, [credential, options]),
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 
   @override
-  _i17.Future<String> issuePresentation(
+  _i18.Future<String> issuePresentation(
     String? presentation,
     String? options,
     String? key,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#issuePresentation, [presentation, options, key]),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#issuePresentation, [
                   presentation,
@@ -792,65 +850,65 @@ class MockDIDKitProvider extends _i1.Mock implements _i6.DIDKitProvider {
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 
   @override
-  _i17.Future<String> verifyPresentation(
+  _i18.Future<String> verifyPresentation(
     String? presentation,
     String? options,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#verifyPresentation, [presentation, options]),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#verifyPresentation, [presentation, options]),
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 
   @override
-  _i17.Future<String> resolveDID(String? did, String? inputMetadata) =>
+  _i18.Future<String> resolveDID(String? did, String? inputMetadata) =>
       (super.noSuchMethod(
             Invocation.method(#resolveDID, [did, inputMetadata]),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#resolveDID, [did, inputMetadata]),
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 
   @override
-  _i17.Future<String> dereferenceDIDURL(
+  _i18.Future<String> dereferenceDIDURL(
     String? didUrl,
     String? inputMetadata,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#dereferenceDIDURL, [didUrl, inputMetadata]),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#dereferenceDIDURL, [didUrl, inputMetadata]),
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 
   @override
-  _i17.Future<String> didAuth(String? did, String? options, String? key) =>
+  _i18.Future<String> didAuth(String? did, String? options, String? key) =>
       (super.noSuchMethod(
             Invocation.method(#didAuth, [did, options, key]),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#didAuth, [did, options, key]),
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 }
 
 /// A class which mocks [SecureStorageProvider].
@@ -863,58 +921,58 @@ class MockSecureStorageProvider extends _i1.Mock
   }
 
   @override
-  _i17.Future<String?> get(String? key) =>
+  _i18.Future<String?> get(String? key) =>
       (super.noSuchMethod(
             Invocation.method(#get, [key]),
-            returnValue: _i17.Future<String?>.value(),
+            returnValue: _i18.Future<String?>.value(),
           )
-          as _i17.Future<String?>);
+          as _i18.Future<String?>);
 
   @override
-  _i17.Future<void> set(String? key, String? val) =>
+  _i18.Future<void> set(String? key, String? val) =>
       (super.noSuchMethod(
             Invocation.method(#set, [key, val]),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> delete(String? key) =>
+  _i18.Future<void> delete(String? key) =>
       (super.noSuchMethod(
             Invocation.method(#delete, [key]),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<Map<String, String>> getAllValues() =>
+  _i18.Future<Map<String, String>> getAllValues() =>
       (super.noSuchMethod(
             Invocation.method(#getAllValues, []),
-            returnValue: _i17.Future<Map<String, String>>.value(
+            returnValue: _i18.Future<Map<String, String>>.value(
               <String, String>{},
             ),
           )
-          as _i17.Future<Map<String, String>>);
+          as _i18.Future<Map<String, String>>);
 
   @override
-  _i17.Future<void> deleteAll() =>
+  _i18.Future<void> deleteAll() =>
       (super.noSuchMethod(
             Invocation.method(#deleteAll, []),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> deleteAllExceptsSomeKeys(List<String>? exceptKeys) =>
+  _i18.Future<void> deleteAllExceptsSomeKeys(List<String>? exceptKeys) =>
       (super.noSuchMethod(
             Invocation.method(#deleteAllExceptsSomeKeys, [exceptKeys]),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 }
 
 /// A class which mocks [ProfileCubit].
@@ -959,12 +1017,12 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
           as _i6.DIDKitProvider);
 
   @override
-  _i14.LangCubit get langCubit =>
+  _i15.LangCubit get langCubit =>
       (super.noSuchMethod(
             Invocation.getter(#langCubit),
-            returnValue: _FakeLangCubit_14(this, Invocation.getter(#langCubit)),
+            returnValue: _FakeLangCubit_15(this, Invocation.getter(#langCubit)),
           )
-          as _i14.LangCubit);
+          as _i15.LangCubit);
 
   @override
   _i8.JWTDecode get jwtDecode =>
@@ -973,6 +1031,17 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
             returnValue: _FakeJWTDecode_7(this, Invocation.getter(#jwtDecode)),
           )
           as _i8.JWTDecode);
+
+  @override
+  _i12.PlatformP256Keys get platformKeys =>
+      (super.noSuchMethod(
+            Invocation.getter(#platformKeys),
+            returnValue: _FakePlatformP256Keys_12(
+              this,
+              Invocation.getter(#platformKeys),
+            ),
+          )
+          as _i12.PlatformP256Keys);
 
   @override
   int get loginAttemptCount =>
@@ -995,22 +1064,27 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
   _i5.ProfileState get state =>
       (super.noSuchMethod(
             Invocation.getter(#state),
-            returnValue: _FakeProfileState_15(this, Invocation.getter(#state)),
+            returnValue: _FakeProfileState_16(this, Invocation.getter(#state)),
           )
           as _i5.ProfileState);
 
   @override
-  _i17.Stream<_i5.ProfileState> get stream =>
+  _i18.Stream<_i5.ProfileState> get stream =>
       (super.noSuchMethod(
             Invocation.getter(#stream),
-            returnValue: _i17.Stream<_i5.ProfileState>.empty(),
+            returnValue: _i18.Stream<_i5.ProfileState>.empty(),
           )
-          as _i17.Stream<_i5.ProfileState>);
+          as _i18.Stream<_i5.ProfileState>);
 
   @override
   bool get isClosed =>
       (super.noSuchMethod(Invocation.getter(#isClosed), returnValue: false)
           as bool);
+
+  @override
+  _i9.JwtSigner? signerForCredentialKey(String? keyId) =>
+      (super.noSuchMethod(Invocation.method(#signerForCredentialKey, [keyId]))
+          as _i9.JwtSigner?);
 
   @override
   void passcodeEntered() => super.noSuchMethod(
@@ -1031,23 +1105,23 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
   );
 
   @override
-  _i17.Future<void> load() =>
+  _i18.Future<void> load() =>
       (super.noSuchMethod(
             Invocation.method(#load, []),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<_i5.ProfileModel> addTrustedList(
+  _i18.Future<_i5.ProfileModel> addTrustedList(
     String? trustedListUrl,
     _i5.ProfileModel? profileModel,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#addTrustedList, [trustedListUrl, profileModel]),
-            returnValue: _i17.Future<_i5.ProfileModel>.value(
-              _FakeProfileModel_16(
+            returnValue: _i18.Future<_i5.ProfileModel>.value(
+              _FakeProfileModel_17(
                 this,
                 Invocation.method(#addTrustedList, [
                   trustedListUrl,
@@ -1056,36 +1130,36 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
               ),
             ),
           )
-          as _i17.Future<_i5.ProfileModel>);
+          as _i18.Future<_i5.ProfileModel>);
 
   @override
-  _i17.Future<void> update(
+  _i18.Future<void> update(
     _i5.ProfileModel? profileModel, {
-    _i16.AppStatus? status,
+    _i17.AppStatus? status,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#update, [profileModel], {#status: status}),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> setWalletProtectionType({
-    required _i16.WalletProtectionType? walletProtectionType,
+  _i18.Future<void> setWalletProtectionType({
+    required _i17.WalletProtectionType? walletProtectionType,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#setWalletProtectionType, [], {
               #walletProtectionType: walletProtectionType,
             }),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> updateProfileSetting({
-    _i16.DidKeyType? didKeyType,
+  _i18.Future<void> updateProfileSetting({
+    _i17.DidKeyType? didKeyType,
     bool? securityLevel,
     bool? scope,
     bool? cryptoHolderBinding,
@@ -1143,79 +1217,79 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
               #proximityPeripheralServer: proximityPeripheralServer,
               #proximityCentralClient: proximityCentralClient,
             }),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> setDeveloperModeStatus({bool? enabled = false}) =>
+  _i18.Future<void> setDeveloperModeStatus({bool? enabled = false}) =>
       (super.noSuchMethod(
             Invocation.method(#setDeveloperModeStatus, [], {#enabled: enabled}),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> setProfileSetting({
+  _i18.Future<void> setProfileSetting({
     required _i5.ProfileSetting? profileSetting,
-    required _i16.ProfileType? profileType,
+    required _i17.ProfileType? profileType,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#setProfileSetting, [], {
               #profileSetting: profileSetting,
               #profileType: profileType,
             }),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> close() =>
+  _i18.Future<void> close() =>
       (super.noSuchMethod(
             Invocation.method(#close, []),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> setProfile(
-    _i16.ProfileType? profileType, {
-    _i16.AppStatus? status,
+  _i18.Future<void> setProfile(
+    _i17.ProfileType? profileType, {
+    _i17.AppStatus? status,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#setProfile, [profileType], {#status: status}),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> resetProfile() =>
+  _i18.Future<void> resetProfile() =>
       (super.noSuchMethod(
             Invocation.method(#resetProfile, []),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  void addOidc4VCI(_i20.Oidc4VCIState? data) => super.noSuchMethod(
+  void addOidc4VCI(_i21.Oidc4VCIState? data) => super.noSuchMethod(
     Invocation.method(#addOidc4VCI, [data]),
     returnValueForMissingStub: null,
   );
 
   @override
-  _i17.Future<void> deleteOidc4VCIState(String? key) =>
+  _i18.Future<void> deleteOidc4VCIState(String? key) =>
       (super.noSuchMethod(
             Invocation.method(#deleteOidc4VCIState, [key]),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
   void emit(_i5.ProfileState? state) => super.noSuchMethod(
@@ -1224,7 +1298,7 @@ class MockProfileCubit extends _i1.Mock implements _i5.ProfileCubit {
   );
 
   @override
-  void onChange(_i18.Change<_i5.ProfileState>? change) => super.noSuchMethod(
+  void onChange(_i19.Change<_i5.ProfileState>? change) => super.noSuchMethod(
     Invocation.method(#onChange, [change]),
     returnValueForMissingStub: null,
   );
@@ -1265,7 +1339,7 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
   _i5.HomeCubit get homeCubit =>
       (super.noSuchMethod(
             Invocation.getter(#homeCubit),
-            returnValue: _FakeHomeCubit_17(this, Invocation.getter(#homeCubit)),
+            returnValue: _FakeHomeCubit_18(this, Invocation.getter(#homeCubit)),
           )
           as _i5.HomeCubit);
 
@@ -1292,17 +1366,17 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
   _i10.WalletState get state =>
       (super.noSuchMethod(
             Invocation.getter(#state),
-            returnValue: _FakeWalletState_18(this, Invocation.getter(#state)),
+            returnValue: _FakeWalletState_19(this, Invocation.getter(#state)),
           )
           as _i10.WalletState);
 
   @override
-  _i17.Stream<_i10.WalletState> get stream =>
+  _i18.Stream<_i10.WalletState> get stream =>
       (super.noSuchMethod(
             Invocation.getter(#stream),
-            returnValue: _i17.Stream<_i10.WalletState>.empty(),
+            returnValue: _i18.Stream<_i10.WalletState>.empty(),
           )
-          as _i17.Stream<_i10.WalletState>);
+          as _i18.Stream<_i10.WalletState>);
 
   @override
   bool get isClosed =>
@@ -1310,27 +1384,28 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
           as bool);
 
   @override
-  _i17.Future<void> setCurrentWalletAccount(int? index) =>
+  _i18.Future<void> setCurrentWalletAccount(int? index) =>
       (super.noSuchMethod(
             Invocation.method(#setCurrentWalletAccount, [index]),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> createCryptoWallet({
+  _i18.Future<void> createCryptoWallet({
     String? accountName,
     required String? mnemonicOrKey,
     required bool? isImported,
     required bool? isFromOnboarding,
     required _i5.QRCodeScanCubit? qrCodeScanCubit,
-    required _i12.CredentialsCubit? credentialsCubit,
-    _i16.BlockchainType? blockchainType,
+    required _i13.CredentialsCubit? credentialsCubit,
+    required _i22.WalletConnectCubit? walletConnectCubit,
+    _i17.BlockchainType? blockchainType,
     bool? showStatus = true,
     void Function({
       required _i10.CryptoAccount cryptoAccount,
-      required _i16.MessageHandler messageHandler,
+      required _i17.MessageHandler messageHandler,
     })?
     onComplete,
   }) =>
@@ -1346,18 +1421,18 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
               #showStatus: showStatus,
               #onComplete: onComplete,
             }),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<_i10.CryptoAccountData> generateAccount({
+  _i18.Future<_i10.CryptoAccountData> generateAccount({
     String? accountName,
     required String? mnemonicOrKey,
     required bool? isImported,
     required bool? isSecretKey,
-    required _i16.BlockchainType? blockchainType,
+    required _i17.BlockchainType? blockchainType,
     required int? totalAccountsYet,
   }) =>
       (super.noSuchMethod(
@@ -1369,8 +1444,8 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
               #blockchainType: blockchainType,
               #totalAccountsYet: totalAccountsYet,
             }),
-            returnValue: _i17.Future<_i10.CryptoAccountData>.value(
-              _FakeCryptoAccountData_19(
+            returnValue: _i18.Future<_i10.CryptoAccountData>.value(
+              _FakeCryptoAccountData_20(
                 this,
                 Invocation.method(#generateAccount, [], {
                   #accountName: accountName,
@@ -1383,15 +1458,15 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
               ),
             ),
           )
-          as _i17.Future<_i10.CryptoAccountData>);
+          as _i18.Future<_i10.CryptoAccountData>);
 
   @override
-  _i17.Future<void> editCryptoAccountName({
+  _i18.Future<void> editCryptoAccountName({
     required String? newAccountName,
     required int? index,
     dynamic Function(_i10.CryptoAccount)? onComplete,
-    required _i16.BlockchainType? blockchainType,
-    required _i12.CredentialsCubit? credentialsCubit,
+    required _i17.BlockchainType? blockchainType,
+    required _i13.CredentialsCubit? credentialsCubit,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#editCryptoAccountName, [], {
@@ -1401,17 +1476,17 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
               #blockchainType: blockchainType,
               #credentialsCubit: credentialsCubit,
             }),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<void> deleteCryptoAccount({
+  _i18.Future<void> deleteCryptoAccount({
     required int? index,
     dynamic Function(_i10.CryptoAccount, int)? onComplete,
-    required _i16.BlockchainType? blockchainType,
-    required _i12.CredentialsCubit? credentialsCubit,
+    required _i17.BlockchainType? blockchainType,
+    required _i13.CredentialsCubit? credentialsCubit,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#deleteCryptoAccount, [], {
@@ -1420,10 +1495,10 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
               #blockchainType: blockchainType,
               #credentialsCubit: credentialsCubit,
             }),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
   void emitCryptoAccount(_i10.CryptoAccount? cryptoAccount) =>
@@ -1433,13 +1508,13 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
       );
 
   @override
-  _i17.Future<void> resetWallet(_i12.CredentialsCubit? credentialsCubit) =>
+  _i18.Future<void> resetWallet(_i13.CredentialsCubit? credentialsCubit) =>
       (super.noSuchMethod(
             Invocation.method(#resetWallet, [credentialsCubit]),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
   _i10.CryptoAccountData? getCryptoAccountData(String? publicKey) =>
@@ -1453,7 +1528,7 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
   );
 
   @override
-  void onChange(_i18.Change<_i10.WalletState>? change) => super.noSuchMethod(
+  void onChange(_i19.Change<_i10.WalletState>? change) => super.noSuchMethod(
     Invocation.method(#onChange, [change]),
     returnValueForMissingStub: null,
   );
@@ -1471,13 +1546,13 @@ class MockWalletCubit extends _i1.Mock implements _i10.WalletCubit {
   );
 
   @override
-  _i17.Future<void> close() =>
+  _i18.Future<void> close() =>
       (super.noSuchMethod(
             Invocation.method(#close, []),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 }
 
 /// A class which mocks [OIDC4VCIClient].
@@ -1516,7 +1591,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
   String get offeredCredentialsKey =>
       (super.noSuchMethod(
             Invocation.getter(#offeredCredentialsKey),
-            returnValue: _i19.dummyValue<String>(
+            returnValue: _i20.dummyValue<String>(
               this,
               Invocation.getter(#offeredCredentialsKey),
             ),
@@ -1531,7 +1606,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
             Invocation.method(#resolveIssuerMetadata, [
               issuerOpenIdConfiguration,
             ]),
-            returnValue: _FakeOpenIdConfiguration_20(
+            returnValue: _FakeOpenIdConfiguration_21(
               this,
               Invocation.method(#resolveIssuerMetadata, [
                 issuerOpenIdConfiguration,
@@ -1563,25 +1638,25 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
           as List<String>);
 
   @override
-  _i15.TrustedEntityCriterion issuerIdentityCriterion(
+  _i16.TrustedEntityCriterion issuerIdentityCriterion(
     _i9.OpenIdConfiguration? issuerOpenIdConfiguration,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#issuerIdentityCriterion, [
               issuerOpenIdConfiguration,
             ]),
-            returnValue: _FakeTrustedEntityCriterion_21(
+            returnValue: _FakeTrustedEntityCriterion_22(
               this,
               Invocation.method(#issuerIdentityCriterion, [
                 issuerOpenIdConfiguration,
               ]),
             ),
           )
-          as _i15.TrustedEntityCriterion);
+          as _i16.TrustedEntityCriterion);
 
   @override
-  _i15.TrustedEntity? findTrustedIssuer({
-    required _i15.TrustedList? trustedList,
+  _i16.TrustedEntity? findTrustedIssuer({
+    required _i16.TrustedList? trustedList,
     required _i9.OpenIdConfiguration? issuerOpenIdConfiguration,
     required List<String>? vcTypes,
   }) =>
@@ -1592,7 +1667,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #vcTypes: vcTypes,
             }),
           )
-          as _i15.TrustedEntity?);
+          as _i16.TrustedEntity?);
 
   @override
   Map<String, dynamic> getAuthorizationRequestParemeters({
@@ -1660,7 +1735,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
           as String?);
 
   @override
-  _i17.Future<String> getTokenEndPoint({
+  _i18.Future<String> getTokenEndPoint({
     required String? issuer,
     required _i9.OIDC4VCIDraftType? oidc4vciDraftType,
     required _i9.OpenIdConfiguration? openIdConfiguration,
@@ -1675,8 +1750,8 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #dio: dio,
               #useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
             }),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#getTokenEndPoint, [], {
                   #issuer: issuer,
@@ -1689,10 +1764,10 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 
   @override
-  _i17.Future<(Map<String, dynamic>?, String?, String?, List<dynamic>?)>
+  _i18.Future<(Map<String, dynamic>?, String?, String?, List<dynamic>?)>
   getTokenResponse({
     required _i4.Dio? dio,
     required String? tokenEndPoint,
@@ -1702,7 +1777,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
     required String? oAuthClientAttestationPop,
     required String? dPop,
     required String? issuer,
-    _i17.Future<
+    _i18.Future<
       ({
         String? dPop,
         String? oAuthClientAttestation,
@@ -1725,16 +1800,16 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #refreshProofs: refreshProofs,
             }),
             returnValue:
-                _i17.Future<
+                _i18.Future<
                   (Map<String, dynamic>?, String?, String?, List<dynamic>?)
                 >.value((null, null, null, null)),
           )
-          as _i17.Future<
+          as _i18.Future<
             (Map<String, dynamic>?, String?, String?, List<dynamic>?)
           >);
 
   @override
-  _i17.Future<String?> getNonceReponse({
+  _i18.Future<String?> getNonceReponse({
     required _i4.Dio? dio,
     required String? nonceEndpoint,
   }) =>
@@ -1743,12 +1818,12 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #dio: dio,
               #nonceEndpoint: nonceEndpoint,
             }),
-            returnValue: _i17.Future<String?>.value(),
+            returnValue: _i18.Future<String?>.value(),
           )
-          as _i17.Future<String?>);
+          as _i18.Future<String?>);
 
   @override
-  _i17.Future<dynamic> getSingleCredential({
+  _i18.Future<dynamic> getSingleCredential({
     required String? accessToken,
     required _i4.Dio? dio,
     required Map<String, dynamic>? credentialData,
@@ -1763,9 +1838,9 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #credentialEndpoint: credentialEndpoint,
               #dPop: dPop,
             }),
-            returnValue: _i17.Future<dynamic>.value(),
+            returnValue: _i18.Future<dynamic>.value(),
           )
-          as _i17.Future<dynamic>);
+          as _i18.Future<dynamic>);
 
   @override
   _i9.IssuanceNotification? issuanceNotification({
@@ -1785,7 +1860,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
           as _i9.IssuanceNotification?);
 
   @override
-  _i17.Future<void> sendNotification({
+  _i18.Future<void> sendNotification({
     required _i9.IssuanceNotification? notification,
     required _i9.IssuanceNotificationEvent? event,
     required _i4.Dio? dio,
@@ -1796,13 +1871,47 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #event: event,
               #dio: dio,
             }),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<dynamic> getDeferredCredential({
+  _i18.Future<_i9.DeferredCredentialResponse> requestDeferredCredential({
+    required String? deferredCredentialEndpoint,
+    required String? accessToken,
+    required String? transactionId,
+    required _i4.Dio? dio,
+    String? acceptanceToken,
+    String? dpopKey,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(#requestDeferredCredential, [], {
+              #deferredCredentialEndpoint: deferredCredentialEndpoint,
+              #accessToken: accessToken,
+              #transactionId: transactionId,
+              #dio: dio,
+              #acceptanceToken: acceptanceToken,
+              #dpopKey: dpopKey,
+            }),
+            returnValue: _i18.Future<_i9.DeferredCredentialResponse>.value(
+              _i20.dummyValue<_i9.DeferredCredentialResponse>(
+                this,
+                Invocation.method(#requestDeferredCredential, [], {
+                  #deferredCredentialEndpoint: deferredCredentialEndpoint,
+                  #accessToken: accessToken,
+                  #transactionId: transactionId,
+                  #dio: dio,
+                  #acceptanceToken: acceptanceToken,
+                  #dpopKey: dpopKey,
+                }),
+              ),
+            ),
+          )
+          as _i18.Future<_i9.DeferredCredentialResponse>);
+
+  @override
+  _i18.Future<dynamic> getDeferredCredential({
     required Map<String, dynamic>? credentialHeaders,
     required Map<String, dynamic>? body,
     required String? deferredCredentialEndpoint,
@@ -1815,9 +1924,9 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #deferredCredentialEndpoint: deferredCredentialEndpoint,
               #dio: dio,
             }),
-            returnValue: _i17.Future<dynamic>.value(),
+            returnValue: _i18.Future<dynamic>.value(),
           )
-          as _i17.Future<dynamic>);
+          as _i18.Future<dynamic>);
 
   @override
   Map<String, dynamic> buildTokenData({
@@ -1852,7 +1961,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
           as Map<String, dynamic>);
 
   @override
-  _i17.Future<String> readTokenEndPoint({
+  _i18.Future<String> readTokenEndPoint({
     required _i9.OpenIdConfiguration? openIdConfiguration,
     required String? issuer,
     required _i9.OIDC4VCIDraftType? oidc4vciDraftType,
@@ -1869,8 +1978,8 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
               #secureStorage: secureStorage,
             }),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#readTokenEndPoint, [], {
                   #openIdConfiguration: openIdConfiguration,
@@ -1884,10 +1993,10 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 
   @override
-  _i17.Future<_i9.Oidc4vcParameters> authorizationParameters({
+  _i18.Future<_i9.Oidc4vcParameters> authorizationParameters({
     required _i9.Oidc4vcParameters? oidc4vcParameters,
     required _i4.Dio? dio,
   }) =>
@@ -1896,8 +2005,8 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #oidc4vcParameters: oidc4vcParameters,
               #dio: dio,
             }),
-            returnValue: _i17.Future<_i9.Oidc4vcParameters>.value(
-              _FakeOidc4vcParameters_22(
+            returnValue: _i18.Future<_i9.Oidc4vcParameters>.value(
+              _FakeOidc4vcParameters_23(
                 this,
                 Invocation.method(#authorizationParameters, [], {
                   #oidc4vcParameters: oidc4vcParameters,
@@ -1906,10 +2015,10 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               ),
             ),
           )
-          as _i17.Future<_i9.Oidc4vcParameters>);
+          as _i18.Future<_i9.Oidc4vcParameters>);
 
   @override
-  _i17.Future<_i9.Oidc4vcParameters> finalizeAuthorizationParameters({
+  _i18.Future<_i9.Oidc4vcParameters> finalizeAuthorizationParameters({
     required _i9.Oidc4vcParameters? oidc4vcParameters,
     required _i4.Dio? dio,
     required String? authorizationEndpoint,
@@ -1927,8 +2036,8 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #authorizationServerConfiguration:
                   authorizationServerConfiguration,
             }),
-            returnValue: _i17.Future<_i9.Oidc4vcParameters>.value(
-              _FakeOidc4vcParameters_22(
+            returnValue: _i18.Future<_i9.Oidc4vcParameters>.value(
+              _FakeOidc4vcParameters_23(
                 this,
                 Invocation.method(#finalizeAuthorizationParameters, [], {
                   #oidc4vcParameters: oidc4vcParameters,
@@ -1942,10 +2051,10 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               ),
             ),
           )
-          as _i17.Future<_i9.Oidc4vcParameters>);
+          as _i18.Future<_i9.Oidc4vcParameters>);
 
   @override
-  _i17.Future<Map<String, dynamic>> buildCredentialData({
+  _i18.Future<Map<String, dynamic>> buildCredentialData({
     required _i9.Oidc4vcParameters? oidc4vcParameters,
     required _i9.IssuerTokenParameters? issuerTokenParameters,
     required String? credentialType,
@@ -1965,6 +2074,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
     required String? clientId,
     List<String>? keyAttestationProofs,
     _i9.JwtSigner? proofSigner,
+    List<_i9.JwtProofKey>? batchProofKeys = const [],
   }) =>
       (super.noSuchMethod(
             Invocation.method(#buildCredentialData, [], {
@@ -1987,17 +2097,18 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #clientId: clientId,
               #keyAttestationProofs: keyAttestationProofs,
               #proofSigner: proofSigner,
+              #batchProofKeys: batchProofKeys,
             }),
-            returnValue: _i17.Future<Map<String, dynamic>>.value(
+            returnValue: _i18.Future<Map<String, dynamic>>.value(
               <String, dynamic>{},
             ),
           )
-          as _i17.Future<Map<String, dynamic>>);
+          as _i18.Future<Map<String, dynamic>>);
 
   @override
-  Map<String, dynamic> buildJwtProofEntry(String? vcJwt) =>
+  Map<String, dynamic> buildJwtProofsEntry(List<String>? vcJwts) =>
       (super.noSuchMethod(
-            Invocation.method(#buildJwtProofEntry, [vcJwt]),
+            Invocation.method(#buildJwtProofsEntry, [vcJwts]),
             returnValue: <String, dynamic>{},
           )
           as Map<String, dynamic>);
@@ -2037,7 +2148,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
           as Map<String, dynamic>);
 
   @override
-  _i17.Future<(String, List<String>?, Map<String, dynamic>?, String?, String)>
+  _i18.Future<(String, List<String>?, Map<String, dynamic>?, String?, String)>
   getCredentialData({
     required _i9.OpenIdConfiguration? openIdConfiguration,
     required dynamic credential,
@@ -2048,7 +2159,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #credential: credential,
             }),
             returnValue:
-                _i17.Future<
+                _i18.Future<
                   (
                     String,
                     List<String>?,
@@ -2057,7 +2168,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
                     String,
                   )
                 >.value((
-                  _i19.dummyValue<String>(
+                  _i20.dummyValue<String>(
                     this,
                     Invocation.method(#getCredentialData, [], {
                       #openIdConfiguration: openIdConfiguration,
@@ -2067,7 +2178,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
                   null,
                   null,
                   null,
-                  _i19.dummyValue<String>(
+                  _i20.dummyValue<String>(
                     this,
                     Invocation.method(#getCredentialData, [], {
                       #openIdConfiguration: openIdConfiguration,
@@ -2076,7 +2187,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
                   ),
                 )),
           )
-          as _i17.Future<
+          as _i18.Future<
             (String, List<String>?, Map<String, dynamic>?, String?, String)
           >);
 
@@ -2084,7 +2195,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
   String readCredentialEndpoint(_i9.OpenIdConfiguration? openIdConfiguration) =>
       (super.noSuchMethod(
             Invocation.method(#readCredentialEndpoint, [openIdConfiguration]),
-            returnValue: _i19.dummyValue<String>(
+            returnValue: _i20.dummyValue<String>(
               this,
               Invocation.method(#readCredentialEndpoint, [openIdConfiguration]),
             ),
@@ -2119,7 +2230,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
           as bool);
 
   @override
-  _i17.Future<String> getIssuerJwt({
+  _i18.Future<String> getIssuerJwt({
     required _i9.IssuerTokenParameters? tokenParameters,
     required _i9.ClientAuthentication? clientAuthentication,
     required String? iss,
@@ -2134,8 +2245,8 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #cnonce: cnonce,
               #signer: signer,
             }),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#getIssuerJwt, [], {
                   #tokenParameters: tokenParameters,
@@ -2147,7 +2258,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 
   @override
   ({Map<String, dynamic>? body, Map<String, dynamic> headers})
@@ -2167,7 +2278,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
           as ({Map<String, dynamic>? body, Map<String, dynamic> headers}));
 
   @override
-  _i17.Future<String> getDcqlQueryFromUri({
+  _i18.Future<String> getDcqlQueryFromUri({
     required Uri? uri,
     Map<String, dynamic>? walletMetadata,
   }) =>
@@ -2176,8 +2287,8 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #uri: uri,
               #walletMetadata: walletMetadata,
             }),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#getDcqlQueryFromUri, [], {
                   #uri: uri,
@@ -2186,10 +2297,10 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 
   @override
-  _i17.Future<String> fetchRequestObject({
+  _i18.Future<String> fetchRequestObject({
     required String? requestUri,
     required _i4.Dio? dio,
     String? requestUriMethod,
@@ -2202,8 +2313,8 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #requestUriMethod: requestUriMethod,
               #walletMetadata: walletMetadata,
             }),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#fetchRequestObject, [], {
                   #requestUri: requestUri,
@@ -2214,10 +2325,10 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 
   @override
-  _i17.Future<Map<String, dynamic>> getOpenIdConfiguration({
+  _i18.Future<Map<String, dynamic>> getOpenIdConfiguration({
     required String? didKey,
     required bool? fromStatusList,
     required bool? isCachingEnabled,
@@ -2236,11 +2347,11 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #isSdJwtVc: isSdJwtVc,
               #secureStorage: secureStorage,
             }),
-            returnValue: _i17.Future<Map<String, dynamic>>.value(
+            returnValue: _i18.Future<Map<String, dynamic>>.value(
               <String, dynamic>{},
             ),
           )
-          as _i17.Future<Map<String, dynamic>>);
+          as _i18.Future<Map<String, dynamic>>);
 
   @override
   bool isURL(String? input) =>
@@ -2272,7 +2383,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
   ) =>
       (super.noSuchMethod(
             Invocation.method(#readIssuerDid, [openidConfigurationResponse]),
-            returnValue: _i19.dummyValue<String>(
+            returnValue: _i20.dummyValue<String>(
               this,
               Invocation.method(#readIssuerDid, [openidConfigurationResponse]),
             ),
@@ -2280,7 +2391,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
           as String);
 
   @override
-  _i17.Future<_i9.VerificationType> verifyEncodedData({
+  _i18.Future<_i9.VerificationType> verifyEncodedData({
     required String? issuer,
     required String? issuerKid,
     required String? jwt,
@@ -2303,11 +2414,11 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #useOAuthAuthorizationServerLink: useOAuthAuthorizationServerLink,
               #isSdJwtVc: isSdJwtVc,
             }),
-            returnValue: _i17.Future<_i9.VerificationType>.value(
+            returnValue: _i18.Future<_i9.VerificationType>.value(
               _i9.VerificationType.verified,
             ),
           )
-          as _i17.Future<_i9.VerificationType>);
+          as _i18.Future<_i9.VerificationType>);
 
   @override
   bool verifyTokenEdDSA({
@@ -2324,7 +2435,7 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
           as bool);
 
   @override
-  _i17.Future<Map<String, dynamic>> getToken({
+  _i18.Future<Map<String, dynamic>> getToken({
     required String? tokenEndPoint,
     required Map<String, dynamic>? tokenData,
     required String? authorization,
@@ -2343,14 +2454,14 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #oAuthClientAttestationPop: oAuthClientAttestationPop,
               #dPop: dPop,
             }),
-            returnValue: _i17.Future<Map<String, dynamic>>.value(
+            returnValue: _i18.Future<Map<String, dynamic>>.value(
               <String, dynamic>{},
             ),
           )
-          as _i17.Future<Map<String, dynamic>>);
+          as _i18.Future<Map<String, dynamic>>);
 
   @override
-  _i17.Future<_i9.OpenIdConfiguration> getAuthorizationServerMetaData({
+  _i18.Future<_i9.OpenIdConfiguration> getAuthorizationServerMetaData({
     required String? baseUrl,
     required bool? useOAuthAuthorizationServerLink,
     required _i4.Dio? dio,
@@ -2365,8 +2476,8 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #isCachingEnabled: isCachingEnabled,
               #secureStorage: secureStorage,
             }),
-            returnValue: _i17.Future<_i9.OpenIdConfiguration>.value(
-              _FakeOpenIdConfiguration_20(
+            returnValue: _i18.Future<_i9.OpenIdConfiguration>.value(
+              _FakeOpenIdConfiguration_21(
                 this,
                 Invocation.method(#getAuthorizationServerMetaData, [], {
                   #baseUrl: baseUrl,
@@ -2379,10 +2490,10 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               ),
             ),
           )
-          as _i17.Future<_i9.OpenIdConfiguration>);
+          as _i18.Future<_i9.OpenIdConfiguration>);
 
   @override
-  _i17.Future<_i9.OpenIdConfiguration> getIssuerMetaData({
+  _i18.Future<_i9.OpenIdConfiguration> getIssuerMetaData({
     required String? baseUrl,
     required _i4.Dio? dio,
     bool? isCachingEnabled = false,
@@ -2397,8 +2508,8 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #isSdJwtVc: isSdJwtVc,
               #secureStorage: secureStorage,
             }),
-            returnValue: _i17.Future<_i9.OpenIdConfiguration>.value(
-              _FakeOpenIdConfiguration_20(
+            returnValue: _i18.Future<_i9.OpenIdConfiguration>.value(
+              _FakeOpenIdConfiguration_21(
                 this,
                 Invocation.method(#getIssuerMetaData, [], {
                   #baseUrl: baseUrl,
@@ -2410,10 +2521,10 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               ),
             ),
           )
-          as _i17.Future<_i9.OpenIdConfiguration>);
+          as _i18.Future<_i9.OpenIdConfiguration>);
 
   @override
-  _i17.Future<String> extractVpToken({
+  _i18.Future<String> extractVpToken({
     required String? clientId,
     required String? nonce,
     required List<String>? credentialsToBePresented,
@@ -2432,8 +2543,8 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #privateKey: privateKey,
               #proofHeaderType: proofHeaderType,
             }),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#extractVpToken, [], {
                   #clientId: clientId,
@@ -2447,10 +2558,10 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 
   @override
-  _i17.Future<String> extractIdToken({
+  _i18.Future<String> extractIdToken({
     required String? clientId,
     required List<String>? credentialsToBePresented,
     required String? did,
@@ -2471,8 +2582,8 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #privateKey: privateKey,
               #proofHeaderType: proofHeaderType,
             }),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#extractIdToken, [], {
                   #clientId: clientId,
@@ -2487,10 +2598,10 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 
   @override
-  _i17.Future<Map<String, dynamic>> getDataForSiopV2Flow({
+  _i18.Future<Map<String, dynamic>> getDataForSiopV2Flow({
     required String? clientId,
     required String? did,
     required String? kid,
@@ -2513,14 +2624,14 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #clientType: clientType,
               #proofHeader: proofHeader,
             }),
-            returnValue: _i17.Future<Map<String, dynamic>>.value(
+            returnValue: _i18.Future<Map<String, dynamic>>.value(
               <String, dynamic>{},
             ),
           )
-          as _i17.Future<Map<String, dynamic>>);
+          as _i18.Future<Map<String, dynamic>>);
 
   @override
-  _i17.Future<_i4.Response<dynamic>> siopv2Flow({
+  _i18.Future<_i4.Response<dynamic>> siopv2Flow({
     required String? redirectUri,
     required _i4.Dio? dio,
     required Map<String, dynamic>? responseData,
@@ -2531,8 +2642,8 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               #dio: dio,
               #responseData: responseData,
             }),
-            returnValue: _i17.Future<_i4.Response<dynamic>>.value(
-              _FakeResponse_23<dynamic>(
+            returnValue: _i18.Future<_i4.Response<dynamic>>.value(
+              _FakeResponse_24<dynamic>(
                 this,
                 Invocation.method(#siopv2Flow, [], {
                   #redirectUri: redirectUri,
@@ -2542,37 +2653,37 @@ class MockOIDC4VCIClient extends _i1.Mock implements _i9.OIDC4VCIClient {
               ),
             ),
           )
-          as _i17.Future<_i4.Response<dynamic>>);
+          as _i18.Future<_i4.Response<dynamic>>);
 
   @override
-  _i17.Future<String> getVpToken(
+  _i18.Future<String> getVpToken(
     _i9.VerifierTokenParameters? tokenParameters,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#getVpToken, [tokenParameters]),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#getVpToken, [tokenParameters]),
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 
   @override
-  _i17.Future<String> getIdToken(
+  _i18.Future<String> getIdToken(
     _i9.VerifierTokenParameters? tokenParameters,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#getIdToken, [tokenParameters]),
-            returnValue: _i17.Future<String>.value(
-              _i19.dummyValue<String>(
+            returnValue: _i18.Future<String>.value(
+              _i20.dummyValue<String>(
                 this,
                 Invocation.method(#getIdToken, [tokenParameters]),
               ),
             ),
           )
-          as _i17.Future<String>);
+          as _i18.Future<String>);
 }
 
 /// A class which mocks [JWTDecode].
@@ -2626,30 +2737,30 @@ class MockActivityLogManager extends _i1.Mock
   }
 
   @override
-  _i17.Future<void> saveLog(_i11.LogData? log) =>
+  _i18.Future<void> saveLog(_i11.LogData? log) =>
       (super.noSuchMethod(
             Invocation.method(#saveLog, [log]),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 
   @override
-  _i17.Future<List<_i11.LogData>> readAllLogs() =>
+  _i18.Future<List<_i11.LogData>> readAllLogs() =>
       (super.noSuchMethod(
             Invocation.method(#readAllLogs, []),
-            returnValue: _i17.Future<List<_i11.LogData>>.value(
+            returnValue: _i18.Future<List<_i11.LogData>>.value(
               <_i11.LogData>[],
             ),
           )
-          as _i17.Future<List<_i11.LogData>>);
+          as _i18.Future<List<_i11.LogData>>);
 
   @override
-  _i17.Future<void> clearLogs() =>
+  _i18.Future<void> clearLogs() =>
       (super.noSuchMethod(
             Invocation.method(#clearLogs, []),
-            returnValue: _i17.Future<void>.value(),
-            returnValueForMissingStub: _i17.Future<void>.value(),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
           )
-          as _i17.Future<void>);
+          as _i18.Future<void>);
 }

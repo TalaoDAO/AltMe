@@ -1183,7 +1183,7 @@
   "keyBindingHeader": "Encabezado de vinculación de clave",
   "keyBindingPayload": "Carga útil de vinculación de clave",
   "ebsiV4DecentralizedId": "Identidad descentralizada de EBSI V4",
-  "credentialShareTitle": "Compartir información",
+  "credentialShareTitle": "Revisar la solicitud",
   "reject": "Rechazar",
   "operation": "Operación",
   "chooseYourSSIProfileOrCustomizeYourOwn": "Elige el perfil de tu cartera o personaliza el tuyo",
@@ -1293,5 +1293,21 @@
     }
   },
   "mdocReaderRequestsTitle": "Lector",
-  "mdocReaderRequestsSubtitle": "Elija qué solicitar y luego escanee el código QR del titular."
+  "mdocReaderRequestsSubtitle": "Elija qué solicitar y luego escanee el código QR del titular.",
+  "qesApprovalTitle": "Solicitud de firma",
+  "qesApprovalDocuments": "Documentos para firmar",
+  "qesApprovalSignatureLevel": "Nivel de firma",
+  "qesApprovalNumberOfSignatures": "Número de firmas",
+  "qesApprovalSigningService": "Servicio de firma",
+  "qesApprovalConsent": "Al firmar, autoriza al servicio de firma a crear una firma electrónica cualificada en estos documentos con su certificado.",
+  "qesSignatureQualifierQes": "Firma electrónica cualificada (eIDAS)",
+  "qesDocumentNoContent": "El verificador no ha proporcionado el contenido de este documento.",
+  "qesDocumentNotText": "Este documento no se puede mostrar como texto.",
+  "qesDocumentLoadFailed": "No se ha podido cargar el documento.",
+  "qesDocumentIntegrityVerified": "Integridad verificada",
+  "qesDocumentIntegrityNotVerified": "Integridad no verificada: el verificador no ha proporcionado ninguna suma de comprobación.",
+  "qesDocumentIntegrityFailed": "Este documento no coincide con su suma de comprobación. No se puede aprobar la firma.",
+  "qesDocumentOneTimePassword": "Contraseña de un solo uso",
+  "batchCopiesCount": "{count, plural, =1{1 copia de un solo uso} other{{count} copias de un solo uso}}",
+  "dcqlSharedDataLabel": "Datos compartidos de esta atestación"
 }

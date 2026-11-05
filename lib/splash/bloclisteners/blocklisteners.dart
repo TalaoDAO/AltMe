@@ -123,6 +123,8 @@ final credentialsBlocListener =
           LoadingView().hide();
         }
         if (state.status == CredentialsStatus.delete) {
+          // A silent delete (a presented batch copy) ends its loading too.
+          LoadingView().hide();
           if (state.message != null) {
             Navigator.popUntil(
               context,
@@ -131,6 +133,19 @@ final credentialsBlocListener =
           }
         }
       },
+    );
+
+/// Has the wallet's pending cards collected as soon as their issuers have
+/// the credentials (OpenID4VCI 1.0 §9), from app start and as cards come
+/// and go.
+final deferredCredentialsBlocListener =
+    BlocListener<CredentialsCubit, CredentialsState>(
+      listenWhen: (previous, current) =>
+          previous.credentials != current.credentials,
+      listener: (BuildContext context, CredentialsState state) => context
+          .read<QRCodeScanCubit>()
+          .deferredCredentialPoller
+          .track(state.credentials),
     );
 
 final walletBlocAccountChangeListener = BlocListener<WalletCubit, WalletState>(

@@ -9,14 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:mdoc_proximity/mdoc_proximity.dart';
 
 /// What a reader asks for: who asks and whether the trusted list knows it,
-/// then document by document, the card of the attestation that answers it
-/// with a checkbox per requested data element.
+/// then, as on the OIDC4VP share screen, the card of each attestation that
+/// can answer a requested document with its requested data elements folded.
 ///
 /// Each requested document is answered by one of the wallet's [candidates]
-/// for its type; the user picks when there are several. Everything requested
-/// and held is selected by default; the user unticks what they do not want
-/// to share. Elements the chosen attestation does not hold are listed but
-/// cannot be selected, and a document with no candidate cannot be shared.
+/// for its type; the user picks with the radio under the cards, or a tap on
+/// a card, when there are several. Every requested element the chosen
+/// attestation holds is shared; one it does not hold reads "—". A document
+/// with no candidate cannot be shared.
 class MdocRequestView extends StatefulWidget {
   /// Creates the view.
   const MdocRequestView({
@@ -56,76 +56,42 @@ class _MdocRequestViewState extends State<MdocRequestView> {
         document.docType: credential,
   };
 
-  /// `docType|nameSpace|element` of every selected element.
-  late final Set<String> _selected = {
-    for (final document in widget.documents) ..._heldIds(document),
-  };
-
   List<CredentialModel> _candidatesOf(String docType) =>
       widget.candidates[docType] ?? const [];
 
-  /// The attestation answering [document], if any.
-  CredentialModel? _credential(ProximityDocumentRequest document) =>
-      _chosen[document.docType];
-
-  bool _held(ProximityDocumentRequest document, String ns, String element) =>
-      _credential(document)?.mdocValue(ns, element) != null;
-
-  /// The ids of the elements of [document] the chosen attestation holds.
-  Iterable<String> _heldIds(ProximityDocumentRequest document) => [
-    for (final ns in document.nameSpaces.entries)
-      for (final element in ns.value.keys)
-        if (_held(document, ns.key, element))
-          _id(document.docType, ns.key, element),
-  ];
-
-  static String _id(String docType, String ns, String element) =>
-      '$docType|$ns|$element';
-
-  void _choose(ProximityDocumentRequest document, CredentialModel credential) =>
-      setState(() {
-        _chosen[document.docType] = credential;
-        _selected
-          ..removeWhere((id) => id.startsWith('${document.docType}|'))
-          ..addAll(_heldIds(document));
-      });
-
+  /// One disclosure per document an attestation answers: every requested
+  /// element the chosen attestation holds.
   List<ProximityDisclosure> _disclosures() => [
     for (final document in widget.documents)
-      if (_credential(document) case final CredentialModel credential)
-        if (_elements(document) case final elements when elements.isNotEmpty)
+      if (_chosen[document.docType] case final CredentialModel credential)
+        if (_heldElements(document, credential) case final elements
+            when elements.isNotEmpty)
           ProximityDisclosure(
             mdoc: credential.proximityMdoc,
             elements: elements,
           ),
   ];
 
-  /// name space → the selected elements of [document].
-  Map<String, List<String>> _elements(ProximityDocumentRequest document) => {
+  /// name space → the elements of [document] that [credential] holds.
+  static Map<String, List<String>> _heldElements(
+    ProximityDocumentRequest document,
+    CredentialModel credential,
+  ) => {
     for (final ns in document.nameSpaces.entries)
       if ([
             for (final element in ns.value.keys)
-              if (_selected.contains(_id(document.docType, ns.key, element)))
-                element,
+              if (credential.mdocValue(ns.key, element) != null) element,
           ]
           case final elements when elements.isNotEmpty)
         ns.key: elements,
   };
 
-  void _toggle(String id, {required bool selected}) => setState(() {
-    if (selected) {
-      _selected.add(id);
-    } else {
-      _selected.remove(id);
-    }
-  });
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final languageCode = Localizations.localeOf(context).languageCode;
     final textTheme = Theme.of(context).textTheme;
     final reader = widget.reader;
+    final disclosures = _disclosures();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -149,42 +115,22 @@ class _MdocRequestViewState extends State<MdocRequestView> {
               ),
               const SizedBox(height: 16),
               for (final document in widget.documents)
-                _DocumentCard(
-                  docType: document.docType,
-                  credential: _credential(document),
-                  selector: _candidatesOf(document.docType).length > 1
-                      ? _CandidateSelector(
-                          candidates: _candidatesOf(document.docType),
-                          chosen: _credential(document)!,
-                          onChanged: (credential) =>
-                              _choose(document, credential),
-                        )
-                      : null,
-                  elements: [
-                    for (final ns in document.nameSpaces.entries)
-                      for (final element in ns.value.entries)
-                        _ElementTile(
-                          label:
-                              _credential(
-                                document,
-                              )?.mdocLabel(ns.key, element.key, languageCode) ??
-                              element.key,
-                          value: _credential(
-                            document,
-                          )?.mdocValue(ns.key, element.key),
-                          intentToRetain: element.value,
-                          selected: _selected.contains(
-                            _id(document.docType, ns.key, element.key),
-                          ),
-                          onChanged: _held(document, ns.key, element.key)
-                              ? (selected) => _toggle(
-                                  _id(document.docType, ns.key, element.key),
-                                  selected: selected,
-                                )
-                              : null,
-                        ),
-                  ],
-                ),
+                if (_candidatesOf(document.docType).isEmpty)
+                  _UnavailableDocument(docType: document.docType)
+                else
+                  for (final candidate in _candidatesOf(document.docType))
+                    _CandidateCard(
+                      document: document,
+                      credential: candidate,
+                      // The user picks among the candidates of a document
+                      // when it has several.
+                      selected: _candidatesOf(document.docType).length < 2
+                          ? null
+                          : _chosen[document.docType]?.id == candidate.id,
+                      onSelected: () => setState(
+                        () => _chosen[document.docType] = candidate,
+                      ),
+                    ),
             ],
           ),
         ),
@@ -193,9 +139,9 @@ class _MdocRequestViewState extends State<MdocRequestView> {
         const SizedBox(height: 8),
         MyElevatedButton(
           text: l10n.shareInformationButtonLabel,
-          onPressed: _selected.isEmpty
+          onPressed: disclosures.isEmpty
               ? null
-              : () => widget.onShare(_disclosures()),
+              : () => widget.onShare(disclosures),
         ),
         const SizedBox(height: 8),
         MyOutlinedButton(
@@ -207,152 +153,51 @@ class _MdocRequestViewState extends State<MdocRequestView> {
   }
 }
 
-/// Which of several attestations of one type answers the document.
-class _CandidateSelector extends StatelessWidget {
-  const _CandidateSelector({
-    required this.candidates,
-    required this.chosen,
-    required this.onChanged,
-  });
-
-  final List<CredentialModel> candidates;
-  final CredentialModel chosen;
-  final ValueChanged<CredentialModel> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButtonFormField<CredentialModel>(
-      initialValue: chosen,
-      isExpanded: true,
-      decoration: InputDecoration(
-        labelText: context.l10n.mdocProximityChooseAttestation,
-      ),
-      items: [
-        for (final (index, credential) in candidates.indexed)
-          DropdownMenuItem(
-            value: credential,
-            child: Text(
-              // Two attestations of one type often share a name.
-              '${credential.mdocName} (${index + 1})',
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-      ],
-      onChanged: (credential) {
-        if (credential != null) onChanged(credential);
-      },
-    );
-  }
-}
-
-/// One requested document: the card of the attestation answering it, as on
-/// the OIDC4VP presentation screens, and its requested elements; or why no
-/// attestation answers it.
-class _DocumentCard extends StatelessWidget {
-  const _DocumentCard({
-    required this.docType,
+/// An attestation that can answer a requested document, as on the OIDC4VP
+/// share screen: its card, then a folded row per requested element. With
+/// several candidates, a radio under the card, and a tap on the card picks
+/// it.
+class _CandidateCard extends StatelessWidget {
+  const _CandidateCard({
+    required this.document,
     required this.credential,
-    required this.selector,
-    required this.elements,
-  });
-
-  final String docType;
-  final CredentialModel? credential;
-  final Widget? selector;
-  final List<Widget> elements;
-
-  @override
-  Widget build(BuildContext context) {
-    final credential = this.credential;
-
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (credential == null)
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Icon(
-                  Icons.block,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-                title: Text(docType),
-                subtitle: Text(context.l10n.mdocProximityDocumentUnavailable),
-              )
-            else
-              CredentialCardImage(credentialModel: credential),
-            if (selector != null) ...[const SizedBox(height: 8), selector!],
-            const SizedBox(height: 12),
-            ...elements,
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// A requested element, its value as on the OIDC4VP presentation screens,
-/// with the checkbox that shares it. Not selectable when the attestation
-/// does not hold it.
-class _ElementTile extends StatelessWidget {
-  const _ElementTile({
-    required this.label,
-    required this.value,
-    required this.intentToRetain,
     required this.selected,
-    required this.onChanged,
+    required this.onSelected,
   });
 
-  final String label;
-  final Object? value;
-  final bool intentToRetain;
-  final bool selected;
-  final ValueChanged<bool>? onChanged;
+  final ProximityDocumentRequest document;
+  final CredentialModel credential;
+
+  /// Whether the user picked this candidate, when its document has several.
+  /// `null` when there is nothing to pick.
+  final bool? selected;
+  final VoidCallback onSelected;
 
   @override
   Widget build(BuildContext context) {
-    final onChanged = this.onChanged;
-    final theme = Theme.of(context);
-    final color = onChanged == null
-        ? theme.disabledColor
-        : theme.colorScheme.onSurface;
+    final l10n = context.l10n;
+    final languageCode = Localizations.localeOf(context).languageCode;
+    final selected = this.selected;
 
-    return InkWell(
-      onTap: onChanged == null ? null : () => onChanged(!selected),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Checkbox(
-            value: selected,
-            onChanged: onChanged == null ? null : (v) => onChanged(v ?? false),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CredentialField(
-                  title: label,
-                  value: _display(value),
-                  titleColor: color,
-                  valueColor: color,
-                  showVertically: true,
-                ),
-                if (intentToRetain)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8, bottom: 8),
-                    child: Text(
-                      context.l10n.mdocProximityWillRetain,
-                      style: theme.textTheme.bodySmall,
-                    ),
-                  ),
-              ],
+    return CredentialShareCard(
+      credentialModel: credential,
+      onTap: selected == null ? null : onSelected,
+      belowImage: selected == null
+          ? null
+          : CredentialSelectionMark(selected: selected),
+      children: [
+        Text(
+          l10n.dcqlSharedDataLabel,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        for (final ns in document.nameSpaces.entries)
+          for (final element in ns.value.entries)
+            FoldedClaim(
+              title: credential.mdocLabel(ns.key, element.key, languageCode),
+              value: _display(credential.mdocValue(ns.key, element.key)),
+              note: element.value ? l10n.mdocProximityWillRetain : null,
             ),
-          ),
-        ],
-      ),
+      ],
     );
   }
 
@@ -362,4 +207,30 @@ class _ElementTile extends StatelessWidget {
     Map<dynamic, dynamic>() || List<dynamic>() => jsonEncode(value),
     _ => value.toString(),
   };
+}
+
+/// A requested document the wallet holds no attestation for.
+class _UnavailableDocument extends StatelessWidget {
+  const _UnavailableDocument({required this.docType});
+
+  final String docType;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: Icon(
+            Icons.block,
+            color: Theme.of(context).colorScheme.error,
+          ),
+          title: Text(docType),
+          subtitle: Text(context.l10n.mdocProximityDocumentUnavailable),
+        ),
+      ),
+    );
+  }
 }

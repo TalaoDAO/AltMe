@@ -17,6 +17,7 @@ PendingInfo _$PendingInfoFromJson(Map<String, dynamic> json) => PendingInfo(
   requestedAt: json['requestedAt'] == null
       ? null
       : DateTime.parse(json['requestedAt'] as String),
+  dpopKey: json['dpopKey'] as String?,
 );
 
 Map<String, dynamic> _$PendingInfoToJson(PendingInfo instance) =>
@@ -28,4 +29,5 @@ Map<String, dynamic> _$PendingInfoToJson(PendingInfo instance) =>
       'url': instance.url,
       'issuer': instance.issuer,
       'requestedAt': instance.requestedAt?.toIso8601String(),
+      'dpopKey': instance.dpopKey,
     };

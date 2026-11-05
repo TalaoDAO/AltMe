@@ -33,6 +33,8 @@ final Uint8List _issuerCertificate = base64.decode(
 /// whose certificate it carries, as OID4VCI returns it.
 ///
 /// [tamper] breaks the digests, [badSignature] the issuer signature.
+/// [devicePoint] is the SEC1 point of the device key, [testDevicePoint] by
+/// default.
 String testIssuerSigned({
   Map<String, Object?> elements = const {
     'family_name': 'Doe',
@@ -43,7 +45,9 @@ String testIssuerSigned({
   String docType = mdlDocType,
   String validFrom = '2026-10-01T00:00:00Z',
   String validUntil = '2099-01-01T00:00:00Z',
+  Uint8List? devicePoint,
 }) {
+  final point = devicePoint ?? testDevicePoint;
   var digestId = 0;
   final items = <CborTag>[];
   final digests = <int, Uint8List>{};
@@ -65,7 +69,12 @@ String testIssuerSigned({
     'digestAlgorithm': 'SHA-256',
     'valueDigests': {mdlNameSpace: digests},
     'deviceKeyInfo': {
-      'deviceKey': {1: 2, -1: 1, -2: _x, -3: _y},
+      'deviceKey': {
+        1: 2,
+        -1: 1,
+        -2: point.sublist(1, 33),
+        -3: point.sublist(33, 65),
+      },
     },
     'docType': docType,
     'validityInfo': {

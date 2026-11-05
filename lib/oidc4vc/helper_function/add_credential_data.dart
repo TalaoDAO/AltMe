@@ -2,12 +2,25 @@ import 'package:altme/app/app.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 
+import 'package:altme/oidc4vc/helper_function/credential_key_alias.dart';
 import 'package:altme/oidc4vc/model/credential_acceptance_data.dart';
 import 'package:altme/oidc4vc/oidc4vc.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
+
+/// Whether [data], one token of a Credential Response, defers the credential
+/// (OpenID4VCI §9): it carries a `transaction_id` (`acceptance_token` before
+/// draft 13) and the issuer has a [deferredCredentialEndpoint]. Such a token
+/// becomes a pending card, not an item to accept.
+bool isDeferredCredentialResponse(
+  dynamic data,
+  String? deferredCredentialEndpoint,
+) =>
+    deferredCredentialEndpoint != null &&
+    data is Map &&
+    (data['transaction_id'] != null || data['acceptance_token'] != null);
 
 /// Builds a [CredentialAcceptanceItem] for every fetched, non-deferred token
 /// in [encodedCredentialOrFutureTokens] - a token that fails to decode is
@@ -32,7 +45,7 @@ Future<List<CredentialAcceptanceItem>> addCredentialData({
   required String issuer,
   required JWTDecode jwtDecode,
   required QRCodeScanCubit qrCodeScanCubit,
-  List<String?>? credentialKeyIds,
+  List<List<String>>? credentialKeyIds,
   String? dpopKey,
 }) async {
   final profileModel = credentialsCubit.profileCubit.state.model;
@@ -42,13 +55,7 @@ Future<List<CredentialAcceptanceItem>> addCredentialData({
     final data = encodedCredentialOrFutureTokens[i];
     final String credentialName = getCredentialData(credential);
 
-    final acceptanceToken = data['acceptance_token'];
-
-    /// trasanction_id is NEW for draft 13. it was acceptance_token for draft 11
-    final transactionId = data['transaction_id'];
-
-    if ((acceptanceToken != null || transactionId != null) &&
-        deferredCredentialEndpoint != null) {
+    if (isDeferredCredentialResponse(data, deferredCredentialEndpoint)) {
       /// add deferred card
       final id = const Uuid().v4();
 
@@ -91,11 +98,13 @@ Future<List<CredentialAcceptanceItem>> addCredentialData({
         pendingInfo: PendingInfo(
           encodedCredentialFromOIDC4VC: data,
           accessToken: accessToken,
-          deferredCredentialEndpoint: deferredCredentialEndpoint,
+          // Not null: isDeferredCredentialResponse checked it.
+          deferredCredentialEndpoint: deferredCredentialEndpoint!,
           format: format,
           url: scannedResponse,
           issuer: issuer,
           requestedAt: DateTime.now(),
+          dpopKey: dpopKey,
         ),
         profileLinkedId: profileModel.profileType.getVCId,
       );
@@ -115,9 +124,9 @@ Future<List<CredentialAcceptanceItem>> addCredentialData({
           format: format,
           openIdConfiguration: openIdConfiguration,
           jwtDecode: jwtDecode,
-          keyId: credentialKeyIds != null && i < credentialKeyIds.length
+          keyIds: credentialKeyIds != null && i < credentialKeyIds.length
               ? credentialKeyIds[i]
-              : null,
+              : const [],
         );
         final notification = credentialsCubit.oidc4vc.issuanceNotification(
           credentialResponse: data,
@@ -130,6 +139,15 @@ Future<List<CredentialAcceptanceItem>> addCredentialData({
             credentialId: item.credentialModel.id,
             notification: notification,
           );
+        }
+        for (final credentialModel in item.credentialModels) {
+          final keyId = credentialModel.keyId;
+          if (keyId != null && isPlatformKeyAlias(keyId)) {
+            credentialsCubit.expectCredentialKey(
+              credentialId: credentialModel.id,
+              keyId: keyId,
+            );
+          }
         }
         items.add(item);
       } catch (_) {

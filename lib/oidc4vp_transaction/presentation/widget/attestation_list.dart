@@ -77,7 +77,11 @@ class AttestationList extends StatelessWidget {
     while (index < presentationDefinition.inputDescriptors.length) {
       final credentialManifestPickCubit = CredentialManifestPickCubit(
         credential: credentialPreview,
-        credentialList: context.read<CredentialsCubit>().state.credentials,
+        credentialList: context
+            .read<CredentialsCubit>()
+            .state
+            .credentials
+            .onePerBatch,
         inputDescriptorIndex: index,
         formatsSupported:
             profileModel
@@ -144,11 +148,6 @@ class AttestationList extends StatelessWidget {
         languageCode: 'en',
         limitDisclosure: selectiveDisclosureCubit.state.limitDisclosure ?? '',
         filters: selectiveDisclosureCubit.state.filters ?? {},
-        isDeveloperMode: context
-            .read<ProfileCubit>()
-            .state
-            .model
-            .isDeveloperMode,
         selectedClaimsKeyIds: [],
         onPressed: (claimKey, claimKeyId, threeDotValue, sd) {
           selectiveDisclosureCubit.disclosureAction(

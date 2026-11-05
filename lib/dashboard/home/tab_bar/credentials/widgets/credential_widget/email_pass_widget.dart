@@ -30,11 +30,6 @@ class EmailPassWidget extends StatelessWidget {
         languageCode: languageCode,
         limitDisclosure: '',
         filters: <String, dynamic>{},
-        isDeveloperMode: context
-            .read<ProfileCubit>()
-            .state
-            .model
-            .isDeveloperMode,
         selectedClaimsKeyIds: <SelectedClaimsKeyIds>[],
         onPressed: null,
         displayMode: context

@@ -3314,7 +3314,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Elige la(s) credencial(es) que quieres obtener';
 
   @override
-  String get credentialShareTitle => 'Compartir información';
+  String get credentialShareTitle => 'Revisar la solicitud';
 
   @override
   String get enterYourSecretCode => 'Introduce tu código secreto.';
@@ -3718,4 +3718,66 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get proximityBleCentralClientSubtitle =>
       'Su teléfono se conecta al lector.';
+
+  @override
+  String get qesApprovalTitle => 'Solicitud de firma';
+
+  @override
+  String get qesApprovalDocuments => 'Documentos para firmar';
+
+  @override
+  String get qesApprovalSignatureLevel => 'Nivel de firma';
+
+  @override
+  String get qesApprovalNumberOfSignatures => 'Número de firmas';
+
+  @override
+  String get qesApprovalSigningService => 'Servicio de firma';
+
+  @override
+  String get qesApprovalConsent =>
+      'Al firmar, autoriza al servicio de firma a crear una firma electrónica cualificada en estos documentos con su certificado.';
+
+  @override
+  String get qesSignatureQualifierQes =>
+      'Firma electrónica cualificada (eIDAS)';
+
+  @override
+  String get qesDocumentNoContent =>
+      'El verificador no ha proporcionado el contenido de este documento.';
+
+  @override
+  String get qesDocumentNotText =>
+      'Este documento no se puede mostrar como texto.';
+
+  @override
+  String get qesDocumentLoadFailed => 'No se ha podido cargar el documento.';
+
+  @override
+  String get qesDocumentIntegrityVerified => 'Integridad verificada';
+
+  @override
+  String get qesDocumentIntegrityNotVerified =>
+      'Integridad no verificada: el verificador no ha proporcionado ninguna suma de comprobación.';
+
+  @override
+  String get qesDocumentIntegrityFailed =>
+      'Este documento no coincide con su suma de comprobación. No se puede aprobar la firma.';
+
+  @override
+  String get qesDocumentOneTimePassword => 'Contraseña de un solo uso';
+
+  @override
+  String batchCopiesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count copias de un solo uso',
+      one: '1 copia de un solo uso',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dcqlSharedDataLabel => 'Datos compartidos de esta atestación';
 }

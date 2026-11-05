@@ -36,6 +36,7 @@ class CredentialModel extends Equatable {
     this.credentialSupported,
     this.aiCredentialAnalysis,
     this.keyId,
+    this.batchId,
   });
 
   factory CredentialModel.fromJson(Map<String, dynamic> json) {
@@ -88,6 +89,7 @@ class CredentialModel extends Equatable {
       pendingInfo: oldCredentialModel.pendingInfo,
       profileLinkedId: profileType.getVCId,
       keyId: oldCredentialModel.keyId,
+      batchId: oldCredentialModel.batchId,
     );
     return credentialModel;
   }
@@ -123,6 +125,11 @@ class CredentialModel extends Equatable {
   /// other credential, which presents with the wallet's usual key instead.
   final String? keyId;
 
+  /// Shared by every copy of a batch issuance (OpenID4VCI 1.0 §12.2.4): the
+  /// credentials one Credential Response returned, each bound to its own key
+  /// and destroyed once presented. `null` for a credential issued alone.
+  final String? batchId;
+
   Map<String, dynamic> toJson() => _$CredentialModelToJson(this);
 
   CredentialModel copyWith({
@@ -147,6 +154,7 @@ class CredentialModel extends Equatable {
     String? profileLinkedId,
     String? aiCredentialAnalysis,
     String? keyId,
+    String? batchId,
   }) {
     final credentialModel = CredentialModel(
       id: id ?? this.id,
@@ -170,6 +178,7 @@ class CredentialModel extends Equatable {
       profileLinkedId: profileLinkedId ?? this.profileLinkedId,
       aiCredentialAnalysis: aiCredentialAnalysis ?? this.aiCredentialAnalysis,
       keyId: keyId ?? this.keyId,
+      batchId: batchId ?? this.batchId,
     );
     return credentialModel;
   }
@@ -325,5 +334,6 @@ class CredentialModel extends Equatable {
     format,
     credentialSupported,
     keyId,
+    batchId,
   ];
 }

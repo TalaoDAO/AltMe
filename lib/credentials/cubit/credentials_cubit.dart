@@ -7,6 +7,7 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/dashboard/home/tab_bar/credentials/models/activity/activity.dart';
 import 'package:altme/dashboard/profile/models/display_external_issuer.dart';
 import 'package:altme/key_generator/key_generator.dart';
+import 'package:altme/oidc4vc/helper_function/credential_key_alias.dart';
 import 'package:altme/wallet/wallet.dart';
 import 'package:bloc/bloc.dart';
 import 'package:credential_manifest/credential_manifest.dart';
@@ -17,6 +18,7 @@ import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:platform_p256_keys/platform_p256_keys.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:uuid/uuid.dart';
 
@@ -38,6 +40,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required this.oidc4vc,
     required this.walletCubit,
     required this.activityLogManager,
+    this.platformKeys = const PlatformP256Keys(),
   }) : super(const CredentialsState());
 
   final CredentialsRepository credentialsRepository;
@@ -51,6 +54,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
   final OIDC4VCIClient oidc4vc;
   final WalletCubit walletCubit;
   final ActivityLogManager activityLogManager;
+  final PlatformP256Keys platformKeys;
   final _dio = Dio();
 
   final log = getLogger('CredentialsCubit');
@@ -68,13 +72,34 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     required IssuanceNotification notification,
   }) => _issuanceNotifications[credentialId] = notification;
 
+  /// The platform keys of credentials offered but not stored yet, by
+  /// credential id.
+  final _offeredCredentialKeys = <String, String>{};
+
+  /// Registers the platform key [keyId] the offered credential [credentialId]
+  /// is bound to, so that it is deleted if the credential is not stored.
+  void expectCredentialKey({
+    required String credentialId,
+    required String keyId,
+  }) => _offeredCredentialKeys[credentialId] = keyId;
+
   /// Sends `credential_deleted` for every credential registered with
-  /// [expectIssuanceNotification] that was not stored: the ones the user
-  /// declined, once the screen offering them is closed.
+  /// [expectIssuanceNotification] that was not stored, and deletes the key of
+  /// every credential registered with [expectCredentialKey] that was not
+  /// stored: the ones the user declined, once the screen offering them is
+  /// closed.
   void notifyDeclinedCredentials() {
     for (final credentialId in _issuanceNotifications.keys.toList()) {
       _notifyIssuer(credentialId, IssuanceNotificationEvent.credentialDeleted);
     }
+    for (final keyId in _offeredCredentialKeys.values) {
+      unawaited(
+        platformKeys.delete(keyId).catchError((Object e, StackTrace s) {
+          log.e('key $keyId not deleted', error: e, stackTrace: s);
+        }),
+      );
+    }
+    _offeredCredentialKeys.clear();
   }
 
   void _notifyIssuer(String credentialId, IssuanceNotificationEvent event) {
@@ -220,7 +245,11 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     emit(state.copyWith(status: CredentialsStatus.reset, credentials: []));
   }
 
-  Future<void> deleteById({required String id, bool showMessage = true}) async {
+  Future<void> deleteById({
+    required String id,
+    bool showMessage = true,
+    bool logActivity = true,
+  }) async {
     emit(state.loading());
 
     final credential = state.credentials
@@ -228,16 +257,28 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         .first;
 
     await credentialsRepository.deleteById(id);
+    // A platform key binds this credential only: nothing will be presented
+    // with it again.
+    final keyId = credential.keyId;
+    if (keyId != null && isPlatformKeyAlias(keyId)) {
+      try {
+        await platformKeys.delete(keyId);
+      } catch (e, s) {
+        log.e('key $keyId not deleted', error: e, stackTrace: s);
+      }
+    }
     final credentials = List.of(state.credentials)
       ..removeWhere((element) => element.id == id);
     final dummies = _getAvalaibleDummyCredentials(credentials: credentials);
 
-    await activityLogManager.saveLog(
-      LogData(
-        type: LogType.deleteVC,
-        vcInfo: VCInfo(id: credential.id, name: credential.getName),
-      ),
-    );
+    if (logActivity) {
+      await activityLogManager.saveLog(
+        LogData(
+          type: LogType.deleteVC,
+          vcInfo: VCInfo(id: credential.id, name: credential.getName),
+        ),
+      );
+    }
     emit(
       state.copyWith(
         status: CredentialsStatus.delete,
@@ -251,6 +292,34 @@ class CredentialsCubit extends Cubit<CredentialsState> {
             : null,
       ),
     );
+  }
+
+  /// Deletes the credential [id] and, when it is a copy of a batch issuance,
+  /// every other copy of the batch: the user sees them as one credential.
+  Future<void> deleteWithCopies({
+    required String id,
+    bool showMessage = true,
+  }) async {
+    final credential = state.credentials.firstWhere((c) => c.id == id);
+    final copies = state.credentials.copiesOf(credential);
+    for (final copy in copies) {
+      await deleteById(
+        id: copy.id,
+        showMessage: showMessage && copy == copies.last,
+      );
+    }
+  }
+
+  /// Deletes the copies of a batch issuance among [ids], and their keys: a
+  /// copy is presented once, so a verifier cannot link two presentations by
+  /// the key or the signature. A credential issued alone is kept. Nothing is
+  /// logged: the presentation already is.
+  Future<void> deleteConsumedCopies(Iterable<String> ids) async {
+    for (final id in ids.toSet()) {
+      final copy = state.credentials.where((c) => c.id == id).firstOrNull;
+      if (copy == null || copy.batchId == null) continue;
+      await deleteById(id: id, showMessage: false, logActivity: false);
+    }
   }
 
   Future<void> updateCredential({
@@ -336,6 +405,7 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       rethrow;
     }
     _notifyIssuer(credential.id, IssuanceNotificationEvent.credentialAccepted);
+    _offeredCredentialKeys.remove(credential.id);
 
     final CredentialCategory credentialCategory =
         credential.credentialPreview.credentialSubjectModel.credentialCategory;
@@ -426,6 +496,11 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         .findAll();
 
     for (final storedCredential in allCredentials) {
+      // The copies of one batch are stored one after the other.
+      if (credential.batchId != null &&
+          storedCredential.batchId == credential.batchId) {
+        continue;
+      }
       final iteratedCredentialSubjectModel =
           storedCredential.credentialPreview.credentialSubjectModel;
       final iteratedCredentialFormat = storedCredential.format;

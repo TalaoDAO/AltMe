@@ -3300,7 +3300,7 @@ class AppLocalizationsCa extends AppLocalizations {
       'Escull la(es) credencial(s) que vols obtenir';
 
   @override
-  String get credentialShareTitle => 'Compartir informació';
+  String get credentialShareTitle => 'Revisa la sol·licitud';
 
   @override
   String get enterYourSecretCode => 'Introdueix el teu codi secret.';
@@ -3708,4 +3708,66 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get proximityBleCentralClientSubtitle =>
       'El vostre telèfon es connecta al lector.';
+
+  @override
+  String get qesApprovalTitle => 'Sol·licitud de signatura';
+
+  @override
+  String get qesApprovalDocuments => 'Documents per signar';
+
+  @override
+  String get qesApprovalSignatureLevel => 'Nivell de signatura';
+
+  @override
+  String get qesApprovalNumberOfSignatures => 'Nombre de signatures';
+
+  @override
+  String get qesApprovalSigningService => 'Servei de signatura';
+
+  @override
+  String get qesApprovalConsent =>
+      'En signar, autoritzeu el servei de signatura a crear una signatura electrònica qualificada en aquests documents amb el vostre certificat.';
+
+  @override
+  String get qesSignatureQualifierQes =>
+      'Signatura electrònica qualificada (eIDAS)';
+
+  @override
+  String get qesDocumentNoContent =>
+      'El verificador no ha proporcionat el contingut d\'aquest document.';
+
+  @override
+  String get qesDocumentNotText =>
+      'Aquest document no es pot mostrar com a text.';
+
+  @override
+  String get qesDocumentLoadFailed => 'No s\'ha pogut carregar el document.';
+
+  @override
+  String get qesDocumentIntegrityVerified => 'Integritat verificada';
+
+  @override
+  String get qesDocumentIntegrityNotVerified =>
+      'Integritat no verificada: el verificador no ha proporcionat cap suma de comprovació.';
+
+  @override
+  String get qesDocumentIntegrityFailed =>
+      'Aquest document no coincideix amb la seva suma de comprovació. No es pot aprovar la signatura.';
+
+  @override
+  String get qesDocumentOneTimePassword => 'Contrasenya d\'un sol ús';
+
+  @override
+  String batchCopiesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count còpies d\'un sol ús',
+      one: '1 còpia d\'un sol ús',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dcqlSharedDataLabel => 'Dades compartides d\'aquesta atestació';
 }

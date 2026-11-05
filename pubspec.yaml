@@ -1,7 +1,7 @@
 name: altme
 description: AltMe Flutter App
 resolution: workspace
-version: 4.0.1+5718
+version: 4.1.0+5719
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 environment:
@@ -14,14 +14,10 @@ dependencies:
   auto_size_text: ^3.0.0
   badges: ^3.1.1
   bip32: ^2.0.0
-  bip39:
-    git:
-      url: git@github.com:hawkbee1/bip39.git
-      ref: master
+  bip39: ^1.0.6
   bloc: ^8.1.2
   cached_network_image: ^3.2.3
   camera: ^0.10.5+2
-  confetti: ^0.7.0
   connectivity_plus: ^6.1.0
   convert: ^3.1.1
   credential_manifest: ^1.0.0
@@ -53,6 +49,7 @@ dependencies:
   flutter_image_compress: ^2.0.3
   flutter_localizations:
     sdk: flutter
+  flutter_pdfview: ^1.4.5
   flutter_slidable: ^3.1.1
   flutter_svg: ^2.0.6
   google_fonts: ^6.2.1

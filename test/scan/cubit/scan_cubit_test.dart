@@ -367,6 +367,7 @@ void main() {
           vpToken: const {},
           issuer: Issuer.emptyIssuer('verifier.example.com'),
           qrCodeScanCubit: MockQRCodeScanCubit(),
+          presentedCredentials: const [],
         );
 
         expect(scanCubit.state.status, ScanStatus.error);

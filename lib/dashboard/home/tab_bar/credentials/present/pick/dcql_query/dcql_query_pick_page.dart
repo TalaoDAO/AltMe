@@ -11,7 +11,6 @@ import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/mdoc_proximity/helpers/mdoc_credential_model.dart';
 import 'package:altme/oidc4vc/model/verifier_trust_info.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
-import 'package:altme/selective_disclosure/selective_disclosure.dart';
 
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dcql/dcql.dart';
@@ -66,7 +65,11 @@ class DcqlQueryOfferPickPage extends StatelessWidget {
         final profileModel = context.read<ProfileCubit>().state.model;
         final credentialManifestPickCubit = CredentialManifestPickCubit(
           credential: credential,
-          credentialList: context.read<CredentialsCubit>().state.credentials,
+          credentialList: context
+              .read<CredentialsCubit>()
+              .state
+              .credentials
+              .onePerBatch,
           inputDescriptorIndex: inputDescriptorIndex,
           formatsSupported:
               profileModel
@@ -135,6 +138,14 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
   /// presentation cannot be sent twice.
   bool _presenting = false;
 
+  /// How many of the transaction types' screens shown before the consent
+  /// the user has gone through.
+  int _reviewsSeen = 0;
+
+  /// The match the user picked for each credential query, by query id and
+  /// index in its list of matches. The first match when absent.
+  final _selection = <String, int>{};
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -151,7 +162,18 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
         throw Exception('dcql_query is not a Map<String, dynamic>');
       }
       final query = DcqlCredentialQuery.fromJson(rawQuery);
-      final credentials = context.read<CredentialsCubit>().state.credentials;
+      // Already checked against the query when the request was scanned.
+      const transactionHandlers = Parameters.transactionHandlers;
+      final transactionData = transactionHandlers.dataTypes.parse(
+        token.payload['transaction_data'],
+        credentialQueryIds: {for (final c in query.credentials) c.id},
+      );
+      // One copy per batch: the user chooses among credentials, not copies.
+      final credentials = context
+          .read<CredentialsCubit>()
+          .state
+          .credentials
+          .onePerBatch;
       final candidates = <CredentialModel>[];
       final packageFormatCredentials = <DigitalCredential>[];
       for (final e in credentials) {
@@ -173,26 +195,51 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
           // whole screen
         }
       }
-      final result = keepFirstMatchPerCredential(
-        query.query(packageFormatCredentials),
-      );
+      final matches = query.query(packageFormatCredentials);
 
-      if (!result.fulfilled) {
+      if (!matches.fulfilled) {
         return _DcqlQueryFailureView(
-          missingCredentials: result.unsatisfiedQueryCredentialSets.toList(),
+          missingCredentials: matches.unsatisfiedQueryCredentialSets.toList(),
           credentialModels: candidates,
         );
       }
+
+      // The screens some transaction types show before the consent, such as
+      // the documents a QES approval signs, one after the other.
+      final reviews = [
+        for (final item in transactionData)
+          if (transactionHandlers
+                  .of(item)
+                  .buildReview(
+                    context,
+                    item,
+                    onContinue: () => setState(() => _reviewsSeen++),
+                  )
+              case final review?)
+            review,
+      ];
+      if (_reviewsSeen < reviews.length) return reviews[_reviewsSeen];
 
       return BasePage(
         title: l10n.credentialShareTitle,
         titleAlignment: Alignment.topCenter,
         titleTrailing: const WhiteCloseButton(),
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-        body: VerifiableCredentialsColumn(
-          result: result,
-          packageFormatCredentials: packageFormatCredentials,
-          candidates: candidates,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final item in transactionData)
+              transactionHandlers.of(item).buildConsent(context, item),
+            VerifiableCredentialsColumn(
+              result: matches,
+              packageFormatCredentials: packageFormatCredentials,
+              candidates: candidates,
+              selection: _selection,
+              onSelected: (queryId, index) =>
+                  setState(() => _selection[queryId] = index),
+            ),
+          ],
         ),
         navigation: SafeArea(
           child: Container(
@@ -206,9 +253,10 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
                         await present(
                           context: context,
                           uri: widget.uri,
-                          result: result,
+                          result: selectMatchPerCredential(matches, _selection),
                           packageFormatCredentials: packageFormatCredentials,
                           candidates: candidates,
+                          transactionData: transactionData,
                         );
                       } catch (e) {
                         // Nothing was sent (key, VP token): the user may try
@@ -219,7 +267,11 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
                         }
                       }
                     },
-              text: l10n.confirm,
+              text: transactionData.isEmpty
+                  ? l10n.share
+                  : transactionHandlers
+                        .of(transactionData.first)
+                        .confirmLabel(l10n),
             ),
           ),
         ),
@@ -235,6 +287,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
     required DcqlQueryResult result,
     required List<DigitalCredential> packageFormatCredentials,
     required List<CredentialModel> candidates,
+    required List<TransactionDataItem> transactionData,
   }) async {
     final profileCubit = context.read<ProfileCubit>();
     final customOidc4vcProfile = profileCubit
@@ -271,8 +324,16 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       uri,
       jsonDecode(privateKeyString) as Map<String, dynamic>,
       customOidc4vcProfile.proofHeader,
-      credentialKeySigner: profileCubit.credentialKeySigner,
+      credentialKeySigner: profileCubit.signerForCredentialKey,
       mdocSessionTranscript: mdocSessionTranscript,
+      transactionDataTypes: Parameters.transactionHandlers.dataTypes,
+      transactionData: transactionData,
+    );
+
+    final presentedCredentials = presentedCandidates(
+      result,
+      packageFormatCredentials,
+      candidates,
     );
 
     await context.read<ScanCubit>().presentOidc4vpFinal(
@@ -282,6 +343,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       vpToken: vpToken,
       issuer: widget.issuer,
       qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+      presentedCredentials: presentedCredentials,
     );
   }
 }
@@ -393,16 +455,7 @@ class _DcqlQueryFailureView extends StatelessWidget {
           return translatedTitle;
         }
         final value = path.isEmpty ? credential.id : path.last;
-        final formattedValue = value
-            .replaceAll(RegExp('([a-z])([A-Z])'), r'$1 $2')
-            .replaceAll(RegExp('[_-]+'), ' ')
-            .split(' ')
-            .map(
-              (word) => word.isEmpty
-                  ? word
-                  : '${word[0].toUpperCase()}${word.substring(1)}',
-            )
-            .join(' ');
+        final formattedValue = _humanizeClaimName(value);
         return formattedValue;
       });
       return labels;
@@ -440,11 +493,22 @@ String _translatedTitle(
       }
     }
   }
-  final joinedPath = path
-      .map((item) => item == null ? '*' : item.toString())
-      .join(' > ');
-  return joinedPath;
+  // No display in the issuer's metadata: the claim's own name, readable.
+  final names = path.whereType<String>();
+  if (names.isNotEmpty) return _humanizeClaimName(names.last);
+  return path.map((item) => item == null ? '*' : item.toString()).join(' > ');
 }
+
+/// `family_name` and `familyName` as "Family Name".
+String _humanizeClaimName(String name) => name
+    .replaceAll(RegExp('([a-z])([A-Z])'), r'$1 $2')
+    .replaceAll(RegExp('[_-]+'), ' ')
+    .split(' ')
+    .map(
+      (word) =>
+          word.isEmpty ? word : '${word[0].toUpperCase()}${word.substring(1)}',
+    )
+    .join(' ');
 
 class VerifiableCredentialsColumn extends StatelessWidget {
   const VerifiableCredentialsColumn({
@@ -452,11 +516,21 @@ class VerifiableCredentialsColumn extends StatelessWidget {
     required this.result,
     required this.packageFormatCredentials,
     required this.candidates,
+    this.selection = const {},
+    this.onSelected,
   });
 
   final DcqlQueryResult result;
   final List<DigitalCredential> packageFormatCredentials;
   final List<CredentialModel> candidates;
+
+  /// The match picked for each credential query, by query id and index in
+  /// its matches. The first match when absent.
+  final Map<String, int> selection;
+
+  /// Called with the query id and the index of the match the user taps,
+  /// when a query matches several credentials.
+  final void Function(String queryId, int index)? onSelected;
 
   // Label a missing (zero-match) credential-query requirement: the claims
   // it asked for when it specified any, else the credential type it asked
@@ -493,12 +567,6 @@ class VerifiableCredentialsColumn extends StatelessWidget {
       );
     }
 
-    final profileSetting = context
-        .read<ProfileCubit>()
-        .state
-        .model
-        .profileSetting;
-
     final errorColor = Theme.of(context).colorScheme.error;
 
     return Column(
@@ -529,19 +597,26 @@ class VerifiableCredentialsColumn extends StatelessWidget {
             ),
           ),
         for (final entry in entries) ...[
-          for (final credential in entry.value)
+          for (final (index, credential) in entry.value.indexed)
             _CredentialTile(
               credentialModel:
                   candidates[packageFormatCredentials.indexOf(
                     findOriginal(credential, packageFormatCredentials)!,
                   )],
-              profileSetting: profileSetting,
               credential: credential,
-              requestedPaths: result.query.credentials
-                  .firstWhere((c) => c.id == entry.key)
-                  .claims!
-                  .map((c) => c.path)
-                  .toList(),
+              requestedPaths:
+                  result.query.credentials
+                      .firstWhere((c) => c.id == entry.key)
+                      .claims
+                      ?.map((c) => c.path)
+                      .toList() ??
+                  const [],
+              // The user picks among the matches of a query when it has
+              // several.
+              selected: entry.value.length < 2
+                  ? null
+                  : (selection[entry.key] ?? 0) == index,
+              onSelected: () => onSelected?.call(entry.key, index),
             ),
         ],
       ],
@@ -549,24 +624,26 @@ class VerifiableCredentialsColumn extends StatelessWidget {
   }
 }
 
+/// A credential the verifier asks for: its card, then a folded list of the
+/// data the request asks for. Each row shows the label of one claim and
+/// unfolds its value on a tap.
 class _CredentialTile extends StatelessWidget {
   const _CredentialTile({
     required this.credentialModel,
-    required this.profileSetting,
     required this.credential,
     required this.requestedPaths,
+    this.selected,
+    this.onSelected,
   });
 
   final CredentialModel credentialModel;
-  final ProfileSetting profileSetting;
   final DigitalCredential credential;
   final List<List<dynamic>> requestedPaths;
 
-  // Registered/technical JWT and SD-JWT claims — never shown to the user.
-  static const _technicalClaims = {
-    'iss', 'sub', 'aud', 'exp', 'nbf', 'iat', 'jti',
-    'cnf', 'vct', 'vct#integrity', 'status', '_sd', '_sd_alg', //
-  };
+  /// Whether the user picked this match, when its query has several. `null`
+  /// when there is nothing to pick.
+  final bool? selected;
+  final VoidCallback? onSelected;
 
   static String _valueLabel(dynamic value) =>
       value is Map || value is List ? jsonEncode(value) : value.toString();
@@ -574,48 +651,20 @@ class _CredentialTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageCode = context.read<LangCubit>().state.locale.languageCode;
-    final selectiveDisclosure = SelectiveDisclosure(credentialModel);
-
-    // Top-level keys already covered by the DCQL-disclosed claims below,
-    // so they aren't duplicated among the "not in a disclosure" claims.
-    final disclosedKeys = requestedPaths
-        .map((path) => path.isNotEmpty ? path.first?.toString() : null)
-        .whereType<String>()
-        .toSet();
-
-    final plainClaims = <MapEntry<String, dynamic>>[];
-    selectiveDisclosure.payload.forEach((key, value) {
-      if (_technicalClaims.contains(key) || disclosedKeys.contains(key)) {
-        return;
-      }
-      // A Map holding `_sd` is a selective-disclosure group container, not
-      // a plain always-visible value.
-      if (value is Map && value.containsKey('_sd')) {
-        return;
-      }
-      plainClaims.add(MapEntry(key, value));
-    });
-
-    final onSurface = Theme.of(context).colorScheme.onSurface;
+    final textTheme = Theme.of(context).textTheme;
 
     return CredentialShareCard(
       credentialModel: credentialModel,
+      onTap: selected == null ? null : onSelected,
+      belowImage: selected == null
+          ? null
+          : CredentialSelectionMark(selected: selected!),
       children: [
+        Text(context.l10n.dcqlSharedDataLabel, style: textTheme.bodySmall),
         for (final path in requestedPaths)
-          CredentialField(
+          FoldedClaim(
             title: _translatedTitle(credentialModel, path, languageCode),
             value: _valueLabel(credential.getValueByPath(path) ?? '—'),
-            titleColor: onSurface,
-            valueColor: onSurface,
-            showVertically: true,
-          ),
-        for (final entry in plainClaims)
-          CredentialField(
-            title: _translatedTitle(credentialModel, [entry.key], languageCode),
-            value: _valueLabel(entry.value),
-            titleColor: onSurface,
-            valueColor: onSurface,
-            showVertically: true,
           ),
       ],
     );
