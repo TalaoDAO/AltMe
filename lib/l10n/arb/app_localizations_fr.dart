@@ -3100,7 +3100,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get pincodeRules =>
-      'Votre code secret ne peut avoir 4 caractères identitiques ou 4 chiffres successifs.';
+      'Votre code secret ne peut avoir 6 caractères identitiques ou 6 chiffres successifs.';
 
   @override
   String get pincodeSerie =>

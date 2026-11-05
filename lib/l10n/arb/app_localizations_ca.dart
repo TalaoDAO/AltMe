@@ -3070,13 +3070,13 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get pincodeRules =>
-      'El teu codi secret no pot ser una seqüència ni tenir 4 dígits idèntics.';
+      'El teu codi secret no pot ser una seqüència ni tenir 6 dígits idèntics.';
 
   @override
-  String get pincodeSerie => 'No pots tenir 4 dígits idèntics.';
+  String get pincodeSerie => 'No pots tenir 6 dígits idèntics.';
 
   @override
-  String get pincodeSequence => 'No pots tenir una seqüència de 4 dígits.';
+  String get pincodeSequence => 'No pots tenir una seqüència de 6 dígits.';
 
   @override
   String get pincodeDifferent => 'Codi incorrecte.\nEls codis no són iguals.';

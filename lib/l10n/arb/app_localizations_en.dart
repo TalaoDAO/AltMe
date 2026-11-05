@@ -3059,13 +3059,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pincodeRules =>
-      'Your secret code can\'t be a sequence or have 4 identical digit.';
+      'Your secret code can\'t be a sequence or have 6 identical digits.';
 
   @override
-  String get pincodeSerie => 'You can\'t have 4 identical digits.';
+  String get pincodeSerie => 'You can\'t have 6 identical digits.';
 
   @override
-  String get pincodeSequence => 'You can\'t have a sequence of 4 digits.';
+  String get pincodeSequence => 'You can\'t have a sequence of 6 digits.';
 
   @override
   String get pincodeDifferent =>

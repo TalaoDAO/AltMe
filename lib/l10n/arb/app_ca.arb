@@ -1010,9 +1010,9 @@
   "deleteMyWalletForWrontPincodeDescription": "Per la teva seguretat, has de reiniciar la teva cartera digital per utilitzar els nostres serveis de nou.",
   "walletBloced": "Compte bloquejat",
   "deleteMyWallet": "Eliminar el meu compte",
-  "pincodeRules": "El teu codi secret no pot ser una seqüència ni tenir 4 dígits idèntics.",
-  "pincodeSerie": "No pots tenir 4 dígits idèntics.",
-  "pincodeSequence": "No pots tenir una seqüència de 4 dígits.",
+  "pincodeRules": "El teu codi secret no pot ser una seqüència ni tenir 6 dígits idèntics.",
+  "pincodeSerie": "No pots tenir 6 dígits idèntics.",
+  "pincodeSequence": "No pots tenir una seqüència de 6 dígits.",
   "pincodeDifferent": "Codi incorrecte.\nEls codis no són iguals.",
   "codeSecretIncorrectDescription": "Ves amb compte, et queden {count} intent{plural}.",
   "@codeSecretIncorrectDescription": {

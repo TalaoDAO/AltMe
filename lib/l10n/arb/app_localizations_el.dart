@@ -3098,13 +3098,13 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get pincodeRules =>
-      'Ο μυστικός σας κωδικός δεν μπορεί να είναι μια ακολουθία ή να έχει 4 ίδια ψηφία.';
+      'Ο μυστικός σας κωδικός δεν μπορεί να είναι μια ακολουθία ή να έχει 6 ίδια ψηφία.';
 
   @override
-  String get pincodeSerie => 'Δεν μπορείτε να έχετε 4 πανομοιότυπα ψηφία.';
+  String get pincodeSerie => 'Δεν μπορείτε να έχετε 6 πανομοιότυπα ψηφία.';
 
   @override
-  String get pincodeSequence => 'Δεν μπορείτε να έχετε μια ακολουθία 4 ψηφίων.';
+  String get pincodeSequence => 'Δεν μπορείτε να έχετε μια ακολουθία 6 ψηφίων.';
 
   @override
   String get pincodeDifferent =>

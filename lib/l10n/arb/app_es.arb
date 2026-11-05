@@ -1012,9 +1012,9 @@
   "deleteMyWalletForWrontPincodeDescription": "Por tu seguridad debes reiniciar tu cartera digital para usar nuestros servicios nuevamente.",
   "walletBloced": "Cuenta bloqueada",
   "deleteMyWallet": "Eliminar mi cuenta",
-  "pincodeRules": "Tu código secreto no puede ser una secuencia ni tener 4 dígitos idénticos.",
-  "pincodeSerie": "No puedes tener 4 dígitos idénticos.",
-  "pincodeSequence": "No puedes tener una secuencia de 4 dígitos.",
+  "pincodeRules": "Tu código secreto no puede ser una secuencia ni tener 6 dígitos idénticos.",
+  "pincodeSerie": "No puedes tener 6 dígitos idénticos.",
+  "pincodeSequence": "No puedes tener una secuencia de 6 dígitos.",
   "pincodeDifferent": "Código incorrecto.\nLos códigos no son iguales.",
   "codeSecretIncorrectDescription": "Ten cuidado, te quedan {count} intento{plural}.",
   "@codeSecretIncorrectDescription": {

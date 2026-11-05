@@ -3083,13 +3083,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get pincodeRules =>
-      'Tu código secreto no puede ser una secuencia ni tener 4 dígitos idénticos.';
+      'Tu código secreto no puede ser una secuencia ni tener 6 dígitos idénticos.';
 
   @override
-  String get pincodeSerie => 'No puedes tener 4 dígitos idénticos.';
+  String get pincodeSerie => 'No puedes tener 6 dígitos idénticos.';
 
   @override
-  String get pincodeSequence => 'No puedes tener una secuencia de 4 dígitos.';
+  String get pincodeSequence => 'No puedes tener una secuencia de 6 dígitos.';
 
   @override
   String get pincodeDifferent =>

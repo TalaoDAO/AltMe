@@ -5598,19 +5598,19 @@ abstract class AppLocalizations {
   /// No description provided for @pincodeRules.
   ///
   /// In en, this message translates to:
-  /// **'Your secret code can\'t be a sequence or have 4 identical digit.'**
+  /// **'Your secret code can\'t be a sequence or have 6 identical digits.'**
   String get pincodeRules;
 
   /// No description provided for @pincodeSerie.
   ///
   /// In en, this message translates to:
-  /// **'You can\'t have 4 identical digits.'**
+  /// **'You can\'t have 6 identical digits.'**
   String get pincodeSerie;
 
   /// No description provided for @pincodeSequence.
   ///
   /// In en, this message translates to:
-  /// **'You can\'t have a sequence of 4 digits.'**
+  /// **'You can\'t have a sequence of 6 digits.'**
   String get pincodeSequence;
 
   /// No description provided for @pincodeDifferent.

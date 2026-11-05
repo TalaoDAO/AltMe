@@ -1008,9 +1008,9 @@
   "deleteMyWalletForWrontPincodeDescription": "For your security you must reset you wallet to use it again.",
   "walletBloced": "Account blocked",
   "deleteMyWallet": "Delete my account",
-  "pincodeRules": "Your secret code can't be a sequence or have 4 identical digit.",
-  "pincodeSerie": "You can't have 4 identical digits.",
-  "pincodeSequence": "You can't have a sequence of 4 digits.",
+  "pincodeRules": "Your secret code can't be a sequence or have 6 identical digits.",
+  "pincodeSerie": "You can't have 6 identical digits.",
+  "pincodeSequence": "You can't have a sequence of 6 digits.",
   "pincodeDifferent": "Incorrect code.\nBoth codes are not the same.",
   "codeSecretIncorrectDescription": "Be carreful, {count} attempt{plural} left.",
   "@codeSecretIncorrectDescription": {
