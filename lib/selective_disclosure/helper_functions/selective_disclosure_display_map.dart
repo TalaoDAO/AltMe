@@ -16,7 +16,6 @@ class SelectiveDisclosureDisplayMap {
     required this.languageCode,
     required this.limitDisclosure,
     required this.filters,
-    required this.isDeveloperMode,
     required this.displayMode,
     this.claims,
     this.parentKeyId,
@@ -29,7 +28,6 @@ class SelectiveDisclosureDisplayMap {
   final bool isPresentation;
   final String languageCode;
   final String limitDisclosure;
-  final bool isDeveloperMode;
   final Map<String, dynamic>? claims;
   final String? parentKeyId;
   final Map<String, dynamic> filters;
@@ -79,7 +77,6 @@ class SelectiveDisclosureDisplayMap {
           limitDisclosure: limitDisclosure,
           filters: filters,
           parentKeyId: mapKey,
-          isDeveloperMode: isDeveloperMode,
           selectedClaimsKeyIds: selectedClaimsKeyIds,
           onPressed: onPressed,
           displayMode: displayMode,
@@ -116,7 +113,6 @@ class SelectiveDisclosureDisplayMap {
     String? parentKeyId,
   ) {
     final builtMap = <String, dynamic>{};
-    if (!isPresentation && !isDeveloperMode) return builtMap;
     for (final disclosure in selectiveDisclosure.disclosureFromJWT) {
       /// check if disclosure is in a nested value
       /// if so, return empty container
@@ -207,7 +203,6 @@ class SelectiveDisclosureDisplayMap {
         limitDisclosure: limitDisclosure,
         filters: filters,
         parentKeyId: element.key.toString(),
-        isDeveloperMode: isDeveloperMode,
         selectedClaimsKeyIds: selectedClaimsKeyIds,
         onPressed: onPressed,
         displayMode: displayMode,
@@ -240,7 +235,6 @@ class SelectiveDisclosureDisplayMap {
             languageCode: languageCode,
             limitDisclosure: limitDisclosure,
             filters: filters,
-            isDeveloperMode: isDeveloperMode,
             claims: claims,
             parentKeyId: element.key.toString(),
             selectedClaimsKeyIds: selectedClaimsKeyIds,

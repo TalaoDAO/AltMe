@@ -3315,7 +3315,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Elige la(s) credencial(es) que quieres obtener';
 
   @override
-  String get credentialShareTitle => 'Compartir información';
+  String get credentialShareTitle => 'Revisar la solicitud';
 
   @override
   String get enterYourSecretCode => 'Introduce tu código secreto.';
@@ -3778,4 +3778,7 @@ class AppLocalizationsEs extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get dcqlSharedDataLabel => 'Datos compartidos de esta atestación';
 }

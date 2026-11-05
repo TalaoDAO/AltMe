@@ -1103,7 +1103,7 @@
   "restoreAnAppBackup": "Restaurer une sauvegarde de {appName}",
   "credentialPickShare": "Partager",
   "credentialPickTitle": "Choisissez une ou plusieurs attestation(s)",
-  "credentialShareTitle": "Partager les données",
+  "credentialShareTitle": "Examiner la demande",
   "enterYourSecretCode": "Entrez votre code secret.",
   "jwk": "JWK",
   "typeYourPINCodeToOpenTheWallet": "Entrez votre code PIN pour ouvrir le wallet",
@@ -1292,5 +1292,6 @@
   "qesDocumentIntegrityNotVerified": "Intégrité non vérifiée : le vérificateur n'a fourni aucune empreinte.",
   "qesDocumentIntegrityFailed": "Ce document ne correspond pas à son empreinte. La signature ne peut pas être approuvée.",
   "qesDocumentOneTimePassword": "Mot de passe à usage unique",
-  "batchCopiesCount": "{count, plural, =1{1 exemplaire à usage unique} other{{count} exemplaires à usage unique}}"
+  "batchCopiesCount": "{count, plural, =1{1 exemplaire à usage unique} other{{count} exemplaires à usage unique}}",
+  "dcqlSharedDataLabel": "Données partagées depuis cette attestation"
 }

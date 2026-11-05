@@ -2091,7 +2091,7 @@
   "spanish": "Español",
   "catalan": "Català",
   "english": "English",
-  "credentialShareTitle": "Κοινοποίηση πληροφοριών",
+  "credentialShareTitle": "Εξέταση του αιτήματος",
   "greek": "Ελληνικά",
   "issuerConnectTitle": "Σύνδεση με τον εκδότη πιστοποιητικού;",
   "issuerConnectSubtitle": "Ο {issuerName} θέλει να εκδώσει ένα πιστοποιητικό στο πορτοφόλι σας.",
@@ -2202,5 +2202,6 @@
   "qesDocumentIntegrityNotVerified": "Η ακεραιότητα δεν επαληθεύτηκε: ο επαληθευτής δεν έδωσε άθροισμα ελέγχου.",
   "qesDocumentIntegrityFailed": "Αυτό το έγγραφο δεν ταιριάζει με το άθροισμα ελέγχου του. Η υπογραφή δεν μπορεί να εγκριθεί.",
   "qesDocumentOneTimePassword": "Κωδικός μίας χρήσης",
-  "batchCopiesCount": "{count, plural, =1{1 αντίγραφο μίας χρήσης} other{{count} αντίγραφα μίας χρήσης}}"
+  "batchCopiesCount": "{count, plural, =1{1 αντίγραφο μίας χρήσης} other{{count} αντίγραφα μίας χρήσης}}",
+  "dcqlSharedDataLabel": "Δεδομένα που κοινοποιούνται από αυτή την βεβαίωση"
 }

@@ -269,7 +269,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
                       }
                     },
               text: transactionData.isEmpty
-                  ? l10n.confirm
+                  ? l10n.share
                   : transactionHandlers
                         .of(transactionData.first)
                         .confirmLabel(l10n),
@@ -449,16 +449,7 @@ class _DcqlQueryFailureView extends StatelessWidget {
           return translatedTitle;
         }
         final value = path.isEmpty ? credential.id : path.last;
-        final formattedValue = value
-            .replaceAll(RegExp('([a-z])([A-Z])'), r'$1 $2')
-            .replaceAll(RegExp('[_-]+'), ' ')
-            .split(' ')
-            .map(
-              (word) => word.isEmpty
-                  ? word
-                  : '${word[0].toUpperCase()}${word.substring(1)}',
-            )
-            .join(' ');
+        final formattedValue = _humanizeClaimName(value);
         return formattedValue;
       });
       return labels;
@@ -496,11 +487,22 @@ String _translatedTitle(
       }
     }
   }
-  final joinedPath = path
-      .map((item) => item == null ? '*' : item.toString())
-      .join(' > ');
-  return joinedPath;
+  // No display in the issuer's metadata: the claim's own name, readable.
+  final names = path.whereType<String>();
+  if (names.isNotEmpty) return _humanizeClaimName(names.last);
+  return path.map((item) => item == null ? '*' : item.toString()).join(' > ');
 }
+
+/// `family_name` and `familyName` as "Family Name".
+String _humanizeClaimName(String name) => name
+    .replaceAll(RegExp('([a-z])([A-Z])'), r'$1 $2')
+    .replaceAll(RegExp('[_-]+'), ' ')
+    .split(' ')
+    .map(
+      (word) =>
+          word.isEmpty ? word : '${word[0].toUpperCase()}${word.substring(1)}',
+    )
+    .join(' ');
 
 class VerifiableCredentialsColumn extends StatelessWidget {
   const VerifiableCredentialsColumn({
@@ -559,12 +561,6 @@ class VerifiableCredentialsColumn extends StatelessWidget {
       );
     }
 
-    final profileSetting = context
-        .read<ProfileCubit>()
-        .state
-        .model
-        .profileSetting;
-
     final errorColor = Theme.of(context).colorScheme.error;
 
     return Column(
@@ -596,79 +592,52 @@ class VerifiableCredentialsColumn extends StatelessWidget {
           ),
         for (final entry in entries) ...[
           for (final (index, credential) in entry.value.indexed)
-            _selectable(
-              context,
-              queryId: entry.key,
-              index: index,
-              matchCount: entry.value.length,
-              tile: _CredentialTile(
-                credentialModel:
-                    candidates[packageFormatCredentials.indexOf(
-                      findOriginal(credential, packageFormatCredentials)!,
-                    )],
-                profileSetting: profileSetting,
-                credential: credential,
-                requestedPaths: result.query.credentials
-                    .firstWhere((c) => c.id == entry.key)
-                    .claims!
-                    .map((c) => c.path)
-                    .toList(),
-              ),
+            _CredentialTile(
+              credentialModel:
+                  candidates[packageFormatCredentials.indexOf(
+                    findOriginal(credential, packageFormatCredentials)!,
+                  )],
+              credential: credential,
+              requestedPaths:
+                  result.query.credentials
+                      .firstWhere((c) => c.id == entry.key)
+                      .claims
+                      ?.map((c) => c.path)
+                      .toList() ??
+                  const [],
+              // The user picks among the matches of a query when it has
+              // several.
+              selected: entry.value.length < 2
+                  ? null
+                  : (selection[entry.key] ?? 0) == index,
+              onSelected: () => onSelected?.call(entry.key, index),
             ),
         ],
       ],
     );
   }
-
-  /// [tile], with a radio mark the user taps to present it, when its query
-  /// matches several credentials.
-  Widget _selectable(
-    BuildContext context, {
-    required String queryId,
-    required int index,
-    required int matchCount,
-    required Widget tile,
-  }) {
-    if (matchCount < 2) return tile;
-    final selected = (selection[queryId] ?? 0) == index;
-    return Semantics(
-      selected: selected,
-      inMutuallyExclusiveGroup: true,
-      child: InkWell(
-        onTap: () => onSelected?.call(queryId, index),
-        child: Row(
-          children: [
-            Icon(
-              selected ? Icons.radio_button_checked : Icons.radio_button_off,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(width: 8),
-            Expanded(child: tile),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
+/// A credential the verifier asks for: its card, then a folded list of the
+/// data the request asks for. Each row shows the label of one claim and
+/// unfolds its value on a tap.
 class _CredentialTile extends StatelessWidget {
   const _CredentialTile({
     required this.credentialModel,
-    required this.profileSetting,
     required this.credential,
     required this.requestedPaths,
+    this.selected,
+    this.onSelected,
   });
 
   final CredentialModel credentialModel;
-  final ProfileSetting profileSetting;
   final DigitalCredential credential;
   final List<List<dynamic>> requestedPaths;
 
-  // Registered/technical JWT and SD-JWT claims — never shown to the user.
-  static const _technicalClaims = {
-    'iss', 'sub', 'aud', 'exp', 'nbf', 'iat', 'jti',
-    'cnf', 'vct', 'vct#integrity', 'status', '_sd', '_sd_alg', //
-  };
+  /// Whether the user picked this match, when its query has several. `null`
+  /// when there is nothing to pick.
+  final bool? selected;
+  final VoidCallback? onSelected;
 
   static String _valueLabel(dynamic value) =>
       value is Map || value is List ? jsonEncode(value) : value.toString();
@@ -676,50 +645,62 @@ class _CredentialTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageCode = context.read<LangCubit>().state.locale.languageCode;
-    final selectiveDisclosure = SelectiveDisclosure(credentialModel);
-
-    // Top-level keys already covered by the DCQL-disclosed claims below,
-    // so they aren't duplicated among the "not in a disclosure" claims.
-    final disclosedKeys = requestedPaths
-        .map((path) => path.isNotEmpty ? path.first?.toString() : null)
-        .whereType<String>()
-        .toSet();
-
-    final plainClaims = <MapEntry<String, dynamic>>[];
-    selectiveDisclosure.payload.forEach((key, value) {
-      if (_technicalClaims.contains(key) || disclosedKeys.contains(key)) {
-        return;
-      }
-      // A Map holding `_sd` is a selective-disclosure group container, not
-      // a plain always-visible value.
-      if (value is Map && value.containsKey('_sd')) {
-        return;
-      }
-      plainClaims.add(MapEntry(key, value));
-    });
-
-    final onSurface = Theme.of(context).colorScheme.onSurface;
+    final textTheme = Theme.of(context).textTheme;
 
     return CredentialShareCard(
       credentialModel: credentialModel,
+      onTap: selected == null ? null : onSelected,
+      belowImage: selected == null
+          ? null
+          : Semantics(
+              selected: selected,
+              inMutuallyExclusiveGroup: true,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Icon(
+                    selected!
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_off,
+                    size: 25,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+            ),
       children: [
+        Text(context.l10n.dcqlSharedDataLabel, style: textTheme.bodySmall),
         for (final path in requestedPaths)
-          CredentialField(
+          _FoldedClaim(
             title: _translatedTitle(credentialModel, path, languageCode),
             value: _valueLabel(credential.getValueByPath(path) ?? '—'),
-            titleColor: onSurface,
-            valueColor: onSurface,
-            showVertically: true,
-          ),
-        for (final entry in plainClaims)
-          CredentialField(
-            title: _translatedTitle(credentialModel, [entry.key], languageCode),
-            value: _valueLabel(entry.value),
-            titleColor: onSurface,
-            valueColor: onSurface,
-            showVertically: true,
           ),
       ],
+    );
+  }
+}
+
+/// The label of one shared claim, with its value one tap away.
+class _FoldedClaim extends StatelessWidget {
+  const _FoldedClaim({required this.title, required this.value});
+
+  final String title;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return ExpansionTile(
+      shape: const Border(),
+      collapsedShape: const Border(),
+      tilePadding: EdgeInsets.zero,
+      childrenPadding: const EdgeInsets.only(bottom: 8),
+      dense: true,
+      title: Text(title, style: textTheme.titleSmall),
+      expandedCrossAxisAlignment: CrossAxisAlignment.start,
+      expandedAlignment: Alignment.centerLeft,
+      children: [SelectableText(value, style: textTheme.bodyMedium)],
     );
   }
 }

@@ -3330,7 +3330,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Choisissez une ou plusieurs attestation(s)';
 
   @override
-  String get credentialShareTitle => 'Partager les données';
+  String get credentialShareTitle => 'Examiner la demande';
 
   @override
   String get enterYourSecretCode => 'Entrez votre code secret.';
@@ -3800,4 +3800,8 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get dcqlSharedDataLabel =>
+      'Données partagées depuis cette attestation';
 }

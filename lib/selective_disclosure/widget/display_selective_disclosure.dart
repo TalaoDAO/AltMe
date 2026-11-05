@@ -47,7 +47,6 @@ class DisplaySelectiveDisclosure extends StatelessWidget {
       languageCode: languageCode,
       limitDisclosure: limitDisclosure,
       filters: filters,
-      isDeveloperMode: context.read<ProfileCubit>().state.model.isDeveloperMode,
       selectedClaimsKeyIds:
           selectiveDisclosureState?.selectedClaimsKeyIds ?? [],
       onPressed: onPressed,

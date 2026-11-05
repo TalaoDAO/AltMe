@@ -3300,7 +3300,7 @@ class AppLocalizationsCa extends AppLocalizations {
       'Escull la(es) credencial(s) que vols obtenir';
 
   @override
-  String get credentialShareTitle => 'Compartir informació';
+  String get credentialShareTitle => 'Revisa la sol·licitud';
 
   @override
   String get enterYourSecretCode => 'Introdueix el teu codi secret.';
@@ -3767,4 +3767,7 @@ class AppLocalizationsCa extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get dcqlSharedDataLabel => 'Dades compartides d\'aquesta atestació';
 }

@@ -3286,7 +3286,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get credentialPickTitle => 'Choose the credential(s) to get';
 
   @override
-  String get credentialShareTitle => 'Share information';
+  String get credentialShareTitle => 'Review the request';
 
   @override
   String get enterYourSecretCode => 'Enter your secret code.';
@@ -3748,4 +3748,7 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get dcqlSharedDataLabel => 'Data shared from this attestation';
 }

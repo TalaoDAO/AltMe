@@ -5988,7 +5988,7 @@ abstract class AppLocalizations {
   /// No description provided for @credentialShareTitle.
   ///
   /// In en, this message translates to:
-  /// **'Share information'**
+  /// **'Review the request'**
   String get credentialShareTitle;
 
   /// No description provided for @enterYourSecretCode.
@@ -6782,6 +6782,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 single-use copy} other{{count} single-use copies}}'**
   String batchCopiesCount(int count);
+
+  /// Small heading above the list of labels of the data the verifier asks for, under the card of the attestation.
+  ///
+  /// In en, this message translates to:
+  /// **'Data shared from this attestation'**
+  String get dcqlSharedDataLabel;
 }
 
 class _AppLocalizationsDelegate

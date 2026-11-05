@@ -1181,7 +1181,7 @@
   "keyBindingHeader": "Encapçalament de vinculació de clau",
   "keyBindingPayload": "Càrrega útil de vinculació de clau",
   "ebsiV4DecentralizedId": "ID descentralitzada de la v4 d'EBSI",
-  "credentialShareTitle": "Compartir informació",
+  "credentialShareTitle": "Revisa la sol·licitud",
   "reject": "Rebutjar",
   "operation": "Operació",
   "chooseYourSSIProfileOrCustomizeYourOwn": "Tria el perfil de la teva cartera o personalitza el teu propi",
@@ -1306,5 +1306,6 @@
   "qesDocumentIntegrityNotVerified": "Integritat no verificada: el verificador no ha proporcionat cap suma de comprovació.",
   "qesDocumentIntegrityFailed": "Aquest document no coincideix amb la seva suma de comprovació. No es pot aprovar la signatura.",
   "qesDocumentOneTimePassword": "Contrasenya d'un sol ús",
-  "batchCopiesCount": "{count, plural, =1{1 còpia d'un sol ús} other{{count} còpies d'un sol ús}}"
+  "batchCopiesCount": "{count, plural, =1{1 còpia d'un sol ús} other{{count} còpies d'un sol ús}}",
+  "dcqlSharedDataLabel": "Dades compartides d'aquesta atestació"
 }

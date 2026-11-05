@@ -33,9 +33,17 @@ class CredentialShareCard extends StatelessWidget {
     super.key,
     required this.credentialModel,
     required this.children,
+    this.belowImage,
+    this.onTap,
   });
 
   final CredentialModel credentialModel;
+
+  /// Shown right under the card's picture, e.g. a selection mark.
+  final Widget? belowImage;
+
+  /// Called when the picture or [belowImage] is tapped.
+  final VoidCallback? onTap;
 
   /// The fields shown under the card.
   final List<Widget> children;
@@ -50,7 +58,16 @@ class CredentialShareCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            CredentialCardImage(credentialModel: credentialModel),
+            _wrapInTap(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CredentialCardImage(credentialModel: credentialModel),
+                  if (belowImage != null) belowImage!,
+                ],
+              ),
+            ),
             const SizedBox(height: 20),
             ...children,
           ],
@@ -58,4 +75,7 @@ class CredentialShareCard extends StatelessWidget {
       ),
     );
   }
+
+  Widget _wrapInTap(Widget child) =>
+      onTap == null ? child : TransparentInkWell(onTap: onTap, child: child);
 }

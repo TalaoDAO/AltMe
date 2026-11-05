@@ -1146,7 +1146,7 @@
   },
   "credentialPickShare": "Share",
   "credentialPickTitle": "Choose the credential(s) to get",
-  "credentialShareTitle": "Share information",
+  "credentialShareTitle": "Review the request",
   "enterYourSecretCode": "Enter your secret code.",
   "jwk": "JWK",
   "typeYourPINCodeToOpenTheWallet": "Type your PIN code to open the wallet",
@@ -1341,5 +1341,9 @@
         "type": "int"
       }
     }
+  },
+  "dcqlSharedDataLabel": "Data shared from this attestation",
+  "@dcqlSharedDataLabel": {
+    "description": "Small heading above the list of labels of the data the verifier asks for, under the card of the attestation."
   }
 }

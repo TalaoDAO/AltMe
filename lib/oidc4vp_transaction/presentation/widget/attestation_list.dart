@@ -148,11 +148,6 @@ class AttestationList extends StatelessWidget {
         languageCode: 'en',
         limitDisclosure: selectiveDisclosureCubit.state.limitDisclosure ?? '',
         filters: selectiveDisclosureCubit.state.filters ?? {},
-        isDeveloperMode: context
-            .read<ProfileCubit>()
-            .state
-            .model
-            .isDeveloperMode,
         selectedClaimsKeyIds: [],
         onPressed: (claimKey, claimKeyId, threeDotValue, sd) {
           selectiveDisclosureCubit.disclosureAction(

@@ -1183,7 +1183,7 @@
   "keyBindingHeader": "Encabezado de vinculación de clave",
   "keyBindingPayload": "Carga útil de vinculación de clave",
   "ebsiV4DecentralizedId": "Identidad descentralizada de EBSI V4",
-  "credentialShareTitle": "Compartir información",
+  "credentialShareTitle": "Revisar la solicitud",
   "reject": "Rechazar",
   "operation": "Operación",
   "chooseYourSSIProfileOrCustomizeYourOwn": "Elige el perfil de tu cartera o personaliza el tuyo",
@@ -1308,5 +1308,6 @@
   "qesDocumentIntegrityNotVerified": "Integridad no verificada: el verificador no ha proporcionado ninguna suma de comprobación.",
   "qesDocumentIntegrityFailed": "Este documento no coincide con su suma de comprobación. No se puede aprobar la firma.",
   "qesDocumentOneTimePassword": "Contraseña de un solo uso",
-  "batchCopiesCount": "{count, plural, =1{1 copia de un solo uso} other{{count} copias de un solo uso}}"
+  "batchCopiesCount": "{count, plural, =1{1 copia de un solo uso} other{{count} copias de un solo uso}}",
+  "dcqlSharedDataLabel": "Datos compartidos de esta atestación"
 }

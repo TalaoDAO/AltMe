@@ -3327,7 +3327,7 @@ class AppLocalizationsEl extends AppLocalizations {
       'Επιλέξτε τα πιστοποιητικά που θέλετε να αποκτήσετε';
 
   @override
-  String get credentialShareTitle => 'Κοινοποίηση πληροφοριών';
+  String get credentialShareTitle => 'Εξέταση του αιτήματος';
 
   @override
   String get enterYourSecretCode => 'Εισάγετε τον μυστικό σας κωδικό.';
@@ -3791,4 +3791,8 @@ class AppLocalizationsEl extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get dcqlSharedDataLabel =>
+      'Δεδομένα που κοινοποιούνται από αυτή την βεβαίωση';
 }

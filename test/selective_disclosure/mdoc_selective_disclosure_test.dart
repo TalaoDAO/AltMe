@@ -74,7 +74,6 @@ void main() {
         languageCode: 'en',
         limitDisclosure: '',
         filters: const {},
-        isDeveloperMode: false,
         displayMode: false,
         selectedClaimsKeyIds: const [],
       ).buildMap;

@@ -65,7 +65,6 @@ Map<String, dynamic> _displayMap(
   languageCode: 'en',
   limitDisclosure: '',
   filters: const {},
-  isDeveloperMode: false,
   displayMode: false,
   selectedClaimsKeyIds: const [],
   hiddenClaim: hiddenClaim,

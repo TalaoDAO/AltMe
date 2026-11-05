@@ -133,9 +133,9 @@ class CredentialsDisplayItem extends StatelessWidget {
               children: [
                 display,
                 Positioned(
-                  right: 12,
-                  bottom: 12,
-                  child: BatchCountBadge(count: copyCount),
+                  right: 6,
+                  bottom: 6,
+                  child: BatchCountBadge(count: copyCount, small: true),
                 ),
               ],
             )
