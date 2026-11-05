@@ -64,12 +64,14 @@ class MdocProximityCubit extends Cubit<MdocProximityState> {
   /// request arrives, so the session follows the wallet without restarting;
   /// [trustedList] gives `null` when the profile does not use one.
   /// [bleModes] is read at each [start], so a settings change applies to the
-  /// next session.
+  /// next session. [onPresented] gets the ids of the credentials the reader
+  /// received, once the session ends in success.
   MdocProximityCubit({
     required MdocProximity proximity,
     required List<CredentialModel> Function() credentials,
     TrustedList? Function() trustedList = _noTrustedList,
     Set<ProximityBleMode> Function() bleModes = _allBleModes,
+    Future<void> Function(List<String> credentialIds)? onPresented,
     PlatformP256Keys platformKeys = const PlatformP256Keys(),
     BluetoothPermissionRequest requestBluetoothPermissions =
         requestProximityBluetoothPermissions,
@@ -77,6 +79,7 @@ class MdocProximityCubit extends Cubit<MdocProximityState> {
        _credentials = credentials,
        _trustedList = trustedList,
        _bleModes = bleModes,
+       _onPresented = onPresented,
        _platformKeys = platformKeys,
        _requestBluetoothPermissions = requestBluetoothPermissions,
        super(const MdocProximityState(ProximityPreparing())) {
@@ -87,6 +90,7 @@ class MdocProximityCubit extends Cubit<MdocProximityState> {
   final List<CredentialModel> Function() _credentials;
   final TrustedList? Function() _trustedList;
   final Set<ProximityBleMode> Function() _bleModes;
+  final Future<void> Function(List<String> credentialIds)? _onPresented;
   final PlatformP256Keys _platformKeys;
   final BluetoothPermissionRequest _requestBluetoothPermissions;
   late final StreamSubscription<ProximityState> _subscription;
@@ -96,9 +100,13 @@ class MdocProximityCubit extends Cubit<MdocProximityState> {
   /// a success.
   bool _declined = false;
 
+  /// The credentials [approve] sent to the reader in this session.
+  List<String> _approved = const [];
+
   /// Starts a session.
   Future<void> start() async {
     _declined = false;
+    _approved = const [];
     emit(const MdocProximityState(ProximityPreparing()));
 
     if (!await _requestBluetoothPermissions()) {
@@ -129,6 +137,7 @@ class MdocProximityCubit extends Cubit<MdocProximityState> {
   Future<void> approve(List<ProximityDisclosure> disclosures) async {
     try {
       await _proximity.approve(disclosures);
+      _approved = [for (final d in disclosures) d.mdoc.id];
     } on MdocProximityException catch (e) {
       _fail(e.message);
     }
@@ -172,6 +181,17 @@ class MdocProximityCubit extends Cubit<MdocProximityState> {
         _log.i('session: $session (declined)');
         // The view leaves the page once the decline is sent.
         return;
+      case ProximitySuccess() when _approved.isNotEmpty:
+        _log.i('session: $session');
+        final presented = _approved;
+        _approved = const [];
+        emit(MdocProximityState(session));
+        // The reader has the answer: a batch copy is used up.
+        try {
+          await _onPresented?.call(presented);
+        } catch (e, s) {
+          _log.e('presented copies not deleted: $e', error: e, stackTrace: s);
+        }
       default:
         _log.i('session: $session');
         emit(MdocProximityState(session));

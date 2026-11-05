@@ -515,11 +515,13 @@ class MockCredentialsCubit extends _i1.Mock implements _i13.CredentialsCubit {
   _i18.Future<void> deleteById({
     required String? id,
     bool? showMessage = true,
+    bool? logActivity = true,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#deleteById, [], {
               #id: id,
               #showMessage: showMessage,
+              #logActivity: logActivity,
             }),
             returnValue: _i18.Future<void>.value(),
             returnValueForMissingStub: _i18.Future<void>.value(),
@@ -536,6 +538,15 @@ class MockCredentialsCubit extends _i1.Mock implements _i13.CredentialsCubit {
               #id: id,
               #showMessage: showMessage,
             }),
+            returnValue: _i18.Future<void>.value(),
+            returnValueForMissingStub: _i18.Future<void>.value(),
+          )
+          as _i18.Future<void>);
+
+  @override
+  _i18.Future<void> deleteConsumedCopies(Iterable<String>? ids) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteConsumedCopies, [ids]),
             returnValue: _i18.Future<void>.value(),
             returnValueForMissingStub: _i18.Future<void>.value(),
           )

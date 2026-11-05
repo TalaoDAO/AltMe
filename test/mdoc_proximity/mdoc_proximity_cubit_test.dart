@@ -318,6 +318,87 @@ void main() {
       ],
     );
 
+    group('single use', () {
+      late List<List<String>> presented;
+
+      MdocProximityCubit buildWithCallback() => MdocProximityCubit(
+        proximity: proximity,
+        credentials: () => credentials,
+        platformKeys: keys,
+        requestBluetoothPermissions: () async => true,
+        onPresented: (ids) async => presented.add(ids),
+      );
+
+      setUp(() => presented = []);
+
+      test(
+        'reports the approved credentials once the session succeeds',
+        () async {
+          final cubit = buildWithCallback();
+          addTearDown(cubit.close);
+
+          await cubit.approve([disclosure]);
+          states.add(const ProximitySuccess());
+          await settle();
+
+          expect(presented, [
+            ['pid'],
+          ]);
+        },
+      );
+
+      test(
+        'reports nothing for a session that ends without an answer',
+        () async {
+          final cubit = buildWithCallback();
+          addTearDown(cubit.close);
+
+          states.add(const ProximitySuccess());
+          await settle();
+
+          expect(presented, isEmpty);
+        },
+      );
+
+      test('reports nothing when the user declined', () async {
+        final cubit = buildWithCallback();
+        addTearDown(cubit.close);
+
+        await cubit.decline();
+        states.add(const ProximitySuccess());
+        await settle();
+
+        expect(presented, isEmpty);
+      });
+
+      test('reports nothing when the answer failed', () async {
+        when(
+          () => proximity.approve(any()),
+        ).thenThrow(const MdocProximityException('no platform key'));
+        final cubit = buildWithCallback();
+        addTearDown(cubit.close);
+
+        await cubit.approve([disclosure]);
+        states.add(const ProximitySuccess());
+        await settle();
+
+        expect(presented, isEmpty);
+      });
+
+      test('reports each session once', () async {
+        final cubit = buildWithCallback();
+        addTearDown(cubit.close);
+
+        await cubit.approve([disclosure]);
+        states
+          ..add(const ProximitySuccess())
+          ..add(const ProximitySuccess());
+        await settle();
+
+        expect(presented, hasLength(1));
+      });
+    });
+
     blocTest<MdocProximityCubit, MdocProximityState>(
       'decline sends the decline, and its end is not a success',
       build: build,

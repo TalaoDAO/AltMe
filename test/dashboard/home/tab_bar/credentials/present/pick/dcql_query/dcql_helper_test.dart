@@ -161,5 +161,20 @@ void main() {
         same(held[1]),
       );
     });
+
+    test('gives the wallet credential of each presented match', () {
+      final wallet = [
+        credential().copyWith(id: 'first'),
+        credential().copyWith(id: 'second'),
+      ];
+
+      final presented = presentedCandidates(
+        selectMatchPerCredential(result, const {'qes_attestation': 1}),
+        held,
+        wallet,
+      );
+
+      expect(presented.map((c) => c.id), ['second']);
+    });
   });
 }

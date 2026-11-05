@@ -667,6 +667,7 @@ class ScanCubit extends Cubit<ScanState> {
           issuer: issuer,
           uri: uri,
         );
+        await _consumeCopies(credentialsToBePresented);
         final transactionData = state.transactionData;
         if (transactionData != null) {
           // Loop on transactionData
@@ -705,6 +706,7 @@ class ScanCubit extends Cubit<ScanState> {
           issuer: issuer,
           uri: uri,
         );
+        await _consumeCopies(credentialsToBePresented);
 
         String? url;
 
@@ -1007,6 +1009,19 @@ class ScanCubit extends Cubit<ScanState> {
     return idToken;
   }
 
+  /// Destroys the batch copies the verifier just accepted, and their keys.
+  /// A failure to delete never turns the accepted presentation into an
+  /// error.
+  Future<void> _consumeCopies(List<CredentialModel> presented) async {
+    try {
+      await credentialsCubit.deleteConsumedCopies(presented.map((c) => c.id));
+    } catch (e, s) {
+      getLogger(
+        'ScanCubit',
+      ).e('presented copies not deleted: $e', error: e, stackTrace: s);
+    }
+  }
+
   Future<void> presentationActivity({
     required List<CredentialModel> credentialModels,
     required Issuer issuer,
@@ -1074,6 +1089,7 @@ class ScanCubit extends Cubit<ScanState> {
     required Map<String, List<String>> vpToken,
     required Issuer issuer,
     required QRCodeScanCubit qrCodeScanCubit,
+    required List<CredentialModel> presentedCredentials,
   }) async {
     try {
       final responseType = uri.queryParameters['response_type'] ?? '';
@@ -1161,6 +1177,7 @@ class ScanCubit extends Cubit<ScanState> {
               issuer: issuer,
               uri: uri,
             );
+            await _consumeCopies(presentedCredentials);
             final transactionData = state.transactionData;
             if (transactionData != null) {
               // Loop on transactionData
@@ -1199,6 +1216,7 @@ class ScanCubit extends Cubit<ScanState> {
               issuer: issuer,
               uri: uri,
             );
+            await _consumeCopies(presentedCredentials);
 
             String? url;
 

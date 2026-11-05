@@ -38,6 +38,7 @@ class _FakeLogData extends Fake implements LogData {}
 void main() {
   late _MockCredentialsRepository repository;
   late _MockPlatformP256Keys platformKeys;
+  late _MockActivityLogManager activityLogManager;
   late CredentialsCubit cubit;
 
   setUpAll(() {
@@ -50,7 +51,7 @@ void main() {
     platformKeys = _MockPlatformP256Keys();
     final profileCubit = _MockProfileCubit();
     final advanceSettingsCubit = _MockAdvanceSettingsCubit();
-    final activityLogManager = _MockActivityLogManager();
+    activityLogManager = _MockActivityLogManager();
 
     when(() => repository.insert(any())).thenAnswer((_) async => 1);
     when(() => repository.deleteById(any())).thenAnswer((_) async => true);
@@ -144,6 +145,57 @@ void main() {
       await cubit.deleteWithCopies(id: 'alone', showMessage: false);
 
       expect(cubit.state.credentials.map((c) => c.id), ['other']);
+    });
+  });
+
+  group('deleteConsumedCopies', () {
+    test(
+      'deletes the presented copy and its key, and keeps the others',
+      () async {
+        await insert(credential('a1', keyId: 'sdjwt_a1', batchId: 'batch-a'));
+        await insert(credential('a2', keyId: 'sdjwt_a2', batchId: 'batch-a'));
+
+        await cubit.deleteConsumedCopies(['a1']);
+
+        expect(cubit.state.credentials.map((c) => c.id), ['a2']);
+        verify(() => platformKeys.delete('sdjwt_a1')).called(1);
+        verifyNever(() => platformKeys.delete('sdjwt_a2'));
+      },
+    );
+
+    test('keeps a credential issued alone, and its key', () async {
+      await insert(credential('alone', keyId: 'sdjwt_alone'));
+
+      await cubit.deleteConsumedCopies(['alone']);
+
+      expect(cubit.state.credentials.map((c) => c.id), ['alone']);
+      verifyNever(() => platformKeys.delete(any()));
+    });
+
+    test('deletes the last copy, so the card goes', () async {
+      await insert(credential('a1', keyId: 'sdjwt_a1', batchId: 'batch-a'));
+
+      await cubit.deleteConsumedCopies(['a1']);
+
+      expect(cubit.state.credentials, isEmpty);
+    });
+
+    test('ignores an id it does not hold and a repeated id', () async {
+      await insert(credential('a1', keyId: 'sdjwt_a1', batchId: 'batch-a'));
+
+      await cubit.deleteConsumedCopies(['gone', 'a1', 'a1']);
+
+      verify(() => repository.deleteById('a1')).called(1);
+      verifyNever(() => repository.deleteById('gone'));
+    });
+
+    test('writes no activity log entry for a consumed copy', () async {
+      await insert(credential('a1', keyId: 'sdjwt_a1', batchId: 'batch-a'));
+      clearInteractions(activityLogManager);
+
+      await cubit.deleteConsumedCopies(['a1']);
+
+      verifyNever(() => activityLogManager.saveLog(any()));
     });
   });
 

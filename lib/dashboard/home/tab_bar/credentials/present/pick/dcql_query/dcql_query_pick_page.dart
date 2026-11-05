@@ -11,7 +11,6 @@ import 'package:altme/lang/cubit/lang_cubit.dart';
 import 'package:altme/mdoc_proximity/helpers/mdoc_credential_model.dart';
 import 'package:altme/oidc4vc/model/verifier_trust_info.dart';
 import 'package:altme/scan/cubit/scan_cubit.dart';
-import 'package:altme/selective_disclosure/selective_disclosure.dart';
 
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:dcql/dcql.dart';
@@ -331,6 +330,12 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       transactionData: transactionData,
     );
 
+    final presentedCredentials = presentedCandidates(
+      result,
+      packageFormatCredentials,
+      candidates,
+    );
+
     await context.read<ScanCubit>().presentOidc4vpFinal(
       uri: uri,
       credentialModel: widget.credential,
@@ -338,6 +343,7 @@ class _DcqlQueryOfferPickViewState extends State<DcqlQueryOfferPickView> {
       vpToken: vpToken,
       issuer: widget.issuer,
       qrCodeScanCubit: context.read<QRCodeScanCubit>(),
+      presentedCredentials: presentedCredentials,
     );
   }
 }

@@ -41,6 +41,7 @@ class MdocPresentView extends StatelessWidget {
         proximity: MdocProximity(),
         credentials: () =>
             context.read<CredentialsCubit>().state.credentials.onePerBatch,
+        onPresented: context.read<CredentialsCubit>().deleteConsumedCopies,
         trustedList: () {
           final profile = context.read<ProfileCubit>().state.model;
           return profile.profileSetting.walletSecurityOptions.trustedList

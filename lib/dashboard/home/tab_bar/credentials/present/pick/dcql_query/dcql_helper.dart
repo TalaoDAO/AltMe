@@ -41,6 +41,20 @@ DigitalCredential? findOriginal(
   List<DigitalCredential> packageFormatCredentials,
 ) => packageFormatCredentials.firstWhere((e) => identical(e, matched));
 
+// The wallet-side credentials [result] presents, one per matched
+// DigitalCredential, in the order of [candidates].
+List<CredentialModel> presentedCandidates(
+  DcqlQueryResult result,
+  List<DigitalCredential> packageFormatCredentials,
+  List<CredentialModel> candidates,
+) => [
+  for (final matches in result.verifiableCredentials.values)
+    for (final matched in matches)
+      candidates[packageFormatCredentials.indexWhere(
+        (e) => identical(e, matched),
+      )],
+];
+
 // Resolve a DCQL path (which may contain `null` wildcards) against the
 // actual claims tree, returning the *concrete* path that was matched.
 List<dynamic>? resolveConcretePath(

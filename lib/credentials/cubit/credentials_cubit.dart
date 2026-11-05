@@ -245,7 +245,11 @@ class CredentialsCubit extends Cubit<CredentialsState> {
     emit(state.copyWith(status: CredentialsStatus.reset, credentials: []));
   }
 
-  Future<void> deleteById({required String id, bool showMessage = true}) async {
+  Future<void> deleteById({
+    required String id,
+    bool showMessage = true,
+    bool logActivity = true,
+  }) async {
     emit(state.loading());
 
     final credential = state.credentials
@@ -267,12 +271,14 @@ class CredentialsCubit extends Cubit<CredentialsState> {
       ..removeWhere((element) => element.id == id);
     final dummies = _getAvalaibleDummyCredentials(credentials: credentials);
 
-    await activityLogManager.saveLog(
-      LogData(
-        type: LogType.deleteVC,
-        vcInfo: VCInfo(id: credential.id, name: credential.getName),
-      ),
-    );
+    if (logActivity) {
+      await activityLogManager.saveLog(
+        LogData(
+          type: LogType.deleteVC,
+          vcInfo: VCInfo(id: credential.id, name: credential.getName),
+        ),
+      );
+    }
     emit(
       state.copyWith(
         status: CredentialsStatus.delete,
@@ -301,6 +307,18 @@ class CredentialsCubit extends Cubit<CredentialsState> {
         id: copy.id,
         showMessage: showMessage && copy == copies.last,
       );
+    }
+  }
+
+  /// Deletes the copies of a batch issuance among [ids], and their keys: a
+  /// copy is presented once, so a verifier cannot link two presentations by
+  /// the key or the signature. A credential issued alone is kept. Nothing is
+  /// logged: the presentation already is.
+  Future<void> deleteConsumedCopies(Iterable<String> ids) async {
+    for (final id in ids.toSet()) {
+      final copy = state.credentials.where((c) => c.id == id).firstOrNull;
+      if (copy == null || copy.batchId == null) continue;
+      await deleteById(id: id, showMessage: false, logActivity: false);
     }
   }
 
