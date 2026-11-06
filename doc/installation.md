@@ -219,15 +219,6 @@ $ flutter packages pub run build_runner build --delete-conflicting-outputs
 For smooth running of the functionalities of Altme, you need to add the following
 keys:
 
-1. PASSBASE_WEBHOOK_AUTH_TOKEN<br />
-   You can get this key from [`here`](https://passbase.com/).
-
-2. PASSBASE_CHECK_DID_AUTH_TOKEN<br />
-   The key is available [`here`](https://passbase.com/).
-
-3. YOTI_AI_API_KEY<br />
-   This key can be obtained from [`here`](https://developers.yoti.com/).
-
 4. TALAO_ISSUER_API_KEY<br />
    The key is available [`here`](https://talao.io/).
 

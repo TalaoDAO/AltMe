@@ -131,12 +131,10 @@ class DioClient {
         uri.contains(Urls.chainbornMembershipCardUrl) ||
         uri.contains(Urls.twitterCardUrl)) {
       await dotenv.load();
-      final YOTI_AI_API_KEY = dotenv.get('YOTI_AI_API_KEY');
 
       requestHeaders = <String, dynamic>{
         'Content-Type': 'application/json; charset=UTF-8',
         'accept': 'application/json',
-        'X-API-KEY': YOTI_AI_API_KEY,
       };
     }
     final requestOptions = (options ?? Options()).copyWith(
