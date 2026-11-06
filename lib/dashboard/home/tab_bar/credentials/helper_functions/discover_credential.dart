@@ -28,18 +28,9 @@ Future<void> discoverCredential({
   //   return;
   // }
 
-  final profileCubit = context.read<ProfileCubit>();
-
   final List<CredentialSubjectType> credentialSubjectTypeListForCheck = [
-    CredentialSubjectType.defiCompliance,
     CredentialSubjectType.gender,
     CredentialSubjectType.ageRange,
-    CredentialSubjectType.over65,
-    CredentialSubjectType.over50,
-    CredentialSubjectType.over21,
-    CredentialSubjectType.over18,
-    CredentialSubjectType.over15,
-    CredentialSubjectType.over13,
     CredentialSubjectType.verifiableIdCard,
   ];
 
@@ -47,40 +38,6 @@ Future<void> discoverCredential({
     dummyCredential.credentialSubjectType,
   )) {
     getLogger('discoverCredential').i(dummyCredential.credentialSubjectType);
-
-    if (dummyCredential.credentialSubjectType.checkForAIKYC) {
-      /// For DefiCompliance, it is not necessary to use Yoti. Instead,
-      /// we can directly proceed with Id360.
-      if (dummyCredential.credentialSubjectType ==
-              CredentialSubjectType.defiCompliance ||
-          dummyCredential.credentialSubjectType ==
-              CredentialSubjectType.livenessCard) {
-        final kycVerification = context
-            .read<KycVerificationCubit>()
-            .getVcByKycVerification(
-              vcType: dummyCredential.credentialSubjectType.getKycVcType,
-              link: dummyCredential.link!,
-            );
-        return kycVerification;
-      }
-
-      if (profileCubit.state.model.profileType == ProfileType.enterprise) {
-        final discoverCardsOptions =
-            profileCubit.state.model.profileSetting.discoverCardsOptions;
-
-        if (discoverCardsOptions != null) {
-          if (discoverCardsOptions.displayOver13 ||
-              discoverCardsOptions.displayOver15 ||
-              discoverCardsOptions.displayOver18 ||
-              discoverCardsOptions.displayOver21 ||
-              discoverCardsOptions.displayOver50 ||
-              discoverCardsOptions.displayOver65) {
-            await LaunchUrl.launch(dummyCredential.link!);
-            return;
-          }
-        }
-      }
-    }
 
     // start verification by KYC (ID360)
     await context.read<KycVerificationCubit>().getVcByKycVerification(

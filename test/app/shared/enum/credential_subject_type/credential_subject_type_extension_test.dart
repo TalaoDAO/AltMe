@@ -490,24 +490,6 @@ void main() {
       expect(CredentialSubjectType.defaultCredential.name, equals(''));
     });
 
-    test('CredentialSubjectType checkForAIKYC returns correct value', () {
-      for (final value in CredentialSubjectType.values) {
-        if (value == CredentialSubjectType.over18 ||
-            value == CredentialSubjectType.over13 ||
-            value == CredentialSubjectType.over15 ||
-            value == CredentialSubjectType.over21 ||
-            value == CredentialSubjectType.over50 ||
-            value == CredentialSubjectType.over65 ||
-            value == CredentialSubjectType.ageRange ||
-            value == CredentialSubjectType.defiCompliance ||
-            value == CredentialSubjectType.livenessCard) {
-          expect(value.checkForAIKYC, isTrue);
-        } else {
-          expect(value.checkForAIKYC, isFalse);
-        }
-      }
-    });
-
     test('CredentialSubjectType getKycVcType returns correct value', () {
       for (final value in CredentialSubjectType.values) {
         if (value == CredentialSubjectType.over18) {

@@ -389,21 +389,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     }
   }
 
-  bool get checkForAIKYC {
-    if (this == CredentialSubjectType.over18 ||
-        this == CredentialSubjectType.over13 ||
-        this == CredentialSubjectType.over15 ||
-        this == CredentialSubjectType.over21 ||
-        this == CredentialSubjectType.over50 ||
-        this == CredentialSubjectType.over65 ||
-        this == CredentialSubjectType.ageRange ||
-        this == CredentialSubjectType.defiCompliance ||
-        this == CredentialSubjectType.livenessCard) {
-      return true;
-    }
-    return false;
-  }
-
   KycVcType get getKycVcType {
     if (this == CredentialSubjectType.over18) {
       return KycVcType.over18;
