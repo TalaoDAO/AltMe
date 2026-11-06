@@ -28,15 +28,8 @@ Future<void> discoverCredential({
   //   return;
   // }
 
-  final List<CredentialSubjectType> credentialSubjectTypeListForCheck = [
-    CredentialSubjectType.gender,
-    CredentialSubjectType.ageRange,
-    CredentialSubjectType.verifiableIdCard,
-  ];
-
-  if (credentialSubjectTypeListForCheck.contains(
-    dummyCredential.credentialSubjectType,
-  )) {
+  if (dummyCredential.credentialSubjectType ==
+      CredentialSubjectType.verifiableIdCard) {
     getLogger('discoverCredential').i(dummyCredential.credentialSubjectType);
 
     // start verification by KYC (ID360)

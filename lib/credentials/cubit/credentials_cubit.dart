@@ -782,28 +782,6 @@ class CredentialsCubit extends Cubit<CredentialsState> {
               );
             }
 
-            /// age range
-            if (formatsSupported.contains(VCFormatType.ldpVc) &&
-                discoverCardsOptions.displayAgeRange) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.ageRange,
-                  formatType: VCFormatType.ldpVc,
-                ),
-              );
-            }
-
-            /// gender
-            if (formatsSupported.contains(VCFormatType.ldpVc) &&
-                discoverCardsOptions.displayGender) {
-              allCategoryVC.add(
-                CredInfo(
-                  credentialType: CredentialSubjectType.gender,
-                  formatType: VCFormatType.ldpVc,
-                ),
-              );
-            }
-
           case CredentialCategory.advantagesCards:
 
             /// chainbornMembership
