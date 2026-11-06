@@ -6255,6 +6255,12 @@ abstract class AppLocalizations {
   /// **'Allow Bluetooth access to share with the reader.'**
   String get mdocProximityBluetoothPermission;
 
+  /// No description provided for @qrScannerCameraPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow camera access to scan QR codes.'**
+  String get qrScannerCameraPermission;
+
   /// No description provided for @mdocProximityOpenSettings.
   ///
   /// In en, this message translates to:

@@ -1217,6 +1217,7 @@
   "mdocProximitySuccess": "Your information was shared with the reader.",
   "mdocProximityBluetoothOff": "Turn on Bluetooth to share with the reader.",
   "mdocProximityBluetoothPermission": "Allow Bluetooth access to share with the reader.",
+  "qrScannerCameraPermission": "Allow camera access to scan QR codes.",
   "mdocProximityOpenSettings": "Open settings",
   "mdocProximityTimeout": "The reader did not respond in time.",
   "mdocProximityReaderDisconnected": "The reader disconnected.",

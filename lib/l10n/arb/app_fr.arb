@@ -1179,6 +1179,7 @@
   "mdocProximitySuccess": "Vos informations ont été partagées avec le lecteur.",
   "mdocProximityBluetoothOff": "Activez le Bluetooth pour partager avec le lecteur.",
   "mdocProximityBluetoothPermission": "Autorisez l'accès au Bluetooth pour partager avec le lecteur.",
+  "qrScannerCameraPermission": "Autorisez l'accès à l'appareil photo pour scanner les QR codes.",
   "mdocProximityOpenSettings": "Ouvrir les réglages",
   "mdocProximityTimeout": "Le lecteur n'a pas répondu à temps.",
   "mdocProximityReaderDisconnected": "Le lecteur s'est déconnecté.",

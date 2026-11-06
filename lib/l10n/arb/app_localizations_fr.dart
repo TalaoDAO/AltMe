@@ -3480,6 +3480,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'Autorisez l\'accès au Bluetooth pour partager avec le lecteur.';
 
   @override
+  String get qrScannerCameraPermission =>
+      'Autorisez l\'accès à l\'appareil photo pour scanner les QR codes.';
+
+  @override
   String get mdocProximityOpenSettings => 'Ouvrir les réglages';
 
   @override

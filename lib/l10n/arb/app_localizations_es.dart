@@ -3463,6 +3463,10 @@ class AppLocalizationsEs extends AppLocalizations {
       'Allow Bluetooth access to share with the reader.';
 
   @override
+  String get qrScannerCameraPermission =>
+      'Allow camera access to scan QR codes.';
+
+  @override
   String get mdocProximityOpenSettings => 'Open settings';
 
   @override
