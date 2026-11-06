@@ -3104,11 +3104,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get pincodeSerie =>
-      'Votre code secret ne peut pas avoir 4 caractères identiques.';
+      'Votre code secret ne peut pas avoir 6 caractères identiques.';
 
   @override
   String get pincodeSequence =>
-      'Votre code secret ne peut pas avoir 4 chiffres successifs.';
+      'Votre code secret ne peut pas avoir 6 chiffres successifs.';
 
   @override
   String get pincodeDifferent =>
