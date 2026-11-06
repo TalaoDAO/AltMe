@@ -247,7 +247,7 @@
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Bluetooth is used to share your documents with a nearby reader.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Please give us access to your camera, to complete the verification.</string>
+	<string>Please give us access to your camera to scan QR codes.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>User can login with Face ID, pin code or both.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

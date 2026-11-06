@@ -1952,80 +1952,10 @@ class AppLocalizationsEs extends AppLocalizations {
       'Vamos a descubrir todo lo que \nofrece la Web 3.';
 
   @override
-  String get failedToInitCamera => '¡Error al inicializar la cámara!';
-
-  @override
-  String get chooseMethodPageOver18Title =>
-      'Elija un método para obtener su prueba Mayor de 18 años';
-
-  @override
-  String get chooseMethodPageOver13Title =>
-      'Elija un método para obtener su prueba Mayor de 13 años';
-
-  @override
-  String get chooseMethodPageOver15Title =>
-      'Elija un método para obtener su prueba Mayor de 15 años';
-
-  @override
-  String get chooseMethodPageOver21Title =>
-      'Elija un método para obtener su prueba Mayor de 21 años';
-
-  @override
-  String get chooseMethodPageOver50Title =>
-      'Elija un método para obtener su prueba Mayor de 50 años';
-
-  @override
-  String get chooseMethodPageOver65Title =>
-      'Elija un método para obtener su prueba Mayor de 65 años';
-
-  @override
-  String get chooseMethodPageAgeRangeTitle =>
-      'Elija un método para obtener su prueba de grupo de edad';
-
-  @override
-  String get chooseMethodPageVerifiableIdTitle =>
-      'Elija un método para obtener su prueba de ID verificable';
-
-  @override
-  String get chooseMethodPageDefiComplianceTitle =>
-      'Elija un método para obtener su prueba de cumplimiento DeFi';
-
-  @override
-  String get chooseMethodPageSubtitle =>
-      'Verifíquese con una foto en tiempo real o una comprobación de carné de identidad clásica.';
-
-  @override
-  String get kycTitle => 'Foto rápida personal (1 min)';
-
-  @override
-  String get kycSubtitle => 'Verifíquese al instante con una foto.';
-
-  @override
-  String get passbaseTitle => 'Comprobación de carné de identidad completa';
-
-  @override
-  String get passbaseSubtitle =>
-      'Verifíquese con el pasaporte o su carné de identidad o de conducir';
-
-  @override
-  String get verifyYourAge => 'Verifique su edad';
-
-  @override
-  String get verifyYourAgeSubtitle =>
-      'Este proceso de verificación de edad es muy sencillo. Solo necesita una foto en tiempo real.';
-
-  @override
-  String get verifyYourAgeDescription =>
-      'Al aceptar, nos autoriza a usar una imagen para estimar su edad. Nuestro socio Yoti hará la estimación. Solo usará su imagen para ello y la eliminará justo después.\n\nPara descubrir más, lea nuestra Política de privacidad.';
-
-  @override
   String get accept => 'Aceptar';
 
   @override
   String get decline => 'Rechazar';
-
-  @override
-  String get yotiCameraAppbarTitle => 'Sitúe el rostro en el centro.';
 
   @override
   String get cameraSubtitle =>
@@ -2592,26 +2522,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get backup => 'Hacer una copia de respaldo';
-
-  @override
-  String get takePicture => 'Hacer una foto';
-
-  @override
-  String get kyc => 'KYC';
-
-  @override
-  String get aiSystemWasNotAbleToEstimateYourAge =>
-      'El sistema de IA no pudo estimar su edad';
-
-  @override
-  String youGotAgeCredentials(Object credential) {
-    return 'Ha obtenido su credencial $credential.';
-  }
-
-  @override
-  String yourAgeEstimationIs(Object ageEstimate) {
-    return 'La estimación de su edad de IA es $ageEstimate años';
-  }
 
   @override
   String get credentialNotFound => 'Credencial no encontrada';

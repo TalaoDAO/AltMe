@@ -1967,81 +1967,10 @@ class AppLocalizationsEl extends AppLocalizations {
       'Ας ανακαλύψουμε τα πάντα\nWeb 3 έχει να προσφέρει.';
 
   @override
-  String get failedToInitCamera => 'Η εκκίνησης της κάμερας απέτυχε!';
-
-  @override
-  String get chooseMethodPageOver18Title =>
-      'Επιλέξτε μια μέθοδο για να λάβετε το Over 18 Proof σας';
-
-  @override
-  String get chooseMethodPageOver13Title =>
-      'Επιλέξτε μια μέθοδο για να λάβετε το Over 13 Proof σας';
-
-  @override
-  String get chooseMethodPageOver15Title =>
-      'Επιλέξτε μια μέθοδο για να λάβετε το Over 15 Proof σας';
-
-  @override
-  String get chooseMethodPageOver21Title =>
-      'Επιλέξτε μια μέθοδο για να λάβετε την απόδειξη Over 21 Proof';
-
-  @override
-  String get chooseMethodPageOver50Title =>
-      'Επιλέξτε μια μέθοδο για να λάβετε το Over 50 Proof σας';
-
-  @override
-  String get chooseMethodPageOver65Title =>
-      'Επιλέξτε μια μέθοδο για να λάβετε το Over 65 Proof σας';
-
-  @override
-  String get chooseMethodPageAgeRangeTitle =>
-      'Επιλέξτε μια μέθοδο για να λάβετε την απόδειξη του εύρους ηλικίας σας';
-
-  @override
-  String get chooseMethodPageVerifiableIdTitle =>
-      'Επιλέξτε μια μέθοδο για να λάβετε την επαληθεύσιμη απόδειξη ταυτότητας';
-
-  @override
-  String get chooseMethodPageDefiComplianceTitle =>
-      'Επιλέξτε μια μέθοδο για να λάβετε την απόδειξη συμμόρφωσης Defi σας';
-
-  @override
-  String get chooseMethodPageSubtitle =>
-      'Επαληθεύστε τον εαυτό σας με μια φωτογραφία σας σε πραγματικό χρόνο ή με έναν κλασικό έλεγχο εγγράφων ταυτότητας .';
-
-  @override
-  String get kycTitle => 'Γρήγορη φωτογραφία σας (1min)';
-
-  @override
-  String get kycSubtitle => 'Επαληθεύστε αμέσως με μια φωτογραφία σας.';
-
-  @override
-  String get passbaseTitle => 'Πλήρης έλεγχος εγγράφων ταυτότητας';
-
-  @override
-  String get passbaseSubtitle =>
-      'Επιβεβαιωθείτε με ταυτότητα, διαβατήριο ή άδεια οδήγησης.';
-
-  @override
-  String get verifyYourAge => 'Επαληθεύστε την ηλικία σας';
-
-  @override
-  String get verifyYourAgeSubtitle =>
-      'Αυτή η διαδικασία επαλήθευσης της ηλικίας είναι πολύ εύκολη και απλή. Το μόνο που απαιτείται είναι μια φωτογραφία σε πραγματικό χρόνο.';
-
-  @override
-  String get verifyYourAgeDescription =>
-      'Με την αποδοχή, συμφωνείτε ότι χρησιμοποιούμε μια φωτογραφία για να εκτιμήσουμε την ηλικία σας. Η εκτίμηση γίνεται από τον συνεργάτη μας Yoti που χρησιμοποιεί τη φωτογραφία σας μόνο για αυτόν τον σκοπό και τη διαγράφει αμέσως.\n\nΓια περισσότερες πληροφορίες, ανατρέξτε στην Πολιτική απορρήτου μας.';
-
-  @override
   String get accept => 'Αποδοχή';
 
   @override
   String get decline => 'Απόρριψη';
-
-  @override
-  String get yotiCameraAppbarTitle =>
-      'Παρακαλώ, τοποθετήστε το πρόσωπό σας στο κέντρο';
 
   @override
   String get cameraSubtitle =>
@@ -2613,26 +2542,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get backup => 'Δημιουργία αντιγράφων ασφαλείας';
-
-  @override
-  String get takePicture => 'Τραβήξτε μια φωτογραφία';
-
-  @override
-  String get kyc => 'KYC';
-
-  @override
-  String get aiSystemWasNotAbleToEstimateYourAge =>
-      'Το σύστημα τεχνητής νοημοσύνης δεν μπόρεσε να εκτιμήσει την ηλικία σας';
-
-  @override
-  String youGotAgeCredentials(Object credential) {
-    return 'Έχετε το $credential πιστοποιητικό σας.';
-  }
-
-  @override
-  String yourAgeEstimationIs(Object ageEstimate) {
-    return 'Η εκτίμηση της ηλικίας σας ως AI είναι $ageEstimate έτη';
-  }
 
   @override
   String get credentialNotFound => 'Δε βρέθηκε πιστοποιητικό';

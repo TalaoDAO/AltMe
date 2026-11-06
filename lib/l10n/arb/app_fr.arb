@@ -663,27 +663,8 @@
   "termsAndConditions": "Conditions Générales d'Utilisation (CGU)",
   "walletReadyTitle": "Votre wallet est prêt !",
   "walletReadySubtitle": "Explorez l'univers Web3.",
-  "failedToInitCamera": "L'initialisation de la caméra a échoué !",
-  "chooseMethodPageOver18Title": "Choisissez une méthode pour vérifier que vous avez + de 18 ans",
-  "chooseMethodPageOver13Title": "Choisissez une méthode pour vérifier que vous avez + de 13 ans",
-  "chooseMethodPageOver15Title": "Choisissez une méthode pour obtenir votre attestation de + de 15 ans",
-  "chooseMethodPageOver21Title": "Choisissez une méthode pour obtenir votre attestation de + de 21 ans",
-  "chooseMethodPageOver50Title": "Choisissez une méthode pour obtenir votre attestation de + de 50 ans",
-  "chooseMethodPageOver65Title": "Choisissez une méthode pour obtenir votre attestation de + de 65 ans",
-  "chooseMethodPageAgeRangeTitle": "Choisissez une méthode pour obtenir une preuve de tranche d'âge",
-  "chooseMethodPageVerifiableIdTitle": "Choisissez une méthode pour obtenir une attestation digitale d'identité",
-  "chooseMethodPageDefiComplianceTitle": "Choisissez une méthode pour obtenir une attestation de conformité pour la DeFi",
-  "chooseMethodPageSubtitle": "Identifiez-vous en prenant une photo ou en partageant un document d'identité.",
-  "kycTitle": "Selfie / Photo (1 min)",
-  "kycSubtitle": "Obtenez une estimation instantanée de votre âge en vous prenant en photo.",
-  "passbaseTitle": "Vérification avec document d'identité",
-  "passbaseSubtitle": "Obtenez une vérification avec une carte d'identité, un passeport ou un permis de conduire.",
-  "verifyYourAge": "Vérifiez votre âge",
-  "verifyYourAgeSubtitle": "Ce mode de vérification de l'âge est très simple. Il suffit d'un selfie.",
-  "verifyYourAgeDescription": "En acceptant, vous donnez l'autorisation d'utiliser votre photo pour estimer votre âge. L'estimation est effectuée par notre partenaire Yoti qui utilise votre photo uniquement à cette fin et la supprime immédiatement après. Pour plus d'information, consultez les CGU.",
   "accept": "Accepter",
   "decline": "Refuser",
-  "yotiCameraAppbarTitle": "Rapprochez votre visage au plus près du smartphone avant de prendre la photo",
   "cameraSubtitle": "Vous avez 5 secondes pour prendre votre photo. Rapprochez votre visage au plus près avant de commencer.",
   "walletSecurityDescription": "Protégez votre wallet avec le code PIN ou l'authentification biométrique et faites une sauvegarde",
   "blockchainSettings": "Paramètres pour les blockchains",
@@ -845,23 +826,6 @@
   "pendingCredentialsHomeSubtitle": "Prouvez vos droits d'accès.",
   "restore": "Restaurer",
   "backup": "Sauvegarder",
-  "takePicture": "Prendre une photo",
-  "kyc": "KYC",
-  "aiSystemWasNotAbleToEstimateYourAge": "L'IA de YOTI n'a pas pu estimer votre âge",
-  "youGotAgeCredentials": "Vous avez votre attestation {credential}.",
-  "@youGotAgeCredentials": {
-    "description": "la description pour l'obtention des preuves d'âge",
-    "placeholders": {
-      "credential": {}
-    }
-  },
-  "yourAgeEstimationIs": "Votre âge estimé est de {ageEstimate} ans",
-  "@yourAgeEstimationIs": {
-    "description": "",
-    "placeholders": {
-      "ageEstimate": {}
-    }
-  },
   "credentialNotFound": "Référence non trouvée",
   "cryptographicProof": "Preuve",
   "downloadingCircuitLoadingMessage": "Téléchargement. Cela peut prendre un certain temps. Veuillez patienter.",

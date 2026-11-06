@@ -1968,82 +1968,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get walletReadySubtitle => 'Explorez l\'univers Web3.';
 
   @override
-  String get failedToInitCamera => 'L\'initialisation de la caméra a échoué !';
-
-  @override
-  String get chooseMethodPageOver18Title =>
-      'Choisissez une méthode pour vérifier que vous avez + de 18 ans';
-
-  @override
-  String get chooseMethodPageOver13Title =>
-      'Choisissez une méthode pour vérifier que vous avez + de 13 ans';
-
-  @override
-  String get chooseMethodPageOver15Title =>
-      'Choisissez une méthode pour obtenir votre attestation de + de 15 ans';
-
-  @override
-  String get chooseMethodPageOver21Title =>
-      'Choisissez une méthode pour obtenir votre attestation de + de 21 ans';
-
-  @override
-  String get chooseMethodPageOver50Title =>
-      'Choisissez une méthode pour obtenir votre attestation de + de 50 ans';
-
-  @override
-  String get chooseMethodPageOver65Title =>
-      'Choisissez une méthode pour obtenir votre attestation de + de 65 ans';
-
-  @override
-  String get chooseMethodPageAgeRangeTitle =>
-      'Choisissez une méthode pour obtenir une preuve de tranche d\'âge';
-
-  @override
-  String get chooseMethodPageVerifiableIdTitle =>
-      'Choisissez une méthode pour obtenir une attestation digitale d\'identité';
-
-  @override
-  String get chooseMethodPageDefiComplianceTitle =>
-      'Choisissez une méthode pour obtenir une attestation de conformité pour la DeFi';
-
-  @override
-  String get chooseMethodPageSubtitle =>
-      'Identifiez-vous en prenant une photo ou en partageant un document d\'identité.';
-
-  @override
-  String get kycTitle => 'Selfie / Photo (1 min)';
-
-  @override
-  String get kycSubtitle =>
-      'Obtenez une estimation instantanée de votre âge en vous prenant en photo.';
-
-  @override
-  String get passbaseTitle => 'Vérification avec document d\'identité';
-
-  @override
-  String get passbaseSubtitle =>
-      'Obtenez une vérification avec une carte d\'identité, un passeport ou un permis de conduire.';
-
-  @override
-  String get verifyYourAge => 'Vérifiez votre âge';
-
-  @override
-  String get verifyYourAgeSubtitle =>
-      'Ce mode de vérification de l\'âge est très simple. Il suffit d\'un selfie.';
-
-  @override
-  String get verifyYourAgeDescription =>
-      'En acceptant, vous donnez l\'autorisation d\'utiliser votre photo pour estimer votre âge. L\'estimation est effectuée par notre partenaire Yoti qui utilise votre photo uniquement à cette fin et la supprime immédiatement après. Pour plus d\'information, consultez les CGU.';
-
-  @override
   String get accept => 'Accepter';
 
   @override
   String get decline => 'Refuser';
-
-  @override
-  String get yotiCameraAppbarTitle =>
-      'Rapprochez votre visage au plus près du smartphone avant de prendre la photo';
 
   @override
   String get cameraSubtitle =>
@@ -2604,26 +2532,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get backup => 'Sauvegarder';
-
-  @override
-  String get takePicture => 'Prendre une photo';
-
-  @override
-  String get kyc => 'KYC';
-
-  @override
-  String get aiSystemWasNotAbleToEstimateYourAge =>
-      'L\'IA de YOTI n\'a pas pu estimer votre âge';
-
-  @override
-  String youGotAgeCredentials(Object credential) {
-    return 'Vous avez votre attestation $credential.';
-  }
-
-  @override
-  String yourAgeEstimationIs(Object ageEstimate) {
-    return 'Votre âge estimé est de $ageEstimate ans';
-  }
 
   @override
   String get credentialNotFound => 'Référence non trouvée';

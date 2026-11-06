@@ -532,37 +532,6 @@ void main() {
       }
     });
 
-    test('CredentialSubjectType aiValidationUrl returns correct value', () {
-      for (final value in CredentialSubjectType.values) {
-        if (value == CredentialSubjectType.over13) {
-          expect(value.aiValidationUrl, equals(Urls.over13AIValidationUrl));
-        } else if (value == CredentialSubjectType.over15) {
-          expect(value.aiValidationUrl, equals(Urls.over15AIValidationUrl));
-        } else if (value == CredentialSubjectType.over18) {
-          expect(value.aiValidationUrl, equals(Urls.over18AIValidationUrl));
-        } else if (value == CredentialSubjectType.over21) {
-          expect(value.aiValidationUrl, equals(Urls.over21AIValidationUrl));
-        } else if (value == CredentialSubjectType.over50) {
-          expect(value.aiValidationUrl, equals(Urls.over50AIValidationUrl));
-        } else if (value == CredentialSubjectType.over65) {
-          expect(value.aiValidationUrl, equals(Urls.over65AIValidationUrl));
-        } else if (value == CredentialSubjectType.ageRange) {
-          expect(value.aiValidationUrl, equals(Urls.ageRangeAIValidationUrl));
-        } else {
-          expect(
-            () => CredentialSubjectType.defaultCredential.aiValidationUrl,
-            throwsA(
-              predicate(
-                (e) =>
-                    e is ResponseMessage &&
-                    e.data['error'] == 'invalid_request',
-              ),
-            ),
-          );
-        }
-      }
-    });
-
     test('CredentialSubjectType byPassDeepLink returns correct value', () {
       for (final value in CredentialSubjectType.values) {
         if (value == CredentialSubjectType.tezotopiaMembership ||

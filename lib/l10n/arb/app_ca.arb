@@ -652,27 +652,8 @@
   "termsAndConditions": "Termes i condicions",
   "walletReadyTitle": "La cartera està a punt!",
   "walletReadySubtitle": "Anem a descobrim-ho tot \nWeb 3 té coses per oferir.",
-  "failedToInitCamera": "Error d’inici de càmera.",
-  "chooseMethodPageOver18Title": "Tria un mètode per aconseguir la prova més de 18",
-  "chooseMethodPageOver13Title": "Tria un mètode per aconseguir la prova més de 13",
-  "chooseMethodPageOver15Title": "Tria un mètode per aconseguir la prova més de 15",
-  "chooseMethodPageOver21Title": "Tria un mètode per aconseguir la prova més de 21",
-  "chooseMethodPageOver50Title": "Tria un mètode per aconseguir la prova més de 50",
-  "chooseMethodPageOver65Title": "Tria un mètode per aconseguir la prova més de 65",
-  "chooseMethodPageAgeRangeTitle": "Tria un mètode per aconseguir la prova d’edat",
-  "chooseMethodPageVerifiableIdTitle": "Tria un mètode per aconseguir la prova d’ID verificable",
-  "chooseMethodPageDefiComplianceTitle": "Tria un mètode per aconseguir la prova de conformitat amb DeFi",
-  "chooseMethodPageSubtitle": "Verifica’t amb una foto en temps real o amb una verificació clàssica de documents d’identitat.",
-  "kycTitle": "Foto ràpida (1 min)",
-  "kycSubtitle": "Verifica’t ràpidament amb una foto teva.",
-  "passbaseTitle": "Verificació completa del document d’identitat",
-  "passbaseSubtitle": "Verifica’t amb un document d’identitat, passaport o carnet de conduir.",
-  "verifyYourAge": "Verifica la teva edat",
-  "verifyYourAgeSubtitle": "El procés de verificació d’edat és molt fàcil i senzill. Només cal és una foto en temps real.",
-  "verifyYourAgeDescription": "En acceptar, accedeixes a que usem una imatge per calcular la teva edat. El càlcul el fa el nostre soci Yoti, que utilitza la imatge només per a aquest propòsit i l'elimina immediatament.\n\nPer saber-ne més, consulta la política de privadesa.",
   "accept": "Acceptar",
   "decline": "Rebutjar",
-  "yotiCameraAppbarTitle": "Col·loca la cara al centre",
   "cameraSubtitle": "Tens 5 segons per fer la foto.\nMira que hi hagi prou llum abans de començar.",
   "walletSecurityDescription": "Protegeix la cartera amb el codi PIN i l’autenticació biomètrica",
   "blockchainSettings": "Configuració de blockchain",
@@ -834,23 +815,6 @@
   "pendingCredentialsHomeSubtitle": "Demostra els teus drets d'accés.",
   "restore": "Restaurar",
   "backup": "Copiar",
-  "takePicture": "Fer una foto",
-  "kyc": "KYC",
-  "aiSystemWasNotAbleToEstimateYourAge": "El sistema d’IA no ha pogut calcular l’edat",
-  "youGotAgeCredentials": "Tens la teva credencial {credential}.",
-  "@youGotAgeCredentials": {
-    "description": "la descripció per obtenir credencials",
-    "placeholders": {
-      "credential": {}
-    }
-  },
-  "yourAgeEstimationIs": "El càlcul de la teva edat amb IA és de {ageEstimate} anys",
-  "@yourAgeEstimationIs": {
-    "description": "",
-    "placeholders": {
-      "ageEstimate": {}
-    }
-  },
   "credentialNotFound": "Credencial no trobada",
   "cryptographicProof": "Prova criptogràfica",
   "downloadingCircuitLoadingMessage": "Descarregant circuits. Pot trigar una estona. Espera.",

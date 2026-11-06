@@ -48,20 +48,6 @@ Future<void> discoverCredential({
   )) {
     getLogger('discoverCredential').i(dummyCredential.credentialSubjectType);
 
-    if (dummyCredential.credentialSubjectType == CredentialSubjectType.over18) {
-      LoadingView().hide();
-      // start verification by Yoti AI
-      final verifyAgeNavigation = Navigator.of(context).push<void>(
-        VerifyAgePage.route(
-          credentialSubjectType: dummyCredential.credentialSubjectType,
-          vcFormatType: dummyCredential.vcFormatType,
-        ),
-      );
-      return verifyAgeNavigation;
-    }
-
-    /// here check for over18, over15, age range and over13 to take photo for
-    /// AI KYC
     if (dummyCredential.credentialSubjectType.checkForAIKYC) {
       /// For DefiCompliance, it is not necessary to use Yoti. Instead,
       /// we can directly proceed with Id360.
@@ -94,50 +80,19 @@ Future<void> discoverCredential({
           }
         }
       }
-
-      LoadingView().hide();
-      await Navigator.push<void>(
-        context,
-        ChooseVerificationMethodPage.route(
-          credentialSubjectType: dummyCredential.credentialSubjectType,
-          onSelectPassbase: () async {
-            // start verification by KYC (ID360)
-            await context.read<KycVerificationCubit>().getVcByKycVerification(
-              vcType: dummyCredential.credentialSubjectType.getKycVcType,
-              link: dummyCredential.link!,
-              onKycApproved: () async {
-                await launchUrlAfterDiscovery(
-                  dummyCredential: dummyCredential,
-                  context: context,
-                );
-              },
-            );
-
-            Navigator.pop(context);
-          },
-          onSelectKYC: () async {
-            // start verification by Yoti AI
-            await Navigator.of(context).push<void>(
-              VerifyAgePage.route(
-                credentialSubjectType: dummyCredential.credentialSubjectType,
-                vcFormatType: dummyCredential.vcFormatType,
-              ),
-            );
-          },
-        ),
-      );
-    } else {
-      await context.read<KycVerificationCubit>().getVcByKycVerification(
-        link: dummyCredential.link!,
-        vcType: dummyCredential.credentialSubjectType.getKycVcType,
-        onKycApproved: () async {
-          await launchUrlAfterDiscovery(
-            dummyCredential: dummyCredential,
-            context: context,
-          );
-        },
-      );
     }
+
+    // start verification by KYC (ID360)
+    await context.read<KycVerificationCubit>().getVcByKycVerification(
+      link: dummyCredential.link!,
+      vcType: dummyCredential.credentialSubjectType.getKycVcType,
+      onKycApproved: () async {
+        await launchUrlAfterDiscovery(
+          dummyCredential: dummyCredential,
+          context: context,
+        );
+      },
+    );
   } else {
     await launchUrlAfterDiscovery(
       dummyCredential: dummyCredential,
