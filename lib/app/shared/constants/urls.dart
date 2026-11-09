@@ -65,14 +65,6 @@ class Urls {
   static const objktUrl = 'https://objkt.com/';
   static const raribleUrl = 'https://rarible.com/';
 
-  static const over13AIValidationUrl = 'https://issuer.talao.co/ai/over13';
-  static const over15AIValidationUrl = 'https://issuer.talao.co/ai/over15';
-  static const over18AIValidationUrl = 'https://issuer.talao.co/ai/over18';
-  static const over21AIValidationUrl = 'https://issuer.talao.co/ai/over21';
-  static const over50AIValidationUrl = 'https://issuer.talao.co/ai/over50';
-  static const over65AIValidationUrl = 'https://issuer.talao.co/ai/over65';
-  static const ageRangeAIValidationUrl = 'https://issuer.talao.co/ai/agerange';
-
   //Matrix home server
   static const matrixHomeServer = 'https://matrix.talao.co';
   static const getNonce = 'https://talao.co/matrix/nonce';

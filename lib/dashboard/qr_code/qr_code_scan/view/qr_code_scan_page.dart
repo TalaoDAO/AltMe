@@ -1,13 +1,13 @@
+import 'dart:async';
+
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:altme/mdoc_proximity/mdoc_proximity.dart';
 import 'package:altme/route/route_name.dart';
 import 'package:altme/scan/scan.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 import 'package:mdoc_proximity/mdoc_proximity.dart';
 
 /// The tabs of [QrCodeScanPage].
@@ -118,7 +118,13 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
             ),
             Expanded(
               child: switch (tab) {
-                ScanPageTab.scan => const _QrCodeScanView(),
+                ScanPageTab.scan => QrScannerView(
+                  onScan: (value) => unawaited(
+                    context.read<QRCodeScanCubit>().process(
+                      scannedResponse: value,
+                    ),
+                  ),
+                ),
                 ScanPageTab.present => const Padding(
                   padding: EdgeInsets.all(16),
                   child: MdocPresentView(),
@@ -135,61 +141,3 @@ class _QrCodeScanPageState extends State<QrCodeScanPage> {
     );
   }
 }
-
-/// The camera, handing the first QR code it reads to [QRCodeScanCubit].
-class _QrCodeScanView extends StatefulWidget {
-  const _QrCodeScanView();
-
-  @override
-  State<_QrCodeScanView> createState() => _QrCodeScanViewState();
-}
-
-class _QrCodeScanViewState extends State<_QrCodeScanView> {
-  final BarcodeScanner _barcodeScannerController = BarcodeScanner(
-    formats: [BarcodeFormat.qrCode],
-  );
-
-  @override
-  void dispose() {
-    _barcodeScannerController.close();
-    super.dispose();
-  }
-
-  bool isScanned = false;
-  bool isFirstImage = true;
-  var _cameraLensDirection = CameraLensDirection.back;
-
-  @override
-  Widget build(BuildContext context) {
-    return QrCameraView(
-      onImage: (InputImage inputImage) async {
-        if (!isScanned) {
-          final barcodes = await _barcodeScannerController.processImage(
-            inputImage,
-          );
-          if (barcodes.isEmpty) {
-            return;
-          }
-
-          /// We are skiping the first image because android device get
-          /// last image from previous camera usage
-          if (isFirstImage) {
-            isFirstImage = false;
-            return;
-          }
-
-          if (isScanned) return;
-          isScanned = true;
-
-          await context.read<QRCodeScanCubit>().process(
-            scannedResponse: barcodes.first.rawValue,
-          );
-        }
-      },
-      initialCameraLensDirection: _cameraLensDirection,
-      onCameraLensDirectionChanged: (value) => _cameraLensDirection = value,
-    );
-  }
-}
-
-//qr is scanning twice

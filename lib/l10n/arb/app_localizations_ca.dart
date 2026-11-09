@@ -1949,80 +1949,10 @@ class AppLocalizationsCa extends AppLocalizations {
       'Anem a descobrim-ho tot \nWeb 3 té coses per oferir.';
 
   @override
-  String get failedToInitCamera => 'Error d’inici de càmera.';
-
-  @override
-  String get chooseMethodPageOver18Title =>
-      'Tria un mètode per aconseguir la prova més de 18';
-
-  @override
-  String get chooseMethodPageOver13Title =>
-      'Tria un mètode per aconseguir la prova més de 13';
-
-  @override
-  String get chooseMethodPageOver15Title =>
-      'Tria un mètode per aconseguir la prova més de 15';
-
-  @override
-  String get chooseMethodPageOver21Title =>
-      'Tria un mètode per aconseguir la prova més de 21';
-
-  @override
-  String get chooseMethodPageOver50Title =>
-      'Tria un mètode per aconseguir la prova més de 50';
-
-  @override
-  String get chooseMethodPageOver65Title =>
-      'Tria un mètode per aconseguir la prova més de 65';
-
-  @override
-  String get chooseMethodPageAgeRangeTitle =>
-      'Tria un mètode per aconseguir la prova d’edat';
-
-  @override
-  String get chooseMethodPageVerifiableIdTitle =>
-      'Tria un mètode per aconseguir la prova d’ID verificable';
-
-  @override
-  String get chooseMethodPageDefiComplianceTitle =>
-      'Tria un mètode per aconseguir la prova de conformitat amb DeFi';
-
-  @override
-  String get chooseMethodPageSubtitle =>
-      'Verifica’t amb una foto en temps real o amb una verificació clàssica de documents d’identitat.';
-
-  @override
-  String get kycTitle => 'Foto ràpida (1 min)';
-
-  @override
-  String get kycSubtitle => 'Verifica’t ràpidament amb una foto teva.';
-
-  @override
-  String get passbaseTitle => 'Verificació completa del document d’identitat';
-
-  @override
-  String get passbaseSubtitle =>
-      'Verifica’t amb un document d’identitat, passaport o carnet de conduir.';
-
-  @override
-  String get verifyYourAge => 'Verifica la teva edat';
-
-  @override
-  String get verifyYourAgeSubtitle =>
-      'El procés de verificació d’edat és molt fàcil i senzill. Només cal és una foto en temps real.';
-
-  @override
-  String get verifyYourAgeDescription =>
-      'En acceptar, accedeixes a que usem una imatge per calcular la teva edat. El càlcul el fa el nostre soci Yoti, que utilitza la imatge només per a aquest propòsit i l\'elimina immediatament.\n\nPer saber-ne més, consulta la política de privadesa.';
-
-  @override
   String get accept => 'Acceptar';
 
   @override
   String get decline => 'Rebutjar';
-
-  @override
-  String get yotiCameraAppbarTitle => 'Col·loca la cara al centre';
 
   @override
   String get cameraSubtitle =>
@@ -2587,26 +2517,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get backup => 'Copiar';
-
-  @override
-  String get takePicture => 'Fer una foto';
-
-  @override
-  String get kyc => 'KYC';
-
-  @override
-  String get aiSystemWasNotAbleToEstimateYourAge =>
-      'El sistema d’IA no ha pogut calcular l’edat';
-
-  @override
-  String youGotAgeCredentials(Object credential) {
-    return 'Tens la teva credencial $credential.';
-  }
-
-  @override
-  String yourAgeEstimationIs(Object ageEstimate) {
-    return 'El càlcul de la teva edat amb IA és de $ageEstimate anys';
-  }
 
   @override
   String get credentialNotFound => 'Credencial no trobada';
@@ -3539,6 +3449,10 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get mdocProximityBluetoothPermission =>
       'Allow Bluetooth access to share with the reader.';
+
+  @override
+  String get qrScannerCameraPermission =>
+      'Allow camera access to scan QR codes.';
 
   @override
   String get mdocProximityOpenSettings => 'Open settings';

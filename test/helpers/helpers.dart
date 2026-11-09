@@ -5,4 +5,5 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
+export 'fake_mobile_scanner_platform.dart';
 export 'pump_app.dart';

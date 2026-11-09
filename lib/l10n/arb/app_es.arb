@@ -652,27 +652,8 @@
   "termsAndConditions": "Términos y condiciones",
   "walletReadyTitle": "¡Su cartera está lista!",
   "walletReadySubtitle": "Vamos a descubrir todo lo que \nofrece la Web 3.",
-  "failedToInitCamera": "¡Error al inicializar la cámara!",
-  "chooseMethodPageOver18Title": "Elija un método para obtener su prueba Mayor de 18 años",
-  "chooseMethodPageOver13Title": "Elija un método para obtener su prueba Mayor de 13 años",
-  "chooseMethodPageOver15Title": "Elija un método para obtener su prueba Mayor de 15 años",
-  "chooseMethodPageOver21Title": "Elija un método para obtener su prueba Mayor de 21 años",
-  "chooseMethodPageOver50Title": "Elija un método para obtener su prueba Mayor de 50 años",
-  "chooseMethodPageOver65Title": "Elija un método para obtener su prueba Mayor de 65 años",
-  "chooseMethodPageAgeRangeTitle": "Elija un método para obtener su prueba de grupo de edad",
-  "chooseMethodPageVerifiableIdTitle": "Elija un método para obtener su prueba de ID verificable",
-  "chooseMethodPageDefiComplianceTitle": "Elija un método para obtener su prueba de cumplimiento DeFi",
-  "chooseMethodPageSubtitle": "Verifíquese con una foto en tiempo real o una comprobación de carné de identidad clásica.",
-  "kycTitle": "Foto rápida personal (1 min)",
-  "kycSubtitle": "Verifíquese al instante con una foto.",
-  "passbaseTitle": "Comprobación de carné de identidad completa",
-  "passbaseSubtitle": "Verifíquese con el pasaporte o su carné de identidad o de conducir",
-  "verifyYourAge": "Verifique su edad",
-  "verifyYourAgeSubtitle": "Este proceso de verificación de edad es muy sencillo. Solo necesita una foto en tiempo real.",
-  "verifyYourAgeDescription": "Al aceptar, nos autoriza a usar una imagen para estimar su edad. Nuestro socio Yoti hará la estimación. Solo usará su imagen para ello y la eliminará justo después.\n\nPara descubrir más, lea nuestra Política de privacidad.",
   "accept": "Aceptar",
   "decline": "Rechazar",
-  "yotiCameraAppbarTitle": "Sitúe el rostro en el centro.",
   "cameraSubtitle": "Tiene 5 segundos para hacerse la foto.\nAntes de comenzar, asegúrese de que hay suficiente luz.",
   "walletSecurityDescription": "Proteja su cartera con código PIN y autenticación biométrica",
   "blockchainSettings": "Configuración de blockchain",
@@ -836,23 +817,6 @@
   "pendingCredentialsHomeSubtitle": "Demuestre sus derechos de acceso.",
   "restore": "Restablecer",
   "backup": "Hacer una copia de respaldo",
-  "takePicture": "Hacer una foto",
-  "kyc": "KYC",
-  "aiSystemWasNotAbleToEstimateYourAge": "El sistema de IA no pudo estimar su edad",
-  "youGotAgeCredentials": "Ha obtenido su credencial {credential}.",
-  "@youGotAgeCredentials": {
-    "description": "la descripción para obtener las credenciales",
-    "placeholders": {
-      "credential": {}
-    }
-  },
-  "yourAgeEstimationIs": "La estimación de su edad de IA es {ageEstimate} años",
-  "@yourAgeEstimationIs": {
-    "description": "",
-    "placeholders": {
-      "ageEstimate": {}
-    }
-  },
   "credentialNotFound": "Credencial no encontrada",
   "cryptographicProof": "Prueba criptográfica",
   "downloadingCircuitLoadingMessage": "Descargando circuitos. Esto puede tardar un poco. Espere.",

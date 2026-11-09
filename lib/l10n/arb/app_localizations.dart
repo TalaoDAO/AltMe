@@ -3620,114 +3620,6 @@ abstract class AppLocalizations {
   /// **'Let’s discover everything \nWeb 3 has to offer.'**
   String get walletReadySubtitle;
 
-  /// No description provided for @failedToInitCamera.
-  ///
-  /// In en, this message translates to:
-  /// **'Camera initialization failed!'**
-  String get failedToInitCamera;
-
-  /// No description provided for @chooseMethodPageOver18Title.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a method to get your Over 18 Proof'**
-  String get chooseMethodPageOver18Title;
-
-  /// No description provided for @chooseMethodPageOver13Title.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a method to get your Over 13 Proof'**
-  String get chooseMethodPageOver13Title;
-
-  /// No description provided for @chooseMethodPageOver15Title.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a method to get your Over 15 Proof'**
-  String get chooseMethodPageOver15Title;
-
-  /// No description provided for @chooseMethodPageOver21Title.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a method to get your Over 21 Proof'**
-  String get chooseMethodPageOver21Title;
-
-  /// No description provided for @chooseMethodPageOver50Title.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a method to get your Over 50 Proof'**
-  String get chooseMethodPageOver50Title;
-
-  /// No description provided for @chooseMethodPageOver65Title.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a method to get your Over 65 Proof'**
-  String get chooseMethodPageOver65Title;
-
-  /// No description provided for @chooseMethodPageAgeRangeTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a method to get your Age Range Proof'**
-  String get chooseMethodPageAgeRangeTitle;
-
-  /// No description provided for @chooseMethodPageVerifiableIdTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a method to get your Verifiable Id Proof'**
-  String get chooseMethodPageVerifiableIdTitle;
-
-  /// No description provided for @chooseMethodPageDefiComplianceTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a method to get your Defi Compliance Proof'**
-  String get chooseMethodPageDefiComplianceTitle;
-
-  /// No description provided for @chooseMethodPageSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Get verified by taking a real-time photo of yourself or by a classic ID document check .'**
-  String get chooseMethodPageSubtitle;
-
-  /// No description provided for @kycTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Quick photo of you (1min)'**
-  String get kycTitle;
-
-  /// No description provided for @kycSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Get instantly verified by taking a photo of yourself.'**
-  String get kycSubtitle;
-
-  /// No description provided for @passbaseTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Full ID document check'**
-  String get passbaseTitle;
-
-  /// No description provided for @passbaseSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Get verified with an ID card, passport or driving license.'**
-  String get passbaseSubtitle;
-
-  /// No description provided for @verifyYourAge.
-  ///
-  /// In en, this message translates to:
-  /// **'Verify your age'**
-  String get verifyYourAge;
-
-  /// No description provided for @verifyYourAgeSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'This age verification process is very easy and simple. All it requires is a real-time photo.'**
-  String get verifyYourAgeSubtitle;
-
-  /// No description provided for @verifyYourAgeDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'By accepting, you agree that we use a picture to estimate your age. The estimation is done by our partner Yoti that uses your picture only for this purpose and immediately deletes it.\n\nFor more info, review our Privacy Policy.'**
-  String get verifyYourAgeDescription;
-
   /// No description provided for @accept.
   ///
   /// In en, this message translates to:
@@ -3739,12 +3631,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Decline'**
   String get decline;
-
-  /// No description provided for @yotiCameraAppbarTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Please, position your face in the center'**
-  String get yotiCameraAppbarTitle;
 
   /// No description provided for @cameraSubtitle.
   ///
@@ -4735,36 +4621,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Backup'**
   String get backup;
-
-  /// No description provided for @takePicture.
-  ///
-  /// In en, this message translates to:
-  /// **'Take a picture'**
-  String get takePicture;
-
-  /// No description provided for @kyc.
-  ///
-  /// In en, this message translates to:
-  /// **'KYC'**
-  String get kyc;
-
-  /// No description provided for @aiSystemWasNotAbleToEstimateYourAge.
-  ///
-  /// In en, this message translates to:
-  /// **'AI system was not able to estimate your age'**
-  String get aiSystemWasNotAbleToEstimateYourAge;
-
-  /// the description for the getting credentials
-  ///
-  /// In en, this message translates to:
-  /// **'You got your {credential} credential.'**
-  String youGotAgeCredentials(Object credential);
-
-  ///
-  ///
-  /// In en, this message translates to:
-  /// **'Your AI age estimation is {ageEstimate} years'**
-  String yourAgeEstimationIs(Object ageEstimate);
 
   /// No description provided for @credentialNotFound.
   ///
@@ -6398,6 +6254,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Allow Bluetooth access to share with the reader.'**
   String get mdocProximityBluetoothPermission;
+
+  /// No description provided for @qrScannerCameraPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow camera access to scan QR codes.'**
+  String get qrScannerCameraPermission;
 
   /// No description provided for @mdocProximityOpenSettings.
   ///

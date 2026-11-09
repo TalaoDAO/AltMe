@@ -389,21 +389,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
     }
   }
 
-  bool get checkForAIKYC {
-    if (this == CredentialSubjectType.over18 ||
-        this == CredentialSubjectType.over13 ||
-        this == CredentialSubjectType.over15 ||
-        this == CredentialSubjectType.over21 ||
-        this == CredentialSubjectType.over50 ||
-        this == CredentialSubjectType.over65 ||
-        this == CredentialSubjectType.ageRange ||
-        this == CredentialSubjectType.defiCompliance ||
-        this == CredentialSubjectType.livenessCard) {
-      return true;
-    }
-    return false;
-  }
-
   KycVcType get getKycVcType {
     if (this == CredentialSubjectType.over18) {
       return KycVcType.over18;
@@ -423,31 +408,6 @@ extension CredentialSubjectTypeExtension on CredentialSubjectType {
       return KycVcType.defiCompliance;
     } else {
       return KycVcType.verifiableId;
-    }
-  }
-
-  String get aiValidationUrl {
-    if (this == CredentialSubjectType.over13) {
-      return Urls.over13AIValidationUrl;
-    } else if (this == CredentialSubjectType.over15) {
-      return Urls.over15AIValidationUrl;
-    } else if (this == CredentialSubjectType.over18) {
-      return Urls.over18AIValidationUrl;
-    } else if (this == CredentialSubjectType.over21) {
-      return Urls.over21AIValidationUrl;
-    } else if (this == CredentialSubjectType.over50) {
-      return Urls.over50AIValidationUrl;
-    } else if (this == CredentialSubjectType.over65) {
-      return Urls.over65AIValidationUrl;
-    } else if (this == CredentialSubjectType.ageRange) {
-      return Urls.ageRangeAIValidationUrl;
-    } else {
-      throw ResponseMessage(
-        data: {
-          'error': 'invalid_request',
-          'error_description': 'Url is not specified for $name.',
-        },
-      );
     }
   }
 

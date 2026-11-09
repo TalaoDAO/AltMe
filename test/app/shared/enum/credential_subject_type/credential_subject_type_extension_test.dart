@@ -490,24 +490,6 @@ void main() {
       expect(CredentialSubjectType.defaultCredential.name, equals(''));
     });
 
-    test('CredentialSubjectType checkForAIKYC returns correct value', () {
-      for (final value in CredentialSubjectType.values) {
-        if (value == CredentialSubjectType.over18 ||
-            value == CredentialSubjectType.over13 ||
-            value == CredentialSubjectType.over15 ||
-            value == CredentialSubjectType.over21 ||
-            value == CredentialSubjectType.over50 ||
-            value == CredentialSubjectType.over65 ||
-            value == CredentialSubjectType.ageRange ||
-            value == CredentialSubjectType.defiCompliance ||
-            value == CredentialSubjectType.livenessCard) {
-          expect(value.checkForAIKYC, isTrue);
-        } else {
-          expect(value.checkForAIKYC, isFalse);
-        }
-      }
-    });
-
     test('CredentialSubjectType getKycVcType returns correct value', () {
       for (final value in CredentialSubjectType.values) {
         if (value == CredentialSubjectType.over18) {
@@ -528,37 +510,6 @@ void main() {
           expect(value.getKycVcType, equals(KycVcType.defiCompliance));
         } else {
           expect(value.getKycVcType, equals(KycVcType.verifiableId));
-        }
-      }
-    });
-
-    test('CredentialSubjectType aiValidationUrl returns correct value', () {
-      for (final value in CredentialSubjectType.values) {
-        if (value == CredentialSubjectType.over13) {
-          expect(value.aiValidationUrl, equals(Urls.over13AIValidationUrl));
-        } else if (value == CredentialSubjectType.over15) {
-          expect(value.aiValidationUrl, equals(Urls.over15AIValidationUrl));
-        } else if (value == CredentialSubjectType.over18) {
-          expect(value.aiValidationUrl, equals(Urls.over18AIValidationUrl));
-        } else if (value == CredentialSubjectType.over21) {
-          expect(value.aiValidationUrl, equals(Urls.over21AIValidationUrl));
-        } else if (value == CredentialSubjectType.over50) {
-          expect(value.aiValidationUrl, equals(Urls.over50AIValidationUrl));
-        } else if (value == CredentialSubjectType.over65) {
-          expect(value.aiValidationUrl, equals(Urls.over65AIValidationUrl));
-        } else if (value == CredentialSubjectType.ageRange) {
-          expect(value.aiValidationUrl, equals(Urls.ageRangeAIValidationUrl));
-        } else {
-          expect(
-            () => CredentialSubjectType.defaultCredential.aiValidationUrl,
-            throwsA(
-              predicate(
-                (e) =>
-                    e is ResponseMessage &&
-                    e.data['error'] == 'invalid_request',
-              ),
-            ),
-          );
         }
       }
     });

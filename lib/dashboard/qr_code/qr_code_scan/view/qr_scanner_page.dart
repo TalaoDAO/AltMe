@@ -1,10 +1,10 @@
+import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 
-class QrScannerPage extends StatefulWidget {
+/// Scans a QR code and pops with its raw value.
+class QrScannerPage extends StatelessWidget {
   const QrScannerPage({super.key});
 
   static Route<String?> route() => MaterialPageRoute<String?>(
@@ -13,54 +13,21 @@ class QrScannerPage extends StatefulWidget {
   );
 
   @override
-  _QrScannerPageState createState() => _QrScannerPageState();
-}
-
-class _QrScannerPageState extends State<QrScannerPage> {
-  final BarcodeScanner _barcodeScannerController = BarcodeScanner(
-    formats: [BarcodeFormat.qrCode],
-  );
-
-  @override
-  void dispose() {
-    _barcodeScannerController.close();
-    super.dispose();
-  }
-
-  bool isScanned = false;
-  bool isFirstImage = true;
-  var _cameraLensDirection = CameraLensDirection.back;
-
-  @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return QrCameraView(
-      title: l10n.scanTitle,
-      onImage: (InputImage inputImage) async {
-        if (!isScanned) {
-          final barcodes = await _barcodeScannerController.processImage(
-            inputImage,
-          );
-          if (barcodes.isEmpty) {
-            return;
-          }
-
-          /// We are skiping the first image because android device get
-          /// last image from previous camera usage
-          if (isFirstImage) {
-            isFirstImage = false;
-            return;
-          }
-
-          if (isScanned) return;
-          isScanned = true;
-
-          await _barcodeScannerController.close();
-          Navigator.of(context).pop(barcodes.first.rawValue);
-        }
-      },
-      initialCameraLensDirection: _cameraLensDirection,
-      onCameraLensDirectionChanged: (value) => _cameraLensDirection = value,
+    final background = Theme.of(context).colorScheme.surface;
+    return Scaffold(
+      backgroundColor: background,
+      appBar: AppBar(
+        title: Text(
+          l10n.scanTitle,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        leading: const BackLeadingButton(),
+        backgroundColor: background,
+      ),
+      body: QrScannerView(onScan: (value) => Navigator.of(context).pop(value)),
     );
   }
 }

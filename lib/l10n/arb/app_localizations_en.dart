@@ -1943,82 +1943,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Let’s discover everything \nWeb 3 has to offer.';
 
   @override
-  String get failedToInitCamera => 'Camera initialization failed!';
-
-  @override
-  String get chooseMethodPageOver18Title =>
-      'Choose a method to get your Over 18 Proof';
-
-  @override
-  String get chooseMethodPageOver13Title =>
-      'Choose a method to get your Over 13 Proof';
-
-  @override
-  String get chooseMethodPageOver15Title =>
-      'Choose a method to get your Over 15 Proof';
-
-  @override
-  String get chooseMethodPageOver21Title =>
-      'Choose a method to get your Over 21 Proof';
-
-  @override
-  String get chooseMethodPageOver50Title =>
-      'Choose a method to get your Over 50 Proof';
-
-  @override
-  String get chooseMethodPageOver65Title =>
-      'Choose a method to get your Over 65 Proof';
-
-  @override
-  String get chooseMethodPageAgeRangeTitle =>
-      'Choose a method to get your Age Range Proof';
-
-  @override
-  String get chooseMethodPageVerifiableIdTitle =>
-      'Choose a method to get your Verifiable Id Proof';
-
-  @override
-  String get chooseMethodPageDefiComplianceTitle =>
-      'Choose a method to get your Defi Compliance Proof';
-
-  @override
-  String get chooseMethodPageSubtitle =>
-      'Get verified by taking a real-time photo of yourself or by a classic ID document check .';
-
-  @override
-  String get kycTitle => 'Quick photo of you (1min)';
-
-  @override
-  String get kycSubtitle =>
-      'Get instantly verified by taking a photo of yourself.';
-
-  @override
-  String get passbaseTitle => 'Full ID document check';
-
-  @override
-  String get passbaseSubtitle =>
-      'Get verified with an ID card, passport or driving license.';
-
-  @override
-  String get verifyYourAge => 'Verify your age';
-
-  @override
-  String get verifyYourAgeSubtitle =>
-      'This age verification process is very easy and simple. All it requires is a real-time photo.';
-
-  @override
-  String get verifyYourAgeDescription =>
-      'By accepting, you agree that we use a picture to estimate your age. The estimation is done by our partner Yoti that uses your picture only for this purpose and immediately deletes it.\n\nFor more info, review our Privacy Policy.';
-
-  @override
   String get accept => 'Accept';
 
   @override
   String get decline => 'Decline';
-
-  @override
-  String get yotiCameraAppbarTitle =>
-      'Please, position your face in the center';
 
   @override
   String get cameraSubtitle =>
@@ -2576,26 +2504,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backup => 'Backup';
-
-  @override
-  String get takePicture => 'Take a picture';
-
-  @override
-  String get kyc => 'KYC';
-
-  @override
-  String get aiSystemWasNotAbleToEstimateYourAge =>
-      'AI system was not able to estimate your age';
-
-  @override
-  String youGotAgeCredentials(Object credential) {
-    return 'You got your $credential credential.';
-  }
-
-  @override
-  String yourAgeEstimationIs(Object ageEstimate) {
-    return 'Your AI age estimation is $ageEstimate years';
-  }
 
   @override
   String get credentialNotFound => 'Credential Not Found';
@@ -3522,6 +3430,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get mdocProximityBluetoothPermission =>
       'Allow Bluetooth access to share with the reader.';
+
+  @override
+  String get qrScannerCameraPermission =>
+      'Allow camera access to scan QR codes.';
 
   @override
   String get mdocProximityOpenSettings => 'Open settings';

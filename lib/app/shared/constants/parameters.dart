@@ -115,10 +115,6 @@ class Parameters {
 
   // false for talao
   // 'true' for altme
-  static const bool supportDefiCompliance = true;
-
-  // false for talao
-  // 'true' for altme
   static const bool supportCryptoAccountOwnershipInDiscoverForEnterpriseMode =
       true;
 

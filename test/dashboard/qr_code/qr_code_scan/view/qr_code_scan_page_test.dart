@@ -60,7 +60,10 @@ void main() {
     when(() => scanCubit.state).thenReturn(const ScanState());
   });
 
-  Future<void> pump(WidgetTester tester) => tester.pumpApp(
+  Future<void> pump(
+    WidgetTester tester, {
+    ScanPageTab initialTab = ScanPageTab.present,
+  }) => tester.pumpApp(
     MultiBlocProvider(
       providers: [
         BlocProvider<ProfileCubit>.value(value: profileCubit),
@@ -71,12 +74,33 @@ void main() {
           value: customReaderRequestsCubit,
         ),
       ],
-      // The Scan tab needs a camera: start on the Present tab.
-      child: const QrCodeScanPage(initialTab: ScanPageTab.present),
+      // The Scan tab needs a camera: start on the Present tab by default.
+      child: QrCodeScanPage(initialTab: initialTab),
     ),
   );
 
   group('QrCodeScanPage', () {
+    testWidgets('hands the scanned QR code to QRCodeScanCubit', (tester) async {
+      final platform = FakeMobileScannerPlatform.install();
+      when(
+        () => qrCodeScanCubit.process(
+          scannedResponse: any(named: 'scannedResponse'),
+        ),
+      ).thenAnswer((_) async {});
+      withProfile(readerRequests: false);
+      await pump(tester, initialTab: ScanPageTab.scan);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(QrScannerView), findsOneWidget);
+      platform.readQrCode('openid4vp://authorize');
+      await tester.pumpAndSettle();
+
+      verify(
+        () => qrCodeScanCubit.process(scannedResponse: 'openid4vp://authorize'),
+      ).called(1);
+      await unmountScanner(tester);
+    });
+
     testWidgets('offers the Read tab with the profile reader requests', (
       tester,
     ) async {
