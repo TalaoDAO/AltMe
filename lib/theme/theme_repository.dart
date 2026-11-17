@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:altme/app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,23 +34,16 @@ class ThemeRepository implements ThemePersistence {
       _sharedPreferences.setString(key, value);
 
   void _init() {
-    final themeString = _getValue(_kThemePersistenceKey);
-
-    if (themeString != null) {
-      switch (themeString) {
-        case 'light':
-          _controller.add(ThemeMode.light);
-        case 'dark':
-          _controller.add(ThemeMode.dark);
-        case 'system':
-          _controller.add(ThemeMode.system);
-        default:
-          _controller.add(ThemeMode.dark);
-      }
-    } else {
-      _controller.add(Parameters.defaultTheme);
-    }
+    _controller.add(_parse(_getValue(_kThemePersistenceKey)));
   }
+
+  /// A stored choice is kept; a fresh install or an unknown value follows the
+  /// system.
+  static ThemeMode _parse(String? value) => switch (value) {
+    'light' => ThemeMode.light,
+    'dark' => ThemeMode.dark,
+    _ => ThemeMode.system,
+  };
 
   @override
   Stream<ThemeMode> getTheme() async* {

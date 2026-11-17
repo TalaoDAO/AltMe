@@ -11,6 +11,7 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
 
   // Load Material fonts for proper text rendering in golden tests
   await _loadMaterialFonts();
+  await _loadWalletUiFonts();
 
   await testMain();
 }
@@ -31,7 +32,8 @@ Future<void> _loadMaterialFonts() async {
   ];
 
   for (final fileName in fontFiles) {
-    final fontPath = '$flutterRoot/bin/cache/artifacts/material_fonts/$fileName';
+    final fontPath =
+        '$flutterRoot/bin/cache/artifacts/material_fonts/$fileName';
     final file = File(fontPath);
     if (file.existsSync()) {
       final fontLoader = FontLoader('Roboto');
@@ -39,5 +41,23 @@ Future<void> _loadMaterialFonts() async {
       fontLoader.addFont(Future.value(ByteData.view(bytes.buffer)));
       await fontLoader.load();
     }
+  }
+}
+
+/// Loads the bundled design system fonts (`assets/fonts/`), so goldens draw
+/// real glyphs instead of placeholder boxes.
+Future<void> _loadWalletUiFonts() async {
+  const families = {
+    'Manrope': ['Regular', 'SemiBold', 'Bold'],
+    'Open Sans': ['Regular', 'SemiBold', 'Bold'],
+  };
+  for (final family in families.entries) {
+    final loader = FontLoader(family.key);
+    final prefix = family.key.replaceAll(' ', '');
+    for (final weight in family.value) {
+      final bytes = File('assets/fonts/$prefix-$weight.ttf').readAsBytesSync();
+      loader.addFont(Future.value(ByteData.view(bytes.buffer)));
+    }
+    await loader.load();
   }
 }

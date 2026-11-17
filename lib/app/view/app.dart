@@ -34,6 +34,7 @@ import 'package:altme/wallet/wallet.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -273,7 +274,7 @@ class MaterialAppDefinition extends StatelessWidget {
                   return MaterialApp(
                     locale: state.locale,
                     title: 'Talao Wallet',
-                    theme: AppTheme.seedThemeData(
+                    theme: AppTheme.themeData(
                       Brightness.light,
                       profileState
                           .model
@@ -281,7 +282,7 @@ class MaterialAppDefinition extends StatelessWidget {
                           .generalOptions
                           .primaryColor,
                     ),
-                    darkTheme: AppTheme.seedThemeData(
+                    darkTheme: AppTheme.themeData(
                       Brightness.dark,
                       profileState
                           .model
@@ -291,6 +292,13 @@ class MaterialAppDefinition extends StatelessWidget {
                     ),
                     navigatorObservers: [MyRouteObserver(context)],
                     themeMode: themeState.themeMode,
+                    builder: (context, child) =>
+                        AnnotatedRegion<SystemUiOverlayStyle>(
+                          value: AppTheme.overlayStyle(
+                            Theme.of(context).brightness,
+                          ),
+                          child: child!,
+                        ),
                     localizationsDelegates: const [
                       AppLocalizations.delegate,
                       GlobalMaterialLocalizations.delegate,

@@ -2,8 +2,8 @@ import 'package:altme/app/shared/enum/enum.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/oidc4vp_transaction/qes_approval/qes_approval_handler.dart';
 import 'package:altme/oidc4vp_transaction/transaction_handler.dart';
-import 'package:flutter/material.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:wallet_ui/wallet_ui.dart';
 
 class Parameters {
   static const int multipleCredentialsProcessDelay = 1;
@@ -21,19 +21,19 @@ class Parameters {
 
   static const AdvanceSettingsState defaultAdvanceSettingsState =
       AdvanceSettingsState(
-    isGamingEnabled: false,
-    isIdentityEnabled: true,
-    isProfessionalEnabled: true,
-    isBlockchainAccountsEnabled: false,
-    isEducationEnabled: true,
-    isSocialMediaEnabled: true,
-    isCommunityEnabled: true,
-    isOtherEnabled: true,
-    isPassEnabled: true,
-    isFinanceEnabled: true,
-    isHumanityProofEnabled: true,
-    isWalletIntegrityEnabled: true,
-  );
+        isGamingEnabled: false,
+        isIdentityEnabled: true,
+        isProfessionalEnabled: true,
+        isBlockchainAccountsEnabled: false,
+        isEducationEnabled: true,
+        isSocialMediaEnabled: true,
+        isCommunityEnabled: true,
+        isOtherEnabled: true,
+        isPassEnabled: true,
+        isFinanceEnabled: true,
+        isHumanityProofEnabled: true,
+        isWalletIntegrityEnabled: true,
+      );
 
   static const universalLink = 'https://app.talao.co/app/download';
   static const walletOfferDeepLink = 'talao-openid-credential-offer';
@@ -150,14 +150,12 @@ class Parameters {
 
   static const String trustedListUrl =
       'https://wallet-provider.com/.well-known/trusted-list.json';
-  // seed color for the app Theme
-  // Altme
-  // static const Color seedColor = Color(0xff6600FF);
-  // Talao
-  static const Color seedColor = Color(0xff1EAADC);
 
-  // ThemeMode.light for talao
-  static const ThemeMode defaultTheme = ThemeMode.light;
+  /// Design system parameters: font families (bundled in `assets/fonts/`
+  /// and declared in `pubspec.yaml`) and the component icons.
+  static const WalletUiConfig walletUiConfig = WalletUiConfig(
+    fonts: WalletUiFonts(display: 'Manrope', body: 'Open Sans'),
+  );
 
   // Used to prevent display
   // This key tells the app to not display the field and it allows use of maps

@@ -76,7 +76,7 @@ void main() {
           ),
         ],
         child: MaterialApp(
-          theme: AppTheme.seedThemeData(Brightness.dark, null),
+          theme: AppTheme.themeData(Brightness.dark, null),
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,

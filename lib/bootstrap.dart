@@ -13,8 +13,9 @@ import 'package:altme/app/shared/protocol_trace/start_protocol_trace.dart';
 import 'package:altme/app/view/app.dart';
 import 'package:altme/theme/theme_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:secure_storage/secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,6 +33,21 @@ class AppBlocObserver extends BlocObserver {
   }
 }
 
+/// Adds the licences of the bundled fonts to the software licence page.
+void registerFontLicenses() {
+  const fonts = {
+    'Manrope': 'assets/fonts/Manrope-OFL.txt',
+    'Open Sans': 'assets/fonts/OpenSans-OFL.txt',
+  };
+  LicenseRegistry.addLicense(() async* {
+    for (final font in fonts.entries) {
+      yield LicenseEntryWithLineBreaks([
+        font.key,
+      ], await rootBundle.loadString(font.value));
+    }
+  });
+}
+
 Future<void> bootstrap(FlavorMode flavor) async {
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
@@ -40,6 +56,7 @@ Future<void> bootstrap(FlavorMode flavor) async {
   await runZonedGuarded(() async {
     // required when using any plugin. In our case, it's shared_preferences
     WidgetsFlutterBinding.ensureInitialized();
+    registerFontLicenses();
 
     // Creating an instance of ThemeRepository that will invoke the _init()
     // method
@@ -53,9 +70,6 @@ Future<void> bootstrap(FlavorMode flavor) async {
     // Only if developer mode is on; before anything opens an HttpClient, so
     // the wallet provider onboarding at startup is traced too.
     await startProtocolTrace();
-
-    /// Disable Http google font
-    GoogleFonts.config.allowRuntimeFetching = true;
 
     Bloc.observer = AppBlocObserver();
     runApp(App(flavorMode: flavor, themeRepository: themeRepository));
