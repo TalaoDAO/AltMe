@@ -1294,5 +1294,8 @@
   "qesDocumentOneTimePassword": "Mot de passe à usage unique",
   "batchCopiesCount": "{count, plural, =1{1 exemplaire à usage unique} other{{count} exemplaires à usage unique}}",
   "dcqlSharedDataLabel": "Données partagées depuis cette attestation",
-  "scanQrCode": "Scanner un QR code"
+  "scanQrCode": "Scanner un QR code",
+  "appearanceAndLanguage": "Apparence et langue",
+  "legal": "Mentions légales",
+  "advancedSettings": "Paramètres avancés"
 }

@@ -2205,5 +2205,8 @@
   "batchCopiesCount": "{count, plural, =1{1 αντίγραφο μίας χρήσης} other{{count} αντίγραφα μίας χρήσης}}",
   "dcqlSharedDataLabel": "Δεδομένα που κοινοποιούνται από αυτή την βεβαίωση",
   "mdocPresent": "Παρουσίαση",
-  "scanQrCode": "Σάρωση κωδικού QR"
+  "scanQrCode": "Σάρωση κωδικού QR",
+  "appearanceAndLanguage": "Εμφάνιση και γλώσσα",
+  "legal": "Νομικά",
+  "advancedSettings": "Σύνθετες ρυθμίσεις"
 }

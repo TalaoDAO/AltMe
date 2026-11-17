@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
+import 'package:altme/flavor/flavor.dart';
 import 'package:altme/kyc_verification/kyc_verification.dart';
 import 'package:altme/route/route_name.dart';
 import 'package:altme/splash/cubit/splash_cubit.dart';
@@ -26,6 +27,11 @@ class _MockQRCodeScanCubit extends MockCubit<QRCodeScanState>
 class _MockSplashCubit extends MockCubit<SplashState> implements SplashCubit {}
 
 class _MockDeepLinkCubit extends MockCubit<String> implements DeepLinkCubit {}
+
+class _MockFlavorCubit extends MockCubit<FlavorMode> implements FlavorCubit {
+  @override
+  final state = FlavorMode.development;
+}
 
 class _MockMnemonicNeedVerificationCubit extends MockCubit<bool>
     implements MnemonicNeedVerificationCubit {}
@@ -102,6 +108,18 @@ void main() {
     await dashboardCubit.close();
   });
 
+  List<BlocProvider<dynamic>> providers() => [
+    BlocProvider<HomeCubit>.value(value: homeCubit),
+    BlocProvider<ProfileCubit>.value(value: profileCubit),
+    BlocProvider<QRCodeScanCubit>.value(value: qrCodeScanCubit),
+    BlocProvider<SplashCubit>.value(value: splashCubit),
+    BlocProvider<DeepLinkCubit>.value(value: deepLinkCubit),
+    BlocProvider<MnemonicNeedVerificationCubit>.value(value: mnemonicCubit),
+    BlocProvider<KycVerificationCubit>.value(value: kycCubit),
+    BlocProvider<DashboardCubit>.value(value: dashboardCubit),
+    BlocProvider<FlavorCubit>.value(value: _MockFlavorCubit()),
+  ];
+
   Widget dashboard({MediaQueryData Function(MediaQueryData)? mediaQuery}) {
     Widget view = DashboardView(tabBuilder: (tab) => Text('page ${tab.name}'));
     if (mediaQuery != null) {
@@ -111,19 +129,7 @@ void main() {
             MediaQuery(data: mediaQuery(MediaQuery.of(context)), child: child),
       );
     }
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<HomeCubit>.value(value: homeCubit),
-        BlocProvider<ProfileCubit>.value(value: profileCubit),
-        BlocProvider<QRCodeScanCubit>.value(value: qrCodeScanCubit),
-        BlocProvider<SplashCubit>.value(value: splashCubit),
-        BlocProvider<DeepLinkCubit>.value(value: deepLinkCubit),
-        BlocProvider<MnemonicNeedVerificationCubit>.value(value: mnemonicCubit),
-        BlocProvider<KycVerificationCubit>.value(value: kycCubit),
-        BlocProvider<DashboardCubit>.value(value: dashboardCubit),
-      ],
-      child: view,
-    );
+    return MultiBlocProvider(providers: providers(), child: view);
   }
 
   /// Pumps the dashboard, then the frame that runs the `initState` work
@@ -288,6 +294,29 @@ void main() {
 
       verify(() => qrCodeScanCubit.deepLink()).called(1);
       expect(dashboardCubit.state.tab, DashboardTab.discover);
+    });
+
+    testWidgets('opens Settings from the header and keeps handling deep links '
+        'while it is open', (tester) async {
+      dashboardCubit = DashboardCubit();
+      // The providers sit above the app, so the pushed page sees them.
+      await tester.pumpApp(
+        DashboardView(tabBuilder: (tab) => Text('page ${tab.name}')),
+        wrapApp: (app) => MultiBlocProvider(providers: providers(), child: app),
+        navigatorObservers: [observer],
+      );
+      await tester.pump(Duration.zero);
+
+      await tester.tap(find.byTooltip('Settings'));
+      await tester.pumpAndSettle();
+      expect(find.byType(SettingsPage), findsOneWidget);
+      clearInteractions(qrCodeScanCubit);
+
+      deepLinks.add('openid-credential-offer://?credential_offer=x');
+      await tester.pump();
+
+      verify(() => qrCodeScanCubit.deepLink()).called(1);
+      expect(find.byType(SettingsPage), findsOneWidget);
     });
 
     testWidgets('hides the bar while the keyboard is open', (tester) async {

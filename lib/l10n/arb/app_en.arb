@@ -1346,5 +1346,8 @@
   "@dcqlSharedDataLabel": {
     "description": "Small heading above the list of labels of the data the verifier asks for, under the card of the attestation."
   },
-  "scanQrCode": "Scan QR code"
+  "scanQrCode": "Scan QR code",
+  "appearanceAndLanguage": "Appearance & language",
+  "legal": "Legal",
+  "advancedSettings": "Advanced settings"
 }

@@ -3754,4 +3754,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scanQrCode => 'Scan QR code';
+
+  @override
+  String get appearanceAndLanguage => 'Appearance & language';
+
+  @override
+  String get legal => 'Legal';
+
+  @override
+  String get advancedSettings => 'Advanced settings';
 }

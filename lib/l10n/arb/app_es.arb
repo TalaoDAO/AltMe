@@ -1311,5 +1311,8 @@
   "batchCopiesCount": "{count, plural, =1{1 copia de un solo uso} other{{count} copias de un solo uso}}",
   "dcqlSharedDataLabel": "Datos compartidos de esta atestación",
   "mdocPresent": "Presentar",
-  "scanQrCode": "Escanear código QR"
+  "scanQrCode": "Escanear código QR",
+  "appearanceAndLanguage": "Apariencia e idioma",
+  "legal": "Aviso legal",
+  "advancedSettings": "Ajustes avanzados"
 }

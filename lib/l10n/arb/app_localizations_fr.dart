@@ -3807,4 +3807,13 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get scanQrCode => 'Scanner un QR code';
+
+  @override
+  String get appearanceAndLanguage => 'Apparence et langue';
+
+  @override
+  String get legal => 'Mentions légales';
+
+  @override
+  String get advancedSettings => 'Paramètres avancés';
 }

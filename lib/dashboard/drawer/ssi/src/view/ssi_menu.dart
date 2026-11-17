@@ -54,12 +54,6 @@ class SSIView extends StatelessWidget {
                 Navigator.of(context).push<void>(DidMenu.route());
               },
             ),
-          DrawerItem(
-            title: l10n.searchCredentials,
-            onTap: () {
-              Navigator.of(context).push<void>(SearchPage.route());
-            },
-          ),
           if (context.read<ProfileCubit>().state.model.profileType ==
               ProfileType.custom) ...[
             DrawerItem(

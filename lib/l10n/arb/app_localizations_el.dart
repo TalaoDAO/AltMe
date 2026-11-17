@@ -3798,4 +3798,13 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get scanQrCode => 'Σάρωση κωδικού QR';
+
+  @override
+  String get appearanceAndLanguage => 'Εμφάνιση και γλώσσα';
+
+  @override
+  String get legal => 'Νομικά';
+
+  @override
+  String get advancedSettings => 'Σύνθετες ρυθμίσεις';
 }

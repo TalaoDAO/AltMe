@@ -6794,6 +6794,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Scan QR code'**
   String get scanQrCode;
+
+  /// No description provided for @appearanceAndLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance & language'**
+  String get appearanceAndLanguage;
+
+  /// No description provided for @legal.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal'**
+  String get legal;
+
+  /// No description provided for @advancedSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced settings'**
+  String get advancedSettings;
 }
 
 class _AppLocalizationsDelegate

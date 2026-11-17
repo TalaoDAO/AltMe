@@ -16,4 +16,15 @@ abstract class WalletIconStrings {
   static const String creditCardInactive = '$_base/credit_card-200.svg';
   static const String eyeTracking = '$_base/eye_tracking.svg';
   static const String dehaze = '$_base/dehaze.svg';
+  static const String cached = '$_base/cached.svg';
+  static const String verifiedUser = '$_base/verified_user.svg';
+  static const String language = '$_base/language.svg';
+  static const String schedule = '$_base/schedule.svg';
+  static const String help = '$_base/help.svg';
+  static const String info = '$_base/info.svg';
+  static const String codeXml = '$_base/code_xml.svg';
+  static const String warning = '$_base/warning.svg';
+  static const String person = '$_base/person.svg';
+  static const String dashboardCustomize = '$_base/dashboard_customize.svg';
+  static const String tune = '$_base/tune.svg';
 }

@@ -3773,4 +3773,13 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get scanQrCode => 'Escanejar codi QR';
+
+  @override
+  String get appearanceAndLanguage => 'Aparença i idioma';
+
+  @override
+  String get legal => 'Avís legal';
+
+  @override
+  String get advancedSettings => 'Configuració avançada';
 }

@@ -9,6 +9,7 @@ export 'mnemonic_verification/mnemonic_verification.dart';
 export 'profile/profile.dart';
 export 'qr_code/qr_code.dart';
 export 'search/search.dart';
+export 'settings/settings.dart';
 export 'src/src.dart';
 export 'user_pin/user_pin.dart';
 export 'wert/wert.dart';

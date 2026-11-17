@@ -58,7 +58,6 @@ const _barDestinations = <DashboardTab?>[
 ];
 
 class _DashboardViewState extends State<DashboardView> {
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final PageController pageController = PageController();
 
   @override
@@ -212,8 +211,6 @@ class _DashboardViewState extends State<DashboardView> {
               }
             },
             child: Scaffold(
-              key: scaffoldKey,
-              drawer: const DrawerPage(),
               // The body ends above the bar, so the content gets a bottom
               // padding of the bar height plus `viewPadding.bottom`, and
               // snackbars sit above the bar.
@@ -328,10 +325,11 @@ class _DashboardViewState extends State<DashboardView> {
                           IconButton(
                             tooltip: l10n.settings,
                             icon: const WalletIcon(WalletIconStrings.dehaze),
-                            // Temporary: Part 2.3 opens Settings instead.
                             onPressed: () {
                               if (!ensureWallet(context)) return;
-                              scaffoldKey.currentState!.openDrawer();
+                              Navigator.of(
+                                context,
+                              ).push<void>(SettingsPage.route());
                             },
                           ),
                         ],

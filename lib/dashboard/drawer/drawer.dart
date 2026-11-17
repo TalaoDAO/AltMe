@@ -7,7 +7,6 @@ export 'help_center/help_center.dart';
 export 'import_talao_community_card/import_talao_community_card.dart';
 export 'protocol_trace_logs/protocol_trace_logs.dart';
 export 'reset_wallet/reset_wallet.dart';
-export 'src/src.dart';
 export 'ssi/ssi.dart';
 export 'wallet_security/wallet_security.dart';
 export 'wallet_settings/wallet_settings.dart';

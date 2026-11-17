@@ -1309,5 +1309,8 @@
   "batchCopiesCount": "{count, plural, =1{1 còpia d'un sol ús} other{{count} còpies d'un sol ús}}",
   "dcqlSharedDataLabel": "Dades compartides d'aquesta atestació",
   "mdocPresent": "Presentar",
-  "scanQrCode": "Escanejar codi QR"
+  "scanQrCode": "Escanejar codi QR",
+  "appearanceAndLanguage": "Aparença i idioma",
+  "legal": "Avís legal",
+  "advancedSettings": "Configuració avançada"
 }
