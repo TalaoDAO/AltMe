@@ -48,6 +48,14 @@ class DiscoverDummyCredential extends Equatable {
   final String? websiteLinkExtern;
   final VCFormatType vcFormatType;
 
+  /// The name shown for the credential in the catalogue and on its detail
+  /// page.
+  String get discoverName =>
+      (credentialSubjectType == CredentialSubjectType.defaultCredential
+          ? display?.name
+          : credentialSubjectType.title) ??
+      '';
+
   Map<String, dynamic> toJson() => _$DiscoverDummyCredentialToJson(this);
 
   @override

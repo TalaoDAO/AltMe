@@ -1297,5 +1297,8 @@
   "scanQrCode": "Scanner un QR code",
   "appearanceAndLanguage": "Apparence et langue",
   "legal": "Mentions légales",
-  "advancedSettings": "Paramètres avancés"
+  "advancedSettings": "Paramètres avancés",
+  "searchNoResults": "Aucun résultat",
+  "searchNoResultsDescription": "Rien dans votre portefeuille ne correspond à « {query} ». Essayez un autre mot.",
+  "clearSearch": "Effacer la recherche"
 }

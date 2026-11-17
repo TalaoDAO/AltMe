@@ -1314,5 +1314,8 @@
   "scanQrCode": "Escanear código QR",
   "appearanceAndLanguage": "Apariencia e idioma",
   "legal": "Aviso legal",
-  "advancedSettings": "Ajustes avanzados"
+  "advancedSettings": "Ajustes avanzados",
+  "searchNoResults": "Sin resultados",
+  "searchNoResultsDescription": "Nada en tu cartera coincide con «{query}». Prueba con otra palabra.",
+  "clearSearch": "Borrar búsqueda"
 }

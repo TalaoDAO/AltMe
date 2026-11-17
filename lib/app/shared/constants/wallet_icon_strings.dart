@@ -25,6 +25,9 @@ abstract class WalletIconStrings {
   static const String codeXml = '$_base/code_xml.svg';
   static const String warning = '$_base/warning.svg';
   static const String person = '$_base/person.svg';
+  static const String arrowForward = '$_base/arrow_forward.svg';
+  static const String closeSmall = '$_base/close_small.svg';
+  static const String add = '$_base/add_2.svg';
   static const String dashboardCustomize = '$_base/dashboard_customize.svg';
   static const String tune = '$_base/tune.svg';
 }

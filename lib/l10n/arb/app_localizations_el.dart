@@ -3807,4 +3807,15 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get advancedSettings => 'Σύνθετες ρυθμίσεις';
+
+  @override
+  String get searchNoResults => 'Κανένα αποτέλεσμα';
+
+  @override
+  String searchNoResultsDescription(String query) {
+    return 'Τίποτα στο πορτοφόλι σας δεν ταιριάζει με «$query». Δοκιμάστε άλλη λέξη.';
+  }
+
+  @override
+  String get clearSearch => 'Εκκαθάριση αναζήτησης';
 }

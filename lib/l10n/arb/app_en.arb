@@ -1349,5 +1349,16 @@
   "scanQrCode": "Scan QR code",
   "appearanceAndLanguage": "Appearance & language",
   "legal": "Legal",
-  "advancedSettings": "Advanced settings"
+  "advancedSettings": "Advanced settings",
+  "searchNoResults": "No results",
+  "searchNoResultsDescription": "Nothing in your wallet matches “{query}”. Try another word.",
+  "@searchNoResultsDescription": {
+    "description": "Shown in Search when nothing matches the typed text.",
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "clearSearch": "Clear search"
 }

@@ -3816,4 +3816,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get advancedSettings => 'Paramètres avancés';
+
+  @override
+  String get searchNoResults => 'Aucun résultat';
+
+  @override
+  String searchNoResultsDescription(String query) {
+    return 'Rien dans votre portefeuille ne correspond à « $query ». Essayez un autre mot.';
+  }
+
+  @override
+  String get clearSearch => 'Effacer la recherche';
 }

@@ -3,6 +3,7 @@ export 'batch_count_badge.dart';
 export 'card_animation.dart';
 export 'credential_background.dart';
 export 'credential_container.dart';
+export 'credential_container_card.dart';
 export 'credential_display.dart';
 export 'credential_dynamic_detail.dart';
 export 'credential_image.dart';

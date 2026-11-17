@@ -3763,4 +3763,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get advancedSettings => 'Advanced settings';
+
+  @override
+  String get searchNoResults => 'No results';
+
+  @override
+  String searchNoResultsDescription(String query) {
+    return 'Nothing in your wallet matches “$query”. Try another word.';
+  }
+
+  @override
+  String get clearSearch => 'Clear search';
 }

@@ -1,6 +1,7 @@
 import 'package:altme/app/app.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:wallet_ui/wallet_ui.dart';
 
 class DiscoverCredentialCategoryList extends StatelessWidget {
   const DiscoverCredentialCategoryList({
@@ -17,8 +18,9 @@ class DiscoverCredentialCategoryList extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Sizes.space2XSmall),
+        padding: const EdgeInsets.symmetric(horizontal: WalletSpacing.m),
         child: ListView(
+          padding: const EdgeInsets.only(top: WalletSpacing.s),
           scrollDirection: Axis.vertical,
           children: dummyCredentials.keys
               .where(

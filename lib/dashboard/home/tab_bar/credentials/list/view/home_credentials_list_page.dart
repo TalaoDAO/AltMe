@@ -32,14 +32,7 @@ class _HomeCredentialsListPageState extends State<HomeCredentialsListPage>
     super.build(context);
     return BasePage(
       scrollView: false,
-      padding: Parameters.walletHandlesCrypto
-          ? EdgeInsets.zero
-          : const EdgeInsets.fromLTRB(
-              Sizes.spaceSmall,
-              Sizes.spaceSmall,
-              Sizes.spaceSmall,
-              0,
-            ),
+      padding: EdgeInsets.zero,
       backgroundColor: Colors.transparent,
       body: BlocListener<ProfileCubit, ProfileState>(
         listenWhen: (previous, current) {

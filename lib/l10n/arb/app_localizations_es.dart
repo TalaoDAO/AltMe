@@ -3792,4 +3792,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get advancedSettings => 'Ajustes avanzados';
+
+  @override
+  String get searchNoResults => 'Sin resultados';
+
+  @override
+  String searchNoResultsDescription(String query) {
+    return 'Nada en tu cartera coincide con «$query». Prueba con otra palabra.';
+  }
+
+  @override
+  String get clearSearch => 'Borrar búsqueda';
 }

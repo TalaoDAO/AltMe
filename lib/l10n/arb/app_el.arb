@@ -2208,5 +2208,8 @@
   "scanQrCode": "Σάρωση κωδικού QR",
   "appearanceAndLanguage": "Εμφάνιση και γλώσσα",
   "legal": "Νομικά",
-  "advancedSettings": "Σύνθετες ρυθμίσεις"
+  "advancedSettings": "Σύνθετες ρυθμίσεις",
+  "searchNoResults": "Κανένα αποτέλεσμα",
+  "searchNoResultsDescription": "Τίποτα στο πορτοφόλι σας δεν ταιριάζει με «{query}». Δοκιμάστε άλλη λέξη.",
+  "clearSearch": "Εκκαθάριση αναζήτησης"
 }

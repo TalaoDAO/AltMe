@@ -4,6 +4,7 @@ import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_storage/secure_storage.dart' as secure_storage;
+import 'package:wallet_ui/wallet_ui.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key, this.hideAppBar = true});
@@ -39,45 +40,48 @@ class SearchView extends StatelessWidget {
     final l10n = context.l10n;
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
+        final showEmpty =
+            state.status != AppStatus.loading &&
+            state.searchText.trim().isNotEmpty &&
+            state.credentials.isEmpty;
         return BasePage(
+          backgroundColor: context.walletColors.backgroundAlternative,
+          appBarBackgroundColor: context.walletColors.backgroundAlternative,
           title: hideAppBar ? null : l10n.searchCredentials,
           titleLeading: hideAppBar ? null : const BackLeadingButton(),
           titleAlignment: Alignment.topCenter,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: WalletSpacing.m),
           scrollView: false,
-          body: BackgroundCard(
-            child: Column(
-              children: [
-                const Search(),
-                const SizedBox(height: 15),
-                if (state.status == AppStatus.loading)
-                  const Expanded(child: SearchListShimmer())
-                else
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: state.credentials.length,
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 10),
-                          child: CredentialsListPageItem(
-                            credentialModel: state.credentials[index],
-                            isDiscover: false,
-                            onTap: () {
-                              Navigator.of(context).push<void>(
-                                CredentialsDetailsPage.route(
-                                  credentialModel: state.credentials[index],
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
+          body: Column(
+            children: [
+              const Search(),
+              const SizedBox(height: WalletSpacing.m),
+              if (state.status == AppStatus.loading)
+                const Expanded(child: SearchListShimmer())
+              else if (showEmpty)
+                Expanded(child: SearchEmptyView(query: state.searchText))
+              else
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: state.credentials.length,
+                    physics: const ScrollPhysics(),
+                    separatorBuilder: (_, _) =>
+                        const SizedBox(height: WalletSpacing.m),
+                    itemBuilder: (context, index) {
+                      return CredentialContainerCard(
+                        credentialModel: state.credentials[index],
+                        onTap: () {
+                          Navigator.of(context).push<void>(
+                            CredentialsDetailsPage.route(
+                              credentialModel: state.credentials[index],
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
         );
       },

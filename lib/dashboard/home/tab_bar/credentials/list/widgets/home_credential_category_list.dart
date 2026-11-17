@@ -6,6 +6,7 @@ import 'package:did_kit/did_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oidc4vc/oidc4vc.dart';
+import 'package:wallet_ui/wallet_ui.dart';
 
 class HomeCredentialCategoryList extends StatefulWidget {
   const HomeCredentialCategoryList({
@@ -55,7 +56,7 @@ class _HomeCredentialCategoryListState
         return RefreshIndicator(
           onRefresh: widget.onRefresh,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Sizes.space2XSmall),
+            padding: const EdgeInsets.symmetric(horizontal: WalletSpacing.m),
             child: FutureBuilder<String>(
               future: getDid(),
               builder: (context, snapshot) {
@@ -90,6 +91,7 @@ class _HomeCredentialCategoryListState
     CustomOidc4VcProfile customOidc4vcProfile,
   ) {
     return ListView(
+      padding: const EdgeInsets.only(top: WalletSpacing.s),
       scrollDirection: Axis.vertical,
       children: getCredentialCategorySorted
           .where((category) {

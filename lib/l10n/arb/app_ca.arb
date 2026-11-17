@@ -1312,5 +1312,8 @@
   "scanQrCode": "Escanejar codi QR",
   "appearanceAndLanguage": "Aparença i idioma",
   "legal": "Avís legal",
-  "advancedSettings": "Configuració avançada"
+  "advancedSettings": "Configuració avançada",
+  "searchNoResults": "Sense resultats",
+  "searchNoResultsDescription": "Res a la teua cartera coincideix amb «{query}». Prova amb una altra paraula.",
+  "clearSearch": "Esborra la cerca"
 }

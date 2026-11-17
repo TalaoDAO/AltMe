@@ -3,9 +3,11 @@ import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wallet_ui/wallet_ui.dart';
 
-class DiscoverCredentialItem extends StatelessWidget {
-  const DiscoverCredentialItem({super.key, required this.dummyCredential});
+/// A credential of the discover catalogue: opens its detail page.
+class DiscoverCredentialTile extends StatelessWidget {
+  const DiscoverCredentialTile({super.key, required this.dummyCredential});
 
   final DiscoverDummyCredential dummyCredential;
 
@@ -13,7 +15,16 @@ class DiscoverCredentialItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return InkWell(
+    return WalletCredentialContainer(
+      title: dummyCredential.discoverName,
+      media: AspectRatio(
+        aspectRatio: Sizes.credentialAspectRatio,
+        child: DummyCredentialImage(
+          displayExternalIssuer: dummyCredential.display,
+          credentialSubjectType: dummyCredential.credentialSubjectType,
+          image: dummyCredential.image,
+        ),
+      ),
       onTap: () async {
         if (context.read<HomeCubit>().state.homeStatus ==
             HomeStatus.hasNoWallet) {
@@ -23,8 +34,6 @@ class DiscoverCredentialItem extends StatelessWidget {
           );
           return;
         }
-        // If dummyCredential is an external issuer we don't display
-        // the detail screen, we go directly to the issuer endpoint
         await Navigator.push<void>(
           context,
           DiscoverDetailsPage.route(
@@ -42,11 +51,6 @@ class DiscoverCredentialItem extends StatelessWidget {
           ),
         );
       },
-      child: DummyCredentialImage(
-        displayExternalIssuer: dummyCredential.display,
-        credentialSubjectType: dummyCredential.credentialSubjectType,
-        image: dummyCredential.image,
-      ),
     );
   }
 }

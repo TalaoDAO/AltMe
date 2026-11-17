@@ -3782,4 +3782,15 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get advancedSettings => 'Configuració avançada';
+
+  @override
+  String get searchNoResults => 'Sense resultats';
+
+  @override
+  String searchNoResultsDescription(String query) {
+    return 'Res a la teua cartera coincideix amb «$query». Prova amb una altra paraula.';
+  }
+
+  @override
+  String get clearSearch => 'Esborra la cerca';
 }

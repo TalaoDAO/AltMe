@@ -211,6 +211,7 @@ class _DashboardViewState extends State<DashboardView> {
               }
             },
             child: Scaffold(
+              backgroundColor: context.walletColors.backgroundAlternative,
               // The body ends above the bar, so the content gets a bottom
               // padding of the bar height plus `viewPadding.bottom`, and
               // snackbars sit above the bar.

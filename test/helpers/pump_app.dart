@@ -20,10 +20,13 @@ extension PumpApp on WidgetTester {
     Widget widget, {
     Widget Function(Widget app)? wrapApp,
     List<NavigatorObserver> navigatorObservers = const [],
+    Brightness brightness = Brightness.light,
   }) {
     final app = MaterialApp(
       navigatorObservers: navigatorObservers,
-      theme: WalletTheme.light(Parameters.walletUiConfig),
+      theme: brightness == Brightness.light
+          ? WalletTheme.light(Parameters.walletUiConfig)
+          : WalletTheme.dark(Parameters.walletUiConfig),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

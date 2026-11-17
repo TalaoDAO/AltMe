@@ -25,6 +25,7 @@ class BasePage extends StatefulWidget {
     this.floatingActionButtonLocation,
     this.secureScreen = false,
     this.appBarHeight = Sizes.appBarHeight,
+    this.appBarBackgroundColor,
   });
 
   final GlobalKey<ScaffoldState>? scaffoldKey;
@@ -46,6 +47,9 @@ class BasePage extends StatefulWidget {
   final FloatingActionButtonLocation? floatingActionButtonLocation;
   final bool secureScreen;
   final double appBarHeight;
+
+  /// Colour of the title bar; defaults to the surface colour.
+  final Color? appBarBackgroundColor;
 
   @override
   State<BasePage> createState() => _BasePageState();
@@ -140,6 +144,7 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
                             titleAlignment: widget.titleAlignment,
                             trailing: widget.titleTrailing,
                             appBarHeight: widget.appBarHeight,
+                            backgroundColor: widget.appBarBackgroundColor,
                           ),
                     bottomNavigationBar: widget.navigation != null
                         ? (widget.useSafeArea
@@ -185,6 +190,7 @@ class _BasePageState extends State<BasePage> with WidgetsBindingObserver {
                     titleAlignment: widget.titleAlignment,
                     trailing: widget.titleTrailing,
                     appBarHeight: widget.appBarHeight,
+                    backgroundColor: widget.appBarBackgroundColor,
                   ),
             bottomNavigationBar: widget.navigation != null
                 ? (widget.useSafeArea

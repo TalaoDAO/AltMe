@@ -6812,6 +6812,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Advanced settings'**
   String get advancedSettings;
+
+  /// No description provided for @searchNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No results'**
+  String get searchNoResults;
+
+  /// Shown in Search when nothing matches the typed text.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing in your wallet matches “{query}”. Try another word.'**
+  String searchNoResultsDescription(String query);
+
+  /// No description provided for @clearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get clearSearch;
 }
 
 class _AppLocalizationsDelegate

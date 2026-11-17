@@ -11,6 +11,7 @@ class CustomAppBar extends PreferredSize {
     this.trailing,
     this.titleAlignment = Alignment.bottomCenter,
     this.appBarHeight = Sizes.appBarHeight,
+    this.backgroundColor,
   }) : super(child: Container(), preferredSize: Size.fromHeight(appBarHeight));
 
   final String? title;
@@ -20,9 +21,12 @@ class CustomAppBar extends PreferredSize {
   final Alignment titleAlignment;
   final double appBarHeight;
 
+  /// Defaults to the surface colour.
+  final Color? backgroundColor;
+
   @override
   Widget build(BuildContext context) => ColoredBox(
-    color: Theme.of(context).colorScheme.surface,
+    color: backgroundColor ?? Theme.of(context).colorScheme.surface,
     child: SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 0, 15, 0),
