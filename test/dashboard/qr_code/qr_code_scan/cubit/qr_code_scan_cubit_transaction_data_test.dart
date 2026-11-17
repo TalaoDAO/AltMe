@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:altme/app/app.dart';
-import 'package:altme/connection_bridge/connection_bridge.dart';
 import 'package:altme/credentials/credentials.dart';
 import 'package:altme/dashboard/dashboard.dart';
 import 'package:altme/deep_link/deep_link.dart';
@@ -9,7 +8,6 @@ import 'package:altme/enterprise/cubit/enterprise_cubit.dart';
 import 'package:altme/query_by_example/query_by_example.dart';
 import 'package:altme/scan/scan.dart';
 import 'package:altme/wallet/cubit/wallet_cubit.dart';
-import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:did_kit/did_kit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -28,10 +26,6 @@ class _MockCredentialsCubit extends Mock implements CredentialsCubit {}
 class _MockQueryByExampleCubit extends Mock implements QueryByExampleCubit {}
 
 class _MockDeepLinkCubit extends Mock implements DeepLinkCubit {}
-
-class _MockBeacon extends Mock implements Beacon {}
-
-class _MockWalletConnectCubit extends Mock implements WalletConnectCubit {}
 
 class _MockSecureStorage extends Mock implements SecureStorageProvider {}
 
@@ -81,8 +75,6 @@ void main() {
       queryByExampleCubit: _MockQueryByExampleCubit(),
       deepLinkCubit: _MockDeepLinkCubit(),
       jwtDecode: JWTDecode(),
-      beacon: _MockBeacon(),
-      walletConnectCubit: _MockWalletConnectCubit(),
       secureStorageProvider: _MockSecureStorage(),
       didKitProvider: _MockDIDKitProvider(),
       oidc4vc: _MockOIDC4VCIClient(),
