@@ -154,6 +154,7 @@ flutter:
   assets:
     - assets/fonts/Manrope-OFL.txt
     - assets/fonts/OpenSans-OFL.txt
+    - assets/icon/wallet_ui/
     - assets/
     - assets/abi/
     - assets/splash/
