@@ -18,7 +18,7 @@ class AddCredentialButton extends StatelessWidget {
         if (credentialCategory == CredentialCategory.blockchainAccountsCards) {
           Navigator.of(context).push<void>(ChooseAddAccountMethodPage.route());
         } else {
-          context.read<DashboardCubit>().onPageChanged(1);
+          context.read<DashboardCubit>().selectTab(DashboardTab.discover);
         }
       },
       child: BackgroundCard(

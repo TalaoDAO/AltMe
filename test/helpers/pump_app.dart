@@ -15,9 +15,14 @@ import 'package:wallet_ui/wallet_ui.dart';
 extension PumpApp on WidgetTester {
   /// Pumps [widget] in a [MaterialApp]. [wrapApp] puts something above the
   /// app, like the providers of the real app, which routes pushed from
-  /// [widget] can see.
-  Future<void> pumpApp(Widget widget, {Widget Function(Widget app)? wrapApp}) {
+  /// [widget] can see. [navigatorObservers] watch the app's navigator.
+  Future<void> pumpApp(
+    Widget widget, {
+    Widget Function(Widget app)? wrapApp,
+    List<NavigatorObserver> navigatorObservers = const [],
+  }) {
     final app = MaterialApp(
+      navigatorObservers: navigatorObservers,
       theme: WalletTheme.light(Parameters.walletUiConfig),
       localizationsDelegates: const [
         AppLocalizations.delegate,

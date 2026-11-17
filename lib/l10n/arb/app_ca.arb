@@ -1307,5 +1307,7 @@
   "qesDocumentIntegrityFailed": "Aquest document no coincideix amb la seva suma de comprovació. No es pot aprovar la signatura.",
   "qesDocumentOneTimePassword": "Contrasenya d'un sol ús",
   "batchCopiesCount": "{count, plural, =1{1 còpia d'un sol ús} other{{count} còpies d'un sol ús}}",
-  "dcqlSharedDataLabel": "Dades compartides d'aquesta atestació"
+  "dcqlSharedDataLabel": "Dades compartides d'aquesta atestació",
+  "mdocPresent": "Presentar",
+  "scanQrCode": "Escanejar codi QR"
 }

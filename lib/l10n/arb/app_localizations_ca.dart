@@ -3672,7 +3672,7 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get mdocPresent => 'Present';
+  String get mdocPresent => 'Presentar';
 
   @override
   String get mdocPresentNoAttestation =>
@@ -3770,4 +3770,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get dcqlSharedDataLabel => 'Dades compartides d\'aquesta atestació';
+
+  @override
+  String get scanQrCode => 'Escanejar codi QR';
 }

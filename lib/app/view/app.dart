@@ -237,7 +237,6 @@ class App extends StatelessWidget {
               profileCubit: context.read<ProfileCubit>(),
             ),
           ),
-          BlocProvider(create: (context) => HomeTabbarCubit()),
           BlocProvider(create: (context) => MessageCubit()),
         ],
         child: const MaterialAppDefinition(),

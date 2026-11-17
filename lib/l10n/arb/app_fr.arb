@@ -1293,5 +1293,6 @@
   "qesDocumentIntegrityFailed": "Ce document ne correspond pas à son empreinte. La signature ne peut pas être approuvée.",
   "qesDocumentOneTimePassword": "Mot de passe à usage unique",
   "batchCopiesCount": "{count, plural, =1{1 exemplaire à usage unique} other{{count} exemplaires à usage unique}}",
-  "dcqlSharedDataLabel": "Données partagées depuis cette attestation"
+  "dcqlSharedDataLabel": "Données partagées depuis cette attestation",
+  "scanQrCode": "Scanner un QR code"
 }

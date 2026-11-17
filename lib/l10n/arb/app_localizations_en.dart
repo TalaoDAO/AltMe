@@ -3751,4 +3751,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dcqlSharedDataLabel => 'Data shared from this attestation';
+
+  @override
+  String get scanQrCode => 'Scan QR code';
 }

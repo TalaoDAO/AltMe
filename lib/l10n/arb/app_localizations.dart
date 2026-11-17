@@ -6788,6 +6788,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Data shared from this attestation'**
   String get dcqlSharedDataLabel;
+
+  /// No description provided for @scanQrCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan QR code'**
+  String get scanQrCode;
 }
 
 class _AppLocalizationsDelegate

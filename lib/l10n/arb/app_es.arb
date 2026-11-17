@@ -1309,5 +1309,7 @@
   "qesDocumentIntegrityFailed": "Este documento no coincide con su suma de comprobación. No se puede aprobar la firma.",
   "qesDocumentOneTimePassword": "Contraseña de un solo uso",
   "batchCopiesCount": "{count, plural, =1{1 copia de un solo uso} other{{count} copias de un solo uso}}",
-  "dcqlSharedDataLabel": "Datos compartidos de esta atestación"
+  "dcqlSharedDataLabel": "Datos compartidos de esta atestación",
+  "mdocPresent": "Presentar",
+  "scanQrCode": "Escanear código QR"
 }

@@ -1,4 +1,3 @@
 export 'view/discover_details_page.dart';
 export 'view/discover_page.dart';
-export 'view/discover_tab_page.dart';
 export 'widgets/widget.dart';

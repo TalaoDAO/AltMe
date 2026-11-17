@@ -3804,4 +3804,7 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get dcqlSharedDataLabel =>
       'Données partagées depuis cette attestation';
+
+  @override
+  String get scanQrCode => 'Scanner un QR code';
 }

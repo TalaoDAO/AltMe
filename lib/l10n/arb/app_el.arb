@@ -2203,5 +2203,7 @@
   "qesDocumentIntegrityFailed": "Αυτό το έγγραφο δεν ταιριάζει με το άθροισμα ελέγχου του. Η υπογραφή δεν μπορεί να εγκριθεί.",
   "qesDocumentOneTimePassword": "Κωδικός μίας χρήσης",
   "batchCopiesCount": "{count, plural, =1{1 αντίγραφο μίας χρήσης} other{{count} αντίγραφα μίας χρήσης}}",
-  "dcqlSharedDataLabel": "Δεδομένα που κοινοποιούνται από αυτή την βεβαίωση"
+  "dcqlSharedDataLabel": "Δεδομένα που κοινοποιούνται από αυτή την βεβαίωση",
+  "mdocPresent": "Παρουσίαση",
+  "scanQrCode": "Σάρωση κωδικού QR"
 }

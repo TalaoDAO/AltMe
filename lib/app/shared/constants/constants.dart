@@ -7,3 +7,4 @@ export 'parameters.dart';
 export 'secure_storage_keys.dart';
 export 'sizes.dart';
 export 'urls.dart';
+export 'wallet_icon_strings.dart';

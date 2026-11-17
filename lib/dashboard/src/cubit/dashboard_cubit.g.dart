@@ -14,13 +14,15 @@ DashboardState _$DashboardStateFromJson(Map<String, dynamic> json) =>
       message: json['message'] == null
           ? null
           : StateMessage.fromJson(json['message'] as Map<String, dynamic>),
-      selectedIndex: (json['selectedIndex'] as num?)?.toInt() ?? 0,
+      tab:
+          $enumDecodeNullable(_$DashboardTabEnumMap, json['tab']) ??
+          DashboardTab.wallet,
     );
 
 Map<String, dynamic> _$DashboardStateToJson(DashboardState instance) =>
     <String, dynamic>{
       'status': _$AppStatusEnumMap[instance.status]!,
-      'selectedIndex': instance.selectedIndex,
+      'tab': _$DashboardTabEnumMap[instance.tab]!,
       'message': instance.message,
     };
 
@@ -42,4 +44,10 @@ const _$AppStatusEnumMap = {
   AppStatus.successAdd: 'successAdd',
   AppStatus.successUpdate: 'successUpdate',
   AppStatus.addEuropeanProfile: 'addEuropeanProfile',
+};
+
+const _$DashboardTabEnumMap = {
+  DashboardTab.wallet: 'wallet',
+  DashboardTab.discover: 'discover',
+  DashboardTab.search: 'search',
 };

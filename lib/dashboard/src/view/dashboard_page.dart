@@ -11,6 +11,7 @@ import 'package:altme/splash/cubit/splash_cubit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wallet_ui/wallet_ui.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -29,15 +30,36 @@ class DashboardPage extends StatelessWidget {
   }
 }
 
+/// The page shown inside the dashboard for [tab].
+Widget buildDashboardTab(DashboardTab tab) => switch (tab) {
+  DashboardTab.wallet => const HomePage(),
+  DashboardTab.discover => const DiscoverPage(),
+  DashboardTab.search =>
+    Parameters.walletHandlesCrypto ? const WertPage() : const SearchPage(),
+};
+
 class DashboardView extends StatefulWidget {
-  const DashboardView({super.key});
+  const DashboardView({super.key, this.tabBuilder = buildDashboardTab});
+
+  /// Builds the page of each tab. Tests replace the real pages.
+  final Widget Function(DashboardTab tab) tabBuilder;
 
   @override
   State<DashboardView> createState() => _DashboardViewState();
 }
 
+/// The bottom bar destinations, left to right. `null` is Present, which
+/// pushes the scanner instead of showing a tab.
+const _barDestinations = <DashboardTab?>[
+  DashboardTab.wallet,
+  DashboardTab.discover,
+  null,
+  DashboardTab.search,
+];
+
 class _DashboardViewState extends State<DashboardView> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final PageController pageController = PageController();
 
   @override
   void initState() {
@@ -46,6 +68,8 @@ class _DashboardViewState extends State<DashboardView> {
       // unlocked: the links waiting for it can be processed.
       context.read<SplashCubit>().authenticated();
       Future.delayed(Duration.zero, () {
+        if (!mounted) return;
+
         /// If there is a deepLink we give do as if it coming from QRCode
         context.read<QRCodeScanCubit>().deepLink();
 
@@ -61,74 +85,56 @@ class _DashboardViewState extends State<DashboardView> {
     super.initState();
   }
 
-  PageController pageController = PageController(
-    initialPage: 0,
-    keepPage: true,
-  );
-
-  Duration pageTurnDuration = const Duration(milliseconds: 500);
-  Curve pageTurnCurve = Curves.ease;
-
-  void bottomTapped(int index) {
-    if (context.read<HomeCubit>().state.homeStatus == HomeStatus.hasNoWallet) {
-      showDialog<void>(context: context, builder: (_) => const WalletDialog());
-      return;
-    }
-    context.read<DashboardCubit>().onPageChanged(index);
-    pageController.jumpToPage(index);
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
   }
 
-  /// Opens the in-person presentation QR code, like the scan button does
-  /// for scanning.
-  void _openPresent(BuildContext context) {
+  void _selectTab(DashboardTab tab) {
+    if (!ensureWallet(context)) return;
+    context.read<DashboardCubit>().selectTab(tab);
+  }
+
+  /// Pushes the scanner on [tab]: Scan from the centre button, Present from
+  /// the Present destination.
+  void _openScanner(ScanPageTab tab) {
     if (kIsWeb) {
       final l10n = context.l10n;
-      showDialog<void>(
-        context: context,
-        builder: (_) => ConfirmDialog(
-          title: l10n.unavailable_feature_title,
-          subtitle: l10n.unavailable_feature_message,
-          yes: l10n.ok,
-          showNoButton: false,
+      unawaited(
+        showDialog<void>(
+          context: context,
+          builder: (_) => ConfirmDialog(
+            title: l10n.unavailable_feature_title,
+            subtitle: l10n.unavailable_feature_message,
+            yes: l10n.ok,
+            showNoButton: false,
+          ),
         ),
       );
       return;
     }
-    if (context.read<HomeCubit>().state.homeStatus == HomeStatus.hasNoWallet) {
-      showDialog<void>(context: context, builder: (_) => const WalletDialog());
-      return;
-    }
-    Navigator.of(
-      context,
-    ).push<void>(QrCodeScanPage.route(initialTab: ScanPageTab.present));
+    if (!ensureWallet(context)) return;
+    unawaited(
+      Navigator.of(context).push<void>(QrCodeScanPage.route(initialTab: tab)),
+    );
   }
 
-  String _getTitle(int selectedIndex, AppLocalizations l10n) {
-    switch (selectedIndex) {
-      case 0:
-        return l10n.myWallet;
-      case 1:
-        return l10n.discover;
-      case 2:
-        return Parameters.walletHandlesCrypto ? l10n.buy : l10n.search;
-      case 3:
-        return l10n.chat;
-      default:
-        return '';
+  void _onBarSelected(int index) {
+    final tab = _barDestinations[index];
+    if (tab == null) {
+      _openScanner(ScanPageTab.present);
+    } else {
+      _selectTab(tab);
     }
   }
 
-  // Future<void> _startKycVerification() async {
-  //   await securityCheck(
-  //     context: context,
-  //     localAuthApi: LocalAuthApi(),
-  //     onSuccess: () {
-  //       context.read<KycVerificationCubit>().startKycVerifcation(
-  //             vcType: KycVcType.verifiableId,
-  //           );
-  //     },
-  //   );
-  // }
+  String _title(DashboardTab tab, AppLocalizations l10n) => switch (tab) {
+    DashboardTab.wallet => l10n.myWallet,
+    DashboardTab.discover => l10n.discover,
+    DashboardTab.search =>
+      Parameters.walletHandlesCrypto ? l10n.buy : l10n.search,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -160,9 +166,10 @@ class _DashboardViewState extends State<DashboardView> {
           },
         ),
         BlocListener<DashboardCubit, DashboardState>(
+          listenWhen: (previous, current) => previous.tab != current.tab,
           listener: (_, state) {
-            if (state.selectedIndex != pageController.page?.toInt()) {
-              pageController.jumpToPage(state.selectedIndex);
+            if (pageController.hasClients) {
+              pageController.jumpToPage(state.tab.index);
             }
           },
         ),
@@ -183,193 +190,167 @@ class _DashboardViewState extends State<DashboardView> {
       ],
       child: BlocBuilder<DashboardCubit, DashboardState>(
         builder: (context, dashboardState) {
-          if (dashboardState.selectedIndex == 3) {
-            context.read<AltmeChatSupportCubit>().setMessagesAsRead();
-          }
+          final tab = dashboardState.tab;
+          final displayNotification = context.select<ProfileCubit, bool>(
+            (cubit) => cubit
+                .state
+                .model
+                .profileSetting
+                .helpCenterOptions
+                .displayNotification,
+          );
+          final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
 
-          return BlocBuilder<ProfileCubit, ProfileState>(
-            builder: (context, profileState) {
-              final profileModel = profileState.model;
-
-              final helpCenterOptions =
-                  profileModel.profileSetting.helpCenterOptions;
-
-              final displayChatSupport = helpCenterOptions.displayChatSupport;
-
-              final displayNotification = helpCenterOptions.displayNotification;
-
-              return PopScope(
-                canPop: false,
-                onPopInvoked: (didPop) async {
-                  if (didPop) {
-                    return;
-                  }
-                  if (scaffoldKey.currentState!.isDrawerOpen) {
-                    // Navigator.of(context).pop();
-                  }
-                },
-                child: BasePage(
-                  scrollView: false,
-                  scaffoldKey: scaffoldKey,
-                  padding: EdgeInsets.zero,
-                  drawer: const DrawerPage(),
-                  body: Stack(
-                    children: [
-                      Column(
+          return PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, _) {
+              if (didPop) return;
+              // Back from another tab goes to Wallet; on Wallet it does
+              // nothing.
+              if (tab != DashboardTab.wallet) {
+                context.read<DashboardCubit>().selectTab(DashboardTab.wallet);
+              }
+            },
+            child: Scaffold(
+              key: scaffoldKey,
+              drawer: const DrawerPage(),
+              // The body ends above the bar, so the content gets a bottom
+              // padding of the bar height plus `viewPadding.bottom`, and
+              // snackbars sit above the bar.
+              bottomNavigationBar: keyboardOpen
+                  ? null
+                  : WalletBottomBar(
+                      items: [
+                        WalletBottomBarItem(
+                          icon: const WalletIcon(
+                            WalletIconStrings.walletInactive,
+                          ),
+                          activeIcon: const WalletIcon(
+                            WalletIconStrings.wallet,
+                          ),
+                          label: l10n.wallet,
+                          semanticLabel: l10n.wallet,
+                        ),
+                        WalletBottomBarItem(
+                          icon: const WalletIcon(
+                            WalletIconStrings.exploreInactive,
+                          ),
+                          activeIcon: const WalletIcon(
+                            WalletIconStrings.explore,
+                          ),
+                          label: l10n.discover,
+                          semanticLabel: l10n.discover,
+                        ),
+                        WalletBottomBarItem(
+                          icon: const WalletIcon(
+                            WalletIconStrings.sensorsInactive,
+                          ),
+                          activeIcon: const WalletIcon(
+                            WalletIconStrings.sensors,
+                          ),
+                          label: l10n.mdocPresent,
+                          semanticLabel: l10n.mdocPresent,
+                        ),
+                        if (Parameters.walletHandlesCrypto)
+                          WalletBottomBarItem(
+                            icon: const WalletIcon(
+                              WalletIconStrings.creditCardInactive,
+                            ),
+                            activeIcon: const WalletIcon(
+                              WalletIconStrings.creditCard,
+                            ),
+                            label: l10n.buy,
+                            semanticLabel: l10n.buy,
+                          )
+                        else
+                          WalletBottomBarItem(
+                            icon: const WalletIcon(WalletIconStrings.search),
+                            activeIcon: const WalletIcon(
+                              WalletIconStrings.search,
+                            ),
+                            label: l10n.search,
+                            semanticLabel: l10n.search,
+                          ),
+                      ],
+                      selectedIndex: _barDestinations.indexOf(tab),
+                      onSelected: _onBarSelected,
+                      centerButton: WalletBottomBarCenterButton(
+                        icon: const WalletIcon(WalletIconStrings.eyeTracking),
+                        semanticLabel: l10n.scanQrCode,
+                        onPressed: () => _openScanner(ScanPageTab.scan),
+                      ),
+                    ),
+              body: SafeArea(
+                bottom: false,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        WalletSpacing.m,
+                        0,
+                        WalletSpacing.s,
+                        0,
+                      ),
+                      child: Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 15, 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                HomeTitleLeading(
-                                  onPressed: () {
-                                    if (context
-                                            .read<HomeCubit>()
-                                            .state
-                                            .homeStatus ==
-                                        HomeStatus.hasNoWallet) {
-                                      showDialog<void>(
-                                        context: context,
-                                        builder: (_) => const WalletDialog(),
-                                      );
-                                      return;
-                                    }
-                                    scaffoldKey.currentState!.openDrawer();
-                                  },
-                                ),
-                                if (Parameters.walletHandlesCrypto)
-                                  const CryptoAccountSwitcherButton(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                  ),
-                                if (displayNotification)
-                                  StreamBuilder(
-                                    initialData: context
-                                        .read<MatrixNotificationCubit>()
-                                        .unreadMessageCount,
-                                    stream: context
-                                        .read<MatrixNotificationCubit>()
-                                        .unreadMessageCountStream,
-                                    builder: (_, snapShot) {
-                                      return NotifyIcon(
-                                        badgeCount: snapShot.data ?? 0,
-                                        onTap: () {
-                                          Navigator.of(context).push<void>(
-                                            NotificationPage.route(),
-                                          );
-                                        },
-                                      );
-                                    },
-                                  ),
-                              ],
+                          if (Parameters.walletHandlesCrypto)
+                            const CryptoAccountSwitcherButton(
+                              mainAxisAlignment: MainAxisAlignment.center,
                             ),
-                          ),
-                          Text(
-                            _getTitle(dashboardState.selectedIndex, l10n),
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.headlineSmall!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
                           Expanded(
-                            child: PageView(
-                              controller: pageController,
-                              onPageChanged: context
-                                  .read<DashboardCubit>()
-                                  .onPageChanged,
-                              physics: const NeverScrollableScrollPhysics(),
-                              children: [
-                                const HomePage(),
-                                // if (Parameters.walletHandlesCrypto)
-                                //   const DiscoverTabPage()
-                                // else
-                                const DiscoverPage(),
-                                if (Parameters.walletHandlesCrypto)
-                                  const WertPage()
-                                else
-                                  const SearchPage(),
-                                if (displayChatSupport)
-                                  const AltmeSupportChatPage()
-                                else
-                                  Container(),
-                              ],
+                            child: Text(
+                              _title(tab, l10n),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.headlineSmall!
+                                  .copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
-                          BottomBarDecoration(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                BottomBarItem(
-                                  icon: IconStrings.home,
-                                  text: l10n.home,
-                                  onTap: () => bottomTapped(0),
-                                  isSelected: dashboardState.selectedIndex == 0,
-                                ),
-                                BottomBarItem(
-                                  icon: IconStrings.discover,
-                                  text: l10n.discover,
-                                  onTap: () => bottomTapped(1),
-                                  isSelected: dashboardState.selectedIndex == 1,
-                                ),
-                                const SizedBox(width: 60),
-                                if (Parameters.walletHandlesCrypto)
-                                  BottomBarItem(
-                                    icon: IconStrings.cashInHand,
-                                    text: l10n.buy,
-                                    onTap: () => bottomTapped(2),
-                                    isSelected:
-                                        dashboardState.selectedIndex == 2,
-                                  )
-                                else
-                                  BottomBarItem(
-                                    icon: IconStrings.searchNormal,
-                                    text: l10n.search,
-                                    onTap: () => bottomTapped(2),
-                                    isSelected:
-                                        dashboardState.selectedIndex == 2,
-                                  ),
-                                if (displayChatSupport) ...[
-                                  StreamBuilder(
-                                    initialData: context
-                                        .read<AltmeChatSupportCubit>()
-                                        .unreadMessageCount,
-                                    stream: context
-                                        .read<AltmeChatSupportCubit>()
-                                        .unreadMessageCountStream,
-                                    builder: (_, snapShot) {
-                                      return BottomBarItem(
-                                        icon: IconStrings.messaging,
-                                        text: l10n.chat,
-                                        badgeCount: snapShot.data ?? 0,
-                                        onTap: () => bottomTapped(3),
-                                        isSelected:
-                                            dashboardState.selectedIndex == 3,
-                                      );
-                                    },
-                                  ),
-                                ] else ...[
-                                  BottomBarItem(
-                                    iconData: Icons.contactless_outlined,
-                                    text: l10n.mdocPresent,
-                                    onTap: () => _openPresent(context),
-                                    isSelected: false,
-                                  ),
-                                ],
-                              ],
+                          if (displayNotification)
+                            StreamBuilder(
+                              initialData: context
+                                  .read<MatrixNotificationCubit>()
+                                  .unreadMessageCount,
+                              stream: context
+                                  .read<MatrixNotificationCubit>()
+                                  .unreadMessageCountStream,
+                              builder: (_, snapShot) {
+                                return NotifyIcon(
+                                  badgeCount: snapShot.data ?? 0,
+                                  onTap: () {
+                                    Navigator.of(
+                                      context,
+                                    ).push<void>(NotificationPage.route());
+                                  },
+                                );
+                              },
                             ),
+                          IconButton(
+                            tooltip: l10n.settings,
+                            icon: const WalletIcon(WalletIconStrings.dehaze),
+                            // Temporary: Part 2.3 opens Settings instead.
+                            onPressed: () {
+                              if (!ensureWallet(context)) return;
+                              scaffoldKey.currentState!.openDrawer();
+                            },
                           ),
-                          const SizedBox(height: 1),
                         ],
                       ),
-                      const Align(
-                        alignment: Alignment.bottomCenter,
-                        child: QRIcon(),
+                    ),
+                    Expanded(
+                      child: PageView(
+                        controller: pageController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          for (final tab in DashboardTab.values)
+                            widget.tabBuilder(tab),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              );
-            },
+              ),
+            ),
           );
         },
       ),

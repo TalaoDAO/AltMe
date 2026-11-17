@@ -25,9 +25,7 @@ class HomePage extends StatelessWidget {
 
         if (homeState.status == AppStatus.success) {}
       },
-      child: Parameters.walletHandlesCrypto
-          ? const TabControllerPage()
-          : const HomeCredentialsListPage(),
+      child: const HomeCredentialsListPage(),
     );
   }
 }

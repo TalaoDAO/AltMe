@@ -1,7 +1,6 @@
 class IconStrings {
   static const String base = 'assets/icon';
   static const String call = '$base/call.png';
-  static const String messaging = '$base/messaging.png';
   static const String alertErrorIcon = '$base/alert-error-icon.png';
   static const String talaoIcon = '$base/talao_token.png';
   static const String alertWarningIcon = '$base/alert-warning-icon.png';
@@ -17,9 +16,7 @@ class IconStrings {
   static const String closeCircleWhite = '$base/close-circle-white.png';
   static const String story = '$base/story.png';
   static const String profile = '$base/profile.png';
-  static const String searchNormal = '$base/search-normal.png';
   static const String save = '$base/save.png';
-  static const String scan = '$base/scan.png';
   static const String arrows = '$base/arrows.png';
   static const String fingerprint = '$base/fingerprint.png';
   static const String fingerprint2 = '$base/fingerprint2.png';
@@ -28,11 +25,7 @@ class IconStrings {
   static const String restore = '$base/restore.png';
   static const String terms = '$base/terms.png';
   static const String userSquare = '$base/user-square.png';
-  static const String ghost = '$base/ghost.png';
-  static const String health = '$base/health.png';
   static const String userSquareBlur = '$base/user-square-blur.png';
-  static const String ghostBlur = '$base/ghost-blur.png';
-  static const String healthBlur = '$base/health-blur.png';
   static const String cardReceive = '$base/card-receive.png';
   static const String cardSend = '$base/card-send.png';
   static const String emptyWalletAdd = '$base/empty-wallet-add.png';
@@ -58,17 +51,12 @@ class IconStrings {
   static const String lockCircle = '$base/lock-circle.png';
   static const String cloudAdd = '$base/cloud-add.png';
   static const String addressBook = '$base/address_book.png';
-  static const String home = '$base/empty-wallet.png';
-  static const String discover = '$base/discover.png';
-  static const String settings = '$base/settings.png';
   static const String notification = '$base/notification.png';
   static const String advanceSettings = '$base/advance-settings.png';
   static const String export = '$base/export.png';
   static const String copy = '$base/copy.png';
   static const String share = '$base/share.png';
   static const String alert = '$base/alert.png';
-  static const String cardsBlur = '$base/cards-blur.png';
-  static const String cards = '$base/cards.png';
   static const String scanAddress = '$base/scan-address.png';
   static const String whiteList = '$base/whitelist.png';
   static const String keyboardDelete = '$base/keyboard-delete.png';
@@ -86,7 +74,6 @@ class IconStrings {
   static const String tezos = '$base/blockchain-tezos.png';
   static const String upload = '$base/upload.png';
   static const String document = '$base/document.png';
-  static const String cashInHand = '$base/cash-in-hand.png';
   static const String warning = '$base/warning.png';
   static const String lock = '$base/lock.png';
   static const String pincode = '$base/pincode.png';

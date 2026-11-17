@@ -3696,7 +3696,7 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get mdocPresent => 'Present';
+  String get mdocPresent => 'Παρουσίαση';
 
   @override
   String get mdocPresentNoAttestation =>
@@ -3795,4 +3795,7 @@ class AppLocalizationsEl extends AppLocalizations {
   @override
   String get dcqlSharedDataLabel =>
       'Δεδομένα που κοινοποιούνται από αυτή την βεβαίωση';
+
+  @override
+  String get scanQrCode => 'Σάρωση κωδικού QR';
 }

@@ -9,7 +9,7 @@ part 'dashboard_state.dart';
 class DashboardCubit extends Cubit<DashboardState> {
   DashboardCubit() : super(const DashboardState());
 
-  Future<void> onPageChanged(int index) async {
-    emit(state.copyWith(selectedIndex: index));
+  void selectTab(DashboardTab tab) {
+    emit(state.copyWith(tab: tab));
   }
 }
